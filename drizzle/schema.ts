@@ -25,6 +25,16 @@ export const users = mysqlTable("users", {
   primaryPathway: varchar("primaryPathway", { length: 64 }),
   avatarUrl: text("avatarUrl"),
   bio: text("bio"),
+  // Adaptive Intelligence Layer — Wave 1
+  mindPatterns: json("mindPatterns"),           // PatternId[] — how my mind works
+  supportPreferences: json("supportPreferences"), // SupportPreferenceId[]
+  lowBandwidthMode: boolean("lowBandwidthMode").default(false).notNull(),
+  lastActiveAt: timestamp("lastActiveAt"),       // for re-entry detection
+  // Better Mirror metrics
+  returnCount: int("returnCount").default(0).notNull(),
+  keptPromisesCount: int("keptPromisesCount").default(0).notNull(),
+  avgResetSpeedDays: decimal("avgResetSpeedDays", { precision: 5, scale: 1 }),
+  gentleConsistencyScore: int("gentleConsistencyScore").default(0).notNull(), // 0-100
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
@@ -90,6 +100,13 @@ export const habits = mysqlTable("habits", {
   isActive: boolean("isActive").default(true).notNull(),
   streak: int("streak").default(0).notNull(),
   longestStreak: int("longestStreak").default(0).notNull(),
+  // Adaptive Intelligence Layer — Minimum Viable Habits
+  fullVersion: text("fullVersion"),   // e.g. "15 min meditation"
+  smallVersion: text("smallVersion"), // e.g. "5 min meditation"
+  tinyVersion: text("tinyVersion"),   // e.g. "1 min breath reset"
+  // Better Mirror
+  returnCount: int("returnCount").default(0).notNull(),
+  lastCompletedAt: timestamp("lastCompletedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -297,6 +314,18 @@ export const communityComments = mysqlTable("community_comments", {
   userId: int("userId").notNull(),
   content: text("content").notNull(),
   likesCount: int("likesCount").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+// ─── Overflow Capture (Adaptive Intelligence Layer) ─────────────────────────
+
+export const overflowCaptures = mysqlTable("overflow_captures", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  content: text("content").notNull(),
+  type: mysqlEnum("type", ["idea", "reminder", "thought", "task", "worry", "other"]).default("other").notNull(),
+  isSorted: boolean("isSorted").default(false).notNull(),
+  sortedTo: varchar("sortedTo", { length: 64 }), // module or pathway it was moved to
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 

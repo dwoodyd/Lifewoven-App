@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
@@ -9,10 +9,14 @@ import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import LowBandwidthDashboard from "@/components/LowBandwidthDashboard";
+import ReentryFlow from "@/components/ReentryFlow";
+import BetterMirror from "@/components/BetterMirror";
+import { REENTRY, LOW_BANDWIDTH } from "../../../shared/adaptive-language";
 import {
   Waves, BookOpen, Target, Compass, Leaf, Sparkles,
   CheckCircle2, Circle, TrendingUp, MessageCircle,
-  ArrowRight, Flame, Brain, Heart
+  ArrowRight, Flame, Brain, Heart, Wind
 } from "lucide-react";
 
 const EGS_EMOTIONS = [
@@ -44,6 +48,25 @@ export default function Dashboard() {
   const [energyLevel, setEnergyLevel] = useState(7);
   const [clarityLevel, setClarityLevel] = useState(7);
   const [checkInNote, setCheckInNote] = useState("");
+  // Adaptive Intelligence Layer
+  const [lowBandwidthMode, setLowBandwidthMode] = useState(false);
+  const [showReentry, setShowReentry] = useState(false);
+  const [daysSinceActive, setDaysSinceActive] = useState(0);
+
+  // Detect absence for re-entry flow
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    const lastVisit = localStorage.getItem("lifeos_last_visit");
+    const now = Date.now();
+    if (lastVisit) {
+      const days = Math.floor((now - parseInt(lastVisit)) / (1000 * 60 * 60 * 24));
+      if (days >= 2) {
+        setDaysSinceActive(days);
+        setShowReentry(true);
+      }
+    }
+    localStorage.setItem("lifeos_last_visit", String(now));
+  }, [isAuthenticated]);
 
   const { data: dashData, refetch } = trpc.profile.dashboard.useQuery(undefined, { enabled: isAuthenticated });
   const { data: habits } = trpc.habits.list.useQuery(undefined, { enabled: isAuthenticated });
@@ -73,10 +96,44 @@ export default function Dashboard() {
     ? { label: "Write your first journal entry", sub: "Reflection is where transformation begins. Take 5 minutes to write.", href: "/journal", cta: "Open Journal" }
     : { label: "Begin today's check-in", sub: "How you feel right now is data. Check in and let the Oracle listen.", href: null, cta: "Start Check-in", action: () => setShowCheckIn(true) };
 
+  // Low bandwidth mode shortcut: if user has the preference stored
+  useEffect(() => {
+    const stored = localStorage.getItem("lifeos_low_bandwidth");
+    if (stored === "true") setLowBandwidthMode(true);
+  }, []);
+
+  const toggleLowBandwidth = () => {
+    const next = !lowBandwidthMode;
+    setLowBandwidthMode(next);
+    localStorage.setItem("lifeos_low_bandwidth", String(next));
+    if (next) toast("Simplified view on. One thing at a time.", { icon: "🌿" });
+  };
+
+  if (lowBandwidthMode) {
+    return <LowBandwidthDashboard onExit={toggleLowBandwidth} />;
+  }
+
   return (
     <div className="min-h-screen bg-background">
+      {showReentry && (
+        <ReentryFlow
+          daysSinceActive={daysSinceActive}
+          onDismiss={() => setShowReentry(false)}
+        />
+      )}
       <Nav />
       <div className="container pt-24 pb-20 max-w-5xl mx-auto">
+        {/* Adaptive Intelligence Layer — top bar */}
+        <div className="flex items-center justify-between mb-2">
+          <div />
+          <button
+            onClick={toggleLowBandwidth}
+            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors px-3 py-1.5 rounded-full border border-border hover:border-primary/30"
+          >
+            <Wind className="w-3.5 h-3.5" />
+            {LOW_BANDWIDTH.toggleLabel}
+          </button>
+        </div>
         {/* Greeting + prominent check-in */}
         <div className="flex items-start justify-between mb-6">
           <div>

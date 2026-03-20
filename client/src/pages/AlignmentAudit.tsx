@@ -3,9 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import Nav from "@/components/Nav";
-import { ArrowRight, ArrowLeft, CheckCircle2, Waves, BookOpen, Target, Compass, Leaf } from "lucide-react";
+import { ArrowRight, ArrowLeft, CheckCircle2, Waves, BookOpen, Target, Compass, Leaf, Brain } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { ONBOARDING_PATTERNS } from "../../../shared/adaptive-language";
 
 const questions = [
   { id: 1, module: "state", text: "How often do you feel emotionally reactive, anxious, or unable to access a sense of calm?", options: [
@@ -91,6 +92,8 @@ function calculateScores(answers: Record<number, number>) {
 
 export default function AlignmentAudit() {
   const [started, setStarted] = useState(false);
+  const [showMindPatterns, setShowMindPatterns] = useState(false);
+  const [selectedPatterns, setSelectedPatterns] = useState<string[]>([]);
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -98,6 +101,12 @@ export default function AlignmentAudit() {
   const [result, setResult] = useState<{ scores: Record<string, number>; recommendedModule: string } | null>(null);
   const { isAuthenticated } = useAuth();
   const saveAudit = trpc.audit.save.useMutation();
+
+  function togglePattern(id: string) {
+    setSelectedPatterns(prev =>
+      prev.includes(id) ? prev.filter(p => p !== id) : [...prev, id]
+    );
+  }
 
   const question = questions[currentQ];
   const progress = (currentQ / questions.length) * 100;
@@ -212,8 +221,62 @@ export default function AlignmentAudit() {
               <div className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-accent" /><span>~3 minutes</span></div>
               <div className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-accent" /><span>Free, no account required</span></div>
             </div>
-            <Button size="lg" className="gap-2 text-base" onClick={() => setStarted(true)}>
+            <Button size="lg" className="gap-2 text-base" onClick={() => setShowMindPatterns(true)}>
               Begin the Audit <ArrowRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // "How my mind works" — neurodivergent-aware step
+  if (showMindPatterns && !started) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Nav />
+        <div className="container pt-28 pb-20 max-w-2xl mx-auto">
+          <div className="mb-8">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-violet-100 mb-5">
+              <Brain className="w-6 h-6 text-violet-600" />
+            </div>
+            <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">One quick thing</p>
+            <h1 className="font-serif text-3xl md:text-4xl font-light text-foreground leading-snug mb-4">
+              How does your mind tend to work?
+            </h1>
+            <p className="text-muted-foreground text-base font-light leading-relaxed mb-2">
+              This helps LifeOS adapt to you — not the other way around. Select anything that feels true. There are no wrong answers, and nothing here is a diagnosis.
+            </p>
+            <p className="text-xs text-muted-foreground mb-7">
+              You can skip this step. It only helps us serve you better.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+            {ONBOARDING_PATTERNS.patterns.map((p) => {
+              const selected = selectedPatterns.includes(p.id);
+              return (
+                <button
+                  key={p.id}
+                  onClick={() => togglePattern(p.id)}
+                  className={`text-left p-4 rounded-xl border transition-all ${
+                    selected
+                      ? "border-violet-400/60 bg-violet-50 text-foreground"
+                      : "border-border bg-card text-muted-foreground hover:border-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <p className="text-sm font-medium text-foreground">{p.label}</p>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="flex items-center justify-between">
+            <Button variant="ghost" className="text-muted-foreground" onClick={() => setShowMindPatterns(false)}>
+              <ArrowLeft className="h-4 w-4 mr-1" /> Back
+            </Button>
+            <Button size="lg" className="gap-2" onClick={() => setStarted(true)}>
+              {selectedPatterns.length > 0 ? "Continue" : "Skip this step"} <ArrowRight className="h-4 w-4" />
             </Button>
           </div>
         </div>

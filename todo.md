@@ -83,3 +83,38 @@
 - [x] Footer: add links to legal pages, support, and social
 - [ ] Pathway pages: add a "Begin This Practice" interactive button that tracks progress (not just read-only content)
 - [ ] Reset After Setback: the steps should be interactive/expandable, not just static cards
+
+## Adaptive Intelligence Layer — Wave 1
+
+### Foundation
+- [ ] Create shared language constants file (adaptive-language.ts) with all re-entry, streak, and onboarding copy
+- [ ] Add DB columns for better mirror metrics: returnCount, lastReturnDate, resetSpeed, keptPromises, gentleConsistencyScore
+- [ ] Generate and apply DB migration for new columns
+
+### Low Bandwidth Mode
+- [ ] Add lowBandwidthMode toggle to user preferences in DB schema
+- [ ] Build LowBandwidthDashboard component: one next step, one grounding prompt, one unfinished priority, one reset option
+- [ ] Add "Simplify my view" toggle button to Dashboard that activates Low Bandwidth Mode
+- [ ] Ensure Low Bandwidth Mode persists across sessions (stored in user profile)
+
+### Re-entry Button
+- [ ] Add "Begin Again" / re-entry button to Dashboard — visible when user has been absent 2+ days
+- [ ] Build ReentryFlow component: warm welcome back message, no guilt framing, one small win suggestion, what still matters, what can wait
+- [ ] Wire Oracle to detect absence and surface a re-entry message on next visit
+
+### Neurodivergent-Aware Onboarding
+- [ ] Add "How my mind works" step to Alignment Audit (after current questions, before results)
+- [ ] Build pattern self-identification UI: scattered/overwhelmed/trouble starting/time blindness/inconsistent energy/reading fatigue (non-clinical language)
+- [ ] Store selected patterns in user profile for Oracle and Dashboard adaptation
+- [ ] Adapt Dashboard greeting and "Your Next Step" card based on selected patterns
+
+### Flexible Streak Logic — Better Mirror
+- [ ] Replace streak-only display in StandardsModule with the Better Mirror panel
+- [ ] Build BetterMirror component showing: return rate %, reset speed (avg days to return), kept promises count, gentle consistency score
+- [ ] Add "You're the kind of person who returns" identity language to habit completion and re-entry flows
+- [ ] Add Minimum Viable Habits: let users set full / small / tiny versions of each habit
+- [ ] Remove any "broken streak" language from the entire codebase — replace with return-oriented language
+- [ ] Add "Catch me before I overcommit" warning when user adds more than 5 daily habits
+
+### Language System Documentation
+- [ ] Write Adaptive Intelligence Layer Language System document (all copy, naming conventions, tone guidelines)
