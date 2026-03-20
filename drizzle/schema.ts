@@ -1,22 +1,30 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import {
+  boolean,
+  decimal,
+  int,
+  json,
+  mysqlEnum,
+  mysqlTable,
+  text,
+  timestamp,
+  varchar,
+} from "drizzle-orm/mysql-core";
 
-/**
- * Core user table backing auth flow.
- * Extend this file with additional tables as your product grows.
- * Columns use camelCase to match both database fields and generated types.
- */
+// ─── Users ────────────────────────────────────────────────────────────────────
+
 export const users = mysqlTable("users", {
-  /**
-   * Surrogate primary key. Auto-incremented numeric value managed by the database.
-   * Use this for relations between tables.
-   */
   id: int("id").autoincrement().primaryKey(),
-  /** Manus OAuth identifier (openId) returned from the OAuth callback. Unique per user. */
   openId: varchar("openId", { length: 64 }).notNull().unique(),
   name: text("name"),
   email: varchar("email", { length: 320 }),
   loginMethod: varchar("loginMethod", { length: 64 }),
   role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
+  membershipTier: mysqlEnum("membershipTier", ["free", "core", "premium"]).default("free").notNull(),
+  membershipExpiresAt: timestamp("membershipExpiresAt"),
+  onboardingCompleted: boolean("onboardingCompleted").default(false).notNull(),
+  primaryPathway: varchar("primaryPathway", { length: 64 }),
+  avatarUrl: text("avatarUrl"),
+  bio: text("bio"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
@@ -25,4 +33,277 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// TODO: Add your tables here
+// ─── Alignment Audit ──────────────────────────────────────────────────────────
+
+export const auditResults = mysqlTable("audit_results", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  answers: json("answers").notNull(), // { questionId: score }
+  scores: json("scores").notNull(),   // { state: 0-100, story: 0-100, ... }
+  recommendedPathway: varchar("recommendedPathway", { length: 64 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+// ─── Daily Check-ins ──────────────────────────────────────────────────────────
+
+export const checkIns = mysqlTable("check_ins", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  emotionalScore: int("emotionalScore").notNull(), // 1-22 (Emotional Guidance Scale)
+  energyLevel: int("energyLevel").notNull(),       // 1-10
+  clarityLevel: int("clarityLevel").notNull(),     // 1-10
+  note: text("note"),
+  module: varchar("module", { length: 32 }),       // which 5S module triggered this
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+// ─── Journal Entries ──────────────────────────────────────────────────────────
+
+export const journalEntries = mysqlTable("journal_entries", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  title: varchar("title", { length: 255 }),
+  content: text("content").notNull(),
+  module: mysqlEnum("module", ["state", "story", "standards", "strategy", "stewardship", "free"]).default("free").notNull(),
+  pathway: varchar("pathway", { length: 64 }),
+  tags: json("tags"),               // string[]
+  emotionalScore: int("emotionalScore"), // linked check-in score
+  aiReflection: text("aiReflection"),   // AI-generated reflection
+  isPrivate: boolean("isPrivate").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+// ─── Habits ───────────────────────────────────────────────────────────────────
+
+export const habits = mysqlTable("habits", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  description: text("description"),
+  module: mysqlEnum("module", ["state", "story", "standards", "strategy", "stewardship"]).default("standards").notNull(),
+  cue: text("cue"),
+  reward: text("reward"),
+  identityStatement: text("identityStatement"), // "I am the type of person who..."
+  frequency: mysqlEnum("frequency", ["daily", "weekly", "custom"]).default("daily").notNull(),
+  targetDays: json("targetDays"),  // [0,1,2,3,4,5,6] for custom
+  isActive: boolean("isActive").default(true).notNull(),
+  streak: int("streak").default(0).notNull(),
+  longestStreak: int("longestStreak").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const habitLogs = mysqlTable("habit_logs", {
+  id: int("id").autoincrement().primaryKey(),
+  habitId: int("habitId").notNull(),
+  userId: int("userId").notNull(),
+  completedAt: timestamp("completedAt").defaultNow().notNull(),
+  note: text("note"),
+  quality: int("quality"), // 1-5 self-rating
+});
+
+// ─── Daily Scorecard ──────────────────────────────────────────────────────────
+
+export const scorecards = mysqlTable("scorecards", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  date: varchar("date", { length: 10 }).notNull(), // YYYY-MM-DD
+  standards: json("standards").notNull(),          // { habitId: boolean }
+  overallScore: int("overallScore"),               // 0-100
+  wins: text("wins"),
+  improvements: text("improvements"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+// ─── Beliefs (Story Module) ───────────────────────────────────────────────────
+
+export const beliefs = mysqlTable("beliefs", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  limitingBelief: text("limitingBelief").notNull(),
+  empoweringBelief: text("empoweringBelief"),
+  evidence: text("evidence"),
+  affirmation: text("affirmation"),
+  category: mysqlEnum("category", ["self", "money", "relationships", "health", "purpose", "other"]).default("self").notNull(),
+  isRewritten: boolean("isRewritten").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+// ─── Decisions (Strategy Module) ─────────────────────────────────────────────
+
+export const decisions = mysqlTable("decisions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
+  context: text("context"),
+  options: json("options"),           // { option: string, pros: string[], cons: string[], secondOrder: string }[]
+  chosenOption: text("chosenOption"),
+  reasoning: text("reasoning"),
+  secondOrderEffects: text("secondOrderEffects"),
+  outcome: text("outcome"),           // filled in later
+  outcomeRating: int("outcomeRating"), // 1-10
+  status: mysqlEnum("status", ["pending", "decided", "reviewing", "closed"]).default("pending").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+// ─── Energy Audits (Stewardship Module) ──────────────────────────────────────
+
+export const energyAudits = mysqlTable("energy_audits", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  date: varchar("date", { length: 10 }).notNull(),
+  sleepHours: decimal("sleepHours", { precision: 4, scale: 1 }),
+  movementMinutes: int("movementMinutes"),
+  sunExposure: boolean("sunExposure").default(false),
+  screenTimeHours: decimal("screenTimeHours", { precision: 4, scale: 1 }),
+  dopamineAudit: json("dopamineAudit"), // { trigger: string, rating: 1-5 }[]
+  energyScore: int("energyScore"),      // 1-10
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+// ─── Oracle Insights ──────────────────────────────────────────────────────────
+
+export const oracleInsights = mysqlTable("oracle_insights", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  type: mysqlEnum("type", ["pattern", "recommendation", "reflection", "nudge"]).notNull(),
+  module: varchar("module", { length: 32 }),
+  content: text("content").notNull(),
+  sourceData: json("sourceData"), // what data triggered this insight
+  isRead: boolean("isRead").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const oracleConversations = mysqlTable("oracle_conversations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  messages: json("messages").notNull(), // { role, content, timestamp }[]
+  context: json("context"),             // snapshot of user data used
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+// ─── Pathways ─────────────────────────────────────────────────────────────────
+
+export const userPathways = mysqlTable("user_pathways", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  pathway: varchar("pathway", { length: 64 }).notNull(),
+  status: mysqlEnum("status", ["active", "completed", "paused"]).default("active").notNull(),
+  currentStep: int("currentStep").default(0).notNull(),
+  totalSteps: int("totalSteps").default(0).notNull(),
+  startedAt: timestamp("startedAt").defaultNow().notNull(),
+  completedAt: timestamp("completedAt"),
+});
+
+// ─── Resources ────────────────────────────────────────────────────────────────
+
+export const resources = mysqlTable("resources", {
+  id: int("id").autoincrement().primaryKey(),
+  title: varchar("title", { length: 255 }).notNull(),
+  description: text("description"),
+  type: mysqlEnum("type", ["audio", "text", "video", "pdf", "affirmation"]).notNull(),
+  module: mysqlEnum("module", ["state", "story", "standards", "strategy", "stewardship", "all"]).default("all").notNull(),
+  pathway: varchar("pathway", { length: 64 }),
+  contentUrl: text("contentUrl"),
+  thumbnailUrl: text("thumbnailUrl"),
+  duration: int("duration"),            // seconds for audio/video
+  author: varchar("author", { length: 255 }),
+  isPublicDomain: boolean("isPublicDomain").default(false),
+  requiredTier: mysqlEnum("requiredTier", ["free", "core", "premium"]).default("free").notNull(),
+  sortOrder: int("sortOrder").default(0),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+// ─── Courses ──────────────────────────────────────────────────────────────────
+
+export const courses = mysqlTable("courses", {
+  id: int("id").autoincrement().primaryKey(),
+  slug: varchar("slug", { length: 128 }).notNull().unique(),
+  title: varchar("title", { length: 255 }).notNull(),
+  subtitle: text("subtitle"),
+  description: text("description"),
+  instructor: varchar("instructor", { length: 255 }),
+  thumbnailUrl: text("thumbnailUrl"),
+  module: mysqlEnum("module", ["state", "story", "standards", "strategy", "stewardship", "all"]).default("all").notNull(),
+  price: decimal("price", { precision: 8, scale: 2 }).notNull(),
+  originalPrice: decimal("originalPrice", { precision: 8, scale: 2 }),
+  lessonsCount: int("lessonsCount").default(0),
+  durationHours: decimal("durationHours", { precision: 5, scale: 1 }),
+  level: mysqlEnum("level", ["beginner", "intermediate", "advanced"]).default("beginner").notNull(),
+  isPublished: boolean("isPublished").default(false).notNull(),
+  isFeatured: boolean("isFeatured").default(false).notNull(),
+  sortOrder: int("sortOrder").default(0),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const enrollments = mysqlTable("enrollments", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  courseId: int("courseId").notNull(),
+  progress: int("progress").default(0).notNull(), // 0-100
+  completedAt: timestamp("completedAt"),
+  enrolledAt: timestamp("enrolledAt").defaultNow().notNull(),
+});
+
+// ─── Digital Products ─────────────────────────────────────────────────────────
+
+export const products = mysqlTable("products", {
+  id: int("id").autoincrement().primaryKey(),
+  slug: varchar("slug", { length: 128 }).notNull().unique(),
+  title: varchar("title", { length: 255 }).notNull(),
+  description: text("description"),
+  type: mysqlEnum("type", ["workbook", "card_deck", "audio_bundle", "planner", "guide"]).notNull(),
+  price: decimal("price", { precision: 8, scale: 2 }).notNull(),
+  thumbnailUrl: text("thumbnailUrl"),
+  downloadUrl: text("downloadUrl"),
+  isPublished: boolean("isPublished").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const orders = mysqlTable("orders", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  items: json("items").notNull(), // { type: 'course'|'product', id: number, price: number }[]
+  total: decimal("total", { precision: 8, scale: 2 }).notNull(),
+  status: mysqlEnum("status", ["pending", "completed", "refunded"]).default("pending").notNull(),
+  stripeSessionId: varchar("stripeSessionId", { length: 255 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+// ─── Community ────────────────────────────────────────────────────────────────
+
+export const communityPosts = mysqlTable("community_posts", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  title: varchar("title", { length: 255 }),
+  content: text("content").notNull(),
+  category: mysqlEnum("category", ["share", "question", "win", "support", "workshop"]).default("share").notNull(),
+  pathway: varchar("pathway", { length: 64 }),
+  module: varchar("module", { length: 32 }),
+  likesCount: int("likesCount").default(0).notNull(),
+  commentsCount: int("commentsCount").default(0).notNull(),
+  isPinned: boolean("isPinned").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export const communityComments = mysqlTable("community_comments", {
+  id: int("id").autoincrement().primaryKey(),
+  postId: int("postId").notNull(),
+  userId: int("userId").notNull(),
+  content: text("content").notNull(),
+  likesCount: int("likesCount").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const communityLikes = mysqlTable("community_likes", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  postId: int("postId"),
+  commentId: int("commentId"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
