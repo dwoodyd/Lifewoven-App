@@ -90,6 +90,7 @@ function calculateScores(answers: Record<number, number>) {
 }
 
 export default function AlignmentAudit() {
+  const [started, setStarted] = useState(false);
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -130,16 +131,28 @@ export default function AlignmentAudit() {
     const Icon = rec.icon;
     const moduleOrder = ["state", "story", "standards", "strategy", "stewardship"];
     const moduleLabels: Record<string, string> = { state: "State", story: "Story", standards: "Standards", strategy: "Strategy", stewardship: "Stewardship" };
+    const moduleDescriptions: Record<string, string> = {
+      state: "Your emotional landscape is calling for attention. This is not a weakness — it is wisdom. When the foundation of how you feel is unstable, everything else is harder.",
+      story: "The narrative you carry about yourself is shaping your reality more than you may realize. The good news: stories can be rewritten. That work begins here.",
+      standards: "You have the vision. The gap is in daily execution. This is one of the most common and most solvable challenges — and it starts with identity, not willpower.",
+      strategy: "You are capable of more than your current decisions reflect. Clarity of direction and quality of thinking are skills — and they can be developed.",
+      stewardship: "Your energy, body, and resources are the raw material of everything you want to create. Right now, they need your attention before anything else can truly flourish.",
+    };
     return (
       <div className="min-h-screen bg-background">
         <Nav />
         <div className="container pt-28 pb-20 max-w-2xl mx-auto">
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-accent/10 mb-4">
+          <div className="mb-10">
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-accent/10 mb-5">
               <CheckCircle2 className="h-7 w-7 text-accent" />
             </div>
-            <h1 className="font-serif text-4xl font-light text-foreground mb-3">Your Alignment Audit is complete.</h1>
-            <p className="text-muted-foreground text-lg font-light">Here is where you stand across the 5S dimensions.</p>
+            <h1 className="font-serif text-4xl font-light text-foreground mb-4">Your Alignment Audit is complete.</h1>
+            <p className="text-foreground text-lg font-light leading-relaxed mb-3">
+              Thank you for taking the time to be honest with yourself. That alone is the first act of alignment.
+            </p>
+            <p className="text-muted-foreground text-base font-light leading-relaxed">
+              {moduleDescriptions[result.recommendedModule]}
+            </p>
           </div>
           <div className="space-y-4 mb-10">
             {moduleOrder.map((mod) => {
@@ -178,13 +191,46 @@ export default function AlignmentAudit() {
     );
   }
 
+  if (!started) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Nav />
+        <div className="container pt-28 pb-20 max-w-2xl mx-auto">
+          <div className="mb-8">
+            <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">The Alignment Audit</p>
+            <h1 className="font-serif text-4xl md:text-5xl font-light text-foreground leading-tight mb-5">
+              Let's find out where<br />you actually are.
+            </h1>
+            <p className="text-muted-foreground text-lg font-light leading-relaxed mb-4">
+              This is not a test. There are no right or wrong answers. This is a 10-question diagnostic designed to help you see yourself clearly — across all five dimensions of the 5S Framework.
+            </p>
+            <p className="text-muted-foreground text-base font-light leading-relaxed mb-8">
+              At the end, you will receive a personalized map of where you stand, and a specific starting pathway recommended just for you. It takes about 3 minutes. Answer as honestly as you can.
+            </p>
+            <div className="flex items-center gap-6 text-sm text-muted-foreground mb-10">
+              <div className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-accent" /><span>10 questions</span></div>
+              <div className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-accent" /><span>~3 minutes</span></div>
+              <div className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-accent" /><span>Free, no account required</span></div>
+            </div>
+            <Button size="lg" className="gap-2 text-base" onClick={() => setStarted(true)}>
+              Begin the Audit <ArrowRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Nav />
       <div className="container pt-28 pb-20 max-w-2xl mx-auto">
         <div className="mb-10">
-          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">Alignment Audit — Question {currentQ + 1} of {questions.length}</p>
-          <Progress value={progress} className="h-1 mb-6" />
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase">Question {currentQ + 1} of {questions.length}</p>
+            <p className="text-xs text-muted-foreground">{Math.round(((currentQ) / questions.length) * 100)}% complete</p>
+          </div>
+          <Progress value={progress} className="h-1.5 mb-6" />
           <h1 className="font-serif text-3xl md:text-4xl font-light text-foreground leading-snug">{question.text}</h1>
         </div>
         <div className="space-y-3 mb-10">

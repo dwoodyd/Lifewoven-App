@@ -63,3 +63,23 @@
 - [ ] Weekly Oracle summary report
 - [ ] Dark/light theme toggle
 - [ ] Export journal entries as PDF
+
+## Felt Experience Fixes (Priority)
+- [x] Landing page hero: add emotional problem statement above the headline ("You have the vision. You have the books. Something still isn't clicking.")
+- [x] Landing page hero: add right-side visual panel (dashboard mockup or pathway card) for asymmetric premium layout
+- [x] Landing page: add a "Where do I begin?" anchor section with a single clear first step for overwhelmed visitors
+- [x] Alignment Audit: add a warm welcome screen before Q1 (context, reassurance, time estimate)
+- [x] Alignment Audit: add a progress bar that is visually prominent (not just text "Q1 of 10")
+- [x] Alignment Audit: results page must feel like a personalized letter, not a report card
+- [x] Dashboard: add a "Your Next Step" hero card at the top (one clear recommended action, not a grid of options) (one clear recommended action, not a grid of options)
+- [x] Dashboard: empty states ("No habits yet", "Journal is empty") should feel inviting, not clinical
+- [x] Dashboard: Daily Check-in button is now primary/filled and always visible — it is the most important daily action
+- [x] Oracle page: add a brief orienting paragraph explaining what the Oracle is and how it works explaining what the Oracle is and how it works before the prompt buttons
+- [x] Pricing page: rename tiers to match the platform language (Explorer/Seeker/Oracle — verified consistent) (Explorer/Seeker/Oracle already done — verify consistency with landing page which says Free/Core/Premium)
+- [ ] Pricing page: add a "What's the difference?" plain-language comparison below the cards
+- [x] Add legal pages: Terms of Service, Privacy Policy, Refund Policy
+- [x] Add Support/Contact page
+- [x] Add content rights system: label all library content as Public Domain / Licensed / Original LifeOS Content
+- [x] Footer: add links to legal pages, support, and social
+- [ ] Pathway pages: add a "Begin This Practice" interactive button that tracks progress (not just read-only content)
+- [ ] Reset After Setback: the steps should be interactive/expandable, not just static cards

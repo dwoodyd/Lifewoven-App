@@ -17,6 +17,7 @@ import {
   Brain,
   Heart,
   Zap,
+  CheckCircle2,
 } from "lucide-react";
 
 const modules = [
@@ -102,35 +103,124 @@ const testimonials = [
 
 const pricingTiers = [
   {
-    name: "Free",
+    name: "Explorer",
     price: "$0",
-    desc: "Begin your alignment journey",
-    features: ["Alignment Audit", "7-Day Reset Challenge", "Daily Check-in", "Starter Journal", "Public Library Access"],
+    desc: "Begin your alignment journey. No credit card, no commitment.",
+    features: [
+      "Alignment Audit diagnostic",
+      "Daily emotional check-in",
+      "Journal (up to 30 entries)",
+      "Align & Uplift pathways",
+      "5S Framework overview",
+      "Public resource library",
+      "Community read access",
+    ],
     cta: "Start Free",
     href: "/audit",
     highlight: false,
   },
   {
-    name: "Core",
-    price: "$29",
+    name: "Seeker",
+    price: "$19",
     period: "/month",
-    desc: "The full 5S operating system",
-    features: ["All 5 Modules", "All 7 Pathways", "Unlimited Journaling", "Habit & Scorecard Tracker", "Full Resource Library", "Community Access", "Course Discounts"],
-    cta: "Start Core",
+    desc: "The full LifeOS experience. Every tool, every pathway, every module — fully unlocked.",
+    features: [
+      "Everything in Explorer",
+      "Unlimited journal entries",
+      "All 7 branded pathways",
+      "Full 5S module suite",
+      "Habit tracker & scorecard",
+      "Decision journal & analysis",
+      "Energy audit & trends",
+      "Belief rewrite system",
+      "Community full access",
+      "Course library access",
+    ],
+    cta: "Begin Transformation",
     href: getLoginUrl(),
     highlight: true,
   },
   {
-    name: "Premium",
-    price: "$79",
+    name: "Oracle",
+    price: "$49",
     period: "/month",
-    desc: "AI Oracle + advanced intelligence",
-    features: ["Everything in Core", "AI Oracle — Pattern Recognition", "Personalized Pathway Guidance", "Cross-Module Insights", "Priority Community Access", "Live Workshops Included", "All Courses Included"],
-    cta: "Start Premium",
+    desc: "The premium AI-powered experience. The Oracle as your personal guide, available 24/7.",
+    features: [
+      "Everything in Seeker",
+      "Unlimited Oracle AI chat",
+      "AI-powered journal reflections",
+      "AI decision analysis",
+      "Cross-module pattern insights",
+      "Personalized pathway recommendations",
+      "Monthly Oracle deep-dive report",
+      "Early access to new features",
+      "1-on-1 onboarding call",
+    ],
+    cta: "Unlock the Oracle",
     href: getLoginUrl(),
     highlight: false,
   },
 ];
+
+// Hero right-panel: a visual representation of the dashboard/system
+function HeroDashboardPreview() {
+  return (
+    <div className="relative w-full max-w-md mx-auto lg:mx-0">
+      {/* Outer glow */}
+      <div className="absolute inset-0 rounded-2xl bg-accent/10 blur-2xl scale-110 pointer-events-none" />
+      <div className="relative rounded-2xl border border-border bg-card shadow-2xl overflow-hidden">
+        {/* Mini header */}
+        <div className="px-5 py-3 border-b border-border flex items-center justify-between">
+          <span className="font-serif text-sm font-light text-foreground">Your LifeOS</span>
+          <div className="flex gap-1.5">
+            <div className="w-2 h-2 rounded-full bg-[oklch(0.62_0.14_200)]/60" />
+            <div className="w-2 h-2 rounded-full bg-[oklch(0.60_0.14_280)]/60" />
+            <div className="w-2 h-2 rounded-full bg-[oklch(0.58_0.16_145)]/60" />
+          </div>
+        </div>
+        {/* 5S mini grid */}
+        <div className="p-4 grid grid-cols-5 gap-2 border-b border-border">
+          {[
+            { label: "State", color: "text-state", bg: "bg-state-soft" },
+            { label: "Story", color: "text-story", bg: "bg-story-soft" },
+            { label: "Standards", color: "text-standards", bg: "bg-standards-soft" },
+            { label: "Strategy", color: "text-strategy", bg: "bg-strategy-soft" },
+            { label: "Stewardship", color: "text-stewardship", bg: "bg-stewardship-soft" },
+          ].map((m) => (
+            <div key={m.label} className={`${m.bg} rounded-lg p-2 text-center`}>
+              <p className={`text-[9px] font-medium ${m.color} leading-tight`}>{m.label}</p>
+            </div>
+          ))}
+        </div>
+        {/* Oracle insight */}
+        <div className="p-4 border-b border-border">
+          <div className="flex items-start gap-2.5">
+            <div className="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center shrink-0 mt-0.5">
+              <Sparkles className="h-3 w-3 text-accent" />
+            </div>
+            <div>
+              <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1">Oracle Insight</p>
+              <p className="text-xs text-foreground leading-relaxed font-light">
+                "Your journal entries this week show a recurring theme around worthiness. The Belief Rewrite tool in Story is your next step."
+              </p>
+            </div>
+          </div>
+        </div>
+        {/* Today's pathway */}
+        <div className="p-4 flex items-center justify-between">
+          <div>
+            <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1">Today's Pathway</p>
+            <p className="text-sm font-serif text-foreground font-light">Align — Daily Grounding</p>
+            <p className="text-[10px] text-muted-foreground mt-0.5">15 min · 6 steps</p>
+          </div>
+          <div className="w-8 h-8 rounded-full bg-[oklch(0.65_0.13_195)]/20 flex items-center justify-center">
+            <ArrowRight className="h-3.5 w-3.5 text-[oklch(0.65_0.13_195)]" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function Home() {
   const { isAuthenticated } = useAuth();
@@ -140,7 +230,7 @@ export default function Home() {
       <Nav />
 
       {/* ─── Hero ─── */}
-      <section className="relative pt-32 pb-24 overflow-hidden">
+      <section className="relative pt-28 pb-20 overflow-hidden">
         {/* Subtle background texture */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-accent/5 blur-3xl translate-x-1/3 -translate-y-1/4" />
@@ -148,48 +238,61 @@ export default function Home() {
         </div>
 
         <div className="container relative">
-          <div className="max-w-3xl">
-            <Badge variant="outline" className="mb-6 text-xs font-mono tracking-wider text-muted-foreground border-border">
-              THE 5S PERSONAL TRANSFORMATION SYSTEM
-            </Badge>
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left: Copy */}
+            <div>
+              <Badge variant="outline" className="mb-5 text-xs font-mono tracking-wider text-muted-foreground border-border">
+                THE 5S PERSONAL TRANSFORMATION SYSTEM
+              </Badge>
 
-            <h1 className="font-serif text-5xl md:text-7xl font-light leading-[1.08] tracking-tight mb-6 text-foreground">
-              One intelligent
-              <br />
-              <span className="italic text-accent">operating system</span>
-              <br />
-              for your whole life.
-            </h1>
+              {/* Emotional problem statement */}
+              <p className="text-sm font-sans text-muted-foreground mb-4 font-light tracking-wide">
+                You have the vision. You have the books. Something still isn't clicking.
+              </p>
 
-            <p className="text-lg md:text-xl text-muted-foreground font-sans font-light leading-relaxed mb-10 max-w-xl">
-              LifeOS integrates emotional alignment, belief work, habit execution, strategic decision-making, and holistic stewardship into one beautiful, guided platform — rooted in timeless wisdom, powered by AI.
-            </p>
+              <h1 className="font-serif text-5xl md:text-6xl font-light leading-[1.08] tracking-tight mb-6 text-foreground">
+                One intelligent
+                <br />
+                <span className="italic text-accent">operating system</span>
+                <br />
+                for your whole life.
+              </h1>
 
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Button size="lg" asChild className="gap-2 text-base">
-                <Link href="/audit">
-                  Take the Alignment Audit
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" asChild className="gap-2 text-base">
-                <Link href="/#modules">
-                  Explore the 5S Framework
-                </Link>
-              </Button>
+              <p className="text-lg text-muted-foreground font-sans font-light leading-relaxed mb-8 max-w-lg">
+                LifeOS brings together emotional alignment, belief work, habit execution, strategic clarity, and holistic stewardship — in one guided, intelligent platform rooted in timeless wisdom.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-3 mb-6">
+                <Button size="lg" asChild className="gap-2 text-base">
+                  <Link href="/audit">
+                    Take the Alignment Audit
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button size="lg" variant="outline" asChild className="gap-2 text-base">
+                  <a href="#where-to-begin">
+                    Where do I begin?
+                  </a>
+                </Button>
+              </div>
+
+              <p className="text-sm text-muted-foreground">
+                Free to start. No credit card required.
+              </p>
             </div>
 
-            <p className="mt-6 text-sm text-muted-foreground">
-              Free to start. No credit card required.
-            </p>
+            {/* Right: Dashboard preview */}
+            <div className="hidden lg:block">
+              <HeroDashboardPreview />
+            </div>
           </div>
         </div>
       </section>
 
       {/* ─── Trust Bar ─── */}
-      <section className="border-y border-border py-8">
+      <section className="border-y border-border py-7">
         <div className="container">
-          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16 text-muted-foreground">
+          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-14 text-muted-foreground">
             <div className="flex items-center gap-2 text-sm">
               <Brain className="h-4 w-4" />
               <span>Ernest Holmes · Science of Mind</span>
@@ -210,6 +313,58 @@ export default function Home() {
               <Waves className="h-4 w-4" />
               <span>Summer McStravick · Flowdreaming</span>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Where Do I Begin ─── */}
+      <section id="where-to-begin" className="py-20 bg-secondary/20">
+        <div className="container">
+          <div className="max-w-3xl mx-auto text-center mb-12">
+            <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">Your Starting Point</p>
+            <h2 className="font-serif text-4xl md:text-5xl font-light text-foreground mb-4">
+              Overwhelmed? Start here.
+            </h2>
+            <p className="text-muted-foreground text-lg font-light">
+              You don't need to understand the whole system to begin. Every path leads to the same place: a life that feels like yours.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-5 max-w-4xl mx-auto">
+            {[
+              {
+                step: "01",
+                title: "Take the Alignment Audit",
+                desc: "A 10-question diagnostic that identifies where you are and recommends your exact starting pathway. Takes 3 minutes.",
+                cta: "Begin the Audit",
+                href: "/audit",
+                color: "text-state",
+              },
+              {
+                step: "02",
+                title: "Enter Your First Pathway",
+                desc: "Follow the guided protocol recommended for you. Each pathway is a complete, step-by-step experience — not a list of features.",
+                cta: "See All Pathways",
+                href: "/pathways",
+                color: "text-story",
+              },
+              {
+                step: "03",
+                title: "Let the Oracle Guide You",
+                desc: "As you journal and check in, the Oracle recognizes patterns and tells you exactly what to work on next. You are never alone in this.",
+                cta: "Meet the Oracle",
+                href: "/oracle",
+                color: "text-accent",
+              },
+            ].map((item) => (
+              <div key={item.step} className="p-6 rounded-xl border border-border bg-card">
+                <p className={`font-mono text-xs ${item.color} mb-3 tracking-wider`}>{item.step}</p>
+                <h3 className="font-serif text-xl font-light text-foreground mb-3">{item.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-5">{item.desc}</p>
+                <Link href={item.href} className={`text-sm font-medium ${item.color} flex items-center gap-1 hover:gap-2 transition-all`}>
+                  {item.cta} <ChevronRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -273,7 +428,7 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
-              <Badge className="mt-4 text-xs bg-accent/20 text-accent border-accent/30">Premium Feature</Badge>
+              <Badge className="mt-4 text-xs bg-accent/20 text-accent border-accent/30">Oracle Tier Feature</Badge>
             </div>
           </div>
         </div>
@@ -361,12 +516,35 @@ export default function Home() {
       {/* ─── Pricing ─── */}
       <section id="pricing" className="py-24">
         <div className="container">
-          <div className="max-w-2xl mb-14">
-            <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">Membership</p>
+          <div className="max-w-2xl mb-4">
+            <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">Investment</p>
             <h2 className="font-serif text-4xl md:text-5xl font-light text-foreground mb-4">
-              Choose your level<br />of engagement.
+              Choose your path.
             </h2>
+            <p className="text-muted-foreground text-lg font-light">
+              Every tier is designed to create real transformation. Start free. Upgrade when you are ready.
+            </p>
           </div>
+
+          {/* Plain-language comparison */}
+          <div className="mb-12 p-5 rounded-xl border border-border bg-secondary/30 max-w-2xl">
+            <p className="text-xs font-mono text-muted-foreground uppercase tracking-wider mb-3">What's the difference?</p>
+            <div className="space-y-2 text-sm text-foreground">
+              <div className="flex items-start gap-2">
+                <CheckCircle2 className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
+                <span><strong>Explorer (Free)</strong> — Try the core tools. Take the Audit. Start a journal. No time limit.</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle2 className="h-4 w-4 text-accent mt-0.5 shrink-0" />
+                <span><strong>Seeker ($19/mo)</strong> — Unlock everything: all 5 modules, all 7 pathways, unlimited journaling, habits, community. The full operating system.</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle2 className="h-4 w-4 text-accent mt-0.5 shrink-0" />
+                <span><strong>Oracle ($49/mo)</strong> — Add the AI layer. The Oracle reads your patterns and tells you exactly what to work on next. Includes all courses and a 1-on-1 onboarding call.</span>
+              </div>
+            </div>
+          </div>
+
           <div className="grid md:grid-cols-3 gap-6 max-w-4xl">
             {pricingTiers.map((tier) => (
               <div
@@ -404,33 +582,67 @@ export default function Home() {
               </div>
             ))}
           </div>
+
+          <p className="mt-8 text-sm text-muted-foreground max-w-xl">
+            Not sure which tier is right for you? Take the free Alignment Audit first — it will tell you exactly where to start.{" "}
+            <Link href="/audit" className="text-accent hover:underline">Take the Audit →</Link>
+          </p>
         </div>
       </section>
 
       {/* ─── Footer ─── */}
       <footer className="border-t border-border py-12">
         <div className="container">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div>
-              <div className="flex items-center gap-2 mb-2">
+          <div className="grid md:grid-cols-4 gap-8 mb-10">
+            <div className="md:col-span-2">
+              <div className="flex items-center gap-2 mb-3">
                 <div className="w-6 h-6 rounded bg-primary flex items-center justify-center">
                   <span className="text-primary-foreground font-serif text-xs">L</span>
                 </div>
                 <span className="font-serif text-lg font-medium">Life<span className="text-accent">OS</span></span>
               </div>
-              <p className="text-xs text-muted-foreground max-w-xs">
+              <p className="text-xs text-muted-foreground max-w-xs leading-relaxed">
                 A personal transformation operating system rooted in timeless wisdom and powered by intelligent design.
               </p>
             </div>
-            <div className="flex flex-wrap gap-6 text-sm text-muted-foreground">
-              <Link href="/about" className="hover:text-foreground transition-colors">About</Link>
-              <Link href="/store" className="hover:text-foreground transition-colors">Store</Link>
-              <Link href="/community" className="hover:text-foreground transition-colors">Community</Link>
-              <Link href="/library" className="hover:text-foreground transition-colors">Library</Link>
-              <Link href="/pricing" className="hover:text-foreground transition-colors">Pricing</Link>
+            <div>
+              <p className="text-xs font-mono text-muted-foreground uppercase tracking-wider mb-3">Platform</p>
+              <div className="space-y-2">
+                {[
+                  { label: "About", href: "/about" },
+                  { label: "Pathways", href: "/pathways" },
+                  { label: "Library", href: "/library" },
+                  { label: "Community", href: "/community" },
+                  { label: "Store", href: "/store" },
+                  { label: "Pricing", href: "/pricing" },
+                ].map((l) => (
+                  <div key={l.label}>
+                    <Link href={l.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                      {l.label}
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <p className="text-xs font-mono text-muted-foreground uppercase tracking-wider mb-3">Legal & Support</p>
+              <div className="space-y-2">
+                {[
+                  { label: "Terms of Service", href: "/legal/terms" },
+                  { label: "Privacy Policy", href: "/legal/privacy" },
+                  { label: "Refund Policy", href: "/legal/refunds" },
+                  { label: "Contact & Support", href: "/support" },
+                ].map((l) => (
+                  <div key={l.label}>
+                    <Link href={l.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                      {l.label}
+                    </Link>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-          <div className="mt-8 pt-6 border-t border-border">
+          <div className="pt-6 border-t border-border">
             <p className="text-xs text-muted-foreground">
               © {new Date().getFullYear()} LifeOS. Built on the wisdom of the ages. Designed for the present moment.
             </p>

@@ -45,6 +45,12 @@ import Community from "./pages/Community";
 // Resources
 import ResourceLibrary from "./pages/ResourceLibrary";
 
+// Legal & Support
+import Terms from "./pages/legal/Terms";
+import Privacy from "./pages/legal/Privacy";
+import Refunds from "./pages/legal/Refunds";
+import Support from "./pages/Support";
+
 function Router() {
   return (
     <Switch>
@@ -87,6 +93,12 @@ function Router() {
 
       {/* Resources */}
       <Route path="/library" component={ResourceLibrary} />
+
+      {/* Legal & Support */}
+      <Route path="/legal/terms" component={Terms} />
+      <Route path="/legal/privacy" component={Privacy} />
+      <Route path="/legal/refunds" component={Refunds} />
+      <Route path="/support" component={Support} />
 
       {/* Fallback */}
       <Route path="/404" component={NotFound} />

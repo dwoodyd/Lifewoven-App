@@ -62,21 +62,58 @@ export default function Dashboard() {
   const currentEmotion = EGS_EMOTIONS.find(e => e.level <= emotionalScore) ?? EGS_EMOTIONS[EGS_EMOTIONS.length - 1];
   const greeting = () => { const h = new Date().getHours(); return h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening"; };
 
+  const hasHabits = habits && habits.length > 0;
+  const hasJournal = dashData?.recentJournals && dashData.recentJournals.length > 0;
+  const hasInsights = oracleInsights && oracleInsights.length > 0;
+
+  // Determine the single most important next step
+  const nextStep = !hasHabits
+    ? { label: "Build your first habit", sub: "Your Stack is empty. Start with one small identity-based habit.", href: "/standards", cta: "Build My Stack" }
+    : !hasJournal
+    ? { label: "Write your first journal entry", sub: "Reflection is where transformation begins. Take 5 minutes to write.", href: "/journal", cta: "Open Journal" }
+    : { label: "Begin today's check-in", sub: "How you feel right now is data. Check in and let the Oracle listen.", href: null, cta: "Start Check-in", action: () => setShowCheckIn(true) };
+
   return (
     <div className="min-h-screen bg-background">
       <Nav />
       <div className="container pt-24 pb-20 max-w-5xl mx-auto">
-        <div className="flex items-start justify-between mb-10">
+        {/* Greeting + prominent check-in */}
+        <div className="flex items-start justify-between mb-6">
           <div>
             <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-1">Your LifeOS</p>
             <h1 className="font-serif text-3xl md:text-4xl font-light text-foreground">
               {greeting()}, {user?.name?.split(" ")[0] ?? "friend"}.
             </h1>
           </div>
-          <Button variant="outline" size="sm" className="gap-2 hidden md:flex" onClick={() => setShowCheckIn(!showCheckIn)}>
+          <Button size="sm" className="gap-2" onClick={() => setShowCheckIn(!showCheckIn)}>
             <Heart className="h-4 w-4" /> Daily Check-in
           </Button>
         </div>
+
+        {/* Next Step Hero Card */}
+        {!showCheckIn && (
+          <div className="p-5 rounded-2xl border border-accent/30 bg-gradient-to-r from-accent/5 to-transparent mb-8 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
+                <ArrowRight className="h-5 w-5 text-accent" />
+              </div>
+              <div>
+                <p className="text-xs font-mono text-accent uppercase tracking-wider mb-0.5">Your Next Step</p>
+                <p className="font-serif text-base font-light text-foreground">{nextStep.label}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">{nextStep.sub}</p>
+              </div>
+            </div>
+            {nextStep.href ? (
+              <Button asChild size="sm" className="shrink-0 gap-1.5">
+                <Link href={nextStep.href}>{nextStep.cta} <ArrowRight className="h-3.5 w-3.5" /></Link>
+              </Button>
+            ) : (
+              <Button size="sm" className="shrink-0 gap-1.5" onClick={nextStep.action}>
+                {nextStep.cta} <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            )}
+          </div>
+        )}
 
         {showCheckIn && (
           <div className="p-6 rounded-2xl border border-border bg-card mb-8 animate-in fade-in slide-in-from-top-2 duration-300">
@@ -154,10 +191,11 @@ export default function Dashboard() {
                   })}
                 </div>
               ) : (
-                <div className="p-6 rounded-xl border border-dashed border-border text-center">
-                  <Target className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                  <p className="text-sm text-muted-foreground mb-3">No habits yet. Build your Stack.</p>
-                  <Button asChild size="sm" variant="outline"><Link href="/module/standards">Add First Habit</Link></Button>
+                <div className="p-6 rounded-2xl border border-dashed border-accent/20 bg-accent/3 text-center">
+                  <Target className="h-8 w-8 text-accent/40 mx-auto mb-3" />
+                  <p className="font-serif text-base font-light text-foreground mb-1">Your Stack is waiting.</p>
+                  <p className="text-sm text-muted-foreground mb-4">Habits are not about discipline — they are about identity. Who do you want to become? Start with one habit that reflects that person.</p>
+                  <Button asChild size="sm"><Link href="/standards">Build My First Habit</Link></Button>
                 </div>
               )}
             </div>
@@ -182,10 +220,11 @@ export default function Dashboard() {
                   ))}
                 </div>
               ) : (
-                <div className="p-6 rounded-xl border border-dashed border-border text-center">
-                  <Brain className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                  <p className="text-sm text-muted-foreground mb-3">Your journal is empty. Begin writing.</p>
-                  <Button asChild size="sm" variant="outline"><Link href="/journal">Start Journaling</Link></Button>
+                <div className="p-6 rounded-2xl border border-dashed border-story/30 bg-story/3 text-center">
+                  <Brain className="h-8 w-8 text-story/40 mx-auto mb-3" />
+                  <p className="font-serif text-base font-light text-foreground mb-1">Your journal is a blank canvas.</p>
+                  <p className="text-sm text-muted-foreground mb-4">Five minutes of honest writing can reveal more than five hours of thinking. What is alive in you right now?</p>
+                  <Button asChild size="sm"><Link href="/journal">Begin Writing</Link></Button>
                 </div>
               )}
             </div>
