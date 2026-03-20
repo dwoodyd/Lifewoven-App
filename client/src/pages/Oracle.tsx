@@ -21,10 +21,10 @@ const ORACLE_STARTERS = [
 ];
 
 const WISDOM_SOURCES = [
-  { icon: Brain, label: "Ernest Holmes", desc: "Science of Mind — the creative power of thought" },
-  { icon: Heart, label: "Abraham-Hicks", desc: "Law of Attraction — emotional alignment and the Vortex" },
-  { icon: Sparkles, label: "Viktor Frankl", desc: "Logotherapy — meaning as the root of resilience" },
-  { icon: Zap, label: "James Clear", desc: "Atomic Habits — identity-based behavior change" },
+  { icon: Brain, label: "Mind Science", desc: "New Thought philosophy — the creative power of thought and consciousness" },
+  { icon: Heart, label: "Vibrational Alignment", desc: "Law of Attraction — emotional guidance and the art of allowing" },
+  { icon: Sparkles, label: "Meaning-Centered Philosophy", desc: "Logotherapy — meaning as the root of resilience and purpose" },
+  { icon: Zap, label: "Behavioral Science", desc: "Identity-based habit formation — systems over goals" },
 ];
 
 type Message = { role: "user" | "assistant"; content: string };
@@ -183,7 +183,7 @@ export default function Oracle() {
               </div>
             </div>
             <p className="text-xs text-muted-foreground text-center">
-              The Oracle draws from Ernest Holmes, Abraham-Hicks, Viktor Frankl, and James Clear.{" "}
+              The Oracle draws from the LifeOS 5S Framework and the wisdom traditions that inform it.{" "}
               Not a substitute for professional mental health advice.
             </p>
           </div>

@@ -27,11 +27,11 @@ const IDENTITY_STATEMENTS = [
   "I am becoming the best version of myself every day.",
 ];
 
-const FRANKL_QUOTES = [
-  { text: "He who has a why to live can bear almost any how.", source: "Viktor Frankl, Man's Search for Meaning" },
-  { text: "Between stimulus and response there is a space. In that space is our power to choose our response.", source: "Viktor Frankl" },
-  { text: "When we are no longer able to change a situation, we are challenged to change ourselves.", source: "Viktor Frankl" },
-  { text: "Everything can be taken from a man but one thing: the last of the human freedoms — to choose one's attitude.", source: "Viktor Frankl" },
+const MEANING_QUOTES = [
+  { text: "He who has a why to live can bear almost any how.", source: "Meaning-Centered Philosophy" },
+  { text: "Between stimulus and response there is a space. In that space is our power to choose our response.", source: "Logotherapy Tradition" },
+  { text: "When we are no longer able to change a situation, we are challenged to change ourselves.", source: "Meaning-Centered Philosophy" },
+  { text: "Everything can be taken from a man but one thing: the last of the human freedoms — to choose one's attitude.", source: "Logotherapy Tradition" },
 ];
 
 export default function StoryModule() {
@@ -40,7 +40,7 @@ export default function StoryModule() {
   const [newBeliefPrompt, setNewBeliefPrompt] = useState("");
   const [showAddBelief, setShowAddBelief] = useState(false);
   const [rewritingId, setRewritingId] = useState<number | null>(null);
-  const [dailyQuote] = useState(() => FRANKL_QUOTES[Math.floor(Math.random() * FRANKL_QUOTES.length)]);
+  const [dailyQuote] = useState(() => MEANING_QUOTES[Math.floor(Math.random() * MEANING_QUOTES.length)]);
 
   const { data: beliefs, refetch: refetchBeliefs } = trpc.beliefs.list.useQuery(undefined, { enabled: isAuthenticated });
   const createBelief = trpc.beliefs.create.useMutation({
@@ -124,7 +124,7 @@ export default function StoryModule() {
 
             <div className="p-6 rounded-2xl border border-border bg-card">
               <h2 className="font-serif text-xl font-light text-foreground mb-2">Identity Builder</h2>
-              <p className="text-sm text-muted-foreground mb-5">From Atomic Habits: "Every action you take is a vote for the type of person you wish to become."</p>
+              <p className="text-sm text-muted-foreground mb-5">Every action you take is a vote for the type of person you wish to become. Identity-based change begins with small, consistent acts of becoming.</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-4">
                 {IDENTITY_STATEMENTS.map((stmt, i) => (
                   <div key={i} className="flex items-start gap-2 p-3 rounded-lg bg-secondary/50">
@@ -138,7 +138,7 @@ export default function StoryModule() {
 
             <div className="p-6 rounded-2xl border border-border bg-card">
               <h2 className="font-serif text-xl font-light text-foreground mb-2">Meaning & Why Journal</h2>
-              <p className="text-sm text-muted-foreground mb-4">Viktor Frankl taught that meaning can be found through work and creation, through love and connection, and through the attitude we take toward unavoidable suffering.</p>
+              <p className="text-sm text-muted-foreground mb-4">Meaning-centered philosophy teaches that meaning can be found through work and creation, through love and connection, and through the attitude we take toward unavoidable suffering.</p>
               <div className="space-y-2">
                 {[
                   "What work or creation gives your life the deepest meaning?",
@@ -179,7 +179,7 @@ export default function StoryModule() {
               <h2 className="font-serif text-base font-light text-foreground mb-3">From the Texts</h2>
               <blockquote className="border-l-2 border-story/40 pl-3 space-y-1">
                 <p className="font-serif text-sm font-light text-foreground italic leading-relaxed">"The mind, once stretched by a new idea, never returns to its original dimensions."</p>
-                <footer className="text-xs text-muted-foreground">— Ernest Holmes</footer>
+                <footer className="text-xs text-muted-foreground">— New Thought Tradition (Public Domain)</footer>
               </blockquote>
             </div>
           </div>

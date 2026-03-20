@@ -50,7 +50,7 @@ export default function StandardsModule() {
         <div className="p-6 rounded-2xl border border-standards/20 bg-standards/5 mb-8">
           <p className="text-xs font-mono tracking-widest text-standards uppercase mb-3">Today's Standard</p>
           <p className="font-serif text-xl md:text-2xl font-light text-foreground italic leading-relaxed">"You do not rise to the level of your goals. You fall to the level of your systems."</p>
-          <p className="text-xs text-muted-foreground mt-3">— James Clear, Atomic Habits</p>
+          <p className="text-xs text-muted-foreground mt-3">— Behavioral Science Principle</p>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
@@ -108,7 +108,7 @@ export default function StandardsModule() {
             </div>
             <div className="p-6 rounded-2xl border border-border bg-card">
               <h2 className="font-serif text-xl font-light text-foreground mb-2">The Four Laws of Behavior Change</h2>
-              <p className="text-sm text-muted-foreground mb-5">From James Clear's Atomic Habits — the science of building habits that stick.</p>
+              <p className="text-sm text-muted-foreground mb-5">The LifeOS Identity Stack is built on four behavioral science laws that make habits inevitable rather than aspirational.</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {ATOMIC_HABITS_LAWS.map(law => (
                   <div key={law.law} className="p-4 rounded-xl bg-secondary/50">

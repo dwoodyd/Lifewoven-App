@@ -37,7 +37,7 @@ export default function StewardshipModule() {
         <div className="p-6 rounded-2xl border border-stewardship/20 bg-stewardship/5 mb-8">
           <p className="text-xs font-mono tracking-widest text-stewardship uppercase mb-3">Wealth Affirmation</p>
           <p className="font-serif text-xl md:text-2xl font-light text-foreground italic leading-relaxed">"{wealthAffirmation}"</p>
-          <p className="text-xs text-muted-foreground mt-3">— Ernest Holmes, Creative Mind and Success</p>
+          <p className="text-xs text-muted-foreground mt-3">— New Thought Tradition (Public Domain)</p>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
@@ -57,7 +57,7 @@ export default function StewardshipModule() {
             </div>
             <div className="p-6 rounded-2xl border border-border bg-card">
               <div className="flex items-center gap-2 mb-2"><DollarSign className="h-4 w-4 text-muted-foreground" /><h2 className="font-serif text-xl font-light text-foreground">Wealth Consciousness</h2></div>
-              <p className="text-sm text-muted-foreground mb-4">Ernest Holmes taught that prosperity is a mental state before it is a material reality. Your relationship with money begins in your mind.</p>
+              <p className="text-sm text-muted-foreground mb-4">New Thought philosophy teaches that prosperity is a mental state before it is a material reality. Your relationship with abundance begins in your mind.</p>
               <div className="space-y-2">{["What is my current story about money?", "Where am I blocking abundance in my life?", "What would I do with complete financial freedom?", "How can I create more value for others today?"].map(prompt => (<Link key={prompt} href={`/journal?module=stewardship&prompt=${encodeURIComponent(prompt)}`}><div className="p-3 rounded-lg border border-border hover:border-stewardship/40 hover:bg-stewardship/5 transition-all cursor-pointer flex items-center justify-between gap-2"><p className="text-sm text-foreground">{prompt}</p><ArrowRight className="h-4 w-4 text-muted-foreground flex-shrink-0" /></div></Link>))}</div>
             </div>
           </div>

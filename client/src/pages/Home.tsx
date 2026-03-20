@@ -292,26 +292,27 @@ export default function Home() {
       {/* ─── Trust Bar ─── */}
       <section className="border-y border-border py-7">
         <div className="container">
+          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase text-center mb-4">Informed by wisdom traditions including</p>
           <div className="flex flex-wrap items-center justify-center gap-8 md:gap-14 text-muted-foreground">
             <div className="flex items-center gap-2 text-sm">
               <Brain className="h-4 w-4" />
-              <span>Ernest Holmes · Science of Mind</span>
+              <span>Mind Science & New Thought</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
               <Heart className="h-4 w-4" />
-              <span>Abraham-Hicks · Law of Attraction</span>
+              <span>Law of Attraction Philosophy</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
               <Zap className="h-4 w-4" />
-              <span>James Clear · Atomic Habits</span>
+              <span>Behavioral Science & Habit Theory</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
               <Sparkles className="h-4 w-4" />
-              <span>Viktor Frankl · Logotherapy</span>
+              <span>Logotherapy & Meaning-Centered Psychology</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
               <Waves className="h-4 w-4" />
-              <span>Summer McStravick · Flowdreaming</span>
+              <span>Conscious Creation & Emotional Immersion</span>
             </div>
           </div>
         </div>

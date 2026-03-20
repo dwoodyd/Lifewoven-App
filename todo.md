@@ -118,3 +118,17 @@
 
 ### Language System Documentation
 - [ ] Write Adaptive Intelligence Layer Language System document (all copy, naming conventions, tone guidelines)
+
+## Legal-Risk Scrub & Release-Readiness Pass
+
+- [x] Rename all high-risk course/product titles (Atomic Habits for the Soul → Identity in Motion, Living in the Vortex → The Alignment Current, Finding Your Why → The Meaning Foundation, Creative Flowdreaming → Emotional Futures, Getting Into the Vortex → The Alignment State)
+- [x] Update all internal references to renamed titles throughout codebase
+- [x] Reframe "Teachers" section to "Wisdom Lineage" with non-affiliation disclaimer
+- [x] Add non-affiliation disclaimer to About page, footer, and any page with named influences
+- [x] Review and reduce direct quotes from living authors on sales-oriented pages — all living author quotes removed from sales pages
+- [x] Fix rights labeling inconsistencies — all library resources now have explicit rights notes
+- [x] Review Emotional Guidance Scale framing — reframed as LifeOS Emotional Compass in Oracle; EGS name retained in State module as a descriptive tool name
+- [x] Review Flowdreaming/Vortex pathway framing — Flowdream Session renamed to Emotional Futures Session; all branded attributions removed from PathwayPage
+- [x] Ensure all renamed items feel original, premium, and LifeOS-owned — verified
+- [x] Update Terms of Service to include explicit non-affiliation language — included in legal pages
+- [x] Final TypeScript check: zero errors. All 14 tests passing. Checkpoint saved.

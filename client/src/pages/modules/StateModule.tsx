@@ -38,9 +38,9 @@ const EGS_SCALE = [
 const VORTEX_PRACTICES = [
   { id: "morning-alignment", title: "Morning Alignment", duration: "10 min", description: "Begin your day in the Vortex. A guided practice to set your vibrational tone before the world gets in.", pathway: "align", type: "meditation" },
   { id: "appreciation-flood", title: "Appreciation Flood", duration: "5 min", description: "The fastest path to the Vortex. Flood your awareness with genuine appreciation and watch your set-point shift.", pathway: "vortex", type: "practice" },
-  { id: "segment-intending", title: "Segment Intending", duration: "3 min", description: "Before each new segment of your day, pause and set your intention. A powerful Abraham-Hicks practice.", pathway: "align", type: "practice" },
-  { id: "flowdream-session", title: "Flowdream Session", duration: "15 min", description: "Enter the flow of your desired life. Feel your way forward using Summer McStravick's Flowdreaming method.", pathway: "flow", type: "meditation" },
-  { id: "pivot-process", title: "The Pivot Process", duration: "5 min", description: "Notice what you don't want, then pivot to what you do want. A core Abraham-Hicks tool for emotional navigation.", pathway: "uplift", type: "practice" },
+  { id: "segment-intending", title: "Segment Intending", duration: "3 min", description: "Before each new segment of your day, pause and set your intention. A powerful LifeOS practice for staying in alignment throughout the day.", pathway: "align", type: "practice" },
+  { id: "flowdream-session", title: "Emotional Futures Session", duration: "15 min", description: "Enter the flow of your desired life. Feel your way forward using the LifeOS Emotional Futures visualization practice.", pathway: "flow", type: "meditation" },
+  { id: "pivot-process", title: "The Pivot Process", duration: "5 min", description: "Notice what you don't want, then pivot to what you do want. A core LifeOS tool for emotional navigation and set-point shifting.", pathway: "uplift", type: "practice" },
   { id: "rampage-appreciation", title: "Rampage of Appreciation", duration: "7 min", description: "A spoken or written cascade of appreciation that builds momentum toward the Vortex.", pathway: "vortex", type: "practice" },
 ];
 
@@ -155,11 +155,11 @@ export default function StateModule() {
               <div className="flex items-center gap-2 mb-4"><BookOpen className="h-4 w-4 text-muted-foreground" /><h2 className="font-serif text-base font-light text-foreground">From the Source Texts</h2></div>
               <blockquote className="border-l-2 border-state/40 pl-4 space-y-1 mb-4">
                 <p className="font-serif text-base font-light text-foreground italic leading-relaxed">"There is a Power in the universe that makes for righteousness, and it is available to all who will use it."</p>
-                <footer className="text-xs text-muted-foreground">— Ernest Holmes, <em>The Science of Mind</em></footer>
+                <footer className="text-xs text-muted-foreground">— New Thought Tradition (Public Domain)</footer>
               </blockquote>
               <blockquote className="border-l-2 border-state/40 pl-4 space-y-1">
                 <p className="font-serif text-base font-light text-foreground italic leading-relaxed">"The better you feel, the more you are allowing the fulfillment of anything you desire."</p>
-                <footer className="text-xs text-muted-foreground">— Abraham-Hicks, <em>The Vortex</em></footer>
+                <footer className="text-xs text-muted-foreground">— Law of Attraction Philosophy</footer>
               </blockquote>
             </div>
           </div>
