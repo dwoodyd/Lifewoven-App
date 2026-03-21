@@ -89,10 +89,10 @@ const PRODUCTS = [
     id: "reset-protocol-audio",
     category: "audio",
     icon: "🔄",
-    title: "Reset After Setback Audio",
+    title: "Reset Audio",
     subtitle: "The Full Resilience Protocol",
     price: "$27",
-    description: "A guided audio experience walking you through the complete Reset After Setback pathway. For the moments when you need to return to yourself.",
+    description: "A guided audio experience walking you through the complete Reset pathway. For the moments when you need to return to yourself.",
     tags: ["Audio", "Resilience", "45 min"],
   },
   {

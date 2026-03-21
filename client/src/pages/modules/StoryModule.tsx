@@ -162,8 +162,8 @@ export default function StoryModule() {
               <h2 className="font-serif text-base font-light text-foreground mb-4">Story Pathways</h2>
               <div className="space-y-2">
                 {[
-                  { href: "/pathway/why", label: "Why — Meaning & Resilience", desc: "Find your deepest purpose" },
-                  { href: "/pathway/reset", label: "Reset After Setback", desc: "Reframe and rebuild" },
+                  { href: "/pathway/purpose", label: "Why — Meaning & Resilience", desc: "Find your deepest purpose" },
+                  { href: "/pathway/reset", label: "Reset", desc: "Reframe and rebuild" },
                   { href: "/pathway/flow", label: "Flow — Visualization", desc: "See your desired future" },
                 ].map(({ href, label, desc }) => (
                   <Link key={href} href={href}>

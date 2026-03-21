@@ -91,7 +91,7 @@ export default function Dashboard() {
 
   // Determine the single most important next step
   const nextStep = !hasHabits
-    ? { label: "Build your first habit", sub: "Your Stack is empty. Start with one small identity-based habit.", href: "/standards", cta: "Build My Stack" }
+    ? { label: "Build your first habit", sub: "Your Rhythms are empty. Start with one small identity-based habit.", href: "/standards", cta: "Build My Rhythms" }
     : !hasJournal
     ? { label: "Write your first journal entry", sub: "Reflection is where transformation begins. Take 5 minutes to write.", href: "/journal", cta: "Open Journal" }
     : { label: "Begin today's check-in", sub: "How you feel right now is data. Check in and let the Oracle listen.", href: null, cta: "Start Check-in", action: () => setShowCheckIn(true) };
@@ -223,7 +223,7 @@ export default function Dashboard() {
 
             <div>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="font-serif text-lg font-light text-foreground">Today's Stack</h2>
+                <h2 className="font-serif text-lg font-light text-foreground">Today's Rhythms</h2>
                 <Link href="/module/standards"><Button variant="ghost" size="sm" className="gap-1 text-xs text-muted-foreground">Manage <ArrowRight className="h-3 w-3" /></Button></Link>
               </div>
               {habits && habits.length > 0 ? (
@@ -250,7 +250,7 @@ export default function Dashboard() {
               ) : (
                 <div className="p-6 rounded-2xl border border-dashed border-accent/20 bg-accent/3 text-center">
                   <Target className="h-8 w-8 text-accent/40 mx-auto mb-3" />
-                  <p className="font-serif text-base font-light text-foreground mb-1">Your Stack is waiting.</p>
+                  <p className="font-serif text-base font-light text-foreground mb-1">Your Rhythms are waiting.</p>
                   <p className="text-sm text-muted-foreground mb-4">Habits are not about discipline — they are about identity. Who do you want to become? Start with one habit that reflects that person.</p>
                   <Button asChild size="sm"><Link href="/standards">Build My First Habit</Link></Button>
                 </div>

@@ -12,7 +12,6 @@ import {
   Compass,
   Leaf,
   Sparkles,
-  Star,
   ChevronRight,
   Brain,
   Heart,
@@ -75,31 +74,15 @@ const modules = [
 
 const pathways = [
   { slug: "align", label: "Align", desc: "Daily grounding and morning alignment", color: "bg-[oklch(0.65_0.13_195)]" },
-  { slug: "vortex", label: "Vortex", desc: "Advanced vibrational and meditative practice", color: "bg-[oklch(0.55_0.18_290)]" },
+  { slug: "resonance", label: "Resonance", desc: "Advanced vibrational and meditative practice", color: "bg-[oklch(0.55_0.18_290)]" },
   { slug: "uplift", label: "Uplift", desc: "Shift your emotional set-point upward", color: "bg-[oklch(0.70_0.15_50)]" },
   { slug: "flow", label: "Flow", desc: "Visualization and future-self activation", color: "bg-[oklch(0.62_0.14_175)]" },
-  { slug: "stack", label: "Stack", desc: "Identity-based habit execution system", color: "bg-[oklch(0.55_0.16_140)]" },
-  { slug: "why", label: "Why", desc: "Meaning, purpose, and deep resilience", color: "bg-[oklch(0.52_0.14_250)]" },
-  { slug: "reset", label: "Reset After Setback", desc: "The flagship resilience protocol", color: "bg-[oklch(0.58_0.18_20)]" },
+  { slug: "rhythms", label: "Rhythms", desc: "Identity-based habit execution system", color: "bg-[oklch(0.55_0.16_140)]" },
+  { slug: "purpose", label: "Purpose", desc: "Meaning, purpose, and deep resilience", color: "bg-[oklch(0.52_0.14_250)]" },
+  { slug: "reset", label: "Reset", desc: "The flagship resilience protocol", color: "bg-[oklch(0.58_0.18_20)]" },
 ];
 
-const testimonials = [
-  {
-    quote: "LifeOS gave me a framework that actually holds. I've tried every productivity app. This is the first one that addresses why I wasn't following through.",
-    name: "Maya R.",
-    role: "Founder & Coach",
-  },
-  {
-    quote: "The Oracle noticed a pattern in my journals that I had missed for months. That single insight shifted something fundamental.",
-    name: "James T.",
-    role: "Executive",
-  },
-  {
-    quote: "Reset After Setback is unlike anything I've used. It's not toxic positivity. It's structured, honest, and it actually works.",
-    name: "Alicia M.",
-    role: "Therapist & Practitioner",
-  },
-];
+// Testimonials removed — replaced with canonical trust structure below
 
 const pricingTiers = [
   {
@@ -486,30 +469,43 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── Testimonials ─── */}
+      {/* ─── Why LifeOS Exists ─── */}
       <section className="py-24 bg-secondary/30">
         <div className="container">
-          <div className="max-w-2xl mb-14">
-            <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">Voices</p>
-            <h2 className="font-serif text-4xl font-light text-foreground">What people are saying.</h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((t, i) => (
-              <div key={i} className="p-6 rounded-xl bg-card border border-border">
-                <div className="flex gap-0.5 mb-4">
-                  {[...Array(5)].map((_, j) => (
-                    <Star key={j} className="h-3.5 w-3.5 fill-accent text-accent" />
-                  ))}
+          <div className="grid lg:grid-cols-2 gap-16 items-center max-w-5xl">
+            <div>
+              <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Why This Exists</p>
+              <h2 className="font-serif text-4xl md:text-5xl font-light text-foreground mb-6">
+                Most systems are built for<br />
+                <span className="italic text-accent">the best version of you.</span>
+              </h2>
+              <p className="text-muted-foreground font-light leading-relaxed mb-5">
+                LifeOS was built for the real version. The one who starts and stops. The one who has the books and the knowledge but still feels stuck. The one whose mind works differently on different days.
+              </p>
+              <p className="text-muted-foreground font-light leading-relaxed mb-5">
+                The wisdom traditions we draw from — New Thought, mind science, behavioral psychology, logotherapy, conscious creation — have been helping people transform their lives for over a century. What was missing was a single, intelligent container that brought them together.
+              </p>
+              <p className="text-muted-foreground font-light leading-relaxed">
+                LifeOS is that container. Not a content library. Not a habit app. A living operating system for a whole, aligned life.
+              </p>
+            </div>
+            <div className="space-y-5">
+              {[
+                { label: "Built for Real Minds", desc: "Designed for interruption, return, and inconsistency — not just peak performance. Low Bandwidth Mode, Re-entry Flow, and flexible tracking built in from the start." },
+                { label: "Rooted in Timeless Wisdom", desc: "Every tool, pathway, and practice is grounded in wisdom traditions that have been tested across generations — not trending frameworks." },
+                { label: "One System, Not Many Apps", desc: "Your emotional state, your beliefs, your habits, your decisions, your energy — all connected. The Oracle sees the whole picture so you don't have to." },
+              ].map((item) => (
+                <div key={item.label} className="p-5 rounded-xl border border-border bg-card">
+                  <div className="flex items-start gap-3">
+                    <CheckCircle2 className="h-4 w-4 text-accent mt-0.5 shrink-0" />
+                    <div>
+                      <p className="font-medium text-sm text-foreground mb-1">{item.label}</p>
+                      <p className="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
                 </div>
-                <blockquote className="font-serif text-lg font-light leading-relaxed text-foreground mb-4 italic">
-                  "{t.quote}"
-                </blockquote>
-                <div>
-                  <p className="text-sm font-medium text-foreground">{t.name}</p>
-                  <p className="text-xs text-muted-foreground">{t.role}</p>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>

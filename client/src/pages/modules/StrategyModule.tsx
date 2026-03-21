@@ -129,7 +129,7 @@ export default function StrategyModule() {
             <div className="p-5 rounded-2xl border border-border bg-card">
               <h2 className="font-serif text-base font-light text-foreground mb-4">Strategy Pathways</h2>
               <div className="space-y-2">
-                {[{ href: "/pathway/why", label: "Why — Purpose Alignment", desc: "Align strategy with meaning" }, { href: "/pathway/flow", label: "Flow — Visualization", desc: "See your desired future" }].map(({ href, label, desc }) => (
+                {[{ href: "/pathway/purpose", label: "Why — Purpose Alignment", desc: "Align strategy with meaning" }, { href: "/pathway/flow", label: "Flow — Visualization", desc: "See your desired future" }].map(({ href, label, desc }) => (
                   <Link key={href} href={href}><div className="p-3 rounded-lg border border-border hover:border-strategy/40 hover:bg-strategy/5 transition-all cursor-pointer"><p className="text-sm font-medium text-foreground">{label}</p><p className="text-xs text-muted-foreground">{desc}</p></div></Link>
                 ))}
               </div>

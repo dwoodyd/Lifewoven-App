@@ -191,9 +191,9 @@ export default function StateModule() {
               <div className="space-y-2">
                 {[
                   { href: "/pathway/align", label: "Align — Daily Grounding", desc: "7-day foundation practice" },
-                  { href: "/pathway/vortex", label: "Vortex — Advanced Practice", desc: "Vibrational mastery" },
+                  { href: "/pathway/resonance", label: "Vortex — Advanced Practice", desc: "Vibrational mastery" },
                   { href: "/pathway/uplift", label: "Uplift — Set-Point Shift", desc: "Raise your baseline" },
-                  { href: "/pathway/reset", label: "Reset After Setback", desc: "Resilience protocol" },
+                  { href: "/pathway/reset", label: "Reset", desc: "Resilience protocol" },
                 ].map(({ href, label, desc }) => (
                   <Link key={href} href={href}>
                     <div className="p-3 rounded-lg border border-border hover:border-state/40 hover:bg-state/5 transition-all cursor-pointer">

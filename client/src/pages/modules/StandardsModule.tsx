@@ -133,7 +133,7 @@ export default function StandardsModule() {
             <div className="p-5 rounded-2xl border border-border bg-card">
               <h2 className="font-serif text-base font-light text-foreground mb-4">Standards Pathways</h2>
               <div className="space-y-2">
-                {[{ href: "/pathway/stack", label: "Stack — Habit Execution", desc: "Build your daily system" }, { href: "/pathway/align", label: "Align — Daily Grounding", desc: "Start each day right" }].map(({ href, label, desc }) => (
+                {[{ href: "/pathway/rhythms", label: "Stack — Habit Execution", desc: "Build your daily system" }, { href: "/pathway/align", label: "Align — Daily Grounding", desc: "Start each day right" }].map(({ href, label, desc }) => (
                   <Link key={href} href={href}><div className="p-3 rounded-lg border border-border hover:border-standards/40 hover:bg-standards/5 transition-all cursor-pointer"><p className="text-sm font-medium text-foreground">{label}</p><p className="text-xs text-muted-foreground">{desc}</p></div></Link>
                 ))}
               </div>

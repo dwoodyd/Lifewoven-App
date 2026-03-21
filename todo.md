@@ -132,3 +132,52 @@
 - [x] Ensure all renamed items feel original, premium, and LifeOS-owned — verified
 - [x] Update Terms of Service to include explicit non-affiliation language — included in legal pages
 - [x] Final TypeScript check: zero errors. All 14 tests passing. Checkpoint saved.
+
+## Canonical Build Directive — Final Pass
+
+### Phase 1: Global Rename
+- [ ] Rename Vortex → Resonance everywhere (pathways, routes, nav, dashboard, Oracle, audit)
+- [ ] Rename Stack → Rhythms everywhere
+- [ ] Rename Why → Purpose everywhere
+- [ ] Rename Reset After Setback → Reset everywhere (single word, no variants)
+- [ ] Remove all old pathway name variants: Begin Again, Return, Re-enter Gently
+
+### Phase 2: Alignment Audit Rebuild (Canonical HTML)
+- [ ] 3-screen opening: Entry, Consent, Pre-question framing (exact copy from canonical HTML)
+- [ ] 12 core questions with 4 section labels (exact copy from canonical HTML)
+- [ ] 3 optional precision questions (Q13-Q15) shown after Q12
+- [ ] Scoring logic: 5S dimension mapping, friction tags, Reset-first override (Q5+Q9 both 4-5)
+- [ ] 6 result profiles with exact canonical copy (no paraphrasing)
+- [ ] Results page: profile name, summary, insight bullets, 5S snapshot bar chart, pathway routing, save/continue block, required disclaimer
+- [ ] Dashboard routing after audit: clear "what to do right now" card
+- [ ] Audit result persistence in database
+
+### Phase 3: Reset Elevation + Interactive Pathways
+- [ ] Reset as persistent visible dashboard action (not just a pathway card)
+- [ ] Reset visible after absence, overwhelm, shame, burnout
+- [ ] All 7 pathways: expandable steps with Mark Complete button
+- [ ] Pathway progress memory (persisted per user)
+- [ ] Pathway re-entry continuity (resume where you left off)
+
+### Phase 4: Homepage + Pricing + Community
+- [ ] Homepage: remove fake testimonials, replace with trust sections (Why LifeOS Exists, Founder Note, Built for Real Minds, How LifeOS Helps)
+- [ ] Homepage: primary CTA = Take the Alignment Audit, secondary = Explore LifeOS
+- [ ] Pricing: Explorer (Free), Seeker ($19/mo), Oracle ($49/mo)
+- [ ] Pricing: clear tier differences, upgrade path, support/refund clarity
+- [ ] Community: public preview state (not an empty login wall)
+
+### Phase 5: Oracle Strengthened
+- [ ] Oracle personalization opt-in consent (explicit, user-controlled)
+- [ ] Oracle unstuck mode ("Why Am I Stuck?" mode)
+- [ ] Oracle pattern mirror (recurring themes from journal entries)
+- [ ] Oracle weekly reflection summary
+
+### Phase 6: QA Pass
+- [ ] All routes load without 404
+- [ ] All buttons functional (no dead buttons)
+- [ ] All footer links work
+- [ ] Legal pages linked globally
+- [ ] Mobile responsiveness verified
+- [ ] No fake testimonials anywhere
+- [ ] No old pathway names anywhere
+- [ ] Consent settings page exists and works

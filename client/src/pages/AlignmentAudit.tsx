@@ -1,320 +1,441 @@
 import { useState } from "react";
+import { useLocation } from "wouter";
+import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import Nav from "@/components/Nav";
-import { ArrowRight, ArrowLeft, CheckCircle2, Waves, BookOpen, Target, Compass, Leaf, Brain } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { ONBOARDING_PATTERNS } from "../../../shared/adaptive-language";
+import { getLoginUrl } from "@/const";
+import { toast } from "sonner";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 
-const questions = [
-  { id: 1, module: "state", text: "How often do you feel emotionally reactive, anxious, or unable to access a sense of calm?", options: [
-    { label: "Almost always — I feel overwhelmed most days", score: 1 },
-    { label: "Often — it takes effort to regulate", score: 2 },
-    { label: "Sometimes — I have good days and hard days", score: 3 },
-    { label: "Rarely — I generally feel grounded", score: 4 },
-  ]},
-  { id: 2, module: "state", text: "When you imagine your ideal life, how connected do you feel to that vision right now?", options: [
-    { label: "Completely disconnected — it feels impossible", score: 1 },
-    { label: "Distant — I can see it but can't feel it", score: 2 },
-    { label: "Occasionally close — in good moments", score: 3 },
-    { label: "Fairly aligned — I feel it most of the time", score: 4 },
-  ]},
-  { id: 3, module: "story", text: "How much do your internal beliefs support your goals and desires?", options: [
-    { label: "They actively work against me — I self-sabotage", score: 1 },
-    { label: "Mixed — some support, some undermine", score: 2 },
-    { label: "Mostly supportive — with some doubt", score: 3 },
-    { label: "Strongly aligned — I believe in myself", score: 4 },
-  ]},
-  { id: 4, module: "story", text: "How clear is your sense of identity and purpose?", options: [
-    { label: "Very unclear — I feel lost or undefined", score: 1 },
-    { label: "Somewhat unclear — I'm searching", score: 2 },
-    { label: "Emerging — I have a sense but it's not solid", score: 3 },
-    { label: "Clear and grounded — I know who I am", score: 4 },
-  ]},
-  { id: 5, module: "standards", text: "How consistently do you follow through on the habits and commitments you set for yourself?", options: [
-    { label: "Rarely — I start but rarely sustain", score: 1 },
-    { label: "Inconsistently — good weeks and bad weeks", score: 2 },
-    { label: "Mostly — with occasional lapses", score: 3 },
-    { label: "Consistently — I keep my promises to myself", score: 4 },
-  ]},
-  { id: 6, module: "standards", text: "How intentional is your daily structure and use of time?", options: [
-    { label: "Reactive — I respond to whatever comes", score: 1 },
-    { label: "Somewhat structured — but easily derailed", score: 2 },
-    { label: "Mostly intentional — with room to improve", score: 3 },
-    { label: "Highly intentional — I design my days", score: 4 },
-  ]},
-  { id: 7, module: "strategy", text: "How confident are you in the quality of your major life decisions?", options: [
-    { label: "Not confident — I often regret or second-guess", score: 1 },
-    { label: "Somewhat — I decide but without a clear framework", score: 2 },
-    { label: "Mostly — I think things through fairly well", score: 3 },
-    { label: "Very confident — I have a solid decision process", score: 4 },
-  ]},
-  { id: 8, module: "strategy", text: "How well are you leveraging your unique strengths in your work or life?", options: [
-    { label: "Poorly — I feel stuck or misaligned", score: 1 },
-    { label: "Somewhat — I see the opportunity but haven't acted", score: 2 },
-    { label: "Moderately — I'm moving in the right direction", score: 3 },
-    { label: "Well — I'm operating in my zone of genius", score: 4 },
-  ]},
-  { id: 9, module: "stewardship", text: "How well are you caring for your physical energy — sleep, movement, nutrition, and recovery?", options: [
-    { label: "Poorly — I'm depleted and running on empty", score: 1 },
-    { label: "Inconsistently — some areas better than others", score: 2 },
-    { label: "Mostly well — with some gaps", score: 3 },
-    { label: "Very well — my body feels like an asset", score: 4 },
-  ]},
-  { id: 10, module: "stewardship", text: "How aligned is your relationship with money and resources to your values and goals?", options: [
-    { label: "Misaligned — money feels like a source of stress or shame", score: 1 },
-    { label: "Somewhat — I manage but without real intention", score: 2 },
-    { label: "Mostly — I'm building but there's more to do", score: 3 },
-    { label: "Aligned — I steward my resources with clarity", score: 4 },
-  ]},
-];
+// ─────────────────────────────────────────────
+// CANONICAL QUESTIONS — source: lifeos-audit-copy-system.html
+// ─────────────────────────────────────────────
+const SCALE = ["Never", "Rarely", "Sometimes", "Often", "Almost always"] as const;
+type ScaleValue = 1 | 2 | 3 | 4 | 5;
 
-const pathwayMap: Record<string, { pathway: string; title: string; desc: string; icon: React.ElementType; color: string }> = {
-  state: { pathway: "align", title: "Begin with Align", desc: "Your emotional state is the foundation. The Align pathway will guide you into daily grounding, vibrational alignment, and nervous system regulation.", icon: Waves, color: "text-state" },
-  story: { pathway: "why", title: "Begin with Why", desc: "Your beliefs and identity are the architecture of your life. The Why pathway will help you excavate meaning, rewrite limiting narratives, and build an identity that supports your vision.", icon: BookOpen, color: "text-story" },
-  standards: { pathway: "stack", title: "Begin with Stack", desc: "Your daily execution is the bridge between vision and reality. The Stack pathway will help you design identity-based habits and build the consistency that creates lasting change.", icon: Target, color: "text-standards" },
-  strategy: { pathway: "flow", title: "Begin with Flow", desc: "Your strategic clarity shapes your trajectory. The Flow pathway will help you visualize your future self and align your actions with your deepest intentions.", icon: Compass, color: "text-strategy" },
-  stewardship: { pathway: "uplift", title: "Begin with Uplift", desc: "Your energy and resources are your capacity for life. The Uplift pathway will help you audit your energy, shift your emotional set-point, and build the foundation you need.", icon: Leaf, color: "text-stewardship" },
-};
-
-function calculateScores(answers: Record<number, number>) {
-  const moduleScores: Record<string, number[]> = { state: [], story: [], standards: [], strategy: [], stewardship: [] };
-  questions.forEach((q) => { const score = answers[q.id]; if (score !== undefined) moduleScores[q.module].push(score); });
-  const averages: Record<string, number> = {};
-  Object.entries(moduleScores).forEach(([mod, scores]) => {
-    averages[mod] = scores.length > 0 ? Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 25) : 50;
-  });
-  const lowest = Object.entries(averages).sort((a, b) => a[1] - b[1])[0][0];
-  return { scores: averages, recommendedModule: lowest };
+interface CoreQuestion {
+  id: number;
+  dimension: string;
+  section: number;
+  sectionLabel: string;
+  text: string;
 }
 
-export default function AlignmentAudit() {
-  const [started, setStarted] = useState(false);
-  const [showMindPatterns, setShowMindPatterns] = useState(false);
-  const [selectedPatterns, setSelectedPatterns] = useState<string[]>([]);
-  const [currentQ, setCurrentQ] = useState(0);
-  const [answers, setAnswers] = useState<Record<number, number>>({});
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const [completed, setCompleted] = useState(false);
-  const [result, setResult] = useState<{ scores: Record<string, number>; recommendedModule: string } | null>(null);
-  const { isAuthenticated } = useAuth();
-  const saveAudit = trpc.audit.save.useMutation();
+interface OptionalQuestion {
+  id: number;
+  dimension: string;
+  text: string;
+  options: string[];
+}
 
-  function togglePattern(id: string) {
-    setSelectedPatterns(prev =>
-      prev.includes(id) ? prev.filter(p => p !== id) : [...prev, id]
-    );
+const CORE_QUESTIONS: CoreQuestion[] = [
+  { id: 1, dimension: "State", section: 1, sectionLabel: "Current felt experience", text: "Lately, I feel mentally scattered even when I care deeply about what I need to do." },
+  { id: 2, dimension: "State", section: 1, sectionLabel: "Current felt experience", text: "I feel like I am carrying more internally than I know how to organize." },
+  { id: 3, dimension: "State", section: 1, sectionLabel: "Current felt experience", text: "It has been hard to feel clear, steady, or grounded in daily life." },
+  { id: 4, dimension: "Standards", section: 2, sectionLabel: "Friction pattern", text: "I often know what needs to happen, but struggle to begin." },
+  { id: 5, dimension: "Standards", section: 2, sectionLabel: "Friction pattern", text: "When I lose momentum, I tend to avoid re-entering instead of starting again." },
+  { id: 6, dimension: "State", section: 2, sectionLabel: "Friction pattern", text: "Small tasks can feel heavier than they should." },
+  { id: 7, dimension: "Story", section: 3, sectionLabel: "Self-trust and inner narrative", text: "I am harder on myself than most people realize." },
+  { id: 8, dimension: "Story", section: 3, sectionLabel: "Self-trust and inner narrative", text: "Part of me questions whether I can really rely on myself." },
+  { id: 9, dimension: "Story", section: 3, sectionLabel: "Self-trust and inner narrative", text: "I often interpret inconsistency as a personal flaw." },
+  { id: 10, dimension: "Standards", section: 4, sectionLabel: "Structure, direction, and stewardship", text: "I need more structure, but rigid systems usually stop working for me." },
+  { id: 11, dimension: "Stewardship", section: 4, sectionLabel: "Structure, direction, and stewardship", text: "I have been neglecting my energy, health, or basic rhythms more than I want to admit." },
+  { id: 12, dimension: "Strategy", section: 4, sectionLabel: "Structure, direction, and stewardship", text: "I am not always sure what deserves my focus first." },
+];
+
+const OPTIONAL_QUESTIONS: OptionalQuestion[] = [
+  { id: 13, dimension: "Pattern clarifier", text: "When I get overwhelmed, I most often:", options: ["Shut down", "Overthink", "Distract myself", "Try to do everything", "Isolate", "Push harder than I should"] },
+  { id: 14, dimension: "Need signal", text: "What sounds most true right now?", options: ["I need calm", "I need clarity", "I need structure", "I need motivation", "I need to recover", "I need a reset"] },
+  { id: 15, dimension: "Module fit", text: "What do you most want help with first?", options: ["Emotional steadiness", "Identity and mindset", "Habits and follow-through", "Decisions and direction", "Health, energy, and balance"] },
+];
+
+// ─────────────────────────────────────────────
+// SCORING — canonical logic
+// ─────────────────────────────────────────────
+function computeScores(answers: Record<number, ScaleValue>) {
+  const state = (answers[1] ?? 0) + (answers[2] ?? 0) + (answers[3] ?? 0) + (answers[6] ?? 0);
+  const standards = (answers[4] ?? 0) + (answers[5] ?? 0) + (answers[6] ?? 0) + (answers[10] ?? 0);
+  const story = (answers[7] ?? 0) + (answers[8] ?? 0) + (answers[9] ?? 0);
+  const strategy = (answers[10] ?? 0) + (answers[12] ?? 0);
+  const stewardship = (answers[11] ?? 0);
+  return {
+    raw: { state, standards, story, strategy, stewardship },
+    pct: {
+      State: Math.round((state / 20) * 100),
+      Story: Math.round((story / 15) * 100),
+      Standards: Math.round((standards / 20) * 100),
+      Strategy: Math.round((strategy / 10) * 100),
+      Stewardship: Math.round((stewardship / 5) * 100),
+    },
+  };
+}
+
+function detectFrictionTags(answers: Record<number, ScaleValue>): string[] {
+  const tags: string[] = [];
+  if ((answers[1] ?? 0) >= 4 && (answers[2] ?? 0) >= 4 && (answers[3] ?? 0) >= 4) tags.push("overwhelm");
+  if ((answers[7] ?? 0) >= 4 && (answers[8] ?? 0) >= 4 && (answers[9] ?? 0) >= 4) tags.push("self-trust erosion");
+  if ((answers[4] ?? 0) >= 4 && (answers[5] ?? 0) >= 4) tags.push("initiation friction");
+  if ((answers[11] ?? 0) >= 4 && (answers[3] ?? 0) >= 4) tags.push("burnout");
+  if ((answers[5] ?? 0) >= 4 && (answers[9] ?? 0) >= 4) tags.push("shame after interruption");
+  return tags;
+}
+
+type ProfileKey = "The Overextended Mind" | "The Friction-Filled Starter" | "The Quiet Self-Trust Fracture" | "The Emotionally Flooded Achiever" | "The Direction-Drained Builder" | "The Burned-Out Steward";
+
+interface Profile {
+  name: ProfileKey;
+  tags: string[];
+  summary: string;
+  bullets: string[];
+  firstPathway: string;
+  secondPathway: string;
+  nextStep: string;
+  truth: string;
+}
+
+const PROFILES: Record<ProfileKey, Profile> = {
+  "The Overextended Mind": {
+    name: "The Overextended Mind", tags: ["State", "Stewardship"],
+    summary: "Right now, your main challenge does not look like a lack of desire. It looks more like overload. You may be carrying too much mentally, emotionally, or practically, which makes even simple things feel heavier than they should. Before you push harder, your system may need more steadiness, clarity, and a gentler way to re-enter.",
+    bullets: ["You may be trying to function at a level your current capacity does not fully support.", "You may need relief from internal pressure before adding more goals.", "You may be mistaking overload for failure."],
+    firstPathway: "Reset", secondPathway: "Align",
+    nextStep: "Take 3 minutes to complete a reset check-in and choose one small promise for today.",
+    truth: "You do not need to earn your way back. You only need a better place to begin.",
+  },
+  "The Friction-Filled Starter": {
+    name: "The Friction-Filled Starter", tags: ["Standards", "Strategy"],
+    summary: "You may not be struggling because you lack motivation. You may be struggling because getting started has become heavier than it looks from the outside. When the first step feels noisy, loaded, or unclear, even meaningful work can become hard to begin.",
+    bullets: ["You may be carrying too many open loops at once.", "You may need more entry support, not more pressure.", "You may work better with smaller, clearer starting points than rigid expectations."],
+    firstPathway: "Rhythms", secondPathway: "Purpose",
+    nextStep: "Choose one task you care about and reduce it to the smallest honest first move.",
+    truth: "Starting gently still counts as starting.",
+  },
+  "The Quiet Self-Trust Fracture": {
+    name: "The Quiet Self-Trust Fracture", tags: ["Story", "Standards"],
+    summary: "You are not without desire. But somewhere along the way, inconsistency may have started turning into self-doubt. When you mean well and still struggle to follow through, it can quietly damage trust in yourself. Not in a dramatic way. In small private moments.",
+    bullets: ["You may be carrying the weight of broken private promises.", "You may be interpreting friction as evidence against your character.", "You may need repair before you need bigger goals."],
+    firstPathway: "Reset", secondPathway: "Story",
+    nextStep: "Choose one promise small enough to keep without force.",
+    truth: "Self-trust is not rebuilt through pressure. It is rebuilt through honest returns.",
+  },
+  "The Emotionally Flooded Achiever": {
+    name: "The Emotionally Flooded Achiever", tags: ["State", "Story"],
+    summary: "You may be capable of a great deal, but your system does not feel steady enough to carry all that pressure cleanly right now. When your inner state is overloaded, even meaningful goals can start to feel sharp, heavy, or impossible to hold.",
+    bullets: ["You may be trying to execute from a flooded state.", "You may be carrying more emotional weight than you have named.", "You may need regulation before planning."],
+    firstPathway: "Align", secondPathway: "Uplift",
+    nextStep: "Take one guided state check-in before making any decisions about what the rest of the day should look like.",
+    truth: "Calm is not avoidance. For you, it may be the doorway back into honest strength.",
+  },
+  "The Direction-Drained Builder": {
+    name: "The Direction-Drained Builder", tags: ["Strategy", "Story"],
+    summary: "You may not need more effort right now. You may need a clearer center. When too many things matter at once, focus can break down. You may be doing a lot, thinking a lot, and still feel strangely unanchored.",
+    bullets: ["You may be spending energy without enough internal prioritization.", "You may need a stronger sense of what matters now, not just what matters in general.", "You may be missing direction more than discipline."],
+    firstPathway: "Purpose", secondPathway: "Strategy",
+    nextStep: "Choose one area of your life that needs a decision more than more thought.",
+    truth: "Clarity is not found by doing more. It is found by returning to what matters most.",
+  },
+  "The Burned-Out Steward": {
+    name: "The Burned-Out Steward", tags: ["Stewardship", "State"],
+    summary: "You may be asking more from yourself than your current rhythms can faithfully support. When energy, rest, or basic care have been neglected for too long, the whole system starts to feel harder to carry.",
+    bullets: ["You may be trying to build from depletion.", "You may need restoration before optimization.", "You may be underestimating how much your physical and energetic state is shaping everything else."],
+    firstPathway: "Reset", secondPathway: "Stewardship",
+    nextStep: "Complete a quick rhythm check and choose one act of repair for your body, energy, or schedule today.",
+    truth: "You are not behind because you need restoration. Restoration is part of the work.",
+  },
+};
+
+function assignProfile(raw: ReturnType<typeof computeScores>["raw"], frictionTags: string[]): ProfileKey {
+  if (frictionTags.includes("shame after interruption")) return "The Quiet Self-Trust Fracture";
+  if (frictionTags.includes("burnout")) return "The Burned-Out Steward";
+  const dims = [
+    { key: "state" as const, score: raw.state },
+    { key: "standards" as const, score: raw.standards },
+    { key: "story" as const, score: raw.story },
+    { key: "strategy" as const, score: raw.strategy },
+    { key: "stewardship" as const, score: raw.stewardship },
+  ].sort((a, b) => b.score - a.score);
+  const top1 = dims[0]?.key;
+  const top2 = dims[1]?.key;
+  if (top1 === "stewardship") return "The Burned-Out Steward";
+  if (top1 === "state" && top2 === "story") return "The Emotionally Flooded Achiever";
+  if (top1 === "state") return "The Overextended Mind";
+  if (top1 === "story") return "The Quiet Self-Trust Fracture";
+  if (top1 === "standards") return "The Friction-Filled Starter";
+  if (top1 === "strategy") return "The Direction-Drained Builder";
+  return "The Friction-Filled Starter";
+}
+
+const DIM_COLORS: Record<string, string> = {
+  State: "bg-state", Story: "bg-story", Standards: "bg-standards",
+  Strategy: "bg-strategy", Stewardship: "bg-stewardship",
+};
+
+type Step = "entry" | "consent" | "preframe" | "quiz" | "optional_prompt" | "optional" | "results";
+
+export default function AlignmentAudit() {
+  const [, navigate] = useLocation();
+  const { isAuthenticated } = useAuth();
+  const [step, setStep] = useState<Step>("entry");
+  const [currentQ, setCurrentQ] = useState(0);
+  const [answers, setAnswers] = useState<Record<number, ScaleValue>>({});
+  const [optionalAnswers, setOptionalAnswers] = useState<Record<number, string>>({});
+  const [optionalQ, setOptionalQ] = useState(0);
+  const [result, setResult] = useState<{ profile: Profile; scores: ReturnType<typeof computeScores>; frictionTags: string[] } | null>(null);
+
+  const saveAudit = trpc.audit.save.useMutation({ onSuccess: () => toast.success("Results saved to your profile.") });
+
+  const totalQ = CORE_QUESTIONS.length;
+  const progress = step === "quiz" ? Math.round((currentQ / totalQ) * 100) : step === "results" ? 100 : 0;
+
+  function finalize(finalAnswers: Record<number, ScaleValue>) {
+    const scores = computeScores(finalAnswers);
+    const frictionTags = detectFrictionTags(finalAnswers);
+    const profileKey = assignProfile(scores.raw, frictionTags);
+    setResult({ profile: PROFILES[profileKey], scores, frictionTags });
+    setStep("optional_prompt");
   }
 
-  const question = questions[currentQ];
-  const progress = (currentQ / questions.length) * 100;
+  function handleAnswer(qId: number, value: ScaleValue) {
+    const updated = { ...answers, [qId]: value };
+    setAnswers(updated);
+    if (currentQ < totalQ - 1) { setTimeout(() => setCurrentQ(q => q + 1), 280); }
+    else { finalize(updated); }
+  }
 
-  function handleSelect(score: number) { setSelectedOption(score); }
+  function handleOptionalAnswer(qId: number, value: string) {
+    const updated = { ...optionalAnswers, [qId]: value };
+    setOptionalAnswers(updated);
+    if (optionalQ < OPTIONAL_QUESTIONS.length - 1) { setTimeout(() => setOptionalQ(q => q + 1), 280); }
+    else { setStep("results"); }
+  }
 
-  function handleNext() {
-    if (selectedOption === null) return;
-    const newAnswers = { ...answers, [question.id]: selectedOption };
-    setAnswers(newAnswers);
-    setSelectedOption(null);
-    if (currentQ < questions.length - 1) {
-      setCurrentQ(currentQ + 1);
-    } else {
-      const { scores, recommendedModule } = calculateScores(newAnswers);
-      setResult({ scores, recommendedModule });
-      setCompleted(true);
-      if (isAuthenticated) {
-        const pathway = pathwayMap[recommendedModule]?.pathway || "align";
-        saveAudit.mutate({ answers: newAnswers, scores, recommendedPathway: pathway });
-      }
+  function handleSaveResults() {
+    if (!isAuthenticated) { window.location.href = getLoginUrl(); return; }
+    if (result) {
+      const stringAnswers: Record<string, number> = {};
+      Object.entries(answers).forEach(([k, v]) => { stringAnswers[k] = v; });
+      saveAudit.mutate({ answers: stringAnswers, scores: result.scores.pct as Record<string, number>, recommendedPathway: result.profile.firstPathway.toLowerCase() });
     }
   }
 
-  function handleBack() {
-    if (currentQ > 0) { setCurrentQ(currentQ - 1); setSelectedOption(answers[questions[currentQ - 1].id] ?? null); }
-  }
+  const q = CORE_QUESTIONS[currentQ];
+  const oq = OPTIONAL_QUESTIONS[optionalQ];
 
-  if (completed && result) {
-    const rec = pathwayMap[result.recommendedModule];
-    const Icon = rec.icon;
-    const moduleOrder = ["state", "story", "standards", "strategy", "stewardship"];
-    const moduleLabels: Record<string, string> = { state: "State", story: "Story", standards: "Standards", strategy: "Strategy", stewardship: "Stewardship" };
-    const moduleDescriptions: Record<string, string> = {
-      state: "Your emotional landscape is calling for attention. This is not a weakness — it is wisdom. When the foundation of how you feel is unstable, everything else is harder.",
-      story: "The narrative you carry about yourself is shaping your reality more than you may realize. The good news: stories can be rewritten. That work begins here.",
-      standards: "You have the vision. The gap is in daily execution. This is one of the most common and most solvable challenges — and it starts with identity, not willpower.",
-      strategy: "You are capable of more than your current decisions reflect. Clarity of direction and quality of thinking are skills — and they can be developed.",
-      stewardship: "Your energy, body, and resources are the raw material of everything you want to create. Right now, they need your attention before anything else can truly flourish.",
-    };
-    return (
-      <div className="min-h-screen bg-background">
-        <Nav />
-        <div className="container pt-28 pb-20 max-w-2xl mx-auto">
-          <div className="mb-10">
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-accent/10 mb-5">
-              <CheckCircle2 className="h-7 w-7 text-accent" />
-            </div>
-            <h1 className="font-serif text-4xl font-light text-foreground mb-4">Your Alignment Audit is complete.</h1>
-            <p className="text-foreground text-lg font-light leading-relaxed mb-3">
-              Thank you for taking the time to be honest with yourself. That alone is the first act of alignment.
-            </p>
-            <p className="text-muted-foreground text-base font-light leading-relaxed">
-              {moduleDescriptions[result.recommendedModule]}
-            </p>
-          </div>
-          <div className="space-y-4 mb-10">
-            {moduleOrder.map((mod) => {
-              const score = result.scores[mod] ?? 50;
-              const isLowest = mod === result.recommendedModule;
-              return (
-                <div key={mod} className={`p-4 rounded-xl border ${isLowest ? "border-accent/40 bg-accent/5" : "border-border bg-card"}`}>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className={`text-sm font-medium ${isLowest ? "text-accent" : "text-foreground"}`}>
-                      {moduleLabels[mod]}
-                      {isLowest && <Badge className="ml-2 text-xs bg-accent/20 text-accent border-accent/30">Start Here</Badge>}
-                    </span>
-                    <span className="text-sm font-mono text-muted-foreground">{score}%</span>
-                  </div>
-                  <Progress value={score} className="h-1.5" />
-                </div>
-              );
-            })}
-          </div>
-          <div className="p-6 rounded-xl border border-border bg-card mb-8">
-            <div className="inline-flex p-2 rounded-lg bg-secondary mb-4"><Icon className={`h-5 w-5 ${rec.color}`} /></div>
-            <h2 className="font-serif text-2xl font-light text-foreground mb-2">{rec.title}</h2>
-            <p className="text-muted-foreground text-sm leading-relaxed mb-5">{rec.desc}</p>
-            <Button asChild className="gap-2">
-              <a href={`/pathway/${rec.pathway}`}>Enter the {rec.pathway.charAt(0).toUpperCase() + rec.pathway.slice(1)} Pathway <ArrowRight className="h-4 w-4" /></a>
-            </Button>
-          </div>
-          {!isAuthenticated && (
-            <div className="p-4 rounded-xl border border-border bg-secondary/30 text-center">
-              <p className="text-sm text-muted-foreground mb-3">Create a free account to save your results and track your progress over time.</p>
-              <Button variant="outline" size="sm" asChild><a href="/dashboard">Save My Results</a></Button>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  if (!started) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Nav />
-        <div className="container pt-28 pb-20 max-w-2xl mx-auto">
-          <div className="mb-8">
-            <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">The Alignment Audit</p>
-            <h1 className="font-serif text-4xl md:text-5xl font-light text-foreground leading-tight mb-5">
-              Let's find out where<br />you actually are.
-            </h1>
-            <p className="text-muted-foreground text-lg font-light leading-relaxed mb-4">
-              This is not a test. There are no right or wrong answers. This is a 10-question diagnostic designed to help you see yourself clearly — across all five dimensions of the 5S Framework.
-            </p>
-            <p className="text-muted-foreground text-base font-light leading-relaxed mb-8">
-              At the end, you will receive a personalized map of where you stand, and a specific starting pathway recommended just for you. It takes about 3 minutes. Answer as honestly as you can.
-            </p>
-            <div className="flex items-center gap-6 text-sm text-muted-foreground mb-10">
-              <div className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-accent" /><span>10 questions</span></div>
-              <div className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-accent" /><span>~3 minutes</span></div>
-              <div className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-accent" /><span>Free, no account required</span></div>
-            </div>
-            <Button size="lg" className="gap-2 text-base" onClick={() => setShowMindPatterns(true)}>
-              Begin the Audit <ArrowRight className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // "How my mind works" — neurodivergent-aware step
-  if (showMindPatterns && !started) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Nav />
-        <div className="container pt-28 pb-20 max-w-2xl mx-auto">
-          <div className="mb-8">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-violet-100 mb-5">
-              <Brain className="w-6 h-6 text-violet-600" />
-            </div>
-            <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">One quick thing</p>
-            <h1 className="font-serif text-3xl md:text-4xl font-light text-foreground leading-snug mb-4">
-              How does your mind tend to work?
-            </h1>
-            <p className="text-muted-foreground text-base font-light leading-relaxed mb-2">
-              This helps LifeOS adapt to you — not the other way around. Select anything that feels true. There are no wrong answers, and nothing here is a diagnosis.
-            </p>
-            <p className="text-xs text-muted-foreground mb-7">
-              You can skip this step. It only helps us serve you better.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
-            {ONBOARDING_PATTERNS.patterns.map((p) => {
-              const selected = selectedPatterns.includes(p.id);
-              return (
-                <button
-                  key={p.id}
-                  onClick={() => togglePattern(p.id)}
-                  className={`text-left p-4 rounded-xl border transition-all ${
-                    selected
-                      ? "border-violet-400/60 bg-violet-50 text-foreground"
-                      : "border-border bg-card text-muted-foreground hover:border-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  <p className="text-sm font-medium text-foreground">{p.label}</p>
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="flex items-center justify-between">
-            <Button variant="ghost" className="text-muted-foreground" onClick={() => setShowMindPatterns(false)}>
-              <ArrowLeft className="h-4 w-4 mr-1" /> Back
-            </Button>
-            <Button size="lg" className="gap-2" onClick={() => setStarted(true)}>
-              {selectedPatterns.length > 0 ? "Continue" : "Skip this step"} <ArrowRight className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
+  if (step === "entry") return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container pt-28 pb-20 max-w-2xl mx-auto">
-        <div className="mb-10">
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase">Question {currentQ + 1} of {questions.length}</p>
-            <p className="text-xs text-muted-foreground">{Math.round(((currentQ) / questions.length) * 100)}% complete</p>
-          </div>
-          <Progress value={progress} className="h-1.5 mb-6" />
-          <h1 className="font-serif text-3xl md:text-4xl font-light text-foreground leading-snug">{question.text}</h1>
-        </div>
-        <div className="space-y-3 mb-10">
-          {question.options.map((opt, i) => (
-            <button key={i} onClick={() => handleSelect(opt.score)}
-              className={`w-full text-left p-4 rounded-xl border transition-all duration-150 ${
-                selectedOption === opt.score ? "border-accent bg-accent/5 text-foreground" : "border-border bg-card text-muted-foreground hover:border-muted-foreground hover:text-foreground"
-              }`}>
-              <span className="text-sm leading-relaxed">{opt.label}</span>
-            </button>
+      <div className="container max-w-xl mx-auto pt-32 pb-20 text-center">
+        <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">LifeOS · Alignment Audit</p>
+        <h1 className="font-serif text-4xl md:text-5xl font-light text-foreground mb-6 leading-tight">Find your clearest<br />place to begin.</h1>
+        <p className="text-muted-foreground text-base leading-relaxed mb-8 max-w-md mx-auto">The Alignment Audit identifies where friction is highest in your life right now — and recommends the most honest place to start inside LifeOS.</p>
+        <div className="flex items-center justify-center gap-3 mb-8 flex-wrap">
+          {["12 questions", "3 to 5 minutes", "Free, no account required"].map(tag => (
+            <span key={tag} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border text-xs text-muted-foreground">
+              <span className="w-1.5 h-1.5 rounded-full bg-accent inline-block" /> {tag}
+            </span>
           ))}
         </div>
-        <div className="flex items-center justify-between">
-          <Button variant="ghost" size="sm" onClick={handleBack} disabled={currentQ === 0} className="gap-1.5 text-muted-foreground">
-            <ArrowLeft className="h-4 w-4" /> Back
-          </Button>
-          <Button onClick={handleNext} disabled={selectedOption === null} className="gap-2">
-            {currentQ === questions.length - 1 ? "See My Results" : "Next"} <ArrowRight className="h-4 w-4" />
-          </Button>
+        <Button size="lg" className="gap-2 px-8" onClick={() => setStep("consent")}>Begin the Audit <ArrowRight className="h-4 w-4" /></Button>
+        <p className="text-xs text-muted-foreground mt-4">Your responses stay private and are used only to personalize your experience if you choose.</p>
+      </div>
+    </div>
+  );
+
+  if (step === "consent") return (
+    <div className="min-h-screen bg-background">
+      <Nav />
+      <div className="container max-w-xl mx-auto pt-32 pb-20">
+        <div className="p-8 rounded-2xl border border-border bg-card">
+          <h2 className="font-serif text-2xl font-light text-foreground mb-4">One quick thing before we begin.</h2>
+          <p className="text-muted-foreground mb-4 leading-relaxed">With your permission, your responses can be used to personalize your recommendations inside LifeOS. You can change this any time in settings.</p>
+          <p className="text-sm text-muted-foreground mb-8 leading-relaxed">LifeOS uses your responses only to guide your experience. This audit is not a diagnosis.</p>
+          <div className="space-y-3">
+            <Button className="w-full gap-2" onClick={() => setStep("preframe")}><CheckCircle2 className="h-4 w-4" /> Yes, personalize my experience</Button>
+            <Button variant="outline" className="w-full" onClick={() => setStep("preframe")}>Not now</Button>
+          </div>
         </div>
       </div>
     </div>
   );
+
+  if (step === "preframe") return (
+    <div className="min-h-screen bg-background">
+      <Nav />
+      <div className="container max-w-xl mx-auto pt-32 pb-20 text-center">
+        <div className="p-8 rounded-2xl border border-border bg-card">
+          <p className="font-serif text-xl font-light text-foreground mb-4">There are four short sections.</p>
+          <p className="text-muted-foreground leading-relaxed mb-8">Answer as honestly as you can. This only works if you are real with it.</p>
+          <Button size="lg" className="gap-2 px-8" onClick={() => setStep("quiz")}>I'm ready <ArrowRight className="h-4 w-4" /></Button>
+        </div>
+      </div>
+    </div>
+  );
+
+  if (step === "quiz" && q) {
+    const isNewSection = currentQ === 0 || CORE_QUESTIONS[currentQ - 1]?.section !== q.section;
+    return (
+      <div className="min-h-screen bg-background">
+        <Nav />
+        <div className="container max-w-xl mx-auto pt-24 pb-20">
+          <div className="mb-8">
+            <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
+              <span>Question {currentQ + 1} of {totalQ}</span><span>{progress}%</span>
+            </div>
+            <Progress value={progress} className="h-1.5" />
+          </div>
+          {isNewSection && (
+            <div className="mb-6">
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-mono tracking-wider">
+                Section {q.section} of 4 · {q.sectionLabel}
+              </span>
+            </div>
+          )}
+          <div className="p-8 rounded-2xl border border-border bg-card mb-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+            <p className="font-serif text-xl md:text-2xl font-light text-foreground leading-relaxed mb-8">{q.text}</p>
+            <div className="grid grid-cols-5 gap-2">
+              {SCALE.map((label, idx) => {
+                const value = (idx + 1) as ScaleValue;
+                const isSelected = answers[q.id] === value;
+                return (
+                  <button key={label} onClick={() => handleAnswer(q.id, value)}
+                    className={`flex flex-col items-center gap-2 p-3 rounded-xl border transition-all duration-200 ${isSelected ? "border-accent bg-accent/10 text-accent" : "border-border bg-background hover:border-accent/50 hover:bg-accent/5 text-muted-foreground"}`}>
+                    <span className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-mono font-medium transition-all ${isSelected ? "border-accent bg-accent text-background" : "border-current"}`}>{value}</span>
+                    <span className="text-xs text-center leading-tight">{label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          {currentQ > 0 && <button onClick={() => setCurrentQ(q => q - 1)} className="text-xs text-muted-foreground hover:text-foreground transition-colors">← Previous question</button>}
+        </div>
+      </div>
+    );
+  }
+
+  if (step === "optional_prompt") return (
+    <div className="min-h-screen bg-background">
+      <Nav />
+      <div className="container max-w-xl mx-auto pt-32 pb-20 text-center">
+        <div className="p-8 rounded-2xl border border-border bg-card">
+          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Almost there</p>
+          <h2 className="font-serif text-2xl font-light text-foreground mb-4">A few optional questions to sharpen your results.</h2>
+          <p className="text-muted-foreground mb-8 text-sm leading-relaxed">These take about 60 seconds and can be skipped.</p>
+          <div className="space-y-3">
+            <Button className="w-full gap-2" onClick={() => setStep("optional")}>Answer optional questions <ArrowRight className="h-4 w-4" /></Button>
+            <Button variant="outline" className="w-full" onClick={() => setStep("results")}>Skip to my results</Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  if (step === "optional" && oq) return (
+    <div className="min-h-screen bg-background">
+      <Nav />
+      <div className="container max-w-xl mx-auto pt-24 pb-20">
+        <div className="mb-8">
+          <Progress value={((optionalQ + 1) / OPTIONAL_QUESTIONS.length) * 100} className="h-1.5" />
+        </div>
+        <div className="p-8 rounded-2xl border border-border bg-card animate-in fade-in slide-in-from-bottom-2 duration-300">
+          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">Optional {optionalQ + 1} of {OPTIONAL_QUESTIONS.length}</p>
+          <p className="font-serif text-xl font-light text-foreground mb-6">{oq.text}</p>
+          <div className="space-y-2">
+            {oq.options.map(opt => (
+              <button key={opt} onClick={() => handleOptionalAnswer(oq.id, opt)}
+                className={`w-full text-left px-4 py-3 rounded-xl border transition-all text-sm ${optionalAnswers[oq.id] === opt ? "border-accent bg-accent/10 text-foreground" : "border-border bg-background hover:border-accent/40 text-muted-foreground hover:text-foreground"}`}>
+                {opt}
+              </button>
+            ))}
+          </div>
+          <button onClick={() => setStep("results")} className="mt-4 text-xs text-muted-foreground hover:text-foreground transition-colors">Skip remaining →</button>
+        </div>
+      </div>
+    </div>
+  );
+
+  if (step === "results" && result) {
+    const { profile, scores, frictionTags } = result;
+    return (
+      <div className="min-h-screen bg-background">
+        <Nav />
+        <div className="container max-w-2xl mx-auto pt-24 pb-20">
+          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-2">Your Alignment Audit Results</p>
+          <h1 className="font-serif text-3xl md:text-4xl font-light text-foreground mb-1">
+            Your current pattern: <span className="text-accent">{profile.name}</span>
+          </h1>
+          <p className="text-sm text-muted-foreground mb-6">This reflects patterns in your responses, not fixed traits. Patterns shift.</p>
+          {frictionTags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-6">
+              {frictionTags.map(tag => <Badge key={tag} variant="secondary" className="text-xs capitalize">{tag}</Badge>)}
+            </div>
+          )}
+          <div className="p-6 rounded-2xl border border-border bg-card mb-4">
+            <h3 className="font-serif text-lg font-light text-foreground mb-3">What this pattern looks like</h3>
+            <p className="text-muted-foreground leading-relaxed text-sm">{profile.summary}</p>
+          </div>
+          <div className="p-6 rounded-2xl border border-border bg-card mb-4">
+            <h3 className="font-serif text-lg font-light text-foreground mb-3">What may be happening</h3>
+            <ul className="space-y-2">
+              {profile.bullets.map((b, i) => (
+                <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent mt-2 shrink-0" />{b}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="p-6 rounded-2xl border border-accent/20 bg-accent/3 mb-4">
+            <h3 className="font-serif text-lg font-light text-foreground mb-1">Your 5S Snapshot</h3>
+            <p className="text-xs text-muted-foreground mb-4">Where your energy is going right now, based on your responses.</p>
+            <div className="space-y-3">
+              {(["State", "Story", "Standards", "Strategy", "Stewardship"] as const).map(dim => (
+                <div key={dim} className="flex items-center gap-3">
+                  <span className="w-24 text-xs text-muted-foreground shrink-0">{dim}</span>
+                  <div className="flex-1 h-2 bg-border rounded-full overflow-hidden">
+                    <div className={`h-full rounded-full transition-all duration-700 ${DIM_COLORS[dim] ?? "bg-accent"}`} style={{ width: `${scores.pct[dim]}%` }} />
+                  </div>
+                  <span className="text-xs text-muted-foreground w-8 text-right">{scores.pct[dim]}%</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="p-6 rounded-2xl border border-border bg-card mb-4">
+            <h3 className="font-serif text-lg font-light text-foreground mb-3">Start here</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed mb-1">
+              Based on your responses, the best next step is <strong className="text-foreground">{profile.firstPathway}</strong>. Right now, support matters more than pressure.
+            </p>
+            <p className="text-sm text-muted-foreground mb-5"><strong className="text-foreground">Then continue into</strong> {profile.secondPathway} to deepen the work.</p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Button asChild className="gap-2">
+                <a href={`/pathway/${profile.firstPathway.toLowerCase()}`}>Start {profile.firstPathway} <ArrowRight className="h-4 w-4" /></a>
+              </Button>
+              <Button variant="outline" asChild><a href="/pathways">Explore all pathways</a></Button>
+            </div>
+          </div>
+          <div className="p-5 rounded-2xl border border-accent/20 bg-accent/5 mb-4 text-center">
+            <p className="font-serif text-base font-light text-foreground italic">"{profile.truth}"</p>
+          </div>
+          <div className="p-6 rounded-2xl border border-border bg-card mb-6">
+            <h3 className="font-serif text-lg font-light text-foreground mb-2">Want to track your progress over time?</h3>
+            <p className="text-sm text-muted-foreground mb-4">Create a free account to save your results, revisit your audit, and watch your patterns shift as you work through LifeOS.</p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Button className="gap-2" onClick={handleSaveResults} disabled={saveAudit.isPending}>
+                <CheckCircle2 className="h-4 w-4" /> {saveAudit.isPending ? "Saving..." : "Save My Results — It's Free"}
+              </Button>
+              <Button variant="ghost" asChild><a href="/dashboard">Continue without saving</a></Button>
+            </div>
+          </div>
+          <div className="p-4 rounded-xl bg-muted/30 border border-border">
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              <strong>Disclaimer:</strong> The Alignment Audit is a reflective tool, not a medical or psychological diagnosis. It is designed to identify current patterns and help guide your experience inside LifeOS. If you are dealing with significant mental health concerns, please seek support from a qualified professional.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return null;
 }

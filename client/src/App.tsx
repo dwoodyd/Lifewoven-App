@@ -27,6 +27,7 @@ import StewardshipModule from "./pages/modules/StewardshipModule";
 
 // Pathways
 import PathwayPage from "./pages/PathwayPage";
+import PathwaysListing from "./pages/PathwaysListing";
 
 // Journal
 import Journal from "./pages/Journal";
@@ -44,6 +45,9 @@ import Community from "./pages/Community";
 
 // Resources
 import ResourceLibrary from "./pages/ResourceLibrary";
+
+// Settings
+import Settings from "./pages/Settings";
 
 // Legal & Support
 import Terms from "./pages/legal/Terms";
@@ -75,6 +79,7 @@ function Router() {
       <Route path="/stewardship" component={StewardshipModule} />
 
       {/* Pathways */}
+      <Route path="/pathways" component={PathwaysListing} />
       <Route path="/pathway/:slug" component={PathwayPage} />
 
       {/* Journal */}
@@ -93,6 +98,9 @@ function Router() {
 
       {/* Resources */}
       <Route path="/library" component={ResourceLibrary} />
+
+      {/* Settings */}
+      <Route path="/settings" component={Settings} />
 
       {/* Legal & Support */}
       <Route path="/legal/terms" component={Terms} />
