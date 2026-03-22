@@ -38,9 +38,9 @@ const EGS_SCALE = [
 const VORTEX_PRACTICES = [
   { id: "morning-alignment", title: "Morning Alignment", duration: "10 min", description: "Begin your day in the Vortex. A guided practice to set your vibrational tone before the world gets in.", pathway: "align", type: "meditation" },
   { id: "appreciation-flood", title: "Appreciation Flood", duration: "5 min", description: "The fastest path to the Vortex. Flood your awareness with genuine appreciation and watch your set-point shift.", pathway: "vortex", type: "practice" },
-  { id: "segment-intending", title: "Segment Intending", duration: "3 min", description: "Before each new segment of your day, pause and set your intention. A powerful LifeOS practice for staying in alignment throughout the day.", pathway: "align", type: "practice" },
-  { id: "flowdream-session", title: "Emotional Futures Session", duration: "15 min", description: "Enter the flow of your desired life. Feel your way forward using the LifeOS Emotional Futures visualization practice.", pathway: "flow", type: "meditation" },
-  { id: "pivot-process", title: "The Pivot Process", duration: "5 min", description: "Notice what you don't want, then pivot to what you do want. A core LifeOS tool for emotional navigation and set-point shifting.", pathway: "uplift", type: "practice" },
+  { id: "segment-intending", title: "Segment Intending", duration: "3 min", description: "Before each new segment of your day, pause and set your intention. A powerful Steadora practice for staying in alignment throughout the day.", pathway: "align", type: "practice" },
+  { id: "flowdream-session", title: "Emotional Futures Session", duration: "15 min", description: "Enter the flow of your desired life. Feel your way forward using the Steadora Emotional Futures visualization practice.", pathway: "flow", type: "meditation" },
+  { id: "pivot-process", title: "The Pivot Process", duration: "5 min", description: "Notice what you don't want, then pivot to what you do want. A core Steadora tool for emotional navigation and set-point shifting.", pathway: "uplift", type: "practice" },
   { id: "rampage-appreciation", title: "Rampage of Appreciation", duration: "7 min", description: "A spoken or written cascade of appreciation that builds momentum toward the Vortex.", pathway: "vortex", type: "practice" },
 ];
 

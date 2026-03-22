@@ -28,7 +28,7 @@ const TIERS = [
     name: "Seeker",
     price: "$19",
     period: "/month",
-    description: "The full LifeOS experience. Every tool, every pathway, every module — fully unlocked.",
+    description: "The full Steadora experience. Every tool, every pathway, every module — fully unlocked.",
     cta: "Begin Transformation",
     href: "/dashboard",
     isExternal: false,

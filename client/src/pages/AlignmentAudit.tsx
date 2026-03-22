@@ -228,9 +228,9 @@ export default function AlignmentAudit() {
     <div className="min-h-screen bg-background">
       <Nav />
       <div className="container max-w-xl mx-auto pt-32 pb-20 text-center">
-        <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">LifeOS · Alignment Audit</p>
+        <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Steadora · Alignment Audit</p>
         <h1 className="font-serif text-4xl md:text-5xl font-light text-foreground mb-6 leading-tight">Find your clearest<br />place to begin.</h1>
-        <p className="text-muted-foreground text-base leading-relaxed mb-8 max-w-md mx-auto">The Alignment Audit identifies where friction is highest in your life right now — and recommends the most honest place to start inside LifeOS.</p>
+        <p className="text-muted-foreground text-base leading-relaxed mb-8 max-w-md mx-auto">The Alignment Audit identifies where friction is highest in your life right now — and recommends the most honest place to start inside Steadora.</p>
         <div className="flex items-center justify-center gap-3 mb-8 flex-wrap">
           {["12 questions", "3 to 5 minutes", "Free, no account required"].map(tag => (
             <span key={tag} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border text-xs text-muted-foreground">
@@ -250,8 +250,8 @@ export default function AlignmentAudit() {
       <div className="container max-w-xl mx-auto pt-32 pb-20">
         <div className="p-8 rounded-2xl border border-border bg-card">
           <h2 className="font-serif text-2xl font-light text-foreground mb-4">One quick thing before we begin.</h2>
-          <p className="text-muted-foreground mb-4 leading-relaxed">With your permission, your responses can be used to personalize your recommendations inside LifeOS. You can change this any time in settings.</p>
-          <p className="text-sm text-muted-foreground mb-8 leading-relaxed">LifeOS uses your responses only to guide your experience. This audit is not a diagnosis.</p>
+          <p className="text-muted-foreground mb-4 leading-relaxed">With your permission, your responses can be used to personalize your recommendations inside Steadora. You can change this any time in settings.</p>
+          <p className="text-sm text-muted-foreground mb-8 leading-relaxed">Steadora uses your responses only to guide your experience. This audit is not a diagnosis.</p>
           <div className="space-y-3">
             <Button className="w-full gap-2" onClick={() => setStep("preframe")}><CheckCircle2 className="h-4 w-4" /> Yes, personalize my experience</Button>
             <Button variant="outline" className="w-full" onClick={() => setStep("preframe")}>Not now</Button>
@@ -419,7 +419,7 @@ export default function AlignmentAudit() {
           </div>
           <div className="p-6 rounded-2xl border border-border bg-card mb-6">
             <h3 className="font-serif text-lg font-light text-foreground mb-2">Want to track your progress over time?</h3>
-            <p className="text-sm text-muted-foreground mb-4">Create a free account to save your results, revisit your audit, and watch your patterns shift as you work through LifeOS.</p>
+            <p className="text-sm text-muted-foreground mb-4">Create a free account to save your results, revisit your audit, and watch your patterns shift as you work through Steadora.</p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Button className="gap-2" onClick={handleSaveResults} disabled={saveAudit.isPending}>
                 <CheckCircle2 className="h-4 w-4" /> {saveAudit.isPending ? "Saving..." : "Save My Results — It's Free"}
@@ -429,7 +429,7 @@ export default function AlignmentAudit() {
           </div>
           <div className="p-4 rounded-xl bg-muted/30 border border-border">
             <p className="text-xs text-muted-foreground leading-relaxed">
-              <strong>Disclaimer:</strong> The Alignment Audit is a reflective tool, not a medical or psychological diagnosis. It is designed to identify current patterns and help guide your experience inside LifeOS. If you are dealing with significant mental health concerns, please seek support from a qualified professional.
+              <strong>Disclaimer:</strong> The Alignment Audit is a reflective tool, not a medical or psychological diagnosis. It is designed to identify current patterns and help guide your experience inside Steadora. If you are dealing with significant mental health concerns, please seek support from a qualified professional.
             </p>
           </div>
         </div>

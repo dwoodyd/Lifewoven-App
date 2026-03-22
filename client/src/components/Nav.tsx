@@ -43,10 +43,10 @@ export default function Nav() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
           <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-            <span className="text-primary-foreground font-serif text-sm font-medium">L</span>
+            <span className="text-primary-foreground font-serif text-sm font-medium">S</span>
           </div>
           <span className="font-serif text-xl font-medium tracking-tight text-foreground">
-            Life<span className="text-accent">OS</span>
+            Stea<span className="text-accent">dora</span>
           </span>
         </Link>
 

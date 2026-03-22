@@ -181,3 +181,23 @@
 - [ ] No fake testimonials anywhere
 - [ ] No old pathway names anywhere
 - [ ] Consent settings page exists and works
+
+## Brand Rename: LifeOS → Steadora (Full Visible Sweep)
+
+- [x] Replace LifeOS in index.html browser/tab title and meta
+- [x] Replace LifeOS in App.tsx (nav logo, layout shell, page titles)
+- [x] Replace LifeOS in Home.tsx (hero, CTAs, all sections)
+- [x] Replace LifeOS in About page
+- [x] Replace LifeOS in Pricing page
+- [x] Replace LifeOS in Dashboard and all dashboard sub-pages
+- [x] Replace LifeOS in Oracle page
+- [x] Replace LifeOS in Alignment Audit page
+- [x] Replace LifeOS in all Pathway pages
+- [x] Replace LifeOS in Store page
+- [x] Replace LifeOS in Community page
+- [x] Replace LifeOS in Resource Library page
+- [x] Replace LifeOS in all legal/support pages (Terms, Privacy, Refunds, Contact)
+- [x] Replace LifeOS in Settings page
+- [x] Replace LifeOS in all module pages (State, Story, Standards, Strategy, Stewardship)
+- [x] Replace LifeOS in VITE_APP_TITLE secret
+- [x] Final grep sweep to confirm zero visible LifeOS instances

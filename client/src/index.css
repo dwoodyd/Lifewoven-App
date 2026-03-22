@@ -5,7 +5,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* ─── LifeOS Design Tokens — Felt Structure Aesthetic ─── */
+/* ─── Steadora Design Tokens — Felt Structure Aesthetic ─── */
 @theme inline {
   --font-serif: "Cormorant Garamond", Georgia, serif;
   --font-sans: "Inter", system-ui, sans-serif;
@@ -66,7 +66,7 @@
 }
 
 :root {
-  /* LifeOS — Warm Stone + Deep Slate + Gold Accent */
+  /* Steadora — Warm Stone + Deep Slate + Gold Accent */
   --radius: 0.5rem;
   --background: oklch(0.98 0.005 60);
   --foreground: oklch(0.18 0.015 240);

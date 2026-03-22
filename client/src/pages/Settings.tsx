@@ -180,7 +180,7 @@ export default function Settings() {
             <h2 className="font-medium text-sm text-foreground">Notifications</h2>
           </div>
           <p className="text-sm text-muted-foreground font-light">
-            Notification preferences will be available in a future update. For now, LifeOS communicates through your dashboard.
+            Notification preferences will be available in a future update. For now, Steadora communicates through your dashboard.
           </p>
         </div>
 

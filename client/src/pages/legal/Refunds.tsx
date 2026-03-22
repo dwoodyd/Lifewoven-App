@@ -13,7 +13,7 @@ export default function Refunds() {
 
         <div className="p-5 rounded-xl border border-accent/30 bg-accent/5 mb-10">
           <p className="text-sm font-light text-foreground leading-relaxed">
-            We want you to feel confident investing in LifeOS. If the platform does not serve you, we will make it right. Our goal is your transformation — not your money.
+            We want you to feel confident investing in Steadora. If the platform does not serve you, we will make it right. Our goal is your transformation — not your money.
           </p>
         </div>
 

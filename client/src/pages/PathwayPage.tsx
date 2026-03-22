@@ -11,7 +11,7 @@ const PATHWAYS: Record<string, any> = {
   align: {
     name: "Align", tagline: "Daily Grounding Practice", color: "state", badge: "Daily Foundation",
     description: "Align is your daily grounding ritual — the practice of returning to your center before the world asks anything of you. It takes five minutes and sets the tone for everything that follows.",
-    duration: "5-10 minutes", frequency: "Every morning", source: "LifeOS Original Practice",
+    duration: "5-10 minutes", frequency: "Every morning", source: "Steadora Original Practice",
     steps: [
       { title: "Arrive (1 min)", desc: "Sit comfortably. Close your eyes. Take three slow, deep breaths. Let your nervous system know: you are safe, you are here, you are present." },
       { title: "Body Scan (2 min)", desc: "Slowly scan from the top of your head to the soles of your feet. Notice any tension, tightness, or holding. Do not try to fix it — just notice it with curiosity." },
@@ -24,7 +24,7 @@ const PATHWAYS: Record<string, any> = {
   resonance: {
     name: "Resonance", tagline: "Advanced Vibrational Practice", color: "state",
     description: "Resonance is the practice of closing the gap between where you are and where your desires live — not through force, but through feeling.",
-    duration: "20 minutes", frequency: "Daily or as needed", source: "LifeOS Original Practice",
+    duration: "20 minutes", frequency: "Daily or as needed", source: "Steadora Original Practice",
     steps: [
       { title: "Soften Resistance (4 min)", desc: "Release the need to figure it out. Let go of the how. Your only job right now is to feel good. Breathe into that permission." },
       { title: "Appreciation Rampage (5 min)", desc: "Begin with something small and easy to appreciate. Build momentum. Let one appreciation lead to another. Feel the energy rise." },
@@ -36,8 +36,8 @@ const PATHWAYS: Record<string, any> = {
   },
   uplift: {
     name: "Uplift", tagline: "Emotional Set-Point Shifting", color: "state",
-    description: "This practice uses the LifeOS Emotional Compass to systematically move you up the emotional scale — not by forcing positivity, but by reaching for the next best-feeling thought.",
-    duration: "10-20 minutes", frequency: "As needed", source: "LifeOS Original Practice",
+    description: "This practice uses the Steadora Emotional Compass to systematically move you up the emotional scale — not by forcing positivity, but by reaching for the next best-feeling thought.",
+    duration: "10-20 minutes", frequency: "As needed", source: "Steadora Original Practice",
     steps: [
       { title: "Locate Yourself (2 min)", desc: "Identify your current emotional state on the Emotional Compass. Be honest. Despair, anger, frustration, boredom, contentment, joy — all are valid starting points." },
       { title: "Reach for Relief (5 min)", desc: "You do not need to jump to joy. Just reach for the next better-feeling thought. From despair, reach for anger. From anger, reach for frustration. Each step up is a win." },
@@ -49,8 +49,8 @@ const PATHWAYS: Record<string, any> = {
   },
   flow: {
     name: "Flow", tagline: "Creative Visualization Practice", color: "story",
-    description: "An original LifeOS guided visualization practice rooted in emotional immersion and mind science. You are not just imagining a future — you are flowing into it, feeling it as present reality.",
-    duration: "15-25 minutes", frequency: "Daily", source: "LifeOS Original Practice",
+    description: "An original Steadora guided visualization practice rooted in emotional immersion and mind science. You are not just imagining a future — you are flowing into it, feeling it as present reality.",
+    duration: "15-25 minutes", frequency: "Daily", source: "Steadora Original Practice",
     steps: [
       { title: "Enter the Flow (3 min)", desc: "Imagine yourself floating in a warm, gentle current of energy. This is the Flow — the stream of life moving you toward everything you desire. Relax into it." },
       { title: "Feel Your Desired Life (10 min)", desc: "In the Flow, experience your desired life as already real. Do not watch it like a movie — be IN it. Feel the emotions, the sensations, the relationships, the freedom." },
@@ -62,8 +62,8 @@ const PATHWAYS: Record<string, any> = {
   },
   rhythms: {
     name: "Rhythms", tagline: "Identity-Based Habit Execution", color: "standards",
-    description: "Rhythms is the LifeOS approach to building habits that actually hold — not through willpower, but through identity. You are not trying to do more. You are becoming someone for whom these actions are natural.",
-    duration: "Ongoing daily practice", frequency: "Daily", source: "LifeOS Original Practice",
+    description: "Rhythms is the Steadora approach to building habits that actually hold — not through willpower, but through identity. You are not trying to do more. You are becoming someone for whom these actions are natural.",
+    duration: "Ongoing daily practice", frequency: "Daily", source: "Steadora Original Practice",
     steps: [
       { title: "Identity Declaration (2 min)", desc: "Before you begin, state who you are becoming. I am someone who... This is not affirmation — it is identity architecture. The habit follows the identity." },
       { title: "The Minimum Viable Action", desc: "Identify the smallest possible version of each habit. Not the ideal — the minimum. On hard days, this is what you do. On good days, you build from here." },
@@ -77,7 +77,7 @@ const PATHWAYS: Record<string, any> = {
   purpose: {
     name: "Purpose", tagline: "Meaning and Resilience Work", color: "strategy",
     description: "Purpose is the practice of returning to your why — the deep meaning that makes difficulty bearable and effort worthwhile. This is not motivational work. This is existential anchoring.",
-    duration: "20-30 minutes", frequency: "Weekly or during difficulty", source: "LifeOS Original Practice",
+    duration: "20-30 minutes", frequency: "Weekly or during difficulty", source: "Steadora Original Practice",
     steps: [
       { title: "The Meaning Inventory (5 min)", desc: "Ask: What am I doing, and why does it matter? Not to the world — to you. Write it down. Be specific. Vague meaning provides vague resilience." },
       { title: "The Difficulty Reframe (5 min)", desc: "Name the current difficulty. Then ask: What is this difficulty asking of me? What quality is it developing? Difficulty is not the enemy of purpose — it is often the path." },
@@ -90,8 +90,8 @@ const PATHWAYS: Record<string, any> = {
   },
   reset: {
     name: "Reset", tagline: "Flagship Resilience Protocol", color: "stewardship", badge: "Start Here When Overwhelmed",
-    description: "Reset is not a failure protocol. It is a return protocol. When life interrupts — and it will — Reset is how you come back without shame, without drama, without losing ground. This is the most important pathway in LifeOS.",
-    duration: "15-30 minutes", frequency: "Whenever you need to return", source: "LifeOS Original Practice",
+    description: "Reset is not a failure protocol. It is a return protocol. When life interrupts — and it will — Reset is how you come back without shame, without drama, without losing ground. This is the most important pathway in Steadora.",
+    duration: "15-30 minutes", frequency: "Whenever you need to return", source: "Steadora Original Practice",
     steps: [
       { title: "The Honest Inventory (5 min)", desc: "Name what happened. Not a story — just the facts. I stopped. I got overwhelmed. I lost momentum. No shame in the naming. Clarity is the first act of return." },
       { title: "The Compassion Pause (3 min)", desc: "Before you plan, before you fix — pause. Place your hand on your chest. Say: I am human. Interruption is part of the process. I am allowed to begin again. Say it until you mean it." },
