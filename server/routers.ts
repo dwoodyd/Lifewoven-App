@@ -1,5 +1,6 @@
 import { COOKIE_NAME } from "@shared/const";
 import { btwRouter } from "./routers/btw";
+import { stripeRouter } from "./routers/stripe";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
@@ -829,6 +830,7 @@ export const appRouter = router({
   community: communityRouter,
   profile: profileRouter,
   btw: btwRouter,
+  stripe: stripeRouter,
 });
 
 export type AppRouter = typeof appRouter;

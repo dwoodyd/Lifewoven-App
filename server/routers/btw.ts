@@ -1,8 +1,10 @@
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 import { protectedProcedure, router } from "../_core/trpc";
 import { getDb } from "../db";
+import { tierCanAccessGroundGuide, tierCanAccessWeeklyReflection } from "../stripe/products";
 import {
-  btwProfiles, btwGroundChecks, btwDailySessions, btwReturns,
+  users, btwProfiles, btwGroundChecks, btwDailySessions, btwReturns,
   btwPrayers, btwGratitudeEntries, btwAudioItems, btwWeeklyReflections,
 } from "../../drizzle/schema";
 import { eq, desc, and, gte } from "drizzle-orm";
@@ -182,6 +184,12 @@ export const btwRouter = router({
   reflectOnPrayer: protectedProcedure
     .input(z.object({ prayerBody: z.string() }))
     .mutation(async ({ ctx, input }) => {
+      // Tier gate: Seeker+ only
+      const db = await requireDb();
+      const [user] = await db.select({ membershipTier: users.membershipTier }).from(users).where(eq(users.id, ctx.user.id));
+      if (!tierCanAccessGroundGuide(user?.membershipTier as any)) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "UPGRADE_REQUIRED:seeker" });
+      }
       const response = await invokeLLM({
         messages: [
           {
@@ -270,6 +278,11 @@ You are a reflective companion, not a spiritual authority.`,
   // Weekly reflection (AI-generated)
   generateWeeklyReflection: protectedProcedure.mutation(async ({ ctx }) => {
       const db = await requireDb();
+      // Tier gate: Seeker+ only
+      const [user] = await db.select({ membershipTier: users.membershipTier }).from(users).where(eq(users.id, ctx.user.id));
+      if (!tierCanAccessWeeklyReflection(user?.membershipTier as any)) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "UPGRADE_REQUIRED:seeker" });
+      }
     const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     const [sessions, returns, prayers, gratitude] = await Promise.all([
       db.select().from(btwDailySessions).where(and(eq(btwDailySessions.userId, ctx.user.id), gte(btwDailySessions.startedAt, weekAgo))),

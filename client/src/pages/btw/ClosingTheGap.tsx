@@ -1,11 +1,17 @@
 import { Button } from "@/components/ui/button";
 import Nav from "@/components/Nav";
 import { trpc } from "@/lib/trpc";
-import { Loader2, RefreshCw } from "lucide-react";
+import { Loader2, RefreshCw, Lock } from "lucide-react";
+import { toast } from "sonner";
 
 export default function ClosingTheGap() {
   const { data: stats, isLoading: statsLoading } = trpc.btw.getStats.useQuery();
   const { data: weeklyReflection, refetch: refetchWeekly } = trpc.btw.getLatestWeeklyReflection.useQuery();
+  const { data: subStatus } = trpc.stripe.status.useQuery();
+  const canUseWeeklyReflection = subStatus?.tier === "seeker" || subStatus?.tier === "oracle";
+  const checkoutMutation = trpc.stripe.createCheckout.useMutation({
+    onSuccess: (d) => { if (d.url) { toast.info("Opening checkout…"); window.open(d.url, "_blank"); } },
+  });
   const generateMutation = trpc.btw.generateWeeklyReflection.useMutation({ onSuccess: () => refetchWeekly() });
 
   const METRIC_CARDS = stats ? [
@@ -48,12 +54,23 @@ export default function ClosingTheGap() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-serif text-xl font-light text-foreground">Weekly Reflection</h2>
-            <Button variant="ghost" size="sm" className="gap-1.5 text-xs" onClick={() => generateMutation.mutate()} disabled={generateMutation.isPending}>
-              {generateMutation.isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <RefreshCw className="h-3 w-3" />}
-              Generate
-            </Button>
+            {canUseWeeklyReflection ? (
+              <Button variant="ghost" size="sm" className="gap-1.5 text-xs" onClick={() => generateMutation.mutate()} disabled={generateMutation.isPending}>
+                {generateMutation.isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <RefreshCw className="h-3 w-3" />}
+                Generate
+              </Button>
+            ) : (
+              <Button variant="ghost" size="sm" className="gap-1.5 text-xs text-muted-foreground" onClick={() => checkoutMutation.mutate({ plan: "seeker", origin: window.location.origin })}>
+                <Lock className="h-3 w-3" /> Seeker only
+              </Button>
+            )}
           </div>
 
+          {!canUseWeeklyReflection && (
+            <div className="rounded-2xl border border-border bg-secondary/20 p-6 text-center mb-4">
+              <p className="text-sm font-light text-muted-foreground">Weekly AI reflection is available on the <span className="text-foreground">Seeker</span> plan.</p>
+            </div>
+          )}
           {weeklyData ? (
             <div className="space-y-4">
               {[

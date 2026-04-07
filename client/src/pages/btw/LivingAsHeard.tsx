@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import Nav from "@/components/Nav";
 import { trpc } from "@/lib/trpc";
-import { Loader2, Sparkles, Trash2, Plus } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Loader2, Sparkles, Trash2, Plus, Lock } from "lucide-react";
+import { toast } from "sonner";
 
 const TONE_TAGS = ["trust", "fear", "striving", "grief", "gratitude", "honest", "mixed"] as const;
 const TOPIC_TAGS = ["long_wait", "fear", "provision", "relationship", "calling", "grief", "uncertainty", "gratitude", "not_yet", "answered", "still_carrying"] as const;
@@ -34,6 +34,12 @@ export default function LivingAsHeard() {
   const [statusTag, setStatusTag] = useState<typeof STATUS_TAGS[number]>("carrying");
   const [reflection, setReflection] = useState<string | null>(null);
   const [reflectingId, setReflectingId] = useState<number | null>(null);
+
+  const { data: subStatus } = trpc.stripe.status.useQuery();
+  const canUseGroundGuide = subStatus?.tier === "seeker" || subStatus?.tier === "oracle";
+  const checkoutMutation = trpc.stripe.createCheckout.useMutation({
+    onSuccess: (d) => { if (d.url) { toast.info("Opening checkout…"); window.open(d.url, "_blank"); } },
+  });
 
   const { data: prayers, refetch } = trpc.btw.getPrayers.useQuery();
   const saveMutation = trpc.btw.savePrayer.useMutation({ onSuccess: () => { refetch(); setWriting(false); setBody(""); setTitle(""); setReflection(null); } });
@@ -105,9 +111,13 @@ export default function LivingAsHeard() {
                       <div className="flex items-center gap-2 text-xs text-muted-foreground">
                         <Loader2 className="h-3 w-3 animate-spin" /> Ground Guide is reflecting…
                       </div>
-                    ) : (
+                    ) : canUseGroundGuide ? (
                       <Button variant="ghost" size="sm" className="gap-1.5 text-xs" onClick={() => handleReflect(prayer)}>
                         <Sparkles className="h-3 w-3" /> Ask the Ground Guide
+                      </Button>
+                    ) : (
+                      <Button variant="ghost" size="sm" className="gap-1.5 text-xs text-muted-foreground" onClick={() => checkoutMutation.mutate({ plan: "seeker", origin: window.location.origin })}>
+                        <Lock className="h-3 w-3" /> Ground Guide — Seeker only
                       </Button>
                     )}
 

@@ -220,3 +220,35 @@
 - [x] Navigation entry points (4 locations)
 - [x] Home dashboard cards
 - [x] Vitest coverage for BTW procedures
+
+## Stripe Integration
+
+- [ ] Add Stripe feature scaffold
+- [ ] Create Stripe products/prices (Seeker $19/mo, Oracle $49/mo)
+- [ ] Subscription checkout procedure (create checkout session)
+- [ ] Stripe webhook handler (subscription created/updated/deleted)
+- [ ] Store subscription tier in user table
+- [ ] Backend gate: Ground Guide AI reflection (Seeker+)
+- [ ] Backend gate: Weekly AI reflection (Seeker+)
+- [ ] Pricing page upgrade CTA wired to Stripe checkout
+- [ ] UI gate: Ground Guide locked state with upgrade prompt
+- [ ] UI gate: Weekly reflection locked state with upgrade prompt
+- [ ] Customer portal link (manage/cancel subscription)
+- [ ] Vitest coverage for tier enforcement
+
+## Stripe Integration
+
+- [x] Stripe scaffold (pnpm add stripe)
+- [x] Schema migration: membershipTier enum → explorer/seeker/oracle, stripeCustomerId, stripeSubscriptionId
+- [x] server/stripe/products.ts — plan definitions and tier helper functions
+- [x] server/routers/stripe.ts — status, createCheckout, createPortal procedures
+- [x] server/stripe/webhook.ts — webhook handler (checkout.session.completed, subscription.updated/deleted)
+- [x] Register webhook at /api/stripe/webhook with raw body parser
+- [x] Wire stripeRouter into appRouter
+- [x] Tier gate on btw.reflectOnPrayer (Seeker+)
+- [x] Tier gate on btw.generateWeeklyReflection (Seeker+)
+- [x] UpgradeGate component and UpgradeButton
+- [x] LivingAsHeard — Ground Guide button shows lock + upgrade CTA for Explorer tier
+- [x] ClosingTheGap — Weekly reflection generate button shows lock + upgrade CTA for Explorer tier
+- [x] Pricing.tsx — dynamic Stripe checkout CTAs, current plan badge
+- [x] Vitest tests for tier helper functions (10 tests passing)

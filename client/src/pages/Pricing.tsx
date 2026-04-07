@@ -3,6 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { Check, Sparkles, Star } from "lucide-react";
 import { getLoginUrl } from "@/const";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
+import { toast } from "sonner";
 
 const TIERS = [
   {
@@ -71,6 +74,31 @@ const TIERS = [
 ];
 
 export default function Pricing() {
+  const { user } = useAuth();
+  const { data: subStatus } = trpc.stripe.status.useQuery(undefined, { enabled: !!user });
+  const currentTier = subStatus?.tier ?? "explorer";
+
+  const checkoutMutation = trpc.stripe.createCheckout.useMutation({
+    onSuccess: (data) => {
+      if (data.url) {
+        toast.info("Opening secure checkout…");
+        window.open(data.url, "_blank");
+      }
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  function handleTierCta(tierName: string) {
+    if (tierName === "Explorer") return;
+    const plan = tierName.toLowerCase() as "seeker" | "oracle";
+    if (!user) {
+      window.location.href = getLoginUrl();
+      return;
+    }
+    if (currentTier === plan) return;
+    checkoutMutation.mutate({ plan, origin: window.location.origin });
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Nav />
@@ -98,10 +126,23 @@ export default function Pricing() {
                   </div>
                 ))}
               </div>
-              {tier.isExternal ? (
-                <Button asChild variant={tier.highlight ? "secondary" : "outline"} className="w-full"><a href={tier.href}>{tier.cta}</a></Button>
+              {tier.name === "Explorer" ? (
+                currentTier === "explorer" ? (
+                  <div className="rounded-xl border border-border bg-secondary/40 py-2.5 text-center text-sm text-muted-foreground font-light">Current plan</div>
+                ) : (
+                  <Button asChild variant="outline" className="w-full"><a href={tier.href}>{tier.cta}</a></Button>
+                )
+              ) : currentTier === tier.name.toLowerCase() ? (
+                <div className="rounded-xl border border-border bg-secondary/40 py-2.5 text-center text-sm text-muted-foreground font-light">Current plan</div>
               ) : (
-                <Button asChild variant={tier.highlight ? "secondary" : "outline"} className="w-full"><Link href={tier.href}>{tier.cta}</Link></Button>
+                <Button
+                  variant={tier.highlight ? "secondary" : "outline"}
+                  className="w-full"
+                  onClick={() => handleTierCta(tier.name)}
+                  disabled={checkoutMutation.isPending && checkoutMutation.variables?.plan === tier.name.toLowerCase()}
+                >
+                  {checkoutMutation.isPending && checkoutMutation.variables?.plan === tier.name.toLowerCase() ? "Opening checkout…" : tier.cta}
+                </Button>
               )}
             </div>
           ))}
