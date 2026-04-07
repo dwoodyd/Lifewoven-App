@@ -49,6 +49,18 @@ import ResourceLibrary from "./pages/ResourceLibrary";
 // Settings
 import Settings from "./pages/Settings";
 
+// Before the Words (BTW)
+import BTWLanding from "./pages/btw/BTWLanding";
+import GroundCheck from "./pages/btw/GroundCheck";
+import EnterTheGround from "./pages/btw/EnterTheGround";
+import ReturnToGround from "./pages/btw/ReturnToGround";
+import StateYouEnter from "./pages/btw/StateYouEnter";
+import LivingAsHeard from "./pages/btw/LivingAsHeard";
+import ThankingFromThere from "./pages/btw/ThankingFromThere";
+import WordsWithWeight from "./pages/btw/WordsWithWeight";
+import ClosingTheGap from "./pages/btw/ClosingTheGap";
+import BTWLibrary from "./pages/btw/BTWLibrary";
+
 // Legal & Support
 import Terms from "./pages/legal/Terms";
 import Privacy from "./pages/legal/Privacy";
@@ -101,6 +113,18 @@ function Router() {
 
       {/* Settings */}
       <Route path="/settings" component={Settings} />
+
+      {/* Before the Words */}
+      <Route path="/btw" component={BTWLanding} />
+      <Route path="/btw/ground-check" component={GroundCheck} />
+      <Route path="/btw/enter-the-ground" component={EnterTheGround} />
+      <Route path="/btw/return" component={ReturnToGround} />
+      <Route path="/btw/state" component={StateYouEnter} />
+      <Route path="/btw/prayers" component={LivingAsHeard} />
+      <Route path="/btw/gratitude" component={ThankingFromThere} />
+      <Route path="/btw/words" component={WordsWithWeight} />
+      <Route path="/btw/insights" component={ClosingTheGap} />
+      <Route path="/btw/library" component={BTWLibrary} />
 
       {/* Legal & Support */}
       <Route path="/legal/terms" component={Terms} />

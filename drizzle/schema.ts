@@ -336,3 +336,89 @@ export const communityLikes = mysqlTable("community_likes", {
   commentId: int("commentId"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
+
+// ─── Before the Words (BTW) ───────────────────────────────────────────────────
+
+export const btwProfiles = mysqlTable("btw_profiles", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  preferredMode: mysqlEnum("preferredMode", ["text", "audio", "silent"]).default("text").notNull(),
+  audioEnabled: boolean("audioEnabled").default(true).notNull(),
+  faithLanguageConfirmed: boolean("faithLanguageConfirmed").default(false).notNull(),
+  lastPrimaryState: varchar("lastPrimaryState", { length: 32 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export const btwGroundChecks = mysqlTable("btw_ground_checks", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  stateResult: mysqlEnum("stateResult", ["bracing", "striving", "drifting", "depleted", "settled"]).notNull(),
+  answersJson: json("answersJson").notNull(),
+  recommendedPractice: varchar("recommendedPractice", { length: 64 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const btwDailySessions = mysqlTable("btw_daily_sessions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  sessionType: mysqlEnum("sessionType", ["morning", "midday", "evening", "return", "emergency"]).notNull(),
+  durationSeconds: int("durationSeconds"),
+  startedAt: timestamp("startedAt").defaultNow().notNull(),
+  completedAt: timestamp("completedAt"),
+  completed: boolean("completed").default(false).notNull(),
+  stateBeforeId: varchar("stateBeforeId", { length: 32 }),
+  stateAfterId: varchar("stateAfterId", { length: 32 }),
+});
+
+export const btwReturns = mysqlTable("btw_returns", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  returnType: mysqlEnum("returnType", ["30sec", "2min", "fear", "discouragement", "depletion"]).notNull(),
+  triggerTag: varchar("triggerTag", { length: 64 }),
+  beforeState: varchar("beforeState", { length: 32 }),
+  afterState: varchar("afterState", { length: 32 }),
+  nextAction: text("nextAction"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const btwPrayers = mysqlTable("btw_prayers", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  title: varchar("title", { length: 255 }),
+  body: text("body").notNull(),
+  toneTag: mysqlEnum("toneTag", ["trust", "fear", "striving", "grief", "gratitude", "honest", "mixed"]).default("honest").notNull(),
+  topicTag: mysqlEnum("topicTag", ["long_wait", "fear", "provision", "relationship", "calling", "grief", "uncertainty", "gratitude", "not_yet", "answered", "still_carrying"]).default("still_carrying").notNull(),
+  statusTag: mysqlEnum("statusTag", ["carrying", "released", "answered", "returning"]).default("carrying").notNull(),
+  isPrivate: boolean("isPrivate").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export const btwGratitudeEntries = mysqlTable("btw_gratitude_entries", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  entryText: text("entryText").notNull(),
+  gratitudeType: mysqlEnum("gratitudeType", ["morning", "evening", "sparse_table", "hard_day", "specific_mercy"]).default("evening").notNull(),
+  feltRealness: mysqlEnum("feltRealness", ["real", "forced", "mixed"]).default("real").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const btwAudioItems = mysqlTable("btw_audio_items", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  type: mysqlEnum("type", ["prayer", "declaration", "voice_note", "scripture"]).notNull(),
+  title: varchar("title", { length: 255 }),
+  sourceType: mysqlEnum("sourceType", ["recorded", "uploaded", "library"]).default("recorded").notNull(),
+  fileUrlOrText: text("fileUrlOrText").notNull(),
+  favorite: boolean("favorite").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const btwWeeklyReflections = mysqlTable("btw_weekly_reflections", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  summaryJson: json("summaryJson").notNull(),
+  focusSuggestion: text("focusSuggestion"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});

@@ -342,10 +342,11 @@ export default function Dashboard() {
               <h2 className="font-serif text-base font-light text-foreground mb-4">Quick Actions</h2>
               <div className="space-y-2">
                 {[
+                  { href: "/btw", icon: Leaf, label: "Before the Words" },
                   { href: "/journal", icon: Brain, label: "New Journal Entry" },
                   { href: "/oracle", icon: Sparkles, label: "Ask the Oracle" },
                   { href: "/community", icon: MessageCircle, label: "Community" },
-                  { href: "/resources", icon: Leaf, label: "Resource Library" },
+                  { href: "/library", icon: Leaf, label: "Resource Library" },
                 ].map(({ href, icon: Icon, label }) => (
                   <Button key={href} asChild variant="ghost" size="sm" className="w-full justify-start gap-2 text-sm">
                     <Link href={href}><Icon className="h-4 w-4 text-muted-foreground" />{label}</Link>

@@ -18,6 +18,7 @@ import { trpc } from "@/lib/trpc";
 const navLinks = [
   { label: "About", href: "/about" },
   { label: "Pathways", href: "/#pathways" },
+  { label: "Before the Words", href: "/btw" },
   { label: "Library", href: "/library" },
   { label: "Community", href: "/community" },
   { label: "Store", href: "/store" },

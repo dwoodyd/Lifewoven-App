@@ -201,3 +201,22 @@
 - [x] Replace LifeOS in all module pages (State, Story, Standards, Strategy, Stewardship)
 - [x] Replace LifeOS in VITE_APP_TITLE secret
 - [x] Final grep sweep to confirm zero visible LifeOS instances
+
+## Before the Words (BTW) Build
+
+- [x] BTW database schema (8 tables) + migration
+- [x] BTW tRPC procedures (all CRUD + Oracle Ground Guide)
+- [x] BTW Landing Page
+- [x] Ground Check (7-question diagnostic)
+- [x] Enter the Ground (Morning/Midday/Evening)
+- [x] The State You Enter
+- [x] Return to the Ground (5-step reset, 4 versions)
+- [x] Living as Heard (prayer journal)
+- [x] Thanking From There (gratitude)
+- [x] Words With Weight (scripture/prayer/spoken)
+- [x] Closing the Gap (insights dashboard)
+- [x] BTW Library
+- [x] Ground Guide Oracle mode
+- [x] Navigation entry points (4 locations)
+- [x] Home dashboard cards
+- [x] Vitest coverage for BTW procedures

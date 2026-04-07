@@ -1,4 +1,5 @@
 import { COOKIE_NAME } from "@shared/const";
+import { btwRouter } from "./routers/btw";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
@@ -827,6 +828,7 @@ export const appRouter = router({
   products: productsRouter,
   community: communityRouter,
   profile: profileRouter,
+  btw: btwRouter,
 });
 
 export type AppRouter = typeof appRouter;
