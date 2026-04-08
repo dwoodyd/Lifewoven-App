@@ -168,7 +168,7 @@ const journalRouter = router({
       recentEntries: z.array(z.string()).optional(),
     }))
     .mutation(async ({ input }) => {
-      const systemPrompt = `You are the Steadora Journal Oracle — a wise, warm, and perceptive guide rooted in the teachings of Ernest Holmes, Abraham-Hicks, Viktor Frankl, and James Clear. Generate a single, powerful journaling prompt for the ${input.module} module${input.pathway ? ` (${input.pathway} pathway)` : ""}. The prompt should be introspective, specific, and invite genuine self-reflection. Return only the prompt text, nothing else.`;
+      const systemPrompt = `You are the Lifewoven Journal Oracle — a wise, warm, and perceptive guide rooted in the teachings of Ernest Holmes, Abraham-Hicks, Viktor Frankl, and James Clear. Generate a single, powerful journaling prompt for the ${input.module} module${input.pathway ? ` (${input.pathway} pathway)` : ""}. The prompt should be introspective, specific, and invite genuine self-reflection. Return only the prompt text, nothing else.`;
       const response = await invokeLLM({
         messages: [
           { role: "system", content: systemPrompt },
@@ -185,7 +185,7 @@ const journalRouter = router({
       if (!db) throw new Error("Database unavailable");
       const response = await invokeLLM({
         messages: [
-          { role: "system", content: "You are the Steadora Oracle. Read this journal entry and offer a brief, wise, compassionate reflection (2-3 sentences). Identify one key theme or pattern. Do not be preachy. Be warm and specific." },
+          { role: "system", content: "You are the Lifewoven Oracle. Read this journal entry and offer a brief, wise, compassionate reflection (2-3 sentences). Identify one key theme or pattern. Do not be preachy. Be warm and specific." },
           { role: "user", content: input.content },
         ],
       });
@@ -444,7 +444,7 @@ const oracleRouter = router({
       if (!db) throw new Error("Database unavailable");
 
       // Build system prompt with user context
-      const systemPrompt = `You are the Steadora Oracle — a wise, warm, and deeply perceptive guide. You are trained in the integrated wisdom of:
+      const systemPrompt = `You are the Lifewoven Oracle — a wise, warm, and deeply perceptive guide. You are trained in the integrated wisdom of:
 - Ernest Holmes (Science of Mind): consciousness creates reality; mental equivalents; spiritual mind treatment
 - Abraham-Hicks: emotional guidance scale; Law of Attraction; alignment with the Vortex
 - Viktor Frankl (Logotherapy): meaning as primary motivation; response-ability; the last human freedom
@@ -539,7 +539,7 @@ Active habits: ${recentHabits.map(h => `${h.name} (streak: ${h.streak})`).join("
 
     const response = await invokeLLM({
       messages: [
-        { role: "system", content: "You are the Steadora Oracle pattern recognition engine. Analyze the user's recent data and identify 1-2 meaningful patterns or insights. Return JSON array: [{ type: 'pattern'|'recommendation'|'nudge', module: string, content: string }]" },
+        { role: "system", content: "You are the Lifewoven Oracle pattern recognition engine. Analyze the user's recent data and identify 1-2 meaningful patterns or insights. Return JSON array: [{ type: 'pattern'|'recommendation'|'nudge', module: string, content: string }]" },
         { role: "user", content: dataContext },
       ],
       response_format: {

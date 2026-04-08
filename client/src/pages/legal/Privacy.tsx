@@ -18,7 +18,7 @@ export default function Privacy() {
 
           <section>
             <h2 className="font-serif text-xl font-light mb-3">How We Use Your Data</h2>
-            <p className="text-muted-foreground leading-relaxed text-sm">Your data is used to: provide and improve the Steadora platform, power AI features such as the Oracle and pattern recognition, send you relevant communications about your account and the platform, and analyze aggregate usage trends (never individual user data) to improve our products.</p>
+            <p className="text-muted-foreground leading-relaxed text-sm">Your data is used to: provide and improve the Lifewoven platform, power AI features such as the Oracle and pattern recognition, send you relevant communications about your account and the platform, and analyze aggregate usage trends (never individual user data) to improve our products.</p>
           </section>
 
           <section>

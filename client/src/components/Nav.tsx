@@ -43,11 +43,13 @@ export default function Nav() {
       <div className="container flex items-center justify-between h-16">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-            <span className="text-primary-foreground font-serif text-sm font-medium">S</span>
-          </div>
-          <span className="font-serif text-xl font-medium tracking-tight text-foreground">
-            Stea<span className="text-accent">dora</span>
+          <img
+            src="https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/app-icon_e26b6bab.png"
+            alt="Lifewoven"
+            className="w-8 h-8 rounded-lg object-cover"
+          />
+          <span className="font-sans text-lg font-semibold tracking-tight text-foreground">
+            Lifewoven
           </span>
         </Link>
 

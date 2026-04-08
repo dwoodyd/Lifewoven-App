@@ -137,7 +137,7 @@ export default function Dashboard() {
         {/* Greeting + prominent check-in */}
         <div className="flex items-start justify-between mb-6">
           <div>
-            <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-1">Your Steadora</p>
+            <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-1">Your Lifewoven</p>
             <h1 className="font-serif text-3xl md:text-4xl font-light text-foreground">
               {greeting()}, {user?.name?.split(" ")[0] ?? "friend"}.
             </h1>

@@ -58,7 +58,7 @@ export default function BTWLibrary() {
 
         <div className="p-4 rounded-xl bg-secondary/30 border border-border mb-10 text-center">
           <p className="text-xs text-muted-foreground font-light">
-            Public domain texts are offered freely. Original content is proprietary to Steadora. Third-party practices are credited to their traditions.
+            Public domain texts are offered freely. Original content is proprietary to Lifewoven. Third-party practices are credited to their traditions.
           </p>
         </div>
 

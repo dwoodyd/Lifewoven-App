@@ -65,7 +65,7 @@ export async function stripeWebhookHandler(req: Request, res: Response) {
       case "customer.subscription.updated": {
         const sub = event.data.object as Stripe.Subscription;
         const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
-        const plan = sub.metadata?.steadora_plan as "seeker" | "oracle" | undefined;
+        const plan = sub.metadata?.lifewoven_plan as "seeker" | "oracle" | undefined;
 
         // Determine tier from price metadata if not in sub metadata
         let tier: "seeker" | "oracle" | "explorer" = "explorer";
@@ -75,7 +75,7 @@ export async function stripeWebhookHandler(req: Request, res: Response) {
           const priceId = sub.items.data[0]?.price?.id;
           if (priceId) {
             const price = await stripe.prices.retrieve(priceId);
-            const pricePlan = price.metadata?.steadora_plan as "seeker" | "oracle" | undefined;
+            const pricePlan = price.metadata?.lifewoven_plan as "seeker" | "oracle" | undefined;
             if (pricePlan) tier = pricePlan;
           }
         }

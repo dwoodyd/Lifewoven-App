@@ -64,22 +64,22 @@ export const stripeRouter = router({
       // Look up or create the price for this plan
       const prices = await stripe.prices.list({ active: true, limit: 100 });
       let price = prices.data.find((p: Stripe.Price) =>
-        p.metadata?.steadora_plan === input.plan && p.recurring?.interval === "month"
+        p.metadata?.lifewoven_plan === input.plan && p.recurring?.interval === "month"
       );
 
       if (!price) {
         // Create product + price on first use
         const product = await stripe.products.create({
-          name: `Steadora ${planConfig.name}`,
+          name: `Lifewoven ${planConfig.name}`,
           description: planConfig.description,
-          metadata: { steadora_plan: input.plan },
+          metadata: { lifewoven_plan: input.plan },
         });
         price = await stripe.prices.create({
           product: product.id,
           unit_amount: planConfig.price,
           currency: "usd",
           recurring: { interval: "month" },
-          metadata: { steadora_plan: input.plan },
+          metadata: { lifewoven_plan: input.plan },
         });
       }
 

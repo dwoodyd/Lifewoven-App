@@ -1,4 +1,4 @@
-// Steadora Stripe Products & Prices
+// Lifewoven Stripe Products & Prices
 // These are created dynamically on first use via the Stripe API.
 // Price IDs are stored in env after first creation, or looked up by product metadata.
 
@@ -7,7 +7,7 @@ export const PLANS = {
     name: "Explorer",
     tier: "explorer" as const,
     price: 0,
-    description: "Free access to core Steadora features.",
+    description: "Free access to core Lifewoven features.",
   },
   seeker: {
     name: "Seeker",

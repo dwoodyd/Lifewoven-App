@@ -1,6 +1,6 @@
 /**
  * Adaptive Intelligence Layer — Language System
- * Steadora | Wave 1
+ * Lifewoven | Wave 1
  *
  * This file is the canonical source of truth for all copy used in the
  * Adaptive Intelligence Layer. Every string here was chosen deliberately.
@@ -29,7 +29,7 @@ export const REENTRY = {
   subheadline: "You're here now. That's what matters.",
 
   /** Body copy for the re-entry flow. One paragraph, no guilt. */
-  body: "Life gets full. You don't need to catch up on everything — just begin with one small thing. Steadora will meet you exactly where you are.",
+  body: "Life gets full. You don't need to catch up on everything — just begin with one small thing. Lifewoven will meet you exactly where you are.",
 
   /** Button label. Action-oriented but gentle. NOT "Resume" (implies failure to pause). */
   ctaLabel: "Begin with one small win",
@@ -169,11 +169,11 @@ export const ONBOARDING_PATTERNS = {
 
   /** Step subtitle — sets the tone before any options appear */
   stepSubtitle:
-    "Steadora works better when it knows how you actually function — not how you think you should. None of these are problems. They're just patterns. Select anything that feels true.",
+    "Lifewoven works better when it knows how you actually function — not how you think you should. None of these are problems. They're just patterns. Select anything that feels true.",
 
   /** Reassurance note below the options */
   reassuranceNote:
-    "Your selections stay private and help Steadora adapt to you. You can change them anytime in your profile.",
+    "Your selections stay private and help Lifewoven adapt to you. You can change them anytime in your profile.",
 
   /** The pattern options — non-clinical, first-person language */
   patterns: [
@@ -190,7 +190,7 @@ export const ONBOARDING_PATTERNS = {
   ] as const,
 
   /** Support preference options */
-  supportPreferencesTitle: "How would you like Steadora to support you?",
+  supportPreferencesTitle: "How would you like Lifewoven to support you?",
   supportPreferences: [
     { id: "fewer_words", label: "Fewer words, more clarity" },
     { id: "audio_first", label: "Audio over reading when possible" },

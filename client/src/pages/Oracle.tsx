@@ -345,7 +345,7 @@ export default function Oracle() {
               </div>
             </div>
             <p className="text-xs text-muted-foreground text-center">
-              The Oracle draws from the Steadora 5S Framework and the wisdom traditions that inform it.{" "}
+              The Oracle draws from the Lifewoven 5S Framework and the wisdom traditions that inform it.{" "}
               Not a substitute for professional mental health advice.
             </p>
           </div>

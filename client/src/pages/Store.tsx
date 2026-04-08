@@ -12,7 +12,7 @@ const PRODUCTS = [
     title: "Alignment Fundamentals",
     subtitle: "The 5S Framework in Practice",
     price: "$97",
-    description: "A 6-week immersive course that walks you through each of the 5S modules with daily practices, video lessons, and journaling exercises. Build the foundation of your Steadora.",
+    description: "A 6-week immersive course that walks you through each of the 5S modules with daily practices, video lessons, and journaling exercises. Build the foundation of your Lifewoven.",
     tags: ["5S Framework", "Foundations", "6 weeks"],
   },
   {
@@ -127,7 +127,7 @@ export default function Store() {
           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Store</p>
           <h1 className="font-serif text-4xl md:text-5xl font-light text-foreground mb-4">Wisdom Tools</h1>
           <p className="text-muted-foreground text-lg font-light max-w-xl mx-auto">
-            Courses, workbooks, audio programs, and card decks — each one an original Steadora creation, distilling timeless wisdom into practical tools for modern life.
+            Courses, workbooks, audio programs, and card decks — each one an original Lifewoven creation, distilling timeless wisdom into practical tools for modern life.
           </p>
         </div>
         <div className="flex flex-wrap gap-2 justify-center mb-10">
@@ -173,7 +173,7 @@ export default function Store() {
         <div className="mt-16 p-8 rounded-2xl border border-border bg-card text-center">
           <h2 className="font-serif text-2xl font-light text-foreground mb-3">Bundle & Save</h2>
           <p className="text-muted-foreground text-sm mb-6 max-w-md mx-auto">
-            Get the complete Steadora toolkit — all courses, workbooks, audio programs, and card decks — at one transformational price.
+            Get the complete Lifewoven toolkit — all courses, workbooks, audio programs, and card decks — at one transformational price.
           </p>
           <div className="flex items-center justify-center gap-3 mb-6">
             <span className="text-muted-foreground line-through text-lg">$613</span>
@@ -185,7 +185,7 @@ export default function Store() {
           </Button>
         </div>
         <p className="text-center text-xs text-muted-foreground mt-8 max-w-2xl mx-auto">
-          All Steadora courses, workbooks, and audio programs are original creations. They are informed by wisdom traditions and personal development ideas but are independently produced and not affiliated with, endorsed by, or licensed by any named author, teacher, or publisher.
+          All Lifewoven courses, workbooks, and audio programs are original creations. They are informed by wisdom traditions and personal development ideas but are independently produced and not affiliated with, endorsed by, or licensed by any named author, teacher, or publisher.
         </p>
       </div>
     </div>

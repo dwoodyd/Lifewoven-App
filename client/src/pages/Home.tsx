@@ -106,7 +106,7 @@ const pricingTiers = [
     name: "Seeker",
     price: "$19",
     period: "/month",
-    desc: "The full Steadora experience. Every tool, every pathway, every module — fully unlocked.",
+    desc: "The full Lifewoven experience. Every tool, every pathway, every module — fully unlocked.",
     features: [
       "Everything in Explorer",
       "Unlimited journal entries",
@@ -154,7 +154,7 @@ function HeroDashboardPreview() {
       <div className="relative rounded-2xl border border-border bg-card shadow-2xl overflow-hidden">
         {/* Mini header */}
         <div className="px-5 py-3 border-b border-border flex items-center justify-between">
-          <span className="font-serif text-sm font-light text-foreground">Your Steadora</span>
+          <span className="font-serif text-sm font-light text-foreground">Your Lifewoven</span>
           <div className="flex gap-1.5">
             <div className="w-2 h-2 rounded-full bg-[oklch(0.62_0.14_200)]/60" />
             <div className="w-2 h-2 rounded-full bg-[oklch(0.60_0.14_280)]/60" />
@@ -242,7 +242,7 @@ export default function Home() {
               </h1>
 
               <p className="text-lg text-muted-foreground font-sans font-light leading-relaxed mb-8 max-w-lg">
-                Steadora brings together emotional alignment, belief work, habit execution, strategic clarity, and holistic stewardship — in one guided, intelligent platform rooted in timeless wisdom.
+                Lifewoven brings together emotional alignment, belief work, habit execution, strategic clarity, and holistic stewardship — in one guided, intelligent platform rooted in timeless wisdom.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 mb-6">
@@ -469,7 +469,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── Why Steadora Exists ─── */}
+      {/* ─── Why Lifewoven Exists ─── */}
       <section className="py-24 bg-secondary/30">
         <div className="container">
           <div className="grid lg:grid-cols-2 gap-16 items-center max-w-5xl">
@@ -480,13 +480,13 @@ export default function Home() {
                 <span className="italic text-accent">the best version of you.</span>
               </h2>
               <p className="text-muted-foreground font-light leading-relaxed mb-5">
-                Steadora was built for the real version. The one who starts and stops. The one who has the books and the knowledge but still feels stuck. The one whose mind works differently on different days.
+                Lifewoven was built for the real version. The one who starts and stops. The one who has the books and the knowledge but still feels stuck. The one whose mind works differently on different days.
               </p>
               <p className="text-muted-foreground font-light leading-relaxed mb-5">
                 The wisdom traditions we draw from — New Thought, mind science, behavioral psychology, logotherapy, conscious creation — have been helping people transform their lives for over a century. What was missing was a single, intelligent container that brought them together.
               </p>
               <p className="text-muted-foreground font-light leading-relaxed">
-                Steadora is that container. Not a content library. Not a habit app. A living operating system for a whole, aligned life.
+                Lifewoven is that container. Not a content library. Not a habit app. A living operating system for a whole, aligned life.
               </p>
             </div>
             <div className="space-y-5">
@@ -641,7 +641,7 @@ export default function Home() {
           </div>
           <div className="pt-6 border-t border-border">
             <p className="text-xs text-muted-foreground">
-              © {new Date().getFullYear()} Steadora. Built on the wisdom of the ages. Designed for the present moment.
+              © {new Date().getFullYear()} Lifewoven. Built on the wisdom of the ages. Designed for the present moment.
             </p>
           </div>
         </div>
