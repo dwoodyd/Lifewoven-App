@@ -593,10 +593,12 @@ export default function Home() {
           <div className="grid md:grid-cols-4 gap-8 mb-10">
             <div className="md:col-span-2">
               <div className="flex items-center gap-2 mb-3">
-                <div className="w-6 h-6 rounded bg-primary flex items-center justify-center">
-                  <span className="text-primary-foreground font-serif text-xs">S</span>
-                </div>
-                <span className="font-serif text-lg font-medium">Stea<span className="text-accent">dora</span></span>
+                <img
+                  src="https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/app-icon_e26b6bab.png"
+                  alt="Lifewoven"
+                  className="w-7 h-7 rounded-lg object-cover"
+                />
+                <span className="font-sans text-lg font-semibold tracking-tight text-foreground">Lifewoven</span>
               </div>
               <p className="text-xs text-muted-foreground max-w-xs leading-relaxed">
                 A personal transformation operating system rooted in timeless wisdom and powered by intelligent design.
