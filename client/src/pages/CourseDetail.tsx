@@ -2,7 +2,7 @@ import { useRoute } from "wouter";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { ArrowLeft, Clock, BookOpen, PenLine, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Clock, BookOpen, PenLine, CheckCircle2, Download } from "lucide-react";
 import { alignmentFundamentals, meaningFoundation, alignmentCurrent, identityInMotion, type CourseData } from "@/data/courseData";
 
 const COURSES: Record<string, CourseData> = {
@@ -10,6 +10,13 @@ const COURSES: Record<string, CourseData> = {
   "meaning-foundation": meaningFoundation,
   "alignment-current": alignmentCurrent,
   "identity-in-motion": identityInMotion,
+};
+
+const CDN = "https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t";
+
+const COURSE_PDFS: Record<string, string> = {
+  "alignment-current": `${CDN}/LifewovenAlignmentCurrentComplete_a5e0f9b2.pdf`,
+  "identity-in-motion": `${CDN}/LifewovenIdentitiesinMotion_c3d1e8f4.pdf`,
 };
 
 export default function CourseDetail() {
@@ -47,9 +54,14 @@ export default function CourseDetail() {
             <span className="flex items-center gap-1.5 text-base text-muted-foreground"><Clock className="h-4 w-4" />{course.duration}</span>
             <span className="text-2xl font-light text-foreground">{course.price}</span>
           </div>
-          <Button size="lg" className="gap-2">
-            Enroll Now — {course.price}
-          </Button>
+          <div className="flex flex-wrap gap-3">
+            <Button size="lg" className="gap-2">Enroll Now — {course.price}</Button>
+            {COURSE_PDFS[courseId] && (
+              <a href={COURSE_PDFS[courseId]} download target="_blank" rel="noopener noreferrer">
+                <Button size="lg" variant="outline" className="gap-2"><Download className="h-4 w-4" /> Download Course PDF</Button>
+              </a>
+            )}
+          </div>
         </div>
         {/* Overview */}
         <div className="mb-10 p-6 rounded-2xl border border-border bg-card">
@@ -135,9 +147,14 @@ export default function CourseDetail() {
           <p className="text-base text-muted-foreground font-light mb-6 max-w-md mx-auto">
             Enroll now and get immediate access to all lessons, practices, and the full course library.
           </p>
-          <Button size="lg" className="gap-2">
-            Enroll Now — {course.price}
-          </Button>
+          <div className="flex flex-wrap gap-3 justify-center">
+            <Button size="lg" className="gap-2">Enroll Now — {course.price}</Button>
+            {COURSE_PDFS[courseId] && (
+              <a href={COURSE_PDFS[courseId]} download target="_blank" rel="noopener noreferrer">
+                <Button size="lg" variant="outline" className="gap-2"><Download className="h-4 w-4" /> Download Course PDF</Button>
+              </a>
+            )}
+          </div>
         </div>
       </div>
     </div>

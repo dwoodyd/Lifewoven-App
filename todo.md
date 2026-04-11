@@ -252,3 +252,20 @@
 - [x] ClosingTheGap — Weekly reflection generate button shows lock + upgrade CTA for Explorer tier
 - [x] Pricing.tsx — dynamic Stripe checkout CTAs, current plan badge
 - [x] Vitest tests for tier helper functions (10 tests passing)
+
+## Product Store Sprint
+
+- [ ] Stripe checkout — server tRPC procedure for one-time product purchases (alignment-workbook, wisdom-card-deck, morning-alignment-audio)
+- [ ] Stripe webhook — handle checkout.session.completed to deliver download URL via email or on-page
+- [ ] Wire Stripe checkout to ProductDetail page (replace direct download with gated purchase)
+- [ ] Add PDF companion download buttons to CourseDetail (identity-in-motion, alignment-current)
+- [ ] Add Coming Soon / notify-me placeholder for belief-rewrite-workbook and identity-stack-workbook
+
+## Product Store Sprint (Apr 11, 2026)
+
+- [x] Stripe checkout for 3 live products (Alignment Workbook, Wisdom Card Deck, Morning Alignment Audio)
+- [x] Post-purchase success state with download button on ProductDetail page
+- [x] Coming Soon email capture for Belief Rewrite Workbook and Identity Stack Workbook
+- [x] PDF companion download buttons on Alignment Current and Identity in Motion course pages
+- [x] Webhook updated to handle product one-time purchases (checkout.session.completed)
+- [x] getMyOrders tRPC procedure to check if user has already purchased a product

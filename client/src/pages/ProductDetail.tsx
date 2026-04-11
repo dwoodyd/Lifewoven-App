@@ -1,8 +1,13 @@
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
-import { Link } from "wouter";
-import { ArrowLeft, Download, FileText, Headphones, Star, CheckCircle2 } from "lucide-react";
+import { Link, useLocation } from "wouter";
+import { ArrowLeft, Download, FileText, Headphones, Star, CheckCircle2, Mail, Loader2, ShoppingCart } from "lucide-react";
 import { useRoute } from "wouter";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
+import { getLoginUrl } from "@/const";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const CDN = "https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t";
 
@@ -12,6 +17,7 @@ const PRODUCTS: Record<string, {
   title: string;
   subtitle: string;
   price: string;
+  priceInCents: number;
   category: string;
   description: string;
   longDescription: string;
@@ -26,6 +32,7 @@ const PRODUCTS: Record<string, {
     title: "The Alignment Workbook",
     subtitle: "A 90-Day Practice for Living in Coherence",
     price: "$27",
+    priceInCents: 2700,
     description: "A beautifully designed 90-day guided journal with daily prompts, weekly reviews, and the full 5S framework woven throughout.",
     longDescription: `This workbook is not a journal. A journal asks you to record what happened. This workbook asks you to practice — to apply the five dimensions of the Lifewoven 5S Framework to your actual daily life with enough consistency that they become the operating system of your living, not a set of ideas you think about occasionally.\n\nNinety days. One prompt per day. Thirteen weekly reviews.\n\nThe daily prompts rotate through the five dimensions of the framework — State, Story, Standards, Strategy, Stewardship — so that over the course of three months, you develop a working relationship with each one. Some days the prompt will land immediately. Others will feel flat or difficult or like you have nothing to say. Write anyway. Resistance is usually the sign that something worth addressing is present.\n\nThe only rule: Write before you evaluate whether you are writing well. The quality of your thinking in this workbook is not the point. The quality of your attention is.`,
     includes: [
@@ -45,6 +52,7 @@ const PRODUCTS: Record<string, {
     title: "Wisdom Card Deck",
     subtitle: "52 Cards — One Per Week for a Year",
     price: "$34",
+    priceInCents: 3400,
     description: "52 beautifully designed digital cards featuring distilled wisdom from the four wisdom traditions at the heart of the Lifewoven platform.",
     longDescription: `One card. One week. One practice.\n\nDo not rush through this deck. Each card is a single distilled insight from one of the four wisdom traditions at the heart of the Lifewoven platform. The instruction is to sit with each card for seven days — to let it work on you through the week rather than consuming it in a sitting.\n\nRead it on Monday. Return to it on Wednesday. Let it find you in a moment on Friday when it is suddenly more relevant than it was at the beginning of the week.\n\nA year of this practice is a year of quiet, cumulative formation — the kind that does not announce itself and does not require dramatic effort. It simply asks your attention, one week at a time.\n\nThe 52 cards draw from four wisdom lineages: Mind Science (Ernest Holmes and New Thought), Vibrational Alignment (Law of Attraction), Meaning-Centered Philosophy (Viktor Frankl and Logotherapy), and Behavioral Science (identity-based habit formation).`,
     includes: [
@@ -64,6 +72,7 @@ const PRODUCTS: Record<string, {
     title: "Morning Alignment Series",
     subtitle: "7 Guided Morning Practices",
     price: "$37",
+    priceInCents: 3700,
     description: "Seven 15-minute guided audio sessions — one for each day of the week — to start your day in alignment.",
     longDescription: `These fifteen minutes belong entirely to you — before the week asks anything of you, before the calendar fills, before the first message arrives.\n\nThe Morning Alignment Series is seven complete guided sessions, one for each day of the week, each approximately fifteen minutes. Each session moves through five elements: Arrive, Acknowledge, Appreciate, Intend, and Release — a complete interior practice that sets the vibrational tone for everything that follows.\n\nThe sessions are designed to be used in sequence across a week, or individually on the days when a specific practice is most needed. Monday's Foundation session establishes the week's ground. Each subsequent day builds on a specific dimension of the Lifewoven framework.\n\nThis download includes the complete narrated scripts — formatted for professional recording or personal use. Each script includes narrator pacing notes, pause markers, and breath cues.`,
     includes: [
@@ -84,6 +93,7 @@ const PRODUCTS: Record<string, {
     title: "Belief Rewrite Workbook",
     subtitle: "Rewire Your Story in 30 Days",
     price: "$19",
+    priceInCents: 1900,
     description: "A focused 30-day workbook for identifying and rewriting the limiting beliefs that are holding you back. Rooted in the Story module of the 5S Framework.",
     longDescription: `The Story module of the 5S Framework begins with a single premise: the story you tell about yourself is not a description of reality. It is a set of instructions. The beliefs you hold about who you are, what you are capable of, and what is available to you are not passive observations — they are active directives that shape what you attempt, what you notice, and what you allow yourself to receive.\n\nThis workbook is a 30-day structured process for surfacing, examining, and rewriting the specific beliefs that are most actively limiting your experience. It is not a positive-thinking exercise. It is a rigorous inquiry into the actual content of your current story — followed by a deliberate, evidence-based process for writing a more accurate one.`,
     includes: [
@@ -104,6 +114,7 @@ const PRODUCTS: Record<string, {
     title: "The Identity Stack Workbook",
     subtitle: "Design the Habits That Make You, You",
     price: "$22",
+    priceInCents: 2200,
     description: "A practical workbook for designing, stacking, and anchoring identity-based habits. Includes the Minimum Viable Habit framework and the Better Mirror tracking system.",
     longDescription: `Most habit change fails not because of a lack of discipline but because of a mismatch between the desired behavior and the underlying identity. The Identity Stack Workbook addresses the root.\n\nThis workbook walks you through the complete identity-based habit design process: surfacing the current identity architecture, writing a credible identity declaration, designing the habit stack that carries that identity into daily life, and building the recovery protocols that make consistency possible over time.\n\nIncludes the Minimum Viable Habit framework — the practice of designing habits small enough to survive your worst days — and the Better Mirror tracking system, which counts returns as demonstrations rather than treating missed days as failures.`,
     includes: [
@@ -125,6 +136,7 @@ const PRODUCTS: Record<string, {
     title: "Reset Audio",
     subtitle: "The Full Resilience Protocol",
     price: "$27",
+    priceInCents: 2700,
     description: "A guided audio experience walking you through the complete Reset pathway. For the moments when you need to return to yourself.",
     longDescription: `The Reset pathway is built on a single premise: returning is not failure. It is the practice.\n\nThis guided audio experience walks you through the complete Reset protocol — a 45-minute journey from wherever you are to a place of genuine re-ground. It is not a motivational session. It is not a pep talk. It is a structured, compassionate process for the specific experience of having lost your footing and needing to find it again.\n\nThe Reset Audio is for the moments when you know something has shifted — when the alignment feels distant, when the story has gone dark, when the energy is low and the path forward is unclear. It meets you there, without judgment, and walks you back.`,
     includes: [
@@ -143,6 +155,47 @@ export default function ProductDetail() {
   const [, params] = useRoute("/product/:id");
   const productId = params?.id ?? "";
   const product = PRODUCTS[productId];
+  const { user, loading: authLoading } = useAuth();
+  const [location] = useLocation();
+  const [notifyEmail, setNotifyEmail] = useState("");
+  const [notifySent, setNotifySent] = useState(false);
+
+  // Check for post-purchase success redirect
+  const urlParams = new URLSearchParams(window.location.search);
+  const purchaseSuccess = urlParams.get("purchase") === "success";
+
+  // Fetch user's existing orders to check if already purchased
+  const { data: myOrders } = trpc.stripe.getMyOrders.useQuery(undefined, {
+    enabled: !!user,
+  });
+  const alreadyPurchased = myOrders?.some(o => o.productSlug === productId);
+
+  const checkout = trpc.stripe.createProductCheckout.useMutation({
+    onSuccess: (data) => {
+      if (data.url) {
+        toast.success("Redirecting to checkout…", { description: "You'll be taken to Stripe's secure payment page." });
+        window.open(data.url, "_blank");
+      }
+    },
+    onError: (err) => {
+      toast.error("Checkout error", { description: err.message });
+    },
+  });
+
+  function handleBuy() {
+    if (!user) {
+      window.location.href = getLoginUrl();
+      return;
+    }
+    if (!product.downloadUrl) return;
+    checkout.mutate({
+      productSlug: product.id,
+      productTitle: product.title,
+      priceInCents: product.priceInCents,
+      downloadUrl: product.downloadUrl,
+      origin: window.location.origin,
+    });
+  }
 
   if (!product) {
     return (
@@ -163,6 +216,8 @@ export default function ProductDetail() {
   }
 
   const CategoryIcon = product.category === "audio" ? Headphones : product.category === "cards" ? Star : FileText;
+  const isAvailable = !!product.downloadUrl;
+  const canDownload = purchaseSuccess || alreadyPurchased;
 
   return (
     <div className="min-h-screen bg-background">
@@ -173,6 +228,22 @@ export default function ProductDetail() {
             <ArrowLeft className="h-4 w-4" /> Back to Store
           </p>
         </Link>
+
+        {/* Post-purchase success banner */}
+        {canDownload && (
+          <div className="mb-8 p-5 rounded-2xl border border-green-500/30 bg-green-500/10 flex items-start gap-4">
+            <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5 shrink-0" />
+            <div>
+              <p className="text-base font-medium text-foreground mb-1">Purchase complete — your download is ready.</p>
+              <p className="text-sm text-muted-foreground mb-3">Thank you for your purchase. Click below to download your file.</p>
+              <a href={product.downloadUrl} download target="_blank" rel="noopener noreferrer">
+                <Button size="sm" className="gap-2">
+                  <Download className="h-4 w-4" /> Download {product.title}
+                </Button>
+              </a>
+            </div>
+          </div>
+        )}
 
         {/* Header */}
         <div className="mb-10">
@@ -191,12 +262,21 @@ export default function ProductDetail() {
               ))}
             </div>
           </div>
-          {product.downloadUrl ? (
-            <a href={product.downloadUrl} download target="_blank" rel="noopener noreferrer">
-              <Button size="lg" className="gap-2">
-                <Download className="h-4 w-4" /> Download — {product.price}
+
+          {/* Primary CTA */}
+          {isAvailable ? (
+            canDownload ? (
+              <a href={product.downloadUrl} download target="_blank" rel="noopener noreferrer">
+                <Button size="lg" className="gap-2">
+                  <Download className="h-4 w-4" /> Download Now
+                </Button>
+              </a>
+            ) : (
+              <Button size="lg" className="gap-2" onClick={handleBuy} disabled={checkout.isPending || authLoading}>
+                {checkout.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShoppingCart className="h-4 w-4" />}
+                {checkout.isPending ? "Redirecting…" : `Buy Now — ${product.price}`}
               </Button>
-            </a>
+            )
           ) : (
             <Button size="lg" disabled className="gap-2 opacity-60">
               <Download className="h-4 w-4" /> Coming Soon
@@ -206,7 +286,9 @@ export default function ProductDetail() {
 
         {/* Description */}
         <div className="mb-10 p-6 rounded-2xl border border-border bg-card">
-          <h2 className="font-serif text-2xl font-light text-foreground mb-4">About This {product.category === "audio" ? "Series" : product.category === "cards" ? "Deck" : "Workbook"}</h2>
+          <h2 className="font-serif text-2xl font-light text-foreground mb-4">
+            About This {product.category === "audio" ? "Series" : product.category === "cards" ? "Deck" : "Workbook"}
+          </h2>
           {product.longDescription.split("\n\n").map((p, i) => (
             <p key={i} className="text-base text-muted-foreground font-light leading-relaxed mb-3 last:mb-0">{p}</p>
           ))}
@@ -225,24 +307,63 @@ export default function ProductDetail() {
           </ul>
         </div>
 
-        {/* CTA */}
+        {/* Bottom CTA */}
         <div className="p-8 rounded-2xl border border-border bg-card text-center">
-          <h3 className="font-serif text-2xl font-light text-foreground mb-3">Ready to Begin?</h3>
-          <p className="text-base text-muted-foreground font-light mb-6 max-w-md mx-auto">
-            {product.downloadUrl
-              ? "Your download will begin immediately. No account required."
-              : "This product is currently in development. Check back soon."}
-          </p>
-          {product.downloadUrl ? (
-            <a href={product.downloadUrl} download target="_blank" rel="noopener noreferrer">
-              <Button size="lg" className="gap-2">
-                <Download className="h-4 w-4" /> Download {product.title} — {product.price}
-              </Button>
-            </a>
+          <h3 className="font-serif text-2xl font-light text-foreground mb-3">
+            {isAvailable ? "Ready to Begin?" : "Be the First to Know"}
+          </h3>
+          {isAvailable ? (
+            <>
+              <p className="text-base text-muted-foreground font-light mb-6 max-w-md mx-auto">
+                {canDownload
+                  ? "Your purchase is confirmed. Download your file below."
+                  : "Secure checkout via Stripe. Instant download after payment."}
+              </p>
+              {canDownload ? (
+                <a href={product.downloadUrl} download target="_blank" rel="noopener noreferrer">
+                  <Button size="lg" className="gap-2">
+                    <Download className="h-4 w-4" /> Download {product.title}
+                  </Button>
+                </a>
+              ) : (
+                <Button size="lg" className="gap-2" onClick={handleBuy} disabled={checkout.isPending || authLoading}>
+                  {checkout.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShoppingCart className="h-4 w-4" />}
+                  {checkout.isPending ? "Redirecting to checkout…" : `Purchase — ${product.price}`}
+                </Button>
+              )}
+            </>
           ) : (
-            <Button size="lg" disabled className="gap-2 opacity-60">
-              Coming Soon
-            </Button>
+            <>
+              <p className="text-base text-muted-foreground font-light mb-6 max-w-md mx-auto">
+                This product is in development. Enter your email and we'll notify you the moment it's available.
+              </p>
+              {notifySent ? (
+                <div className="flex items-center justify-center gap-2 text-base text-muted-foreground">
+                  <CheckCircle2 className="h-4 w-4 text-green-500" />
+                  You're on the list. We'll be in touch.
+                </div>
+              ) : (
+                <form
+                  className="flex flex-col sm:flex-row gap-3 max-w-sm mx-auto"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (notifyEmail) setNotifySent(true);
+                  }}
+                >
+                  <input
+                    type="email"
+                    required
+                    placeholder="your@email.com"
+                    value={notifyEmail}
+                    onChange={e => setNotifyEmail(e.target.value)}
+                    className="flex-1 px-4 py-2 rounded-lg border border-border bg-background text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                  />
+                  <Button type="submit" className="gap-2 shrink-0">
+                    <Mail className="h-4 w-4" /> Notify Me
+                  </Button>
+                </form>
+              )}
+            </>
           )}
         </div>
       </div>

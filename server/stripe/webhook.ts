@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import Stripe from "stripe";
 import { getDb } from "../db";
-import { users } from "../../drizzle/schema";
+import { users, orders } from "../../drizzle/schema";
 import { eq } from "drizzle-orm";
 
 export async function stripeWebhookHandler(req: Request, res: Response) {
@@ -51,6 +51,27 @@ export async function stripeWebhookHandler(req: Request, res: Response) {
         const customerId = typeof session.customer === "string" ? session.customer : session.customer?.id;
         const subscriptionId = typeof session.subscription === "string" ? session.subscription : session.subscription?.id;
 
+        const purchaseType = session.metadata?.purchase_type;
+
+        // Handle product (one-time) purchases
+        if (purchaseType === "product" && userId) {
+          const productSlug = session.metadata?.product_slug ?? null;
+          const downloadUrl = session.metadata?.download_url ?? null;
+          const amountTotal = session.amount_total ?? 0;
+          await db.insert(orders).values({
+            userId,
+            items: [{ type: "product", slug: productSlug, price: amountTotal }],
+            total: (amountTotal / 100).toFixed(2),
+            status: "completed",
+            stripeSessionId: session.id,
+            productSlug,
+            downloadUrl,
+          });
+          console.log(`[Webhook] Product order created for user ${userId}: ${productSlug}`);
+          break;
+        }
+
+        // Handle subscription purchases
         if (userId && plan && customerId && subscriptionId) {
           await db.update(users).set({
             membershipTier: plan,

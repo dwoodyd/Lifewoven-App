@@ -290,6 +290,8 @@ export const orders = mysqlTable("orders", {
   total: decimal("total", { precision: 8, scale: 2 }).notNull(),
   status: mysqlEnum("status", ["pending", "completed", "refunded"]).default("pending").notNull(),
   stripeSessionId: varchar("stripeSessionId", { length: 255 }),
+  productSlug: varchar("productSlug", { length: 128 }),
+  downloadUrl: text("downloadUrl"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 

@@ -5,6 +5,7 @@ import { getDb } from "../db";
 import { users } from "../../drizzle/schema";
 import { eq } from "drizzle-orm";
 import { PLANS, type PlanTier } from "../stripe/products";
+import { orders } from "../../drizzle/schema";
 import { TRPCError } from "@trpc/server";
 
 async function requireDb() {
@@ -110,16 +111,77 @@ export const stripeRouter = router({
       const db = await requireDb();
       const [user] = await db.select({ stripeCustomerId: users.stripeCustomerId })
         .from(users).where(eq(users.id, ctx.user.id));
-
       if (!user?.stripeCustomerId) {
         throw new TRPCError({ code: "NOT_FOUND", message: "No billing account found." });
       }
-
       const session = await stripe.billingPortal.sessions.create({
         customer: user.stripeCustomerId,
         return_url: `${input.origin}/settings?tab=billing`,
       });
-
       return { url: session.url };
     }),
+
+  // ── One-time product purchase checkout ─────────────────────────────────────
+  createProductCheckout: protectedProcedure
+    .input(z.object({
+      productSlug: z.string(),
+      productTitle: z.string(),
+      priceInCents: z.number().int().positive(),
+      downloadUrl: z.string(),
+      origin: z.string().url(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const stripe = getStripe();
+      const db = await requireDb();
+      // Get or create Stripe customer
+      const [user] = await db.select().from(users).where(eq(users.id, ctx.user.id));
+      let customerId = user?.stripeCustomerId;
+      if (!customerId) {
+        const customer = await stripe.customers.create({
+          email: ctx.user.email ?? undefined,
+          name: ctx.user.name ?? undefined,
+          metadata: { userId: ctx.user.id.toString() },
+        });
+        customerId = customer.id;
+        await db.update(users).set({ stripeCustomerId: customerId }).where(eq(users.id, ctx.user.id));
+      }
+      const session = await stripe.checkout.sessions.create({
+        customer: customerId,
+        mode: "payment",
+        line_items: [{
+          price_data: {
+            currency: "usd",
+            unit_amount: input.priceInCents,
+            product_data: {
+              name: input.productTitle,
+              metadata: { lifewoven_product_slug: input.productSlug },
+            },
+          },
+          quantity: 1,
+        }],
+        success_url: `${input.origin}/product/${input.productSlug}?purchase=success&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${input.origin}/product/${input.productSlug}`,
+        allow_promotion_codes: true,
+        client_reference_id: ctx.user.id.toString(),
+        metadata: {
+          user_id: ctx.user.id.toString(),
+          customer_email: ctx.user.email ?? "",
+          customer_name: ctx.user.name ?? "",
+          product_slug: input.productSlug,
+          download_url: input.downloadUrl,
+          purchase_type: "product",
+        },
+      });
+      return { url: session.url };
+    }),
+
+  // ── Get user's completed product orders ─────────────────────────────────────
+  getMyOrders: protectedProcedure.query(async ({ ctx }) => {
+    const db = await requireDb();
+    const myOrders = await db.select()
+      .from(orders)
+      .where(eq(orders.userId, ctx.user.id))
+      .orderBy(orders.createdAt);
+    return myOrders.filter(o => o.status === "completed" && o.productSlug);
+  }),
 });
