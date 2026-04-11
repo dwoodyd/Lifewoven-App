@@ -99,8 +99,8 @@ export default function StateYouEnter() {
               onClick={() => setSelectedState(s.id)}
               className={`p-4 rounded-2xl border text-left transition-all ${selectedState === s.id ? "border-primary bg-primary/10" : "border-border bg-card hover:bg-secondary/40"}`}
             >
-              <p className={`text-sm font-light mb-1 ${selectedState === s.id ? "text-foreground" : "text-muted-foreground"}`}>{s.label}</p>
-              <p className="text-xs text-muted-foreground leading-relaxed">{s.desc}</p>
+              <p className={`text-base font-light mb-1 ${selectedState === s.id ? "text-foreground" : "text-muted-foreground"}`}>{s.label}</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
             </button>
           ))}
         </div>

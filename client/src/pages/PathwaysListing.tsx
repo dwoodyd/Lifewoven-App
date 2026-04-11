@@ -155,10 +155,10 @@ export default function PathwaysListing() {
                         <h3 className="font-serif text-xl font-light text-foreground">{pathway.name}</h3>
                         <Badge variant="outline" className="text-xs font-mono hidden sm:inline-flex">{pathway.tag}</Badge>
                       </div>
-                      <p className="text-xs text-muted-foreground">{pathway.subtitle}</p>
+                      <p className="text-base text-muted-foreground">{pathway.subtitle}</p>
                     </div>
                   </div>
-                  <p className="text-sm text-muted-foreground font-light leading-relaxed mb-4">{pathway.description}</p>
+                  <p className="text-base text-muted-foreground font-light leading-relaxed mb-4">{pathway.description}</p>
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-muted-foreground font-mono">{pathway.duration}</span>
                     <span className={`text-xs font-medium ${pathway.color} flex items-center gap-1 group-hover:gap-2 transition-all`}>
@@ -173,7 +173,7 @@ export default function PathwaysListing() {
 
         {/* Bottom note */}
         <div className="mt-12 text-center">
-          <p className="text-sm text-muted-foreground font-light">
+          <p className="text-base text-muted-foreground font-light">
             Not sure where to start?{" "}
             <Link href="/audit" className="text-accent hover:underline">
               Take the Alignment Audit

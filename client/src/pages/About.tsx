@@ -58,7 +58,7 @@ export default function About() {
             <img
               src="https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/logo-transparent_0c4f036f.png"
               alt="Lifewoven"
-              className="h-10 object-contain"
+              className="h-16 object-contain"
             />
           </div>
           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">About</p>
@@ -91,22 +91,22 @@ export default function About() {
             ].map(({ s, desc }) => (
               <div key={s} className="text-center p-3 rounded-xl bg-secondary">
                 <p className="font-serif text-lg font-light text-foreground">{s}</p>
-                <p className="text-xs text-muted-foreground">{desc}</p>
+                <p className="text-sm text-muted-foreground">{desc}</p>
               </div>
             ))}
           </div>
         </div>
 
         <h2 className="font-serif text-2xl font-light text-foreground mb-3 text-center">Wisdom Lineage</h2>
-        <p className="text-center text-sm text-muted-foreground font-light mb-8 max-w-xl mx-auto">
+          <p className="text-center text-base text-muted-foreground font-light mb-8 max-w-xl mx-auto">
           The thinkers and traditions that informed the development of Lifewoven. Their ideas are acknowledged here as sources of inspiration, not as endorsers of this platform.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {WISDOM_LINEAGE.map(t => (
             <div key={t.name} className="p-6 rounded-2xl border border-border bg-card">
               <h3 className="font-serif text-xl font-light text-foreground mb-1">{t.name}</h3>
-              <p className="text-xs text-muted-foreground mb-3">{t.years} · {t.role}</p>
-              <p className="text-sm text-muted-foreground font-light leading-relaxed mb-4">{t.contribution}</p>
+              <p className="text-sm text-muted-foreground mb-3">{t.years} · {t.role}</p>
+              <p className="text-base text-muted-foreground font-light leading-relaxed mb-4">{t.contribution}</p>
               <span className="text-xs px-2 py-0.5 rounded-full bg-secondary text-muted-foreground">{t.status}</span>
             </div>
           ))}
@@ -114,7 +114,7 @@ export default function About() {
 
         {/* Repeated disclaimer at bottom of influences section */}
         <div className="p-5 rounded-2xl border border-border bg-secondary/40 mb-12">
-          <p className="text-xs text-muted-foreground font-light leading-relaxed text-center">
+          <p className="text-sm text-muted-foreground font-light leading-relaxed text-center">
             The individuals listed above are acknowledged as intellectual and philosophical influences on the development of Lifewoven. None of them have reviewed, approved, endorsed, or sponsored this platform or its content. References to their work are made in the spirit of intellectual acknowledgment and do not imply any formal relationship, license, or affiliation.
           </p>
         </div>

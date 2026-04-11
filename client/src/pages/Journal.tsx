@@ -148,10 +148,10 @@ export default function Journal() {
                       <Link key={entry.id} href={`/journal/${entry.id}`}>
                         <div className="p-4 rounded-xl border border-border bg-card hover:border-muted-foreground transition-all cursor-pointer">
                           <div className="flex items-start justify-between gap-2 mb-2">
-                            <h3 className="font-medium text-foreground text-sm">{entry.title || "Untitled Entry"}</h3>
+                            <h3 className="font-medium text-foreground text-base">{entry.title || "Untitled Entry"}</h3>
                             <span className="text-xs text-muted-foreground flex-shrink-0">{new Date(entry.createdAt).toLocaleDateString()}</span>
                           </div>
-                          <p className="text-xs text-muted-foreground line-clamp-2 mb-2">{entry.content}</p>
+                          <p className="text-sm text-muted-foreground line-clamp-2 mb-2">{entry.content}</p>
                           <div className="flex items-center gap-2">
                             {entry.module && <Badge variant="secondary" className={`text-xs capitalize ${MODULE_COLORS[entry.module]}`}>{entry.module}</Badge>}
                             {entry.tags && entry.tags.slice(0, 3).map((tag: string) => <span key={tag} className="text-xs text-muted-foreground">#{tag}</span>)}
@@ -164,7 +164,7 @@ export default function Journal() {
                   <div className="text-center py-16">
                     <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                     <p className="font-serif text-lg font-light text-foreground mb-2">Your journal is empty.</p>
-                    <p className="text-sm text-muted-foreground mb-6">Begin with a prompt below, or write freely.</p>
+                    <p className="text-base text-muted-foreground mb-6">Begin with a prompt below, or write freely.</p>
                     <Button onClick={() => setIsWriting(true)} className="gap-2"><Plus className="h-4 w-4" /> First Entry</Button>
                   </div>
                 )}
@@ -184,7 +184,7 @@ export default function Journal() {
                 {DEFAULT_PROMPTS.map(p => (
                   <button key={p} onClick={() => { setCurrentPrompt(p); setIsWriting(true); }} className="w-full text-left p-2.5 rounded-lg hover:bg-secondary/50 transition-colors group flex items-start gap-2">
                     <ArrowRight className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0 mt-0.5 group-hover:text-foreground transition-colors" />
-                    <span className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">{p}</span>
+                    <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">{p}</span>
                   </button>
                 ))}
               </div>

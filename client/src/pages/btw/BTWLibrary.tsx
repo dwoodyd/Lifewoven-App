@@ -57,7 +57,7 @@ export default function BTWLibrary() {
         </div>
 
         <div className="p-4 rounded-xl bg-secondary/30 border border-border mb-10 text-center">
-          <p className="text-xs text-muted-foreground font-light">
+          <p className="text-sm text-muted-foreground font-light">
             Public domain texts are offered freely. Original content is proprietary to Lifewoven. Third-party practices are credited to their traditions.
           </p>
         </div>
@@ -73,10 +73,10 @@ export default function BTWLibrary() {
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           <span className="text-muted-foreground">{TYPE_ICONS[item.type]}</span>
-                          <h3 className="text-sm font-light text-foreground">{item.title}</h3>
+                          <h3 className="text-base font-light text-foreground">{item.title}</h3>
                         </div>
-                        <p className="text-xs text-muted-foreground mb-1">{item.author}</p>
-                        <p className="text-xs text-muted-foreground font-light leading-relaxed">{item.desc}</p>
+                        <p className="text-sm text-muted-foreground mb-1">{item.author}</p>
+                        <p className="text-sm text-muted-foreground font-light leading-relaxed">{item.desc}</p>
                       </div>
                       {item.link && (
                         <a href={item.link} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors shrink-0">
@@ -93,7 +93,7 @@ export default function BTWLibrary() {
 
         <div className="mt-12 p-6 rounded-2xl border border-border bg-card text-center">
           <p className="font-serif text-lg font-light text-foreground mb-2">More coming with the book</p>
-          <p className="text-sm text-muted-foreground font-light leading-relaxed max-w-md mx-auto">
+          <p className="text-base text-muted-foreground font-light leading-relaxed max-w-md mx-auto">
             The full Before the Words library will expand alongside the book release, including companion teachings, audio reflections, and guided practices.
           </p>
         </div>

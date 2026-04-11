@@ -366,7 +366,7 @@ export default function AlignmentAudit() {
           <h1 className="font-serif text-3xl md:text-4xl font-light text-foreground mb-1">
             Your current pattern: <span className="text-accent">{profile.name}</span>
           </h1>
-          <p className="text-sm text-muted-foreground mb-6">This reflects patterns in your responses, not fixed traits. Patterns shift.</p>
+          <p className="text-base text-muted-foreground mb-6">This reflects patterns in your responses, not fixed traits. Patterns shift.</p>
           {frictionTags.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-6">
               {frictionTags.map(tag => <Badge key={tag} variant="secondary" className="text-xs capitalize">{tag}</Badge>)}
@@ -374,13 +374,13 @@ export default function AlignmentAudit() {
           )}
           <div className="p-6 rounded-2xl border border-border bg-card mb-4">
             <h3 className="font-serif text-lg font-light text-foreground mb-3">What this pattern looks like</h3>
-            <p className="text-muted-foreground leading-relaxed text-sm">{profile.summary}</p>
+            <p className="text-muted-foreground leading-relaxed text-base">{profile.summary}</p>
           </div>
           <div className="p-6 rounded-2xl border border-border bg-card mb-4">
             <h3 className="font-serif text-lg font-light text-foreground mb-3">What may be happening</h3>
             <ul className="space-y-2">
               {profile.bullets.map((b, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                <li key={i} className="flex items-start gap-2 text-base text-muted-foreground">
                   <span className="w-1.5 h-1.5 rounded-full bg-accent mt-2 shrink-0" />{b}
                 </li>
               ))}
@@ -403,10 +403,10 @@ export default function AlignmentAudit() {
           </div>
           <div className="p-6 rounded-2xl border border-border bg-card mb-4">
             <h3 className="font-serif text-lg font-light text-foreground mb-3">Start here</h3>
-            <p className="text-sm text-muted-foreground leading-relaxed mb-1">
+            <p className="text-base text-muted-foreground leading-relaxed mb-1">
               Based on your responses, the best next step is <strong className="text-foreground">{profile.firstPathway}</strong>. Right now, support matters more than pressure.
             </p>
-            <p className="text-sm text-muted-foreground mb-5"><strong className="text-foreground">Then continue into</strong> {profile.secondPathway} to deepen the work.</p>
+            <p className="text-base text-muted-foreground mb-5"><strong className="text-foreground">Then continue into</strong> {profile.secondPathway} to deepen the work.</p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Button asChild className="gap-2">
                 <a href={`/pathway/${profile.firstPathway.toLowerCase()}`}>Start {profile.firstPathway} <ArrowRight className="h-4 w-4" /></a>
@@ -419,7 +419,7 @@ export default function AlignmentAudit() {
           </div>
           <div className="p-6 rounded-2xl border border-border bg-card mb-6">
             <h3 className="font-serif text-lg font-light text-foreground mb-2">Want to track your progress over time?</h3>
-            <p className="text-sm text-muted-foreground mb-4">Create a free account to save your results, revisit your audit, and watch your patterns shift as you work through Lifewoven.</p>
+            <p className="text-base text-muted-foreground mb-4">Create a free account to save your results, revisit your audit, and watch your patterns shift as you work through Lifewoven.</p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Button className="gap-2" onClick={handleSaveResults} disabled={saveAudit.isPending}>
                 <CheckCircle2 className="h-4 w-4" /> {saveAudit.isPending ? "Saving..." : "Save My Results — It's Free"}
@@ -428,7 +428,7 @@ export default function AlignmentAudit() {
             </div>
           </div>
           <div className="p-4 rounded-xl bg-muted/30 border border-border">
-            <p className="text-xs text-muted-foreground leading-relaxed">
+            <p className="text-sm text-muted-foreground leading-relaxed">
               <strong>Disclaimer:</strong> The Alignment Audit is a reflective tool, not a medical or psychological diagnosis. It is designed to identify current patterns and help guide your experience inside Lifewoven. If you are dealing with significant mental health concerns, please seek support from a qualified professional.
             </p>
           </div>

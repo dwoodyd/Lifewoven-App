@@ -80,7 +80,7 @@ export default function Community() {
                 <h3 className="font-medium text-foreground">{post.title}</h3>
                 <Badge variant="secondary" className={`text-xs capitalize flex-shrink-0 ${CATEGORY_COLORS[post.category]}`}>{post.category}</Badge>
               </div>
-              <p className="text-sm text-muted-foreground font-light leading-relaxed mb-4">{post.content}</p>
+              <p className="text-base text-muted-foreground font-light leading-relaxed mb-4">{post.content}</p>
               <div className="flex items-center gap-4 text-xs text-muted-foreground">
                 <span>{new Date(post.createdAt).toLocaleDateString()}</span>
                 <button onClick={() => isAuthenticated ? likePost.mutate({ postId: post.id }) : toast.info("Sign in to like posts")} className="flex items-center gap-1.5 hover:text-foreground transition-colors">
@@ -93,7 +93,7 @@ export default function Community() {
             <div className="text-center py-16">
               <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <p className="font-serif text-lg font-light text-foreground mb-2">The community is just beginning.</p>
-              <p className="text-sm text-muted-foreground mb-6">Be the first to share your journey.</p>
+              <p className="text-base text-muted-foreground mb-6">Be the first to share your journey.</p>
               {isAuthenticated && <Button onClick={() => setShowNewPost(true)} className="gap-2"><Plus className="h-4 w-4" /> Share First</Button>}
             </div>
           )}

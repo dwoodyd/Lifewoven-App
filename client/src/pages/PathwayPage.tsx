@@ -242,14 +242,14 @@ export default function PathwayPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-mono text-muted-foreground">{i + 1}</span>
-                      <h3 className={`font-medium text-sm ${isCompleted ? "text-muted-foreground line-through" : "text-foreground"}`}>{step.title}</h3>
+                      <h3 className={`font-medium text-base ${isCompleted ? "text-muted-foreground line-through" : "text-foreground"}`}>{step.title}</h3>
                     </div>
                   </div>
                   {isExpanded ? <ChevronUp className="h-4 w-4 text-muted-foreground shrink-0" /> : <ChevronDown className="h-4 w-4 text-muted-foreground shrink-0" />}
                 </button>
                 {isExpanded && (
                   <div className="px-5 pb-5 border-t border-border/50 animate-in slide-in-from-top-1 duration-200">
-                    <p className="text-sm text-muted-foreground font-light leading-relaxed pt-4 mb-4">{step.desc}</p>
+                    <p className="text-base text-muted-foreground font-light leading-relaxed pt-4 mb-4">{step.desc}</p>
                     {sessionStarted && !isCompleted && (
                       <Button size="sm" variant="outline" className="gap-2" onClick={() => toggleStep(i)}>
                         <CheckCircle2 className="h-3.5 w-3.5" /> Mark Complete
@@ -270,7 +270,7 @@ export default function PathwayPage() {
             <h3 className="font-serif text-lg font-light text-foreground mb-2">
               {sessionComplete ? "Practice complete." : `${completedCount} step${completedCount > 1 ? "s" : ""} complete.`}
             </h3>
-            <p className="text-sm text-muted-foreground mb-4">
+            <p className="text-base text-muted-foreground mb-4">
               {sessionComplete ? "You showed up. That is the whole practice." : "You can continue later — your progress is yours to keep."}
             </p>
             <Button className="gap-2" onClick={handleSaveSession}><CheckCircle2 className="h-4 w-4" /> Save This Session</Button>
@@ -281,7 +281,7 @@ export default function PathwayPage() {
           <h2 className="font-serif text-lg font-light text-foreground mb-3">
             <BookOpen className="inline h-4 w-4 mr-2 opacity-60" />Journal After This Practice
           </h2>
-          <p className="text-sm text-muted-foreground italic mb-4">"{pathway.journalPrompt}"</p>
+          <p className="text-base text-muted-foreground italic mb-4">"{pathway.journalPrompt}"</p>
           <Button asChild variant="outline" className="gap-2">
             <Link href={`/journal?module=${pathway.color}&prompt=${encodeURIComponent(pathway.journalPrompt)}`}>
               <ArrowRight className="h-4 w-4" /> Open Journal with This Prompt

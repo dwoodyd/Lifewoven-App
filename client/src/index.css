@@ -165,10 +165,13 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-size: 17px; /* Bumped from 16px — improves readability across all text-* classes */
   }
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.7;
   }
   h1, h2, h3 {
     font-family: var(--font-serif);
@@ -179,7 +182,11 @@
   h4, h5, h6 {
     font-family: var(--font-sans);
     font-weight: 500;
+    line-height: 1.4;
   }
+  /* Globally lift text-xs and text-sm one step for legibility */
+  .text-xs  { font-size: 0.8125rem !important; }   /* was 0.75rem */
+  .text-sm  { font-size: 0.9375rem !important; }   /* was 0.875rem */
   ::selection {
     background-color: oklch(0.78 0.12 75 / 0.25);
   }

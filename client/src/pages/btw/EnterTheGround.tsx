@@ -171,7 +171,7 @@ export default function EnterTheGround() {
           <h2 className="font-serif text-xl font-light text-foreground mb-4">{practice.label}</h2>
           <div className="space-y-3">
             {practice.steps.map((step, i) => (
-              <div key={i} className="flex gap-3 text-sm text-muted-foreground font-light">
+              <div key={i} className="flex gap-3 text-base text-muted-foreground font-light">
                 <span className="text-accent font-mono shrink-0">{i + 1}.</span>
                 <span className="leading-relaxed">{step}</span>
               </div>

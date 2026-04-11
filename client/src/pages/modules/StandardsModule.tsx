@@ -108,12 +108,12 @@ export default function StandardsModule() {
             </div>
             <div className="p-6 rounded-2xl border border-border bg-card">
               <h2 className="font-serif text-xl font-light text-foreground mb-2">The Four Laws of Behavior Change</h2>
-              <p className="text-sm text-muted-foreground mb-5">The Lifewoven Identity Stack is built on four behavioral science laws that make habits inevitable rather than aspirational.</p>
+              <p className="text-base text-muted-foreground mb-5">The Lifewoven Identity Stack is built on four behavioral science laws that make habits inevitable rather than aspirational.</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {ATOMIC_HABITS_LAWS.map(law => (
                   <div key={law.law} className="p-4 rounded-xl bg-secondary/50">
-                    <div className="flex items-center gap-2 mb-2"><span className="text-lg">{law.icon}</span><h3 className="font-medium text-foreground text-sm">{law.law}</h3></div>
-                    <p className="text-xs text-muted-foreground leading-relaxed">{law.description}</p>
+                    <div className="flex items-center gap-2 mb-2"><span className="text-lg">{law.icon}</span><h3 className="font-medium text-foreground text-base">{law.law}</h3></div>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{law.description}</p>
                   </div>
                 ))}
               </div>

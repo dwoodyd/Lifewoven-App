@@ -124,12 +124,12 @@ export default function StoryModule() {
 
             <div className="p-6 rounded-2xl border border-border bg-card">
               <h2 className="font-serif text-xl font-light text-foreground mb-2">Identity Builder</h2>
-              <p className="text-sm text-muted-foreground mb-5">Every action you take is a vote for the type of person you wish to become. Identity-based change begins with small, consistent acts of becoming.</p>
+              <p className="text-base text-muted-foreground mb-5">Every action you take is a vote for the type of person you wish to become. Identity-based change begins with small, consistent acts of becoming.</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-4">
                 {IDENTITY_STATEMENTS.map((stmt, i) => (
                   <div key={i} className="flex items-start gap-2 p-3 rounded-lg bg-secondary/50">
                     <CheckCircle2 className="h-4 w-4 text-story flex-shrink-0 mt-0.5" />
-                    <p className="text-sm text-foreground">{stmt}</p>
+                    <p className="text-base text-foreground">{stmt}</p>
                   </div>
                 ))}
               </div>
@@ -138,7 +138,7 @@ export default function StoryModule() {
 
             <div className="p-6 rounded-2xl border border-border bg-card">
               <h2 className="font-serif text-xl font-light text-foreground mb-2">Meaning & Why Journal</h2>
-              <p className="text-sm text-muted-foreground mb-4">Meaning-centered philosophy teaches that meaning can be found through work and creation, through love and connection, and through the attitude we take toward unavoidable suffering.</p>
+              <p className="text-base text-muted-foreground mb-4">Meaning-centered philosophy teaches that meaning can be found through work and creation, through love and connection, and through the attitude we take toward unavoidable suffering.</p>
               <div className="space-y-2">
                 {[
                   "What work or creation gives your life the deepest meaning?",
@@ -148,7 +148,7 @@ export default function StoryModule() {
                 ].map(prompt => (
                   <Link key={prompt} href={`/journal?module=story&prompt=${encodeURIComponent(prompt)}`}>
                     <div className="p-3 rounded-lg border border-border hover:border-story/40 hover:bg-story/5 transition-all cursor-pointer flex items-center justify-between gap-2">
-                      <p className="text-sm text-foreground">{prompt}</p>
+                      <p className="text-base text-foreground">{prompt}</p>
                       <ArrowRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                     </div>
                   </Link>

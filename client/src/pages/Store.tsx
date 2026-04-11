@@ -157,8 +157,8 @@ export default function Store() {
                   <h3 className="font-serif text-lg font-light text-foreground">{product.title}</h3>
                   <span className="text-sm font-medium text-foreground flex-shrink-0">{product.price}</span>
                 </div>
-                <p className="text-xs text-muted-foreground mb-3">{product.subtitle}</p>
-                <p className="text-sm text-muted-foreground font-light leading-relaxed flex-1 mb-4">{product.description}</p>
+                <p className="text-base text-muted-foreground mb-3">{product.subtitle}</p>
+                <p className="text-base text-muted-foreground font-light leading-relaxed flex-1 mb-4">{product.description}</p>
                 <div className="flex flex-wrap gap-1.5">
                   {product.tags.map(tag => (
                     <span key={tag} className="text-xs px-2 py-0.5 rounded-full bg-secondary text-muted-foreground">
@@ -172,7 +172,7 @@ export default function Store() {
         </div>
         <div className="mt-16 p-8 rounded-2xl border border-border bg-card text-center">
           <h2 className="font-serif text-2xl font-light text-foreground mb-3">Bundle & Save</h2>
-          <p className="text-muted-foreground text-sm mb-6 max-w-md mx-auto">
+          <p className="text-muted-foreground text-base mb-6 max-w-md mx-auto">
             Get the complete Lifewoven toolkit — all courses, workbooks, audio programs, and card decks — at one transformational price.
           </p>
           <div className="flex items-center justify-center gap-3 mb-6">
@@ -184,7 +184,7 @@ export default function Store() {
             <ShoppingBag className="h-4 w-4" /> Get the Complete Bundle
           </Button>
         </div>
-        <p className="text-center text-xs text-muted-foreground mt-8 max-w-2xl mx-auto">
+        <p className="text-center text-base text-muted-foreground mt-8 max-w-2xl mx-auto">
           All Lifewoven courses, workbooks, and audio programs are original creations. They are informed by wisdom traditions and personal development ideas but are independently produced and not affiliated with, endorsed by, or licensed by any named author, teacher, or publisher.
         </p>
       </div>

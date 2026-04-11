@@ -198,7 +198,7 @@ export default function Oracle() {
                             {new Date(insight.createdAt).toLocaleDateString()}
                           </span>
                         </div>
-                        <p className="text-sm text-foreground font-light leading-relaxed">{insight.content}</p>
+                        <p className="text-base text-foreground font-light leading-relaxed">{insight.content}</p>
                         {insight.recommendedAction && (
                           <div className="mt-3 flex items-center gap-2">
                             <ChevronRight className="h-3.5 w-3.5 text-accent shrink-0" />
@@ -214,7 +214,7 @@ export default function Oracle() {
               <div className="text-center py-12 border border-dashed border-border rounded-xl">
                 <TrendingUp className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" />
                 <p className="font-serif text-lg font-light text-foreground mb-2">No patterns yet</p>
-                <p className="text-sm text-muted-foreground max-w-xs mx-auto">
+                <p className="text-base text-muted-foreground max-w-xs mx-auto">
                   The Oracle needs a few journal entries and check-ins before it can recognize patterns. Start there.
                 </p>
                 <Button variant="outline" size="sm" className="mt-4" asChild>
@@ -236,7 +236,7 @@ export default function Oracle() {
                   <AlertCircle className="h-4 w-4 text-orange-400 mt-0.5 shrink-0" />
                   <div>
                     <p className="text-sm font-medium text-foreground mb-1">Unstuck Mode</p>
-                    <p className="text-xs text-muted-foreground font-light leading-relaxed">
+                    <p className="text-sm text-muted-foreground font-light leading-relaxed">
                       You are not broken. You are not failing. You are a person whose system needs a different kind of input right now. The Oracle will respond with compassion and one small, concrete next step — nothing more.
                     </p>
                   </div>
@@ -247,10 +247,10 @@ export default function Oracle() {
             {/* Orientation panel — shown only before first message in guide mode */}
             {messages.length === 0 && mode === "guide" && (
               <div className="rounded-xl border border-border bg-card p-5">
-                <p className="text-sm font-light text-foreground leading-relaxed mb-4">
+                <p className="text-base font-light text-foreground leading-relaxed mb-4">
                   The Oracle is not a search engine. It is a reflective guide — trained to meet you where you are, draw connections across your 5S dimensions, and offer wisdom that is both timeless and personally relevant to your situation.
                 </p>
-                <p className="text-sm font-light text-muted-foreground leading-relaxed mb-4">
+                <p className="text-base font-light text-muted-foreground leading-relaxed mb-4">
                   You can ask anything: a question you are wrestling with, a feeling you cannot name, a decision you are avoiding, or simply "where do I begin?"
                 </p>
                 <button

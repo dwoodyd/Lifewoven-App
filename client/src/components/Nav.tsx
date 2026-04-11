@@ -46,9 +46,9 @@ export default function Nav() {
           <img
             src="https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/app-icon_e26b6bab.png"
             alt="Lifewoven"
-            className="w-8 h-8 rounded-lg object-cover"
+            className="w-10 h-10 rounded-xl object-cover"
           />
-          <span className="font-sans text-lg font-semibold tracking-tight text-foreground">
+          <span className="font-sans text-xl font-semibold tracking-tight text-foreground">
             Lifewoven
           </span>
         </Link>

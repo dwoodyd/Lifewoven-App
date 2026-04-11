@@ -67,14 +67,14 @@ export default function WordsWithWeight() {
                     <div key={item.id} className="p-5 rounded-2xl border border-primary/30 bg-primary/5">
                       <div className="flex items-start justify-between mb-2">
                         <div>
-                          {item.title && <p className="text-sm font-light text-foreground mb-0.5">{item.title}</p>}
+                          {item.title && <p className="text-base font-light text-foreground mb-0.5">{item.title}</p>}
                           <span className="text-xs text-muted-foreground capitalize">{item.type}</span>
                         </div>
                         <button onClick={() => favoriteMutation.mutate({ id: item.id, favorite: false })} className="text-accent">
                           <Star className="h-4 w-4 fill-current" />
                         </button>
                       </div>
-                      <p className="text-sm text-muted-foreground font-light leading-relaxed italic">{item.fileUrlOrText}</p>
+                      <p className="text-base text-muted-foreground font-light leading-relaxed italic">{item.fileUrlOrText}</p>
                     </div>
                   ))}
                 </div>
@@ -89,7 +89,7 @@ export default function WordsWithWeight() {
                   <div key={item.title} className="flex items-start justify-between gap-4">
                     <div className="flex-1">
                       <p className="text-xs text-muted-foreground mb-0.5 capitalize">{item.type} · {item.title}</p>
-                      <p className="text-sm text-foreground font-light leading-relaxed italic">{item.text}</p>
+                      <p className="text-base text-foreground font-light leading-relaxed italic">{item.text}</p>
                     </div>
                     <Button variant="ghost" size="sm" className="shrink-0 text-xs" onClick={() => handleAddFromLibrary(item)}>
                       Add

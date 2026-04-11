@@ -76,7 +76,7 @@ export default function ThankingFromThere() {
                         {REALNESS.find(r => r.id === entry.feltRealness)?.label}
                       </span>
                     </div>
-                    <p className="text-sm text-foreground font-light leading-relaxed whitespace-pre-wrap">{entry.entryText}</p>
+                    <p className="text-base text-foreground font-light leading-relaxed whitespace-pre-wrap">{entry.entryText}</p>
                     <p className="text-xs text-muted-foreground mt-3">{new Date(entry.createdAt).toLocaleDateString()}</p>
                   </div>
                 ))}
@@ -84,7 +84,7 @@ export default function ThankingFromThere() {
             ) : (
               <div className="text-center py-12 text-muted-foreground">
                 <p className="font-serif text-lg font-light mb-2">Nothing named yet.</p>
-                <p className="text-sm font-light">Even one honest line is enough to begin.</p>
+                <p className="text-base font-light">Even one honest line is enough to begin.</p>
               </div>
             )}
           </>

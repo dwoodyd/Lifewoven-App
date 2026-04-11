@@ -236,7 +236,7 @@ export default function Dashboard() {
                           {done ? <CheckCircle2 className="h-5 w-5 text-accent" /> : <Circle className="h-5 w-5 text-muted-foreground hover:text-foreground transition-colors" />}
                         </button>
                         <div className="flex-1 min-w-0">
-                          <p className={`text-sm font-medium truncate ${done ? "line-through text-muted-foreground" : "text-foreground"}`}>{habit.name}</p>
+                          <p className={`text-base font-medium truncate ${done ? "line-through text-muted-foreground" : "text-foreground"}`}>{habit.name}</p>
                           {habit.identityStatement && <p className="text-xs text-muted-foreground truncate">{habit.identityStatement}</p>}
                         </div>
                         <div className="flex items-center gap-1 flex-shrink-0">
@@ -251,7 +251,7 @@ export default function Dashboard() {
                 <div className="p-6 rounded-2xl border border-dashed border-accent/20 bg-accent/3 text-center">
                   <Target className="h-8 w-8 text-accent/40 mx-auto mb-3" />
                   <p className="font-serif text-base font-light text-foreground mb-1">Your Rhythms are waiting.</p>
-                  <p className="text-sm text-muted-foreground mb-4">Habits are not about discipline — they are about identity. Who do you want to become? Start with one habit that reflects that person.</p>
+                  <p className="text-base text-muted-foreground mb-4">Habits are not about discipline — they are about identity. Who do you want to become? Start with one habit that reflects that person.</p>
                   <Button asChild size="sm"><Link href="/standards">Build My First Habit</Link></Button>
                 </div>
               )}
@@ -268,7 +268,7 @@ export default function Dashboard() {
                     <Link key={entry.id} href={`/journal/${entry.id}`}>
                       <div className="p-3 rounded-xl border border-border bg-card hover:border-muted-foreground transition-all cursor-pointer">
                         <div className="flex items-start justify-between gap-2">
-                          <p className="text-sm font-medium text-foreground truncate">{entry.title || entry.content.slice(0, 60) + "..."}</p>
+                          <p className="text-base font-medium text-foreground truncate">{entry.title || entry.content.slice(0, 60) + "..."}</p>
                           <Badge variant="secondary" className="text-xs flex-shrink-0 capitalize">{entry.module}</Badge>
                         </div>
                         <p className="text-xs text-muted-foreground mt-1">{new Date(entry.createdAt).toLocaleDateString()}</p>
@@ -280,7 +280,7 @@ export default function Dashboard() {
                 <div className="p-6 rounded-2xl border border-dashed border-story/30 bg-story/3 text-center">
                   <Brain className="h-8 w-8 text-story/40 mx-auto mb-3" />
                   <p className="font-serif text-base font-light text-foreground mb-1">Your journal is a blank canvas.</p>
-                  <p className="text-sm text-muted-foreground mb-4">Five minutes of honest writing can reveal more than five hours of thinking. What is alive in you right now?</p>
+                  <p className="text-base text-muted-foreground mb-4">Five minutes of honest writing can reveal more than five hours of thinking. What is alive in you right now?</p>
                   <Button asChild size="sm"><Link href="/journal">Begin Writing</Link></Button>
                 </div>
               )}
@@ -298,14 +298,14 @@ export default function Dashboard() {
                   {oracleInsights.map((insight: any) => (
                     <div key={insight.id} className="p-3 rounded-lg bg-accent/5 border border-accent/20">
                       <p className="text-xs text-muted-foreground capitalize mb-1">{insight.type}</p>
-                      <p className="text-sm text-foreground leading-relaxed">{insight.content}</p>
+                      <p className="text-base text-foreground leading-relaxed">{insight.content}</p>
                       <button onClick={() => markInsightRead.mutate({ id: insight.id })} className="text-xs text-muted-foreground hover:text-foreground mt-2 transition-colors">Dismiss</button>
                     </div>
                   ))}
                 </div>
               ) : (
                 <div className="text-center py-4">
-                  <p className="text-xs text-muted-foreground mb-3">Complete check-ins and journal entries to receive Oracle insights.</p>
+                  <p className="text-base text-muted-foreground mb-3">Complete check-ins and journal entries to receive Oracle insights.</p>
                   <Button asChild size="sm" variant="outline" className="gap-2 text-xs">
                     <Link href="/oracle"><MessageCircle className="h-3 w-3" /> Talk to Oracle</Link>
                   </Button>
@@ -323,7 +323,7 @@ export default function Dashboard() {
                   {dashData.activePathways.map((p: any) => (
                     <div key={p.id} className="space-y-1.5">
                       <div className="flex items-center justify-between">
-                        <p className="text-sm font-medium text-foreground capitalize">{p.pathway}</p>
+                        <p className="text-base font-medium text-foreground capitalize">{p.pathway}</p>
                         <span className="text-xs font-mono text-muted-foreground">{p.currentStep}/{p.totalSteps}</span>
                       </div>
                       <Progress value={(p.currentStep / p.totalSteps) * 100} className="h-1" />

@@ -79,7 +79,7 @@ export default function LivingAsHeard() {
               <div className="space-y-2">
                 {PROMPTS.map(p => (
                   <button key={p} onClick={() => { setBody(p + "\n\n"); setWriting(true); }}
-                    className="w-full text-left text-sm text-muted-foreground font-light p-3 rounded-xl hover:bg-secondary/40 transition-colors">
+                        className="w-full text-left text-base text-muted-foreground font-light p-3 rounded-xl hover:bg-secondary/40 transition-colors">
                     ◦ {p}
                   </button>
                 ))}
@@ -105,7 +105,7 @@ export default function LivingAsHeard() {
                         <Trash2 className="h-3.5 w-3.5" />
                       </button>
                     </div>
-                    <p className="text-sm text-muted-foreground font-light leading-relaxed whitespace-pre-wrap mb-4">{prayer.body}</p>
+                    <p className="text-base text-muted-foreground font-light leading-relaxed whitespace-pre-wrap mb-4">{prayer.body}</p>
 
                     {reflectingId === prayer.id ? (
                       <div className="flex items-center gap-2 text-xs text-muted-foreground">

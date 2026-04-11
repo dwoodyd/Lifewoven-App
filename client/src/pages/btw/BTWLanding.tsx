@@ -77,7 +77,7 @@ export default function BTWLanding() {
         {/* Who this is for */}
         <div className="p-8 rounded-2xl border border-border bg-card mb-12">
           <h2 className="font-serif text-xl font-light text-foreground mb-4">Who this is for</h2>
-          <div className="space-y-3 text-sm text-muted-foreground font-light leading-relaxed">
+          <div className="space-y-3 text-base text-muted-foreground font-light leading-relaxed">
             <p>People who know the right words but still feel inwardly split when they say them.</p>
             <p>People who pray but wonder if they're praying from fear, habit, or genuine trust.</p>
             <p>People who want to close the gap between their inner life and their outer expression.</p>
@@ -95,7 +95,7 @@ export default function BTWLanding() {
                   <h3 className="font-serif text-base font-light text-foreground">{s.title}</h3>
                   <span className="text-xs text-muted-foreground ml-2 shrink-0">{s.time}</span>
                 </div>
-                <p className="text-xs text-muted-foreground font-light leading-relaxed">{s.desc}</p>
+                <p className="text-sm text-muted-foreground font-light leading-relaxed">{s.desc}</p>
               </div>
             </Link>
           ))}
@@ -103,7 +103,7 @@ export default function BTWLanding() {
 
         {/* Faith language notice */}
         <div className="p-5 rounded-2xl border border-border bg-secondary/30 text-center">
-          <p className="text-xs text-muted-foreground font-light leading-relaxed max-w-lg mx-auto">
+          <p className="text-sm text-muted-foreground font-light leading-relaxed max-w-lg mx-auto">
             <BookOpen className="h-3 w-3 inline mr-1.5 mb-0.5" />
             This pathway uses Christian contemplative language and prayer-centered reflection. It is offered as a formation practice, not a theological system. You are welcome to engage at whatever depth feels honest.
           </p>

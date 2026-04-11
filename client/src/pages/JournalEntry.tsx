@@ -25,13 +25,13 @@ export default function JournalEntry() {
     <div className="min-h-screen bg-background">
       <Nav />
       <div className="container pt-24 pb-20 max-w-2xl mx-auto">
-        <Link href="/journal"><div className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer mb-6"><ArrowLeft className="h-3.5 w-3.5" /> Back to Journal</div></Link>
+        <Link href="/journal"><div className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer mb-6"><ArrowLeft className="h-3.5 w-3.5" /> Back to Journal</div></Link>
         {entry ? (
           <div>
             <div className="flex items-start justify-between gap-4 mb-6">
               <div>
                 <h1 className="font-serif text-3xl font-light text-foreground mb-1">{entry.title || "Untitled Entry"}</h1>
-                <p className="text-xs text-muted-foreground">{new Date(entry.createdAt).toLocaleDateString("en", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</p>
+                <p className="text-sm text-muted-foreground">{new Date(entry.createdAt).toLocaleDateString("en", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</p>
               </div>
               {!entry.aiReflection && (
                 <Button variant="outline" size="sm" className="gap-1.5 text-xs flex-shrink-0" onClick={() => { setIsReflecting(true); generateReflection.mutate({ entryId: entry.id, content: entry.content }); }} disabled={isReflecting}>
@@ -39,11 +39,11 @@ export default function JournalEntry() {
                 </Button>
               )}
             </div>
-            <div className="prose prose-sm max-w-none text-foreground font-light leading-relaxed mb-8 whitespace-pre-wrap">{entry.content}</div>
+            <div className="prose prose-base max-w-none text-foreground font-light leading-relaxed mb-8 whitespace-pre-wrap">{entry.content}</div>
             {entry.aiReflection && (
               <div className="p-5 rounded-2xl border border-border bg-card">
                 <div className="flex items-center gap-2 mb-3"><Sparkles className="h-4 w-4 text-amber-500" /><p className="text-xs font-mono tracking-widest text-muted-foreground uppercase">Oracle Reflection</p></div>
-                <Streamdown className="text-sm text-foreground leading-relaxed">{entry.aiReflection}</Streamdown>
+                <Streamdown className="text-base text-foreground leading-relaxed">{entry.aiReflection}</Streamdown>
               </div>
             )}
           </div>

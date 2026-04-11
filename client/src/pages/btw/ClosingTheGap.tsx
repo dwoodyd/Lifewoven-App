@@ -82,13 +82,13 @@ export default function ClosingTheGap() {
               ].map(({ key, label }) => weeklyData[key] && (
                 <div key={key} className="p-5 rounded-2xl border border-border bg-card">
                   <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-2">{label}</p>
-                  <p className="text-sm text-foreground font-light leading-relaxed">{weeklyData[key]}</p>
+                  <p className="text-base text-foreground font-light leading-relaxed">{weeklyData[key]}</p>
                 </div>
               ))}
             </div>
           ) : (
             <div className="p-8 rounded-2xl border border-border bg-card text-center">
-              <p className="text-muted-foreground font-light mb-4 text-sm">
+              <p className="text-muted-foreground font-light mb-4 text-base">
                 No weekly reflection yet. Generate one to see patterns across your practices this week.
               </p>
               <Button onClick={() => generateMutation.mutate()} disabled={generateMutation.isPending} className="gap-2">

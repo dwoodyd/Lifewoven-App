@@ -81,7 +81,7 @@ export default function GroundCheck() {
         <div className="text-center mb-10">
           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Ground Check</p>
           <h1 className="font-serif text-3xl font-light text-foreground mb-3">Where are you right now?</h1>
-          <p className="text-sm text-muted-foreground font-light">Seven honest questions. No score. No judgment. Just a reading of where you are.</p>
+          <p className="text-base text-muted-foreground font-light">Seven honest questions. No score. No judgment. Just a reading of where you are.</p>
         </div>
 
         {/* Progress */}
@@ -108,7 +108,7 @@ export default function GroundCheck() {
                 }`}
               >
                 <span className={`w-6 h-6 rounded-full border flex items-center justify-center text-xs font-mono shrink-0 ${answers[step] === v ? "border-primary bg-primary text-primary-foreground" : "border-border"}`}>{v}</span>
-                <span className="text-sm font-light">
+                <span className="text-base font-light">
                   {v === 0 ? q.low : v === 5 ? q.high : ""}
                 </span>
               </button>

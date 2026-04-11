@@ -141,8 +141,8 @@ export default function StateModule() {
                       </div>
                       <Badge variant="secondary" className="text-xs capitalize">{practice.type}</Badge>
                     </div>
-                    <h3 className="font-medium text-foreground text-sm mb-1">{practice.title}</h3>
-                    <p className="text-xs text-muted-foreground leading-relaxed mb-3">{practice.description}</p>
+                    <h3 className="font-medium text-foreground text-base mb-1">{practice.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-3">{practice.description}</p>
                     <Button asChild size="sm" variant="outline" className="gap-1.5 text-xs w-full">
                       <Link href={`/pathway/${practice.pathway}`}><Play className="h-3 w-3" /> Begin Practice</Link>
                     </Button>

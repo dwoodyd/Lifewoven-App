@@ -117,12 +117,12 @@ export default function Pricing() {
                 <span className={`text-3xl font-light ${tier.highlight ? "text-background" : "text-foreground"}`}>{tier.price}</span>
                 <span className={`text-sm ${tier.highlight ? "opacity-60" : "text-muted-foreground"}`}>{tier.period}</span>
               </div>
-              <p className={`text-sm font-light mb-6 ${tier.highlight ? "opacity-70" : "text-muted-foreground"}`}>{tier.description}</p>
+              <p className={`text-base font-light mb-6 ${tier.highlight ? "opacity-70" : "text-muted-foreground"}`}>{tier.description}</p>
               <div className="space-y-2 mb-8 flex-1">
                 {tier.features.map(f => (
                   <div key={f} className="flex items-center gap-2">
                     <Check className={`h-3.5 w-3.5 flex-shrink-0 ${tier.highlight ? "opacity-80" : "text-muted-foreground"}`} />
-                    <span className={`text-sm ${tier.highlight ? "opacity-80" : "text-muted-foreground"}`}>{f}</span>
+                    <span className={`text-base ${tier.highlight ? "opacity-80" : "text-muted-foreground"}`}>{f}</span>
                   </div>
                 ))}
               </div>
@@ -150,7 +150,7 @@ export default function Pricing() {
         <div className="text-center p-8 rounded-2xl border border-border bg-card">
           <Sparkles className="h-8 w-8 text-amber-400 mx-auto mb-4" />
           <h2 className="font-serif text-2xl font-light text-foreground mb-3">Not sure where to start?</h2>
-          <p className="text-muted-foreground text-sm mb-6 max-w-md mx-auto">Take the free Alignment Audit. In 5 minutes, you will know exactly which pathway and tier is right for you.</p>
+          <p className="text-muted-foreground text-base mb-6 max-w-md mx-auto">Take the free Alignment Audit. In 5 minutes, you will know exactly which pathway and tier is right for you.</p>
           <Button asChild variant="outline"><Link href="/alignment-audit">Take the Alignment Audit</Link></Button>
         </div>
       </div>

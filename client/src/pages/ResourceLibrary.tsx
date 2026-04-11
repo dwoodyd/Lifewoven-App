@@ -268,8 +268,8 @@ export default function ResourceLibrary() {
                         <span className="text-xs px-1.5 py-0.5 rounded-full bg-secondary text-muted-foreground">Free</span>
                       )}
                     </div>
-                    <h3 className="font-medium text-foreground text-sm leading-snug">{resource.title}</h3>
-                    <p className="text-xs text-muted-foreground mt-0.5">{resource.author}</p>
+                    <h3 className="font-medium text-foreground text-base leading-snug">{resource.title}</h3>
+                    <p className="text-base text-muted-foreground mt-0.5">{resource.author}</p>
                   </div>
                   {/* Rights badge */}
                   <span className={`text-xs px-2 py-0.5 rounded-full border shrink-0 ${rights.color} ${rights.bg}`}>
@@ -277,10 +277,10 @@ export default function ResourceLibrary() {
                   </span>
                 </div>
 
-                <p className="text-sm text-muted-foreground font-light leading-relaxed mb-3">{resource.description}</p>
+                <p className="text-base text-muted-foreground font-light leading-relaxed mb-3">{resource.description}</p>
 
                 {resource.rightsNote && (
-                  <p className="text-xs text-muted-foreground/70 italic leading-relaxed mb-3 border-l-2 border-border pl-2">
+                  <p className="text-sm text-muted-foreground/70 italic leading-relaxed mb-3 border-l-2 border-border pl-2">
                     {resource.rightsNote}
                   </p>
                 )}

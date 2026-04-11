@@ -103,7 +103,7 @@ function Router() {
 
       {/* Commerce */}
       <Route path="/store" component={Store} />
-      <Route path="/courses/:slug" component={CourseDetail} />
+      <Route path="/course/:id" component={CourseDetail} />
 
       {/* Community */}
       <Route path="/community" component={Community} />

@@ -101,12 +101,12 @@ export default function StrategyModule() {
             </div>
             <div className="p-6 rounded-2xl border border-border bg-card">
               <div className="flex items-center gap-2 mb-2"><Lightbulb className="h-4 w-4 text-muted-foreground" /><h2 className="font-serif text-xl font-light text-foreground">Leverage Mapper</h2></div>
-              <p className="text-sm text-muted-foreground mb-5">Find the highest-leverage questions to ask yourself right now.</p>
+              <p className="text-base text-muted-foreground mb-5">Find the highest-leverage questions to ask yourself right now.</p>
               <div className="space-y-2">
                 {LEVERAGE_QUESTIONS.map(q => (
                   <Link key={q} href={`/journal?module=strategy&prompt=${encodeURIComponent(q)}`}>
                     <div className="p-3 rounded-lg border border-border hover:border-strategy/40 hover:bg-strategy/5 transition-all cursor-pointer flex items-center justify-between gap-2">
-                      <p className="text-sm text-foreground">{q}</p>
+                      <p className="text-base text-foreground">{q}</p>
                       <ArrowRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                     </div>
                   </Link>
@@ -115,11 +115,11 @@ export default function StrategyModule() {
             </div>
             <div className="p-6 rounded-2xl border border-border bg-card">
               <h2 className="font-serif text-xl font-light text-foreground mb-2">Second-Order Thinking</h2>
-              <p className="text-sm text-muted-foreground mb-4">Most people stop at first-order consequences. Great strategists think two and three steps ahead.</p>
+              <p className="text-base text-muted-foreground mb-4">Most people stop at first-order consequences. Great strategists think two and three steps ahead.</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 {SECOND_ORDER_PROMPTS.map(p => (
                   <Link key={p} href={`/journal?module=strategy&prompt=${encodeURIComponent(p)}`}>
-                    <div className="p-3 rounded-lg bg-secondary/50 hover:bg-strategy/5 transition-all cursor-pointer"><p className="text-xs text-foreground leading-relaxed">{p}</p></div>
+                    <div className="p-3 rounded-lg bg-secondary/50 hover:bg-strategy/5 transition-all cursor-pointer"><p className="text-sm text-foreground leading-relaxed">{p}</p></div>
                   </Link>
                 ))}
               </div>

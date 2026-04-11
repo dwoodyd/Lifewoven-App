@@ -343,7 +343,7 @@ export default function Home() {
               <div key={item.step} className="p-6 rounded-xl border border-border bg-card">
                 <p className={`font-mono text-xs ${item.color} mb-3 tracking-wider`}>{item.step}</p>
                 <h3 className="font-serif text-xl font-light text-foreground mb-3">{item.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed mb-5">{item.desc}</p>
+                <p className="text-base text-muted-foreground leading-relaxed mb-5">{item.desc}</p>
                 <Link href={item.href} className={`text-sm font-medium ${item.color} flex items-center gap-1 hover:gap-2 transition-all`}>
                   {item.cta} <ChevronRight className="h-3.5 w-3.5" />
                 </Link>
@@ -379,10 +379,10 @@ export default function Home() {
                     <Icon className={`h-5 w-5 ${mod.color}`} />
                   </div>
                   <h3 className={`font-serif text-2xl font-light mb-2 ${mod.color}`}>{mod.label}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">{mod.description}</p>
+                  <p className="text-base text-muted-foreground leading-relaxed mb-4">{mod.description}</p>
                   <ul className="space-y-1">
                     {mod.tools.map((tool) => (
-                      <li key={tool} className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <li key={tool} className="flex items-center gap-2 text-sm text-muted-foreground">
                         <div className="w-1 h-1 rounded-full bg-muted-foreground/50" />
                         {tool}
                       </li>
@@ -401,12 +401,12 @@ export default function Home() {
                 <Sparkles className="h-5 w-5 text-accent" />
               </div>
               <h3 className="font-serif text-2xl font-light mb-2 text-accent">Oracle</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+              <p className="text-base text-muted-foreground leading-relaxed mb-4">
                 The AI intelligence layer. Recognizes patterns across your journals, habits, and check-ins. Guides you to the right tool at the right moment.
               </p>
               <ul className="space-y-1">
                 {["Pattern Recognition", "Cross-Module Guidance", "Personalized Pathways", "Gentle Nudges"].map((f) => (
-                  <li key={f} className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <li key={f} className="flex items-center gap-2 text-sm text-muted-foreground">
                     <div className="w-1 h-1 rounded-full bg-accent/50" />
                     {f}
                   </li>
@@ -440,7 +440,7 @@ export default function Home() {
               >
                 <div className={`absolute top-0 left-0 w-1 h-full ${p.color} opacity-60 group-hover:opacity-100 transition-opacity`} />
                 <h3 className="font-serif text-xl font-light mb-2 text-foreground">{p.label}</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">{p.desc}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{p.desc}</p>
                 <ChevronRight className="h-4 w-4 text-muted-foreground mt-3 group-hover:translate-x-1 transition-transform" />
               </Link>
             ))}
@@ -499,8 +499,8 @@ export default function Home() {
                   <div className="flex items-start gap-3">
                     <CheckCircle2 className="h-4 w-4 text-accent mt-0.5 shrink-0" />
                     <div>
-                      <p className="font-medium text-sm text-foreground mb-1">{item.label}</p>
-                      <p className="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
+                      <p className="font-medium text-base text-foreground mb-1">{item.label}</p>
+                      <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
                     </div>
                   </div>
                 </div>
@@ -539,8 +539,8 @@ export default function Home() {
               <div className="w-24 h-24 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center mx-auto mb-3">
                 <span className="font-serif text-4xl text-accent font-light">BTW</span>
               </div>
-              <p className="text-xs text-muted-foreground font-light">Available now</p>
-              <p className="text-xs text-muted-foreground">Free with Explorer</p>
+              <p className="text-sm text-muted-foreground font-light">Available now</p>
+              <p className="text-sm text-muted-foreground">Free with Explorer</p>
             </div>
           </div>
         </div>
@@ -596,10 +596,10 @@ export default function Home() {
                   <span className="text-3xl font-sans font-light text-foreground">{tier.price}</span>
                   {tier.period && <span className="text-sm text-muted-foreground">{tier.period}</span>}
                 </div>
-                <p className="text-sm text-muted-foreground mb-5">{tier.desc}</p>
+                <p className="text-base text-muted-foreground mb-5">{tier.desc}</p>
                 <ul className="space-y-2 mb-6">
                   {tier.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm text-foreground">
+                    <li key={f} className="flex items-start gap-2 text-base text-foreground">
                       <div className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 shrink-0" />
                       {f}
                     </li>
@@ -632,11 +632,11 @@ export default function Home() {
                 <img
                   src="https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/app-icon_e26b6bab.png"
                   alt="Lifewoven"
-                  className="w-7 h-7 rounded-lg object-cover"
+                  className="w-10 h-10 rounded-xl object-cover"
                 />
-                <span className="font-sans text-lg font-semibold tracking-tight text-foreground">Lifewoven</span>
+                <span className="font-sans text-xl font-semibold tracking-tight text-foreground">Lifewoven</span>
               </div>
-              <p className="text-xs text-muted-foreground max-w-xs leading-relaxed">
+              <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
                 A personal transformation operating system rooted in timeless wisdom and powered by intelligent design.
               </p>
             </div>
