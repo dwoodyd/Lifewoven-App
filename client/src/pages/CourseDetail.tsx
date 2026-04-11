@@ -19,8 +19,10 @@ const COURSES: Record<string, CourseData> = {
 const CDN = "https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t";
 
 const COURSE_PDFS: Record<string, string> = {
-  "alignment-current": `${CDN}/LifewovenAlignmentCurrentComplete_a5e0f9b2.pdf`,
-  "identity-in-motion": `${CDN}/LifewovenIdentitiesinMotion_c3d1e8f4.pdf`,
+  "alignment-fundamentals": `${CDN}/PACKAGE-01-alignment-fundamentals_c895ad25.pdf`,
+  "alignment-current": `${CDN}/PACKAGE-02-alignment-current_52e9777d.pdf`,
+  "identity-in-motion": `${CDN}/PACKAGE-03-identity-in-motion_5aff167f.pdf`,
+  "meaning-foundation": `${CDN}/PACKAGE-04-meaning-foundation_5715c90e.pdf`,
 };
 
 // Courses map to subscription tiers

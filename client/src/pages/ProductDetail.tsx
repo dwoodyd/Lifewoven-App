@@ -62,7 +62,7 @@ const PRODUCTS: Record<string, {
       "Printable PDF — 12 pages",
       "Immediate download after purchase"
     ],
-    downloadUrl: `${CDN}/wisdom-card-deck_f5c3a5dd.pdf`,
+    downloadUrl: `${CDN}/PACKAGE-09-wisdom-card-deck_8e2da07b.pdf`,
     tags: ["Cards", "PDF", "52 cards", "Year-long practice"],
   },
   "morning-alignment-audio": {
@@ -83,7 +83,7 @@ const PRODUCTS: Record<string, {
       "PDF download — 50 pages",
       "Immediate download after purchase"
     ],
-    downloadUrl: `${CDN}/morning-alignment-audio_f184f493.pdf`,
+    downloadUrl: `${CDN}/PACKAGE-07-morning-alignment-series_acb6281f.pdf`,
     tags: ["Audio Scripts", "Morning Practice", "7 sessions", "PDF"],
   },
   "belief-rewrite-workbook": {
@@ -94,8 +94,8 @@ const PRODUCTS: Record<string, {
     subtitle: "Rewire Your Story in 30 Days",
     price: "$19",
     priceInCents: 1900,
-    description: "A focused 30-day workbook for identifying and rewriting the limiting beliefs that are holding you back. Rooted in the Story module of the 5S Framework.",
-    longDescription: `The Story module of the 5S Framework begins with a single premise: the story you tell about yourself is not a description of reality. It is a set of instructions. The beliefs you hold about who you are, what you are capable of, and what is available to you are not passive observations — they are active directives that shape what you attempt, what you notice, and what you allow yourself to receive.\n\nThis workbook is a 30-day structured process for surfacing, examining, and rewriting the specific beliefs that are most actively limiting your experience. It is not a positive-thinking exercise. It is a rigorous inquiry into the actual content of your current story — followed by a deliberate, evidence-based process for writing a more accurate one.`,
+    description: "The story you tell about yourself is not a description of reality. It is a set of instructions. This 30-day workbook is a structured process for surfacing the specific beliefs that are most actively limiting your experience — and rewriting them with evidence, not optimism.",
+    longDescription: `The Story module of the 5S Framework begins with a single premise: the story you tell about yourself is not a description of reality. It is a set of instructions. The beliefs you hold about who you are, what you are capable of, and what is available to you are not passive observations — they are active directives that shape what you attempt, what you notice, and what you allow yourself to receive.\n\nThis workbook is a 30-day structured process for surfacing, examining, and rewriting the specific beliefs that are most actively limiting your experience. It is not a positive-thinking exercise. It is a rigorous inquiry into the actual content of your current story — followed by a deliberate, evidence-based process for writing a more accurate one.\n\nThe distinction matters: the goal is not to replace a limiting belief with an aspirational one. The goal is to replace a limiting belief with a true one — a belief that is supported by evidence you already have access to but have not yet organized into a coherent counter-narrative.`,
     includes: [
       "30-day structured belief rewrite process",
       "Belief surfacing and examination exercises",
@@ -104,7 +104,7 @@ const PRODUCTS: Record<string, {
       "Printable PDF",
       "Immediate download after purchase"
     ],
-    downloadUrl: "",
+    downloadUrl: `${CDN}/PACKAGE-05-belief-rewrite-workbook_5bcb2d06.pdf`,
     tags: ["Beliefs", "PDF", "30 days", "Story Module"],
   },
   "identity-stack-workbook": {
@@ -115,8 +115,8 @@ const PRODUCTS: Record<string, {
     subtitle: "Design the Habits That Make You, You",
     price: "$22",
     priceInCents: 2200,
-    description: "A practical workbook for designing, stacking, and anchoring identity-based habits. Includes the Minimum Viable Habit framework and the Better Mirror tracking system.",
-    longDescription: `Most habit change fails not because of a lack of discipline but because of a mismatch between the desired behavior and the underlying identity. The Identity Stack Workbook addresses the root.\n\nThis workbook walks you through the complete identity-based habit design process: surfacing the current identity architecture, writing a credible identity declaration, designing the habit stack that carries that identity into daily life, and building the recovery protocols that make consistency possible over time.\n\nIncludes the Minimum Viable Habit framework — the practice of designing habits small enough to survive your worst days — and the Better Mirror tracking system, which counts returns as demonstrations rather than treating missed days as failures.`,
+    description: "Who you are becoming shapes what you do. This workbook walks you through the complete identity-based habit design process — from surfacing your current identity architecture to writing a credible identity declaration to building the habit stack that carries it into daily life.",
+    longDescription: `Most habit change fails not because of a lack of discipline but because of a mismatch between the desired behavior and the underlying identity. The Identity Stack Workbook addresses the root.\n\nThis workbook walks you through the complete identity-based habit design process: surfacing the current identity architecture, writing a credible identity declaration, designing the habit stack that carries that identity into daily life, and building the recovery protocols that make consistency possible over time.\n\nIt includes the Minimum Viable Habit framework — the practice of designing habits small enough to survive your worst days — and the Better Mirror tracking system, which counts returns as demonstrations rather than treating missed days as failures.\n\nThe workbook is designed to be used alongside the Identity in Motion course or as a standalone practice tool. It is printable, structured for weekly use, and built to be returned to across multiple cycles of habit design.`,
     includes: [
       "Complete identity-based habit design process",
       "Minimum Viable Habit framework",
@@ -126,7 +126,7 @@ const PRODUCTS: Record<string, {
       "Printable PDF",
       "Immediate download after purchase"
     ],
-    downloadUrl: "",
+    downloadUrl: `${CDN}/PACKAGE-06-identity-stack-workbook_eff87b9e.pdf`,
     tags: ["Habits", "Identity", "PDF", "Behavior Science"],
   },
   "reset-protocol-audio": {
@@ -152,7 +152,7 @@ This is the first edition of the Reset Audio, narrated by an AI voice trained on
       "PDF download",
       "Immediate download after purchase"
     ],
-    downloadUrl: "",
+    downloadUrl: `${CDN}/PACKAGE-08-reset-audio_ec229747.pdf`,
     tags: ["Audio Scripts", "Resilience", "45 min", "Reset Pathway"],
   },
 };
