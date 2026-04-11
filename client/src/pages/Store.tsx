@@ -150,7 +150,7 @@ export default function Store() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map(product => (
-            <Link key={product.id} href={`/course/${product.id}`}>
+            <Link key={product.id} href={product.category === "course" ? `/course/${product.id}` : `/product/${product.id}`}>
               <div className="p-6 rounded-2xl border border-border bg-card hover:border-muted-foreground transition-all cursor-pointer h-full flex flex-col">
                 <div className="text-3xl mb-4">{product.icon}</div>
                 <div className="flex items-start justify-between gap-2 mb-2">

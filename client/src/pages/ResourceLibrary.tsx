@@ -17,11 +17,12 @@ interface Resource {
   free: boolean;
   rights: RightsLabel;
   rightsNote?: string;
+  slug?: string; // if set, links to /library/:slug reader
 }
 
 const RESOURCES: Resource[] = [
   {
-    id: 1, category: "text", module: "state",
+    id: 1, category: "text", module: "state", slug: "emotional-guidance-scale",
     title: "The Emotional Guidance Scale",
     author: "Abraham-Hicks (Inspired Summary)",
     description: "The complete 22-level emotional scale from despair to joy, with original Lifewoven guidance on how to use it as your inner GPS for daily alignment.",
@@ -48,7 +49,7 @@ const RESOURCES: Resource[] = [
     rightsNote: "Published 1984. Rights status varies by edition — only pre-1928 Holmes works are verified public domain. This entry is pending rights verification.",
   },
   {
-    id: 4, category: "text", module: "story",
+    id: 4, category: "text", module: "story", slug: "processes-to-raise-emotional-set-point",
     title: "Processes to Raise Your Emotional Set Point",
     author: "Lifewoven (Inspired by Abraham-Hicks)",
     description: "22 original Lifewoven practices for shifting your emotional baseline upward, inspired by the Abraham-Hicks teachings but written as original platform content.",
@@ -66,7 +67,7 @@ const RESOURCES: Resource[] = [
     rightsNote: "Original Lifewoven audio content. Inspired by Abraham-Hicks concepts, not a reproduction of any copyrighted recording.",
   },
   {
-    id: 6, category: "text", module: "standards",
+    id: 6, category: "text", module: "standards", slug: "four-laws-of-behavior-change",
     title: "The Four Laws of Behavior Change — Framework Summary",
     author: "Lifewoven (Inspired by James Clear)",
     description: "An original Lifewoven summary of the habit loop framework: Make It Obvious, Attractive, Easy, and Satisfying — with original application exercises.",
@@ -75,7 +76,7 @@ const RESOURCES: Resource[] = [
     rightsNote: "Original Lifewoven content. Inspired by Atomic Habits principles. Not a reproduction of James Clear's copyrighted text.",
   },
   {
-    id: 7, category: "text", module: "story",
+    id: 7, category: "text", module: "story", slug: "finding-meaning-logotherapy-primer",
     title: "Finding Meaning — A Logotherapy Primer",
     author: "Lifewoven (Inspired by Viktor Frankl)",
     description: "An original Lifewoven exploration of meaning-centered living, inspired by Frankl's logotherapy. Includes original reflection exercises.",
@@ -84,7 +85,7 @@ const RESOURCES: Resource[] = [
     rightsNote: "Original Lifewoven content. Inspired by Viktor Frankl's philosophy. Not a reproduction of Man's Search for Meaning.",
   },
   {
-    id: 8, category: "text", module: "state",
+    id: 8, category: "text", module: "state", slug: "art-of-allowing",
     title: "The Art of Allowing — Principles Guide",
     author: "Lifewoven",
     description: "An original Lifewoven guide to the third element of deliberate creation: releasing resistance and allowing desires to manifest.",
@@ -93,8 +94,8 @@ const RESOURCES: Resource[] = [
     rightsNote: "Original Lifewoven content.",
   },
   {
-    id: 9, category: "audio", module: "stewardship",
-    title: "Morning Alignment Meditation",
+    id: 9, category: "text", module: "stewardship", slug: "morning-alignment-text-companion",
+    title: "Morning Alignment — Text Companion",
     author: "Lifewoven",
     description: "A 15-minute original guided morning practice to anchor you in alignment before the day begins.",
     type: "Meditation", free: true,
@@ -102,7 +103,7 @@ const RESOURCES: Resource[] = [
     rightsNote: "Original Lifewoven audio content.",
   },
   {
-    id: 10, category: "text", module: "strategy",
+    id: 10, category: "text", module: "strategy", slug: "leverage-mapper",
     title: "The Leverage Mapper",
     author: "Lifewoven",
     description: "A guided exercise for identifying the highest-leverage actions in your life and work right now.",
@@ -111,7 +112,7 @@ const RESOURCES: Resource[] = [
     rightsNote: "Original Lifewoven content.",
   },
   {
-    id: 11, category: "text", module: "story",
+    id: 11, category: "text", module: "story", slug: "flowdreaming-introduction",
     title: "Creative Flowdreaming — Introduction",
     author: "Lifewoven (Inspired by Summer McStravick)",
     description: "An original Lifewoven introduction to Flowdreaming — the practice of manifesting through emotional immersion in desired futures.",
@@ -285,7 +286,13 @@ export default function ResourceLibrary() {
                   </p>
                 )}
 
-                {resource.free ? (
+                {resource.slug ? (
+                  <Button asChild size="sm" variant="outline" className="gap-1.5 text-xs">
+                    <Link href={`/library/${resource.slug}`}>
+                      <ArrowRight className="h-3 w-3" /> Read
+                    </Link>
+                  </Button>
+                ) : resource.free ? (
                   <Button asChild size="sm" variant="outline" className="gap-1.5 text-xs">
                     <Link href={`/journal?module=${resource.module}&prompt=Reflecting on: ${encodeURIComponent(resource.title)}`}>
                       <ArrowRight className="h-3 w-3" /> Explore & Journal

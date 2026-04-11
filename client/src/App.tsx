@@ -39,12 +39,14 @@ import Oracle from "./pages/Oracle";
 // Commerce
 import Store from "./pages/Store";
 import CourseDetail from "./pages/CourseDetail";
+import ProductDetail from "./pages/ProductDetail";
 
 // Community
 import Community from "./pages/Community";
 
 // Resources
 import ResourceLibrary from "./pages/ResourceLibrary";
+import LibraryArticlePage from "./pages/LibraryArticlePage";
 
 // Settings
 import Settings from "./pages/Settings";
@@ -60,6 +62,7 @@ import ThankingFromThere from "./pages/btw/ThankingFromThere";
 import WordsWithWeight from "./pages/btw/WordsWithWeight";
 import ClosingTheGap from "./pages/btw/ClosingTheGap";
 import BTWLibrary from "./pages/btw/BTWLibrary";
+import BTWArticlePage from "./pages/btw/BTWArticlePage";
 
 // Legal & Support
 import Terms from "./pages/legal/Terms";
@@ -104,12 +107,14 @@ function Router() {
       {/* Commerce */}
       <Route path="/store" component={Store} />
       <Route path="/course/:id" component={CourseDetail} />
+      <Route path="/product/:id" component={ProductDetail} />
 
       {/* Community */}
       <Route path="/community" component={Community} />
 
       {/* Resources */}
       <Route path="/library" component={ResourceLibrary} />
+      <Route path="/library/:slug" component={LibraryArticlePage} />
 
       {/* Settings */}
       <Route path="/settings" component={Settings} />
@@ -125,6 +130,7 @@ function Router() {
       <Route path="/btw/words" component={WordsWithWeight} />
       <Route path="/btw/insights" component={ClosingTheGap} />
       <Route path="/btw/library" component={BTWLibrary} />
+      <Route path="/btw/library/:slug" component={BTWArticlePage} />
 
       {/* Legal & Support */}
       <Route path="/legal/terms" component={Terms} />
