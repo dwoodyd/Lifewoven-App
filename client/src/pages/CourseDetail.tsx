@@ -25,6 +25,37 @@ const COURSE_PDFS: Record<string, string> = {
   "meaning-foundation": `${CDN}/PACKAGE-04-meaning-foundation_5715c90e.pdf`,
 };
 
+const COURSE_PREVIEWS: Record<string, { label: string; excerpts: string[] }> = {
+  "alignment-fundamentals": {
+    label: "From Lesson 1.1",
+    excerpts: [
+      "The gap between knowing and living is not a knowledge problem. It is a systems problem. Human beings are not collections of separate problems to be solved one at a time. They are systems — interconnected dimensions of experience in which everything affects everything else.",
+      "The 5S Framework does not add another thing to work on. It reorganizes the work you are already doing into a coherent system — one that is greater than the sum of its parts because it addresses the actual structure of a human life.",
+    ],
+  },
+  "alignment-current": {
+    label: "From Lesson 1.1",
+    excerpts: [
+      "The current — the sustained state of vibrational alignment — is not a condition you achieve once and maintain automatically. It is a practice — an ongoing, daily engagement with the quality of your interior state.",
+      "Precision in working with the scale means three things: accurate location, pattern recognition, and gradient sensitivity. The current is built from small, consistent upward movements.",
+    ],
+  },
+  "identity-in-motion": {
+    label: "From Lesson 1.1",
+    excerpts: [
+      "The invisible architecture is the set of beliefs you hold about who you are, specifically in relation to the behavior in question. When these identity specifications and the desired habit are in conflict, the identity wins.",
+      "This is not weakness of character. It is the predictable operation of a coherent system. The problem is not the system — it is the identity the system is maintaining consistency with.",
+    ],
+  },
+  "meaning-foundation": {
+    label: "From Lesson 1.1",
+    excerpts: [
+      "Viktor Frankl argued that the question 'what is your life for?' is not optional. The human organism is structured to seek meaning, in the same way it is structured to seek food and shelter.",
+      "What is missing is a genuine, personal, specific answer to the question. Not a borrowed answer — but the answer that emerges from honest attention to what your particular life is asking of you.",
+    ],
+  },
+};
+
 // Courses map to subscription tiers
 const COURSE_PLANS: Record<string, "seeker" | "oracle"> = {
   "alignment-fundamentals": "seeker",
@@ -127,6 +158,20 @@ export default function CourseDetail() {
             <p key={i} className="text-base text-muted-foreground font-light leading-relaxed mb-3 last:mb-0">{p}</p>
           ))}
         </div>
+        {/* Preview Excerpts */}
+        {COURSE_PREVIEWS[courseId] && (
+          <div className="mb-10 p-6 rounded-2xl border border-border bg-secondary/10">
+            <h2 className="font-serif text-2xl font-light text-foreground mb-5">{COURSE_PREVIEWS[courseId].label}</h2>
+            <div className="space-y-4">
+              {COURSE_PREVIEWS[courseId].excerpts.map((excerpt, i) => (
+                <blockquote key={i} className="border-l-2 border-muted-foreground/30 pl-4 text-base text-muted-foreground font-light leading-relaxed italic">
+                  {excerpt}
+                </blockquote>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Curriculum */}
         <div>
           <h2 className="font-serif text-2xl font-light text-foreground mb-6">Curriculum</h2>

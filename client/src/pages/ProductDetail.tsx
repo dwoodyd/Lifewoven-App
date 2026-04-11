@@ -11,6 +11,52 @@ import { toast } from "sonner";
 
 const CDN = "https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t";
 
+const PREVIEWS: Record<string, { label: string; excerpts: string[] }> = {
+  "wisdom-card-deck": {
+    label: "Sample Cards",
+    excerpts: [
+      "Card 1 · Mind Science — The quality of your inner life is not a response to your circumstances. It is the architect of them. What you hold consistently in consciousness tends to become the material of your experience.",
+      "Card 6 · Vibrational Alignment — The next better-feeling thought is always available. Not joy from despair — the next small, genuine movement upward. Relief before arrival. Ease before evidence.",
+      "Card 11 · Meaning-Centered Philosophy — The person who has a why to live can bear almost any how. This is not a principle about the virtue of suffering. It is an observation about the human capacity to endure.",
+    ],
+  },
+  "morning-alignment-audio": {
+    label: "From Day 1: Foundation",
+    excerpts: [
+      "Welcome to your Monday morning practice. This is fifteen minutes that belong entirely to you — before the week asks anything of you, before the calendar fills, before the first message arrives.",
+      "Appreciation is not positive thinking. It is the deliberate, honest direction of your attention toward what is already genuinely good — the part of your life that anxiety and habit tend to make invisible.",
+    ],
+  },
+  "belief-rewrite-workbook": {
+    label: "Sample Prompts",
+    excerpts: [
+      "Day 1 — Complete the following sentence ten times without editing or pausing: I could never... Write whatever comes first. Do not evaluate it. Do not soften it. Let the belief speak in its own voice.",
+      "Day 10 — Review Days 1–9. What is the single most important belief that has surfaced — the one that, if changed, would have the most significant effect on your life? This is your primary belief target.",
+    ],
+  },
+  "identity-stack-workbook": {
+    label: "From the Workbook",
+    excerpts: [
+      "Before you design a single habit, you will examine who you currently believe you are. Before you track a single behavior, you will decide who you are becoming.",
+      "The Minimum Viable Habit is the floor — the smallest version of the habit that still qualifies. The version you can do on your worst day, when your motivation is zero and your energy is spent.",
+    ],
+  },
+  "reset-protocol-audio": {
+    label: "From the Reset Protocol",
+    excerpts: [
+      "You came back. Whatever brought you here — whatever happened, however long you were away — you came back. That matters more than you currently believe it does.",
+      "The voice of judgment is almost certainly present right now. That voice is not telling you the truth. It is telling you a story — a story that feels like truth because it is spoken in your own voice.",
+    ],
+  },
+  "alignment-workbook": {
+    label: "From the Workbook",
+    excerpts: [
+      "This workbook asks you to practice — to apply the five dimensions of the 5S Framework to your actual daily life with enough consistency that they become the operating system of your living.",
+      "The only rule: Write before you evaluate whether you are writing well. The quality of your thinking in this workbook is not the point. The quality of your attention is.",
+    ],
+  },
+};
+
 const PRODUCTS: Record<string, {
   id: string;
   icon: string;
@@ -149,10 +195,10 @@ This is the first edition of the Reset Audio, narrated by an AI voice trained on
       "Complete 45-minute Reset protocol script",
       "Professional narrator pacing notes",
       "Pause and breath markers",
-      "PDF download",
+      "MP3 audio download",
       "Immediate download after purchase"
     ],
-    downloadUrl: `${CDN}/PACKAGE-08-reset-audio_ec229747.pdf`,
+    downloadUrl: `https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/reset-audio_c806fe42.mp3`,
     tags: ["Audio Scripts", "Resilience", "45 min", "Reset Pathway"],
   },
 };
@@ -316,6 +362,20 @@ export default function ProductDetail() {
             ))}
           </ul>
         </div>
+
+        {/* Preview Excerpts */}
+        {PREVIEWS[productId] && (
+          <div className="mb-10 p-6 rounded-2xl border border-border bg-secondary/10">
+            <h2 className="font-serif text-2xl font-light text-foreground mb-5">{PREVIEWS[productId].label}</h2>
+            <div className="space-y-4">
+              {PREVIEWS[productId].excerpts.map((excerpt, i) => (
+                <blockquote key={i} className="border-l-2 border-muted-foreground/30 pl-4 text-base text-muted-foreground font-light leading-relaxed italic">
+                  {excerpt}
+                </blockquote>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Bottom CTA */}
         <div className="p-8 rounded-2xl border border-border bg-card text-center">
