@@ -42,6 +42,7 @@ async function startServer() {
     max: 5,
     standardHeaders: true,
     legacyHeaders: false,
+    validate: { xForwardedForHeader: false },
     message: { error: "Too many requests. Please try again later." },
   });
   app.use("/api/oauth", authLimiter);
@@ -52,6 +53,7 @@ async function startServer() {
     max: 200,
     standardHeaders: true,
     legacyHeaders: false,
+    validate: { xForwardedForHeader: false },
     message: { error: "Too many requests. Please try again later." },
   });
   app.use("/api/trpc", apiLimiter);

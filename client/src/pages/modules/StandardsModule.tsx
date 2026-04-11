@@ -88,7 +88,7 @@ export default function StandardsModule() {
                     const done = completedHabitIds.has(habit.id);
                     return (
                       <div key={habit.id} className={`flex items-center gap-3 p-3 rounded-xl border transition-all group ${done ? "border-standards/30 bg-standards/5" : "border-border bg-background hover:border-muted-foreground"}`}>
-                        <button onClick={() => !done && logHabit.mutate({ habitId: habit.id })} disabled={done} className="flex-shrink-0">
+                        <button onClick={() => !done && logHabit.mutate({ habitId: habit.id })} disabled={done} className="flex-shrink-0" aria-label={done ? `${habit.name} — completed` : `Mark ${habit.name} as complete`}>
                           {done ? <CheckCircle2 className="h-5 w-5 text-standards" /> : <Circle className="h-5 w-5 text-muted-foreground hover:text-foreground transition-colors" />}
                         </button>
                         <div className="flex-1 min-w-0">
@@ -98,7 +98,7 @@ export default function StandardsModule() {
                         <div className="flex items-center gap-2 flex-shrink-0">
                           <Badge variant="secondary" className="text-xs capitalize hidden sm:flex">{habit.category}</Badge>
                           <div className="flex items-center gap-1"><Flame className="h-3.5 w-3.5 text-orange-400" /><span className="text-xs font-mono text-muted-foreground">{habit.streak}</span></div>
-                          <button onClick={() => archiveHabit.mutate({ id: habit.id })} className="opacity-0 group-hover:opacity-100 text-xs text-muted-foreground hover:text-destructive transition-all">✕</button>
+                          <button onClick={() => archiveHabit.mutate({ id: habit.id })} className="opacity-0 group-hover:opacity-100 text-xs text-muted-foreground hover:text-destructive transition-all" aria-label={`Archive ${habit.name}`}>✕</button>
                         </div>
                       </div>
                     );

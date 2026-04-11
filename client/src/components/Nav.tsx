@@ -54,7 +54,7 @@ export default function Nav() {
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden md:flex items-center gap-6" aria-label="Main navigation">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -149,6 +149,9 @@ export default function Nav() {
             size="icon"
             className="md:hidden"
             onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-nav"
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
@@ -157,7 +160,7 @@ export default function Nav() {
 
       {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-border bg-background px-4 py-4 flex flex-col gap-3">
+        <div id="mobile-nav" className="md:hidden border-t border-border bg-background px-4 py-4 flex flex-col gap-3" role="navigation" aria-label="Mobile navigation">
           {navLinks.map((link) => (
             <Link
               key={link.href}
