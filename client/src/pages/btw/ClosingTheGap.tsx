@@ -1,14 +1,16 @@
 import { Button } from "@/components/ui/button";
 import Nav from "@/components/Nav";
 import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Loader2, RefreshCw, Lock } from "lucide-react";
 import { toast } from "sonner";
 
 export default function ClosingTheGap() {
+  const { user } = useAuth();
   const { data: stats, isLoading: statsLoading } = trpc.btw.getStats.useQuery();
   const { data: weeklyReflection, refetch: refetchWeekly } = trpc.btw.getLatestWeeklyReflection.useQuery();
   const { data: subStatus } = trpc.stripe.status.useQuery();
-  const canUseWeeklyReflection = subStatus?.tier === "seeker" || subStatus?.tier === "oracle";
+  const canUseWeeklyReflection = user?.role === "admin" || subStatus?.tier === "seeker" || subStatus?.tier === "oracle";
   const checkoutMutation = trpc.stripe.createCheckout.useMutation({
     onSuccess: (d) => { if (d.url) { toast.info("Opening checkout…"); window.open(d.url, "_blank"); } },
   });

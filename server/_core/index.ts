@@ -8,6 +8,7 @@ import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import { stripeWebhookHandler } from "../stripe/webhook";
+import { transcribeRouter } from "../transcribeRoute";
 import rateLimit from "express-rate-limit";
 
 function isPortAvailable(port: number): Promise<boolean> {
@@ -67,6 +68,9 @@ async function startServer() {
 
   // OAuth callback under /api/oauth/callback
   registerOAuthRoutes(app);
+
+  // Voice transcription upload endpoint
+  app.use(transcribeRouter);
 
   // tRPC API
   app.use(

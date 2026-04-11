@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import Nav from "@/components/Nav";
 import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Loader2, Sparkles, Trash2, Plus, Lock } from "lucide-react";
 import { toast } from "sonner";
 
@@ -35,8 +36,9 @@ export default function LivingAsHeard() {
   const [reflection, setReflection] = useState<string | null>(null);
   const [reflectingId, setReflectingId] = useState<number | null>(null);
 
+  const { user } = useAuth();
   const { data: subStatus } = trpc.stripe.status.useQuery();
-  const canUseGroundGuide = subStatus?.tier === "seeker" || subStatus?.tier === "oracle";
+  const canUseGroundGuide = user?.role === "admin" || subStatus?.tier === "seeker" || subStatus?.tier === "oracle";
   const checkoutMutation = trpc.stripe.createCheckout.useMutation({
     onSuccess: (d) => { if (d.url) { toast.info("Opening checkout…"); window.open(d.url, "_blank"); } },
   });

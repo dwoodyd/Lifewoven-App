@@ -69,6 +69,7 @@ import Terms from "./pages/legal/Terms";
 import Privacy from "./pages/legal/Privacy";
 import Refunds from "./pages/legal/Refunds";
 import Support from "./pages/Support";
+import Admin from "./pages/Admin";
 
 function Router() {
   return (
@@ -137,6 +138,9 @@ function Router() {
       <Route path="/legal/privacy" component={Privacy} />
       <Route path="/legal/refunds" component={Refunds} />
       <Route path="/support" component={Support} />
+
+      {/* Admin */}
+      <Route path="/admin" component={Admin} />
 
       {/* Fallback */}
       <Route path="/404" component={NotFound} />

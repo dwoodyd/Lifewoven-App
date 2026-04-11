@@ -269,3 +269,10 @@
 - [x] PDF companion download buttons on Alignment Current and Identity in Motion course pages
 - [x] Webhook updated to handle product one-time purchases (checkout.session.completed)
 - [x] getMyOrders tRPC procedure to check if user has already purchased a product
+
+## Feature Sprint (Apr 11, 2026 — Session 2)
+
+- [ ] Fix Begin Your Journey broken link (404)
+- [ ] Voice-to-text journaling: mic button, browser audio recording, Whisper transcription, text populates journal field
+- [ ] Admin dashboard: owner-only access gate, user list, orders, content status, system health
+- [ ] Admin bypass: owner account has full unrestricted access to all gated pages

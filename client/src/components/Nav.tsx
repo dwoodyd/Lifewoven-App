@@ -122,6 +122,14 @@ export default function Nav() {
                   <DropdownMenuItem asChild>
                     <Link href="/journal">Journal</Link>
                   </DropdownMenuItem>
+                  {user?.role === "admin" && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link href="/admin">⚙ Admin Panel</Link>
+                      </DropdownMenuItem>
+                    </>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     className="text-destructive"

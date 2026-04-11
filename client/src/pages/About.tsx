@@ -121,7 +121,7 @@ export default function About() {
 
         <div className="text-center">
           <Button asChild size="lg" className="gap-2">
-            <Link href="/alignment-audit">
+            <Link href="/audit">
               <ArrowRight className="h-4 w-4" /> Begin Your Journey
             </Link>
           </Button>

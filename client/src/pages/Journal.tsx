@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { BookOpen, Plus, Sparkles, Search, Tag, ArrowRight, Loader2, Pencil } from "lucide-react";
+import VoiceRecorder from "@/components/VoiceRecorder";
 import { Streamdown } from "streamdown";
 
 const MODULE_COLORS: Record<string, string> = {
@@ -117,7 +118,8 @@ export default function Journal() {
                 <Streamdown className="text-sm text-foreground leading-relaxed">{aiReflection}</Streamdown>
               </div>
             )}
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
+              <VoiceRecorder onTranscription={(text) => setContent(prev => prev ? prev + "\n\n" + text : text)} />
               <Button onClick={() => createEntry.mutate({ title: title || undefined, content, module: selectedModule as any || undefined, tags: tags ? tags.split(",").map(t => t.trim()).filter(Boolean) : undefined })} disabled={!content.trim() || createEntry.isPending} className="gap-2">
                 {createEntry.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Pencil className="h-4 w-4" />} Save Entry
               </Button>
