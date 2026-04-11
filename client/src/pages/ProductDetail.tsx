@@ -138,7 +138,13 @@ const PRODUCTS: Record<string, {
     price: "$27",
     priceInCents: 2700,
     description: "A guided audio experience walking you through the complete Reset pathway. For the moments when you need to return to yourself.",
-    longDescription: `The Reset pathway is built on a single premise: returning is not failure. It is the practice.\n\nThis guided audio experience walks you through the complete Reset protocol — a 45-minute journey from wherever you are to a place of genuine re-ground. It is not a motivational session. It is not a pep talk. It is a structured, compassionate process for the specific experience of having lost your footing and needing to find it again.\n\nThe Reset Audio is for the moments when you know something has shifted — when the alignment feels distant, when the story has gone dark, when the energy is low and the path forward is unclear. It meets you there, without judgment, and walks you back.`,
+     longDescription: `The Reset pathway is built on a single premise: returning is not failure. It is the practice.
+
+This guided audio experience walks you through the complete Reset protocol — a 45-minute journey from wherever you are to a place of genuine re-ground. It is not a motivational session. It is not a pep talk. It is a structured, compassionate process for the specific experience of having lost your footing and needing to find it again.
+
+The Reset Audio is for the moments when you know something has shifted — when the alignment feels distant, when the story has gone dark, when the energy is low and the path forward is unclear. It meets you there, without judgment, and walks you back.
+
+This is the first edition of the Reset Audio, narrated by an AI voice trained on the Lifewoven tone and pacing. A version narrated by the founder is in production and will be available to all purchasers as a free update when released.`,
     includes: [
       "Complete 45-minute Reset protocol script",
       "Professional narrator pacing notes",
@@ -159,6 +165,10 @@ export default function ProductDetail() {
   const [location] = useLocation();
   const [notifyEmail, setNotifyEmail] = useState("");
   const [notifySent, setNotifySent] = useState(false);
+  const joinWaitlist = trpc.stripe.joinWaitlist.useMutation({
+    onSuccess: () => setNotifySent(true),
+    onError: () => setNotifySent(true),
+  });
 
   // Check for post-purchase success redirect
   const urlParams = new URLSearchParams(window.location.search);
@@ -347,7 +357,7 @@ export default function ProductDetail() {
                   className="flex flex-col sm:flex-row gap-3 max-w-sm mx-auto"
                   onSubmit={(e) => {
                     e.preventDefault();
-                    if (notifyEmail) setNotifySent(true);
+                    if (notifyEmail) joinWaitlist.mutate({ email: notifyEmail, productName: product.title });
                   }}
                 >
                   <input

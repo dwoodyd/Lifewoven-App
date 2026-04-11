@@ -2,7 +2,11 @@ import { useRoute } from "wouter";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { ArrowLeft, Clock, BookOpen, PenLine, CheckCircle2, Download } from "lucide-react";
+import { ArrowLeft, Clock, BookOpen, PenLine, CheckCircle2, Download, Loader2 } from "lucide-react";
+import { trpc } from "@/lib/trpc";
+import { toast } from "sonner";
+import { useAuth } from "@/_core/hooks/useAuth";
+import { getLoginUrl } from "@/const";
 import { alignmentFundamentals, meaningFoundation, alignmentCurrent, identityInMotion, type CourseData } from "@/data/courseData";
 
 const COURSES: Record<string, CourseData> = {
@@ -19,10 +23,46 @@ const COURSE_PDFS: Record<string, string> = {
   "identity-in-motion": `${CDN}/LifewovenIdentitiesinMotion_c3d1e8f4.pdf`,
 };
 
+// Courses map to subscription tiers
+const COURSE_PLANS: Record<string, "seeker" | "oracle"> = {
+  "alignment-fundamentals": "seeker",
+  "meaning-foundation": "seeker",
+  "alignment-current": "oracle",
+  "identity-in-motion": "oracle",
+};
+
 export default function CourseDetail() {
   const [, params] = useRoute("/course/:id");
   const courseId = params?.id ?? "";
   const course = COURSES[courseId];
+  const { user } = useAuth();
+  const { data: subStatus } = trpc.stripe.status.useQuery(undefined, { enabled: !!user });
+
+  const checkoutMutation = trpc.stripe.createCheckout.useMutation({
+    onSuccess: (d) => {
+      if (d.url) {
+        toast.info("Redirecting to checkout…");
+        window.open(d.url, "_blank");
+      }
+    },
+    onError: () => toast.error("Could not start checkout. Please try again."),
+  });
+
+  const handleEnroll = () => {
+    if (!user) {
+      window.location.href = getLoginUrl();
+      return;
+    }
+    const requiredPlan = COURSE_PLANS[courseId] ?? "seeker";
+    const currentTier = subStatus?.tier ?? "explorer";
+    const tierOrder = { explorer: 0, seeker: 1, oracle: 2 };
+    if (tierOrder[currentTier] >= tierOrder[requiredPlan]) {
+      toast.success("You already have access!", { description: "Head to your dashboard to start this course." });
+      return;
+    }
+    checkoutMutation.mutate({ plan: requiredPlan, origin: window.location.origin });
+  };
+
   if (!course) {
     return (
       <div className="min-h-screen bg-background">
@@ -36,6 +76,14 @@ export default function CourseDetail() {
       </div>
     );
   }
+
+  const EnrollButton = ({ size = "lg" as "lg" | "default" }) => (
+    <Button size={size} className="gap-2" onClick={handleEnroll} disabled={checkoutMutation.isPending}>
+      {checkoutMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+      Enroll Now — {course.price}
+    </Button>
+  );
+
   return (
     <div className="min-h-screen bg-background">
       <Nav />
@@ -55,7 +103,7 @@ export default function CourseDetail() {
             <span className="text-2xl font-light text-foreground">{course.price}</span>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Button size="lg" className="gap-2">Enroll Now — {course.price}</Button>
+            <EnrollButton />
             {COURSE_PDFS[courseId] && (
               <a href={COURSE_PDFS[courseId]} download target="_blank" rel="noopener noreferrer">
                 <Button size="lg" variant="outline" className="gap-2"><Download className="h-4 w-4" /> Download Course PDF</Button>
@@ -99,7 +147,6 @@ export default function CourseDetail() {
                         <BookOpen className="h-4 w-4 text-muted-foreground group-open:text-foreground transition-colors shrink-0" />
                       </summary>
                       <div className="px-5 pb-6 pt-2 space-y-6">
-                        {/* Teaching */}
                         <div>
                           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">Teaching</p>
                           <div className="space-y-3">
@@ -109,7 +156,6 @@ export default function CourseDetail() {
                             ))}
                           </div>
                         </div>
-                        {/* Reflections */}
                         <div className="p-4 rounded-xl bg-secondary/30 border border-border">
                           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3 flex items-center gap-2"><PenLine className="h-3.5 w-3.5" />Reflection Questions</p>
                           <ol className="space-y-2">
@@ -121,12 +167,10 @@ export default function CourseDetail() {
                             ))}
                           </ol>
                         </div>
-                        {/* Journal Prompt */}
                         <div className="p-4 rounded-xl border border-border bg-card">
                           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-2 flex items-center gap-2"><BookOpen className="h-3.5 w-3.5" />Journal Prompt</p>
                           <p className="text-base text-foreground/80 font-light leading-relaxed italic">{lesson.journalPrompt}</p>
                         </div>
-                        {/* Daily Practice */}
                         {lesson.dailyPractice && (
                           <div className="p-4 rounded-xl border border-border bg-card">
                             <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-2 flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5" />Daily Practice</p>
@@ -148,7 +192,7 @@ export default function CourseDetail() {
             Enroll now and get immediate access to all lessons, practices, and the full course library.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
-            <Button size="lg" className="gap-2">Enroll Now — {course.price}</Button>
+            <EnrollButton />
             {COURSE_PDFS[courseId] && (
               <a href={COURSE_PDFS[courseId]} download target="_blank" rel="noopener noreferrer">
                 <Button size="lg" variant="outline" className="gap-2"><Download className="h-4 w-4" /> Download Course PDF</Button>

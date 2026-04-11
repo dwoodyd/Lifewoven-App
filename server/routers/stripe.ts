@@ -1,6 +1,7 @@
 import Stripe from "stripe";
 import { z } from "zod";
 import { protectedProcedure, publicProcedure, router } from "../_core/trpc";
+import { notifyOwner } from "../_core/notification";
 import { getDb } from "../db";
 import { users } from "../../drizzle/schema";
 import { eq } from "drizzle-orm";
@@ -173,6 +174,17 @@ export const stripeRouter = router({
         },
       });
       return { url: session.url };
+    }),
+
+  // ── Waitlist signup with owner notification ───────────────────────────────
+  joinWaitlist: publicProcedure
+    .input(z.object({ email: z.string().email(), productName: z.string() }))
+    .mutation(async ({ input }) => {
+      await notifyOwner({
+        title: `✉️ Waitlist: ${input.productName}`,
+        content: `${input.email} just joined the waitlist for "${input.productName}".`,
+      });
+      return { ok: true };
     }),
 
   // ── Get user's completed product orders ─────────────────────────────────────

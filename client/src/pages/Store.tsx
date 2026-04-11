@@ -12,7 +12,7 @@ const PRODUCTS = [
     title: "Alignment Fundamentals",
     subtitle: "The 5S Framework in Practice",
     price: "$97",
-    description: "A 6-week immersive course that walks you through each of the 5S modules with daily practices, video lessons, and journaling exercises. Build the foundation of your Lifewoven.",
+    description: "Six weeks. Five dimensions. One coherent life. Alignment Fundamentals is the complete introduction to the 5S Framework — State, Story, Standards, Strategy, Stewardship — built for people who are ready to move from insight to practice.",
     tags: ["5S Framework", "Foundations", "6 weeks"],
   },
   {
@@ -22,7 +22,7 @@ const PRODUCTS = [
     title: "The Alignment Current",
     subtitle: "Advanced Vibrational Practice",
     price: "$147",
-    description: "A deep-immersion course in sustained vibrational alignment. Master the Emotional Compass, the Art of Allowing, and the daily practices that keep you in a state of open, receptive flow — consistently.",
+    description: "Most people touch alignment occasionally. This course teaches you to live there. The Alignment Current is a four-week deep-immersion in the daily practices, emotional tools, and inner conditions that make sustained vibrational coherence not a peak experience but a way of being.",
     tags: ["Vibrational Alignment", "Advanced", "4 weeks"],
   },
   {
@@ -32,7 +32,7 @@ const PRODUCTS = [
     title: "Identity in Motion",
     subtitle: "Habit Architecture for the Whole Self",
     price: "$127",
-    description: "A practical course in identity-based habit design. Learn to build habits that are rooted in who you are becoming — not just what you want to achieve. Behavior science meets inner transformation.",
+    description: "Behavior change fails when it is built on willpower. Identity in Motion teaches you to build habits from the inside out — starting with who you are becoming, then designing the daily practices that make that identity real. Behavior science, applied to the whole self.",
     tags: ["Habits", "Identity", "Behavior Science"],
   },
   {
@@ -42,7 +42,7 @@ const PRODUCTS = [
     title: "The Meaning Foundation",
     subtitle: "Purpose, Resilience & the Unshakeable Why",
     price: "$97",
-    description: "A course in meaning-centered living. Discover the deepest source of your resilience, clarify your purpose, and learn to use meaning as an anchor through difficulty and change.",
+    description: "Viktor Frankl discovered that meaning is not found — it is made. The Meaning Foundation is a four-week course in the practice of meaning-centered living: how to locate your deepest why, use it as an anchor through difficulty, and build a life that holds its shape under pressure.",
     tags: ["Meaning", "Purpose", "Resilience"],
   },
   {
@@ -62,7 +62,7 @@ const PRODUCTS = [
     title: "Belief Rewrite Workbook",
     subtitle: "Rewire Your Story in 30 Days",
     price: "$19",
-    description: "A focused 30-day workbook for identifying and rewriting the limiting beliefs that are holding you back. Rooted in the Story module of the 5S Framework.",
+    description: "The story you tell about yourself is not a description of reality. It is a set of instructions. This 30-day workbook is a structured process for surfacing the specific beliefs that are most actively limiting your experience — and rewriting them with evidence, not optimism.",
     tags: ["Beliefs", "PDF", "30 days"],
   },
   {
@@ -72,7 +72,7 @@ const PRODUCTS = [
     title: "The Identity Stack Workbook",
     subtitle: "Design the Habits That Make You, You",
     price: "$22",
-    description: "A practical workbook for designing, stacking, and anchoring identity-based habits. Includes the Minimum Viable Habit framework, the Better Mirror tracking system, and weekly reflection prompts.",
+    description: "Who you are becoming shapes what you do. This workbook walks you through the complete identity-based habit design process — from surfacing your current identity architecture to writing a credible identity declaration to building the habit stack that carries it into daily life.",
     tags: ["Habits", "Identity", "PDF"],
   },
   {
@@ -82,7 +82,7 @@ const PRODUCTS = [
     title: "Morning Alignment Series",
     subtitle: "7 Guided Morning Practices",
     price: "$37",
-    description: "Seven 15-minute guided audio sessions — one for each day of the week — to start your day in alignment. Includes vibrational tuning, appreciation activation, and intention setting.",
+    description: "Fifteen minutes, before the day asks anything of you. The Morning Alignment Series is seven complete guided sessions — one for each day of the week — moving through Arrive, Acknowledge, Appreciate, Intend, and Release. A full interior practice that sets the tone for everything that follows.",
     tags: ["Audio", "Morning", "7 sessions"],
   },
   {
@@ -92,7 +92,7 @@ const PRODUCTS = [
     title: "Reset Audio",
     subtitle: "The Full Resilience Protocol",
     price: "$27",
-    description: "A guided audio experience walking you through the complete Reset pathway. For the moments when you need to return to yourself.",
+    description: "Returning is not failure. It is the practice. The Reset Audio is a 45-minute guided experience for the specific moment when alignment feels distant and the path forward is unclear. It meets you where you are — without judgment — and walks you back. (Narrated audio; AI-voiced first edition, owner-voiced version coming.)",
     tags: ["Audio", "Resilience", "45 min"],
   },
   {
@@ -102,7 +102,7 @@ const PRODUCTS = [
     title: "Wisdom Card Deck",
     subtitle: "52 Cards of Timeless Insight",
     price: "$34",
-    description: "52 beautifully designed digital cards featuring distilled wisdom from the great traditions of mind science, logotherapy, and conscious living. One card per week for a year of transformation.",
+    description: "One card. One week. One practice. The Wisdom Card Deck is 52 distilled insights from the four wisdom traditions at the heart of Lifewoven — Mind Science, Vibrational Alignment, Meaning-Centered Philosophy, and Behavioral Science. Sit with each card for seven days and let it work on you.",
     tags: ["Cards", "PDF", "52 cards"],
   },
 ];
