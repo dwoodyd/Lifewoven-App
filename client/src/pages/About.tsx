@@ -54,6 +54,13 @@ export default function About() {
       <Nav />
       <div className="container pt-24 pb-20 max-w-4xl mx-auto">
         <div className="text-center mb-16">
+          <div className="flex justify-center mb-8">
+            <img
+              src="https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/logo-transparent_0c4f036f.png"
+              alt="Lifewoven"
+              className="h-10 object-contain"
+            />
+          </div>
           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">About</p>
           <h1 className="font-serif text-4xl md:text-5xl font-light text-foreground mb-6">The Wisdom Behind Lifewoven</h1>
           <p className="text-muted-foreground text-lg font-light max-w-2xl mx-auto leading-relaxed">

@@ -3,9 +3,80 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Link } from "wouter";
 import { getLoginUrl } from "@/const";
-import { Settings2, Shield, Bell, User, Sparkles, Eye, EyeOff } from "lucide-react";
+import { Settings2, Shield, Bell, User, Sparkles, Eye, CreditCard, ExternalLink } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { trpc } from "@/lib/trpc";
+import { Badge } from "@/components/ui/badge";
+
+const TIER_LABELS: Record<string, { label: string; color: string; desc: string }> = {
+  explorer: { label: "Explorer", color: "bg-secondary text-foreground", desc: "Free tier — core tools included." },
+  seeker:   { label: "Seeker",   color: "bg-accent/20 text-accent",     desc: "Full access including Ground Guide AI." },
+  oracle:   { label: "Oracle",   color: "bg-primary/20 text-primary",   desc: "Complete platform — every tool unlocked." },
+};
+
+function BillingSection() {
+  const { data: sub, isLoading } = trpc.stripe.status.useQuery();
+  const createPortal = trpc.stripe.createPortal.useMutation({
+    onSuccess: (data) => { if (data?.url) window.open(data.url, "_blank"); },
+    onError: () => toast.error("Could not open billing portal. Please try again."),
+  });
+  const createCheckout = trpc.stripe.createCheckout.useMutation({
+    onSuccess: (data) => { if (data?.url) { toast.info("Redirecting to checkout…"); window.open(data.url, "_blank"); } },
+    onError: () => toast.error("Could not start checkout. Please try again."),
+  });
+
+  const tier = (sub as any)?.tier ?? "explorer";
+  const tierInfo = TIER_LABELS[tier] ?? TIER_LABELS.explorer;
+
+  return (
+    <div className="rounded-xl border border-border bg-card p-6 mb-5">
+      <div className="flex items-center gap-2 mb-4">
+        <CreditCard className="h-4 w-4 text-muted-foreground" />
+        <h2 className="font-medium text-sm text-foreground">Subscription & Billing</h2>
+      </div>
+
+      {isLoading ? (
+        <div className="h-10 bg-secondary animate-pulse rounded-lg" />
+      ) : (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between py-2 border-b border-border/50">
+            <div>
+              <p className="text-sm text-foreground font-medium">Current plan</p>
+              <p className="text-xs text-muted-foreground">{tierInfo.desc}</p>
+            </div>
+            <Badge className={`text-xs font-medium ${tierInfo.color}`}>{tierInfo.label}</Badge>
+          </div>
+
+          {tier === "explorer" ? (
+            <div className="space-y-2">
+              <p className="text-xs text-muted-foreground">Upgrade to unlock Ground Guide AI, weekly reflections, and the full Oracle suite.</p>
+              <div className="flex gap-2 flex-wrap">
+                <Button size="sm" className="gap-1.5" onClick={() => createCheckout.mutate({ plan: "seeker", origin: window.location.origin })} disabled={createCheckout.isPending}>
+                  Upgrade to Seeker — $19/mo
+                </Button>
+                <Button size="sm" variant="outline" className="gap-1.5 bg-transparent" onClick={() => createCheckout.mutate({ plan: "oracle", origin: window.location.origin })} disabled={createCheckout.isPending}>
+                  Oracle — $49/mo
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <Button
+              size="sm"
+              variant="outline"
+              className="gap-1.5 bg-transparent"
+              onClick={() => createPortal.mutate({ origin: window.location.origin })}
+              disabled={createPortal.isPending}
+            >
+              <ExternalLink className="h-3.5 w-3.5" />
+              Manage subscription
+            </Button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function Settings() {
   const { isAuthenticated, user } = useAuth();
@@ -80,6 +151,9 @@ export default function Settings() {
             </div>
           </div>
         </div>
+
+        {/* Billing */}
+        <BillingSection />
 
         {/* Oracle Preferences */}
         <div className="rounded-xl border border-border bg-card p-6 mb-5">

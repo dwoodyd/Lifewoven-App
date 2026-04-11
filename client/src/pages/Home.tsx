@@ -510,6 +510,42 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ─── Before the Words Banner ─── */}
+      <section className="py-16 bg-background">
+        <div className="container">
+          <div className="max-w-4xl mx-auto rounded-2xl border border-accent/30 bg-gradient-to-br from-accent/5 via-background to-secondary/20 p-10 flex flex-col md:flex-row items-center gap-8">
+            <div className="flex-1">
+              <p className="text-xs font-mono tracking-widest text-accent uppercase mb-3">Companion Practice</p>
+              <h2 className="font-serif text-3xl md:text-4xl font-light text-foreground mb-4">
+                Before the Words
+              </h2>
+              <p className="text-muted-foreground font-light leading-relaxed mb-6 max-w-md">
+                A contemplative formation practice for people who know the right words — but want to be grounded before they say them. A companion to the book. A practice for the space before prayer, conversation, and decision.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Link href="/btw">
+                  <Button className="gap-2">
+                    Enter the Practice <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+                <Link href="/btw/ground-check">
+                  <Button variant="outline" className="gap-2 bg-transparent">
+                    Take the Ground Check
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            <div className="shrink-0 text-center">
+              <div className="w-24 h-24 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center mx-auto mb-3">
+                <span className="font-serif text-4xl text-accent font-light">BTW</span>
+              </div>
+              <p className="text-xs text-muted-foreground font-light">Available now</p>
+              <p className="text-xs text-muted-foreground">Free with Explorer</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ─── Pricing ─── */}
       <section id="pricing" className="py-24">
         <div className="container">
