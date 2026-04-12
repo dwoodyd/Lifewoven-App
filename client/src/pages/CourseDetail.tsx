@@ -81,9 +81,15 @@ export default function CourseDetail() {
     onError: () => toast.error("Could not start checkout. Please try again."),
   });
 
+  const isAdmin = user?.role === "admin";
+
   const handleEnroll = () => {
     if (!user) {
       window.location.href = getLoginUrl();
+      return;
+    }
+    if (isAdmin) {
+      toast.success("Admin access — all course content is available to you.");
       return;
     }
     const requiredPlan = COURSE_PLANS[courseId] ?? "seeker";
@@ -110,7 +116,7 @@ export default function CourseDetail() {
     );
   }
 
-  const EnrollButton = ({ size = "lg" as "lg" | "default" }) => (
+  const EnrollButton = ({ size = "lg" as "lg" | "default" }) => isAdmin ? null : (
     <Button size={size} className="gap-2" onClick={handleEnroll} disabled={checkoutMutation.isPending}>
       {checkoutMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
       Enroll Now — {course.price}

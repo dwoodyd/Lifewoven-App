@@ -273,7 +273,8 @@ export default function ProductDetail() {
 
   const CategoryIcon = product.category === "audio" ? Headphones : product.category === "cards" ? Star : FileText;
   const isAvailable = !!product.downloadUrl;
-  const canDownload = purchaseSuccess || alreadyPurchased;
+  const isAdmin = user?.role === "admin";
+  const canDownload = isAdmin || purchaseSuccess || alreadyPurchased;
 
   return (
     <div className="min-h-screen bg-background">

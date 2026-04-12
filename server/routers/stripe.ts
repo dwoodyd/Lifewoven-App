@@ -24,17 +24,21 @@ function getStripe() {
 export const stripeRouter = router({
   // ── Get current subscription status ────────────────────────────────────────
   status: protectedProcedure.query(async ({ ctx }) => {
+      // Admins get oracle-level access to all paywalled content
+      if (ctx.user.role === "admin") {
+        return { tier: "oracle" as PlanTier, subscriptionId: null, expiresAt: null, isAdmin: true };
+      }
       const db = await requireDb();
       const [user] = await db.select({
         membershipTier: users.membershipTier,
         stripeSubscriptionId: users.stripeSubscriptionId,
         membershipExpiresAt: users.membershipExpiresAt,
       }).from(users).where(eq(users.id, ctx.user.id));
-
     return {
       tier: (user?.membershipTier ?? "explorer") as PlanTier,
       subscriptionId: user?.stripeSubscriptionId ?? null,
       expiresAt: user?.membershipExpiresAt ?? null,
+      isAdmin: false,
     };
   }),
 
@@ -189,6 +193,18 @@ export const stripeRouter = router({
 
   // ── Get user's completed product orders ─────────────────────────────────────
   getMyOrders: protectedProcedure.query(async ({ ctx }) => {
+    // Admins see all products as accessible (no purchase required)
+    if (ctx.user.role === "admin") {
+      const ALL_PRODUCT_SLUGS = [
+        "alignment-workbook", "wisdom-card-deck", "morning-alignment-audio",
+        "belief-rewrite-workbook", "identity-stack-workbook", "reset-protocol-audio",
+      ];
+      return ALL_PRODUCT_SLUGS.map(slug => ({
+        id: 0, userId: ctx.user.id, productSlug: slug, status: "completed",
+        stripePaymentIntentId: null, stripeSessionId: null, amountPaid: 0,
+        downloadUrl: null, createdAt: new Date(),
+      }));
+    }
     const db = await requireDb();
     const myOrders = await db.select()
       .from(orders)
