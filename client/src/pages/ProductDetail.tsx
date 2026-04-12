@@ -1,12 +1,12 @@
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
-import { ArrowLeft, Download, FileText, Headphones, Star, CheckCircle2, Mail, Loader2, ShoppingCart } from "lucide-react";
+import { ArrowLeft, Download, FileText, Headphones, Star, CheckCircle2, Mail, Loader2, ShoppingCart, Volume2, VolumeX, Shield } from "lucide-react";
 import { useRoute } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { toast } from "sonner";
 
 const CDN = "https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t";
@@ -276,6 +276,21 @@ export default function ProductDetail() {
   const isAdmin = user?.role === "admin";
   const canDownload = isAdmin || purchaseSuccess || alreadyPurchased;
 
+  // Audio preview player (muted autoplay)
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [isMuted, setIsMuted] = useState(true);
+  const isAudioProduct = productId === "reset-protocol-audio";
+  useEffect(() => {
+    if (!isAudioProduct || !audioRef.current) return;
+    audioRef.current.muted = true;
+    audioRef.current.play().catch(() => {});
+  }, [isAudioProduct]);
+  function toggleMute() {
+    if (!audioRef.current) return;
+    audioRef.current.muted = !isMuted;
+    setIsMuted(m => !m);
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Nav />
@@ -302,6 +317,30 @@ export default function ProductDetail() {
           </div>
         )}
 
+        {/* Admin Preview Badge */}
+        {isAdmin && (
+          <div className="mb-6 flex items-center gap-2 px-3 py-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 w-fit">
+            <Shield className="h-3.5 w-3.5 text-amber-500" />
+            <span className="text-xs font-mono tracking-widest text-amber-500 uppercase">Admin Preview — Full Access</span>
+          </div>
+        )}
+        {/* Audio Preview Player */}
+        {isAudioProduct && (
+          <div className="mb-8 p-5 rounded-2xl border border-border bg-card flex items-center gap-4">
+            <div className="flex-1">
+              <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-1">Audio Preview</p>
+              <p className="text-base font-light text-foreground">Reset Protocol — Introduction</p>
+            </div>
+            <button
+              onClick={toggleMute}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border bg-secondary hover:bg-secondary/80 transition-colors text-sm font-light"
+            >
+              {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+              {isMuted ? "Unmute" : "Mute"}
+            </button>
+            <audio ref={audioRef} src={`${CDN}/reset-audio_c806fe42.mp3`} muted />
+          </div>
+        )}
         {/* Header */}
         <div className="mb-10">
           <div className="flex items-center gap-2 mb-4">

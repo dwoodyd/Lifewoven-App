@@ -2,7 +2,7 @@ import { useRoute } from "wouter";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { ArrowLeft, Clock, BookOpen, PenLine, CheckCircle2, Download, Loader2 } from "lucide-react";
+import { ArrowLeft, Clock, BookOpen, PenLine, CheckCircle2, Download, Loader2, Shield } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -132,6 +132,13 @@ export default function CourseDetail() {
             <ArrowLeft className="h-4 w-4" /> Back to Store
           </p>
         </Link>
+        {/* Admin Preview Badge */}
+        {isAdmin && (
+          <div className="mb-6 flex items-center gap-2 px-3 py-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 w-fit">
+            <Shield className="h-3.5 w-3.5 text-amber-500" />
+            <span className="text-xs font-mono tracking-widest text-amber-500 uppercase">Admin Preview — Full Access</span>
+          </div>
+        )}
         {/* Header */}
         <div className="mb-10">
           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">Course</p>
