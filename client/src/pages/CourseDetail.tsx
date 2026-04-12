@@ -1,4 +1,5 @@
 import { useRoute } from "wouter";
+import DOMPurify from "dompurify";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
@@ -212,7 +213,7 @@ export default function CourseDetail() {
                           <div className="space-y-3">
                             {lesson.teaching.split("\n\n").map((para, i) => (
                               <p key={i} className="text-base text-foreground/80 font-light leading-relaxed"
-                                dangerouslySetInnerHTML={{ __html: para.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') }} />
+                                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(para.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')) }} />
                             ))}
                           </div>
                         </div>

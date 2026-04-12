@@ -334,11 +334,11 @@ export default function Oracle() {
                 rows={2}
               />
               <div className="flex flex-col gap-2">
-                <Button onClick={() => sendMessage(input)} disabled={!input.trim() || isLoading} size="icon" className="h-[52px] w-[52px] flex-shrink-0">
+                <Button onClick={() => sendMessage(input)} disabled={!input.trim() || isLoading} size="icon" className="h-[52px] w-[52px] flex-shrink-0" aria-label="Send message">
                   {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                 </Button>
                 {messages.length > 0 && (
-                  <Button variant="outline" size="icon" className="h-9 w-9 flex-shrink-0" onClick={() => setMessages([])} title="New conversation">
+                  <Button variant="outline" size="icon" className="h-9 w-9 flex-shrink-0" onClick={() => setMessages([])} aria-label="New conversation" title="New conversation">
                     <RefreshCw className="h-3.5 w-3.5" />
                   </Button>
                 )}
