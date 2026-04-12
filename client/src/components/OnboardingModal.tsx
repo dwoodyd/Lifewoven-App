@@ -5,16 +5,23 @@ import { X, ArrowRight } from "lucide-react";
 
 const STORAGE_KEY = "lifewoven_onboarded";
 
-export default function OnboardingModal() {
+interface Props {
+  userId?: number | null;
+}
+
+export default function OnboardingModal({ userId }: Props) {
   const [open, setOpen] = useState(false);
 
+  // Trigger when a user first logs in — keyed to their userId so each new account sees it once
   useEffect(() => {
-    const seen = localStorage.getItem(STORAGE_KEY);
+    if (!userId) return;
+    const key = `${STORAGE_KEY}_${userId}`;
+    const seen = localStorage.getItem(key);
     if (!seen) setOpen(true);
-  }, []);
+  }, [userId]);
 
   function dismiss() {
-    localStorage.setItem(STORAGE_KEY, "1");
+    if (userId) localStorage.setItem(`${STORAGE_KEY}_${userId}`, "1");
     setOpen(false);
   }
 

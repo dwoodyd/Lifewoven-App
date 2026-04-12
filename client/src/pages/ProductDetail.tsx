@@ -5,6 +5,7 @@ import { ArrowLeft, Download, FileText, Headphones, Star, CheckCircle2, Mail, Lo
 import { useRoute } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { useAdminPreview } from "@/contexts/AdminPreviewContext";
 import { getLoginUrl } from "@/const";
 import { useState, useRef, useEffect } from "react";
 import { toast } from "sonner";
@@ -274,7 +275,9 @@ export default function ProductDetail() {
   const CategoryIcon = product.category === "audio" ? Headphones : product.category === "cards" ? Star : FileText;
   const isAvailable = !!product.downloadUrl;
   const isAdmin = user?.role === "admin";
-  const canDownload = isAdmin || purchaseSuccess || alreadyPurchased;
+  const { previewAsUser, togglePreview } = useAdminPreview();
+  const effectiveAdmin = isAdmin && !previewAsUser;
+  const canDownload = effectiveAdmin || purchaseSuccess || alreadyPurchased;
 
   // Audio preview player (muted autoplay)
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -328,11 +331,22 @@ export default function ProductDetail() {
           </div>
         )}
 
-        {/* Admin Preview Badge */}
+        {/* Admin Preview Badge + Toggle */}
         {isAdmin && (
-          <div className="mb-6 flex items-center gap-2 px-3 py-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 w-fit">
-            <Shield className="h-3.5 w-3.5 text-amber-500" />
-            <span className="text-xs font-mono tracking-widest text-amber-500 uppercase">Admin Preview — Full Access</span>
+          <div className="mb-6 flex items-center gap-3 flex-wrap">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-amber-500/30 bg-amber-500/10">
+              <Shield className="h-3.5 w-3.5 text-amber-500" />
+              <span className="text-xs font-mono tracking-widest text-amber-500 uppercase">
+                {previewAsUser ? "Previewing as User" : "Admin Preview — Full Access"}
+              </span>
+            </div>
+            <button
+              onClick={togglePreview}
+              aria-label={previewAsUser ? "Restore admin access" : "Preview as regular user"}
+              className="text-xs font-mono tracking-widest text-muted-foreground hover:text-foreground underline underline-offset-2 transition-colors"
+            >
+              {previewAsUser ? "Restore Admin Access" : "Preview as User"}
+            </button>
           </div>
         )}
         {/* Audio Preview Player */}

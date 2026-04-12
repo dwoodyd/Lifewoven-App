@@ -54,6 +54,7 @@ async function startServer() {
   const allowedOrigins = [
     /\.manus\.space$/,
     /\.manus\.computer$/,
+    /\.us1\.manus\.computer$/,
     /^https:\/\/lifewovenapp\.manus\.space$/,
     /^https:\/\/lifeosplatform-krrwopfb\.manus\.space$/,
     ...(process.env.NODE_ENV !== "production" ? [/^http:\/\/localhost(:\d+)?$/] : []),

@@ -7,6 +7,7 @@ import { ArrowLeft, Clock, BookOpen, PenLine, CheckCircle2, Download, Loader2, S
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { useAdminPreview } from "@/contexts/AdminPreviewContext";
 import { getLoginUrl } from "@/const";
 import { alignmentFundamentals, meaningFoundation, alignmentCurrent, identityInMotion, type CourseData } from "@/data/courseData";
 
@@ -83,13 +84,15 @@ export default function CourseDetail() {
   });
 
   const isAdmin = user?.role === "admin";
+  const { previewAsUser, togglePreview } = useAdminPreview();
+  const effectiveAdmin = isAdmin && !previewAsUser;
 
   const handleEnroll = () => {
     if (!user) {
       window.location.href = getLoginUrl();
       return;
     }
-    if (isAdmin) {
+    if (effectiveAdmin) {
       toast.success("Admin access — all course content is available to you.");
       return;
     }
@@ -117,7 +120,7 @@ export default function CourseDetail() {
     );
   }
 
-  const EnrollButton = ({ size = "lg" as "lg" | "default" }) => isAdmin ? null : (
+  const EnrollButton = ({ size = "lg" as "lg" | "default" }) => effectiveAdmin ? null : (
     <Button size={size} className="gap-2" onClick={handleEnroll} disabled={checkoutMutation.isPending}>
       {checkoutMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
       Enroll Now — {course.price}
@@ -133,11 +136,22 @@ export default function CourseDetail() {
             <ArrowLeft className="h-4 w-4" /> Back to Store
           </p>
         </Link>
-        {/* Admin Preview Badge */}
+        {/* Admin Preview Badge + Toggle */}
         {isAdmin && (
-          <div className="mb-6 flex items-center gap-2 px-3 py-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 w-fit">
-            <Shield className="h-3.5 w-3.5 text-amber-500" />
-            <span className="text-xs font-mono tracking-widest text-amber-500 uppercase">Admin Preview — Full Access</span>
+          <div className="mb-6 flex items-center gap-3 flex-wrap">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-amber-500/30 bg-amber-500/10">
+              <Shield className="h-3.5 w-3.5 text-amber-500" />
+              <span className="text-xs font-mono tracking-widest text-amber-500 uppercase">
+                {previewAsUser ? "Previewing as User" : "Admin Preview — Full Access"}
+              </span>
+            </div>
+            <button
+              onClick={togglePreview}
+              aria-label={previewAsUser ? "Restore admin access" : "Preview as regular user"}
+              className="text-xs font-mono tracking-widest text-muted-foreground hover:text-foreground underline underline-offset-2 transition-colors"
+            >
+              {previewAsUser ? "Restore Admin Access" : "Preview as User"}
+            </button>
           </div>
         )}
         {/* Header */}

@@ -6,6 +6,7 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { useAuth } from "./_core/hooks/useAuth";
 
 // Public pages
 import Home from "./pages/Home";
@@ -152,12 +153,13 @@ function Router() {
 }
 
 function App() {
+  const { user } = useAuth();
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light" switchable>
         <TooltipProvider>
           <Toaster />
-          <OnboardingModal />
+          <OnboardingModal userId={user?.id} />
           <FeedbackWidget />
           <Router />
         </TooltipProvider>
