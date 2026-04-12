@@ -29,9 +29,9 @@ const IDENTITY_STATEMENTS = [
 
 const MEANING_QUOTES = [
   { text: "He who has a why to live can bear almost any how.", source: "Meaning-Centered Philosophy" },
-  { text: "Between stimulus and response there is a space. In that space is our power to choose our response.", source: "Logotherapy Tradition" },
+  { text: "Between stimulus and response there is a space. In that space is our power to choose our response.", source: "Lifewoven Framework" },
   { text: "When we are no longer able to change a situation, we are challenged to change ourselves.", source: "Meaning-Centered Philosophy" },
-  { text: "Everything can be taken from a man but one thing: the last of the human freedoms — to choose one's attitude.", source: "Logotherapy Tradition" },
+  { text: "Everything can be taken from a man but one thing: the last of the human freedoms — to choose one's attitude.", source: "Lifewoven Framework" },
 ];
 
 export default function StoryModule() {
@@ -179,7 +179,7 @@ export default function StoryModule() {
               <h2 className="font-serif text-base font-light text-foreground mb-3">From the Texts</h2>
               <blockquote className="border-l-2 border-story/40 pl-3 space-y-1">
                 <p className="font-serif text-sm font-light text-foreground italic leading-relaxed">"The mind, once stretched by a new idea, never returns to its original dimensions."</p>
-                <footer className="text-xs text-muted-foreground">— New Thought Tradition (Public Domain)</footer>
+                <footer className="text-xs text-muted-foreground">— Lifewoven Framework</footer>
               </blockquote>
             </div>
           </div>

@@ -50,7 +50,7 @@ const COURSE_PREVIEWS: Record<string, { label: string; excerpts: string[] }> = {
   "meaning-foundation": {
     label: "From Lesson 1.1",
     excerpts: [
-      "Viktor Frankl argued that the question 'what is your life for?' is not optional. The human organism is structured to seek meaning, in the same way it is structured to seek food and shelter.",
+      "The Lifewoven framework holds that the question 'what is your life for?' is not optional. The human organism is structured to seek meaning, in the same way it is structured to seek food and shelter.",
       "What is missing is a genuine, personal, specific answer to the question. Not a borrowed answer — but the answer that emerges from honest attention to what your particular life is asking of you.",
     ],
   },

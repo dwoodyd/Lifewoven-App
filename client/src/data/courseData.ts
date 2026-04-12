@@ -427,17 +427,17 @@ Track your evidence explicitly. Each week, write down three specific moments whe
         },
         {
           id: "3.4",
-          title: "Meaning-Making: The Frankl Dimension of Story",
+          title: "Meaning-Making: The the framework Dimension of Story",
           duration: "20 min",
-          teaching: `Viktor Frankl's contribution to the Story dimension is the deepest and the most challenging: the recognition that meaning is not assigned to experience by the experience itself but by the person undergoing it, and that this meaning-assignment is one of the last freedoms available even in the most constrained circumstances.
+          teaching: `The meaning-centered contribution to the Story dimension is the deepest and the most challenging: the recognition that meaning is not assigned to experience by the experience itself but by the person undergoing it, and that this meaning-assignment is one of the last freedoms available even in the most constrained circumstances.
 
-This is not a comfortable idea. It implies a level of responsibility for the quality of one's own experience that is genuinely difficult to accept — particularly in the context of genuine suffering, genuine injustice, or genuine loss. Frankl was not naive about this. He wrote from the experience of concentration camps. His argument is not that suffering is fine or that meaning-making cancels suffering. It is that the suffering human being retains, even in extremity, the capacity to choose their response — and that the quality of that response is itself a form of meaning.
+This is not a comfortable idea. It implies a level of responsibility for the quality of one's own experience that is genuinely difficult to accept — particularly in the context of genuine suffering, genuine injustice, or genuine loss. the framework was not naive about this. He wrote from the experience of concentration camps. His argument is not that suffering is fine or that meaning-making cancels suffering. It is that the suffering human being retains, even in extremity, the capacity to choose their response — and that the quality of that response is itself a form of meaning.
 
-The most practically important question Frankl's work generates is this: what story are you currently telling about your most significant difficulty?
+The most practically important question The framework's work generates is this: what story are you currently telling about your most significant difficulty?
 
 Not the description of what happened. The interpretation — the conclusion you have drawn about what it means about you, about others, about the world, about what is possible from this point. That interpretation is not the truth. It is a meaning-making act, and it is — within real limits — a choice.
 
-For the purposes of this course, the Frankl dimension of Story work produces three specific practices:
+For the purposes of this course, the the framework dimension of Story work produces three specific practices:
 
 **The Meaning Inventory.** For your most significant current difficulty, ask: what am I giving through this difficulty that I could not give in easier circumstances? What capacity is being developed that comfort would not have developed? What relationship is being deepened by the shared navigation of this?
 
@@ -447,7 +447,7 @@ For the purposes of this course, the Frankl dimension of Story work produces thr
           reflections: [
             "What is the story you have been telling about your most significant difficulty? Name the meaning you have assigned to it. Is that meaning helping you move forward or keeping you in place?",
             "What response does your current most significant challenge seem to be calling out of you — what specific quality or capacity does navigating it well require? Where do you feel that quality developing in you?",
-            "Frankl argues that meaning is a fundamental human need — that its absence is one of the primary sources of human suffering, even in conditions of material comfort. Does this match your experience? Where do you feel the absence of meaning most acutely?"
+            "the framework argues that meaning is a fundamental human need — that its absence is one of the primary sources of human suffering, even in conditions of material comfort. Does this match your experience? Where do you feel the absence of meaning most acutely?"
           ],
           journalPrompt: "Write the most generative possible interpretation of the hardest chapter of your life so far — not the most comfortable, the most useful for who you are becoming. What meaning does that chapter carry that you have not yet fully claimed? What would claiming it require? What would it make possible?"
         },
@@ -909,7 +909,7 @@ The practices continue. The system does not stop. You return to it tomorrow morn
 Begin again tomorrow.`,
   nextSteps: [
     "The Alignment Current — The advanced interior alignment course for deepening your relationship with the State dimension.",
-    "The Meaning Foundation — The Frankl-rooted course for deepening your Story work through meaning-centered philosophy.",
+    "The Meaning Foundation — The the framework-rooted course for deepening your Story work through meaning-centered philosophy.",
     "The Oracle — The AI intelligence layer, now available with six weeks of your own data to draw on."
   ]
 };
@@ -921,10 +921,10 @@ Begin again tomorrow.`,
 export const meaningFoundation: CourseData = {
   id: "meaning-foundation",
   title: "The Meaning Foundation",
-  subtitle: "Viktor Frankl, Logotherapy, and the Art of a Purposeful Life",
-  description: "A four-week course rooted in Viktor Frankl's logotherapy and the broader tradition of meaning-centered philosophy. Twenty lessons on suffering, freedom, responsibility, and the discovery of a life worth living.",
+  subtitle: "Meaning-Centered Living and the Art of a Purposeful Life",
+  description: "A four-week course in the practice of meaning-centered living. Twenty lessons on suffering, freedom, responsibility, and the discovery of a life worth living.",
   price: "$67",
-  overview: "Viktor Frankl survived Auschwitz and went on to found logotherapy — a form of psychotherapy built on the premise that the primary human drive is not pleasure or power but meaning. This course draws on his work, and on the broader tradition of meaning-centered philosophy, to address the question that underlies most personal development work: not how to feel better, but why any of it matters.\n\nThe Meaning Foundation course is for the person who has done the surface work and found it insufficient. Who has optimized their habits and still feels empty. Who has achieved the goals and found the achievement hollow. Who suspects that the problem is not a lack of discipline but a lack of direction — and that the direction problem is actually a meaning problem.\n\nThis course will not give you meaning. It will give you the tools to find it.",
+  overview: "The Meaning Foundation draws on the tradition of meaning-centered philosophy to address the question that underlies most personal development work: not how to feel better, but why any of it matters.\n\nThe Meaning Foundation course is for the person who has done the surface work and found it insufficient. Who has optimized their habits and still feels empty. Who has achieved the goals and found the achievement hollow. Who suspects that the problem is not a lack of discipline but a lack of direction — and that the direction problem is actually a meaning problem.\n\nThis course will not give you meaning. It will give you the tools to find it.",
   structure: "Each lesson includes a Teaching section (15–20 minutes of reading), three Reflection Questions, a Journal Prompt, and a Daily Practice. The course is designed to be taken one lesson per day, five days per week, over four weeks.\n\nThis course works best when taken after Alignment Fundamentals, but it can be taken independently. The only prerequisite is a willingness to sit with difficult questions without rushing toward comfortable answers.",
   duration: "4 weeks · 20 lessons",
   weeks: [
@@ -937,20 +937,20 @@ export const meaningFoundation: CourseData = {
           id: "1.1",
           title: "The Will to Meaning",
           duration: "20 min",
-          teaching: `Viktor Frankl's central claim — the one that distinguishes logotherapy from every other psychological tradition of his era — is this: the primary motivational force in human beings is not the will to pleasure (Freud) and not the will to power (Adler), but the will to meaning.
+          teaching: `The central claim of meaning-centered philosophy is this: the primary motivational force in human beings is not the will to pleasure (Freud) and not the will to power (Adler), but the will to meaning.
 
-This is not a philosophical preference. It is a clinical observation, made in the most extreme conditions available to a human observer. Frankl developed his theory before the camps. He tested it in them. What he observed was that the prisoners who survived — not physically, but psychologically, with their humanity intact — were almost uniformly those who had found or maintained a sense of meaning in their suffering. And those who lost their sense of meaning died, often within days of the loss, even when their physical condition remained viable.
+This is not a philosophical preference. It is a clinical observation, made in the most extreme conditions available to a human observer. The meaning-centered tradition was confirmed in the most extreme circumstances: what was observed was that the prisoners who survived — not physically, but psychologically, with their humanity intact — were almost uniformly those who had found or maintained a sense of meaning in their suffering. And those who lost their sense of meaning died, often within days of the loss, even when their physical condition remained viable.
 
 The will to meaning is not the desire for a comfortable explanation of one's life. It is the fundamental orientation of a conscious being toward something beyond itself — toward a purpose, a person, a work, a cause, a value that makes the suffering of existence not merely bearable but worthwhile.
 
-Frankl's term for the absence of this orientation is the *existential vacuum* — the experience of inner emptiness that he identified as the mass neurosis of the modern age. The existential vacuum does not announce itself as meaninglessness. It presents as boredom, as the Sunday afternoon depression that descends when the distractions of the week have ceased. It presents as the feeling that something is missing without the ability to name what. It presents as the compulsive pursuit of pleasure, power, or conformity — the three most common ways of filling a vacuum that cannot, in fact, be filled by any of them.
+The framework's term for the absence of this orientation is the *existential vacuum* — the experience of inner emptiness that he identified as the mass neurosis of the modern age. The existential vacuum does not announce itself as meaninglessness. It presents as boredom, as the Sunday afternoon depression that descends when the distractions of the week have ceased. It presents as the feeling that something is missing without the ability to name what. It presents as the compulsive pursuit of pleasure, power, or conformity — the three most common ways of filling a vacuum that cannot, in fact, be filled by any of them.
 
 The Meaning Foundation course begins here — with the recognition that meaning is not a luxury, not a philosophical preference, and not something that can be indefinitely deferred. It is a fundamental human need, and its absence produces a specific and recognizable form of suffering that no amount of comfort, achievement, or distraction can resolve.
 
-The first question this course asks you to sit with is not *what is the meaning of my life* — that question, posed in the abstract, is unanswerable and tends to produce paralysis rather than clarity. The first question is simpler and more immediate: *what is calling for my response right now?* Meaning, in Frankl's understanding, is always specific, always situational, and always discovered in the act of responding to what life is actually asking of you — not in the abstract contemplation of what you wish it were asking.`,
+The first question this course asks you to sit with is not *what is the meaning of my life* — that question, posed in the abstract, is unanswerable and tends to produce paralysis rather than clarity. The first question is simpler and more immediate: *what is calling for my response right now?* Meaning, in The framework's understanding, is always specific, always situational, and always discovered in the act of responding to what life is actually asking of you — not in the abstract contemplation of what you wish it were asking.`,
           reflections: [
             "Where in your current life do you most clearly feel the presence of meaning — the sense that what you are doing or being matters beyond your own comfort or preference?",
-            "Where do you most clearly feel the existential vacuum — the inner emptiness that Frankl describes? What do you typically use to fill it? How long does the filling last?",
+            "Where do you most clearly feel the existential vacuum — the inner emptiness the meaning-centered tradition describes? What do you typically use to fill it? How long does the filling last?",
             "What is life currently asking of you — specifically, in your actual situation, with your actual capacities? Not what you wish it were asking. What it is actually asking."
           ],
           journalPrompt: "Write about the last time you felt genuinely, unmistakably alive — the experience in which meaning was not a concept but a felt reality. What were you doing? Who were you with? What were you giving? What were you receiving? What does that experience tell you about where your meaning most naturally lives?",
@@ -960,23 +960,23 @@ The first question this course asks you to sit with is not *what is the meaning 
           id: "1.2",
           title: "The Three Avenues to Meaning",
           duration: "20 min",
-          teaching: `Frankl identified three primary avenues through which human beings can discover meaning. Understanding these avenues is not merely theoretical — it is a practical map for finding meaning in any circumstance, including those that seem to offer none.
+          teaching: `The meaning-centered tradition identifies three primary avenues through which human beings can discover meaning. Understanding these avenues is not merely theoretical — it is a practical map for finding meaning in any circumstance, including those that seem to offer none.
 
 **The first avenue: Creative values.** Meaning is found through what we give to the world — through work, through creation, through the contribution of our specific capacities to something that matters. This is the most commonly recognized avenue. The person who has found meaningful work, who is engaged in a project that calls on their genuine capacities and serves something beyond their own comfort, is experiencing meaning through creative values.
 
-But Frankl is careful to note that the avenue is not limited to conventionally recognized creative work. The parent who tends a child with profound care and attention is exercising creative values. The craftsperson who brings genuine excellence to a trade that the world does not particularly notice is exercising creative values. The avenue is not about the scale or visibility of the contribution — it is about the quality of the giving.
+The tradition is careful to note that the avenue is not limited to conventionally recognized creative work. The parent who tends a child with profound care and attention is exercising creative values. The craftsperson who brings genuine excellence to a trade that the world does not particularly notice is exercising creative values. The avenue is not about the scale or visibility of the contribution — it is about the quality of the giving.
 
 **The second avenue: Experiential values.** Meaning is also found through what we receive from the world — through love, through beauty, through the experience of genuine encounter with another person or with the natural world. This avenue is often undervalued in cultures that privilege production over reception — that treat the capacity to be moved by beauty or to love with full presence as less serious than the capacity to produce.
 
-Frankl's account of love is particularly important here. Love, in his understanding, is not primarily a feeling — it is an act of perception. To love another person is to see them fully — to perceive not only who they are now but who they are capable of becoming. This act of perception is itself a form of meaning.
+The framework's account of love is particularly important here. Love, in his understanding, is not primarily a feeling — it is an act of perception. To love another person is to see them fully — to perceive not only who they are now but who they are capable of becoming. This act of perception is itself a form of meaning.
 
-**The third avenue: Attitudinal values.** This is Frankl's most radical and most important contribution: the recognition that meaning can be found even in unavoidable suffering — through the attitude with which that suffering is met. When circumstances cannot be changed, the last human freedom — the freedom to choose one's response — remains available. And the exercise of that freedom, in the face of genuine suffering, is the highest form of meaning available to a human being.
+**The third avenue: Attitudinal values.** This is The framework's most radical and most important contribution: the recognition that meaning can be found even in unavoidable suffering — through the attitude with which that suffering is met. When circumstances cannot be changed, the last human freedom — the freedom to choose one's response — remains available. And the exercise of that freedom, in the face of genuine suffering, is the highest form of meaning available to a human being.
 
 This avenue does not require suffering to be welcomed or minimized. It requires only that the person facing unavoidable suffering ask: what response does this call out of me? What quality of character is this situation asking me to demonstrate? The answer to that question is meaning.`,
           reflections: [
             "Which of the three avenues is most naturally available to you in your current life? Which is most neglected?",
             "In the area of your life where you most feel the absence of meaning, which avenue is most likely to offer the path back to it?",
-            "Frankl's account of attitudinal values is the most challenging of the three. Is there a situation in your current life in which the only available meaning is attitudinal — in which the circumstances cannot be changed but the response can? What would the most meaningful response look like?"
+            "The framework's account of attitudinal values is the most challenging of the three. Is there a situation in your current life in which the only available meaning is attitudinal — in which the circumstances cannot be changed but the response can? What would the most meaningful response look like?"
           ],
           journalPrompt: "Map your current life against the three avenues. For each avenue, write honestly about where you are: what creative values are you currently exercising, and are they genuinely calling on your capacities? What experiential values are you currently receiving, and are you receiving them with full presence? What attitudinal values are you currently being asked to demonstrate, and are you meeting that invitation?"
         },
@@ -984,21 +984,21 @@ This avenue does not require suffering to be welcomed or minimized. It requires 
           id: "1.3",
           title: "The Uniqueness of Your Meaning",
           duration: "20 min",
-          teaching: `One of the most important and most frequently misunderstood aspects of Frankl's teaching is his insistence on the uniqueness of meaning. Meaning, in his account, is not a general truth that applies equally to all people — it is always specific, always personal, and always irreplaceable.
+          teaching: `One of the most important and most frequently misunderstood aspects of The framework's teaching is his insistence on the uniqueness of meaning. Meaning, in his account, is not a general truth that applies equally to all people — it is always specific, always personal, and always irreplaceable.
 
 This has a profound implication: your meaning cannot be borrowed. It cannot be found by following someone else's path, adopting someone else's purpose, or living inside someone else's framework for a meaningful life. The person who is living their genuine meaning is not living a version of someone else's life that they have adapted to their own circumstances. They are living the specific, irreplaceable response to the specific, irreplaceable situation that is theirs alone.
 
-Frankl uses the image of a chess game: there is no universally best move in chess. There is only the best move in this specific position, with these specific pieces, at this specific moment in the game. The person who tries to play a universally good move rather than the best move in their actual position will lose.
+The tradition uses the image of a chess game: there is no universally best move in chess. There is only the best move in this specific position, with these specific pieces, at this specific moment in the game. The person who tries to play a universally good move rather than the best move in their actual position will lose.
 
 The uniqueness of meaning also means that meaning cannot be given. It can only be found. A therapist, a teacher, a spiritual director, a platform like Lifewoven — none of these can hand you your meaning. They can create the conditions in which you are more likely to find it. They can ask the questions that help you hear what your own life is asking. They can reflect back the patterns that your own perspective makes invisible. But the finding is yours.
 
-This is both the challenge and the liberation of Frankl's account. The challenge: no one can do this for you. The liberation: no one can take it from you, either. Your meaning is not dependent on external validation, on social recognition, or on the agreement of others that what you are doing matters. It is between you and the specific situation that is calling for your response.
+This is both the challenge and the liberation of The framework's account. The challenge: no one can do this for you. The liberation: no one can take it from you, either. Your meaning is not dependent on external validation, on social recognition, or on the agreement of others that what you are doing matters. It is between you and the specific situation that is calling for your response.
 
 The practical question this lesson generates is: what is uniquely yours to do? Not what would be good for someone to do — what is yours specifically, given your specific capacities, your specific history, your specific position in the specific relationships and circumstances that constitute your actual life?`,
           reflections: [
             "What is uniquely yours to do — the contribution, the relationship, the work, the response that only you, with your specific history and capacities, can make?",
             "Where in your life are you living someone else's version of meaning rather than your own? What would it cost to stop? What would it produce?",
-            "Frankl argues that meaning cannot be given, only found. What has been your experience of this? Have you ever received someone else's meaning and tried to live from it? What happened?"
+            "The framework holds that meaning cannot be given, only found. What has been your experience of this? Have you ever received someone else's meaning and tried to live from it? What happened?"
           ],
           journalPrompt: "Write about what is uniquely yours. Not what you are good at in general — what only you can bring to the specific situation you are currently in. What does your particular history make you capable of that a different person in your position would not be? What does your specific combination of wounds and gifts make possible? Write toward the most honest answer you can find."
         },
@@ -1006,7 +1006,7 @@ The practical question this lesson generates is: what is uniquely yours to do? N
           id: "1.4",
           title: "Meaning vs. Happiness: The Paradox of Pursuit",
           duration: "20 min",
-          teaching: `One of Frankl's most counterintuitive and most practically important observations is this: happiness cannot be pursued directly. It can only ensue — as the byproduct of a life lived in genuine service of meaning.
+          teaching: `One of The framework's most counterintuitive and most practically important observations is this: happiness cannot be pursued directly. It can only ensue — as the byproduct of a life lived in genuine service of meaning.
 
 The person who makes happiness their primary goal will find it consistently elusive. Not because happiness is undesirable or unimportant, but because the direct pursuit of happiness tends to produce a heightened awareness of its absence rather than its presence. The person who is trying to feel happy is, by the structure of that effort, focused on the gap between their current state and the desired state of happiness — and that focus tends to sustain the gap rather than close it.
 
@@ -1026,7 +1026,7 @@ The practical implication of the paradox is this: when you are struggling with h
           id: "1.5",
           title: "Week One Integration: Finding Your Meaning Orientation",
           duration: "15 min",
-          teaching: `The first week of The Meaning Foundation has introduced the foundational architecture of Frankl's thought: the will to meaning as the primary human motivational force, the three avenues through which meaning is found, the uniqueness of personal meaning, and the paradox of happiness as a byproduct rather than a goal.
+          teaching: `The first week of The Meaning Foundation has introduced the foundational architecture of The framework's thought: the will to meaning as the primary human motivational force, the three avenues through which meaning is found, the uniqueness of personal meaning, and the paradox of happiness as a byproduct rather than a goal.
 
 This integration lesson asks you to synthesize what you have encountered into a personal meaning orientation — a clear, honest account of where meaning most naturally lives in your specific life and where it is most significantly absent.
 
@@ -1059,7 +1059,7 @@ The meaning orientation is a living document. It will change as your life change
           duration: "20 min",
           teaching: `Between stimulus and response, there is a space. In that space lies the freedom to choose our response. In our response lies our growth and our freedom.
 
-This observation — attributed to Frankl, though the precise wording has been disputed — is the most practically important single idea in the entire logotherapy tradition. It is also the most difficult to actually inhabit.
+This observation — a foundational Lifewoven insight — is the most practically important single idea in the entire meaning-centered tradition. It is also the most difficult to actually inhabit.
 
 The difficulty is not conceptual. Most people understand immediately what the space between stimulus and response means. The difficulty is experiential: in the actual moment of stimulus — the difficult conversation, the unexpected setback, the provocation, the fear — the space feels very small, or absent entirely. The response seems to happen before the choice is available.
 
@@ -1069,7 +1069,7 @@ The practice of expanding the space is the practice of noticing the stimulus bef
 
 The expansion of the space is the work of months and years, not days. But it begins with a single, specific practice: the deliberate pause. Before responding to any significant stimulus — a difficult email, a challenging conversation, a moment of fear or anger — pause. Take one breath. Ask the question. Then respond.
 
-The pause is not hesitation. It is the exercise of the last human freedom — the freedom that, Frankl argues, cannot be taken from us even in the most extreme circumstances.`,
+The pause is not hesitation. It is the exercise of the last human freedom — the freedom that cannot be taken from us even in the most extreme circumstances.`,
           reflections: [
             "In what areas of your life is the space between stimulus and response currently smallest — where do you most consistently respond automatically, without the pause?",
             "What is the most costly automatic response you currently have — the habitual reaction that most consistently produces outcomes you do not want?",
@@ -1082,13 +1082,13 @@ The pause is not hesitation. It is the exercise of the last human freedom — th
           id: "2.2",
           title: "Responsibility: The Other Side of Freedom",
           duration: "20 min",
-          teaching: `Frankl's account of freedom is inseparable from his account of responsibility. Freedom without responsibility is not freedom — it is arbitrariness. The person who exercises the freedom to choose their response but does so without reference to anything beyond their own preference has not found meaning. They have found a more sophisticated form of self-indulgence.
+          teaching: `The framework's account of freedom is inseparable from his account of responsibility. Freedom without responsibility is not freedom — it is arbitrariness. The person who exercises the freedom to choose their response but does so without reference to anything beyond their own preference has not found meaning. They have found a more sophisticated form of self-indulgence.
 
-Responsibility, in Frankl's account, is the recognition that the freedom to choose one's response is always a freedom to respond to something — to a situation, to a person, to a value, to a call. The responsible person is not the one who follows rules. They are the one who listens carefully enough to hear what the situation is actually asking, and who responds to that asking with their full capacity.
+Responsibility, in The framework's account, is the recognition that the freedom to choose one's response is always a freedom to respond to something — to a situation, to a person, to a value, to a call. The responsible person is not the one who follows rules. They are the one who listens carefully enough to hear what the situation is actually asking, and who responds to that asking with their full capacity.
 
 The word *responsibility* contains its own definition: response-ability. The capacity to respond. Not the obligation to comply with external demands, but the ability — and the willingness — to give a genuine response to what life is actually asking.
 
-Frankl's formulation is worth sitting with: he suggests that the Statue of Liberty on the East Coast of the United States be complemented by a Statue of Responsibility on the West Coast. Not because freedom is insufficient, but because freedom without responsibility — without the recognition that the exercise of freedom is always in response to something beyond the self — tends to produce the existential vacuum rather than meaning.
+The framework's formulation is worth sitting with: he suggests that the Statue of Liberty on the East Coast of the United States be complemented by a Statue of Responsibility on the West Coast. Not because freedom is insufficient, but because freedom without responsibility — without the recognition that the exercise of freedom is always in response to something beyond the self — tends to produce the existential vacuum rather than meaning.
 
 The practical question this generates is: what are you responsible for? Not in the legal or social sense — in the meaning sense. What is asking for your response right now, in your actual situation, with your actual capacities? And are you responding to it — or are you exercising your freedom to look away?`,
           reflections: [
@@ -1102,11 +1102,11 @@ The practical question this generates is: what are you responsible for? Not in t
           id: "2.3",
           title: "The Defiant Power of the Human Spirit",
           duration: "20 min",
-          teaching: `Frankl coined the phrase *the defiant power of the human spirit* to describe the capacity of human beings to transcend their circumstances — not to deny them, not to escape them, but to rise above them in the specific sense of refusing to be defined by them.
+          teaching: `The meaning-centered tradition names this *the defiant power of the human spirit* to describe the capacity of human beings to transcend their circumstances — not to deny them, not to escape them, but to rise above them in the specific sense of refusing to be defined by them.
 
 The defiant power is not optimism. It is not positive thinking. It is not the refusal to acknowledge suffering. It is the specific, active, sometimes fierce refusal to allow circumstances — however extreme — to determine the final word about who one is and what one is capable of.
 
-In the camps, Frankl observed this power in the prisoners who maintained their dignity, their humor, their care for others, and their sense of meaning even in conditions designed to strip all of these away. These were not people who were unaffected by their circumstances. They suffered fully. What they refused was the conclusion that their suffering was the whole story — that the conditions of their imprisonment were the final definition of their humanity.
+This power has been observed in the prisoners who maintained their dignity, their humor, their care for others, and their sense of meaning even in conditions designed to strip all of these away. These were not people who were unaffected by their circumstances. They suffered fully. What they refused was the conclusion that their suffering was the whole story — that the conditions of their imprisonment were the final definition of their humanity.
 
 The defiant power is available in ordinary circumstances as well as extreme ones. It is the quality that refuses to accept that a difficult childhood is a permanent sentence. That a failed relationship is evidence of fundamental unlovability. That a pattern of struggle is proof of incapacity. That the story of the past is the story of the future.
 
@@ -1124,11 +1124,11 @@ This is not naive. It is the most realistic possible assessment of human capacit
           id: "2.4",
           title: "Tragic Optimism: Finding Meaning in the Unavoidable",
           duration: "20 min",
-          teaching: `Frankl's concept of tragic optimism is one of the most mature and most honest ideas in the entire tradition of meaning-centered philosophy. It is the capacity to affirm life despite — and sometimes because of — its tragic dimensions.
+          teaching: `The framework's concept of tragic optimism is one of the most mature and most honest ideas in the entire tradition of meaning-centered philosophy. It is the capacity to affirm life despite — and sometimes because of — its tragic dimensions.
 
 Tragic optimism is not the refusal to acknowledge tragedy. It is not the insistence that everything happens for a reason, or that suffering is secretly good, or that the painful things in a human life are not really painful. It is the recognition that meaning can be found even in the unavoidable painful dimensions of human existence — in suffering, in guilt, and in death — and that the finding of that meaning is itself a form of declaration.
 
-Frankl identifies three unavoidable tragic elements of human existence: suffering, guilt, and death. He calls these the *tragic triad.* And he argues that each of the three, when met with the right attitude, becomes an avenue to meaning rather than merely an obstacle to happiness.
+The meaning-centered tradition identifies three unavoidable tragic elements of human existence: suffering, guilt, and death. These are called the *tragic triad.* The framework holds that each of the three, when met with the right attitude, becomes an avenue to meaning rather than merely an obstacle to happiness.
 
 **Suffering** becomes meaningful when it is met with the attitude of the attitudinal values — when the person facing unavoidable suffering asks not *why is this happening to me* but *what response does this call out of me?*
 
@@ -1148,7 +1148,7 @@ Tragic optimism is not the same as forced positivity. It does not require the pr
           id: "2.5",
           title: "Week Two Integration: The Practice of Responsible Freedom",
           duration: "15 min",
-          teaching: `Week Two has explored the inseparable relationship between freedom and responsibility in Frankl's account — the recognition that the last human freedom is always a freedom to respond, and that genuine response requires the willingness to hear what the situation is actually asking rather than simply exercising the freedom to look away.
+          teaching: `Week Two has explored the inseparable relationship between freedom and responsibility in The framework's account — the recognition that the last human freedom is always a freedom to respond, and that genuine response requires the willingness to hear what the situation is actually asking rather than simply exercising the freedom to look away.
 
 The integration practice for this week is the Responsibility Audit — a specific examination of the areas in your current life where you are being called to respond and where you have been, for whatever reason, declining the call.
 
@@ -1183,7 +1183,7 @@ The Responsibility Audit is not a guilt exercise. It is a clarity exercise. The 
 
 For this category of suffering, the conventional approaches to personal development — the goal-setting, the habit-building, the emotional management techniques — are insufficient. Not because they are wrong, but because they are designed for problems that can be solved. Unavoidable suffering is not a problem to be solved. It is a reality to be met.
 
-Frankl's most important contribution to the question of unavoidable suffering is not a technique. It is a reframing of what suffering is for. Not in the sense that suffering is secretly good or that it happens for a reason — Frankl is careful to avoid that kind of forced meaning-making. But in the sense that the human being facing unavoidable suffering retains, even in that suffering, the freedom to choose their response — and that the quality of that response is itself a form of meaning.
+The framework's most important contribution to the question of unavoidable suffering is not a technique. It is a reframing of what suffering is for. Not in the sense that suffering is secretly good or that it happens for a reason — the framework is careful to avoid that kind of forced meaning-making. But in the sense that the human being facing unavoidable suffering retains, even in that suffering, the freedom to choose their response — and that the quality of that response is itself a form of meaning.
 
 The question is not: why is this happening to me? That question, in the face of genuinely unavoidable suffering, has no satisfying answer. The question is: given that this is happening, what response does it call out of me? What quality of character is this situation asking me to demonstrate? What does it mean to meet this suffering well?
 
@@ -1200,11 +1200,11 @@ These are not rhetorical questions. They are genuine inquiries — and the answe
           id: "3.2",
           title: "The Transformation of Suffering Through Meaning",
           duration: "25 min",
-          teaching: `Frankl's claim is not that meaning eliminates suffering. It is that meaning transforms it — that the same suffering, held within a framework of genuine meaning, is experienced differently than suffering that is held as purely random, purely meaningless, and purely destructive.
+          teaching: `The framework's claim is not that meaning eliminates suffering. It is that meaning transforms it — that the same suffering, held within a framework of genuine meaning, is experienced differently than suffering that is held as purely random, purely meaningless, and purely destructive.
 
 The transformation is not a cognitive trick. It is a genuine change in the quality of the experience. The person who has found meaning in their suffering — who has found the response that the suffering calls out of them, who has found the quality of character it is developing, who has found the relationship it is deepening — is not pretending that the suffering is less than it is. They are experiencing it within a larger context that makes it bearable in a way that meaningless suffering is not.
 
-Frankl's most powerful illustration of this is his account of a fellow prisoner in the camps — an older man who had lost the will to live after the death of his wife and the destruction of his life's work. Frankl did not offer him comfort or reassurance. He asked him a question: was there anyone who loved him who was still alive? There was — a child, in another country, who depended on him. And in the recognition of that dependence — in the recognition that someone needed him to survive — the man found a reason to continue.
+The framework's most powerful illustration of this is the account of a prisoner in the camps — an older man who had lost the will to live after the death of his wife and the destruction of his life's work. The question asked of him: was there anyone who loved him who was still alive? There was — a child, in another country, who depended on him. And in the recognition of that dependence — in the recognition that someone needed him to survive — the man found a reason to continue.
 
 The meaning was not in the suffering. It was in the relationship that the suffering was threatening. But the recognition of that relationship transformed the suffering from an argument against continuing into an argument for it.
 
@@ -1222,11 +1222,11 @@ The practical question this generates is: what is your suffering threatening tha
           duration: "20 min",
           teaching: `Grief is the price of love. The person who has never loved deeply has never grieved deeply. The depth of the grief is a measure of the depth of the love — and in that sense, grief is not the opposite of love but its continuation.
 
-This reframing — grief as a form of love — is one of the most practically important applications of Frankl's attitudinal values to a specific and universal human experience. It does not make grief less painful. It makes it less meaningless.
+This reframing — grief as a form of love — is one of the most practically important applications of The framework's attitudinal values to a specific and universal human experience. It does not make grief less painful. It makes it less meaningless.
 
 The conventional approach to grief in the modern West is to treat it as a problem to be resolved — a temporary state of dysfunction that, with the right support and the right time, should give way to a return to normal functioning. The grief process is measured by its endpoint: when will you be over it? When will you be back to normal?
 
-Frankl's account suggests a different relationship to grief. Grief is not a problem to be resolved. It is a form of ongoing love — the love that continues after the person or the thing loved is no longer present. The question is not when you will be over it. The question is how you will carry it — how you will hold the grief in a way that honors what it represents rather than treating it as an obstacle to be overcome.
+The framework's account suggests a different relationship to grief. Grief is not a problem to be resolved. It is a form of ongoing love — the love that continues after the person or the thing loved is no longer present. The question is not when you will be over it. The question is how you will carry it — how you will hold the grief in a way that honors what it represents rather than treating it as an obstacle to be overcome.
 
 The grief that is carried well — that is acknowledged, honored, and held within a framework of meaning — tends to deepen the person carrying it. It produces a specific quality of presence, a specific capacity for compassion, and a specific depth of understanding that is not available to the person who has not grieved. This is not a consolation. It is an observation about what grief, when met with genuine engagement rather than avoidance, tends to produce.`,
           reflections: [
@@ -1246,7 +1246,7 @@ The research identifies five primary domains of post-traumatic growth: personal 
 
 This is not a claim that trauma is good or that suffering should be welcomed. It is an observation about what the human being who meets genuine adversity with genuine engagement tends to develop — and about the relationship between the depth of the struggle and the depth of the growth.
 
-Frankl's contribution to the understanding of post-traumatic growth is the recognition that growth does not happen automatically. It is not the inevitable product of suffering. It is the product of suffering met with the specific attitude of the attitudinal values — the attitude that asks what response the suffering calls out, rather than simply enduring it or being destroyed by it.
+The framework's contribution to the understanding of post-traumatic growth is the recognition that growth does not happen automatically. It is not the inevitable product of suffering. It is the product of suffering met with the specific attitude of the attitudinal values — the attitude that asks what response the suffering calls out, rather than simply enduring it or being destroyed by it.
 
 The person who develops post-traumatic growth is not the person who suffered most. They are the person who engaged most genuinely with the question of what their suffering was asking of them — and who found, in that engagement, the specific response that the suffering called out.
 
@@ -1293,7 +1293,7 @@ The suffering practice runs alongside the State, Story, and Standards practices 
           id: "4.1",
           title: "The Meaning Audit: Where Is Your Life Calling You?",
           duration: "20 min",
-          teaching: `Four weeks into The Meaning Foundation, you have developed a working relationship with the foundational ideas of logotherapy: the will to meaning, the three avenues, the uniqueness of personal meaning, the paradox of happiness, the space between stimulus and response, the defiant power, tragic optimism, and the transformation of suffering through meaning.
+          teaching: `Four weeks into The Meaning Foundation, you have developed a working relationship with the foundational ideas of meaning-centered philosophy: the will to meaning, the three avenues, the uniqueness of personal meaning, the paradox of happiness, the space between stimulus and response, the defiant power, tragic optimism, and the transformation of suffering through meaning.
 
 This lesson asks you to apply all of that to a comprehensive audit of your current life — a clear-eyed assessment of where meaning is present, where it is absent, and where it is calling most insistently for your response.
 
@@ -1320,11 +1320,11 @@ The Meaning Audit has five questions:
           id: "4.2",
           title: "The Dereflection Practice: Getting Out of Your Own Way",
           duration: "20 min",
-          teaching: `One of Frankl's most practically useful therapeutic techniques is *dereflection* — the deliberate redirection of attention away from the self and toward the world, the task, the person, or the value that is calling for engagement.
+          teaching: `One of The framework's most practically useful therapeutic techniques is *dereflection* — the deliberate redirection of attention away from the self and toward the world, the task, the person, or the value that is calling for engagement.
 
-Dereflection is the antidote to hyper-reflection — the excessive self-focus that Frankl identifies as one of the primary obstacles to meaning. The person who is constantly monitoring their own emotional state, constantly evaluating their own performance, constantly asking whether they are happy enough, successful enough, or living meaningfully enough — that person is, paradoxically, less likely to find meaning than the person who is simply engaged with the thing in front of them.
+Dereflection is the antidote to hyper-reflection — the excessive self-focus the framework identifies as one of the primary obstacles to meaning. The person who is constantly monitoring their own emotional state, constantly evaluating their own performance, constantly asking whether they are happy enough, successful enough, or living meaningfully enough — that person is, paradoxically, less likely to find meaning than the person who is simply engaged with the thing in front of them.
 
-The paradox of self-focus is this: the more attention you direct toward your own inner life, the less available you are to the world that is calling for your response. And meaning, in Frankl's account, is always found in the response to the world — not in the contemplation of the self.
+The paradox of self-focus is this: the more attention you direct toward your own inner life, the less available you are to the world that is calling for your response. And meaning, in The framework's account, is always found in the response to the world — not in the contemplation of the self.
 
 This does not mean that inner work is unimportant. The entire 5S Framework is built on the premise that inner work is foundational. But inner work is in service of outer engagement — it creates the interior conditions from which genuine response is most possible. It is not an end in itself.
 
@@ -1344,7 +1344,7 @@ The dereflection practice is most useful in moments of excessive self-monitoring
           duration: "20 min",
           teaching: `One of the most reliable avenues to meaning — and one of the most consistently underutilized — is the genuine conversation about what matters. Not the social conversation, not the professional conversation, not the conversation that stays safely on the surface of shared experience — the conversation in which two people speak honestly about what they care about, what they are struggling with, and what they are trying to build.
 
-Frankl's account of love as an act of perception — seeing the other person fully, including who they are capable of becoming — is most fully realized in the context of genuine conversation. The conversation in which you are fully seen — in which another person is genuinely interested in your meaning, your struggle, and your becoming — is one of the most powerful experiences of meaning available to a human being.
+The framework's account of love as an act of perception — seeing the other person fully, including who they are capable of becoming — is most fully realized in the context of genuine conversation. The conversation in which you are fully seen — in which another person is genuinely interested in your meaning, your struggle, and your becoming — is one of the most powerful experiences of meaning available to a human being.
 
 The meaning conversation is not therapy. It is not advice-giving. It is not problem-solving. It is the specific quality of conversation in which both people are genuinely present to what matters — in which the questions being asked are real questions, in which the answers being given are honest answers, and in which the space between the two people is genuinely safe for the kind of honesty that meaning requires.
 
@@ -1362,7 +1362,7 @@ The practice this lesson introduces is simple: have one meaning conversation thi
           id: "4.4",
           title: "The Legacy Question: What Will You Leave Behind?",
           duration: "20 min",
-          teaching: `Frankl's awareness of death — of the finitude of human existence — is not morbid. It is clarifying. The recognition that life is finite, that the time available for genuine response is limited, tends to concentrate attention on what actually matters rather than on what merely appears urgent.
+          teaching: `The framework's awareness of death — of the finitude of human existence — is not morbid. It is clarifying. The recognition that life is finite, that the time available for genuine response is limited, tends to concentrate attention on what actually matters rather than on what merely appears urgent.
 
 The legacy question — what will you leave behind? — is not a question about monuments or achievements. It is a question about the quality of your presence in the lives of the people you love and in the work you do. What will the people who knew you carry forward? What will the work you did make possible that would not have been possible without it? What will the world be, in some small but real way, different because you were here?
 
@@ -1384,7 +1384,7 @@ The legacy question is most useful not as a question about the distant future bu
           duration: "25 min",
           teaching: `This is the final lesson of The Meaning Foundation.
 
-Four weeks. Twenty lessons. The foundational architecture of Viktor Frankl's logotherapy, applied to the specific, irreplaceable, particular life you are living.
+Four weeks. Twenty lessons. The foundational architecture of the Lifewoven meaning-centered framework, applied to the specific, irreplaceable, particular life you are living.
 
 The completion practice for this course is the Meaning Inventory — the full accounting of what you have found, what you have lost, what you are carrying, and what you are building.
 
@@ -1411,7 +1411,7 @@ That sentence is the yield of the course. Write it last. Write it carefully. It 
   ],
   completionMessage: `You have completed The Meaning Foundation.
 
-Twenty lessons. Four weeks. The foundational architecture of Viktor Frankl's logotherapy, applied to the specific, irreplaceable life you are living.
+Twenty lessons. Four weeks. The foundational architecture of the Lifewoven meaning-centered framework, applied to the specific, irreplaceable life you are living.
 
 What you have built here is not a philosophy. It is a practice — a daily, ongoing engagement with the question of what your specific life is asking of you, and a growing capacity to respond to that question with genuine presence, genuine honesty, and genuine dignity.
 
@@ -1980,7 +1980,7 @@ The alignment is not achieved once and held forever. It is practiced — daily, 
 Keep practicing. Keep allowing. Keep moving up the scale.`,
   nextSteps: [
     "Alignment Fundamentals — The complete 5S Framework course for building a coherent operating system for your life.",
-    "The Meaning Foundation — Viktor Frankl's logotherapy and the art of a purposeful life.",
+    "The Meaning Foundation — the Lifewoven meaning-centered framework and the art of a purposeful life.",
     "The Oracle — The AI intelligence layer, now available with four weeks of your own data to draw on."
   ]
 };

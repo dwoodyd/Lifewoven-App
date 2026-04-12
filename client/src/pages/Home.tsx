@@ -279,7 +279,7 @@ export default function Home() {
           <div className="flex flex-wrap items-center justify-center gap-8 md:gap-14 text-muted-foreground">
             <div className="flex items-center gap-2 text-sm">
               <Brain className="h-4 w-4" />
-              <span>Mind Science & New Thought</span>
+              <span>Mind Science</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
               <Heart className="h-4 w-4" />
@@ -291,7 +291,7 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-2 text-sm">
               <Sparkles className="h-4 w-4" />
-              <span>Logotherapy & Meaning-Centered Psychology</span>
+              <span>Meaning-Centered Philosophy</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
               <Waves className="h-4 w-4" />
@@ -483,7 +483,7 @@ export default function Home() {
                 Lifewoven was built for the real version. The one who starts and stops. The one who has the books and the knowledge but still feels stuck. The one whose mind works differently on different days.
               </p>
               <p className="text-muted-foreground font-light leading-relaxed mb-5">
-                The wisdom traditions we draw from — New Thought, mind science, behavioral psychology, logotherapy, conscious creation — have been helping people transform their lives for over a century. What was missing was a single, intelligent container that brought them together.
+                The wisdom traditions we draw from have been helping people transform their lives for over a century. What was missing was a single, intelligent container that brought them together.
               </p>
               <p className="text-muted-foreground font-light leading-relaxed">
                 Lifewoven is that container. Not a content library. Not a habit app. A living operating system for a whole, aligned life.

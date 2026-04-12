@@ -42,7 +42,7 @@ const PRODUCTS = [
     title: "The Meaning Foundation",
     subtitle: "Purpose, Resilience & the Unshakeable Why",
     price: "$97",
-    description: "Viktor Frankl discovered that meaning is not found — it is made. The Meaning Foundation is a four-week course in the practice of meaning-centered living: how to locate your deepest why, use it as an anchor through difficulty, and build a life that holds its shape under pressure.",
+    description: "Meaning is not found — it is made. The Meaning Foundation is a four-week course in the practice of meaning-centered living: how to locate your deepest why, use it as an anchor through difficulty, and build a life that holds its shape under pressure.",
     tags: ["Meaning", "Purpose", "Resilience"],
   },
   {

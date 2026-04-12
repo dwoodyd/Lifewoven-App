@@ -34,9 +34,9 @@ const UNSTUCK_STARTERS = [
 ];
 
 const WISDOM_SOURCES = [
-  { icon: Brain, label: "Mind Science", desc: "New Thought philosophy — the creative power of thought and consciousness" },
+  { icon: Brain, label: "Mind Science", desc: "The creative power of thought and interior state — how consciousness shapes experience" },
   { icon: Heart, label: "Interior Alignment", desc: "Lifewoven Framework — emotional guidance and the art of allowing" },
-  { icon: Sparkles, label: "Meaning-Centered Philosophy", desc: "Logotherapy — meaning as the root of resilience and purpose" },
+  { icon: Sparkles, label: "Meaning-Centered Philosophy", desc: "Meaning as the root of resilience and purpose — the Lifewoven Why dimension" },
   { icon: Zap, label: "Behavioral Science", desc: "Identity-based habit formation — systems over goals" },
 ];
 
