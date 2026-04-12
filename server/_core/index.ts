@@ -10,6 +10,8 @@ import { serveStatic, setupVite } from "./vite";
 import { stripeWebhookHandler } from "../stripe/webhook";
 import { transcribeRouter } from "../transcribeRoute";
 import rateLimit from "express-rate-limit";
+import cors from "cors";
+import helmet from "helmet";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -36,6 +38,40 @@ async function startServer() {
 
   // Trust the first proxy (required for accurate IP detection behind load balancers/CDN)
   app.set("trust proxy", 1);
+
+  // ── Security: HTTPS enforcement — redirect HTTP to HTTPS in production
+  app.use((req, res, next) => {
+    if (process.env.NODE_ENV === "production") {
+      const proto = req.headers["x-forwarded-proto"];
+      if (proto && proto !== "https") {
+        return res.redirect(301, `https://${req.headers.host}${req.url}`);
+      }
+    }
+    next();
+  });
+
+  // ── Security: Explicit CORS whitelist — no wildcard
+  const allowedOrigins = [
+    /\.manus\.space$/,
+    /\.manus\.computer$/,
+    /^https:\/\/lifewovenapp\.manus\.space$/,
+    /^https:\/\/lifeosplatform-krrwopfb\.manus\.space$/,
+    ...(process.env.NODE_ENV !== "production" ? [/^http:\/\/localhost(:\d+)?$/] : []),
+  ];
+  app.use(cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true); // allow server-to-server
+      const allowed = allowedOrigins.some(p => p.test(origin));
+      callback(allowed ? null : new Error("Not allowed by CORS"), allowed);
+    },
+    credentials: true,
+  }));
+
+  // ── Security: HTTP security headers via helmet
+  app.use(helmet({
+    contentSecurityPolicy: false, // managed by Vite in dev
+    crossOriginEmbedderPolicy: false,
+  }));
 
   // ── Security: Rate limit auth/OAuth endpoints — 5 attempts per 15 minutes
   const authLimiter = rateLimit({
