@@ -17,7 +17,7 @@ import { getLoginUrl } from "@/const";
 const ORACLE_STARTERS = [
   "I feel stuck and don't know where to start.",
   "Help me understand my emotional state right now.",
-  "I want to rewrite a limiting belief I have about myself.",
+  "I want to rewrite a constraining belief I have about myself.",
   "What habits should I focus on building first?",
   "I'm facing a big decision and need clarity.",
   "How do I find meaning in what I'm going through?",
@@ -35,7 +35,7 @@ const UNSTUCK_STARTERS = [
 
 const WISDOM_SOURCES = [
   { icon: Brain, label: "Mind Science", desc: "New Thought philosophy — the creative power of thought and consciousness" },
-  { icon: Heart, label: "Vibrational Alignment", desc: "Law of Attraction — emotional guidance and the art of allowing" },
+  { icon: Heart, label: "Interior Alignment", desc: "Lifewoven Framework — emotional guidance and the art of allowing" },
   { icon: Sparkles, label: "Meaning-Centered Philosophy", desc: "Logotherapy — meaning as the root of resilience and purpose" },
   { icon: Zap, label: "Behavioral Science", desc: "Identity-based habit formation — systems over goals" },
 ];

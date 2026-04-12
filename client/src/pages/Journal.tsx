@@ -20,7 +20,7 @@ const MODULE_COLORS: Record<string, string> = {
 const DEFAULT_PROMPTS = [
   "What am I most grateful for right now?",
   "What is the most important thing I can focus on today?",
-  "What limiting belief showed up for me recently?",
+  "What constraining belief showed up for me recently?",
   "How am I feeling in my body right now?",
   "What would the best version of me do today?",
   "What meaning am I finding in my current challenges?",

@@ -169,7 +169,7 @@ const journalRouter = router({
       recentEntries: z.array(z.string()).optional(),
     }))
     .mutation(async ({ input }) => {
-      const systemPrompt = `You are the Lifewoven Journal Oracle — a wise, warm, and perceptive guide rooted in the teachings of Ernest Holmes, Abraham-Hicks, Viktor Frankl, and James Clear. Generate a single, powerful journaling prompt for the ${input.module} module${input.pathway ? ` (${input.pathway} pathway)` : ""}. The prompt should be introspective, specific, and invite genuine self-reflection. Return only the prompt text, nothing else.`;
+      const systemPrompt = `You are the Lifewoven Journal Oracle — a wise, warm, and perceptive guide rooted in the Lifewoven framework of interior alignment, identity, meaning, and deliberate practice. Generate a single, powerful journaling prompt for the ${input.module} module${input.pathway ? ` (${input.pathway} pathway)` : ""}. The prompt should be introspective, specific, and invite genuine self-reflection. Return only the prompt text, nothing else.`;
       const response = await invokeLLM({
         messages: [
           { role: "system", content: systemPrompt },
@@ -283,7 +283,7 @@ const beliefsRouter = router({
       limitingBelief: z.string().min(1),
       empoweringBelief: z.string().optional(),
       evidence: z.string().optional(),
-      affirmation: z.string().optional(),
+      declaration: z.string().optional(),
       category: z.enum(["self", "money", "relationships", "health", "purpose", "other"]).default("self"),
     }))
     .mutation(async ({ ctx, input }) => {
@@ -300,8 +300,8 @@ const beliefsRouter = router({
       if (!db) throw new Error("Database unavailable");
       const response = await invokeLLM({
         messages: [
-          { role: "system", content: "You are a belief transformation coach trained in the work of Ernest Holmes and Abraham-Hicks. Given a limiting belief, provide: 1) An empowering reframe, 2) Three pieces of counter-evidence to collect, 3) A powerful affirmation. Format as JSON: { empoweringBelief, evidence, affirmation }" },
-          { role: "user", content: `Limiting belief: "${input.limitingBelief}"` },
+          { role: "system", content: "You are a belief transformation coach trained in the Lifewoven belief transformation framework. Given a constraining belief, provide: 1) An empowering reframe, 2) Three pieces of counter-evidence to collect, 3) A grounding declaration. Format as JSON: { empoweringBelief, evidence, declaration }" },
+          { role: "user", content: `Constraining belief: "${input.limitingBelief}"` },
         ],
         response_format: {
           type: "json_schema",
@@ -313,9 +313,9 @@ const beliefsRouter = router({
               properties: {
                 empoweringBelief: { type: "string" },
                 evidence: { type: "string" },
-                affirmation: { type: "string" },
+                declaration: { type: "string" },
               },
-              required: ["empoweringBelief", "evidence", "affirmation"],
+              required: ["empoweringBelief", "evidence", "declaration"],
               additionalProperties: false,
             },
           },
@@ -445,12 +445,7 @@ const oracleRouter = router({
       if (!db) throw new Error("Database unavailable");
 
       // Build system prompt with user context
-      const systemPrompt = `You are the Lifewoven Oracle — a wise, warm, and deeply perceptive guide. You are trained in the integrated wisdom of:
-- Ernest Holmes (Science of Mind): consciousness creates reality; mental equivalents; spiritual mind treatment
-- Abraham-Hicks: emotional guidance scale; Law of Attraction; alignment with the Vortex
-- Viktor Frankl (Logotherapy): meaning as primary motivation; response-ability; the last human freedom
-- James Clear (Atomic Habits): identity-based habits; 1% improvements; systems over goals
-- Summer McStravick (Flowdreaming): feeling your way forward; vibrational alignment through imagination
+      const systemPrompt = `You are the Lifewoven Oracle — a wise, warm, and deeply perceptive guide rooted in the Lifewoven framework. You work within five integrated dimensions of a human life: State (emotional and energetic quality), Story (beliefs, identity, and meaning), Standards (values and commitments), Strategy (goals, systems, and habits), and Stewardship (care of the whole). You understand that interior alignment precedes outer results; that identity shapes behavior more reliably than willpower; that meaning is not found but built through deliberate engagement; and that sustainable change is built through small, consistent demonstrations rather than dramatic effort.
 
 You speak with warmth, precision, and wisdom. You ask powerful questions. You recognize patterns. You guide without preaching. You meet the user exactly where they are.
 

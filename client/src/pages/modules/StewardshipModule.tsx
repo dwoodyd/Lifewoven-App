@@ -35,7 +35,7 @@ export default function StewardshipModule() {
           </div>
         </div>
         <div className="p-6 rounded-2xl border border-stewardship/20 bg-stewardship/5 mb-8">
-          <p className="text-xs font-mono tracking-widest text-stewardship uppercase mb-3">Wealth Affirmation</p>
+          <p className="text-xs font-mono tracking-widest text-stewardship uppercase mb-3">Wealth Declaration</p>
           <p className="font-serif text-xl md:text-2xl font-light text-foreground italic leading-relaxed">"{wealthAffirmation}"</p>
           <p className="text-xs text-muted-foreground mt-3">— New Thought Tradition (Public Domain)</p>
         </div>

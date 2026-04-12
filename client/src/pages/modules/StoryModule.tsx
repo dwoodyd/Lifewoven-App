@@ -59,7 +59,7 @@ export default function StoryModule() {
           <div>
             <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-1">5S Framework — Module 2</p>
             <h1 className="font-serif text-3xl md:text-4xl font-light text-foreground mb-2">Story</h1>
-            <p className="text-muted-foreground text-base font-light max-w-xl">The narrative you carry about yourself determines what you allow into your life. Surface limiting beliefs, rewrite your identity, and find meaning in your journey.</p>
+            <p className="text-muted-foreground text-base font-light max-w-xl">The narrative you carry about yourself determines what you allow into your life. Surface constraining beliefs, rewrite your identity, and find meaning in your journey.</p>
           </div>
         </div>
 
@@ -78,14 +78,14 @@ export default function StoryModule() {
               </div>
               {showAddBelief && (
                 <div className="mb-5 p-4 rounded-xl bg-secondary/50 space-y-3">
-                  <p className="text-xs text-muted-foreground">What limiting belief is holding you back?</p>
+                  <p className="text-xs text-muted-foreground">What constraining belief is holding you back?</p>
                   <div className="flex flex-wrap gap-2 mb-2">
                     {LIMITING_BELIEF_PROMPTS.map(p => (
                       <button key={p} onClick={() => setNewBeliefPrompt(p)} className="text-xs px-2 py-1 rounded-md bg-background border border-border hover:border-muted-foreground transition-colors text-muted-foreground">{p}</button>
                     ))}
                   </div>
                   {newBeliefPrompt && <p className="text-xs font-medium text-foreground">{newBeliefPrompt}</p>}
-                  <Textarea placeholder="Write the limiting belief as you currently hold it..." value={newBelief} onChange={e => setNewBelief(e.target.value)} className="resize-none text-sm" rows={2} />
+                  <Textarea placeholder="Write the constraining belief as you currently hold it..." value={newBelief} onChange={e => setNewBelief(e.target.value)} className="resize-none text-sm" rows={2} />
                   <div className="flex gap-2">
                     <Button size="sm" onClick={() => createBelief.mutate({ limitingBelief: (newBeliefPrompt ? newBeliefPrompt + " " : "") + newBelief })} disabled={!newBelief || createBelief.isPending} className="gap-1.5"><Plus className="h-3.5 w-3.5" /> Capture</Button>
                     <Button size="sm" variant="ghost" onClick={() => setShowAddBelief(false)}>Cancel</Button>
@@ -106,7 +106,7 @@ export default function StoryModule() {
                         <div className="mt-2 pt-2 border-t border-story/20">
                           <p className="text-xs text-muted-foreground mb-1">Empowering Belief:</p>
                           <p className="text-sm font-medium text-foreground">"{belief.empoweringBelief}"</p>
-                          {belief.affirmation && <p className="text-xs text-story mt-1 italic">Affirmation: {belief.affirmation}</p>}
+                          {belief.declaration && <p className="text-xs text-story mt-1 italic">Declaration: {belief.declaration}</p>}
                         </div>
                       )}
                       {!belief.isRewritten && (

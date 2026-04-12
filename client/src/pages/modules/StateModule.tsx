@@ -36,12 +36,12 @@ const EGS_SCALE = [
 ];
 
 const VORTEX_PRACTICES = [
-  { id: "morning-alignment", title: "Morning Alignment", duration: "10 min", description: "Begin your day in the Vortex. A guided practice to set your vibrational tone before the world gets in.", pathway: "align", type: "meditation" },
-  { id: "appreciation-flood", title: "Appreciation Flood", duration: "5 min", description: "The fastest path to the Vortex. Flood your awareness with genuine appreciation and watch your set-point shift.", pathway: "vortex", type: "practice" },
+  { id: "morning-alignment", title: "Morning Alignment", duration: "10 min", description: "Begin your day in alignment. A guided practice to set your interior tone before the world gets in.", pathway: "align", type: "meditation" },
+  { id: "appreciation-flood", title: "Appreciation Flood", duration: "5 min", description: "The fastest path to alignment. Flood your awareness with genuine appreciation and watch your set-point shift.", pathway: "align", type: "practice" },
   { id: "segment-intending", title: "Segment Intending", duration: "3 min", description: "Before each new segment of your day, pause and set your intention. A powerful Lifewoven practice for staying in alignment throughout the day.", pathway: "align", type: "practice" },
-  { id: "flowdream-session", title: "Emotional Futures Session", duration: "15 min", description: "Enter the flow of your desired life. Feel your way forward using the Lifewoven Emotional Futures visualization practice.", pathway: "flow", type: "meditation" },
+  { id: "emotional-futures-session", title: "Emotional Futures Session", duration: "15 min", description: "Enter the flow of your desired life. Feel your way forward using the Lifewoven Emotional Futures visualization practice.", pathway: "flow", type: "meditation" },
   { id: "pivot-process", title: "The Pivot Process", duration: "5 min", description: "Notice what you don't want, then pivot to what you do want. A core Lifewoven tool for emotional navigation and set-point shifting.", pathway: "uplift", type: "practice" },
-  { id: "rampage-appreciation", title: "Rampage of Appreciation", duration: "7 min", description: "A spoken or written cascade of appreciation that builds momentum toward the Vortex.", pathway: "vortex", type: "practice" },
+  { id: "rampage-appreciation", title: "Rampage of Appreciation", duration: "7 min", description: "A spoken or written cascade of appreciation that builds momentum toward alignment.", pathway: "align", type: "practice" },
 ];
 
 const AFFIRMATIONS = [
@@ -50,7 +50,7 @@ const AFFIRMATIONS = [
   "The Universe is always conspiring in my favor.",
   "I am in the process of becoming everything I desire.",
   "I trust the unfolding of my life.",
-  "I am a vibrational being, and I choose my vibration deliberately.",
+  "I am someone whose inner state shapes outer experience, and I tend that state deliberately.",
   "Everything I want is already flowing toward me.",
   "I am worthy of all the good that life has to offer.",
 ];
@@ -81,12 +81,12 @@ export default function StateModule() {
           <div>
             <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-1">5S Framework — Module 1</p>
             <h1 className="font-serif text-3xl md:text-4xl font-light text-foreground mb-2">State</h1>
-            <p className="text-muted-foreground text-base font-light max-w-xl">Your emotional state is the foundation of everything. Before strategy, before habits, before action — you must be in alignment. This module is your daily practice of returning to the Vortex.</p>
+            <p className="text-muted-foreground text-base font-light max-w-xl">Your emotional state is the foundation of everything. Before strategy, before habits, before action — you must be in alignment. This module is your daily practice of returning to alignment.</p>
           </div>
         </div>
 
         <div className="p-6 rounded-2xl border border-state/20 bg-state/5 mb-8">
-          <p className="text-xs font-mono tracking-widest text-state uppercase mb-3">Today's Affirmation</p>
+          <p className="text-xs font-mono tracking-widest text-state uppercase mb-3">Today's Declaration</p>
           <p className="font-serif text-xl md:text-2xl font-light text-foreground italic leading-relaxed">"{dailyAffirmation}"</p>
         </div>
 
@@ -159,7 +159,7 @@ export default function StateModule() {
               </blockquote>
               <blockquote className="border-l-2 border-state/40 pl-4 space-y-1">
                 <p className="font-serif text-base font-light text-foreground italic leading-relaxed">"The better you feel, the more you are allowing the fulfillment of anything you desire."</p>
-                <footer className="text-xs text-muted-foreground">— Law of Attraction Philosophy</footer>
+                <footer className="text-xs text-muted-foreground">— Lifewoven Framework</footer>
               </blockquote>
             </div>
           </div>
@@ -191,7 +191,7 @@ export default function StateModule() {
               <div className="space-y-2">
                 {[
                   { href: "/pathway/align", label: "Align — Daily Grounding", desc: "7-day foundation practice" },
-                  { href: "/pathway/resonance", label: "Vortex — Advanced Practice", desc: "Vibrational mastery" },
+                  { href: "/pathway/resonance", label: "Alignment — Advanced Practice", desc: "Alignment mastery" },
                   { href: "/pathway/uplift", label: "Uplift — Set-Point Shift", desc: "Raise your baseline" },
                   { href: "/pathway/reset", label: "Reset", desc: "Resilience protocol" },
                 ].map(({ href, label, desc }) => (

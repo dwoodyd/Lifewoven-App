@@ -36,7 +36,7 @@ const COURSE_PREVIEWS: Record<string, { label: string; excerpts: string[] }> = {
   "alignment-current": {
     label: "From Lesson 1.1",
     excerpts: [
-      "The current — the sustained state of vibrational alignment — is not a condition you achieve once and maintain automatically. It is a practice — an ongoing, daily engagement with the quality of your interior state.",
+      "The current — the sustained state of interior alignment — is not a condition you achieve once and maintain automatically. It is a practice — an ongoing, daily engagement with the quality of your interior state.",
       "Precision in working with the scale means three things: accurate location, pattern recognition, and gradient sensitivity. The current is built from small, consistent upward movements.",
     ],
   },

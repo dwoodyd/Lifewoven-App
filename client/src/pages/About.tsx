@@ -11,13 +11,7 @@ const WISDOM_LINEAGE = [
     contribution: "Holmes' Science of Mind established that consciousness shapes experience — that thought is creative and that a disciplined mental practice can transform every area of life. His work is the philosophical spine of the Lifewoven State and Story modules.",
     status: "Public Domain (pre-1928 works)",
   },
-  {
-    name: "Esther Hicks",
-    years: "Contemporary",
-    role: "Author, Law of Attraction Teacher",
-    contribution: "The teachings channeled through Esther Hicks introduced a practical emotional navigation system — the idea that feelings are guidance, not obstacles, and that alignment precedes manifestation. These ideas inform the emotional orientation work in Lifewoven.",
-    status: "Inspiration Only — Original Lifewoven Content",
-  },
+
   {
     name: "Viktor Frankl",
     years: "1905–1997",
@@ -32,13 +26,7 @@ const WISDOM_LINEAGE = [
     contribution: "Clear's work on identity-based habit formation — the idea that lasting change begins with who you believe you are — informs the Standards module and the Identity in Motion course. Lifewoven applies these principles through its own original framework.",
     status: "Inspiration Only — Original Lifewoven Content",
   },
-  {
-    name: "Summer McStravick",
-    years: "Contemporary",
-    role: "Author, Manifestation Teacher",
-    contribution: "McStravick's work on emotional immersion as a tool for conscious creation informs the Flow pathway and the Emotional Futures practice in Lifewoven. Her core insight — that feeling the future is more powerful than visualizing it — is integrated into original Lifewoven content.",
-    status: "Inspiration Only — Original Lifewoven Content",
-  },
+
   {
     name: "Wayne Dyer",
     years: "1940–2015",

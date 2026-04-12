@@ -7,7 +7,7 @@ export const LIBRARY_ARTICLES: ArticleData[] = [
     subtitle: "Your emotions are not noise. They are a guidance system.",
     category: "State",
     type: "Guide",
-    author: "Lifewoven (Inspired by Abraham-Hicks)",
+    author: "Lifewoven",
     backHref: "/library",
     backLabel: "Back to Library",
     sections: [
@@ -48,7 +48,7 @@ export const LIBRARY_ARTICLES: ArticleData[] = [
       },
       {
         heading: "How to Use the Scale",
-        body: `The scale is a GPS, and GPS only works if you are honest about your current location.\n\n**Step one: Find where you actually are.** Not where you wish you were. Not where you think you should be. Where you actually are right now. Read through the descriptions and find the language that fits your current interior state most accurately. That is your location.\n\n**Step two: Identify one step up.** Not joy from depression. Not enthusiasm from overwhelm. The next state up — the one that is close enough to be accessible from where you currently stand. From worry, that might be doubt. From frustration, it might be overwhelm. From discouragement, it might be frustration. Small movements are real movements.\n\n**Step three: Reach for the next better-feeling thought.** Not a positive affirmation that contradicts your current experience. A thought that is genuinely slightly better than the one you are currently holding. A thought that opens rather than contracts. A thought that, when you think it, produces a small but real shift in how your body feels.\n\nThat shift — small, incremental, honest — is the beginning of movement. The scale does not require a leap. It requires a single step in a better direction.`,
+        body: `The scale is a GPS, and GPS only works if you are honest about your current location.\n\n**Step one: Find where you actually are.** Not where you wish you were. Not where you think you should be. Where you actually are right now. Read through the descriptions and find the language that fits your current interior state most accurately. That is your location.\n\n**Step two: Identify one step up.** Not joy from depression. Not enthusiasm from overwhelm. The next state up — the one that is close enough to be accessible from where you currently stand. From worry, that might be doubt. From frustration, it might be overwhelm. From discouragement, it might be frustration. Small movements are real movements.\n\n**Step three: Reach for the next better-feeling thought.** Not a positive declaration that contradicts your current experience. A thought that is genuinely slightly better than the one you are currently holding. A thought that opens rather than contracts. A thought that, when you think it, produces a small but real shift in how your body feels.\n\nThat shift — small, incremental, honest — is the beginning of movement. The scale does not require a leap. It requires a single step in a better direction.`,
       },
       {
         heading: "A Final Note",
@@ -63,7 +63,7 @@ export const LIBRARY_ARTICLES: ArticleData[] = [
     subtitle: "22 practices for shifting the baseline emotional state you return to habitually.",
     category: "Story",
     type: "Guide",
-    author: "Lifewoven (Inspired by Abraham-Hicks)",
+    author: "Lifewoven",
     backHref: "/library",
     backLabel: "Back to Library",
     sections: [
@@ -240,28 +240,28 @@ export const LIBRARY_ARTICLES: ArticleData[] = [
     coda: "The Strategy module on your dashboard includes the Decision Journal and Second-Order Thinking tool to use alongside this exercise.",
   },
   {
-    slug: "flowdreaming-introduction",
-    title: "Creative Flowdreaming",
+    slug: "emotional-futures-introduction",
+    title: "Creative the Emotional Futures practice",
     subtitle: "An Introduction",
     category: "Story",
     type: "Overview",
-    author: "Lifewoven (Inspired by Summer McStravick)",
+    author: "Lifewoven",
     backHref: "/library",
     backLabel: "Back to Library",
     sections: [
       {
-        body: `Most of us were taught to work toward what we want through planning, effort, and execution. Those are real and necessary capacities. But they operate primarily at the level of mind and body — at the level of what can be thought through and acted upon.\n\nThere is another level. It is the level of feeling — of the full interior experience of what you want, inhabited before it has arrived. And research into the psychology of visualization and mental rehearsal, alongside decades of practical application in performance and personal development, suggests that this level may be the most important one.\n\nCreative Flowdreaming is a practice built on this understanding. It is not visualization in the traditional sense — the process of mentally picturing a desired outcome as if watching it from the outside. Flowdreaming works from the inside. It asks you not to see the future but to feel it — to inhabit the emotional reality of what you want as fully and specifically as possible in the present moment.`,
+        body: `Most of us were taught to work toward what we want through planning, effort, and execution. Those are real and necessary capacities. But they operate primarily at the level of mind and body — at the level of what can be thought through and acted upon.\n\nThere is another level. It is the level of feeling — of the full interior experience of what you want, inhabited before it has arrived. And research into the psychology of visualization and mental rehearsal, alongside decades of practical application in performance and personal development, suggests that this level may be the most important one.\n\nCreative the Emotional Futures practice is a practice built on this understanding. It is not visualization in the traditional sense — the process of mentally picturing a desired outcome as if watching it from the outside. the Emotional Futures practice works from the inside. It asks you not to see the future but to feel it — to inhabit the emotional reality of what you want as fully and specifically as possible in the present moment.`,
       },
       {
         heading: "Why Feeling Is More Specific Than Seeing",
-        body: `When you visualize something in the traditional sense — picturing a scene, watching yourself in it — you are engaging primarily the cognitive and visual processing systems. You are creating a mental image of something you want.\n\nWhen you inhabit the feeling of something you want — when you drop beneath the image and into the actual interior experience of being inside it — something different happens. The emotional and somatic systems engage. Your body begins to register the experience as real, not merely as imagined. The brain cannot distinguish cleanly between a fully inhabited emotional experience and an actual one. The nervous system responds to both.\n\nThis is why athletes who mentally rehearse performance at the level of felt experience — inhabiting the feeling of the race, the game, the performance — produce measurable physiological changes and genuine performance improvements. The rehearsal at the feeling level is not imagination. It is practice.\n\nFlowdreaming applies this same mechanism to the full terrain of what you want to create in your life — not just performance but relationships, work, creative expression, inner quality, daily experience.`,
+        body: `When you visualize something in the traditional sense — picturing a scene, watching yourself in it — you are engaging primarily the cognitive and visual processing systems. You are creating a mental image of something you want.\n\nWhen you inhabit the feeling of something you want — when you drop beneath the image and into the actual interior experience of being inside it — something different happens. The emotional and somatic systems engage. Your body begins to register the experience as real, not merely as imagined. The brain cannot distinguish cleanly between a fully inhabited emotional experience and an actual one. The nervous system responds to both.\n\nThis is why athletes who mentally rehearse performance at the level of felt experience — inhabiting the feeling of the race, the game, the performance — produce measurable physiological changes and genuine performance improvements. The rehearsal at the feeling level is not imagination. It is practice.\n\nThe Emotional Futures practice applies this same mechanism to the full terrain of what you want to create in your life — not just performance but relationships, work, creative expression, inner quality, daily experience.`,
       },
       {
         heading: "What You Are Actually Doing",
-        body: `In a Flowdreaming session, you are not building a movie of your desired future. You are stepping into the middle of it — into the actual interior experience of being a person whose life contains what you want — and inhabiting that experience as specifically and fully as possible.\n\nThe specificity matters enormously. Not the abstract feeling of success or happiness — the specific felt quality of a specific aspect of your desired life. Not "I feel successful" but the exact interior experience of sitting at the particular table, having the particular conversation, feeling the particular quality of energy in a body that is well-rested and genuinely engaged. Not "my relationship is good" but the specific warmth of a specific moment of genuine connection with a specific person.\n\nSpecificity is what separates a genuine feeling from a generic affirmation. And genuine feeling is what makes the practice work.`,
+        body: `In a the Emotional Futures practice session, you are not building a movie of your desired future. You are stepping into the middle of it — into the actual interior experience of being a person whose life contains what you want — and inhabiting that experience as specifically and fully as possible.\n\nThe specificity matters enormously. Not the abstract feeling of success or happiness — the specific felt quality of a specific aspect of your desired life. Not "I feel successful" but the exact interior experience of sitting at the particular table, having the particular conversation, feeling the particular quality of energy in a body that is well-rested and genuinely engaged. Not "my relationship is good" but the specific warmth of a specific moment of genuine connection with a specific person.\n\nSpecificity is what separates a genuine feeling from a generic declaration. And genuine feeling is what makes the practice work.`,
       },
       {
-        heading: "The Core Structure of a Flowdreaming Session",
+        heading: "The Core Structure of an Emotional Futures Session",
         list: [
           "**Enter the flow state first.** Before you begin inhabiting the desired feeling, you need to move from the ambient busyness of daily mental life into a more receptive, open interior state. This is a brief process — three to five slow, deliberate breaths, a deliberate release of whatever you are currently holding in mind, a conscious arrival in the present moment.",
           "**Choose your target experience.** Select a specific aspect of your desired life — not everything at once, but one domain, one relationship, one quality of daily experience. General sessions produce general feelings. Specific sessions produce the interior data that matters.",
@@ -272,12 +272,12 @@ export const LIBRARY_ARTICLES: ArticleData[] = [
         ],
       },
       {
-        heading: "What Flowdreaming Is Not",
-        body: `Flowdreaming is not passive wishing. It is an active interior practice that requires genuine engagement and real emotional investment. People who approach it as daydreaming typically find that nothing happens — because daydreaming is associative and unfocused, while Flowdreaming is deliberate and specific.\n\nIt is not a replacement for action. The interior state that Flowdreaming cultivates — the alignment between your current feeling and your desired future — is meant to inform and energize your actions, not substitute for them. The person who Flowdreams consistently and also takes consistent aligned action is the one for whom the practice produces the most significant results.\n\nIt is not a guarantee of specific outcomes in specific forms. It is a practice for shifting the interior conditions that shape what you notice, what you move toward, and how you engage with what is present.`,
+        heading: "What the Emotional Futures Practice Is Not",
+        body: `The Emotional Futures practice is not passive wishing. It is an active interior practice that requires genuine engagement and real emotional investment. People who approach it as daydreaming typically find that nothing happens — because daydreaming is associative and unfocused, while the Emotional Futures practice is deliberate and specific.\n\nIt is not a replacement for action. The interior state that the Emotional Futures practice cultivates — the alignment between your current feeling and your desired future — is meant to inform and energize your actions, not substitute for them. The person who practices Emotional Futures consistently and also takes consistent aligned action is the one for whom the practice produces the most significant results.\n\nIt is not a guarantee of specific outcomes in specific forms. It is a practice for shifting the interior conditions that shape what you notice, what you move toward, and how you engage with what is present.`,
       },
       {
         heading: "Beginning the Practice",
-        body: `The Flow pathway on your dashboard is a structured Flowdreaming session designed to walk you through the full process. If this is your first time with the practice, begin there — with a guided session — before practicing independently.\n\nFor independent practice: five to ten minutes daily, in the morning before the day begins or at any quiet transition point, is enough to produce measurable interior shifts over two to four weeks of consistent use.\n\nThe rule is: feel it first. Everything else follows from the quality of that interior experience.`,
+        body: `The Flow pathway on your dashboard is a structured Emotional Futures session designed to walk you through the full process. If this is your first time with the practice, begin there — with a guided session — before practicing independently.\n\nFor independent practice: five to ten minutes daily, in the morning before the day begins or at any quiet transition point, is enough to produce measurable interior shifts over two to four weeks of consistent use.\n\nThe rule is: feel it first. Everything else follows from the quality of that interior experience.`,
       },
     ],
     coda: "The Flow pathway on your dashboard is built entirely around this practice. Begin there.",
@@ -288,7 +288,7 @@ export const LIBRARY_ARTICLES: ArticleData[] = [
     subtitle: "Principles Guide",
     category: "State",
     type: "Guide",
-    author: "Lifewoven (Inspired by Abraham-Hicks)",
+    author: "Lifewoven",
     backHref: "/library",
     backLabel: "Back to Library",
     sections: [
@@ -320,7 +320,7 @@ export const LIBRARY_ARTICLES: ArticleData[] = [
           "**The What Is Working Inventory.** Resistance thrives in a context of exclusive attention to what is not working. Counter it with a specific, written list of what is currently working — not in general, but in the specific domain where resistance is active. What is already present? What is already moving? What is already good, even if incomplete?",
           "**The Allowing Statement.** Write or speak a statement that is both honest about the desire and at peace with the present moment: *I want this and I am not there yet, and I am willing to be at peace with that.* The statement must be true — both halves. If either half is not true, adjust until it is. The allowing statement is a bridge between where you are and where the practice is asking you to go.",
           "**The Appreciation Anchor.** When resistance is acute, move your attention immediately to something — anything — that is genuinely present and genuinely good. Hold it in appreciation for sixty seconds. The appreciation does not solve the resistance. It interrupts it long enough to demonstrate that the contracted state is not the only option available.",
-          "**The Trust Affirmation.** Find a statement that feels genuinely true about the trustworthiness of the underlying movement of your life — something you can say and mean, even if faintly. *Things have worked out before. I have more capacity than this moment suggests. The movement is happening even when I cannot see it.* The affirmation must be credible to be useful. Even a small statement of genuine trust is more powerful than a large statement that feels like performance.",
+          "**The Trust Declaration.** Find a statement that feels genuinely true about the trustworthiness of the underlying movement of your life — something you can say and mean, even if faintly. *Things have worked out before. I have more capacity than this moment suggests. The movement is happening even when I cannot see it.* The declaration must be credible to be useful. Even a small statement of genuine trust is more powerful than a large statement that feels like performance.",
         ],
       },
       {

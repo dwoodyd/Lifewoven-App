@@ -16,22 +16,22 @@ const PATHWAYS: Record<string, any> = {
       { title: "Arrive (1 min)", desc: "Sit comfortably. Close your eyes. Take three slow, deep breaths. Let your nervous system know: you are safe, you are here, you are present." },
       { title: "Body Scan (2 min)", desc: "Slowly scan from the top of your head to the soles of your feet. Notice any tension, tightness, or holding. Do not try to fix it — just notice it with curiosity." },
       { title: "Set Your Tone (2 min)", desc: "Choose one word or feeling that you want to carry through your day. Not a goal — a quality of being. Today I intend to feel... or Today I choose to be..." },
-      { title: "Affirmation Seal (2 min)", desc: "Speak your core affirmation three times, slowly, with feeling. Let it land in your body, not just your mind." },
+      { title: "Declaration Seal (2 min)", desc: "Speak your core declaration three times, slowly, with feeling. Let it land in your body, not just your mind." },
     ],
-    affirmation: "I am in alignment with the flow of well-being. Everything I need comes to me with ease.",
+    declaration: "I am in alignment with the flow of well-being. Everything I need comes to me with ease.",
     journalPrompt: "What does alignment feel like in my body right now? What would today look like if I stayed in this state?",
   },
   resonance: {
-    name: "Resonance", tagline: "Advanced Vibrational Practice", color: "state",
+    name: "Resonance", tagline: "Advanced Alignment Practice", color: "state",
     description: "Resonance is the practice of closing the gap between where you are and where your desires live — not through force, but through feeling.",
     duration: "20 minutes", frequency: "Daily or as needed", source: "Lifewoven Original Practice",
     steps: [
       { title: "Soften Resistance (4 min)", desc: "Release the need to figure it out. Let go of the how. Your only job right now is to feel good. Breathe into that permission." },
       { title: "Appreciation Rampage (5 min)", desc: "Begin with something small and easy to appreciate. Build momentum. Let one appreciation lead to another. Feel the energy rise." },
       { title: "Resonance Visualization (8 min)", desc: "Close your eyes. Imagine you are already living your desired reality. Feel it as if it is now. Use all your senses. This is not a future place — it is a present feeling." },
-      { title: "Deliberate Intent (3 min)", desc: "From this high-vibration state, set your deliberate intent. What do you want to attract today? State it as if it is already done." },
+      { title: "Deliberate Intent (3 min)", desc: "From this high-alignment state, set your deliberate intent. What do you want to attract today? State it as if it is already done." },
     ],
-    affirmation: "I am in alignment. Everything I want is here, waiting for me to receive it.",
+    declaration: "I am in alignment. Everything I want is here, waiting for me to receive it.",
     journalPrompt: "What did I see, feel, and experience in my resonance visualization? What is already on its way to me?",
   },
   uplift: {
@@ -44,7 +44,7 @@ const PATHWAYS: Record<string, any> = {
       { title: "Momentum Building (5 min)", desc: "Once you find a slightly better feeling, build on it. Find evidence for it. Tell a better story about your situation. Not a false story — a more empowering one." },
       { title: "Anchor the Shift (3 min)", desc: "When you feel the shift, anchor it. Breathe it in. Acknowledge the movement. You just changed your set-point." },
     ],
-    affirmation: "I am always moving toward greater well-being. Every thought I choose moves me higher.",
+    declaration: "I am always moving toward greater well-being. Every thought I choose moves me higher.",
     journalPrompt: "Where did I start on the emotional scale today? Where did I end up? What thought or reframe made the biggest difference?",
   },
   flow: {
@@ -57,7 +57,7 @@ const PATHWAYS: Record<string, any> = {
       { title: "Speak Your Desires (5 min)", desc: "From inside the Flow, speak your desires as present-tense truths. I am... I have... I feel... Let the words come from the feeling, not the mind." },
       { title: "Gratitude Release (3 min)", desc: "Thank the Flow for bringing these experiences to you. Release attachment to the how and when. Trust the current." },
     ],
-    affirmation: "I am in the Flow of life. My desires are already real in the stream, and I am moving toward them now.",
+    declaration: "I am in the Flow of life. My desires are already real in the stream, and I am moving toward them now.",
     journalPrompt: "What did I experience in my Flow today? What felt most real and alive? What am I ready to receive?",
   },
   rhythms: {
@@ -65,13 +65,13 @@ const PATHWAYS: Record<string, any> = {
     description: "Rhythms is the Lifewoven approach to building habits that actually hold — not through willpower, but through identity. You are not trying to do more. You are becoming someone for whom these actions are natural.",
     duration: "Ongoing daily practice", frequency: "Daily", source: "Lifewoven Original Practice",
     steps: [
-      { title: "Identity Declaration (2 min)", desc: "Before you begin, state who you are becoming. I am someone who... This is not affirmation — it is identity architecture. The habit follows the identity." },
+      { title: "Identity Declaration (2 min)", desc: "Before you begin, state who you are becoming. I am someone who... This is not aspiration — it is identity architecture. The habit follows the identity." },
       { title: "The Minimum Viable Action", desc: "Identify the smallest possible version of each habit. Not the ideal — the minimum. On hard days, this is what you do. On good days, you build from here." },
       { title: "Environment Design (one-time setup)", desc: "Make the right action obvious. Remove friction. Add cues. Your environment should do the work your willpower cannot." },
       { title: "The Two-Minute Rule", desc: "Any habit can start with two minutes. The goal is not the habit — it is showing up. Showing up consistently is the habit." },
       { title: "Celebrate the Return", desc: "When you miss a day, the only rule is: never miss twice. Celebrate coming back. The return is the practice." },
     ],
-    affirmation: "I am becoming the person I want to be, one small action at a time.",
+    declaration: "I am becoming the person I want to be, one small action at a time.",
     journalPrompt: "What identity am I building with today's actions? What did I show up for today, no matter how small?",
   },
   purpose: {
@@ -85,7 +85,7 @@ const PATHWAYS: Record<string, any> = {
       { title: "The Core Statement (5 min)", desc: "Write one sentence: My life is meaningful because... Not because of what you have achieved — because of what you are committed to. This is your anchor." },
       { title: "The Forward Step (5 min)", desc: "From this place of meaning, choose one action that honors your purpose today. Not the biggest action — the most aligned one." },
     ],
-    affirmation: "My life has meaning. My work has purpose. I am here for a reason I am still discovering.",
+    declaration: "My life has meaning. My work has purpose. I am here for a reason I am still discovering.",
     journalPrompt: "What is the deepest why behind what I am doing right now? How does this difficulty serve my purpose?",
   },
   reset: {
@@ -101,7 +101,7 @@ const PATHWAYS: Record<string, any> = {
       { title: "The Re-Alignment (5 min)", desc: "Use the Align pathway to return to your baseline. Set one small, achievable intention for the next 24 hours. One step. Just one." },
       { title: "The Commitment (5 min)", desc: "Write one sentence: Because of this setback, I am now committed to... This is how adversity becomes advantage. This is how you turn pain into purpose." },
     ],
-    affirmation: "I am not broken. I am returning. Every reset is a choice to begin again — and that choice is strength.",
+    declaration: "I am not broken. I am returning. Every reset is a choice to begin again — and that choice is strength.",
     journalPrompt: "What did this interruption cost me? What did it teach me? What am I now committed to because of it?",
   },
 };
@@ -191,8 +191,8 @@ export default function PathwayPage() {
         <p className="text-foreground font-light leading-relaxed mb-8 text-base">{pathway.description}</p>
 
         <div className={`p-6 rounded-2xl border mb-8 ${accentClass}`}>
-          <p className="text-xs font-mono tracking-widest uppercase mb-3 opacity-70">Core Affirmation</p>
-          <p className="font-serif text-xl font-light italic leading-relaxed">"{pathway.affirmation}"</p>
+          <p className="text-xs font-mono tracking-widest uppercase mb-3 opacity-70">Core Declaration</p>
+          <p className="font-serif text-xl font-light italic leading-relaxed">"{pathway.declaration}"</p>
         </div>
 
         {!sessionStarted && (

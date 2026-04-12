@@ -94,7 +94,7 @@ The audit uses a simple 1–10 scale for each dimension. The scale is not a judg
 
 **Rating State:** Consider your average emotional experience over the past two weeks — not your best days or your worst, your average. Where does that average land on the Emotional Guidance Scale? A 1–3 indicates chronic contraction: persistent anxiety, overwhelm, discouragement, or low-grade depression. A 4–6 indicates the middle range: functional but not flourishing, with significant variability between contracted and expanded states. A 7–10 indicates a genuine baseline of optimism, engagement, and expansiveness, with contracted states as exceptions rather than the norm.
 
-**Rating Story:** Consider the quality of your self-talk, the reach of your limiting beliefs, and the accuracy of your identity statements. A 1–3 indicates a Story that is actively working against you — persistent self-doubt, strong limiting beliefs with wide reach, an identity that constrains more than it enables. A 4–6 indicates a mixed Story — some genuinely empowering beliefs alongside significant limiting ones, an identity in transition. A 7–10 indicates a Story that is largely aligned with who you are becoming — beliefs that are accurate and enabling, an identity that supports rather than undermines your direction.
+**Rating Story:** Consider the quality of your self-talk, the reach of your constraining beliefs, and the accuracy of your identity statements. A 1–3 indicates a Story that is actively working against you — persistent self-doubt, strong constraining beliefs with wide reach, an identity that constrains more than it enables. A 4–6 indicates a mixed Story — some genuinely empowering beliefs alongside significant limiting ones, an identity in transition. A 7–10 indicates a Story that is largely aligned with who you are becoming — beliefs that are accurate and enabling, an identity that supports rather than undermines your direction.
 
 **Rating Standards:** Consider your actual behavioral consistency — not what you intend, what you do. A 1–3 indicates significant inconsistency: most intended practices are not happening, the gap between intention and behavior is wide and persistent. A 4–6 indicates moderate consistency: some practices are holding, others are not, with a recognizable pattern of drift and return. A 7–10 indicates genuine behavioral consistency: the practices that matter most are happening reliably, with a healthy relationship to the inevitable misses.
 
@@ -117,7 +117,7 @@ The audit uses a simple 1–10 scale for each dimension. The scale is not a judg
 
 The dimensions do not operate in parallel, each on its own track. They operate in a network, with constant communication and mutual influence. Think of it less like five separate rooms in a house and more like five organs in a body — each with its own function, each essential, each in constant relationship with the others.
 
-**State drives Story.** When your emotional state is low — when you are in fear, in overwhelm, in the contracted lower registers of the emotional scale — your Story becomes more negative and more credible. The limiting beliefs that are unconvincing when you are grounded become genuinely persuasive when you are depleted or anxious. The person who feels capable and grounded interprets the same piece of evidence completely differently than the person who feels small and precarious. This means that working on Story while ignoring State is swimming against the current. Improving State is often the fastest and most effective way to make Story work possible.
+**State drives Story.** When your emotional state is low — when you are in fear, in overwhelm, in the contracted lower registers of the emotional scale — your Story becomes more negative and more credible. The constraining beliefs that are unconvincing when you are grounded become genuinely persuasive when you are depleted or anxious. The person who feels capable and grounded interprets the same piece of evidence completely differently than the person who feels small and precarious. This means that working on Story while ignoring State is swimming against the current. Improving State is often the fastest and most effective way to make Story work possible.
 
 **Story drives Standards.** The habits you can sustain are directly determined by the identity you believe yourself to hold. A person who believes, at a structural level, that they are someone who struggles with consistency will find every habit system eventually confirming that belief — because the belief is operating as a filter, causing them to weight the failures more heavily than the successes and to give up at the first significant miss rather than treat it as a return point. Identity-based habit change (Standards) begins by addressing the Story underneath the behavior. Without that Story work, even the most cleverly designed habit system will eventually be undermined by the identity it is running on.
 
@@ -177,7 +177,7 @@ In the conventional model of personal development, missing a day of practice is 
 
 The Reset model treats drift not as failure but as information and as an invitation. Drift tells you something — about which dimension needed more attention than you were giving it, about which external conditions are most likely to pull you off your practice, about the limits of your current system design. And it invites one specific response: return. Without shame, without the requirement to make up for what was missed, without a lengthy period of re-commitment that delays actual practice — simply return. Begin again. Today.
 
-The affirmation at the heart of the Reset practice — *I am not broken. I am returning. Every reset is a choice to begin again — and that choice is strength* — is not positive self-talk designed to make you feel better about poor performance. It is an accurate description of what the return actually is. Choosing to return after drift requires more genuine strength than maintaining a practice that has never been tested by a difficult period.
+The declaration at the heart of the Reset practice — *I am not broken. I am returning. Every reset is a choice to begin again — and that choice is strength* — is not positive self-talk designed to make you feel better about poor performance. It is an accurate description of what the return actually is. Choosing to return after drift requires more genuine strength than maintaining a practice that has never been tested by a difficult period.
 
 **Lower the re-entry bar as far as it will go.** The reason most people do not return after a period of drift is that they require themselves to return at the full level of the practice they abandoned. The Reset says: return at the minimum viable level. One breath. One sentence. One five-minute practice instead of thirty.
 
@@ -250,7 +250,7 @@ Here are the seven most consistently effective reach practices:
 
 **The Appreciation Anchor.** Move your attention, deliberately and specifically, to one thing that is genuinely and undeniably good in your current life. Not a general category — a specific thing. Hold it in genuine attention for sixty seconds.
 
-**The Pivot.** Identify the unwanted thing that is occupying your attention. Name it explicitly. Then ask: so what do I actually want instead?
+**The Redirect.** Identify the unwanted thing that is occupying your attention. Name it explicitly. Then ask: so what do I actually want instead?
 
 **The Body Shift.** State is not only a mental phenomenon — it is held in the body. Stand up. Take three deliberate breaths. Unclench whatever is clenched. Change your physical position in space.
 
@@ -266,21 +266,21 @@ Here are the seven most consistently effective reach practices:
         },
         {
           id: "2.3",
-          title: "The Vortex: What Alignment Feels Like and How to Return to It",
+          title: "The Current: What Alignment Feels Like and How to Return to It",
           duration: "20 min",
-          teaching: `The Vortex is the name given in the vibrational alignment tradition to the experience of being fully in accord with what you most want and most are. It is not a peak emotional experience in the sense of excitement or euphoria — it can be quiet, even ordinary-looking from the outside. What characterizes it from the inside is a quality of ease: things feel right, thoughts flow without forcing, the gap between desire and reality seems small or absent, and the next right action is typically obvious.
+          teaching: `The Current is the name given in the interior alignment tradition to the experience of being fully in accord with what you most want and most are. It is not a peak emotional experience in the sense of excitement or euphoria — it can be quiet, even ordinary-looking from the outside. What characterizes it from the inside is a quality of ease: things feel right, thoughts flow without forcing, the gap between desire and reality seems small or absent, and the next right action is typically obvious.
 
-You have been in the Vortex before. The experience of creative flow — when work produces itself with unusual ease. The experience of genuine connection — when a conversation becomes something deeper than either participant planned. The experience of aligned decision — when you made a choice that felt immediately right in a way that required no deliberation. The experience of deep appreciation — when you were so fully present to something genuinely good that the rest of your concerns temporarily lost their grip.
+You have been in the current before. The experience of creative flow — when work produces itself with unusual ease. The experience of genuine connection — when a conversation becomes something deeper than either participant planned. The experience of aligned decision — when you made a choice that felt immediately right in a way that required no deliberation. The experience of deep appreciation — when you were so fully present to something genuinely good that the rest of your concerns temporarily lost their grip.
 
 These were Vortex experiences. The practice of State management is, in part, the practice of recognizing what produces those experiences in your specific life and deliberately creating more of the conditions that allow them.
 
-The most important thing to understand about the Vortex is that it is a condition of alignment, not of circumstance. You can be in the Vortex during difficult circumstances — when you are fully aligned with your own values, engaged with a genuine challenge that calls on your real capacities, in honest relationship with people you genuinely love. And you can be outside the Vortex in objectively comfortable circumstances — when you are in subtle discord with your own values, spending your time on things that do not engage your real capacities, performing rather than living.
+The most important thing to understand about the current is that it is a condition of alignment, not of circumstance. You can be in the current during difficult circumstances — when you are fully aligned with your own values, engaged with a genuine challenge that calls on your real capacities, in honest relationship with people you genuinely love. And you can be outside the current in objectively comfortable circumstances — when you are in subtle discord with your own values, spending your time on things that do not engage your real capacities, performing rather than living.
 
 This means that the pursuit of better circumstances as the primary strategy for feeling better is a misunderstanding of what produces alignment. Better circumstances can certainly support alignment — the Stewardship dimension is precisely about creating the material conditions that make alignment more available. But circumstances are the container, not the content. The content is the quality of your inner life.
 
-The practical question is: how do you return to the Vortex when you have drifted from it?
+The practical question is: how do you return to the current when you have drifted from it?
 
-The return follows the same logic as the reach — it is incremental, honest, and begins from wherever you actually are. There is no leap from the contracted state directly back into the Vortex. There are small, genuine, consistent movements in the direction of alignment, and those movements, sustained over days and weeks, produce a lived relationship with the Vortex that is more available, more recognizable, and more quickly recoverable than it was before.`,
+The return follows the same logic as the reach — it is incremental, honest, and begins from wherever you actually are. There is no leap from the contracted state directly back into the current. There are small, genuine, consistent movements in the direction of alignment, and those movements, sustained over days and weeks, produce a lived relationship with the current that is more available, more recognizable, and more quickly recoverable than it was before.`,
           reflections: [
             "What are your most reliable Vortex triggers — the specific conditions, activities, or qualities of experience that most consistently produce the alignment state? Name them precisely.",
             "What are your most reliable Vortex disruptors — the specific conditions or thought patterns that most reliably pull you out of alignment? How quickly do you currently recognize when they are operating?",
@@ -369,27 +369,27 @@ The story operates through three primary mechanisms: beliefs, identity statement
         },
         {
           id: "3.2",
-          title: "How Limiting Beliefs Actually Work",
+          title: "How Constraining Beliefs Actually Work",
           duration: "25 min",
-          teaching: `A limiting belief is not simply a negative thought. It is a thought that has been reinforced enough times that it has acquired the weight and the functioning of fact. It no longer presents itself for evaluation — it presents itself as the terms within which evaluation happens.
+          teaching: `A constraining belief is not simply a negative thought. It is a thought that has been reinforced enough times that it has acquired the weight and the functioning of fact. It no longer presents itself for evaluation — it presents itself as the terms within which evaluation happens.
 
-This is what makes limiting beliefs so resistant to the common approaches to changing them. The affirmation approach — replacing a negative statement with a positive one — fails because it does not address the reinforcement structure. The belief has been reinforced by hundreds or thousands of confirming experiences, real and perceived. A single positive statement, however many times repeated, cannot simply overwrite that reinforcement.
+This is what makes constraining beliefs so resistant to the common approaches to changing them. The declaration approach — replacing a negative statement with a positive one — fails because it does not address the reinforcement structure. The belief has been reinforced by hundreds or thousands of confirming experiences, real and perceived. A single positive statement, however many times repeated, cannot simply overwrite that reinforcement.
 
-The most effective approach to working with limiting beliefs is a four-step process that addresses the structure of the belief rather than just its content.
+The most effective approach to working with constraining beliefs is a four-step process that addresses the structure of the belief rather than just its content.
 
-**Step one: Surface the belief in explicit language.** Most limiting beliefs operate below the level of articulated thought — they are felt as a sense of what is possible rather than heard as a clear statement. The first step is to give the belief a sentence. Complete and specific. Not *I sometimes struggle with things* but *I believe that I am not the kind of person who can sustain significant change for more than a few weeks before reverting to old patterns.* The specificity of the language is what makes the belief workable.
+**Step one: Surface the belief in explicit language.** Most constraining beliefs operate below the level of articulated thought — they are felt as a sense of what is possible rather than heard as a clear statement. The first step is to give the belief a sentence. Complete and specific. Not *I sometimes struggle with things* but *I believe that I am not the kind of person who can sustain significant change for more than a few weeks before reverting to old patterns.* The specificity of the language is what makes the belief workable.
 
 **Step two: Trace the belief to its origin.** Where did this belief come from? Not in a therapeutic sense — you do not need to process the origin fully in order to work with the belief. But seeing the origin changes the status of the belief. A belief that was formed by a nine-year-old drawing a conclusion from a painful experience in a specific context is not the same as a fact established by careful adult observation across many circumstances.
 
-**Step three: Examine the evidence honestly.** Is the belief accurate? The question is: if you were a fair and impartial judge examining the complete evidence — the full history, the counter-examples as well as the confirming examples — what would the evidence actually support? Most limiting beliefs, examined fairly, turn out to be accurate about some things, inaccurate about others, and almost never as universally true as they present themselves to be.
+**Step three: Examine the evidence honestly.** Is the belief accurate? The question is: if you were a fair and impartial judge examining the complete evidence — the full history, the counter-examples as well as the confirming examples — what would the evidence actually support? Most constraining beliefs, examined fairly, turn out to be accurate about some things, inaccurate about others, and almost never as universally true as they present themselves to be.
 
 **Step four: Write the more accurate belief.** Not the idealized opposite — the more accurate description of what is actually true given the complete evidence. This is not positive thinking. It is more precise thinking. *I have difficulty sustaining change when I am trying to change behavior without changing the underlying identity. When I have addressed the identity alongside the behavior, I have sustained change over significant periods.*`,
           reflections: [
-            "Choose one limiting belief from the list you began developing this week. Apply the four-step process to it in full. What did you find at each step? What changed about the belief's felt authority after moving through the process?",
+            "Choose one constraining belief from the list you began developing this week. Apply the four-step process to it in full. What did you find at each step? What changed about the belief's felt authority after moving through the process?",
             "Where in your life are you most aware of your beliefs shaping your perception — actively filtering what you notice, what you remember, and what you conclude from your experience?",
             "What would you attempt if the belief that most constrains you were genuinely no longer operative? Name the specific thing. Why haven't you attempted it yet?"
           ],
-          journalPrompt: "Take the limiting belief you surfaced in your daily practice this week that carries the most weight — the one with the widest reach into your daily experience. Write it through the four-step process in full. Give step two (the origin) particular attention — not to assign blame but to see clearly how the belief was formed and by whom, under what circumstances, with what information."
+          journalPrompt: "Take the constraining belief you surfaced in your daily practice this week that carries the most weight — the one with the widest reach into your daily experience. Write it through the four-step process in full. Give step two (the origin) particular attention — not to assign blame but to see clearly how the belief was formed and by whom, under what circumstances, with what information."
         },
         {
           id: "3.3",
@@ -908,7 +908,7 @@ The practices continue. The system does not stop. You return to it tomorrow morn
 
 Begin again tomorrow.`,
   nextSteps: [
-    "The Alignment Current — The advanced vibrational alignment course for deepening your relationship with the State dimension.",
+    "The Alignment Current — The advanced interior alignment course for deepening your relationship with the State dimension.",
     "The Meaning Foundation — The Frankl-rooted course for deepening your Story work through meaning-centered philosophy.",
     "The Oracle — The AI intelligence layer, now available with six weeks of your own data to draw on."
   ]
@@ -1126,7 +1126,7 @@ This is not naive. It is the most realistic possible assessment of human capacit
           duration: "20 min",
           teaching: `Frankl's concept of tragic optimism is one of the most mature and most honest ideas in the entire tradition of meaning-centered philosophy. It is the capacity to affirm life despite — and sometimes because of — its tragic dimensions.
 
-Tragic optimism is not the refusal to acknowledge tragedy. It is not the insistence that everything happens for a reason, or that suffering is secretly good, or that the painful things in a human life are not really painful. It is the recognition that meaning can be found even in the unavoidable painful dimensions of human existence — in suffering, in guilt, and in death — and that the finding of that meaning is itself a form of affirmation.
+Tragic optimism is not the refusal to acknowledge tragedy. It is not the insistence that everything happens for a reason, or that suffering is secretly good, or that the painful things in a human life are not really painful. It is the recognition that meaning can be found even in the unavoidable painful dimensions of human existence — in suffering, in guilt, and in death — and that the finding of that meaning is itself a form of declaration.
 
 Frankl identifies three unavoidable tragic elements of human existence: suffering, guilt, and death. He calls these the *tragic triad.* And he argues that each of the three, when met with the right attitude, becomes an avenue to meaning rather than merely an obstacle to happiness.
 
@@ -1422,7 +1422,7 @@ The meaning is not found once and held forever. It is found, and lost, and found
 Use the space. Choose the response. Build the meaning.`,
   nextSteps: [
     "Alignment Fundamentals — The complete 5S Framework course for building a coherent operating system for your life.",
-    "The Alignment Current — The advanced vibrational alignment course for deepening your State practice.",
+    "The Alignment Current — The advanced interior alignment course for deepening your State practice.",
     "The Oracle — The AI intelligence layer, now available with four weeks of your own data to draw on."
   ]
 };
@@ -1434,46 +1434,46 @@ Use the space. Choose the response. Build the meaning.`,
 export const alignmentCurrent: CourseData = {
   id: "alignment-current",
   title: "The Alignment Current",
-  subtitle: "Vibrational Alignment, Emotional Mastery, and the Art of Deliberate Creation",
-  description: "A four-week advanced course in the principles of vibrational alignment, drawing on Abraham-Hicks, the Emotional Guidance Scale, and the practice of deliberate creation. Twenty lessons on emotional mastery, the art of allowing, and the cultivation of a consistently high vibrational baseline.",
+  subtitle: "Interior Alignment, Emotional Mastery, and the Art of Deliberate Creation",
+  description: "A four-week advanced course in the principles of interior alignment, drawing on , the Emotional Guidance Scale, and the practice of deliberate creation. Twenty lessons on emotional mastery, the art of allowing, and the cultivation of a consistently high alignment baseline.",
   price: "$67",
-  overview: "Alignment is not a destination. It is a current — a living, dynamic state of resonance between who you are, what you want, and how you are showing up in each moment. This course is the practice of learning to live in that current consistently: to recognize when you have drifted from it, to return to it efficiently, and to build the daily architecture that keeps you in it more of the time.\n\nThe Alignment Current draws on Abraham-Hicks, the Emotional Guidance Scale, and the principles of deliberate creation to build a practical, daily-use framework for emotional mastery. It is not about feeling good all the time. It is about developing enough interior sensitivity that you can recognize alignment and misalignment in real time — and respond skillfully to both.\n\nThis is the advanced course. It assumes familiarity with the 5S Framework and a functioning morning alignment practice.",
+  overview: "Alignment is not a destination. It is a current — a living, dynamic state of resonance between who you are, what you want, and how you are showing up in each moment. This course is the practice of learning to live in that current consistently: to recognize when you have drifted from it, to return to it efficiently, and to build the daily architecture that keeps you in it more of the time.\n\nThe Alignment Current draws on , the Emotional Guidance Scale, and the principles of deliberate creation to build a practical, daily-use framework for emotional mastery. It is not about feeling good all the time. It is about developing enough interior sensitivity that you can recognize alignment and misalignment in real time — and respond skillfully to both.\n\nThis is the advanced course. It assumes familiarity with the 5S Framework and a functioning morning alignment practice.",
   structure: "Each lesson includes a Teaching section (15–20 minutes of reading), three Reflection Questions, a Journal Prompt, and a Daily Practice. The course is designed to be taken one lesson per day, five days per week, over four weeks.\n\nThis course requires Alignment Fundamentals as a prerequisite. It assumes you have a functioning State practice and have begun the Story work. If you are new to the framework, start with Alignment Fundamentals.",
   duration: "4 weeks · 20 lessons",
   weeks: [
     {
       weekNum: 1,
-      title: "Week One: The Vibrational Foundation",
+      title: "Week One: The Alignment Foundation",
       subtitle: "Understanding the Emotional Guidance System",
       lessons: [
         {
           id: "1.1",
-          title: "You Are a Vibrational Being",
+          title: "You Are a Being Whose Inner State Shapes Outer Experience",
           duration: "20 min",
-          teaching: `Everything in the universe is energy. Everything is vibration. This is not metaphor — it is the foundational claim of quantum physics, of the Abraham-Hicks teachings, and of every wisdom tradition that has engaged seriously with the nature of reality at its most fundamental level.
+          teaching: `Everything in the universe is energy. Everything is alignment. This is not metaphor — it is the foundational claim of quantum physics, of the  teachings, and of every wisdom tradition that has engaged seriously with the nature of reality at its most fundamental level.
 
-You are a vibrational being. Your thoughts, your emotions, your beliefs, your habitual patterns of attention — all of these are vibrational. And the vibration you are offering, consistently and habitually, is the primary determinant of what you attract into your experience.
+You are a being whose inner state shapes outer experience. Your thoughts, your emotions, your beliefs, your habitual patterns of attention — all of these are alignment. And the alignment you are offering, consistently and habitually, is the primary determinant of what you attract into your experience.
 
-This is the Law of Attraction at its most basic: like attracts like. The vibration you are offering attracts experiences, circumstances, and people that match that vibration. The person who habitually offers a vibration of fear attracts experiences that confirm the fear. The person who habitually offers a vibration of appreciation attracts experiences that confirm the appreciation.
+This is the principle that attention shapes experience at its most basic: like attracts like. The alignment you are offering attracts experiences, circumstances, and people that match that alignment. The person who habitually offers a alignment of fear attracts experiences that confirm the fear. The person who habitually offers a alignment of appreciation attracts experiences that confirm the appreciation.
 
 This is not a moral claim. It is not a claim that you deserve what you attract or that you are to blame for the difficult things in your life. It is an observation about the mechanics of how reality is organized — and about the leverage that is available to you when you understand those mechanics.
 
-The most important implication of the vibrational model is this: the most effective way to change your external circumstances is to change your internal vibration. Not by forcing yourself to think positively, not by pretending that difficult things are not difficult, but by genuinely shifting the emotional baseline from which you are operating — by finding, in any given situation, the thought that feels slightly better than the thought you are currently thinking, and then finding the next one, and the next.
+The most important implication of the alignment model is this: the most effective way to change your external circumstances is to change your internal alignment. Not by forcing yourself to think positively, not by pretending that difficult things are not difficult, but by genuinely shifting the emotional baseline from which you are operating — by finding, in any given situation, the thought that feels slightly better than the thought you are currently thinking, and then finding the next one, and the next.
 
 This is the practice of the Alignment Current. It is not a quick fix. It is a sustained, deliberate, daily practice of moving up the Emotional Guidance Scale — of finding better-feeling thoughts, of practicing appreciation, of allowing the natural well-being that is your birthright to flow through you without resistance.`,
           reflections: [
-            "What is your current habitual vibrational baseline — the emotional tone that most consistently characterizes your inner life? If you had to name it as a point on the Emotional Guidance Scale, where would it be?",
+            "What is your current habitual alignment baseline — the emotional tone that most consistently characterizes your inner life? If you had to name it as a point on the Emotional Guidance Scale, where would it be?",
             "What are the primary thoughts and beliefs that maintain your current baseline? What do you habitually think about your life, your future, your capacity, and your worthiness?",
-            "What would it mean to raise your vibrational baseline by one level — not to jump to joy from despair, but to find the next better-feeling thought from wherever you currently are?"
+            "What would it mean to raise your alignment baseline by one level — not to jump to joy from despair, but to find the next better-feeling thought from wherever you currently are?"
           ],
-          journalPrompt: "Write an honest assessment of your current vibrational baseline. Not where you want to be — where you actually are. What emotions most consistently characterize your inner life? What thoughts most reliably produce those emotions? And what is one thought — just one — that feels slightly better than the thought you most habitually think? Write it down. That thought is the beginning of the practice.",
+          journalPrompt: "Write an honest assessment of your current alignment baseline. Not where you want to be — where you actually are. What emotions most consistently characterize your inner life? What thoughts most reliably produce those emotions? And what is one thought — just one — that feels slightly better than the thought you most habitually think? Write it down. That thought is the beginning of the practice.",
           dailyPractice: "Each morning this week, before the day begins, take two minutes to identify your current emotional state. Name it honestly. Then ask: what is one thought I could think right now that feels slightly better than this? Think it. Hold it for 17 seconds. That is the morning practice."
         },
         {
           id: "1.2",
           title: "The Emotional Guidance Scale",
           duration: "25 min",
-          teaching: `The Emotional Guidance Scale is the most practically useful tool in the Abraham-Hicks teaching. It is a map of the vibrational spectrum of human emotional experience, arranged from the highest vibration (joy, appreciation, empowerment, freedom, love) to the lowest (fear, grief, depression, despair, powerlessness).
+          teaching: `The Emotional Guidance Scale is the most practically useful tool in the  teaching. It is a map of the alignment spectrum of human emotional experience, arranged from the highest alignment (joy, appreciation, empowerment, freedom, love) to the lowest (fear, grief, depression, despair, powerlessness).
 
 The scale has 22 levels:
 
@@ -1500,9 +1500,9 @@ The scale has 22 levels:
 21. Insecurity / Guilt / Unworthiness
 22. Fear / Grief / Depression / Despair / Powerlessness
 
-The scale is not a hierarchy of good and bad emotions. It is a map of relative vibration — of the relative distance between where you are and where your Inner Being is. Every emotion on the scale is guidance. The higher emotions are guidance that you are in alignment with your Inner Being. The lower emotions are guidance that you have moved away from alignment.
+The scale is not a hierarchy of good and bad emotions. It is a map of relative alignment — of the relative distance between where you are and where your Inner Being is. Every emotion on the scale is guidance. The higher emotions are guidance that you are in alignment with your Inner Being. The lower emotions are guidance that you have moved away from alignment.
 
-The most important principle of the scale is this: you cannot jump from the bottom to the top. You can only move up the scale one or two levels at a time — finding the thought that feels slightly better, then the next, then the next. The person who is in fear cannot immediately access joy. But they can access anger — and anger, while not pleasant, is a higher vibration than fear. It contains more energy, more movement, more possibility.
+The most important principle of the scale is this: you cannot jump from the bottom to the top. You can only move up the scale one or two levels at a time — finding the thought that feels slightly better, then the next, then the next. The person who is in fear cannot immediately access joy. But they can access anger — and anger, while not pleasant, is a higher alignment than fear. It contains more energy, more movement, more possibility.
 
 The practice of the Alignment Current is the practice of moving up the scale — not in giant leaps, but in consistent, deliberate, daily increments. One better-feeling thought at a time.`,
           reflections: [
@@ -1510,13 +1510,13 @@ The practice of the Alignment Current is the practice of moving up the scale —
             "What is one level above your current habitual home? What does that emotion feel like? What thoughts tend to produce it?",
             "What is the emotion you most consistently avoid — the one you have the most resistance to feeling? What does that avoidance cost you?"
           ],
-          journalPrompt: "Map your current emotional life against the Emotional Guidance Scale. For each major area of your life — relationships, work, health, finances, purpose — identify where you most consistently land on the scale. Then identify the one area where your vibration is lowest, and write about what thoughts are maintaining that low vibration. What is the next better-feeling thought available in that area?"
+          journalPrompt: "Map your current emotional life against the Emotional Guidance Scale. For each major area of your life — relationships, work, health, finances, purpose — identify where you most consistently land on the scale. Then identify the one area where your alignment is lowest, and write about what thoughts are maintaining that low alignment. What is the next better-feeling thought available in that area?"
         },
         {
           id: "1.3",
           title: "The Inner Being and the Guidance System",
           duration: "20 min",
-          teaching: `In the Abraham-Hicks teaching, the Inner Being is the non-physical, fully aligned, always-knowing aspect of you — the part of you that has never lost its connection to Source, that always knows what you want and what is in your highest interest, and that is always broadcasting the signal of your highest good.
+          teaching: `In the  teaching, the Inner Being is the non-physical, fully aligned, always-knowing aspect of you — the part of you that has never lost its connection to Source, that always knows what you want and what is in your highest interest, and that is always broadcasting the signal of your highest good.
 
 The emotional guidance system is the mechanism by which the Inner Being communicates with the physical you. Every emotion is a message from the Inner Being — a report on the current relationship between where you are vibrationally and where your Inner Being is.
 
@@ -1538,15 +1538,15 @@ The challenge is that most people have been taught to distrust their emotions �
           id: "1.4",
           title: "Resistance and Allowing",
           duration: "20 min",
-          teaching: `In the vibrational model, resistance is the primary obstacle to well-being. Resistance is the activation of thoughts, beliefs, and emotional patterns that are out of alignment with what you want — and that, by the Law of Attraction, attract more of what you do not want.
+          teaching: `In the alignment model, resistance is the primary obstacle to well-being. Resistance is the activation of thoughts, beliefs, and emotional patterns that are out of alignment with what you want — and that, by the principle that attention shapes experience, attract more of what you do not want.
 
 Resistance takes many forms. It is the worry about what might go wrong. It is the doubt about whether what you want is possible. It is the habitual focus on what is absent rather than what is present. It is the belief that you are not worthy of what you want. It is the story you tell about why things cannot work out.
 
-All of these are forms of resistance — and all of them, by the mechanics of the Law of Attraction, slow or prevent the arrival of what you want.
+All of these are forms of resistance — and all of them, by the mechanics of the principle that attention shapes experience, slow or prevent the arrival of what you want.
 
 The antidote to resistance is allowing — the deliberate practice of releasing the resistance and allowing the natural flow of well-being that is always available. Allowing is not passive. It is the active practice of finding better-feeling thoughts, of focusing on what is working rather than what is not, of appreciating what is present rather than lamenting what is absent.
 
-The Art of Allowing is one of the most important practices in the Alignment Current. It is the recognition that the universe is always responding to your vibration — that what you want is always on its way — and that the only thing standing between you and the full manifestation of your desires is the resistance you are offering.
+The Art of Allowing is one of the most important practices in the Alignment Current. It is the recognition that the universe is always responding to your alignment — that what you want is always on its way — and that the only thing standing between you and the full manifestation of your desires is the resistance you are offering.
 
 The practice of allowing begins with the recognition of resistance. You cannot release what you cannot see. The first step is to notice, without judgment, the thoughts and beliefs that are creating resistance in the specific areas of your life where you most want things to change. The second step is to find the next better-feeling thought — the thought that offers slightly less resistance than the thought you are currently thinking. The third step is to practice that thought until it becomes more habitual than the resistant thought.
 
@@ -1560,27 +1560,27 @@ This is not a quick process. Habitual patterns of resistance have been reinforce
         },
         {
           id: "1.5",
-          title: "Week One Integration: Your Vibrational Baseline",
+          title: "Week One Integration: Your Alignment Baseline",
           duration: "15 min",
-          teaching: `Week One has introduced the foundational architecture of the vibrational model: the Law of Attraction, the Emotional Guidance Scale, the Inner Being and the guidance system, and the practice of allowing.
+          teaching: `Week One has introduced the foundational architecture of the alignment model: the principle that attention shapes experience, the Emotional Guidance Scale, the Inner Being and the guidance system, and the practice of allowing.
 
-The integration practice for this week is the Vibrational Baseline Assessment — a clear, honest account of your current habitual vibration across the major areas of your life, and a specific plan for moving up the scale in the area where the vibration is lowest.
+The integration practice for this week is the Alignment Baseline Assessment — a clear, honest account of your current habitual alignment across the major areas of your life, and a specific plan for moving up the scale in the area where the alignment is lowest.
 
-The Vibrational Baseline Assessment has four parts:
+The Alignment Baseline Assessment has four parts:
 
 **Part One: The current baseline.** For each major area of your life — relationships, work, health, finances, purpose — identify your current habitual emotional tone. Use the Emotional Guidance Scale. Be honest. The assessment is most useful when it is accurate rather than aspirational.
 
-**Part Two: The primary resistance.** For the area where the vibration is lowest, identify the specific thought pattern that is maintaining the low vibration. What do you habitually think about this area? What story are you telling? What belief is underneath the story?
+**Part Two: The primary resistance.** For the area where the alignment is lowest, identify the specific thought pattern that is maintaining the low alignment. What do you habitually think about this area? What story are you telling? What belief is underneath the story?
 
 **Part Three: The next better-feeling thought.** For the primary resistance thought, write the next better-feeling thought — the thought that is slightly less resistant, slightly more allowing. Not the ideal thought — the next one. The one that is actually available from where you currently are.
 
-**Part Four: The daily practice.** Commit to thinking the next better-feeling thought for 17 seconds each morning, in the area where the vibration is lowest. Seventeen seconds is the minimum time required for a thought to begin attracting similar thoughts. The daily practice is the beginning of the shift.`,
+**Part Four: The daily practice.** Commit to thinking the next better-feeling thought for 17 seconds each morning, in the area where the alignment is lowest. Seventeen seconds is the minimum time required for a thought to begin attracting similar thoughts. The daily practice is the beginning of the shift.`,
           reflections: [
-            "What did the Vibrational Baseline Assessment reveal about your current habitual vibration? What surprised you? What confirmed what you already suspected?",
-            "What is the primary resistance thought in the area where the vibration is lowest? How long have you been thinking it? What has it attracted?",
+            "What did the Alignment Baseline Assessment reveal about your current habitual alignment? What surprised you? What confirmed what you already suspected?",
+            "What is the primary resistance thought in the area where the alignment is lowest? How long have you been thinking it? What has it attracted?",
             "What is the next better-feeling thought you identified? Does it feel true? Does it feel possible? What would it take to practice it consistently?"
           ],
-          journalPrompt: "Complete the full Vibrational Baseline Assessment — all four parts, with the honesty and specificity they require. Then write one paragraph about what you want your vibrational baseline to be at the end of this four-week course — not the ideal, the genuinely achievable next level. What would it feel like to consistently operate from that level? What would it attract?"
+          journalPrompt: "Complete the full Alignment Baseline Assessment — all four parts, with the honesty and specificity they require. Then write one paragraph about what you want your alignment baseline to be at the end of this four-week course — not the ideal, the genuinely achievable next level. What would it feel like to consistently operate from that level? What would it attract?"
         }
       ]
     },
@@ -1593,19 +1593,19 @@ The Vibrational Baseline Assessment has four parts:
           id: "2.1",
           title: "The Three Steps of Creation",
           duration: "20 min",
-          teaching: `The Abraham-Hicks teaching describes the process of deliberate creation in three steps:
+          teaching: `The  teaching describes the process of deliberate creation in three steps:
 
-**Step One: Ask.** This step happens automatically. Every desire, every preference, every contrast you experience in your life generates an automatic asking — a vibrational request that is broadcast to the universe the moment the desire is felt. You do not need to ask consciously, repeatedly, or desperately. The asking happens naturally, as a byproduct of your experience of contrast.
+**Step One: Ask.** This step happens automatically. Every desire, every preference, every contrast you experience in your life generates an automatic asking — a alignment request that is broadcast to the universe the moment the desire is felt. You do not need to ask consciously, repeatedly, or desperately. The asking happens naturally, as a byproduct of your experience of contrast.
 
 **Step Two: The universe answers.** This step also happens automatically. The universe — or Source, or the quantum field, or whatever language you prefer — always responds to the asking. The answer is always yes. The desired experience, circumstance, or thing is always in the process of becoming available to you. This step requires nothing from you.
 
-**Step Three: Allow.** This is the step that requires deliberate practice. Allowing is the practice of releasing the resistance that prevents the answer from arriving — of aligning your vibration with the vibration of what you have asked for, so that it can flow into your experience.
+**Step Three: Allow.** This is the step that requires deliberate practice. Allowing is the practice of releasing the resistance that prevents the answer from arriving — of aligning your alignment with the alignment of what you have asked for, so that it can flow into your experience.
 
 Most people spend enormous energy on Step One — asking, wishing, wanting, praying, visualizing — and very little on Step Three. The result is that the asking is clear but the allowing is blocked. The desired experience is always on its way, but the resistance is preventing its arrival.
 
 The practice of deliberate creation is almost entirely a Step Three practice. It is the practice of releasing resistance, of finding better-feeling thoughts, of practicing appreciation, of allowing the natural flow of well-being that is always available.
 
-The most important insight of this lesson is this: you do not need to make things happen. You need to allow them to happen. The universe is always answering. The question is whether you are in a vibrational state that allows the answer to arrive.`,
+The most important insight of this lesson is this: you do not need to make things happen. You need to allow them to happen. The universe is always answering. The question is whether you are in a alignment state that allows the answer to arrive.`,
           reflections: [
             "What have you been asking for — consciously or unconsciously — in the area of your life where you most want things to change? What is the desire that is most consistently present?",
             "What resistance are you offering to the arrival of what you have asked for? What thoughts, beliefs, or emotional patterns are blocking the allowing?",
@@ -1618,15 +1618,15 @@ The most important insight of this lesson is this: you do not need to make thing
           id: "2.2",
           title: "Segment Intending",
           duration: "20 min",
-          teaching: `Segment intending is one of the most practically useful tools in the Abraham-Hicks teaching. It is the practice of setting a clear vibrational intention at the beginning of each distinct segment of your day — each meeting, each conversation, each task, each transition.
+          teaching: `Segment intending is one of the most practically useful tools in the  teaching. It is the practice of setting a clear alignment intention at the beginning of each distinct segment of your day — each meeting, each conversation, each task, each transition.
 
-The practice is simple: before each new segment of your day, take thirty seconds to identify what you want from that segment. Not what you expect — what you want. Not what you fear — what you intend. The intention is a vibrational statement — a clear signal to the universe about the quality of experience you are choosing to have in this specific segment.
+The practice is simple: before each new segment of your day, take thirty seconds to identify what you want from that segment. Not what you expect — what you want. Not what you fear — what you intend. The intention is a alignment statement — a clear signal to the universe about the quality of experience you are choosing to have in this specific segment.
 
-The power of segment intending is in its specificity and its consistency. Most people move through their days reactively — responding to whatever arises, being shaped by whatever energy is present in each situation. Segment intending is the practice of bringing deliberate creation to the level of the individual moment — of choosing, before each segment, the vibration you want to offer and the experience you want to have.
+The power of segment intending is in its specificity and its consistency. Most people move through their days reactively — responding to whatever arises, being shaped by whatever energy is present in each situation. Segment intending is the practice of bringing deliberate creation to the level of the individual moment — of choosing, before each segment, the alignment you want to offer and the experience you want to have.
 
 The intention does not need to be elaborate. It can be as simple as: *In this meeting, I intend to be fully present, to listen with genuine interest, and to contribute something useful.* Or: *In this conversation, I intend to speak honestly and to hear the other person fully.* Or: *In this hour of work, I intend to be focused, creative, and in flow.*
 
-The intention is not a guarantee. It is a vibrational offering — and like all vibrational offerings, it attracts experiences that match it. The person who consistently sets clear intentions at the beginning of each segment will, over time, find that their days feel more deliberate, more aligned, and more productive than the days of the person who moves through life reactively.`,
+The intention is not a guarantee. It is a alignment offering — and like all alignment offerings, it attracts experiences that match it. The person who consistently sets clear intentions at the beginning of each segment will, over time, find that their days feel more deliberate, more aligned, and more productive than the days of the person who moves through life reactively.`,
           reflections: [
             "What segments of your day most consistently feel reactive — where you are most consistently shaped by whatever energy is present rather than bringing your own deliberate intention?",
             "What would segment intending look like in those specific segments? What would you intend?",
@@ -1636,59 +1636,59 @@ The intention is not a guarantee. It is a vibrational offering — and like all 
         },
         {
           id: "2.3",
-          title: "The Vortex: Aligning with Your Desires",
+          title: "The Current: Aligning with Your Desires",
           duration: "20 min",
-          teaching: `In the Abraham-Hicks teaching, the Vortex is the vibrational holding place of everything you have ever asked for — every desire, every preference, every dream, every vision of a better life. Everything you have ever wanted is already in the Vortex, waiting for you to align with it vibrationally so that it can flow into your physical experience.
+          teaching: `In the  teaching, the current is the alignment holding place of everything you have ever asked for — every desire, every preference, every dream, every vision of a better life. Everything you have ever wanted is already in the current, waiting for you to align with it vibrationally so that it can flow into your physical experience.
 
-The Vortex is not a metaphor. It is a description of the vibrational reality that exists alongside and within physical reality — the reality in which all of your desires already exist in their fulfilled form, waiting for the alignment that will allow them to manifest.
+The Current is not a metaphor. It is a description of the interior reality that exists alongside and within physical reality — the reality in which all of your desires already exist in their fulfilled form, waiting for the alignment that will allow them to manifest.
 
-The practice of getting into the Vortex is the practice of raising your vibration to the level at which you can feel the reality of your desires — not the desperate wanting of them, but the genuine sense that they are real, that they are available, and that they are on their way.
+The practice of getting into the current is the practice of raising your alignment to the level at which you can feel the reality of your desires — not the desperate wanting of them, but the genuine sense that they are real, that they are available, and that they are on their way.
 
-The most reliable way to get into the Vortex is through appreciation. Appreciation is the highest vibration available in the physical experience — it is the vibration that most closely matches the vibration of the Vortex itself. The person who is genuinely appreciating — who is finding real things in their current experience that are genuinely worth appreciating — is in the Vortex.
+The most reliable way to get into the current is through appreciation. Appreciation is the highest alignment available in the physical experience — it is the alignment that most closely matches the alignment of the current itself. The person who is genuinely appreciating — who is finding real things in their current experience that are genuinely worth appreciating — is in the current.
 
-The Vortex practice is simple: spend five minutes each day in genuine appreciation. Not forced positivity — genuine appreciation for things that are actually present in your current experience. The warmth of the sun. The taste of coffee. The specific quality of a relationship that is working. The capacity of your body to move. The fact that you are alive and conscious and capable of choosing your response to your experience.
+The Current practice is simple: spend five minutes each day in genuine appreciation. Not forced positivity — genuine appreciation for things that are actually present in your current experience. The warmth of the sun. The taste of coffee. The specific quality of a relationship that is working. The capacity of your body to move. The fact that you are alive and conscious and capable of choosing your response to your experience.
 
-Five minutes of genuine appreciation, practiced daily, will raise your vibrational baseline more reliably than any other single practice.`,
+Five minutes of genuine appreciation, practiced daily, will raise your alignment baseline more reliably than any other single practice.`,
           reflections: [
-            "What is currently in your Vortex — what have you been asking for that is waiting for your vibrational alignment to arrive?",
-            "What is the primary vibrational gap between where you currently are and where your desires are? What thoughts and beliefs are maintaining that gap?",
+            "What is currently in your Vortex — what have you been asking for that is waiting for your interior alignment to arrive?",
+            "What is the primary alignment gap between where you currently are and where your desires are? What thoughts and beliefs are maintaining that gap?",
             "What are five things in your current life that you can genuinely appreciate — not things you think you should appreciate, things you actually do appreciate?"
           ],
-          journalPrompt: "Write your Vortex list — the full accounting of everything you have been asking for that is waiting in the Vortex for your alignment. Write each desire as if it is already real, already present, already yours. Then write your appreciation list — the five to ten things in your current experience that you genuinely appreciate. Feel the appreciation as you write. Notice what happens to your vibration."
+          journalPrompt: "Write your Vortex list — the full accounting of everything you have been asking for that is waiting in the current for your alignment. Write each desire as if it is already real, already present, already yours. Then write your appreciation list — the five to ten things in your current experience that you genuinely appreciate. Feel the appreciation as you write. Notice what happens to your alignment."
         },
         {
           id: "2.4",
           title: "The Power of Now: Presence as Alignment",
           duration: "20 min",
-          teaching: `One of the most important insights in the vibrational model is the recognition that alignment is always a present-moment experience. You cannot align with your desires in the past — the past is fixed. You cannot align with your desires in the future — the future is not yet here. You can only align in the present moment.
+          teaching: `One of the most important insights in the alignment model is the recognition that alignment is always a present-moment experience. You cannot align with your desires in the past — the past is fixed. You cannot align with your desires in the future — the future is not yet here. You can only align in the present moment.
 
-This is the convergence point between the Abraham-Hicks teaching and the contemplative traditions represented in the Before the Words pathway. Both traditions, from very different starting points, arrive at the same conclusion: the present moment is the only place where genuine experience, genuine connection, and genuine creation are available.
+This is the convergence point between the  teaching and the contemplative traditions represented in the Before the Words pathway. Both traditions, from very different starting points, arrive at the same conclusion: the present moment is the only place where genuine experience, genuine connection, and genuine creation are available.
 
-The vibrational model adds a specific dimension to the contemplative insight: the present moment is not only the place where experience is available — it is the place where vibrational alignment is available. The person who is fully present — who is genuinely here, genuinely engaged with what is actually happening right now — is in a state of natural alignment. The resistance that creates low vibration is almost always either past-focused (regret, resentment, grief) or future-focused (worry, fear, anxiety). The present moment, genuinely inhabited, tends to be a place of natural well-being.
+The alignment model adds a specific dimension to the contemplative insight: the present moment is not only the place where experience is available — it is the place where interior alignment is available. The person who is fully present — who is genuinely here, genuinely engaged with what is actually happening right now — is in a state of natural alignment. The resistance that creates low alignment is almost always either past-focused (regret, resentment, grief) or future-focused (worry, fear, anxiety). The present moment, genuinely inhabited, tends to be a place of natural well-being.
 
 The practice of presence as alignment is the practice of returning, again and again, to the actual experience of this moment — not the story about this moment, not the evaluation of this moment, not the comparison of this moment to other moments, but the direct, immediate, sensory experience of what is actually happening right now.
 
-This practice is the foundation of the BTW pathway. It is also the foundation of the vibrational practice: the person who is genuinely present is in the best possible position to hear the guidance of the Inner Being, to feel the emotions that are the guidance system, and to make the deliberate choices that move them up the Emotional Guidance Scale.`,
+This practice is the foundation of the BTW pathway. It is also the foundation of the alignment practice: the person who is genuinely present is in the best possible position to hear the guidance of the Inner Being, to feel the emotions that are the guidance system, and to make the deliberate choices that move them up the Emotional Guidance Scale.`,
           reflections: [
             "How present are you, on average, in your daily life? What percentage of your waking hours are you genuinely here, genuinely engaged with what is actually happening, rather than in your head about the past or future?",
             "What are the primary things that pull you out of the present moment? What thoughts, fears, or preoccupations most consistently take you away from what is actually happening?",
-            "What would it mean to practice presence as alignment — to use the return to the present moment as a vibrational practice, as a way of releasing resistance and accessing the natural well-being that is always available here?"
+            "What would it mean to practice presence as alignment — to use the return to the present moment as a alignment practice, as a way of releasing resistance and accessing the natural well-being that is always available here?"
           ],
-          journalPrompt: "Write about your relationship to the present moment. How often are you genuinely here? What does it feel like when you are? What does it feel like when you are not? And what would it mean to practice presence as a primary vibrational tool — to use the return to now as the most reliable path back to alignment?"
+          journalPrompt: "Write about your relationship to the present moment. How often are you genuinely here? What does it feel like when you are? What does it feel like when you are not? And what would it mean to practice presence as a primary alignment tool — to use the return to now as the most reliable path back to alignment?"
         },
         {
           id: "2.5",
           title: "Week Two Integration: The Creation Practice",
           duration: "15 min",
-          teaching: `Week Two has introduced the mechanics of deliberate creation: the three steps of asking, answering, and allowing; segment intending; the Vortex and the practice of appreciation; and presence as alignment.
+          teaching: `Week Two has introduced the mechanics of deliberate creation: the three steps of asking, answering, and allowing; segment intending; the current and the practice of appreciation; and presence as alignment.
 
 The integration practice for this week is the Daily Creation Practice — a structured fifteen-minute morning practice that combines all four elements of Week Two into a single, coherent daily ritual.
 
 **The Daily Creation Practice:**
 
-*Minutes 1–2: Vibrational check-in.* Identify your current emotional state. Name it honestly. Find the next better-feeling thought.
+*Minutes 1–2: Alignment check-in.* Identify your current emotional state. Name it honestly. Find the next better-feeling thought.
 
-*Minutes 3–5: Appreciation.* Write or speak five genuine appreciations from your current experience. Feel each one. Let the appreciation raise your vibration before you move to the next element.
+*Minutes 3–5: Appreciation.* Write or speak five genuine appreciations from your current experience. Feel each one. Let the appreciation raise your alignment before you move to the next element.
 
 *Minutes 6–10: Vortex alignment.* Choose one desire from your Vortex list. Think about it from the perspective of it already being real — already present, already yours. Feel the reality of it. Hold the feeling for at least 17 seconds.
 
@@ -1696,11 +1696,11 @@ The integration practice for this week is the Daily Creation Practice — a stru
 
 *Minutes 14–15: Presence.* Take one minute of genuine presence — no agenda, no practice, just here. Feel your body. Feel the breath. Feel the reality of this moment.
 
-This fifteen-minute practice, done consistently, will raise your vibrational baseline more reliably than any other single intervention. The key is consistency — not perfection, not intensity, but the daily practice of deliberate alignment.`,
+This fifteen-minute practice, done consistently, will raise your alignment baseline more reliably than any other single intervention. The key is consistency — not perfection, not intensity, but the daily practice of deliberate alignment.`,
           reflections: [
             "What element of the Daily Creation Practice feels most natural and most effective for you? What element feels most challenging?",
             "What would it take to commit to the Daily Creation Practice for the remaining two weeks of this course? What obstacles do you anticipate? How will you address them?",
-            "What has shifted in your vibrational baseline over the first two weeks of this course? What evidence do you have of the shift?"
+            "What has shifted in your alignment baseline over the first two weeks of this course? What evidence do you have of the shift?"
           ],
           journalPrompt: "Write the full Daily Creation Practice for tomorrow — all five elements, with the specificity and presence they require. Then write a commitment: I will practice the Daily Creation Practice every morning for the next fourteen days. Write what you will do if you miss a day. Write what you will do if it feels forced or artificial. Write the commitment as a declaration, in the first person, in the present tense."
         }
@@ -1715,72 +1715,72 @@ This fifteen-minute practice, done consistently, will raise your vibrational bas
           id: "3.1",
           title: "The Belief Ladder: Moving Up the Scale",
           duration: "20 min",
-          teaching: `The Belief Ladder is the most practical tool for moving up the Emotional Guidance Scale in areas where the resistance is deeply entrenched — where the habitual thought pattern has been reinforced by years or decades of repetition and where the gap between the current vibration and the desired vibration feels too large to bridge directly.
+          teaching: `The Belief Ladder is the most practical tool for moving up the Emotional Guidance Scale in areas where the resistance is deeply entrenched — where the habitual thought pattern has been reinforced by years or decades of repetition and where the gap between the current alignment and the desired alignment feels too large to bridge directly.
 
-The principle of the Belief Ladder is simple: you cannot jump from the bottom of the scale to the top. But you can always find the next better-feeling thought — the thought that is one step up from where you currently are. And if you can find the next step, and then the next, and then the next, you can eventually reach the vibration you are seeking.
+The principle of the Belief Ladder is simple: you cannot jump from the bottom of the scale to the top. But you can always find the next better-feeling thought — the thought that is one step up from where you currently are. And if you can find the next step, and then the next, and then the next, you can eventually reach the alignment you are seeking.
 
 The Belief Ladder works by identifying the current habitual thought in a specific area, finding the next better-feeling thought, practicing that thought until it becomes more habitual than the original, and then finding the next one.
 
-Example: In the area of finances, the current habitual thought might be *I never have enough money.* The next better-feeling thought is not *I am abundant and prosperous* — that thought is too far from the current vibration to feel true, and a thought that does not feel true produces cognitive dissonance rather than vibrational shift. The next better-feeling thought might be *I have always managed to get by.* Or *There are people who have less than I do and are doing fine.* Or *Money flows in and out — sometimes more, sometimes less.* These thoughts are not exciting. They are not inspiring. But they feel slightly better than *I never have enough money* — and that slight improvement is the beginning of the vibrational shift.
+Example: In the area of finances, the current habitual thought might be *I never have enough money.* The next better-feeling thought is not *I am abundant and prosperous* — that thought is too far from the current alignment to feel true, and a thought that does not feel true produces cognitive dissonance rather than alignment shift. The next better-feeling thought might be *I have always managed to get by.* Or *There are people who have less than I do and are doing fine.* Or *Money flows in and out — sometimes more, sometimes less.* These thoughts are not exciting. They are not inspiring. But they feel slightly better than *I never have enough money* — and that slight improvement is the beginning of the alignment shift.
 
-The Belief Ladder is not a quick fix. It is a patient, consistent, daily practice of finding the next better-feeling thought and practicing it until it becomes habitual. But the direction, once established, tends to accelerate — and the person who has been practicing the Belief Ladder for six months will find themselves in a vibrational place that would have seemed impossible from where they started.`,
+The Belief Ladder is not a quick fix. It is a patient, consistent, daily practice of finding the next better-feeling thought and practicing it until it becomes habitual. But the direction, once established, tends to accelerate — and the person who has been practicing the Belief Ladder for six months will find themselves in a alignment place that would have seemed impossible from where they started.`,
           reflections: [
-            "In the area of your life where the vibration is lowest, what is the current habitual thought? Write it exactly as you think it.",
+            "In the area of your life where the alignment is lowest, what is the current habitual thought? Write it exactly as you think it.",
             "What is the next better-feeling thought — the thought that is one step up from the current habitual thought? Not the ideal thought — the next one.",
             "What would it take to practice the next better-feeling thought consistently enough that it becomes more habitual than the current one? What is the minimum daily practice?"
           ],
-          journalPrompt: "Build the full Belief Ladder for the area of your life where the vibration is lowest. Start with the current habitual thought. Write the next better-feeling thought. Then the next. Then the next. Build the ladder all the way up to the vibration you want to consistently offer in this area. Write each rung of the ladder as a complete sentence. Then identify which rung is the most accessible from where you currently are — and commit to practicing that thought daily.",
+          journalPrompt: "Build the full Belief Ladder for the area of your life where the alignment is lowest. Start with the current habitual thought. Write the next better-feeling thought. Then the next. Then the next. Build the ladder all the way up to the alignment you want to consistently offer in this area. Write each rung of the ladder as a complete sentence. Then identify which rung is the most accessible from where you currently are — and commit to practicing that thought daily.",
           dailyPractice: "Each morning this week, after the Daily Creation Practice, spend two minutes on the Belief Ladder. Take the most accessible rung from the ladder you built. Think it. Feel it. Hold it for 17 seconds. Write it in your journal."
         },
         {
           id: "3.2",
-          title: "The Pivot: Redirecting Attention",
+          title: "The Redirect: Redirecting Attention",
           duration: "20 min",
-          teaching: `The Pivot is the Abraham-Hicks tool for redirecting attention from what you do not want to what you do want — from the problem to the solution, from the absence to the presence, from the resistance to the allowing.
+          teaching: `The Redirect is the Lifewoven practice for redirecting attention from what you do not want to what you do want — from the problem to the solution, from the absence to the presence, from the resistance to the allowing.
 
 The Pivot is not denial. It is not the refusal to acknowledge that a problem exists. It is the deliberate choice, once the problem has been acknowledged, to redirect attention to the solution — to the version of the situation in which things are working, in which the desire is fulfilled, in which the well-being is present.
 
-The Pivot works because the Law of Attraction responds to the dominant vibration of your attention. The person who is predominantly focused on the problem attracts more of the problem. The person who is predominantly focused on the solution attracts more of the solution. The Pivot is the practice of shifting the dominant focus from problem to solution.
+The Redirect works because the principle that attention shapes experience responds to the dominant alignment of your attention. The person who is predominantly focused on the problem attracts more of the problem. The person who is predominantly focused on the solution attracts more of the solution. The Pivot is the practice of shifting the dominant focus from problem to solution.
 
-The Pivot has three steps:
+The Redirect has three steps:
 
 **Step One: Acknowledge.** Name what you do not want, clearly and specifically. Do not suppress it or minimize it. The acknowledgment is the beginning of the pivot.
 
 **Step Two: Identify the opposite.** For every thing you do not want, there is a corresponding thing you do want. The contrast of the unwanted experience clarifies the desired experience. Name what you do want, with the same clarity and specificity.
 
-**Step Three: Pivot.** Redirect your attention to what you do want. Think about it. Feel it. Hold it. Let the attention to the desired experience become the dominant vibration.
+**Step Three: Pivot.** Redirect your attention to what you do want. Think about it. Feel it. Hold it. Let the attention to the desired experience become the dominant alignment.
 
-The Pivot is most effective when it is practiced consistently — when the habit of redirecting attention from problem to solution becomes more automatic than the habit of dwelling on the problem. This takes time and practice. But every Pivot is a step in the right direction.`,
+The Redirect is most effective when it is practiced consistently — when the habit of redirecting attention from problem to solution becomes more automatic than the habit of dwelling on the problem. This takes time and practice. But every Redirect is a step in the right direction.`,
           reflections: [
-            "What are you currently predominantly focused on in the area of your life where the vibration is lowest — the problem or the solution?",
+            "What are you currently predominantly focused on in the area of your life where the alignment is lowest — the problem or the solution?",
             "What is the Pivot for that area — what is the desired experience that the unwanted experience is clarifying?",
             "What would it mean to practice the Pivot consistently in that area — to make the focus on the desired experience more habitual than the focus on the problem?"
           ],
-          journalPrompt: "Practice the full Pivot for the three areas of your life where the vibration is lowest. For each area: acknowledge what you do not want (clearly and specifically), identify what you do want (with equal clarity and specificity), and then write about the desired experience in as much detail as possible. Feel the desired experience as you write. Let the writing be the practice of the Pivot."
+          journalPrompt: "Practice the full Pivot for the three areas of your life where the alignment is lowest. For each area: acknowledge what you do not want (clearly and specifically), identify what you do want (with equal clarity and specificity), and then write about the desired experience in as much detail as possible. Feel the desired experience as you write. Let the writing be the practice of the Pivot."
         },
         {
           id: "3.3",
-          title: "The Grid: Building a Vibrational Foundation",
+          title: "The Foundation: Building Your Alignment Foundation",
           duration: "20 min",
-          teaching: `The Grid is an Abraham-Hicks concept that describes the vibrational foundation that is built through consistent, deliberate attention to better-feeling thoughts. Every better-feeling thought you practice adds a piece to the Grid — a vibrational structure that makes it easier to find the next better-feeling thought, and the next, and the next.
+          teaching: `The Foundation is the Lifewoven term for the alignment foundation that is built through consistent, deliberate attention to better-feeling thoughts. Every better-feeling thought you practice adds a piece to the Foundation — a alignment structure that makes it easier to find the next better-feeling thought, and the next, and the next.
 
-The Grid is built slowly, through consistent practice. In the early stages of the practice, the Grid is sparse — the better-feeling thoughts are available but require deliberate effort to access. As the practice continues, the Grid becomes denser — the better-feeling thoughts become more automatic, more accessible, more habitual. Eventually, the Grid is so well-established that the default vibration is high rather than low — that the natural, automatic response to any situation is a better-feeling thought rather than a resistant one.
+The Foundation is built slowly, through consistent practice. In the early stages of the practice, the Foundation is sparse — the better-feeling thoughts are available but require deliberate effort to access. As the practice continues, the Foundation becomes denser — the better-feeling thoughts become more automatic, more accessible, more habitual. Eventually, the Foundation is so well-established that the default alignment is high rather than low — that the natural, automatic response to any situation is a better-feeling thought rather than a resistant one.
 
-The Grid is built through three primary practices:
+The Foundation is built through three primary practices:
 
-**Appreciation.** Every genuine appreciation adds a high-vibration piece to the Grid. The daily appreciation practice is the most reliable Grid-building tool available.
+**Appreciation.** Every genuine appreciation adds a high-alignment piece to the Foundation. The daily appreciation practice is the most reliable Grid-building tool available.
 
-**Positive expectation.** Every thought of positive expectation — every genuine belief that things are working out, that the universe is responding, that the desires are on their way — adds a high-vibration piece to the Grid.
+**Positive expectation.** Every thought of positive expectation — every genuine belief that things are working out, that the universe is responding, that the desires are on their way — adds a high-alignment piece to the Foundation.
 
-**Deliberate focus.** Every time you deliberately redirect your attention from a resistant thought to a better-feeling thought — every Pivot, every Belief Ladder step, every moment of deliberate choosing — adds a piece to the Grid.
+**Deliberate focus.** Every time you deliberately redirect your attention from a resistant thought to a better-feeling thought — every Pivot, every Belief Ladder step, every moment of deliberate choosing — adds a piece to the Foundation.
 
-The Grid is not built in a day. It is built over months and years of consistent practice. But the direction, once established, is self-reinforcing — each piece of the Grid makes the next piece easier to add.`,
+The Foundation is not built in a day. It is built over months and years of consistent practice. But the direction, once established, is self-reinforcing — each piece of the Grid makes the next piece easier to add.`,
           reflections: [
-            "What does your current Grid look like — how dense is the vibrational foundation you have built through consistent practice? In which areas of your life is the Grid strongest? In which is it most sparse?",
-            "What is the most reliable Grid-building practice for you personally — appreciation, positive expectation, or deliberate focus? What produces the most consistent vibrational shift?",
-            "What would your Grid look like in six months if you practiced consistently? What would your default vibration be? What would that attract?"
+            "What does your current Foundation look like — how dense is the alignment foundation you have built through consistent practice? In which areas of your life is the Foundation strongest? In which is it most sparse?",
+            "What is the most reliable Foundation-building practice for you personally — appreciation, positive expectation, or deliberate focus? What produces the most consistent alignment shift?",
+            "What would your Grid look like in six months if you practiced consistently? What would your default alignment be? What would that attract?"
           ],
-          journalPrompt: "Write about the Grid you are building. What pieces have you already added through the practices of this course? What does your vibrational foundation look like compared to where you started? And what is the most important Grid-building practice you will commit to for the remainder of this course and beyond?"
+          journalPrompt: "Write about the Foundation you are building. What pieces have you already added through the practices of this course? What does your alignment foundation look like compared to where you started? And what is the most important Foundation-building practice you will commit to for the remainder of this course and beyond?"
         },
         {
           id: "3.4",
@@ -1798,7 +1798,7 @@ The Surrender Practice has three components:
 
 **The allowing statement.** Write or speak the specific quality of experience you are allowing — the specific feeling of the desire fulfilled, the specific sense of the well-being that is available. *I allow the feeling of having what I want.* *I allow the natural flow of well-being that is always available.* *I allow the universe to surprise me with how this arrives.*
 
-The Surrender Practice is most effective when it is practiced in moments of high resistance — when the need to control is strongest, when the fear is loudest, when the effort to force the outcome is most intense. In those moments, the practice of genuine surrender — of releasing the resistance and trusting the process — is the most powerful vibrational shift available.`,
+The Surrender Practice is most effective when it is practiced in moments of high resistance — when the need to control is strongest, when the fear is loudest, when the effort to force the outcome is most intense. In those moments, the practice of genuine surrender — of releasing the resistance and trusting the process — is the most powerful alignment shift available.`,
           reflections: [
             "What are you most tightly holding — the specific outcome you are most desperately trying to control or force? What would it mean to genuinely surrender that?",
             "What is the deepest resistance you are carrying — the core belief or fundamental story that is most consistently blocking the arrival of what you want?",
@@ -1816,9 +1816,9 @@ The integration practice for this week is the Advanced Alignment Session — a t
 
 **The Advanced Alignment Session:**
 
-*Minutes 1–5: Resistance identification.* Name the three areas of your life where the resistance is currently highest. For each area, write the primary resistant thought — the thought that most consistently maintains the low vibration.
+*Minutes 1–5: Resistance identification.* Name the three areas of your life where the resistance is currently highest. For each area, write the primary resistant thought — the thought that most consistently maintains the low alignment.
 
-*Minutes 6–15: Belief Ladder.* For the area where the resistance is highest, build the Belief Ladder from the current resistant thought to the desired vibration. Identify the most accessible rung and practice it.
+*Minutes 6–15: Belief Ladder.* For the area where the resistance is highest, build the Belief Ladder from the current resistant thought to the desired alignment. Identify the most accessible rung and practice it.
 
 *Minutes 16–20: Pivot.* For the same area, practice the full Pivot — acknowledge what you do not want, identify what you do want, and redirect your attention to the desired experience.
 
@@ -1829,7 +1829,7 @@ The integration practice for this week is the Advanced Alignment Session — a t
 The Advanced Alignment Session is a weekly practice — not daily. It is designed for the deeper work that requires more time and more deliberate engagement than the daily practice can provide.`,
           reflections: [
             "What did the Advanced Alignment Session reveal about the nature of your deepest resistance? What did the process of working through all four tools make visible?",
-            "What shifted in your vibration over the course of the session? What was different at the end than at the beginning?",
+            "What shifted in your alignment over the course of the session? What was different at the end than at the beginning?",
             "What is the most important insight from Week Three that has the most immediate practical relevance to your current situation?"
           ],
           journalPrompt: "Complete the full Advanced Alignment Session in writing — all five components, with the specificity and presence they require. Then write one paragraph about what you want your relationship to resistance to look like by the end of this course. Not the absence of resistance — a different quality of relationship with it. What would that look like? What would it produce?"
@@ -1849,52 +1849,52 @@ The Advanced Alignment Session is a weekly practice — not daily. It is designe
 
 The challenge of making the alignment lifestyle sustainable is the challenge of all lifestyle change: the initial enthusiasm tends to fade, the daily practice tends to become routine and then to be skipped, and the old patterns of resistance tend to reassert themselves when the deliberate attention is withdrawn.
 
-The key to sustainability is not willpower. It is the genuine experience of the practice working — the real, felt, undeniable evidence that the vibrational practices are producing the shifts in experience that the teaching promises. The person who has genuinely experienced the connection between their vibrational practice and the quality of their daily experience does not need to be motivated to continue the practice. The practice has become self-reinforcing.
+The key to sustainability is not willpower. It is the genuine experience of the practice working — the real, felt, undeniable evidence that the alignment practices are producing the shifts in experience that the teaching promises. The person who has genuinely experienced the connection between their alignment practice and the quality of their daily experience does not need to be motivated to continue the practice. The practice has become self-reinforcing.
 
 The alignment lifestyle has three foundational elements:
 
-**The morning practice.** The Daily Creation Practice from Week Two — fifteen minutes of vibrational alignment before the day begins. This is the non-negotiable foundation. Everything else is built on this.
+**The morning practice.** The Daily Creation Practice from Week Two — fifteen minutes of interior alignment before the day begins. This is the non-negotiable foundation. Everything else is built on this.
 
-**The in-the-moment practice.** The Pivot, the Belief Ladder step, the surrender — practiced in real time, in the actual moments of resistance, as they arise throughout the day. This is the practice that makes the morning practice meaningful.
+**The in-the-moment practice.** The Redirect, the Belief Ladder step, the surrender — practiced in real time, in the actual moments of resistance, as they arise throughout the day. This is the practice that makes the morning practice meaningful.
 
-**The evening review.** A five-minute end-of-day review: what was my dominant vibration today? Where did I practice well? Where did I fall back into old patterns? What is the one thing I will do differently tomorrow?
+**The evening review.** A five-minute end-of-day review: what was my dominant alignment today? Where did I practice well? Where did I fall back into old patterns? What is the one thing I will do differently tomorrow?
 
 These three elements — morning practice, in-the-moment practice, evening review — constitute the alignment lifestyle. They require approximately twenty-five minutes per day. They produce, over time, a fundamental shift in the quality of daily experience.`,
           reflections: [
             "What has been the most consistent element of your practice over the past three weeks? What has been the most inconsistent?",
             "What are the specific obstacles that most consistently prevent you from maintaining the morning practice? What would it take to address each one?",
-            "What evidence do you have, from the past three weeks, that the vibrational practices are producing real shifts in your experience? What has changed?"
+            "What evidence do you have, from the past three weeks, that the alignment practices are producing real shifts in your experience? What has changed?"
           ],
           journalPrompt: "Design your personal alignment lifestyle — the specific, sustainable version of the three foundational elements that fits your actual life, your actual schedule, and your actual capacities. Write each element with the specificity of a genuine commitment: when, where, how long, and what specifically you will practice. Then write about what you expect the alignment lifestyle to produce in six months, in one year, in five years.",
-          dailyPractice: "This final week, practice all three elements of the alignment lifestyle every day. Morning practice, in-the-moment practice, evening review. Write one sentence at the end of each day about the quality of your dominant vibration."
+          dailyPractice: "This final week, practice all three elements of the alignment lifestyle every day. Morning practice, in-the-moment practice, evening review. Write one sentence at the end of each day about the quality of your dominant alignment."
         },
         {
           id: "4.2",
-          title: "Relationships as Vibrational Mirrors",
+          title: "Relationships as Alignment Mirrors",
           duration: "20 min",
-          teaching: `Every significant relationship in your life is a vibrational mirror — a reflection of the vibration you are offering. The people who are consistently present in your experience are, by the Law of Attraction, a match to your current vibration. The quality of your relationships is one of the most reliable indicators of your current vibrational baseline.
+          teaching: `Every significant relationship in your life is a alignment mirror — a reflection of the alignment you are offering. The people who are consistently present in your experience are, by the principle that attention shapes experience, a match to your current alignment. The quality of your relationships is one of the most reliable indicators of your current alignment baseline.
 
-This is not a judgment. It is an observation about the mechanics of attraction. The person who is offering a vibration of genuine appreciation, genuine openness, and genuine care will attract relationships that reflect those qualities. The person who is offering a vibration of fear, resentment, or unworthiness will attract relationships that reflect those qualities.
+This is not a judgment. It is an observation about the mechanics of attraction. The person who is offering a alignment of genuine appreciation, genuine openness, and genuine care will attract relationships that reflect those qualities. The person who is offering a alignment of fear, resentment, or unworthiness will attract relationships that reflect those qualities.
 
-The vibrational mirror principle has a profound practical implication: if you want to change the quality of your relationships, the most effective intervention is not to change the other people — it is to change your own vibration. The person who raises their vibrational baseline will find, over time, that their relationships change — that some relationships deepen, some fade, and new ones arrive that are a better match to the new vibration.
+The alignment mirror principle has a profound practical implication: if you want to change the quality of your relationships, the most effective intervention is not to change the other people — it is to change your own alignment. The person who raises their alignment baseline will find, over time, that their relationships change — that some relationships deepen, some fade, and new ones arrive that are a better match to the new alignment.
 
-This does not mean that you should leave all relationships that feel difficult. It means that the most powerful thing you can do for any relationship is to raise your own vibration — to bring the best of yourself to the relationship, to see the other person through the eyes of appreciation rather than judgment, and to hold the vision of who they are capable of becoming rather than focusing on who they currently are.
+This does not mean that you should leave all relationships that feel difficult. It means that the most powerful thing you can do for any relationship is to raise your own alignment — to bring the best of yourself to the relationship, to see the other person through the eyes of appreciation rather than judgment, and to hold the vision of who they are capable of becoming rather than focusing on who they currently are.
 
 The specific practice for relationships is the appreciation focus: for each significant relationship in your life, spend two minutes each week in genuine appreciation of that person — finding the real things about them that are genuinely worth appreciating. This practice, done consistently, will shift the quality of every relationship it is applied to.`,
           reflections: [
-            "What do your current relationships reflect about your current vibrational baseline? What qualities are most consistently present in the people who are most present in your life?",
-            "In the relationship that is most challenging, what is the vibration you are most consistently offering? What would a different vibration look like?",
+            "What do your current relationships reflect about your current alignment baseline? What qualities are most consistently present in the people who are most present in your life?",
+            "In the relationship that is most challenging, what is the alignment you are most consistently offering? What would a different alignment look like?",
             "What would the appreciation focus practice produce in your most important relationship if you practiced it consistently for one month?"
           ],
-          journalPrompt: "Write the appreciation focus for your three most important relationships. For each person, write five genuine appreciations — the real things about them that are actually worth appreciating. Feel the appreciation as you write. Notice what happens to your sense of the relationship. Then write about what you want each relationship to become, and what vibrational shift in yourself would be required to attract that."
+          journalPrompt: "Write the appreciation focus for your three most important relationships. For each person, write five genuine appreciations — the real things about them that are actually worth appreciating. Feel the appreciation as you write. Notice what happens to your sense of the relationship. Then write about what you want each relationship to become, and what alignment shift in yourself would be required to attract that."
         },
         {
           id: "4.3",
-          title: "Money and Abundance: The Vibrational Approach",
+          title: "Money and Abundance: The Alignment Approach",
           duration: "20 min",
-          teaching: `Money is one of the most charged vibrational subjects in the modern world. Most people have deeply entrenched beliefs about money — beliefs about scarcity, about worthiness, about the relationship between effort and reward — that create significant resistance to the flow of abundance.
+          teaching: `Money is one of the most charged alignment subjects in the modern world. Most people have deeply entrenched beliefs about money — beliefs about scarcity, about worthiness, about the relationship between effort and reward — that create significant resistance to the flow of abundance.
 
-The vibrational approach to money begins with the recognition that money is energy — that it flows according to the same principles as all energy, and that the primary determinant of how much of it flows into your experience is the vibration you are offering about it.
+The alignment approach to money begins with the recognition that money is energy — that it flows according to the same principles as all energy, and that the primary determinant of how much of it flows into your experience is the alignment you are offering about it.
 
 The most common forms of resistance to abundance are:
 
@@ -1904,11 +1904,11 @@ The most common forms of resistance to abundance are:
 
 **Conditional happiness.** The belief that you will be happy, relaxed, or free when you have enough money — that the well-being is contingent on the financial condition. Conditional happiness creates resistance because it places the well-being outside the present moment and outside your control.
 
-The vibrational approach to abundance is the practice of finding genuine appreciation for the money that is currently flowing — however much or little that is — and of practicing the feeling of abundance rather than waiting for the circumstances to produce it.
+The alignment approach to abundance is the practice of finding genuine appreciation for the money that is currently flowing — however much or little that is — and of practicing the feeling of abundance rather than waiting for the circumstances to produce it.
 
-The abundance feeling is not the feeling of having a lot of money. It is the feeling of sufficiency — of having enough, of being provided for, of trusting that the flow will continue. That feeling, practiced consistently, is the vibrational signal that attracts more abundance.`,
+The abundance feeling is not the feeling of having a lot of money. It is the feeling of sufficiency — of having enough, of being provided for, of trusting that the flow will continue. That feeling, practiced consistently, is the alignment signal that attracts more abundance.`,
           reflections: [
-            "What is your current dominant vibration about money? If you had to name it as a point on the Emotional Guidance Scale, where would it be?",
+            "What is your current dominant alignment about money? If you had to name it as a point on the Emotional Guidance Scale, where would it be?",
             "What are the primary resistant thoughts you have about money? Which of the three forms of resistance — scarcity thinking, unworthiness, or conditional happiness — is most active for you?",
             "What would the abundance feeling feel like in your specific life — the genuine sense of sufficiency, of being provided for, of trusting the flow? What thoughts would produce that feeling?"
           ],
@@ -1916,25 +1916,25 @@ The abundance feeling is not the feeling of having a lot of money. It is the fee
         },
         {
           id: "4.4",
-          title: "Health and Vitality: The Body as Vibrational Instrument",
+          title: "Health and Vitality: The Body as an Alignment Instrument",
           duration: "20 min",
-          teaching: `The body is a vibrational instrument. It responds to the vibration you are offering — to the thoughts, beliefs, and emotional patterns that constitute your habitual inner life. The person who consistently offers a high vibration — who practices appreciation, who releases resistance, who lives from a place of genuine well-being — will tend to experience better physical health than the person who consistently offers a low vibration.
+          teaching: `The body is a alignment instrument. It responds to the alignment you are offering — to the thoughts, beliefs, and emotional patterns that constitute your habitual inner life. The person who consistently offers a high alignment — who practices appreciation, who releases resistance, who lives from a place of genuine well-being — will tend to experience better physical health than the person who consistently offers a low alignment.
 
 This is not a claim that all illness is caused by negative thinking. It is an observation about the relationship between the inner life and the physical body — a relationship that is increasingly well-documented in the research on psychoneuroimmunology, the science of how mental and emotional states affect immune function and physical health.
 
-The vibrational approach to health begins with the recognition that the body is always communicating — that physical symptoms are, among other things, vibrational signals. The symptom is not the enemy. It is guidance — a message from the body about the current state of the inner life.
+The alignment approach to health begins with the recognition that the body is always communicating — that physical symptoms are, among other things, alignment signals. The symptom is not the enemy. It is guidance — a message from the body about the current state of the inner life.
 
-The most important vibrational practice for health is appreciation of the body — the deliberate, consistent practice of finding genuine things to appreciate about the physical instrument you inhabit. Not the idealized body you wish you had — the actual body you have, with its specific capacities, its specific sensations, its specific ways of moving through the world.
+The most important alignment practice for health is appreciation of the body — the deliberate, consistent practice of finding genuine things to appreciate about the physical instrument you inhabit. Not the idealized body you wish you had — the actual body you have, with its specific capacities, its specific sensations, its specific ways of moving through the world.
 
 The body appreciation practice is simple: each day, find three genuine things to appreciate about your body. Not things you think you should appreciate — things you actually do appreciate. The capacity to breathe. The ability to move. The sensation of warmth. The fact that your heart has been beating without your conscious effort for every moment of your life.
 
-This practice, done consistently, shifts the vibrational relationship with the body from one of judgment and dissatisfaction to one of genuine appreciation — and that shift tends to produce improvements in physical well-being that no amount of willpower or discipline can produce.`,
+This practice, done consistently, shifts the alignment relationship with the body from one of judgment and dissatisfaction to one of genuine appreciation — and that shift tends to produce improvements in physical well-being that no amount of willpower or discipline can produce.`,
           reflections: [
-            "What is your current dominant vibration about your body? Is it primarily appreciation, judgment, or something else?",
+            "What is your current dominant alignment about your body? Is it primarily appreciation, judgment, or something else?",
             "What are the three things about your body that you most genuinely appreciate — not the things you think you should appreciate, the things you actually do?",
-            "What physical symptoms or patterns are you currently experiencing that might be vibrational signals? What might they be communicating about the current state of your inner life?"
+            "What physical symptoms or patterns are you currently experiencing that might be alignment signals? What might they be communicating about the current state of your inner life?"
           ],
-          journalPrompt: "Write the body appreciation practice for today. Find five genuine things to appreciate about your physical body — the actual capacities, sensations, and qualities of the body you inhabit right now. Feel the appreciation as you write. Then write about the relationship between your inner life and your physical experience: what patterns do you notice? What does the body seem to be communicating? What vibrational shift might address what it is communicating?"
+          journalPrompt: "Write the body appreciation practice for today. Find five genuine things to appreciate about your physical body — the actual capacities, sensations, and qualities of the body you inhabit right now. Feel the appreciation as you write. Then write about the relationship between your inner life and your physical experience: what patterns do you notice? What does the body seem to be communicating? What alignment shift might address what it is communicating?"
         },
         {
           id: "4.5",
@@ -1942,19 +1942,19 @@ This practice, done consistently, shifts the vibrational relationship with the b
           duration: "25 min",
           teaching: `This is the final lesson of The Alignment Current.
 
-Four weeks. Twenty lessons. The foundational architecture of vibrational alignment, applied to the specific, irreplaceable, particular life you are living.
+Four weeks. Twenty lessons. The foundational architecture of interior alignment, applied to the specific, irreplaceable, particular life you are living.
 
-What you have built here is not a philosophy. It is a practice — a daily, ongoing engagement with the vibrational reality of your inner life and its relationship to the outer circumstances you are attracting.
+What you have built here is not a philosophy. It is a practice — a daily, ongoing engagement with the interior reality of your inner life and its relationship to the outer circumstances you are attracting.
 
 The completion practice for this course is the Alignment Inventory — the full accounting of what has shifted, what remains, and what you are building.
 
-**What has shifted?** In the four weeks of this course, what has changed in your vibrational baseline? What emotions are more consistently present? What thoughts are more habitual? What resistance has been released? What has arrived in your experience that was not there before?
+**What has shifted?** In the four weeks of this course, what has changed in your alignment baseline? What emotions are more consistently present? What thoughts are more habitual? What resistance has been released? What has arrived in your experience that was not there before?
 
-**What remains?** Where is the resistance still most active? What beliefs are still most entrenched? What areas of your life are still most in need of vibrational work?
+**What remains?** Where is the resistance still most active? What beliefs are still most entrenched? What areas of your life are still most in need of alignment work?
 
 **What are you building?** What is the alignment lifestyle you are committing to — the specific, sustainable daily practice that will continue the work of this course? What will you practice? When? How?
 
-**What is the one sentence?** After four weeks of engagement with the practice of vibrational alignment, what is the one sentence that captures the most important thing you have learned — the insight with the widest reach, the shift that will still be present in two years?
+**What is the one sentence?** After four weeks of engagement with the practice of interior alignment, what is the one sentence that captures the most important thing you have learned — the insight with the widest reach, the shift that will still be present in two years?
 
 That sentence is the yield of the course. Write it last. Write it carefully. It is the most important thing you will write in these four weeks.`,
           reflections: [
@@ -1962,20 +1962,20 @@ That sentence is the yield of the course. Write it last. Write it carefully. It 
             "Where did you most resist the work — the lesson, the practice, the tool that you kept finding reasons not to fully engage? What was underneath the resistance?",
             "What is the next step — the practice, the commitment, the conversation, the response — that this course has made both possible and necessary?"
           ],
-          journalPrompt: "Write the full Alignment Inventory. Take your time. This is not a summary — it is the genuine record of four weeks of intentional engagement with the vibrational reality of your inner life. Write what has shifted. Write what remains. Write what you are building. And then write the one sentence. That sentence is the gift the course has been building toward."
+          journalPrompt: "Write the full Alignment Inventory. Take your time. This is not a summary — it is the genuine record of four weeks of intentional engagement with the interior reality of your inner life. Write what has shifted. Write what remains. Write what you are building. And then write the one sentence. That sentence is the gift the course has been building toward."
         }
       ]
     }
   ],
   completionMessage: `You have completed The Alignment Current.
 
-Twenty lessons. Four weeks. The foundational architecture of vibrational alignment, applied to the specific, irreplaceable life you are living.
+Twenty lessons. Four weeks. The foundational architecture of interior alignment, applied to the specific, irreplaceable life you are living.
 
-What you have built here is a practice — a daily, ongoing engagement with the vibrational reality of your inner life and its relationship to the outer circumstances you are attracting.
+What you have built here is a practice — a daily, ongoing engagement with the interior reality of your inner life and its relationship to the outer circumstances you are attracting.
 
 The alignment is not achieved once and held forever. It is practiced — daily, in the specific moments of resistance, in the specific choices about where to direct attention, in the specific practice of finding the next better-feeling thought.
 
-*You are a vibrational being. What you offer, you attract. What you practice, you become.*
+*You are a being whose inner state shapes outer experience. What you offer, you attract. What you practice, you become.*
 
 Keep practicing. Keep allowing. Keep moving up the scale.`,
   nextSteps: [
@@ -2032,7 +2032,7 @@ export const identityInMotion: CourseData = {
           id: "1.3",
           title: "The Identity Declaration",
           duration: "25 min",
-          teaching: `The identity declaration is the specific, deliberate naming of the person you are becoming. It is not a goal statement — goals describe what you want to achieve; the declaration describes who you are becoming. It is not an affirmation — affirmations state what you want to be true; the declaration states what is becoming true, with evidence.\n\nAn effective identity declaration has four characteristics. It is specific — not "I am a healthy person" but "I am someone who moves their body deliberately every day." It is behavioral — it describes what the person does, not how they feel or what they believe. It is present-tense and developing — "I am becoming" or "I am someone who" rather than "I will be." And it is genuinely credible — there is at least some current evidence for it, even if the evidence is small.\n\nThe credibility requirement is the most important and the most commonly violated. An identity declaration that has no current evidence is an aspiration, not a declaration. The mind knows the difference. An aspiration produces motivation followed by disappointment when the behavior is inconsistent. A declaration produces a different relationship — one in which the behavior is not the goal but the demonstration of who you already are.\n\n**Demonstrate at the minimum viable level.** The minimum viable demonstration is the smallest genuine act that counts as evidence for the identity. It is not the most impressive version. It is the one that actually happens on every available day, including the worst days.\n\n**Count returns as demonstrations.** The return after a missed day is not a recovery from a failure. It is itself a demonstration — of the specific identity quality that the full practice is building. *I am someone who comes back* is a real and important identity. Every return is the clearest possible evidence for it.\n\nWriting an effective identity declaration requires honest self-examination and often several drafts. The first version is almost always too aspirational to be credible or too vague to be testable. Work through multiple iterations until you find the version that is both genuinely true in some current form and specific enough to guide behavior.`,
+          teaching: `The identity declaration is the specific, deliberate naming of the person you are becoming. It is not a goal statement — goals describe what you want to achieve; the declaration describes who you are becoming. It is not an aspiration — aspirations state what you want to be true; the declaration states what is becoming true, with evidence.\n\nAn effective identity declaration has four characteristics. It is specific — not "I am a healthy person" but "I am someone who moves their body deliberately every day." It is behavioral — it describes what the person does, not how they feel or what they believe. It is present-tense and developing — "I am becoming" or "I am someone who" rather than "I will be." And it is genuinely credible — there is at least some current evidence for it, even if the evidence is small.\n\nThe credibility requirement is the most important and the most commonly violated. An identity declaration that has no current evidence is an aspiration, not a declaration. The mind knows the difference. An aspiration produces motivation followed by disappointment when the behavior is inconsistent. A declaration produces a different relationship — one in which the behavior is not the goal but the demonstration of who you already are.\n\n**Demonstrate at the minimum viable level.** The minimum viable demonstration is the smallest genuine act that counts as evidence for the identity. It is not the most impressive version. It is the one that actually happens on every available day, including the worst days.\n\n**Count returns as demonstrations.** The return after a missed day is not a recovery from a failure. It is itself a demonstration — of the specific identity quality that the full practice is building. *I am someone who comes back* is a real and important identity. Every return is the clearest possible evidence for it.\n\nWriting an effective identity declaration requires honest self-examination and often several drafts. The first version is almost always too aspirational to be credible or too vague to be testable. Work through multiple iterations until you find the version that is both genuinely true in some current form and specific enough to guide behavior.`,
           reflections: [
             "Write three draft identity declarations for the domain you are working in. For each one, test it: can you find current evidence for it? Does it feel genuinely credible, or does it feel like performance? Is it specific enough to be testable?",
             "Of the three drafts, which is closest to meeting all four criteria — specific, behavioral, present-tense and developing, and genuinely credible? What would make it stronger?",

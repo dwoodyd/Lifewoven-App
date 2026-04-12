@@ -20,10 +20,10 @@ const PRODUCTS = [
     category: "course",
     icon: "🌀",
     title: "The Alignment Current",
-    subtitle: "Advanced Vibrational Practice",
+    subtitle: "Advanced Alignment Practice",
     price: "$147",
-    description: "Most people touch alignment occasionally. This course teaches you to live there. The Alignment Current is a four-week deep-immersion in the daily practices, emotional tools, and inner conditions that make sustained vibrational coherence not a peak experience but a way of being.",
-    tags: ["Vibrational Alignment", "Advanced", "4 weeks"],
+    description: "Most people touch alignment occasionally. This course teaches you to live there. The Alignment Current is a four-week deep-immersion in the daily practices, emotional tools, and inner conditions that make sustained interior coherence not a peak experience but a way of being.",
+    tags: ["Interior Alignment", "Advanced", "4 weeks"],
   },
   {
     id: "identity-in-motion",
@@ -102,7 +102,7 @@ const PRODUCTS = [
     title: "Wisdom Card Deck",
     subtitle: "52 Cards of Timeless Insight",
     price: "$34",
-    description: "One card. One week. One practice. The Wisdom Card Deck is 52 distilled insights from the four wisdom traditions at the heart of Lifewoven — Mind Science, Vibrational Alignment, Meaning-Centered Philosophy, and Behavioral Science. Sit with each card for seven days and let it work on you.",
+    description: "One card. One week. One practice. The Wisdom Card Deck is 52 distilled insights from the four wisdom traditions at the heart of Lifewoven — Mind Science, Interior Alignment, Meaning-Centered Philosophy, and Behavioral Science. Sit with each card for seven days and let it work on you.",
     tags: ["Cards", "PDF", "52 cards"],
   },
 ];

@@ -20,14 +20,14 @@ const PATHWAYS = [
   {
     slug: "resonance",
     name: "Resonance",
-    subtitle: "Advanced Vibrational Practice",
+    subtitle: "Advanced Alignment Practice",
     description: "A deeper practice for emotional and energetic alignment. Work with the Emotional Compass, guided visualization, and intentional state-setting.",
     duration: "20–30 min",
     icon: Waves,
     color: "text-violet-600",
     bg: "bg-violet-50",
     border: "border-violet-100",
-    tag: "Vibrational Work",
+    tag: "Alignment Work",
   },
   {
     slug: "uplift",

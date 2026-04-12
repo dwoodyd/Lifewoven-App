@@ -27,7 +27,7 @@ const modules = [
     color: "text-state",
     bgColor: "bg-state-soft",
     borderColor: "border-l-[3px] border-l-[oklch(0.62_0.14_200)]",
-    description: "Emotional alignment, vibrational practice, and nervous system regulation.",
+    description: "Emotional alignment, interior practice, and nervous system regulation.",
     tools: ["Emotional Guidance Scale", "Vortex Meditations", "Breathwork Timer", "Daily Check-in"],
   },
   {
@@ -74,7 +74,7 @@ const modules = [
 
 const pathways = [
   { slug: "align", label: "Align", desc: "Daily grounding and morning alignment", color: "bg-[oklch(0.65_0.13_195)]" },
-  { slug: "resonance", label: "Resonance", desc: "Advanced vibrational and meditative practice", color: "bg-[oklch(0.55_0.18_290)]" },
+  { slug: "resonance", label: "Resonance", desc: "Advanced alignment and meditative practice", color: "bg-[oklch(0.55_0.18_290)]" },
   { slug: "uplift", label: "Uplift", desc: "Shift your emotional set-point upward", color: "bg-[oklch(0.70_0.15_50)]" },
   { slug: "flow", label: "Flow", desc: "Visualization and future-self activation", color: "bg-[oklch(0.62_0.14_175)]" },
   { slug: "rhythms", label: "Rhythms", desc: "Identity-based habit execution system", color: "bg-[oklch(0.55_0.16_140)]" },
@@ -283,7 +283,7 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-2 text-sm">
               <Heart className="h-4 w-4" />
-              <span>Law of Attraction Philosophy</span>
+              <span>Lifewoven Framework</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
               <Zap className="h-4 w-4" />
