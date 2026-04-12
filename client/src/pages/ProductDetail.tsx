@@ -233,8 +233,8 @@ export default function ProductDetail() {
         window.open(data.url, "_blank");
       }
     },
-    onError: (err) => {
-      toast.error("Checkout error", { description: err.message });
+    onError: () => {
+      toast.error("Something went wrong", { description: "We couldn't start checkout. Please try again or email us at hello@lifewoven.com if the issue persists." });
     },
   });
 
@@ -326,7 +326,7 @@ export default function ProductDetail() {
         )}
         {/* Audio Preview Player */}
         {isAudioProduct && (
-          <div className="mb-8 p-5 rounded-2xl border border-border bg-card flex items-center gap-4">
+          <div className="mb-8 p-5 rounded-2xl border border-border bg-card flex flex-wrap items-center gap-4">
             <div className="flex-1">
               <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-1">Audio Preview</p>
               <p className="text-base font-light text-foreground">Reset Protocol — Introduction</p>

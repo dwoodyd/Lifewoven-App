@@ -3,6 +3,7 @@ import Stripe from "stripe";
 import { getDb } from "../db";
 import { users, orders } from "../../drizzle/schema";
 import { eq } from "drizzle-orm";
+import { notifyOwner } from "../_core/notification";
 
 export async function stripeWebhookHandler(req: Request, res: Response) {
   const sig = req.headers["stripe-signature"];
@@ -68,6 +69,10 @@ export async function stripeWebhookHandler(req: Request, res: Response) {
             downloadUrl,
           });
           console.log(`[Webhook] Product order created for user ${userId}: ${productSlug}`);
+          await notifyOwner({
+            title: `💳 New Purchase: ${productSlug}`,
+            content: `${session.metadata?.customer_name ?? "Someone"} (${session.metadata?.customer_email ?? ""}) purchased "${productSlug}" for $${(amountTotal / 100).toFixed(2)}.\nDownload: ${downloadUrl ?? "N/A"}`,
+          }).catch(() => {});
           break;
         }
 
@@ -79,6 +84,10 @@ export async function stripeWebhookHandler(req: Request, res: Response) {
             stripeSubscriptionId: subscriptionId,
           }).where(eq(users.id, userId));
           console.log(`[Webhook] User ${userId} upgraded to ${plan}`);
+          await notifyOwner({
+            title: `🎉 New ${plan} Subscriber`,
+            content: `${session.metadata?.customer_name ?? "Someone"} (${session.metadata?.customer_email ?? ""}) subscribed to the ${plan} plan.`,
+          }).catch(() => {});
         }
         break;
       }

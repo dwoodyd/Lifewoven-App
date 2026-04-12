@@ -276,3 +276,10 @@
 - [ ] Voice-to-text journaling: mic button, browser audio recording, Whisper transcription, text populates journal field
 - [ ] Admin dashboard: owner-only access gate, user list, orders, content status, system health
 - [ ] Admin bypass: owner account has full unrestricted access to all gated pages
+
+## Beta Prep (Apr 11, 2026)
+- [ ] Stripe webhook: verify end-to-end, add purchase email notification to owner + buyer
+- [ ] Mobile responsiveness: fix dashboard and course pages on small screens
+- [ ] Error states: add friendly fallback messages for Stripe/DB failures
+- [ ] ToS and Privacy Policy pages (already exist — verify links in footer/checkout)
+- [ ] Rebuild About page as visual landing page with instructions

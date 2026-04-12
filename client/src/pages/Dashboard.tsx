@@ -184,7 +184,7 @@ export default function Dashboard() {
                 <Slider min={1} max={22} step={1} value={[emotionalScore]} onValueChange={([v]) => setEmotionalScore(v)} className="mb-1" />
                 <div className="flex justify-between text-xs text-muted-foreground"><span>Fear / Grief</span><span>Joy / Love</span></div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm text-muted-foreground block mb-2">Energy: {energyLevel}/10</label>
                   <Slider min={1} max={10} step={1} value={[energyLevel]} onValueChange={([v]) => setEnergyLevel(v)} />
@@ -209,7 +209,7 @@ export default function Dashboard() {
           <div className="lg:col-span-2 space-y-6">
             <div>
               <h2 className="font-serif text-lg font-light text-foreground mb-4">Your 5S Framework</h2>
-              <div className="grid grid-cols-5 gap-2">
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                 {MODULE_CONFIG.map(({ key, label, icon: Icon, color, bg, href }) => (
                   <Link key={key} href={href}>
                     <div className={`p-3 rounded-xl border border-border ${bg} hover:border-muted-foreground transition-all cursor-pointer text-center group`}>

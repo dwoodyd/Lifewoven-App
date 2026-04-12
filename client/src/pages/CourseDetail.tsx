@@ -78,7 +78,7 @@ export default function CourseDetail() {
         window.open(d.url, "_blank");
       }
     },
-    onError: () => toast.error("Could not start checkout. Please try again."),
+    onError: () => toast.error("Something went wrong", { description: "We couldn't start checkout. Please try again or email hello@lifewoven.com if the issue persists." }),
   });
 
   const isAdmin = user?.role === "admin";
