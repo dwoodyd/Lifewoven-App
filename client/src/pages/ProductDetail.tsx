@@ -122,15 +122,15 @@ const PRODUCTS: Record<string, {
     description: "Seven 15-minute guided audio sessions — one for each day of the week — to start your day in alignment.",
     longDescription: `These fifteen minutes belong entirely to you — before the week asks anything of you, before the calendar fills, before the first message arrives.\n\nThe Morning Alignment Series is seven complete guided sessions, one for each day of the week, each approximately fifteen minutes. Each session moves through five elements: Arrive, Acknowledge, Appreciate, Intend, and Release — a complete interior practice that sets the interior tone for everything that follows.\n\nThe sessions are designed to be used in sequence across a week, or individually on the days when a specific practice is most needed. Monday's Foundation session establishes the week's ground. Each subsequent day builds on a specific dimension of the Lifewoven framework.\n\nThis download includes the complete narrated scripts — formatted for professional recording or personal use. Each script includes narrator pacing notes, pause markers, and breath cues.`,
     includes: [
-      "7 complete guided session scripts (one per day of the week)",
-      "Professional narrator pacing notes and pause markers",
-      "Breath cues and ambient sound suggestions",
-      "~15 minutes per session",
-      "PDF download — 50 pages",
+      "7 complete guided audio sessions — one per day of the week",
+      "Monday: State · Tuesday: Belief · Wednesday: Body & Energy",
+      "Thursday: Clarity · Friday: Identity · Saturday: Appreciation · Sunday: Integration",
+      "~15 minutes per session · AI-voiced first edition",
+      "ZIP bundle — all 7 MP3s in one download",
       "Immediate download after purchase"
     ],
-    downloadUrl: `${CDN}/PACKAGE-07-morning-alignment-series_acb6281f.pdf`,
-    tags: ["Audio Scripts", "Morning Practice", "7 sessions", "PDF"],
+    downloadUrl: `https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/morning-alignment-series_c10557c0.zip`,
+    tags: ["Audio", "Morning Practice", "7 sessions", "MP3"],
   },
   "belief-rewrite-workbook": {
     id: "belief-rewrite-workbook",
@@ -279,7 +279,18 @@ export default function ProductDetail() {
   // Audio preview player (muted autoplay)
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isMuted, setIsMuted] = useState(true);
-  const isAudioProduct = productId === "reset-protocol-audio";
+  const isAudioProduct = productId === "reset-protocol-audio" || productId === "morning-alignment-audio";
+  const isMorningSeries = productId === "morning-alignment-audio";
+  const MORNING_SESSIONS = [
+    { label: 'Monday — State', url: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/day1-state_c8d043a6.mp3' },
+    { label: 'Tuesday — Belief', url: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/day2-belief_f2b4f847.mp3' },
+    { label: 'Wednesday — Body & Energy', url: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/day3-body_feedb3f5.mp3' },
+    { label: 'Thursday — Clarity', url: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/day4-clarity_aa184c25.mp3' },
+    { label: 'Friday — Identity', url: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/day5-identity_078d4c2c.mp3' },
+    { label: 'Saturday — Appreciation', url: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/day6-appreciation_0cbe84b6.mp3' },
+    { label: 'Sunday — Integration', url: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/day7-integration_a6590913.mp3' },
+  ];
+  const [activeSession, setActiveSession] = useState(0);
   useEffect(() => {
     if (!isAudioProduct || !audioRef.current) return;
     audioRef.current.muted = true;
@@ -326,19 +337,40 @@ export default function ProductDetail() {
         )}
         {/* Audio Preview Player */}
         {isAudioProduct && (
-          <div className="mb-8 p-5 rounded-2xl border border-border bg-card flex flex-wrap items-center gap-4">
-            <div className="flex-1">
-              <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-1">Audio Preview</p>
-              <p className="text-base font-light text-foreground">Reset Protocol — Introduction</p>
-            </div>
-            <button
-              onClick={toggleMute}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border bg-secondary hover:bg-secondary/80 transition-colors text-sm font-light"
-            >
-              {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-              {isMuted ? "Unmute" : "Mute"}
-            </button>
-            <audio ref={audioRef} src={`${CDN}/reset-audio_c806fe42.mp3`} muted />
+          <div className="mb-8 p-5 rounded-2xl border border-border bg-card">
+            <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">Audio Preview</p>
+            {isMorningSeries ? (
+              <>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {MORNING_SESSIONS.map((s, i) => (
+                    <button
+                      key={i}
+                      onClick={() => { setActiveSession(i); if (audioRef.current) { audioRef.current.src = s.url; audioRef.current.muted = isMuted; audioRef.current.play().catch(() => {}); } }}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-light border transition-colors ${
+                        activeSession === i ? 'border-foreground bg-foreground text-background' : 'border-border bg-secondary hover:bg-secondary/80 text-foreground'
+                      }`}
+                    >{s.label}</button>
+                  ))}
+                </div>
+                <div className="flex items-center gap-4">
+                  <p className="flex-1 text-sm font-light text-muted-foreground">{MORNING_SESSIONS[activeSession].label}</p>
+                  <button onClick={toggleMute} className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border bg-secondary hover:bg-secondary/80 transition-colors text-sm font-light">
+                    {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                    {isMuted ? 'Unmute' : 'Mute'}
+                  </button>
+                </div>
+                <audio ref={audioRef} src={MORNING_SESSIONS[0].url} muted />
+              </>
+            ) : (
+              <div className="flex flex-wrap items-center gap-4">
+                <p className="flex-1 text-base font-light text-foreground">Reset Protocol — Introduction</p>
+                <button onClick={toggleMute} className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border bg-secondary hover:bg-secondary/80 transition-colors text-sm font-light">
+                  {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                  {isMuted ? 'Unmute' : 'Mute'}
+                </button>
+                <audio ref={audioRef} src={`${CDN}/reset-audio_c806fe42.mp3`} muted />
+              </div>
+            )}
           </div>
         )}
         {/* Header */}

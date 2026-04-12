@@ -1,4 +1,6 @@
 import { Toaster } from "@/components/ui/sonner";
+import OnboardingModal from "./components/OnboardingModal";
+import FeedbackWidget from "./components/FeedbackWidget";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
@@ -155,6 +157,8 @@ function App() {
       <ThemeProvider defaultTheme="light" switchable>
         <TooltipProvider>
           <Toaster />
+          <OnboardingModal />
+          <FeedbackWidget />
           <Router />
         </TooltipProvider>
       </ThemeProvider>
