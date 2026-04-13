@@ -68,7 +68,8 @@ const trpcClient = trpc.createClient({
   ],
 });
 
-createRoot(document.getElementById("root")!).render(
+const root = createRoot(document.getElementById("root")!);
+root.render(
   <trpc.Provider client={trpcClient} queryClient={queryClient}>
     <QueryClientProvider client={queryClient}>
       <AdminPreviewProvider>
@@ -77,3 +78,10 @@ createRoot(document.getElementById("root")!).render(
     </QueryClientProvider>
   </trpc.Provider>
 );
+
+// Dismiss splash after React paints first frame
+requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
+    (window as any).__dismissSplash?.();
+  });
+});
