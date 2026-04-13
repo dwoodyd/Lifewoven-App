@@ -79,9 +79,13 @@ root.render(
   </trpc.Provider>
 );
 
-// Dismiss splash after React paints first frame
+// Dismiss splash after a minimum display time + React first paint
+const splashStart = Date.now();
+const MIN_SPLASH_MS = 2200; // minimum time the splash stays visible
 requestAnimationFrame(() => {
   requestAnimationFrame(() => {
-    (window as any).__dismissSplash?.();
+    const elapsed = Date.now() - splashStart;
+    const remaining = Math.max(0, MIN_SPLASH_MS - elapsed);
+    setTimeout(() => (window as any).__dismissSplash?.(), remaining);
   });
 });
