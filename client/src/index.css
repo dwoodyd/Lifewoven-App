@@ -165,7 +165,7 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-size: 17px; /* Bumped from 16px — improves readability across all text-* classes */
+    font-size: 19px; /* Bumped from 17px — improves readability across all text-* classes */
   }
   body {
     @apply bg-background text-foreground;
