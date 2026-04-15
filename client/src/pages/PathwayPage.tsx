@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRoute, Link } from "wouter";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { ArrowRight, Clock, Star, ChevronDown, ChevronUp, CheckCircle2, Circle, BookOpen, RotateCcw, Play } from "lucide-react";
+import { ArrowRight, Clock, Star, ChevronDown, ChevronUp, CheckCircle2, Circle, BookOpen, RotateCcw, Play, Pause, Timer } from "lucide-react";
 
 const PATHWAYS: Record<string, any> = {
   align: {
@@ -114,6 +114,18 @@ const COLOR_MAP: Record<string, string> = {
   stewardship: "text-stewardship border-stewardship/20 bg-stewardship/5",
 };
 
+function parseStepMinutes(title: string): number {
+  const m = title.match(/(\d+)(?:-(\d+))?\s*min/);
+  if (!m) return 0;
+  return parseInt(m[2] || m[1], 10);
+}
+
+function formatTime(s: number) {
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return `${m}:${sec.toString().padStart(2, "0")}`;
+}
+
 export default function PathwayPage() {
   const [, params] = useRoute("/pathway/:id");
   const id = (params?.id || "align").toLowerCase();
@@ -125,16 +137,57 @@ export default function PathwayPage() {
   const [sessionStarted, setSessionStarted] = useState(false);
   const [sessionComplete, setSessionComplete] = useState(false);
 
+  // Per-step timer state
+  const [activeTimerStep, setActiveTimerStep] = useState<number | null>(null);
+  const [timerSeconds, setTimerSeconds] = useState(0);
+  const [timerRunning, setTimerRunning] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
   const totalSteps = pathway.steps.length;
   const completedCount = completedSteps.size;
   const progressPct = Math.round((completedCount / totalSteps) * 100);
 
+  // Timer tick
+  useEffect(() => {
+    if (timerRunning && timerSeconds > 0) {
+      timerRef.current = setInterval(() => {
+        setTimerSeconds(s => {
+          if (s <= 1) {
+            setTimerRunning(false);
+            toast.success("Step time complete — mark it done when ready.");
+            return 0;
+          }
+          return s - 1;
+        });
+      }, 1000);
+    } else if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, [timerRunning]);
+
+  // Reset on pathway change
   useEffect(() => {
     setCompletedSteps(new Set());
     setExpandedStep(0);
     setSessionStarted(false);
     setSessionComplete(false);
+    setActiveTimerStep(null);
+    setTimerSeconds(0);
+    setTimerRunning(false);
+    if (timerRef.current) clearInterval(timerRef.current);
   }, [id]);
+
+  function startTimer(stepIdx: number, stepTitle: string) {
+    const mins = parseStepMinutes(stepTitle);
+    if (!mins) return;
+    if (timerRef.current) clearInterval(timerRef.current);
+    setActiveTimerStep(stepIdx);
+    setTimerSeconds(mins * 60);
+    setTimerRunning(true);
+  }
+
+  function toggleTimer() { setTimerRunning(r => !r); }
 
   function toggleStep(idx: number) {
     setCompletedSteps(prev => {
@@ -143,6 +196,11 @@ export default function PathwayPage() {
         next.delete(idx);
       } else {
         next.add(idx);
+        // Stop timer if this step's timer was running
+        if (activeTimerStep === idx) {
+          setTimerRunning(false);
+          setActiveTimerStep(null);
+        }
         if (idx + 1 < totalSteps && !next.has(idx + 1)) {
           setTimeout(() => setExpandedStep(idx + 1), 300);
         }
@@ -225,6 +283,8 @@ export default function PathwayPage() {
           {pathway.steps.map((step: any, i: number) => {
             const isCompleted = completedSteps.has(i);
             const isExpanded = expandedStep === i;
+            const stepMins = parseStepMinutes(step.title);
+            const isThisTimerActive = activeTimerStep === i;
             return (
               <div key={i} className={`rounded-2xl border transition-all duration-300 overflow-hidden ${isCompleted ? "border-accent/30 bg-accent/3" : "border-border bg-card"}`}>
                 <button
@@ -245,15 +305,40 @@ export default function PathwayPage() {
                       <h3 className={`font-medium text-base ${isCompleted ? "text-muted-foreground line-through" : "text-foreground"}`}>{step.title}</h3>
                     </div>
                   </div>
+                  {/* Timer badge for active step */}
+                  {isThisTimerActive && (
+                    <span className={`text-xs font-mono px-2 py-0.5 rounded-full border ${timerRunning ? "border-accent/40 text-accent bg-accent/10" : "border-border text-muted-foreground"}`}>
+                      {formatTime(timerSeconds)}
+                    </span>
+                  )}
                   {isExpanded ? <ChevronUp className="h-4 w-4 text-muted-foreground shrink-0" /> : <ChevronDown className="h-4 w-4 text-muted-foreground shrink-0" />}
                 </button>
                 {isExpanded && (
                   <div className="px-5 pb-5 border-t border-border/50 animate-in slide-in-from-top-1 duration-200">
                     <p className="text-base text-muted-foreground font-light leading-relaxed pt-4 mb-4">{step.desc}</p>
                     {sessionStarted && !isCompleted && (
-                      <Button size="sm" variant="outline" className="gap-2" onClick={() => toggleStep(i)}>
-                        <CheckCircle2 className="h-3.5 w-3.5" /> Mark Complete
-                      </Button>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Button size="sm" variant="outline" className="gap-2" onClick={() => toggleStep(i)}>
+                          <CheckCircle2 className="h-3.5 w-3.5" /> Mark Complete
+                        </Button>
+                        {stepMins > 0 && (
+                          isThisTimerActive ? (
+                            <div className="flex items-center gap-2">
+                              <span className={`text-sm font-mono font-medium ${timerRunning ? "text-accent" : "text-muted-foreground"}`}>
+                                {formatTime(timerSeconds)}
+                              </span>
+                              <Button size="sm" variant="ghost" className="gap-1.5 h-8 px-3" onClick={toggleTimer} aria-label={timerRunning ? "Pause timer" : "Resume timer"}>
+                                {timerRunning ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
+                                {timerRunning ? "Pause" : "Resume"}
+                              </Button>
+                            </div>
+                          ) : (
+                            <Button size="sm" variant="ghost" className="gap-1.5 h-8 px-3 text-muted-foreground" onClick={() => startTimer(i, step.title)} aria-label={`Start ${stepMins}-minute timer`}>
+                              <Timer className="h-3.5 w-3.5" /> {stepMins} min timer
+                            </Button>
+                          )
+                        )}
+                      </div>
                     )}
                     {isCompleted && (
                       <button onClick={() => toggleStep(i)} className="text-xs text-muted-foreground hover:text-foreground transition-colors">Undo</button>

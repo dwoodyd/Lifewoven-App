@@ -13,6 +13,7 @@ import Home from "./pages/Home";
 import AlignmentAudit from "./pages/AlignmentAudit";
 import Pricing from "./pages/Pricing";
 import About from "./pages/About";
+import Sources from "./pages/Sources";
 
 // Auth
 import AuthCallback from "./pages/AuthCallback";
@@ -82,6 +83,7 @@ function Router() {
       <Route path="/audit" component={AlignmentAudit} />
       <Route path="/pricing" component={Pricing} />
       <Route path="/about" component={About} />
+      <Route path="/sources" component={Sources} />
 
       {/* Auth */}
       <Route path="/auth/callback" component={AuthCallback} />

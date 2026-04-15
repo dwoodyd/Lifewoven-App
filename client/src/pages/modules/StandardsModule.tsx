@@ -27,10 +27,10 @@ export default function StandardsModule() {
   const [habitFrequency, setHabitFrequency] = useState<"daily" | "weekly">("daily");
 
   const { data: habits, refetch } = trpc.habits.list.useQuery(undefined, { enabled: isAuthenticated });
-  const { data: todayLogs } = trpc.habits.todayLogs.useQuery(undefined, { enabled: isAuthenticated });
+  const { data: todayLogs, refetch: refetchLogs } = trpc.habits.todayLogs.useQuery(undefined, { enabled: isAuthenticated });
   const createHabit = trpc.habits.create.useMutation({ onSuccess: () => { toast.success("Habit added to your Stack."); setHabitName(""); setHabitIdentity(""); setShowAddHabit(false); refetch(); } });
-  const logHabit = trpc.habits.logCompletion.useMutation({ onSuccess: () => { toast.success("1% better. Keep going."); refetch(); } });
-  const archiveHabit = trpc.habits.delete.useMutation({ onSuccess: () => { toast.success("Habit archived."); refetch(); } });
+  const logHabit = trpc.habits.logCompletion.useMutation({ onSuccess: () => { toast.success("1% better. Keep going."); refetch(); refetchLogs(); } });
+  const archiveHabit = trpc.habits.delete.useMutation({ onSuccess: () => { toast.success("Habit archived."); refetch(); refetchLogs(); } });
 
   const completedHabitIds = new Set((todayLogs ?? []).map((l: any) => l.habitId));
   const completionRate = habits && habits.length > 0 ? Math.round((completedHabitIds.size / habits.length) * 100) : 0;
@@ -44,13 +44,13 @@ export default function StandardsModule() {
           <div>
             <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-1">5S Framework — Module 3</p>
             <h1 className="font-serif text-3xl md:text-4xl font-light text-foreground mb-2">Standards</h1>
-            <p className="text-muted-foreground text-base font-light max-w-xl">You don't rise to the level of your goals — you fall to the level of your systems. This module is your habit execution engine, daily scorecard, and deep work architecture.</p>
+            <p className="text-muted-foreground text-base font-light max-w-xl">Your systems determine your outcomes. This module is your habit execution engine, daily scorecard, and deep work architecture.</p>
           </div>
         </div>
         <div className="p-6 rounded-2xl border border-standards/20 bg-standards/5 mb-8">
           <p className="text-xs font-mono tracking-widest text-standards uppercase mb-3">Today's Standard</p>
           <p className="font-serif text-xl md:text-2xl font-light text-foreground italic leading-relaxed">"You do not rise to the level of your goals. You fall to the level of your systems."</p>
-          <p className="text-xs text-muted-foreground mt-3">— Behavioral Science Principle</p>
+          <p className="text-xs text-muted-foreground mt-3">— James Clear, <em>Atomic Habits</em></p>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
@@ -108,7 +108,7 @@ export default function StandardsModule() {
             </div>
             <div className="p-6 rounded-2xl border border-border bg-card">
               <h2 className="font-serif text-xl font-light text-foreground mb-2">The Four Laws of Behavior Change</h2>
-              <p className="text-base text-muted-foreground mb-5">The Lifewoven Identity Stack is built on four behavioral science laws that make habits inevitable rather than aspirational.</p>
+              <p className="text-base text-muted-foreground mb-5">The Identity Stack draws on the behavioral framework from James Clear's <em>Atomic Habits</em> — four laws that make habits inevitable rather than aspirational.</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {ATOMIC_HABITS_LAWS.map(law => (
                   <div key={law.law} className="p-4 rounded-xl bg-secondary/50">
@@ -126,7 +126,7 @@ export default function StandardsModule() {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between"><span className="text-xs text-muted-foreground">Total habits</span><span className="text-sm font-mono font-medium text-foreground">{habits.length}</span></div>
                   <div className="flex items-center justify-between"><span className="text-xs text-muted-foreground">Completed today</span><span className="text-sm font-mono font-medium text-foreground">{completedHabitIds.size}</span></div>
-                  <div className="flex items-center justify-between"><span className="text-xs text-muted-foreground">Best streak</span><span className="text-sm font-mono font-medium text-foreground">{habits.reduce((max: number, h: any) => Math.max(max, h.streak), 0)} days</span></div>
+                  <div className="flex items-center justify-between"><span className="text-xs text-muted-foreground">Best streak</span><span className="text-sm font-mono font-medium text-foreground">{habits.reduce((max: number, h: any) => Math.max(max, h.streak), 0)} {habits.reduce((max: number, h: any) => Math.max(max, h.streak), 0) === 1 ? 'day' : 'days'}</span></div>
                 </div>
               </div>
             )}

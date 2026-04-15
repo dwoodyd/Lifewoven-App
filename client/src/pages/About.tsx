@@ -165,7 +165,7 @@ export default function About() {
           <div className="flex gap-3 p-4 rounded-xl border border-border bg-secondary/40 mb-8">
             <Info className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
             <p className="text-xs text-muted-foreground font-light leading-relaxed">
-              <strong className="text-foreground font-medium">Independence Notice.</strong> Lifewoven is an independently created platform. It is not affiliated with, endorsed by, sponsored by, or formally connected to any of the individuals listed below or their estates. All Lifewoven content is original. These acknowledgements are made in the spirit of intellectual honesty only.
+              <strong className="text-foreground font-medium">Independence Notice.</strong> Lifewoven is an independently created platform. It is not affiliated with, endorsed by, sponsored by, or formally connected to any of the individuals listed below or their estates. The 5S Framework, Seven Pathways, and their interactions are original to Lifewoven. The ideas they draw on are not — and we believe transparency about that is a mark of integrity.{" "}<a href="/sources" className="underline text-foreground hover:text-accent transition-colors">See our full Sources &amp; Influences page →</a>
             </p>
           </div>
           <div className="space-y-3">

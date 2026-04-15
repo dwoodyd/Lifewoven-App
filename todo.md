@@ -283,3 +283,17 @@
 - [ ] Error states: add friendly fallback messages for Stripe/DB failures
 - [ ] ToS and Privacy Policy pages (already exist — verify links in footer/checkout)
 - [ ] Rebuild About page as visual landing page with instructions
+
+## UX Audit Fixes (April 15 2026)
+- [ ] P0: Fix habit checkbox state desync (progress bar / 0/1 not updating on check)
+- [ ] Fix "1 days" plural grammar bug in habit streak
+- [ ] Fix journal 5S filter — all 5 buttons show "S", make them distinct
+- [ ] Attribution audit: replace borrowed quotes/frameworks with proper credit or remove
+- [ ] Add Sources & Influences page (linked from About)
+- [ ] Gate Community tab — replace empty state with waitlist or seeded content
+- [ ] Upgrade Pathways from static checklist to guided timer-based practice
+- [ ] Fix skeleton loaders — replace full-blank spinner with skeleton screens
+- [ ] Fix dark-mode FOUC on route change
+- [ ] Fix Pathways time inconsistency (10-15 min vs 5-10 min)
+- [ ] Reconcile Oracle definitions with module copy
+- [ ] Fix "1/" leading zero in step numbering

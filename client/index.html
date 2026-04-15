@@ -19,6 +19,8 @@
   </head>
 
   <body>
+    <!-- Anti-FOUC: apply saved theme before React mounts -->
+    <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.classList.add('dark');}catch(e){}})()</script>
     <!-- Splash screen: spins favicon, fades out when React mounts -->
     <div id="splash" style="
       position:fixed;inset:0;z-index:9999;

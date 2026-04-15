@@ -141,7 +141,7 @@ export default function Journal() {
                   </div>
                   <div className="flex gap-1">
                     <button onClick={() => setSelectedModule("")} className={`text-xs px-2.5 py-1.5 rounded-lg border transition-colors ${!selectedModule ? "border-foreground bg-foreground text-background" : "border-border text-muted-foreground"}`}>All</button>
-                    {modules.map(m => <button key={m} onClick={() => setSelectedModule(selectedModule === m ? "" : m)} className={`text-xs px-2.5 py-1.5 rounded-lg border transition-colors capitalize ${selectedModule === m ? `border-current bg-current/10 ${MODULE_COLORS[m]}` : "border-border text-muted-foreground"}`}>{m[0].toUpperCase()}</button>)}
+                    {modules.map(m => { const abbr: Record<string,string> = { state:'State', story:'Story', standards:'Stds', strategy:'Strat', stewardship:'Stew' }; return <button key={m} title={m.charAt(0).toUpperCase()+m.slice(1)} onClick={() => setSelectedModule(selectedModule === m ? '' : m)} className={`text-xs px-2.5 py-1.5 rounded-lg border transition-colors ${selectedModule === m ? `border-current bg-current/10 ${MODULE_COLORS[m]}` : 'border-border text-muted-foreground'}`}>{abbr[m]}</button>; })}
                   </div>
                 </div>
                 {entries && entries.length > 0 ? (
