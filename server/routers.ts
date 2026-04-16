@@ -845,6 +845,17 @@ const profileRouter = router({
       return { success: true };
     }),
 
+  completeOnboarding: protectedProcedure
+    .input(z.object({ recommendedPathway: z.string().optional() }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database unavailable");
+      await db.update(users)
+        .set({ onboardingCompleted: true, primaryPathway: input.recommendedPathway })
+        .where(eq(users.id, ctx.user.id));
+      return { success: true };
+    }),
+
   dashboard: protectedProcedure.query(async ({ ctx }) => {
     const db = await getDb();
     if (!db) return null;

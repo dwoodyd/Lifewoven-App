@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import Nav from "@/components/Nav";
+import PageSkeleton from "@/components/PageSkeleton";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
@@ -62,7 +63,7 @@ export default function StateModule() {
   const [showEGS, setShowEGS] = useState(false);
   const [dailyAffirmation] = useState(() => AFFIRMATIONS[Math.floor(Math.random() * AFFIRMATIONS.length)]);
 
-  const { data: recentCheckIns } = trpc.checkIn.recent.useQuery({ limit: 7 }, { enabled: isAuthenticated });
+  const { data: recentCheckIns, isLoading: moduleLoading } = trpc.checkIn.recent.useQuery({ limit: 7 }, { enabled: isAuthenticated });
   const createCheckIn = trpc.checkIn.create.useMutation({
     onSuccess: () => { toast.success("State recorded. Keep reaching for better-feeling thoughts."); setNote(""); },
   });
@@ -72,6 +73,7 @@ export default function StateModule() {
     ? Math.round(recentCheckIns.reduce((a: number, c: any) => a + c.emotionalScore, 0) / recentCheckIns.length)
     : null;
 
+  if (isAuthenticated && moduleLoading) return <PageSkeleton rows={3} />;
   return (
     <div className="min-h-screen bg-background">
       <Nav />

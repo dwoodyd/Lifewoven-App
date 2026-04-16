@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import Nav from "@/components/Nav";
+import PageSkeleton from "@/components/PageSkeleton";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,8 +21,9 @@ export default function StewardshipModule() {
   const [energyScore, setEnergyScore] = useState(7);
   const [auditNote, setAuditNote] = useState("");
   const [wealthAffirmation] = useState(() => WEALTH_AFFIRMATIONS[Math.floor(Math.random() * WEALTH_AFFIRMATIONS.length)]);
-  const { data: recentAudits } = trpc.energy.recent.useQuery({ limit: 7 }, { enabled: isAuthenticated });
+  const { data: recentAudits, isLoading: moduleLoading } = trpc.energy.recent.useQuery({ limit: 7 }, { enabled: isAuthenticated });
   const createAudit = trpc.energy.create.useMutation({ onSuccess: () => { toast.success("Energy audit saved."); setAuditNote(""); } });
+  if (isAuthenticated && moduleLoading) return <PageSkeleton rows={3} />;
   return (
     <div className="min-h-screen bg-background">
       <Nav />

@@ -18,14 +18,14 @@ interface ThemeProviderProps {
 
 export function ThemeProvider({
   children,
-  defaultTheme = "light",
+  defaultTheme = "dark",
   switchable = false,
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(() => {
-    if (switchable) {
-      const stored = localStorage.getItem("theme");
-      return (stored as Theme) || defaultTheme;
-    }
+    // Always read from localStorage first so the in-memory state matches
+    // the class already applied by the anti-FOUC script in index.html
+    const stored = localStorage.getItem("theme");
+    if (stored === "light" || stored === "dark") return stored;
     return defaultTheme;
   });
 

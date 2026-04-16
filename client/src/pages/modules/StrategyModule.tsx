@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import Nav from "@/components/Nav";
+import PageSkeleton from "@/components/PageSkeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -33,12 +34,13 @@ export default function StrategyModule() {
   const [analyzingId, setAnalyzingId] = useState<number | null>(null);
   const [analysisResult, setAnalysisResult] = useState<Record<number, any>>({});
 
-  const { data: decisions, refetch } = trpc.decisions.list.useQuery(undefined, { enabled: isAuthenticated });
+  const { data: decisions, refetch, isLoading: moduleLoading } = trpc.decisions.list.useQuery(undefined, { enabled: isAuthenticated });
   const createDecision = trpc.decisions.create.useMutation({ onSuccess: () => { toast.success("Decision captured."); setDecisionTitle(""); setDecisionContext(""); setShowAddDecision(false); refetch(); } });
   const analyzeDecision = trpc.decisions.analyze.useMutation({
     onSuccess: (data: any, vars: any) => { setAnalysisResult(prev => ({ ...prev, [vars.id]: data })); setAnalyzingId(null); toast.success("Oracle analysis complete."); },
   });
 
+  if (isAuthenticated && moduleLoading) return <PageSkeleton rows={3} />;
   return (
     <div className="min-h-screen bg-background">
       <Nav />

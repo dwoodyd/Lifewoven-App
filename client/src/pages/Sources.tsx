@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { ArrowLeft, BookOpen, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Nav from "@/components/Nav";
 
 const INFLUENCES = [
   {
@@ -54,6 +55,39 @@ const INFLUENCES = [
     ],
   },
   {
+    category: "Flow & Peak Performance",
+    works: [
+      {
+        author: "Mihaly Csikszentmihalyi",
+        title: "Flow: The Psychology of Optimal Experience",
+        contribution: "The concept of flow — complete absorption where time dissolves and performance peaks — informs the Flow pathway and the Stewardship module's approach to deep work and energy management. Lifewoven treats flow not as luck but as a designable condition.",
+        url: "https://www.amazon.com/Flow-Psychology-Experience-Perennial-Classics/dp/0061339202",
+      },
+    ],
+  },
+  {
+    category: "Vulnerability & Wholehearted Living",
+    works: [
+      {
+        author: "Brené Brown",
+        title: "The Gifts of Imperfection / Daring Greatly",
+        contribution: "Brown's research on vulnerability, shame resilience, and wholehearted living shapes the Story module's belief-rewriting work and the Stewardship module's emphasis on self-compassion. The idea that courage requires showing up imperfectly is woven into the Lifewoven ethos.",
+        url: "https://brenebrown.com/",
+      },
+    ],
+  },
+  {
+    category: "Consciousness & Manifestation",
+    works: [
+      {
+        author: "Neville Goddard",
+        title: "The Power of Awareness",
+        contribution: "Goddard's teaching that consciousness is the only reality — and that assuming the feeling of the wish fulfilled is the mechanism of change — informs the Resonance and Flow pathways, and the Oracle's approach to visualization and identity-level affirmation.",
+        url: "https://www.amazon.com/Power-Awareness-Neville-Goddard/dp/1607963604",
+      },
+    ],
+  },
+  {
     category: "Spiritual & Philosophical Foundations",
     works: [
       {
@@ -75,6 +109,7 @@ const INFLUENCES = [
 export default function Sources() {
   return (
     <div className="min-h-screen bg-background">
+      <Nav />
       <div className="container max-w-3xl mx-auto pt-20 pb-24 px-4 sm:px-6">
         <div className="mb-8">
           <Button asChild variant="ghost" size="sm" className="gap-2 mb-6 -ml-2 text-muted-foreground">

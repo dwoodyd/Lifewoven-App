@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import Nav from "@/components/Nav";
+import PageSkeleton from "@/components/PageSkeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -26,7 +27,7 @@ export default function StandardsModule() {
   const [habitCategory, setHabitCategory] = useState("morning");
   const [habitFrequency, setHabitFrequency] = useState<"daily" | "weekly">("daily");
 
-  const { data: habits, refetch } = trpc.habits.list.useQuery(undefined, { enabled: isAuthenticated });
+  const { data: habits, refetch, isLoading: moduleLoading } = trpc.habits.list.useQuery(undefined, { enabled: isAuthenticated });
   const { data: todayLogs, refetch: refetchLogs } = trpc.habits.todayLogs.useQuery(undefined, { enabled: isAuthenticated });
   const createHabit = trpc.habits.create.useMutation({ onSuccess: () => { toast.success("Habit added to your Stack."); setHabitName(""); setHabitIdentity(""); setShowAddHabit(false); refetch(); } });
   const logHabit = trpc.habits.logCompletion.useMutation({ onSuccess: () => { toast.success("1% better. Keep going."); refetch(); refetchLogs(); } });
@@ -35,6 +36,7 @@ export default function StandardsModule() {
   const completedHabitIds = new Set((todayLogs ?? []).map((l: any) => l.habitId));
   const completionRate = habits && habits.length > 0 ? Math.round((completedHabitIds.size / habits.length) * 100) : 0;
 
+  if (isAuthenticated && moduleLoading) return <PageSkeleton rows={3} />;
   return (
     <div className="min-h-screen bg-background">
       <Nav />

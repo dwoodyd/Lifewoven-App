@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import Nav from "@/components/Nav";
+import PageSkeleton from "@/components/PageSkeleton";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
@@ -28,10 +29,10 @@ const IDENTITY_STATEMENTS = [
 ];
 
 const MEANING_QUOTES = [
-  { text: "He who has a why to live can bear almost any how.", source: "Meaning-Centered Philosophy" },
-  { text: "Between stimulus and response there is a space. In that space is our power to choose our response.", source: "Lifewoven Framework" },
-  { text: "When we are no longer able to change a situation, we are challenged to change ourselves.", source: "Meaning-Centered Philosophy" },
-  { text: "Everything can be taken from a man but one thing: the last of the human freedoms — to choose one's attitude.", source: "Lifewoven Framework" },
+  { text: "He who has a why to live can bear almost any how.", source: "Viktor Frankl, \u2018Man\u2019s Search for Meaning\u2019" },
+  { text: "Between stimulus and response there is a space. In that space is our power to choose our response.", source: "Viktor Frankl (as interpreted by Stephen Covey)" },
+  { text: "When we are no longer able to change a situation, we are challenged to change ourselves.", source: "Viktor Frankl, \u2018Man\u2019s Search for Meaning\u2019" },
+  { text: "Everything can be taken from a man but one thing: the last of the human freedoms — to choose one\u2019s attitude.", source: "Viktor Frankl, \u2018Man\u2019s Search for Meaning\u2019" },
 ];
 
 export default function StoryModule() {
@@ -42,13 +43,15 @@ export default function StoryModule() {
   const [rewritingId, setRewritingId] = useState<number | null>(null);
   const [dailyQuote] = useState(() => MEANING_QUOTES[Math.floor(Math.random() * MEANING_QUOTES.length)]);
 
-  const { data: beliefs, refetch: refetchBeliefs } = trpc.beliefs.list.useQuery(undefined, { enabled: isAuthenticated });
+  const { data: beliefs, refetch: refetchBeliefs, isLoading: moduleLoading } = trpc.beliefs.list.useQuery(undefined, { enabled: isAuthenticated });
   const createBelief = trpc.beliefs.create.useMutation({
     onSuccess: () => { toast.success("Belief captured. Now we can work with it."); setNewBelief(""); setNewBeliefPrompt(""); setShowAddBelief(false); refetchBeliefs(); },
   });
   const rewriteBelief = trpc.beliefs.rewrite.useMutation({
     onSuccess: () => { toast.success("The Oracle has rewritten this belief."); setRewritingId(null); refetchBeliefs(); },
   });
+
+  if (isAuthenticated && moduleLoading) return <PageSkeleton rows={3} />;
 
   return (
     <div className="min-h-screen bg-background">
@@ -124,7 +127,7 @@ export default function StoryModule() {
 
             <div className="p-6 rounded-2xl border border-border bg-card">
               <h2 className="font-serif text-xl font-light text-foreground mb-2">Identity Builder</h2>
-              <p className="text-base text-muted-foreground mb-5">Every action you take is a vote for the type of person you wish to become. Identity-based change begins with small, consistent acts of becoming.</p>
+              <p className="text-base text-muted-foreground mb-5">Every action you take is a vote for the type of person you wish to become. <span className="text-xs text-muted-foreground/70">(James Clear, <em>Atomic Habits</em>)</span> Identity-based change begins with small, consistent acts of becoming.</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-4">
                 {IDENTITY_STATEMENTS.map((stmt, i) => (
                   <div key={i} className="flex items-start gap-2 p-3 rounded-lg bg-secondary/50">

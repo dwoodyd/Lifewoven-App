@@ -338,3 +338,12 @@
 - [x] All BTW pages (9 pages): container padding, heading sizes
 - [x] PathwayPage, Support, legal pages: container padding, heading sizes
 - [x] TypeScript: zero errors after all changes
+
+## B-Grade Review Fixes (Apr 16)
+
+- [ ] Fix Story module attribution: credit Frankl for "stimulus/response", Clear for Identity Builder line
+- [ ] Reconcile Align pathway time (one number everywhere: 5-10 min)
+- [ ] Fix dark-mode persistence before React hydrates (set class on <html> in index.html)
+- [ ] Implement skeleton screens for Dashboard, Pathways, module pages
+- [ ] Add first-login onboarding flow (3 screens: welcome → pathway → habit)
+- [ ] Add Sources & Influences page

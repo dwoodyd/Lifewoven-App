@@ -10,7 +10,7 @@ const PATHWAYS = [
     name: "Align",
     subtitle: "Daily Grounding",
     description: "Begin each day anchored in your values and intentions. A short, repeatable morning practice that sets the tone for everything that follows.",
-    duration: "10–15 min",
+    duration: "5–10 min",
     icon: Compass,
     color: "text-emerald-600",
     bg: "bg-emerald-50",

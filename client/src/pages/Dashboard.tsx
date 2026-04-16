@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import LowBandwidthDashboard from "@/components/LowBandwidthDashboard";
 import ReentryFlow from "@/components/ReentryFlow";
 import BetterMirror from "@/components/BetterMirror";
+import PageSkeleton from "@/components/PageSkeleton";
 import { REENTRY, LOW_BANDWIDTH } from "../../../shared/adaptive-language";
 import {
   Waves, BookOpen, Target, Compass, Leaf, Sparkles,
@@ -66,7 +67,7 @@ export default function Dashboard() {
     localStorage.setItem("lifeos_last_visit", String(now));
   }, [isAuthenticated]);
 
-  const { data: dashData, refetch } = trpc.profile.dashboard.useQuery(undefined, { enabled: isAuthenticated });
+  const { data: dashData, refetch, isLoading: dashLoading } = trpc.profile.dashboard.useQuery(undefined, { enabled: isAuthenticated });
   const { data: habits } = trpc.habits.list.useQuery(undefined, { enabled: isAuthenticated });
   const { data: todayLogs } = trpc.habits.todayLogs.useQuery(undefined, { enabled: isAuthenticated });
   const { data: oracleInsights } = trpc.oracle.insights.useQuery(undefined, { enabled: isAuthenticated });
@@ -112,6 +113,10 @@ export default function Dashboard() {
 
   if (lowBandwidthMode) {
     return <LowBandwidthDashboard onExit={toggleLowBandwidth} />;
+  }
+
+  if (isAuthenticated && dashLoading) {
+    return <PageSkeleton rows={3} />;
   }
 
   return (

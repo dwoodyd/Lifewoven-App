@@ -194,7 +194,7 @@ function HeroDashboardPreview() {
           <div>
             <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1">Today's Pathway</p>
             <p className="text-sm font-serif text-foreground font-light">Align — Daily Grounding</p>
-            <p className="text-[10px] text-muted-foreground mt-0.5">15 min · 6 steps</p>
+            <p className="text-[10px] text-muted-foreground mt-0.5">5–10 min · 6 steps</p>
           </div>
           <div className="w-8 h-8 rounded-full bg-[oklch(0.65_0.13_195)]/20 flex items-center justify-center">
             <ArrowRight className="h-3.5 w-3.5 text-[oklch(0.65_0.13_195)]" />
