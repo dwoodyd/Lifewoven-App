@@ -6,6 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { ArrowRight, Clock, Star, ChevronDown, ChevronUp, CheckCircle2, Circle, BookOpen, RotateCcw, Play, Pause, Timer } from "lucide-react";
+import { trpc } from "@/lib/trpc";
 
 const PATHWAYS: Record<string, any> = {
   align: {
@@ -234,8 +235,13 @@ export default function PathwayPage() {
     window.scrollTo({ top: 300, behavior: "smooth" });
   }
 
+  const saveSession = trpc.pathways.saveSession.useMutation({
+    onSuccess: () => toast.success("Session saved. Well done for showing up."),
+    onError: () => toast.error("Could not save session. Please try again."),
+  });
+
   function handleSaveSession() {
-    toast.success("Session saved. Well done for showing up.");
+    saveSession.mutate({ pathway: id, stepsCompleted: completedCount, totalSteps });
   }
 
   function handleResetProgress() {

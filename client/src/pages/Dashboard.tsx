@@ -70,6 +70,7 @@ export default function Dashboard() {
   const { data: habits } = trpc.habits.list.useQuery(undefined, { enabled: isAuthenticated });
   const { data: todayLogs } = trpc.habits.todayLogs.useQuery(undefined, { enabled: isAuthenticated });
   const { data: oracleInsights } = trpc.oracle.insights.useQuery(undefined, { enabled: isAuthenticated });
+  const { data: lastPracticed } = trpc.pathways.lastPracticed.useQuery(undefined, { enabled: isAuthenticated });
 
   const createCheckIn = trpc.checkIn.create.useMutation({
     onSuccess: () => { toast.success("Check-in saved. The Oracle is listening."); setShowCheckIn(false); refetch(); },
@@ -336,6 +337,12 @@ export default function Dashboard() {
                 <div className="p-1.5 rounded-lg bg-secondary"><TrendingUp className="h-4 w-4 text-foreground" /></div>
                 <h2 className="font-serif text-base font-light text-foreground">Active Pathways</h2>
               </div>
+              {lastPracticed && (
+                <div className="mb-3 px-3 py-2 rounded-lg bg-accent/5 border border-accent/20">
+                  <p className="text-xs text-muted-foreground">Last practiced</p>
+                  <p className="text-sm font-medium text-foreground capitalize">{lastPracticed.pathway} <span className="text-xs font-normal text-muted-foreground">— {lastPracticed.stepsCompleted}/{lastPracticed.totalSteps} steps · {new Date(lastPracticed.completedAt).toLocaleDateString()}</span></p>
+                </div>
+              )}
               {dashData?.activePathways && dashData.activePathways.length > 0 ? (
                 <div className="space-y-3">
                   {dashData.activePathways.map((p: any) => (

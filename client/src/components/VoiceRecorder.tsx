@@ -2,6 +2,7 @@ import { useState, useRef, useCallback } from "react";
 import { Mic, MicOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { trpc } from "@/lib/trpc";
 
 interface VoiceRecorderProps {
   onTranscription: (text: string) => void;
@@ -14,6 +15,18 @@ export default function VoiceRecorder({ onTranscription, disabled }: VoiceRecord
   const [state, setState] = useState<RecordingState>("idle");
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
+
+  const transcribe = trpc.journal.transcribeVoice.useMutation({
+    onSuccess: (data) => {
+      onTranscription(data.text);
+      toast.success("Voice note transcribed.");
+      setState("idle");
+    },
+    onError: (err) => {
+      toast.error("Transcription failed: " + err.message);
+      setState("idle");
+    },
+  });
 
   const startRecording = useCallback(async () => {
     try {
@@ -42,19 +55,13 @@ export default function VoiceRecorder({ onTranscription, disabled }: VoiceRecord
         }
 
         setState("transcribing");
-        try {
-          const formData = new FormData();
-          formData.append("audio", blob, "recording.webm");
-          const res = await fetch("/api/transcribe", { method: "POST", body: formData, credentials: "include" });
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.error || "Transcription failed");
-          onTranscription(data.text);
-          toast.success("Voice note transcribed and added.");
-        } catch (err) {
-          toast.error("Transcription failed: " + String(err));
-        } finally {
-          setState("idle");
-        }
+        // Convert blob to base64 data URL
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const dataUrl = reader.result as string;
+          transcribe.mutate({ audioDataUrl: dataUrl, mimeType: mimeType.split(";")[0] });
+        };
+        reader.readAsDataURL(blob);
       };
 
       recorder.start();
@@ -63,14 +70,14 @@ export default function VoiceRecorder({ onTranscription, disabled }: VoiceRecord
     } catch {
       toast.error("Microphone access denied — please allow microphone access in your browser.");
     }
-  }, [onTranscription]);
+  }, [transcribe]);
 
   const stopRecording = useCallback(() => {
     mediaRecorderRef.current?.stop();
     mediaRecorderRef.current = null;
   }, []);
 
-  const label = state === "recording" ? "Stop Recording" : state === "transcribing" ? "Transcribing…" : "Voice Note";
+  const label = state === "recording" ? "Stop" : state === "transcribing" ? "Transcribing…" : "Voice Note";
 
   return (
     <Button

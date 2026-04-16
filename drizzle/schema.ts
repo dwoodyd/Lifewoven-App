@@ -218,6 +218,19 @@ export const userPathways = mysqlTable("user_pathways", {
   completedAt: timestamp("completedAt"),
 });
 
+// ─── Pathway Sessions ───────────────────────────────────────────────────────
+
+export const pathwaySessions = mysqlTable("pathway_sessions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  pathway: varchar("pathway", { length: 64 }).notNull(),
+  stepsCompleted: int("stepsCompleted").notNull(),
+  totalSteps: int("totalSteps").notNull(),
+  completedAt: timestamp("completedAt").defaultNow().notNull(),
+});
+
+export type PathwaySession = typeof pathwaySessions.$inferSelect;
+
 // ─── Resources ────────────────────────────────────────────────────────────────
 
 export const resources = mysqlTable("resources", {

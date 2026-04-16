@@ -43,6 +43,13 @@
       "when": 1775944643146,
       "tag": "0005_peaceful_thena",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1776348825526,
+      "tag": "0006_optimal_bishop",
+      "breakpoints": true
     }
   ]
 }

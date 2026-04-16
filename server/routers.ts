@@ -10,11 +10,13 @@ import { getDb } from "./db";
 import {
   auditResults, checkIns, journalEntries, habits, habitLogs,
   scorecards, beliefs, decisions, energyAudits, oracleInsights,
-  oracleConversations, userPathways, resources, courses, enrollments,
+  oracleConversations, userPathways, pathwaySessions, resources, courses, enrollments,
   products, communityPosts, communityComments, communityLikes, orders, users
 } from "../drizzle/schema";
 import { eq, desc, and, like, sql } from "drizzle-orm";
 import { invokeLLM } from "./_core/llm";
+import { transcribeAudio } from "./_core/voiceTranscription";
+import { storagePut } from "./storage";
 
 // ─── Audit Router ─────────────────────────────────────────────────────────────
 const auditRouter = router({
@@ -196,6 +198,22 @@ const journalRouter = router({
         .set({ aiReflection: reflection })
         .where(and(eq(journalEntries.id, input.entryId), eq(journalEntries.userId, ctx.user.id)));
       return { reflection };
+    }),
+
+  transcribeVoice: protectedProcedure
+    .input(z.object({ audioDataUrl: z.string(), mimeType: z.string().default("audio/webm") }))
+    .mutation(async ({ ctx, input }) => {
+      // Decode base64 data URL and upload to S3
+      const base64 = input.audioDataUrl.split(",")[1];
+      if (!base64) throw new Error("Invalid audio data");
+      const buffer = Buffer.from(base64, "base64");
+      if (buffer.byteLength > 16 * 1024 * 1024) throw new Error("Audio file too large (max 16 MB)");
+      const ext = input.mimeType.includes("mp4") ? "mp4" : input.mimeType.includes("wav") ? "wav" : "webm";
+      const key = `voice-journal/${ctx.user.id}/${Date.now()}.${ext}`;
+      const { url } = await storagePut(key, buffer, input.mimeType);
+      const result = await transcribeAudio({ audioUrl: url });
+      if ("error" in result) throw new Error(result.error ?? "Transcription failed");
+      return { text: result.text ?? "" };
     }),
 });
 
@@ -631,6 +649,41 @@ const pathwaysRouter = router({
     return db.select().from(userPathways)
       .where(eq(userPathways.userId, ctx.user.id))
       .orderBy(desc(userPathways.startedAt));
+  }),
+
+  saveSession: protectedProcedure
+    .input(z.object({ pathway: z.string(), stepsCompleted: z.number(), totalSteps: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database unavailable");
+      await db.insert(pathwaySessions).values({
+        userId: ctx.user.id,
+        pathway: input.pathway,
+        stepsCompleted: input.stepsCompleted,
+        totalSteps: input.totalSteps,
+      });
+      return { success: true };
+    }),
+
+  recentSessions: protectedProcedure
+    .input(z.object({ limit: z.number().default(10) }))
+    .query(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) return [];
+      return db.select().from(pathwaySessions)
+        .where(eq(pathwaySessions.userId, ctx.user.id))
+        .orderBy(desc(pathwaySessions.completedAt))
+        .limit(input.limit);
+    }),
+
+  lastPracticed: protectedProcedure.query(async ({ ctx }) => {
+    const db = await getDb();
+    if (!db) return null;
+    const rows = await db.select().from(pathwaySessions)
+      .where(eq(pathwaySessions.userId, ctx.user.id))
+      .orderBy(desc(pathwaySessions.completedAt))
+      .limit(1);
+    return rows[0] ?? null;
   }),
 });
 
