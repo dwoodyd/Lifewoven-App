@@ -42,12 +42,12 @@ export default function StrategyModule() {
   return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container pt-24 pb-20 max-w-5xl mx-auto">
+      <div className="container pt-20 pb-24 max-w-5xl mx-auto px-4 sm:px-6">
         <div className="flex items-start gap-4 mb-10">
           <div className="p-3 rounded-xl bg-strategy/10 flex-shrink-0"><Compass className="h-6 w-6 text-strategy" /></div>
           <div>
             <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-1">5S Framework — Module 4</p>
-            <h1 className="font-serif text-3xl md:text-4xl font-light text-foreground mb-2">Strategy</h1>
+            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-2">Strategy</h1>
             <p className="text-muted-foreground text-base font-light max-w-xl">Most people are busy being busy. Strategy is about finding the leverage points — the decisions and actions that produce disproportionate results.</p>
           </div>
         </div>

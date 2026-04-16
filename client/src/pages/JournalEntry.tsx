@@ -24,13 +24,13 @@ export default function JournalEntry() {
   return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container pt-24 pb-20 max-w-2xl mx-auto">
+      <div className="container pt-20 pb-24 max-w-2xl mx-auto px-4 sm:px-6">
         <Link href="/journal"><div className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer mb-6"><ArrowLeft className="h-3.5 w-3.5" /> Back to Journal</div></Link>
         {entry ? (
           <div>
-            <div className="flex items-start justify-between gap-4 mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-6">
               <div>
-                <h1 className="font-serif text-3xl font-light text-foreground mb-1">{entry.title || "Untitled Entry"}</h1>
+                <h1 className="font-serif text-2xl sm:text-3xl font-light text-foreground mb-1">{entry.title || "Untitled Entry"}</h1>
                 <p className="text-sm text-muted-foreground">{new Date(entry.createdAt).toLocaleDateString("en", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</p>
               </div>
               {!entry.aiReflection && (

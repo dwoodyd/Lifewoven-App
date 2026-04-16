@@ -181,12 +181,12 @@ export default function ResourceLibrary() {
   return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container pt-24 pb-20 max-w-5xl mx-auto">
+      <div className="container pt-20 pb-24 max-w-5xl mx-auto px-4 sm:px-6">
 
         {/* Header */}
         <div className="mb-10">
           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Library</p>
-          <h1 className="font-serif text-4xl md:text-5xl font-light text-foreground mb-4">Resource Library</h1>
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-4">Resource Library</h1>
           <p className="text-muted-foreground text-lg font-light max-w-2xl">
             The distilled wisdom of the ages, organized by the 5S Framework. Every resource is clearly labeled by content rights so you always know what you are working with.
           </p>
@@ -254,7 +254,7 @@ export default function ResourceLibrary() {
         </div>
 
         {/* Resource Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {filtered.map(resource => {
             const rights = RIGHTS_CONFIG[resource.rights];
             return (

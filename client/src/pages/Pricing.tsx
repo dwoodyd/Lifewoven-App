@@ -102,13 +102,13 @@ export default function Pricing() {
   return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container pt-24 pb-20 max-w-5xl mx-auto">
-        <div className="text-center mb-16">
+      <div className="container pt-20 pb-24 max-w-5xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10 sm:mb-16">
           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Investment</p>
-          <h1 className="font-serif text-4xl md:text-5xl font-light text-foreground mb-4">Choose Your Path</h1>
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-4">Choose Your Path</h1>
           <p className="text-muted-foreground text-lg font-light max-w-xl mx-auto">Every tier is designed to create real transformation. Start free. Upgrade when you are ready.</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mb-10 sm:mb-16">
           {TIERS.map(tier => (
             <div key={tier.name} className={`p-6 rounded-2xl border flex flex-col ${tier.highlight ? "border-foreground bg-foreground text-background" : "border-border bg-card"}`}>
               {tier.highlight && <div className="flex items-center gap-1.5 mb-4"><Star className="h-3.5 w-3.5 text-amber-400 fill-amber-400" /><span className="text-xs font-mono tracking-widest uppercase opacity-70">Most Popular</span></div>}
@@ -147,7 +147,7 @@ export default function Pricing() {
             </div>
           ))}
         </div>
-        <div className="text-center p-8 rounded-2xl border border-border bg-card">
+        <div className="text-center p-6 sm:p-8 rounded-2xl border border-border bg-card">
           <Sparkles className="h-8 w-8 text-amber-400 mx-auto mb-4" />
           <h2 className="font-serif text-2xl font-light text-foreground mb-3">Not sure where to start?</h2>
           <p className="text-muted-foreground text-base mb-6 max-w-md mx-auto">Take the free Alignment Audit. In 5 minutes, you will know exactly which pathway and tier is right for you.</p>

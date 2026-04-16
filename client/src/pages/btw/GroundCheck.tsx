@@ -51,7 +51,7 @@ export default function GroundCheck() {
     return (
       <div className="min-h-screen bg-background">
         <Nav />
-        <div className="container pt-24 pb-20 max-w-xl mx-auto text-center">
+        <div className="container pt-20 pb-24 max-w-xl mx-auto text-center px-4 sm:px-6">
           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-6">Your Ground Check</p>
           <div className="p-10 rounded-2xl border border-border bg-card mb-8">
             <p className="text-xs text-muted-foreground mb-3">Your current posture</p>
@@ -77,7 +77,7 @@ export default function GroundCheck() {
   return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container pt-24 pb-20 max-w-xl mx-auto">
+      <div className="container pt-20 pb-24 max-w-xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-10">
           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Ground Check</p>
           <h1 className="font-serif text-3xl font-light text-foreground mb-3">Where are you right now?</h1>

@@ -114,7 +114,7 @@ ${article.coda ? `<p class="coda">${article.coda}</p>` : ""}
       {/* Print styles */}
       <style>{`@media print { nav, .no-print { display: none !important; } }`}</style>
 
-      <div className="container pt-24 pb-24 max-w-2xl mx-auto">
+      <div className="container pt-20 pb-24 max-w-2xl mx-auto px-4 sm:px-6">
         {/* Back + Download bar */}
         <div className="flex items-center justify-between mb-10 no-print">
           <Button asChild variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground -ml-2">
@@ -134,7 +134,7 @@ ${article.coda ? `<p class="coda">${article.coda}</p>` : ""}
           {article.category && (
             <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">{article.category}</p>
           )}
-          <h1 className="font-serif text-4xl md:text-5xl font-light text-foreground leading-tight mb-4">{article.title}</h1>
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground leading-tight mb-4">{article.title}</h1>
           {article.subtitle && (
             <p className="font-serif text-xl font-light italic text-muted-foreground mb-4">{article.subtitle}</p>
           )}
@@ -158,7 +158,7 @@ ${article.coda ? `<p class="coda">${article.coda}</p>` : ""}
                 <h3 className="font-serif text-lg font-light italic text-muted-foreground mt-6 mb-3">{s.subheading}</h3>
               )}
               {s.body && s.body.split("\n\n").map((para, j) => (
-                <p key={j} className="text-foreground/90 text-lg font-light leading-relaxed mb-5">{renderBody(para)}</p>
+                <p key={j} className="text-foreground/90 text-base sm:text-lg font-light leading-relaxed mb-5">{renderBody(para)}</p>
               ))}
               {s.quote && (
                 <blockquote className="border-l-2 border-accent pl-6 my-8">
@@ -169,7 +169,7 @@ ${article.coda ? `<p class="coda">${article.coda}</p>` : ""}
               {s.list && (
                 <ul className="space-y-2 my-5 pl-4">
                   {s.list.map((item, j) => (
-                    <li key={j} className="text-lg font-light text-foreground/90 leading-relaxed flex gap-3">
+                    <li key={j} className="text-base sm:text-lg font-light text-foreground/90 leading-relaxed flex gap-3">
                       <span className="text-accent mt-1.5 shrink-0">·</span>
                       <span>{renderBody(item)}</span>
                     </li>

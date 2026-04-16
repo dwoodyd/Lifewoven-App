@@ -122,15 +122,15 @@ export default function Store() {
   return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container pt-24 pb-20 max-w-6xl mx-auto">
+      <div className="container pt-20 pb-24 max-w-6xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12">
           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Store</p>
-          <h1 className="font-serif text-4xl md:text-5xl font-light text-foreground mb-4">Wisdom Tools</h1>
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-4">Wisdom Tools</h1>
           <p className="text-muted-foreground text-lg font-light max-w-xl mx-auto">
             Courses, workbooks, audio programs, and card decks — each one an original Lifewoven creation, distilling timeless wisdom into practical tools for modern life.
           </p>
         </div>
-        <div className="flex flex-wrap gap-2 justify-center mb-10">
+        <div className="flex flex-wrap gap-2 justify-center mb-8">
           {CATEGORIES.map(cat => {
             const Icon = cat.icon;
             return (
@@ -148,10 +148,10 @@ export default function Store() {
             );
           })}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {filtered.map(product => (
             <Link key={product.id} href={product.category === "course" ? `/course/${product.id}` : `/product/${product.id}`}>
-              <div className="p-6 rounded-2xl border border-border bg-card hover:border-muted-foreground transition-all cursor-pointer h-full flex flex-col">
+              <div className="p-4 sm:p-6 rounded-2xl border border-border bg-card hover:border-muted-foreground transition-all cursor-pointer h-full flex flex-col">
                 <div className="text-3xl mb-4">{product.icon}</div>
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <h3 className="font-serif text-lg font-light text-foreground">{product.title}</h3>
@@ -170,7 +170,7 @@ export default function Store() {
             </Link>
           ))}
         </div>
-        <div className="mt-16 p-8 rounded-2xl border border-border bg-card text-center">
+        <div className="mt-12 p-6 sm:p-8 rounded-2xl border border-border bg-card text-center">
           <h2 className="font-serif text-2xl font-light text-foreground mb-3">Bundle & Save</h2>
           <p className="text-muted-foreground text-base mb-6 max-w-md mx-auto">
             Get the complete Lifewoven toolkit — all courses, workbooks, audio programs, and card decks — at one transformational price.

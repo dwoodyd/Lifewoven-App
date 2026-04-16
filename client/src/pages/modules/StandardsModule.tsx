@@ -38,12 +38,12 @@ export default function StandardsModule() {
   return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container pt-24 pb-20 max-w-5xl mx-auto">
+      <div className="container pt-20 pb-24 max-w-5xl mx-auto px-4 sm:px-6">
         <div className="flex items-start gap-4 mb-10">
           <div className="p-3 rounded-xl bg-standards/10 flex-shrink-0"><Target className="h-6 w-6 text-standards" /></div>
           <div>
             <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-1">5S Framework — Module 3</p>
-            <h1 className="font-serif text-3xl md:text-4xl font-light text-foreground mb-2">Standards</h1>
+            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-2">Standards</h1>
             <p className="text-muted-foreground text-base font-light max-w-xl">Your systems determine your outcomes. This module is your habit execution engine, daily scorecard, and deep work architecture.</p>
           </div>
         </div>

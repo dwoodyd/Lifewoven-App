@@ -53,12 +53,12 @@ export default function StoryModule() {
   return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container pt-24 pb-20 max-w-5xl mx-auto">
+      <div className="container pt-20 pb-24 max-w-5xl mx-auto px-4 sm:px-6">
         <div className="flex items-start gap-4 mb-10">
           <div className="p-3 rounded-xl bg-story/10 flex-shrink-0"><BookOpen className="h-6 w-6 text-story" /></div>
           <div>
             <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-1">5S Framework — Module 2</p>
-            <h1 className="font-serif text-3xl md:text-4xl font-light text-foreground mb-2">Story</h1>
+            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-2">Story</h1>
             <p className="text-muted-foreground text-base font-light max-w-xl">The narrative you carry about yourself determines what you allow into your life. Surface constraining beliefs, rewrite your identity, and find meaning in your journey.</p>
           </div>
         </div>

@@ -24,7 +24,7 @@ export default function BTWLanding() {
   return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container pt-24 pb-20 max-w-3xl mx-auto">
+      <div className="container pt-20 pb-24 max-w-3xl mx-auto px-4 sm:px-6">
 
         {/* Disclaimer badge */}
         <div className="flex justify-center mb-8">

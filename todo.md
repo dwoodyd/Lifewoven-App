@@ -297,3 +297,44 @@
 - [ ] Fix Pathways time inconsistency (10-15 min vs 5-10 min)
 - [ ] Reconcile Oracle definitions with module copy
 - [ ] Fix "1/" leading zero in step numbering
+
+## Mobile Responsiveness Overhaul
+
+- [ ] DashboardLayout: collapse sidebar to bottom tab bar or hamburger on mobile
+- [ ] Dashboard page: fix 5S grid, habit list, journal, Oracle sections on mobile
+- [ ] Home/landing page: fix hero text, CTA buttons, feature grid overflow on mobile
+- [ ] Store page: fix product card grid, pricing, CTA buttons on mobile
+- [ ] ProductDetail page: fix hero, description, preview excerpt, download button on mobile
+- [ ] CourseDetail page: fix lesson list, enroll button, preview excerpt on mobile
+- [ ] About page: fix hero, module grid, Getting Started steps, wisdom lineage on mobile
+- [ ] Pathways page: fix timer UI, step cards on mobile
+- [ ] Oracle/AI chat page: fix chat bubbles, input bar on mobile
+- [ ] Journal page: fix entry list, editor, 5S filter tabs on mobile
+- [ ] Community page: fix waitlist gate layout on mobile
+- [ ] Sources & Influences page: fix layout on mobile
+- [ ] OnboardingModal: ensure it fits small screens without overflow
+- [ ] FeedbackWidget: ensure form is usable on mobile
+- [ ] AdminPreviewBadge: ensure it doesn't overlap content on mobile
+- [ ] Global: no horizontal scroll, no text overflow, adequate tap targets (min 44px)
+- [ ] Global: all font sizes readable on mobile (no sub-14px text)
+
+## Mobile Responsiveness Overhaul
+- [x] Nav: mobile menu tap targets, spacing, auth buttons
+- [x] Home: hero heading size, trust bar, pricing grid, footer
+- [x] Dashboard: greeting, 5S grid, check-in panel, habits, journal
+- [x] AlignmentAudit: all steps — entry, consent, quiz, optional, results
+- [x] Store: category filters, product grid, bundle section
+- [x] ProductDetail: container padding, header text, CTA buttons
+- [x] CourseDetail: container padding, heading sizes, lesson summary
+- [x] About: hero, grid layouts, heading sizes
+- [x] PathwaysListing: container padding, featured card, grid
+- [x] Pricing: container padding, heading sizes, pricing grid
+- [x] Sources, Profile, Settings, ResourceLibrary: container padding, heading sizes
+- [x] Journal, JournalEntry: container padding, filter bar, header layout
+- [x] Community: container padding, header layout
+- [x] Oracle: container padding, chat input
+- [x] ArticleReader: container padding, heading size, body text
+- [x] All 5 module pages (State, Story, Standards, Strategy, Stewardship): container padding, heading sizes
+- [x] All BTW pages (9 pages): container padding, heading sizes
+- [x] PathwayPage, Support, legal pages: container padding, heading sizes
+- [x] TypeScript: zero errors after all changes

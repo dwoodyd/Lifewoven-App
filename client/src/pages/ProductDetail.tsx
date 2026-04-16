@@ -258,7 +258,7 @@ export default function ProductDetail() {
     return (
       <div className="min-h-screen bg-background">
         <Nav />
-        <div className="container pt-24 pb-20 max-w-3xl mx-auto">
+        <div className="container pt-20 pb-24 max-w-3xl mx-auto px-4 sm:px-6">
           <Link href="/store">
             <p className="text-base text-muted-foreground mb-6 hover:text-foreground transition-colors cursor-pointer flex items-center gap-2">
               <ArrowLeft className="h-4 w-4" /> Back to Store
@@ -308,7 +308,7 @@ export default function ProductDetail() {
   return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container pt-24 pb-20 max-w-3xl mx-auto">
+      <div className="container pt-20 pb-24 max-w-3xl mx-auto px-4 sm:px-6">
         <Link href="/store">
           <p className="text-base text-muted-foreground mb-8 hover:text-foreground transition-colors cursor-pointer flex items-center gap-2">
             <ArrowLeft className="h-4 w-4" /> Back to Store
@@ -366,7 +366,7 @@ export default function ProductDetail() {
                     >{s.label}</button>
                   ))}
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                   <p className="flex-1 text-sm font-light text-muted-foreground">{MORNING_SESSIONS[activeSession].label}</p>
                   <button onClick={toggleMute} className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border bg-secondary hover:bg-secondary/80 transition-colors text-sm font-light">
                     {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
@@ -376,7 +376,7 @@ export default function ProductDetail() {
                 <audio ref={audioRef} src={MORNING_SESSIONS[0].url} muted />
               </>
             ) : (
-              <div className="flex flex-wrap items-center gap-4">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                 <p className="flex-1 text-base font-light text-foreground">Reset Protocol — Introduction</p>
                 <button onClick={toggleMute} className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border bg-secondary hover:bg-secondary/80 transition-colors text-sm font-light">
                   {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
@@ -394,8 +394,8 @@ export default function ProductDetail() {
             <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase">{product.category}</p>
           </div>
           <div className="text-4xl mb-4">{product.icon}</div>
-          <h1 className="font-serif text-4xl md:text-5xl font-light text-foreground mb-3">{product.title}</h1>
-          <p className="text-xl text-muted-foreground font-light mb-5">{product.subtitle}</p>
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-3 break-words">{product.title}</h1>
+          <p className="text-lg sm:text-xl text-muted-foreground font-light mb-5">{product.subtitle}</p>
           <div className="flex flex-wrap items-center gap-4 mb-6">
             <span className="text-2xl font-light text-foreground">{product.price}</span>
             <div className="flex flex-wrap gap-1.5">
@@ -427,7 +427,7 @@ export default function ProductDetail() {
         </div>
 
         {/* Description */}
-        <div className="mb-10 p-6 rounded-2xl border border-border bg-card">
+        <div className="mb-8 p-4 sm:p-6 rounded-2xl border border-border bg-card">
           <h2 className="font-serif text-2xl font-light text-foreground mb-4">
             About This {product.category === "audio" ? "Series" : product.category === "cards" ? "Deck" : "Workbook"}
           </h2>
@@ -437,7 +437,7 @@ export default function ProductDetail() {
         </div>
 
         {/* What's Included */}
-        <div className="mb-10 p-6 rounded-2xl border border-border bg-secondary/20">
+        <div className="mb-8 p-4 sm:p-6 rounded-2xl border border-border bg-secondary/20">
           <h2 className="font-serif text-2xl font-light text-foreground mb-4">What's Included</h2>
           <ul className="space-y-2">
             {product.includes.map((item, i) => (
@@ -451,7 +451,7 @@ export default function ProductDetail() {
 
         {/* Preview Excerpts */}
         {PREVIEWS[productId] && (
-          <div className="mb-10 p-6 rounded-2xl border border-border bg-secondary/10">
+          <div className="mb-8 p-4 sm:p-6 rounded-2xl border border-border bg-secondary/10">
             <h2 className="font-serif text-2xl font-light text-foreground mb-5">{PREVIEWS[productId].label}</h2>
             <div className="space-y-4">
               {PREVIEWS[productId].excerpts.map((excerpt, i) => (
@@ -464,7 +464,7 @@ export default function ProductDetail() {
         )}
 
         {/* Bottom CTA */}
-        <div className="p-8 rounded-2xl border border-border bg-card text-center">
+        <div className="p-6 sm:p-8 rounded-2xl border border-border bg-card text-center">
           <h3 className="font-serif text-2xl font-light text-foreground mb-3">
             {isAvailable ? "Ready to Begin?" : "Be the First to Know"}
           </h3>

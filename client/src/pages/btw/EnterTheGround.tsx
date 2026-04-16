@@ -92,7 +92,7 @@ export default function EnterTheGround() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center max-w-md px-6">
           <CheckCircle2 className="h-10 w-10 text-accent mx-auto mb-6" />
-          <h2 className="font-serif text-3xl font-light text-foreground mb-4">You settled.</h2>
+          <h2 className="font-serif text-2xl sm:text-3xl font-light text-foreground mb-4">You settled.</h2>
           <p className="text-muted-foreground font-light mb-8">That is the practice. Not perfection — presence.</p>
           <div className="flex flex-col gap-3">
             <Button asChild size="lg">
@@ -140,7 +140,7 @@ export default function EnterTheGround() {
   return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container pt-24 pb-20 max-w-2xl mx-auto">
+      <div className="container pt-20 pb-24 max-w-2xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-10">
           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Before the Words</p>
           <h1 className="font-serif text-4xl font-light text-foreground mb-3">Enter the Ground</h1>

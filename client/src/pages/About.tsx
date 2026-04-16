@@ -35,13 +35,13 @@ export default function About() {
       <Nav />
 
       {/* Hero */}
-      <section className="pt-28 pb-20 container max-w-5xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+      <section className="pt-20 pb-14 container max-w-5xl mx-auto px-4 sm:px-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
           <div>
             <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">What Is Lifewoven</p>
-            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-light text-foreground mb-6 leading-tight">
-              One system.<br />
-              <span className="italic text-muted-foreground">Five dimensions.</span><br />
+            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-foreground mb-6 leading-tight">
+              One system.{" "}
+              <span className="italic text-muted-foreground">Five dimensions.</span>{" "}
               Your whole life.
             </h1>
             <p className="text-lg text-muted-foreground font-light leading-relaxed mb-8">
@@ -56,7 +56,7 @@ export default function About() {
               </Link>
             </div>
           </div>
-          <div className="hidden md:block">
+          <div className="hidden md:block mt-4">
             <div className="relative p-8 rounded-3xl border border-border bg-card">
               <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-6">The 5S Framework</p>
               <div className="space-y-3">
@@ -80,7 +80,7 @@ export default function About() {
         <div className="container max-w-3xl mx-auto text-center">
           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Why Lifewoven Exists</p>
           <h2 className="font-serif text-3xl md:text-4xl font-light text-foreground mb-8">You already know what to do.<br />Something else is in the way.</h2>
-          <div className="grid md:grid-cols-3 gap-6 text-left mt-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 text-left mt-10">
             {[
               { title: "The books aren't enough", body: "You've read the books. You understand the concepts. But understanding and embodying are not the same thing. Lifewoven is the bridge." },
               { title: "Fragmented tools don't work", body: "A habit app here. A journaling app there. A meditation timer. None of them talk to each other. Lifewoven integrates everything into one coherent practice." },
@@ -102,7 +102,7 @@ export default function About() {
             <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">The Framework</p>
             <h2 className="font-serif text-3xl md:text-4xl font-light text-foreground">The 5S Personal Transformation System</h2>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {MODULES.map(({ icon: Icon, label, color, bg, desc, href }) => (
               <Link key={label} href={href}>
                 <div className={`p-6 rounded-2xl border border-border ${bg} hover:border-muted-foreground transition-all cursor-pointer group h-full`}>
@@ -131,15 +131,15 @@ export default function About() {
           </div>
           <div className="space-y-4">
             {HOW_TO_STEPS.map(({ step, icon: Icon, title, desc, cta, href }) => (
-              <div key={step} className="p-6 rounded-2xl border border-border bg-card">
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-secondary flex items-center justify-center">
+              <div key={step} className="p-4 sm:p-6 rounded-2xl border border-border bg-card">
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <div className="flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-secondary flex items-center justify-center">
                     <span className="text-xs font-mono text-muted-foreground">{step}</span>
                   </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                       <Icon className="h-4 w-4 text-muted-foreground" />
-                      <h3 className="font-medium text-foreground">{title}</h3>
+                      <h3 className="font-medium text-foreground text-sm sm:text-base">{title}</h3>
                     </div>
                     <p className="text-sm text-muted-foreground font-light leading-relaxed mb-3">{desc}</p>
                     <Link href={href}>

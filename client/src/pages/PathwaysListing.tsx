@@ -96,12 +96,12 @@ export default function PathwaysListing() {
   return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container pt-24 pb-16 max-w-4xl mx-auto">
+      <div className="container pt-20 pb-20 max-w-4xl mx-auto px-4 sm:px-6">
 
         {/* Header */}
         <div className="mb-10">
           <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest mb-3">Guided Experiences</p>
-          <h1 className="font-serif text-4xl md:text-5xl font-light text-foreground mb-4">Pathways</h1>
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-4">Pathways</h1>
           <p className="text-muted-foreground font-light text-lg max-w-xl leading-relaxed">
             Seven guided practice experiences, each designed for a specific moment in your life. Choose the one that meets you where you are.
           </p>
@@ -111,21 +111,21 @@ export default function PathwaysListing() {
         {PATHWAYS.filter(p => p.featured).map(pathway => {
           const Icon = pathway.icon;
           return (
-            <div key={pathway.slug} className={`rounded-2xl border-2 border-teal-200/60 bg-teal-50/30 p-7 mb-8 relative overflow-hidden`}>
+            <div key={pathway.slug} className={`rounded-2xl border-2 border-teal-200/60 bg-teal-50/30 p-5 sm:p-7 mb-8 relative overflow-hidden`}>
               <div className="absolute top-4 right-4">
                 <Badge className="bg-teal-600 text-white text-xs font-mono tracking-wider">Flagship</Badge>
               </div>
-              <div className="flex items-start gap-5">
+              <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-5">
                 <div className={`p-4 rounded-xl ${pathway.bg} flex-shrink-0`}>
                   <Icon className={`h-7 w-7 ${pathway.color}`} />
                 </div>
                 <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-1">
-                    <h2 className="font-serif text-2xl font-light text-foreground">{pathway.name}</h2>
-                    <span className="text-sm text-muted-foreground">— {pathway.subtitle}</span>
+                  <div className="flex flex-wrap items-center gap-2 mb-1">
+                    <h2 className="font-serif text-xl sm:text-2xl font-light text-foreground">{pathway.name}</h2>
+                    <span className="text-sm text-muted-foreground">{pathway.subtitle}</span>
                   </div>
                   <p className="text-muted-foreground font-light leading-relaxed mb-5 max-w-xl">{pathway.description}</p>
-                  <div className="flex items-center gap-4">
+                  <div className="flex flex-wrap items-center gap-3">
                     <Button asChild>
                       <Link href={`/pathway/${pathway.slug}`}>
                         Begin Reset <ArrowRight className="h-4 w-4 ml-1.5" />
@@ -140,12 +140,12 @@ export default function PathwaysListing() {
         })}
 
         {/* All other pathways */}
-        <div className="grid md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
           {PATHWAYS.filter(p => !p.featured).map(pathway => {
             const Icon = pathway.icon;
             return (
               <Link key={pathway.slug} href={`/pathway/${pathway.slug}`}>
-                <div className={`group rounded-xl border ${pathway.border} bg-card hover:shadow-md transition-all duration-200 p-6 cursor-pointer h-full`}>
+                <div className={`group rounded-xl border ${pathway.border} bg-card hover:shadow-md transition-all duration-200 p-4 sm:p-6 cursor-pointer h-full`}>
                   <div className="flex items-start gap-4 mb-4">
                     <div className={`p-3 rounded-lg ${pathway.bg} flex-shrink-0`}>
                       <Icon className={`h-5 w-5 ${pathway.color}`} />

@@ -26,7 +26,7 @@ export default function Support() {
       <Nav />
       <div className="container pt-28 pb-20 max-w-3xl mx-auto">
         <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Support</p>
-        <h1 className="font-serif text-4xl font-light text-foreground mb-3">We are here to help.</h1>
+        <h1 className="font-serif text-2xl sm:text-3xl font-light text-foreground mb-3">We are here to help.</h1>
         <p className="text-muted-foreground text-lg font-light mb-12">
           Whether you have a question about the platform, need help with your account, or want to request a refund — reach out and we will respond within 2 business days.
         </p>

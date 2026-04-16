@@ -75,7 +75,7 @@ const INFLUENCES = [
 export default function Sources() {
   return (
     <div className="min-h-screen bg-background">
-      <div className="container max-w-3xl mx-auto pt-24 pb-20">
+      <div className="container max-w-3xl mx-auto pt-20 pb-24 px-4 sm:px-6">
         <div className="mb-8">
           <Button asChild variant="ghost" size="sm" className="gap-2 mb-6 -ml-2 text-muted-foreground">
             <Link href="/about"><ArrowLeft className="h-4 w-4" /> Back to About</Link>
@@ -84,7 +84,7 @@ export default function Sources() {
             <div className="p-2 rounded-xl bg-accent/10">
               <BookOpen className="h-5 w-5 text-accent" />
             </div>
-            <h1 className="font-serif text-3xl font-light text-foreground">Sources & Influences</h1>
+            <h1 className="font-serif text-2xl sm:text-3xl font-light text-foreground">Sources & Influences</h1>
           </div>
           <p className="text-muted-foreground leading-relaxed">
             Lifewoven is a synthesis — not an invention from nothing. The 5S Framework, Seven Pathways, and the interactions between them are original to Lifewoven. The ideas they draw on are not. We believe transparency about intellectual lineage is a mark of integrity, and that standing openly on the shoulders of great thinkers is more trustworthy than pretending to stand alone.

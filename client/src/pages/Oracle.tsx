@@ -88,7 +88,7 @@ export default function Oracle() {
     return (
       <div className="min-h-screen bg-background flex flex-col">
         <Nav />
-        <div className="container pt-24 pb-6 max-w-3xl mx-auto flex flex-col flex-1 items-center justify-center text-center py-16">
+        <div className="container pt-20 pb-6 max-w-3xl mx-auto flex flex-col flex-1 items-center justify-center text-center py-12 px-4 sm:px-6">
           <Sparkles className="h-16 w-16 text-accent mb-6" />
           <h2 className="font-serif text-2xl font-light text-foreground mb-3">The Oracle awaits you.</h2>
           <p className="text-muted-foreground text-sm mb-8 max-w-sm">Sign in to access your personal AI guide, powered by the wisdom of the ages.</p>
@@ -101,7 +101,7 @@ export default function Oracle() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Nav />
-      <div className="container pt-24 pb-6 max-w-3xl mx-auto flex flex-col flex-1">
+      <div className="container pt-20 pb-6 max-w-3xl mx-auto flex flex-col flex-1 px-4 sm:px-6">
 
         {/* Header */}
         <div className="flex items-start gap-4 mb-5">
@@ -109,7 +109,7 @@ export default function Oracle() {
             <Sparkles className="h-6 w-6 text-accent" />
           </div>
           <div className="flex-1">
-            <h1 className="font-serif text-3xl md:text-4xl font-light text-foreground mb-1">The Oracle</h1>
+            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-1">The Oracle</h1>
             <p className="text-muted-foreground text-sm font-light">
               Your personal AI guide, drawing from four pillars of transformational wisdom.
             </p>
@@ -145,7 +145,7 @@ export default function Oracle() {
         )}
 
         {/* Mode Tabs */}
-        <div className="flex gap-2 mb-5 border-b border-border pb-4">
+        <div className="flex gap-1.5 sm:gap-2 mb-5 border-b border-border pb-4 overflow-x-auto">
           {[
             { id: "guide" as OracleMode, label: "Guide", icon: MessageSquare, desc: "Open conversation" },
             { id: "unstuck" as OracleMode, label: "Unstuck", icon: AlertCircle, desc: "When you're blocked" },
@@ -277,7 +277,7 @@ export default function Oracle() {
             )}
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto space-y-4 mb-2 min-h-[200px] max-h-[50vh]">
+            <div className="flex-1 overflow-y-auto space-y-4 mb-2 min-h-[200px] max-h-[45vh] sm:max-h-[50vh]">
               {messages.length === 0 ? (
                 <div className="pt-2">
                   <p className="font-serif text-base font-light text-muted-foreground mb-4">

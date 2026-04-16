@@ -7,7 +7,7 @@ export default function Terms() {
       <Nav />
       <div className="container pt-28 pb-20 max-w-3xl mx-auto">
         <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Legal</p>
-        <h1 className="font-serif text-4xl font-light text-foreground mb-2">Terms of Service</h1>
+        <h1 className="font-serif text-2xl sm:text-3xl font-light text-foreground mb-2">Terms of Service</h1>
         <p className="text-sm text-muted-foreground mb-10">Last updated: March 2026</p>
 
         <div className="prose prose-sm max-w-none text-foreground space-y-8">

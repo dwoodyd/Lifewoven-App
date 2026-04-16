@@ -213,7 +213,7 @@ export default function Home() {
       <Nav />
 
       {/* ─── Hero ─── */}
-      <section className="relative pt-28 pb-20 overflow-hidden">
+      <section className="relative pt-24 pb-16 overflow-hidden">
         {/* Subtle background texture */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-accent/5 blur-3xl translate-x-1/3 -translate-y-1/4" />
@@ -233,7 +233,7 @@ export default function Home() {
                 You have the vision. You have the books. Something still isn't clicking.
               </p>
 
-              <h1 className="font-serif text-5xl md:text-6xl font-light leading-[1.08] tracking-tight mb-6 text-foreground">
+              <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-light leading-[1.1] tracking-tight mb-6 text-foreground">
                 One intelligent
                 <br />
                 <span className="italic text-accent">operating system</span>
@@ -241,11 +241,11 @@ export default function Home() {
                 for your whole life.
               </h1>
 
-              <p className="text-lg text-muted-foreground font-sans font-light leading-relaxed mb-8 max-w-lg">
+              <p className="text-base sm:text-lg text-muted-foreground font-sans font-light leading-relaxed mb-8 max-w-lg">
                 Lifewoven brings together emotional alignment, belief work, habit execution, strategic clarity, and holistic stewardship — in one guided, intelligent platform rooted in timeless wisdom.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-3 mb-6">
+              <div className="flex flex-col xs:flex-row gap-3 mb-6">
                 <Button size="lg" asChild className="gap-2 text-base">
                   <Link href="/audit">
                     Take the Alignment Audit
@@ -276,7 +276,7 @@ export default function Home() {
       <section className="border-y border-border py-7">
         <div className="container">
           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase text-center mb-4">Informed by wisdom traditions including</p>
-          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-14 text-muted-foreground">
+          <div className="flex flex-wrap items-center justify-center gap-5 md:gap-10 text-muted-foreground">
             <div className="flex items-center gap-2 text-sm">
               <Brain className="h-4 w-4" />
               <span>Mind Science</span>
@@ -306,14 +306,14 @@ export default function Home() {
         <div className="container">
           <div className="max-w-3xl mx-auto text-center mb-12">
             <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">Your Starting Point</p>
-            <h2 className="font-serif text-4xl md:text-5xl font-light text-foreground mb-4">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-4">
               Overwhelmed? Start here.
             </h2>
             <p className="text-muted-foreground text-lg font-light">
               You don't need to understand the whole system to begin. Every path leads to the same place: a life that feels like yours.
             </p>
           </div>
-          <div className="grid sm:grid-cols-3 gap-5 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto">
             {[
               {
                 step: "01",
@@ -358,15 +358,15 @@ export default function Home() {
         <div className="container">
           <div className="max-w-2xl mb-14">
             <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">The Framework</p>
-            <h2 className="font-serif text-4xl md:text-5xl font-light text-foreground mb-4">
-              Five dimensions.<br />One coherent life.
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-4">
+              Five dimensions. One coherent life.
             </h2>
             <p className="text-muted-foreground text-lg font-light">
               The 5S Framework organizes every tool, practice, and insight into five interconnected domains — each essential, each supporting the others.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {modules.map((mod) => {
               const Icon = mod.icon;
               return (
@@ -423,15 +423,15 @@ export default function Home() {
         <div className="container">
           <div className="max-w-2xl mb-14">
             <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">Guided Experiences</p>
-            <h2 className="font-serif text-4xl md:text-5xl font-light text-foreground mb-4">
-              Enter through your<br />present need.
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-4">
+              Enter through your present need.
             </h2>
             <p className="text-muted-foreground text-lg font-light">
               Seven curated pathways, each a complete guided experience. Not just a feature — a transformation protocol.
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {pathways.map((p) => (
               <Link
                 key={p.slug}
@@ -453,7 +453,7 @@ export default function Home() {
         <div className="container">
           <div className="max-w-3xl mx-auto text-center">
             <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Start Here</p>
-            <h2 className="font-serif text-4xl md:text-5xl font-light text-foreground mb-6">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-6">
               Take the Alignment Audit.
             </h2>
             <p className="text-lg text-muted-foreground font-light mb-10 max-w-xl mx-auto">
@@ -472,13 +472,13 @@ export default function Home() {
       {/* ─── Why Lifewoven Exists ─── */}
       <section className="py-24 bg-secondary/30">
         <div className="container">
-          <div className="grid lg:grid-cols-2 gap-16 items-center max-w-5xl">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center max-w-5xl">
             <div>
               <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Why This Exists</p>
-              <h2 className="font-serif text-4xl md:text-5xl font-light text-foreground mb-6">
-                Most systems are built for<br />
-                <span className="italic text-accent">the best version of you.</span>
-              </h2>
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-6">
+              Most systems are built for{" "}
+              <span className="italic text-accent">the best version of you.</span>
+            </h2>
               <p className="text-muted-foreground font-light leading-relaxed mb-5">
                 Lifewoven was built for the real version. The one who starts and stops. The one who has the books and the knowledge but still feels stuck. The one whose mind works differently on different days.
               </p>
@@ -513,7 +513,7 @@ export default function Home() {
       {/* ─── Before the Words Banner ─── */}
       <section className="py-16 bg-background">
         <div className="container">
-          <div className="max-w-4xl mx-auto rounded-2xl border border-accent/30 bg-gradient-to-br from-accent/5 via-background to-secondary/20 p-10 flex flex-col md:flex-row items-center gap-8">
+          <div className="max-w-4xl mx-auto rounded-2xl border border-accent/30 bg-gradient-to-br from-accent/5 via-background to-secondary/20 p-6 sm:p-10 flex flex-col md:flex-row items-center gap-6 sm:gap-8">
             <div className="flex-1">
               <p className="text-xs font-mono tracking-widest text-accent uppercase mb-3">Companion Practice</p>
               <h2 className="font-serif text-3xl md:text-4xl font-light text-foreground mb-4">
@@ -551,7 +551,7 @@ export default function Home() {
         <div className="container">
           <div className="max-w-2xl mb-4">
             <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">Investment</p>
-            <h2 className="font-serif text-4xl md:text-5xl font-light text-foreground mb-4">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-4">
               Choose your path.
             </h2>
             <p className="text-muted-foreground text-lg font-light">
@@ -578,7 +578,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6 max-w-4xl">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 max-w-4xl">
             {pricingTiers.map((tier) => (
               <div
                 key={tier.name}
@@ -626,8 +626,8 @@ export default function Home() {
       {/* ─── Footer ─── */}
       <footer className="border-t border-border py-12">
         <div className="container">
-          <div className="grid md:grid-cols-4 gap-8 mb-10">
-            <div className="md:col-span-2">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-10">
+            <div className="col-span-2 md:col-span-2">
               <div className="flex items-center gap-2 mb-3">
                 <img
                   src="https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/app-icon_e26b6bab.png"

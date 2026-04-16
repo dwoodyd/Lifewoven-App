@@ -43,7 +43,7 @@ export default function WordsWithWeight() {
   return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container pt-24 pb-20 max-w-2xl mx-auto">
+      <div className="container pt-20 pb-24 max-w-2xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-10">
           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Before the Words</p>
           <h1 className="font-serif text-4xl font-light text-foreground mb-3">Words With Weight</h1>

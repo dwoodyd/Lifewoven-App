@@ -234,10 +234,10 @@ export default function PathwayPage() {
         </div>
       )}
 
-      <div className="container pt-24 pb-32 max-w-3xl mx-auto">
+      <div className="container pt-20 pb-32 max-w-3xl mx-auto px-4 sm:px-6">
         <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-2">Pathway</p>
         <div className="flex items-start justify-between gap-4 mb-2">
-          <h1 className="font-serif text-4xl md:text-5xl font-light text-foreground">{pathway.name}</h1>
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground">{pathway.name}</h1>
           {pathway.badge && <Badge variant="secondary" className="mt-2 shrink-0 text-xs">{pathway.badge}</Badge>}
         </div>
         <p className="text-muted-foreground text-lg font-light mb-6">{pathway.tagline}</p>

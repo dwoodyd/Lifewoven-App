@@ -72,22 +72,22 @@ export default function Journal() {
   return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container pt-24 pb-20 max-w-5xl mx-auto">
-        <div className="flex items-start justify-between gap-4 mb-8">
-          <div className="flex items-start gap-4">
-            <div className="p-3 rounded-xl bg-secondary flex-shrink-0"><BookOpen className="h-6 w-6 text-foreground" /></div>
+      <div className="container pt-20 pb-24 max-w-5xl mx-auto px-4 sm:px-6">
+        <div className="flex items-start justify-between gap-3 mb-6">
+          <div className="flex items-start gap-3">
+            <div className="p-2.5 sm:p-3 rounded-xl bg-secondary flex-shrink-0"><BookOpen className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" /></div>
             <div>
-              <h1 className="font-serif text-3xl md:text-4xl font-light text-foreground mb-1">Journal</h1>
+              <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-1">Journal</h1>
               <p className="text-muted-foreground text-sm font-light">Your private space for reflection, clarity, and growth.</p>
             </div>
           </div>
           {isAuthenticated && !isWriting && (
-            <Button onClick={() => setIsWriting(true)} className="gap-2 flex-shrink-0"><Plus className="h-4 w-4" /> New Entry</Button>
+            <Button onClick={() => setIsWriting(true)} size="sm" className="gap-1.5 flex-shrink-0"><Plus className="h-4 w-4" /><span className="hidden sm:inline">New Entry</span><span className="sm:hidden">New</span></Button>
           )}
         </div>
 
         {isWriting && (
-          <div className="p-6 rounded-2xl border border-border bg-card mb-8">
+          <div className="p-4 sm:p-6 rounded-2xl border border-border bg-card mb-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-serif text-xl font-light text-foreground">New Entry</h2>
               <Button variant="ghost" size="sm" onClick={() => setIsWriting(false)}>Cancel</Button>
@@ -130,16 +130,16 @@ export default function Journal() {
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           <div className="lg:col-span-2">
             {isAuthenticated ? (
               <div className="space-y-4">
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
                     <Input placeholder="Search entries..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pl-9 text-sm" />
                   </div>
-                  <div className="flex gap-1">
+                  <div className="flex gap-1 overflow-x-auto flex-shrink-0">
                     <button onClick={() => setSelectedModule("")} className={`text-xs px-2.5 py-1.5 rounded-lg border transition-colors ${!selectedModule ? "border-foreground bg-foreground text-background" : "border-border text-muted-foreground"}`}>All</button>
                     {modules.map(m => { const abbr: Record<string,string> = { state:'State', story:'Story', standards:'Stds', strategy:'Strat', stewardship:'Stew' }; return <button key={m} title={m.charAt(0).toUpperCase()+m.slice(1)} onClick={() => setSelectedModule(selectedModule === m ? '' : m)} className={`text-xs px-2.5 py-1.5 rounded-lg border transition-colors ${selectedModule === m ? `border-current bg-current/10 ${MODULE_COLORS[m]}` : 'border-border text-muted-foreground'}`}>{abbr[m]}</button>; })}
                   </div>

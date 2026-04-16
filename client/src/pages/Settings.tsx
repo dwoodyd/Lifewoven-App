@@ -94,7 +94,7 @@ export default function Settings() {
     return (
       <div className="min-h-screen bg-background flex flex-col">
         <Nav />
-        <div className="container pt-24 pb-6 max-w-2xl mx-auto flex flex-col flex-1 items-center justify-center text-center py-16">
+        <div className="container pt-20 pb-6 max-w-2xl mx-auto flex flex-col flex-1 items-center justify-center text-center py-12 px-4 sm:px-6">
           <Settings2 className="h-12 w-12 text-muted-foreground mb-4" />
           <h2 className="font-serif text-2xl font-light text-foreground mb-3">Settings</h2>
           <p className="text-muted-foreground text-sm mb-8">Sign in to manage your preferences.</p>
@@ -125,12 +125,12 @@ export default function Settings() {
   return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container pt-24 pb-16 max-w-2xl mx-auto">
+      <div className="container pt-20 pb-20 max-w-2xl mx-auto px-4 sm:px-6">
 
         {/* Header */}
         <div className="mb-8">
           <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest mb-2">Preferences</p>
-          <h1 className="font-serif text-3xl font-light text-foreground">Settings</h1>
+          <h1 className="font-serif text-2xl sm:text-3xl font-light text-foreground">Settings</h1>
         </div>
 
         {/* Account */}
@@ -163,7 +163,7 @@ export default function Settings() {
           </div>
           <p className="text-xs text-muted-foreground mb-4">Control how the Oracle uses your data to personalize guidance.</p>
 
-          <div className="flex items-start justify-between gap-4 py-4 border-b border-border/50">
+          <div className="flex items-start justify-between gap-3 py-4 border-b border-border/50">
             <div>
               <p className="text-sm font-medium text-foreground mb-0.5">Personalized guidance</p>
               <p className="text-xs text-muted-foreground font-light leading-relaxed max-w-sm">
@@ -178,7 +178,7 @@ export default function Settings() {
             </button>
           </div>
 
-          <div className="flex items-start justify-between gap-4 py-4">
+          <div className="flex items-start justify-between gap-3 py-4">
             <div>
               <p className="text-sm font-medium text-foreground mb-0.5">Pattern Mirror</p>
               <p className="text-xs text-muted-foreground font-light leading-relaxed max-w-sm">
@@ -202,7 +202,7 @@ export default function Settings() {
           </div>
           <p className="text-xs text-muted-foreground mb-4">Adjust how the platform presents information to you.</p>
 
-          <div className="flex items-start justify-between gap-4 py-4 border-b border-border/50">
+          <div className="flex items-start justify-between gap-3 py-4 border-b border-border/50">
             <div>
               <p className="text-sm font-medium text-foreground mb-0.5">Simplified view</p>
               <p className="text-xs text-muted-foreground font-light leading-relaxed max-w-sm">
@@ -217,7 +217,7 @@ export default function Settings() {
             </button>
           </div>
 
-          <div className="flex items-start justify-between gap-4 py-4">
+          <div className="flex items-start justify-between gap-3 py-4">
             <div>
               <p className="text-sm font-medium text-foreground mb-0.5">Show profile in navigation</p>
               <p className="text-xs text-muted-foreground font-light leading-relaxed max-w-sm">

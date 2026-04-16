@@ -227,9 +227,9 @@ export default function AlignmentAudit() {
   if (step === "entry") return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container max-w-xl mx-auto pt-32 pb-20 text-center">
+      <div className="container max-w-xl mx-auto pt-24 pb-20 text-center px-4 sm:px-6">
         <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Lifewoven · Alignment Audit</p>
-        <h1 className="font-serif text-4xl md:text-5xl font-light text-foreground mb-6 leading-tight">Find your clearest<br />place to begin.</h1>
+        <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-6 leading-tight">Find your clearest<br />place to begin.</h1>
         <p className="text-muted-foreground text-base leading-relaxed mb-8 max-w-md mx-auto">The Alignment Audit identifies where friction is highest in your life right now — and recommends the most honest place to start inside Lifewoven.</p>
         <div className="flex items-center justify-center gap-3 mb-8 flex-wrap">
           {["12 questions", "3 to 5 minutes", "Free, no account required"].map(tag => (
@@ -247,9 +247,9 @@ export default function AlignmentAudit() {
   if (step === "consent") return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container max-w-xl mx-auto pt-32 pb-20">
-        <div className="p-8 rounded-2xl border border-border bg-card">
-          <h2 className="font-serif text-2xl font-light text-foreground mb-4">One quick thing before we begin.</h2>
+      <div className="container max-w-xl mx-auto pt-24 pb-20 px-4 sm:px-6">
+        <div className="p-5 sm:p-8 rounded-2xl border border-border bg-card">
+          <h2 className="font-serif text-xl sm:text-2xl font-light text-foreground mb-4">One quick thing before we begin.</h2>
           <p className="text-muted-foreground mb-4 leading-relaxed">With your permission, your responses can be used to personalize your recommendations inside Lifewoven. You can change this any time in settings.</p>
           <p className="text-sm text-muted-foreground mb-8 leading-relaxed">Lifewoven uses your responses only to guide your experience. This audit is not a diagnosis.</p>
           <div className="space-y-3">
@@ -264,8 +264,8 @@ export default function AlignmentAudit() {
   if (step === "preframe") return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container max-w-xl mx-auto pt-32 pb-20 text-center">
-        <div className="p-8 rounded-2xl border border-border bg-card">
+      <div className="container max-w-xl mx-auto pt-24 pb-20 text-center px-4 sm:px-6">
+        <div className="p-5 sm:p-8 rounded-2xl border border-border bg-card">
           <p className="font-serif text-xl font-light text-foreground mb-4">There are four short sections.</p>
           <p className="text-muted-foreground leading-relaxed mb-8">Answer as honestly as you can. This only works if you are real with it.</p>
           <Button size="lg" className="gap-2 px-8" onClick={() => setStep("quiz")}>I'm ready <ArrowRight className="h-4 w-4" /></Button>
@@ -279,7 +279,7 @@ export default function AlignmentAudit() {
     return (
       <div className="min-h-screen bg-background">
         <Nav />
-        <div className="container max-w-xl mx-auto pt-24 pb-20">
+        <div className="container max-w-xl mx-auto pt-24 pb-20 px-4 sm:px-6">
           <div className="mb-8">
             <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
               <span>Question {currentQ + 1} of {totalQ}</span><span>{progress}%</span>
@@ -293,17 +293,17 @@ export default function AlignmentAudit() {
               </span>
             </div>
           )}
-          <div className="p-8 rounded-2xl border border-border bg-card mb-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <p className="font-serif text-xl md:text-2xl font-light text-foreground leading-relaxed mb-8">{q.text}</p>
-            <div className="grid grid-cols-5 gap-2">
+          <div className="p-5 sm:p-8 rounded-2xl border border-border bg-card mb-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+            <p className="font-serif text-lg sm:text-xl md:text-2xl font-light text-foreground leading-relaxed mb-6">{q.text}</p>
+            <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
               {SCALE.map((label, idx) => {
                 const value = (idx + 1) as ScaleValue;
                 const isSelected = answers[q.id] === value;
                 return (
                   <button key={label} onClick={() => handleAnswer(q.id, value)}
-                    className={`flex flex-col items-center gap-2 p-3 rounded-xl border transition-all duration-200 ${isSelected ? "border-accent bg-accent/10 text-accent" : "border-border bg-background hover:border-accent/50 hover:bg-accent/5 text-muted-foreground"}`}>
-                    <span className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-mono font-medium transition-all ${isSelected ? "border-accent bg-accent text-background" : "border-current"}`}>{value}</span>
-                    <span className="text-xs text-center leading-tight">{label}</span>
+                    className={`flex flex-col items-center gap-1.5 p-2 sm:p-3 rounded-xl border transition-all duration-200 ${isSelected ? "border-accent bg-accent/10 text-accent" : "border-border bg-background hover:border-accent/50 hover:bg-accent/5 text-muted-foreground"}`}>
+                    <span className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 flex items-center justify-center text-xs font-mono font-medium transition-all ${isSelected ? "border-accent bg-accent text-background" : "border-current"}`}>{value}</span>
+                    <span className="text-[10px] sm:text-xs text-center leading-tight">{label}</span>
                   </button>
                 );
               })}
@@ -318,8 +318,8 @@ export default function AlignmentAudit() {
   if (step === "optional_prompt") return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container max-w-xl mx-auto pt-32 pb-20 text-center">
-        <div className="p-8 rounded-2xl border border-border bg-card">
+      <div className="container max-w-xl mx-auto pt-24 pb-20 text-center px-4 sm:px-6">
+        <div className="p-5 sm:p-8 rounded-2xl border border-border bg-card">
           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Almost there</p>
           <h2 className="font-serif text-2xl font-light text-foreground mb-4">A few optional questions to sharpen your results.</h2>
           <p className="text-muted-foreground mb-8 text-sm leading-relaxed">These take about 60 seconds and can be skipped.</p>
@@ -335,11 +335,11 @@ export default function AlignmentAudit() {
   if (step === "optional" && oq) return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container max-w-xl mx-auto pt-24 pb-20">
+      <div className="container max-w-xl mx-auto pt-24 pb-20 px-4 sm:px-6">
         <div className="mb-8">
           <Progress value={((optionalQ + 1) / OPTIONAL_QUESTIONS.length) * 100} className="h-1.5" />
         </div>
-        <div className="p-8 rounded-2xl border border-border bg-card animate-in fade-in slide-in-from-bottom-2 duration-300">
+        <div className="p-5 sm:p-8 rounded-2xl border border-border bg-card animate-in fade-in slide-in-from-bottom-2 duration-300">
           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">Optional {optionalQ + 1} of {OPTIONAL_QUESTIONS.length}</p>
           <p className="font-serif text-xl font-light text-foreground mb-6">{oq.text}</p>
           <div className="space-y-2">
@@ -361,9 +361,9 @@ export default function AlignmentAudit() {
     return (
       <div className="min-h-screen bg-background">
         <Nav />
-        <div className="container max-w-2xl mx-auto pt-24 pb-20">
+        <div className="container max-w-2xl mx-auto pt-24 pb-20 px-4 sm:px-6">
           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-2">Your Alignment Audit Results</p>
-          <h1 className="font-serif text-3xl md:text-4xl font-light text-foreground mb-1">
+          <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-1">
             Your current pattern: <span className="text-accent">{profile.name}</span>
           </h1>
           <p className="text-base text-muted-foreground mb-6">This reflects patterns in your responses, not fixed traits. Patterns shift.</p>

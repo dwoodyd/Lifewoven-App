@@ -110,7 +110,7 @@ export default function CourseDetail() {
     return (
       <div className="min-h-screen bg-background">
         <Nav />
-        <div className="container pt-24 pb-20 max-w-3xl mx-auto">
+        <div className="container pt-20 pb-24 max-w-3xl mx-auto px-4 sm:px-6">
           <Link href="/store"><p className="text-base text-muted-foreground mb-6 hover:text-foreground transition-colors cursor-pointer flex items-center gap-2"><ArrowLeft className="h-4 w-4" /> Back to Store</p></Link>
           <h1 className="font-serif text-4xl font-light text-foreground mb-3">Course Coming Soon</h1>
           <p className="text-muted-foreground font-light text-base mb-8">This course is currently in development. Check back soon or explore the other available courses.</p>
@@ -130,7 +130,7 @@ export default function CourseDetail() {
   return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container pt-24 pb-20 max-w-3xl mx-auto">
+      <div className="container pt-20 pb-24 max-w-3xl mx-auto px-4 sm:px-6">
         <Link href="/store">
           <p className="text-base text-muted-foreground mb-8 hover:text-foreground transition-colors cursor-pointer flex items-center gap-2">
             <ArrowLeft className="h-4 w-4" /> Back to Store
@@ -157,10 +157,10 @@ export default function CourseDetail() {
         {/* Header */}
         <div className="mb-10">
           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">Course</p>
-          <h1 className="font-serif text-4xl md:text-5xl font-light text-foreground mb-3">{course.title}</h1>
-          <p className="text-xl text-muted-foreground font-light mb-5">{course.subtitle}</p>
-          <div className="flex flex-wrap items-center gap-4 mb-6">
-            <span className="flex items-center gap-1.5 text-base text-muted-foreground"><Clock className="h-4 w-4" />{course.duration}</span>
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-3 break-words">{course.title}</h1>
+          <p className="text-lg sm:text-xl text-muted-foreground font-light mb-5">{course.subtitle}</p>
+          <div className="flex flex-wrap items-center gap-3 mb-6">
+            <span className="flex items-center gap-1.5 text-sm text-muted-foreground"><Clock className="h-4 w-4" />{course.duration}</span>
             <span className="text-2xl font-light text-foreground">{course.price}</span>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -173,14 +173,14 @@ export default function CourseDetail() {
           </div>
         </div>
         {/* Overview */}
-        <div className="mb-10 p-6 rounded-2xl border border-border bg-card">
+        <div className="mb-8 p-4 sm:p-6 rounded-2xl border border-border bg-card">
           <h2 className="font-serif text-2xl font-light text-foreground mb-4">Course Overview</h2>
           {course.overview.split("\n\n").map((p, i) => (
             <p key={i} className="text-base text-muted-foreground font-light leading-relaxed mb-3 last:mb-0">{p}</p>
           ))}
         </div>
         {/* Structure */}
-        <div className="mb-10 p-6 rounded-2xl border border-border bg-secondary/20">
+        <div className="mb-8 p-4 sm:p-6 rounded-2xl border border-border bg-secondary/20">
           <h2 className="font-serif text-2xl font-light text-foreground mb-4">How Each Lesson Works</h2>
           {course.structure.split("\n\n").map((p, i) => (
             <p key={i} className="text-base text-muted-foreground font-light leading-relaxed mb-3 last:mb-0">{p}</p>
@@ -188,7 +188,7 @@ export default function CourseDetail() {
         </div>
         {/* Preview Excerpts */}
         {COURSE_PREVIEWS[courseId] && (
-          <div className="mb-10 p-6 rounded-2xl border border-border bg-secondary/10">
+          <div className="mb-8 p-4 sm:p-6 rounded-2xl border border-border bg-secondary/10">
             <h2 className="font-serif text-2xl font-light text-foreground mb-5">{COURSE_PREVIEWS[courseId].label}</h2>
             <div className="space-y-4">
               {COURSE_PREVIEWS[courseId].excerpts.map((excerpt, i) => (
@@ -214,14 +214,14 @@ export default function CourseDetail() {
                 <div className="divide-y divide-border">
                   {week.lessons.map(lesson => (
                     <details key={lesson.id} className="group">
-                      <summary className="flex items-center justify-between p-5 cursor-pointer hover:bg-secondary/20 transition-colors list-none">
-                        <div className="flex items-center gap-3">
-                          <span className="text-xs font-mono text-muted-foreground w-8">{lesson.id}</span>
-                          <span className="text-base font-medium text-foreground">{lesson.title}</span>
+                      <summary className="flex items-center justify-between p-4 sm:p-5 cursor-pointer hover:bg-secondary/20 transition-colors list-none">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <span className="text-xs font-mono text-muted-foreground shrink-0">{lesson.id}</span>
+                          <span className="text-sm sm:text-base font-medium text-foreground truncate">{lesson.title}</span>
                         </div>
                         <BookOpen className="h-4 w-4 text-muted-foreground group-open:text-foreground transition-colors shrink-0" />
                       </summary>
-                      <div className="px-5 pb-6 pt-2 space-y-6">
+                      <div className="px-4 sm:px-5 pb-5 pt-2 space-y-5">
                         <div>
                           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">Teaching</p>
                           <div className="space-y-3">
@@ -261,7 +261,7 @@ export default function CourseDetail() {
           </div>
         </div>
         {/* CTA */}
-        <div className="mt-12 p-8 rounded-2xl border border-border bg-card text-center">
+        <div className="mt-10 p-6 sm:p-8 rounded-2xl border border-border bg-card text-center">
           <h3 className="font-serif text-2xl font-light text-foreground mb-3">Ready to Begin?</h3>
           <p className="text-base text-muted-foreground font-light mb-6 max-w-md mx-auto">
             Enroll now and get immediate access to all lessons, practices, and the full course library.
