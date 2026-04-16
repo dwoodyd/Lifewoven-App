@@ -55,13 +55,13 @@
 ## Upcoming / Future Enhancements
 - [ ] Stripe payment integration for membership tiers
 - [ ] Sonic design layer (completion sounds, timer tones)
-- [ ] Mobile PWA manifest and service worker
+- [x] Mobile PWA manifest and service worker
 - [ ] Email notifications for Oracle insights
 - [ ] Live workshop scheduling and community events
 - [ ] Course content delivery (video lessons, progress tracking)
 - [ ] Habit streak notifications
 - [ ] Weekly Oracle summary report
-- [ ] Dark/light theme toggle
+- [x] Dark/light theme toggle (Nav + Settings page)
 - [ ] Export journal entries as PDF
 
 ## Felt Experience Fixes (Priority)

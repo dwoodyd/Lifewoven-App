@@ -132,10 +132,30 @@ export default function PathwayPage() {
   const pathway = PATHWAYS[id] || PATHWAYS.align;
   const accentClass = COLOR_MAP[pathway.color] || COLOR_MAP.state;
 
-  const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
+  // Persist progress per pathway in localStorage
+  const storageKey = `lifeos_pathway_${id}`;
+  const [completedSteps, setCompletedSteps] = useState<Set<number>>(() => {
+    try {
+      const saved = localStorage.getItem(storageKey);
+      if (saved) return new Set(JSON.parse(saved) as number[]);
+    } catch {}
+    return new Set();
+  });
   const [expandedStep, setExpandedStep] = useState<number | null>(0);
-  const [sessionStarted, setSessionStarted] = useState(false);
+  const [sessionStarted, setSessionStarted] = useState(() => {
+    try { return localStorage.getItem(`${storageKey}_started`) === "1"; } catch { return false; }
+  });
   const [sessionComplete, setSessionComplete] = useState(false);
+
+  // Sync completedSteps to localStorage
+  useEffect(() => {
+    try { localStorage.setItem(storageKey, JSON.stringify(Array.from(completedSteps))); } catch {}
+  }, [completedSteps, storageKey]);
+
+  // Sync sessionStarted to localStorage
+  useEffect(() => {
+    try { localStorage.setItem(`${storageKey}_started`, sessionStarted ? "1" : "0"); } catch {}
+  }, [sessionStarted, storageKey]);
 
   // Per-step timer state
   const [activeTimerStep, setActiveTimerStep] = useState<number | null>(null);
@@ -166,11 +186,9 @@ export default function PathwayPage() {
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [timerRunning]);
 
-  // Reset on pathway change
+  // Reset timer state on pathway change (not progress — that's persisted)
   useEffect(() => {
-    setCompletedSteps(new Set());
     setExpandedStep(0);
-    setSessionStarted(false);
     setSessionComplete(false);
     setActiveTimerStep(null);
     setTimerSeconds(0);
@@ -218,6 +236,18 @@ export default function PathwayPage() {
 
   function handleSaveSession() {
     toast.success("Session saved. Well done for showing up.");
+  }
+
+  function handleResetProgress() {
+    setCompletedSteps(new Set());
+    setSessionStarted(false);
+    setSessionComplete(false);
+    setExpandedStep(0);
+    try {
+      localStorage.removeItem(storageKey);
+      localStorage.removeItem(`${storageKey}_started`);
+    } catch {}
+    toast("Progress cleared. Ready to begin again.");
   }
 
   return (
@@ -356,9 +386,12 @@ export default function PathwayPage() {
               {sessionComplete ? "Practice complete." : `${completedCount} step${completedCount > 1 ? "s" : ""} complete.`}
             </h3>
             <p className="text-base text-muted-foreground mb-4">
-              {sessionComplete ? "You showed up. That is the whole practice." : "You can continue later — your progress is yours to keep."}
+              {sessionComplete ? "You showed up. That is the whole practice." : "Your progress is saved — you can continue where you left off anytime."}
             </p>
-            <Button className="gap-2" onClick={handleSaveSession}><CheckCircle2 className="h-4 w-4" /> Save This Session</Button>
+            <div className="flex flex-wrap gap-2">
+              <Button className="gap-2" onClick={handleSaveSession}><CheckCircle2 className="h-4 w-4" /> Save This Session</Button>
+              <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={handleResetProgress}>Start Over</Button>
+            </div>
           </div>
         )}
 

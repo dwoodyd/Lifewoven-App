@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Link } from "wouter";
 import { getLoginUrl } from "@/const";
-import { Settings2, Shield, Bell, User, Sparkles, Eye, CreditCard, ExternalLink } from "lucide-react";
+import { Settings2, Shield, Bell, User, Sparkles, Eye, CreditCard, ExternalLink, Moon, Sun } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
 import { useState } from "react";
 import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
@@ -86,9 +87,8 @@ export default function Settings() {
   const [lowBandwidth, setLowBandwidth] = useState(
     () => localStorage.getItem("lifeos_low_bandwidth") === "true"
   );
-  const [showProfile, setShowProfile] = useState(
-    () => localStorage.getItem("lifeos_show_profile") !== "false"
-  );
+  const [showProfile, setShowProfile] = useState(() => localStorage.getItem("showProfile") !== "false");
+  const { theme, toggleTheme } = useTheme();
 
   if (!isAuthenticated) {
     return (
@@ -201,6 +201,22 @@ export default function Settings() {
             <h2 className="font-medium text-sm text-foreground">Display Preferences</h2>
           </div>
           <p className="text-xs text-muted-foreground mb-4">Adjust how the platform presents information to you.</p>
+
+          <div className="flex items-start justify-between gap-3 py-4 border-b border-border/50">
+            <div>
+              <p className="text-sm font-medium text-foreground mb-0.5">Appearance</p>
+              <p className="text-xs text-muted-foreground font-light leading-relaxed max-w-sm">
+                Switch between light and dark mode.
+              </p>
+            </div>
+            <button
+              onClick={toggleTheme}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border text-xs text-muted-foreground hover:text-foreground hover:border-muted-foreground transition-colors flex-shrink-0"
+            >
+              {theme === "dark" ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+              {theme === "dark" ? "Light" : "Dark"}
+            </button>
+          </div>
 
           <div className="flex items-start justify-between gap-3 py-4 border-b border-border/50">
             <div>

@@ -1,0 +1,43 @@
+{
+  "name": "Lifewoven — Personal Transformation Platform",
+  "short_name": "Lifewoven",
+  "description": "One intelligent operating system for your whole life, built on the 5S Framework.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2a2520",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/app-icon_e26b6bab.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/app-icon_e26b6bab.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["lifestyle", "health", "productivity"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "url": "/dashboard",
+      "description": "Open your daily dashboard"
+    },
+    {
+      "name": "Oracle",
+      "url": "/oracle",
+      "description": "Ask the Oracle"
+    },
+    {
+      "name": "Journal",
+      "url": "/journal",
+      "description": "Write a journal entry"
+    }
+  ]
+}
