@@ -2,6 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { btwRouter } from "./routers/btw";
 import { stripeRouter } from "./routers/stripe";
 import { adminRouter } from "./routers/admin";
+import { referralRouter } from "./routers/referral";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
@@ -928,6 +929,7 @@ export const appRouter = router({
   btw: btwRouter,
   stripe: stripeRouter,
   admin: adminRouter,
+  referral: referralRouter,
 });
 
 export type AppRouter = typeof appRouter;

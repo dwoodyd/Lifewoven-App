@@ -55,6 +55,7 @@ import LibraryArticlePage from "./pages/LibraryArticlePage";
 // Settings
 import Settings from "./pages/Settings";
 import Downloads from "./pages/Downloads";
+import Referrals from "./pages/Referrals";
 
 // Before the Words (BTW)
 import BTWLanding from "./pages/btw/BTWLanding";
@@ -126,6 +127,7 @@ function Router() {
       {/* Settings */}
       <Route path="/settings" component={Settings} />
       <Route path="/downloads" component={Downloads} />
+      <Route path="/referrals" component={Referrals} />
 
       {/* Before the Words */}
       <Route path="/btw" component={BTWLanding} />

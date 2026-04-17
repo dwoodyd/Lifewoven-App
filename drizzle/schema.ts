@@ -315,6 +315,26 @@ export const orders = mysqlTable("orders", {
 
 // ─── Community ────────────────────────────────────────────────────────────────
 
+
+// ─── Referrals ────────────────────────────────────────────────────────────────
+
+export const referrals = mysqlTable("referrals", {
+  id: int("id").autoincrement().primaryKey(),
+  referrerId: int("referrer_id").notNull(),
+  refereeId: int("referee_id"),
+  code: varchar("code", { length: 16 }).notNull().unique(),
+  creditCents: int("credit_cents").notNull().default(0),
+  usedAt: timestamp("used_at"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const referralCredits = mysqlTable("referral_credits", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("user_id").notNull().unique(),
+  balanceCents: int("balance_cents").notNull().default(0),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
 export const communityPosts = mysqlTable("community_posts", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull(),
