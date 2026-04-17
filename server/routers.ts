@@ -685,6 +685,30 @@ const pathwaysRouter = router({
       .limit(1);
     return rows[0] ?? null;
   }),
+
+  practiceStreak: protectedProcedure.query(async ({ ctx }) => {
+    const db = await getDb();
+    if (!db) return { streak: 0, lastDate: null as string | null };
+    const sessions = await db.select({ completedAt: pathwaySessions.completedAt })
+      .from(pathwaySessions)
+      .where(eq(pathwaySessions.userId, ctx.user.id))
+      .orderBy(desc(pathwaySessions.completedAt))
+      .limit(90);
+    if (!sessions.length) return { streak: 0, lastDate: null as string | null };
+    const toKey = (d: Date) => `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+    const days = Array.from(new Set(sessions.map(s => toKey(new Date(s.completedAt)))));
+    const today = new Date();
+    const yest = new Date(today); yest.setDate(today.getDate() - 1);
+    if (days[0] !== toKey(today) && days[0] !== toKey(yest)) {
+      return { streak: 0, lastDate: sessions[0].completedAt };
+    }
+    let streak = 1;
+    for (let i = 1; i < days.length; i++) {
+      const prev = new Date(today); prev.setDate(today.getDate() - i);
+      if (days[i] === toKey(prev)) streak++; else break;
+    }
+    return { streak, lastDate: sessions[0].completedAt };
+  }),
 });
 
 // ─── Resources Router ─────────────────────────────────────────────────────────

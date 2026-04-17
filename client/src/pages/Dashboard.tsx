@@ -72,6 +72,7 @@ export default function Dashboard() {
   const { data: todayLogs } = trpc.habits.todayLogs.useQuery(undefined, { enabled: isAuthenticated });
   const { data: oracleInsights } = trpc.oracle.insights.useQuery(undefined, { enabled: isAuthenticated });
   const { data: lastPracticed } = trpc.pathways.lastPracticed.useQuery(undefined, { enabled: isAuthenticated });
+  const { data: streakData } = trpc.pathways.practiceStreak.useQuery(undefined, { enabled: isAuthenticated });
 
   const createCheckIn = trpc.checkIn.create.useMutation({
     onSuccess: () => { toast.success("Check-in saved. The Oracle is listening."); setShowCheckIn(false); refetch(); },
@@ -149,10 +150,19 @@ export default function Dashboard() {
               {greeting()}, {user?.name?.split(" ")[0] ?? "friend"}.
             </h1>
           </div>
-          <Button size="sm" className="gap-2 shrink-0 self-start" onClick={() => setShowCheckIn(!showCheckIn)}>
-            <Heart className="h-4 w-4" />
-            <span>Daily Check-in</span>
-          </Button>
+          <div className="flex items-center gap-2 shrink-0 self-start">
+            {streakData && streakData.streak > 0 && (
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20">
+                <Flame className="h-4 w-4 text-orange-400" />
+                <span className="text-sm font-medium text-orange-400">{streakData.streak}</span>
+                <span className="text-xs text-muted-foreground hidden sm:inline">day streak</span>
+              </div>
+            )}
+            <Button size="sm" className="gap-2" onClick={() => setShowCheckIn(!showCheckIn)}>
+              <Heart className="h-4 w-4" />
+              <span>Daily Check-in</span>
+            </Button>
+          </div>
         </div>
 
         {/* Next Step Hero Card */}
