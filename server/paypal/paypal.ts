@@ -8,7 +8,7 @@ import { Router, type Request, type Response } from "express";
 import crypto from "crypto";
 import { getDb } from "../db";
 import { orders } from "../../drizzle/schema";
-import { getProductBySlug } from "../products";
+import { getProductBySlug, getAllProducts } from "../products";
 import { notifyOwner } from "../_core/notification";
 
 const PAYPAL_BASE =
@@ -44,6 +44,9 @@ paypalRouter.post("/api/paypal/create-order", async (req: Request, res: Response
     const product = getProductBySlug(productSlug);
     if (!product) return res.status(404).json({ error: "Product not found" });
 
+    // For bundle: use bundle price
+    const displayPrice = product.priceUsd;
+
     const token = await getAccessToken();
 
     const orderRes = await fetch(`${PAYPAL_BASE}/v2/checkout/orders`, {
@@ -60,7 +63,7 @@ paypalRouter.post("/api/paypal/create-order", async (req: Request, res: Response
           description: product.title,
           amount: {
             currency_code: "USD",
-            value: product.priceUsd.toFixed(2),
+            value: displayPrice.toFixed(2),
           },
           custom_id: userId ? String(userId) : undefined,
         }],
@@ -101,6 +104,11 @@ paypalRouter.post("/api/paypal/capture-order", async (req: Request, res: Respons
     const product = getProductBySlug(productSlug);
     if (!product) return res.status(404).json({ error: "Product not found" });
 
+    const isBundle = productSlug === "complete-bundle";
+    const bundleProducts = isBundle
+      ? getAllProducts().filter(p => p.type !== "bundle" && p.s3Url)
+      : null;
+
     const token = await getAccessToken();
 
     const captureRes = await fetch(`${PAYPAL_BASE}/v2/checkout/orders/${orderId}/capture`, {
@@ -139,30 +147,51 @@ paypalRouter.post("/api/paypal/capture-order", async (req: Request, res: Respons
 
     const db = await getDb();
     if (db && resolvedUserId) {
-      await db.insert(orders).values({
-        userId: resolvedUserId,
-        items: [{ type: "product", slug: productSlug, price: Math.round(amountPaid * 100) }],
-        total: amountPaid.toFixed(2),
-        status: "completed",
-        stripeSessionId: null,
-        paypalCaptureId: paypalCaptureId,
-        productSlug,
-        downloadUrl: product.s3Url,
-        downloadToken,
-        downloadExpiresAt,
-      });
-
-      await notifyOwner({
-        title: `💳 New Purchase (PayPal): ${product.title}`,
-        content: `User ${resolvedUserId} purchased "${product.title}" for $${amountPaid.toFixed(2)} via PayPal. Capture ID: ${paypalCaptureId}`,
-      }).catch(() => {});
+      if (isBundle && bundleProducts) {
+        // Insert one order row per product in the bundle
+        const bundleRows = bundleProducts.map(bp => ({
+          userId: resolvedUserId as number,
+          items: [{ type: "product", slug: bp.slug, price: bp.priceCents }],
+          total: bp.priceUsd.toFixed(2),
+          status: "completed" as const,
+          stripeSessionId: null,
+          paypalCaptureId,
+          productSlug: bp.slug,
+          downloadUrl: bp.s3Url,
+          downloadToken: crypto.randomBytes(32).toString("hex"),
+          downloadExpiresAt: new Date(Date.now() + 72 * 60 * 60 * 1000),
+        }));
+        await db.insert(orders).values(bundleRows);
+        await notifyOwner({
+          title: `💳 Bundle Purchase (PayPal): Complete Bundle`,
+          content: `User ${resolvedUserId} purchased the Complete Bundle for $${amountPaid.toFixed(2)} via PayPal. Capture ID: ${paypalCaptureId}`,
+        }).catch(() => {});
+      } else {
+        await db.insert(orders).values({
+          userId: resolvedUserId,
+          items: [{ type: "product", slug: productSlug, price: Math.round(amountPaid * 100) }],
+          total: amountPaid.toFixed(2),
+          status: "completed",
+          stripeSessionId: null,
+          paypalCaptureId,
+          productSlug,
+          downloadUrl: product.s3Url,
+          downloadToken,
+          downloadExpiresAt,
+        });
+        await notifyOwner({
+          title: `💳 New Purchase (PayPal): ${product.title}`,
+          content: `User ${resolvedUserId} purchased "${product.title}" for $${amountPaid.toFixed(2)} via PayPal. Capture ID: ${paypalCaptureId}`,
+        }).catch(() => {});
+      }
     }
 
     return res.json({
       status: "COMPLETED",
       downloadToken,
       downloadExpiresAt: downloadExpiresAt.toISOString(),
-      productTitle: product.title,
+      productTitle: isBundle ? "Complete Lifewoven Bundle (9 products)" : product.title,
+      isBundle,
     });
   } catch (err) {
     console.error("[PayPal] capture-order error:", err);

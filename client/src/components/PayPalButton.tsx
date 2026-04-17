@@ -14,7 +14,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 interface PayPalButtonProps {
   productSlug: string;
   priceUsd: number;
-  onSuccess: (downloadToken: string, productTitle: string) => void;
+  onSuccess?: (downloadToken: string, productTitle: string) => void;
   onError?: (msg: string) => void;
 }
 
@@ -26,6 +26,7 @@ declare global {
 }
 
 export function PayPalButton({ productSlug, priceUsd, onSuccess, onError }: PayPalButtonProps) {
+  const handleSuccess = onSuccess ?? ((token: string) => { window.location.href = `/api/download/${token}`; });
   const { user } = useAuth();
   const containerRef = useRef<HTMLDivElement>(null);
   const [sdkReady, setSdkReady] = useState(false);
@@ -95,7 +96,7 @@ export function PayPalButton({ productSlug, priceUsd, onSuccess, onError }: PayP
           error?: string;
         };
         if (result.status === "COMPLETED" && result.downloadToken) {
-          onSuccess(result.downloadToken, result.productTitle ?? productSlug);
+          handleSuccess(result.downloadToken, result.productTitle ?? productSlug);
         } else {
           onError?.(result.error ?? "Payment capture failed.");
         }

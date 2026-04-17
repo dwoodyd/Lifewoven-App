@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { ShoppingBag, BookOpen, Headphones, Layers, Star } from "lucide-react";
 import { useState } from "react";
+import { PayPalButton } from "@/components/PayPalButton";
+import { useAuth } from "@/_core/hooks/useAuth";
 
 const PRODUCTS = [
   {
@@ -107,6 +109,7 @@ const CATEGORIES = [
 
 export default function Store() {
   const [activeCategory, setActiveCategory] = useState("all");
+  const { user, isAuthenticated } = useAuth();
   const filtered = activeCategory === "all" ? PRODUCTS : PRODUCTS.filter(p => p.category === activeCategory);
 
   return (
@@ -170,9 +173,15 @@ export default function Store() {
             <span className="text-3xl font-light text-foreground">$297</span>
             <span className="text-xs px-2 py-1 rounded-full bg-secondary text-muted-foreground">Save 52%</span>
           </div>
-          <Button size="lg" className="gap-2">
-            <ShoppingBag className="h-4 w-4" /> Get the Complete Bundle
-          </Button>
+          {isAuthenticated ? (
+            <div className="flex justify-center">
+              <PayPalButton productSlug="complete-bundle" priceUsd={297} />
+            </div>
+          ) : (
+            <Button size="lg" className="gap-2" asChild>
+              <Link href="/store"><ShoppingBag className="h-4 w-4" /> Get the Complete Bundle — Sign in to Purchase</Link>
+            </Button>
+          )}
         </div>
         <p className="text-center text-base text-muted-foreground mt-8 max-w-2xl mx-auto">
           All Lifewoven courses, workbooks, and audio programs are original creations. They are informed by wisdom traditions and personal development ideas but are independently produced and not affiliated with, endorsed by, or licensed by any named author, teacher, or publisher.

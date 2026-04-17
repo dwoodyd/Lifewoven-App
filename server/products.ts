@@ -8,7 +8,7 @@ export interface LWProduct {
   slug: string;
   title: string;
   subtitle: string;
-  type: "course" | "workbook" | "audio" | "deck";
+  type: "course" | "workbook" | "audio" | "deck" | "bundle";
   priceUsd: number;       // display price
   priceCents: number;     // Stripe amount_total (cents)
   description: string;
@@ -108,7 +108,21 @@ export const LIFEWOVEN_PRODUCTS: LWProduct[] = [
     description: "A 52-card digital deck drawing from Mind Science, Vibrational Alignment, Meaning-Centered Philosophy, and Behavioral Science. One card per week for a year — each with a reflection prompt, a practice, and a quote from the Lifewoven lineage.",
     s3Url: "https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/PACKAGE-09-wisdom-card-deck.md_941c4561.pdf",
   },
+  {
+    slug: "complete-bundle",
+    title: "Complete Lifewoven Bundle",
+    subtitle: "All 9 Products — Courses, Workbooks, Audio & Card Deck",
+    type: "bundle",
+    priceUsd: 297,
+    priceCents: 29700,
+    description: "Every Lifewoven product in one purchase: 4 courses, 2 workbooks, 2 audio programs, and the Wisdom Card Deck. Save 52% off individual prices.",
+    s3Url: "",
+  },
 ];
+
+export function getAllProducts(): LWProduct[] {
+  return LIFEWOVEN_PRODUCTS;
+}
 
 export function getProductBySlug(slug: string): LWProduct | undefined {
   return LIFEWOVEN_PRODUCTS.find(p => p.slug === slug);
