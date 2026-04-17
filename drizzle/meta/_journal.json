@@ -50,6 +50,13 @@
       "when": 1776348825526,
       "tag": "0006_optimal_bishop",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1776459116627,
+      "tag": "0007_rainy_toad_men",
+      "breakpoints": true
     }
   ]
 }

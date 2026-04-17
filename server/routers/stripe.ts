@@ -6,6 +6,7 @@ import { getDb } from "../db";
 import { users } from "../../drizzle/schema";
 import { eq } from "drizzle-orm";
 import { PLANS, type PlanTier } from "../stripe/products";
+import { getProductBySlug, LIFEWOVEN_PRODUCTS } from "../products";
 import { orders } from "../../drizzle/schema";
 import { TRPCError } from "@trpc/server";
 
@@ -196,13 +197,14 @@ export const stripeRouter = router({
     // Admins see all products as accessible (no purchase required)
     if (ctx.user.role === "admin") {
       const ALL_PRODUCT_SLUGS = [
-        "alignment-workbook", "wisdom-card-deck", "morning-alignment-audio",
-        "belief-rewrite-workbook", "identity-stack-workbook", "reset-protocol-audio",
+        "alignment-fundamentals", "the-alignment-current", "identity-in-motion",
+        "the-meaning-foundation", "belief-rewrite-workbook", "identity-stack-workbook",
+        "morning-alignment-audio", "reset-protocol-audio", "wisdom-card-deck",
       ];
       return ALL_PRODUCT_SLUGS.map(slug => ({
         id: 0, userId: ctx.user.id, productSlug: slug, status: "completed",
-        stripePaymentIntentId: null, stripeSessionId: null, amountPaid: 0,
-        downloadUrl: null, createdAt: new Date(),
+        stripeSessionId: null, paypalCaptureId: null,
+        downloadUrl: null, downloadToken: null, downloadExpiresAt: null, createdAt: new Date(),
       }));
     }
     const db = await requireDb();

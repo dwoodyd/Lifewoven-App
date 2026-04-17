@@ -8,6 +8,8 @@ import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import { stripeWebhookHandler } from "../stripe/webhook";
+import { downloadHandler } from "../stripe/download";
+import { paypalRouter } from "../paypal/paypal";
 import { transcribeRouter } from "../transcribeRoute";
 import rateLimit from "express-rate-limit";
 import cors from "cors";
@@ -98,6 +100,12 @@ async function startServer() {
 
   // Stripe webhook MUST use raw body BEFORE express.json()
   app.post("/api/stripe/webhook", express.raw({ type: "application/json" }), stripeWebhookHandler);
+
+  // Secure download endpoint — token-based, server-side redirect to S3
+  app.get("/api/download/:token", downloadHandler);
+
+  // PayPal payment routes
+  app.use(paypalRouter);
 
   // ── Security: Reduced body limit (50mb was excessive and a DoS risk)
   app.use(express.json({ limit: "1mb" }));

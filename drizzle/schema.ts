@@ -303,8 +303,13 @@ export const orders = mysqlTable("orders", {
   total: decimal("total", { precision: 8, scale: 2 }).notNull(),
   status: mysqlEnum("status", ["pending", "completed", "refunded"]).default("pending").notNull(),
   stripeSessionId: varchar("stripeSessionId", { length: 255 }),
+  stripeProductId: varchar("stripeProductId", { length: 255 }),
+  stripePriceId: varchar("stripePriceId", { length: 255 }),
+  paypalCaptureId: varchar("paypalCaptureId", { length: 255 }),
   productSlug: varchar("productSlug", { length: 128 }),
   downloadUrl: text("downloadUrl"),
+  downloadToken: varchar("downloadToken", { length: 128 }),
+  downloadExpiresAt: timestamp("downloadExpiresAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 

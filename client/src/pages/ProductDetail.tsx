@@ -9,6 +9,7 @@ import { useAdminPreview } from "@/contexts/AdminPreviewContext";
 import { getLoginUrl } from "@/const";
 import { useState, useRef, useEffect } from "react";
 import { toast } from "sonner";
+import { PayPalButton } from "@/components/PayPalButton";
 
 const CDN = "https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t";
 
@@ -217,41 +218,40 @@ export default function ProductDetail() {
     onError: () => setNotifySent(true),
   });
 
-  // Check for post-purchase success redirect
+  // Check for post-purchase success redirect (legacy Stripe param, kept for compatibility)
   const urlParams = new URLSearchParams(window.location.search);
   const purchaseSuccess = urlParams.get("purchase") === "success";
 
   // Fetch user's existing orders to check if already purchased
-  const { data: myOrders } = trpc.stripe.getMyOrders.useQuery(undefined, {
+  const { data: myOrders, refetch: refetchOrders } = trpc.stripe.getMyOrders.useQuery(undefined, {
     enabled: !!user,
   });
-  const alreadyPurchased = myOrders?.some(o => o.productSlug === productId);
+  const existingOrder = myOrders?.find(o => o.productSlug === productId);
+  const alreadyPurchased = !!existingOrder;
 
-  const checkout = trpc.stripe.createProductCheckout.useMutation({
-    onSuccess: (data) => {
-      if (data.url) {
-        toast.success("Redirecting to checkout…", { description: "You'll be taken to Stripe's secure payment page." });
-        window.open(data.url, "_blank");
-      }
-    },
-    onError: () => {
-      toast.error("Something went wrong", { description: "We couldn't start checkout. Please try again or email us at hello@lifewoven.com if the issue persists." });
-    },
-  });
+  // After PayPal capture, store the download token locally
+  const [downloadToken, setDownloadToken] = useState<string | null>(null);
+  const canDownloadNow = alreadyPurchased || purchaseSuccess || downloadToken !== null;
 
-  function handleBuy() {
-    if (!user) {
-      window.location.href = getLoginUrl();
-      return;
-    }
-    if (!product.downloadUrl) return;
-    checkout.mutate({
-      productSlug: product.id,
-      productTitle: product.title,
-      priceInCents: product.priceInCents,
-      downloadUrl: product.downloadUrl,
-      origin: window.location.origin,
+  // Resolve download URL: use token endpoint if we have a token, else use stored order token
+  function getDownloadHref(): string {
+    const token = downloadToken ?? existingOrder?.downloadToken ?? null;
+    if (token) return `/api/download/${token}`;
+    return "#";
+  }
+
+  function handlePayPalSuccess(token: string, title: string) {
+    setDownloadToken(token);
+    refetchOrders();
+    toast.success(`Purchase complete — ${title} is ready to download!`, {
+      description: "Your secure download link is active for 72 hours.",
+      duration: 8000,
     });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function handlePayPalError(msg: string) {
+    toast.error("Payment failed", { description: msg });
   }
 
   if (!product) {
@@ -277,7 +277,7 @@ export default function ProductDetail() {
   const isAdmin = user?.role === "admin";
   const { previewAsUser, togglePreview } = useAdminPreview();
   const effectiveAdmin = isAdmin && !previewAsUser;
-  const canDownload = effectiveAdmin || purchaseSuccess || alreadyPurchased;
+  const canDownload = effectiveAdmin || canDownloadNow;
 
   // Audio preview player (muted autoplay)
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -322,11 +322,15 @@ export default function ProductDetail() {
             <div>
               <p className="text-base font-medium text-foreground mb-1">Purchase complete — your download is ready.</p>
               <p className="text-sm text-muted-foreground mb-3">Thank you for your purchase. Click below to download your file.</p>
-              <a href={product.downloadUrl} download target="_blank" rel="noopener noreferrer">
-                <Button size="sm" className="gap-2">
-                  <Download className="h-4 w-4" /> Download {product.title}
-                </Button>
-              </a>
+              {effectiveAdmin ? (
+                <a href={product.downloadUrl} download target="_blank" rel="noopener noreferrer">
+                  <Button size="sm" className="gap-2"><Download className="h-4 w-4" /> Download {product.title}</Button>
+                </a>
+              ) : (
+                <a href={getDownloadHref()} target="_blank" rel="noopener noreferrer">
+                  <Button size="sm" className="gap-2"><Download className="h-4 w-4" /> Download {product.title}</Button>
+                </a>
+              )}
             </div>
           </div>
         )}
@@ -408,15 +412,28 @@ export default function ProductDetail() {
           {/* Primary CTA */}
           {isAvailable ? (
             canDownload ? (
-              <a href={product.downloadUrl} download target="_blank" rel="noopener noreferrer">
-                <Button size="lg" className="gap-2">
-                  <Download className="h-4 w-4" /> Download Now
-                </Button>
-              </a>
+              effectiveAdmin ? (
+                <a href={product.downloadUrl} download target="_blank" rel="noopener noreferrer">
+                  <Button size="lg" className="gap-2"><Download className="h-4 w-4" /> Download Now</Button>
+                </a>
+              ) : (
+                <a href={getDownloadHref()} target="_blank" rel="noopener noreferrer">
+                  <Button size="lg" className="gap-2"><Download className="h-4 w-4" /> Download Now</Button>
+                </a>
+              )
+            ) : user ? (
+              <div className="max-w-xs">
+                <p className="text-xs text-muted-foreground mb-2 font-light">Secure checkout via PayPal</p>
+                <PayPalButton
+                  productSlug={product.id}
+                  priceUsd={product.priceInCents / 100}
+                  onSuccess={handlePayPalSuccess}
+                  onError={handlePayPalError}
+                />
+              </div>
             ) : (
-              <Button size="lg" className="gap-2" onClick={handleBuy} disabled={checkout.isPending || authLoading}>
-                {checkout.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShoppingCart className="h-4 w-4" />}
-                {checkout.isPending ? "Redirecting…" : `Buy Now — ${product.price}`}
+              <Button size="lg" className="gap-2" onClick={() => { window.location.href = getLoginUrl(); }}>
+                <ShoppingCart className="h-4 w-4" /> Sign in to Purchase
               </Button>
             )
           ) : (
@@ -473,18 +490,31 @@ export default function ProductDetail() {
               <p className="text-base text-muted-foreground font-light mb-6 max-w-md mx-auto">
                 {canDownload
                   ? "Your purchase is confirmed. Download your file below."
-                  : "Secure checkout via Stripe. Instant download after payment."}
+                  : "Secure checkout via PayPal. Instant download after payment."}
               </p>
               {canDownload ? (
-                <a href={product.downloadUrl} download target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" className="gap-2">
-                    <Download className="h-4 w-4" /> Download {product.title}
-                  </Button>
-                </a>
+                effectiveAdmin ? (
+                  <a href={product.downloadUrl} download target="_blank" rel="noopener noreferrer">
+                    <Button size="lg" className="gap-2"><Download className="h-4 w-4" /> Download {product.title}</Button>
+                  </a>
+                ) : (
+                  <a href={getDownloadHref()} target="_blank" rel="noopener noreferrer">
+                    <Button size="lg" className="gap-2"><Download className="h-4 w-4" /> Download {product.title}</Button>
+                  </a>
+                )
+              ) : user ? (
+                <div className="max-w-xs mx-auto">
+                  <p className="text-xs text-muted-foreground mb-2 font-light">Secure checkout via PayPal</p>
+                  <PayPalButton
+                    productSlug={product.id}
+                    priceUsd={product.priceInCents / 100}
+                    onSuccess={handlePayPalSuccess}
+                    onError={handlePayPalError}
+                  />
+                </div>
               ) : (
-                <Button size="lg" className="gap-2" onClick={handleBuy} disabled={checkout.isPending || authLoading}>
-                  {checkout.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShoppingCart className="h-4 w-4" />}
-                  {checkout.isPending ? "Redirecting to checkout…" : `Purchase — ${product.price}`}
+                <Button size="lg" className="gap-2" onClick={() => { window.location.href = getLoginUrl(); }}>
+                  <ShoppingCart className="h-4 w-4" /> Sign in to Purchase
                 </Button>
               )}
             </>

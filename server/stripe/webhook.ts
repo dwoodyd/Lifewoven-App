@@ -1,9 +1,11 @@
 import type { Request, Response } from "express";
 import Stripe from "stripe";
+import crypto from "crypto";
 import { getDb } from "../db";
 import { users, orders } from "../../drizzle/schema";
 import { eq } from "drizzle-orm";
 import { notifyOwner } from "../_core/notification";
+import { getProductBySlug } from "../products";
 
 export async function stripeWebhookHandler(req: Request, res: Response) {
   const sig = req.headers["stripe-signature"];
@@ -51,14 +53,21 @@ export async function stripeWebhookHandler(req: Request, res: Response) {
         const plan = session.metadata?.plan as "seeker" | "oracle" | undefined;
         const customerId = typeof session.customer === "string" ? session.customer : session.customer?.id;
         const subscriptionId = typeof session.subscription === "string" ? session.subscription : session.subscription?.id;
-
         const purchaseType = session.metadata?.purchase_type;
 
-        // Handle product (one-time) purchases
+        // ── One-time product purchase ──────────────────────────────────────────
         if (purchaseType === "product" && userId) {
           const productSlug = session.metadata?.product_slug ?? null;
-          const downloadUrl = session.metadata?.download_url ?? null;
           const amountTotal = session.amount_total ?? 0;
+
+          // Look up the real S3 URL from our catalog (never stored in Stripe metadata)
+          const product = productSlug ? getProductBySlug(productSlug) : null;
+          const s3Url = product?.s3Url ?? null;
+
+          // Generate a secure, single-use download token (expires in 72 hours)
+          const downloadToken = crypto.randomBytes(32).toString("hex");
+          const downloadExpiresAt = new Date(Date.now() + 72 * 60 * 60 * 1000);
+
           await db.insert(orders).values({
             userId,
             items: [{ type: "product", slug: productSlug, price: amountTotal }],
@@ -66,17 +75,20 @@ export async function stripeWebhookHandler(req: Request, res: Response) {
             status: "completed",
             stripeSessionId: session.id,
             productSlug,
-            downloadUrl,
+            downloadUrl: s3Url,        // stored server-side only
+            downloadToken,             // given to user
+            downloadExpiresAt,
           });
+
           console.log(`[Webhook] Product order created for user ${userId}: ${productSlug}`);
           await notifyOwner({
             title: `💳 New Purchase: ${productSlug}`,
-            content: `${session.metadata?.customer_name ?? "Someone"} (${session.metadata?.customer_email ?? ""}) purchased "${productSlug}" for $${(amountTotal / 100).toFixed(2)}.\nDownload: ${downloadUrl ?? "N/A"}`,
+            content: `${session.metadata?.customer_name ?? "Someone"} (${session.metadata?.customer_email ?? ""}) purchased "${product?.title ?? productSlug}" for $${(amountTotal / 100).toFixed(2)}.`,
           }).catch(() => {});
           break;
         }
 
-        // Handle subscription purchases
+        // ── Subscription purchase ──────────────────────────────────────────────
         if (userId && plan && customerId && subscriptionId) {
           await db.update(users).set({
             membershipTier: plan,
@@ -97,7 +109,6 @@ export async function stripeWebhookHandler(req: Request, res: Response) {
         const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
         const plan = sub.metadata?.lifewoven_plan as "seeker" | "oracle" | undefined;
 
-        // Determine tier from price metadata if not in sub metadata
         let tier: "seeker" | "oracle" | "explorer" = "explorer";
         if (plan) {
           tier = plan;
@@ -120,7 +131,6 @@ export async function stripeWebhookHandler(req: Request, res: Response) {
             membershipTier: "explorer",
             stripeSubscriptionId: null,
           }).where(eq(users.stripeCustomerId, customerId));
-          console.log(`[Webhook] Subscription ${sub.id} ${sub.status} — downgraded to explorer`);
         }
         break;
       }
@@ -132,7 +142,6 @@ export async function stripeWebhookHandler(req: Request, res: Response) {
           membershipTier: "explorer",
           stripeSubscriptionId: null,
         }).where(eq(users.stripeCustomerId, customerId));
-        console.log(`[Webhook] Subscription deleted — user downgraded to explorer`);
         break;
       }
 
