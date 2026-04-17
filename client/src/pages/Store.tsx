@@ -46,16 +46,6 @@ const PRODUCTS = [
     tags: ["Meaning", "Purpose", "Resilience"],
   },
   {
-    id: "alignment-workbook",
-    category: "workbook",
-    icon: "📓",
-    title: "The Alignment Workbook",
-    subtitle: "90-Day Transformation Journal",
-    price: "$27",
-    description: "A beautifully designed 90-day guided journal with daily prompts, weekly reviews, and the full 5S framework woven throughout. Available as a printable PDF.",
-    tags: ["Journal", "PDF", "90 days"],
-  },
-  {
     id: "belief-rewrite-workbook",
     category: "workbook",
     icon: "✍️",
@@ -176,7 +166,7 @@ export default function Store() {
             Get the complete Lifewoven toolkit — all courses, workbooks, audio programs, and card decks — at one transformational price.
           </p>
           <div className="flex items-center justify-center gap-3 mb-6">
-            <span className="text-muted-foreground line-through text-lg">$613</span>
+            <span className="text-muted-foreground line-through text-lg">$566</span>
             <span className="text-3xl font-light text-foreground">$297</span>
             <span className="text-xs px-2 py-1 rounded-full bg-secondary text-muted-foreground">Save 52%</span>
           </div>

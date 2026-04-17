@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Moon, Sun, Menu, X, Sparkles, LayoutDashboard, BookOpen, User, Settings } from "lucide-react";
+import { Moon, Sun, Menu, X, Sparkles, LayoutDashboard, BookOpen, User, Settings, Download } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 
 const navLinks = [
@@ -124,6 +124,9 @@ export default function Nav() {
                   <DropdownMenuItem asChild>
                     <Link href="/journal" className="flex items-center gap-2"><BookOpen className="h-3.5 w-3.5" />Journal</Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/downloads" className="flex items-center gap-2"><Download className="h-3.5 w-3.5" />My Downloads</Link>
+                  </DropdownMenuItem>
                   {user?.role === "admin" && (
                     <>
                       <DropdownMenuSeparator />
@@ -210,6 +213,9 @@ export default function Nav() {
                 </Button>
                 <Button variant="outline" size="default" asChild className="w-full gap-2 bg-transparent">
                   <Link href="/oracle" onClick={closeMobile}><Sparkles className="h-4 w-4" />Oracle</Link>
+                </Button>
+                <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground">
+                  <Link href="/downloads" onClick={closeMobile}><Download className="h-4 w-4" />My Downloads</Link>
                 </Button>
                 <Button variant="ghost" size="default" className="w-full text-muted-foreground" onClick={() => { logoutMutation.mutate(); closeMobile(); }}>
                   Sign out

@@ -4,7 +4,8 @@ import { protectedProcedure, publicProcedure, router } from "../_core/trpc";
 import { notifyOwner } from "../_core/notification";
 import { getDb } from "../db";
 import { users } from "../../drizzle/schema";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
+import crypto from "crypto";
 import { PLANS, type PlanTier } from "../stripe/products";
 import { getProductBySlug, LIFEWOVEN_PRODUCTS } from "../products";
 import { orders } from "../../drizzle/schema";
@@ -190,6 +191,27 @@ export const stripeRouter = router({
         content: `${input.email} just joined the waitlist for "${input.productName}".`,
       });
       return { ok: true };
+    }),
+
+  // ── Re-issue a download token for a previously purchased product ────────────
+  reissueDownload: protectedProcedure
+    .input(z.object({ productSlug: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await requireDb();
+      const [order] = await db.select().from(orders)
+        .where(and(eq(orders.userId, ctx.user.id), eq(orders.productSlug, input.productSlug)))
+        .limit(1);
+      if (!order || order.status !== "completed") {
+        throw new TRPCError({ code: "FORBIDDEN", message: "No completed purchase found for this product." });
+      }
+      const product = getProductBySlug(input.productSlug);
+      if (!product) throw new TRPCError({ code: "NOT_FOUND", message: "Product not found." });
+      const newToken = crypto.randomBytes(32).toString("hex");
+      const expiresAt = new Date(Date.now() + 72 * 60 * 60 * 1000);
+      await db.update(orders)
+        .set({ downloadToken: newToken, downloadExpiresAt: expiresAt, downloadUrl: product.s3Url })
+        .where(eq(orders.id, order.id));
+      return { token: newToken };
     }),
 
   // ── Get user's completed product orders ─────────────────────────────────────
