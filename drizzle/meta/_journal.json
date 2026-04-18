@@ -64,6 +64,13 @@
       "when": 1776467634697,
       "tag": "0008_perpetual_darkhawk",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1776554080188,
+      "tag": "0009_useful_night_thrasher",
+      "breakpoints": true
     }
   ]
 }

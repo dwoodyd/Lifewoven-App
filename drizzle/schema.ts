@@ -464,3 +464,26 @@ export const btwWeeklyReflections = mysqlTable("btw_weekly_reflections", {
   focusSuggestion: text("focusSuggestion"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
+
+// ─── Beta Access ──────────────────────────────────────────────────────────────
+
+export const betaCodes = mysqlTable("beta_codes", {
+  id: int("id").autoincrement().primaryKey(),
+  code: varchar("code", { length: 32 }).notNull().unique(),
+  label: varchar("label", { length: 128 }),          // e.g. "Tester - Jane Smith"
+  maxUses: int("maxUses").default(1).notNull(),
+  usedCount: int("usedCount").default(0).notNull(),
+  durationDays: int("durationDays").default(45).notNull(),
+  createdBy: int("createdBy").notNull(),              // admin userId
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  expiresAt: timestamp("expiresAt"),                 // optional hard expiry for the code itself
+});
+
+export const betaAccess = mysqlTable("beta_access", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  betaCodeId: int("betaCodeId").notNull(),
+  activatedAt: timestamp("activatedAt").defaultNow().notNull(),
+  expiresAt: timestamp("expiresAt").notNull(),       // activatedAt + durationDays
+  notifiedAt: timestamp("notifiedAt"),               // when expiry warning was shown
+});

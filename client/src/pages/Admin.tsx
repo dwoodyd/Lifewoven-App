@@ -1,12 +1,14 @@
+import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Users, ShoppingBag, BookOpen, Activity, Shield, Loader2, AlertTriangle } from "lucide-react";
+import { Users, ShoppingBag, BookOpen, Activity, Shield, Loader2, Copy, Check, KeyRound } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "wouter";
 
@@ -29,6 +31,153 @@ export default function Admin() {
   );
 
   return <AdminDashboard />;
+}
+
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error("Failed to copy");
+    }
+  };
+  return (
+    <Button variant="ghost" size="sm" className="h-7 px-2" onClick={handleCopy}>
+      {copied ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Copy className="h-3.5 w-3.5" />}
+    </Button>
+  );
+}
+
+function BetaTesters() {
+  const [count, setCount] = useState("5");
+  const utils = trpc.useUtils();
+
+  const { data: codes, isLoading: codesLoading } = trpc.beta.listCodes.useQuery();
+  const generateCodes = trpc.beta.generateCodes.useMutation({
+    onSuccess: (data) => {
+      toast.success(`Generated ${data.codes.length} beta code${data.codes.length !== 1 ? "s" : ""}`);
+      utils.beta.listCodes.invalidate();
+    },
+    onError: (err) => toast.error(err.message || "Failed to generate codes"),
+  });
+
+  const handleGenerate = () => {
+    const n = parseInt(count, 10);
+    if (!n || n < 1 || n > 100) { toast.error("Enter a number between 1 and 100"); return; }
+    generateCodes.mutate({ count: n });
+  };
+
+  const statusVariant = (status: string) => {
+    if (status === "available") return "secondary";
+    if (status === "redeemed") return "default";
+    return "destructive";
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Generate section */}
+      <Card className="bg-card border-border">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base flex items-center gap-2">
+            <KeyRound className="h-4 w-4 text-amber-400" />
+            Generate Beta Codes
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground mb-4">
+            Each code grants 45 days of full access. Codes are single-use and expire after redemption period ends.
+          </p>
+          <div className="flex items-center gap-3">
+            <Input
+              type="number"
+              min={1}
+              max={100}
+              value={count}
+              onChange={(e) => setCount(e.target.value)}
+              className="w-28"
+              placeholder="Count"
+            />
+            <Button
+              onClick={handleGenerate}
+              disabled={generateCodes.isPending}
+              style={{ background: "linear-gradient(135deg, #c9a84c, #e8c96a)", color: "#0d0d1a" }}
+              className="font-semibold"
+            >
+              {generateCodes.isPending ? (
+                <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Generating…</>
+              ) : "Generate Codes"}
+            </Button>
+          </div>
+          {generateCodes.data && (
+            <div className="mt-4 p-3 bg-muted rounded-lg">
+              <p className="text-xs text-muted-foreground mb-2 font-medium">Newly generated codes — copy and share:</p>
+              <div className="space-y-1">
+                {generateCodes.data.codes.map((code) => (
+                  <div key={code} className="flex items-center gap-2 font-mono text-sm">
+                    <span className="text-foreground">{code}</span>
+                    <CopyButton text={code} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Codes list */}
+      <Card className="bg-card border-border">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base">All Beta Codes</CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          {codesLoading ? (
+            <div className="flex justify-center py-12"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow className="border-border hover:bg-transparent">
+                  <TableHead>Code</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Redeemed By</TableHead>
+                  <TableHead>Expires</TableHead>
+                  <TableHead className="w-10"></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {(codes ?? []).length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
+                      No beta codes yet — generate some above.
+                    </TableCell>
+                  </TableRow>
+                )}
+                {(codes ?? []).map((c) => (
+                  <TableRow key={c.id} className="border-border">
+                    <TableCell className="font-mono text-sm">{c.code}</TableCell>
+                    <TableCell>
+                      <Badge variant={statusVariant(c.status)}>{c.status}</Badge>
+                    </TableCell>
+                    <TableCell className="text-muted-foreground text-sm">
+                      {c.redeemedByName || c.redeemedByEmail || (c.redeemedBy ? `User #${c.redeemedBy}` : "—")}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground text-sm">
+                      {c.expiresAt ? new Date(c.expiresAt).toLocaleDateString() : "—"}
+                    </TableCell>
+                    <TableCell>
+                      <CopyButton text={c.code} />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
 }
 
 function AdminDashboard() {
@@ -98,9 +247,10 @@ function AdminDashboard() {
 
         {/* Tabs */}
         <Tabs defaultValue="users">
-          <TabsList className="bg-muted">
+          <TabsList className="bg-muted flex-wrap h-auto gap-1">
             <TabsTrigger value="users">Users</TabsTrigger>
             <TabsTrigger value="orders">Orders</TabsTrigger>
+            <TabsTrigger value="beta">Beta Testers</TabsTrigger>
             <TabsTrigger value="recent">Recent Activity</TabsTrigger>
           </TabsList>
 
@@ -203,6 +353,11 @@ function AdminDashboard() {
                 )}
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* Beta Testers Tab */}
+          <TabsContent value="beta" className="mt-4">
+            <BetaTesters />
           </TabsContent>
 
           {/* Recent Activity Tab */}

@@ -3,6 +3,7 @@ import { btwRouter } from "./routers/btw";
 import { stripeRouter } from "./routers/stripe";
 import { adminRouter } from "./routers/admin";
 import { referralRouter } from "./routers/referral";
+import { betaRouter } from "./routers/beta";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
@@ -930,6 +931,7 @@ export const appRouter = router({
   stripe: stripeRouter,
   admin: adminRouter,
   referral: referralRouter,
+  beta: betaRouter,
 });
 
 export type AppRouter = typeof appRouter;

@@ -56,6 +56,8 @@ import LibraryArticlePage from "./pages/LibraryArticlePage";
 import Settings from "./pages/Settings";
 import Downloads from "./pages/Downloads";
 import Referrals from "./pages/Referrals";
+import BetaAccess from "./pages/BetaAccess";
+import { BetaExpiredModal } from "./components/BetaExpiredModal";
 
 // Before the Words (BTW)
 import BTWLanding from "./pages/btw/BTWLanding";
@@ -128,6 +130,7 @@ function Router() {
       <Route path="/settings" component={Settings} />
       <Route path="/downloads" component={Downloads} />
       <Route path="/referrals" component={Referrals} />
+      <Route path="/beta" component={BetaAccess} />
 
       {/* Before the Words */}
       <Route path="/btw" component={BTWLanding} />
@@ -166,6 +169,7 @@ function App() {
         <TooltipProvider>
           <Toaster />
           <OnboardingModal userId={user?.id} />
+          <BetaExpiredModal />
           <FeedbackWidget />
           <Router />
         </TooltipProvider>
