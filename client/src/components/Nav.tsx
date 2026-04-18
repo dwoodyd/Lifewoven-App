@@ -12,7 +12,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Moon, Sun, Menu, X, Sparkles, LayoutDashboard, BookOpen, User, Settings, Download, Gift } from "lucide-react";
+import { Moon, Sun, Menu, X, Sparkles, LayoutDashboard, BookOpen, User, Settings, Download, Gift, Play } from "lucide-react";
+import { replayOnboarding } from "@/components/OnboardingModal";
 import { trpc } from "@/lib/trpc";
 
 const navLinks = [
@@ -130,6 +131,9 @@ export default function Nav() {
                   <DropdownMenuItem asChild>
                     <Link href="/referrals" className="flex items-center gap-2"><Gift className="h-3.5 w-3.5" />Refer &amp; Earn</Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer" onClick={() => replayOnboarding(user?.id)}>
+                    <Play className="h-3.5 w-3.5" />Replay Intro
+                  </DropdownMenuItem>
                   {user?.role === "admin" && (
                     <>
                       <DropdownMenuSeparator />
@@ -222,6 +226,9 @@ export default function Nav() {
                 </Button>
                 <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground">
                   <Link href="/referrals" onClick={closeMobile}><Gift className="h-4 w-4" />Refer &amp; Earn</Link>
+                </Button>
+                <Button variant="ghost" size="default" className="w-full gap-2 text-muted-foreground" onClick={() => { replayOnboarding(user?.id); closeMobile(); }}>
+                  <Play className="h-4 w-4" />Replay Intro
                 </Button>
                 <Button variant="ghost" size="default" className="w-full text-muted-foreground" onClick={() => { logoutMutation.mutate(); closeMobile(); }}>
                   Sign out

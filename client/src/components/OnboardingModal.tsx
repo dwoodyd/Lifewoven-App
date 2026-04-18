@@ -192,6 +192,18 @@ function SceneArt({ id, active }: { id: string; active: boolean }) {
   );
 }
 
+/* ─── Replay helper (call from Nav/Settings) ───────────────── */
+export function replayOnboarding(userId?: number | null) {
+  if (userId) localStorage.removeItem(`${STORAGE_KEY}_${userId}`);
+  else {
+    // Clear all onboarding keys for this device
+    Object.keys(localStorage)
+      .filter(k => k.startsWith(STORAGE_KEY))
+      .forEach(k => localStorage.removeItem(k));
+  }
+  window.dispatchEvent(new CustomEvent("lifewoven:replay-onboarding"));
+}
+
 /* ─── Main component ────────────────────────────────────────────── */
 interface Props { userId?: number | null; }
 
@@ -213,6 +225,13 @@ export default function OnboardingModal({ userId }: Props) {
     const seen = localStorage.getItem(`${STORAGE_KEY}_${userId}`);
     if (!seen) setOpen(true);
   }, [userId]);
+
+  // Listen for replay event dispatched by replayOnboarding()
+  useEffect(() => {
+    const handler = () => { setScene(0); setOpen(true); };
+    window.addEventListener("lifewoven:replay-onboarding", handler);
+    return () => window.removeEventListener("lifewoven:replay-onboarding", handler);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
