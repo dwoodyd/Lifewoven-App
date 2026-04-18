@@ -194,19 +194,17 @@ function SceneArt({ id, active }: { id: string; active: boolean }) {
 
 /* ─── Replay helper (call from Nav/Settings) ───────────────── */
 export function replayOnboarding(userId?: number | null) {
+  // Clear device-level key so the intro fires again for this browser
+  localStorage.removeItem(`${STORAGE_KEY}_device`);
   if (userId) localStorage.removeItem(`${STORAGE_KEY}_${userId}`);
-  else {
-    // Clear all onboarding keys for this device
-    Object.keys(localStorage)
-      .filter(k => k.startsWith(STORAGE_KEY))
-      .forEach(k => localStorage.removeItem(k));
-  }
   window.dispatchEvent(new CustomEvent("lifewoven:replay-onboarding"));
 }
 
 /* ─── Main component ────────────────────────────────────────────── */
-interface Props { userId?: number | null; }
+// Device-level key — fires for every new visitor before sign-in
+const DEVICE_KEY = `${STORAGE_KEY}_device`;
 
+interface Props { userId?: number | null; }
 export default function OnboardingModal({ userId }: Props) {
   const [, navigate] = useLocation();
   const [open, setOpen] = useState(false);
@@ -217,14 +215,13 @@ export default function OnboardingModal({ userId }: Props) {
   const [btnIn, setBtnIn] = useState(false);
   const [selectedPathway, setSelectedPathway] = useState("align");
   const glowRef = useRef<HTMLDivElement>(null);
-
   const completeMutation = trpc.profile.completeOnboarding.useMutation();
 
+  // Fire for ALL visitors on first visit (device-level, no login required)
   useEffect(() => {
-    if (!userId) return;
-    const seen = localStorage.getItem(`${STORAGE_KEY}_${userId}`);
+    const seen = localStorage.getItem(DEVICE_KEY);
     if (!seen) setOpen(true);
-  }, [userId]);
+  }, []);
 
   // Listen for replay event dispatched by replayOnboarding()
   useEffect(() => {
@@ -261,6 +258,7 @@ export default function OnboardingModal({ userId }: Props) {
   const isLast = scene === SCENES.length - 1;
 
   function dismiss() {
+    localStorage.setItem(DEVICE_KEY, "1");
     if (userId) localStorage.setItem(`${STORAGE_KEY}_${userId}`, "1");
     completeMutation.mutate({ recommendedPathway: selectedPathway });
     setOpen(false);
