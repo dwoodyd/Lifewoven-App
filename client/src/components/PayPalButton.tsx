@@ -31,6 +31,7 @@ export function PayPalButton({ productSlug, priceUsd, onSuccess, onError }: PayP
   const containerRef = useRef<HTMLDivElement>(null);
   const [sdkReady, setSdkReady] = useState(false);
   const [rendered, setRendered] = useState(false);
+  const [creditSaving, setCreditSaving] = useState(0);
 
   // Load PayPal JS SDK once
   useEffect(() => {
@@ -72,10 +73,11 @@ export function PayPalButton({ productSlug, priceUsd, onSuccess, onError }: PayP
         const res = await fetch("/api/paypal/create-order", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ productSlug, userId: user?.id }),
+          body: JSON.stringify({ productSlug, userId: user?.id, useCredit: true }),
         });
-        const data = await res.json() as { orderId?: string; error?: string };
+        const data = await res.json() as { orderId?: string; creditApplied?: number; error?: string };
         if (!data.orderId) throw new Error(data.error ?? "Failed to create order");
+        if (data.creditApplied && data.creditApplied > 0) setCreditSaving(data.creditApplied);
         return data.orderId;
       },
 
@@ -115,6 +117,11 @@ export function PayPalButton({ productSlug, priceUsd, onSuccess, onError }: PayP
 
   return (
     <div className="w-full">
+      {creditSaving > 0 && (
+        <p className="text-xs text-emerald-400 mb-2 text-center">
+          🎉 ${(creditSaving / 100).toFixed(2)} referral credit applied!
+        </p>
+      )}
       {!sdkReady && (
         <div className="h-11 rounded bg-muted animate-pulse flex items-center justify-center text-sm text-muted-foreground">
           Loading PayPal…

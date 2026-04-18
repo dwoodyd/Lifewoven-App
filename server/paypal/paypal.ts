@@ -7,7 +7,7 @@
 import { Router, type Request, type Response } from "express";
 import crypto from "crypto";
 import { getDb } from "../db";
-import { orders } from "../../drizzle/schema";
+import { orders, referralCredits } from "../../drizzle/schema";
 import { getProductBySlug, getAllProducts } from "../products";
 import { notifyOwner } from "../_core/notification";
 
@@ -39,13 +39,25 @@ export const paypalRouter = Router();
 // ── Create Order ─────────────────────────────────────────────────────────────
 paypalRouter.post("/api/paypal/create-order", async (req: Request, res: Response) => {
   try {
-    const { productSlug, userId } = req.body as { productSlug: string; userId?: number };
+    const { productSlug, userId, useCredit } = req.body as { productSlug: string; userId?: number; useCredit?: boolean };
 
     const product = getProductBySlug(productSlug);
     if (!product) return res.status(404).json({ error: "Product not found" });
 
     // For bundle: use bundle price
-    const displayPrice = product.priceUsd;
+    let displayPrice = product.priceUsd;
+    let creditApplied = 0;
+    if (useCredit && userId) {
+      const db = await getDb();
+      if (db) {
+        const { eq } = await import("drizzle-orm");
+        const [cr] = await db.select().from(referralCredits).where(eq(referralCredits.userId, userId)).limit(1);
+        if (cr && cr.balanceCents > 0) {
+          creditApplied = Math.min(cr.balanceCents, Math.round(displayPrice * 100));
+          displayPrice = Math.max(0.5, displayPrice - creditApplied / 100);
+        }
+      }
+    }
 
     const token = await getAccessToken();
 
@@ -81,7 +93,7 @@ paypalRouter.post("/api/paypal/create-order", async (req: Request, res: Response
       return res.status(500).json({ error: order.message ?? "Failed to create PayPal order" });
     }
 
-    return res.json({ orderId: order.id });
+    return res.json({ orderId: order.id, creditApplied, finalPrice: displayPrice });
   } catch (err) {
     console.error("[PayPal] create-order error:", err);
     return res.status(500).json({ error: "Internal server error" });
@@ -146,6 +158,15 @@ paypalRouter.post("/api/paypal/capture-order", async (req: Request, res: Respons
     const downloadExpiresAt = new Date(Date.now() + 72 * 60 * 60 * 1000);
 
     const db = await getDb();
+    // Deduct referral credit if any was applied (passed via custom_id suffix)
+    const creditAppliedCents = parseInt((captureUnit?.custom_id ?? "").split(":")[1] ?? "0") || 0;
+    if (db && resolvedUserId && creditAppliedCents > 0) {
+      const { eq, sql } = await import("drizzle-orm");
+      await db.update(referralCredits)
+        .set({ balanceCents: sql`GREATEST(0, balance_cents - ${creditAppliedCents})` })
+        .where(eq(referralCredits.userId, resolvedUserId))
+        .catch(() => {});
+    }
     if (db && resolvedUserId) {
       if (isBundle && bundleProducts) {
         // Insert one order row per product in the bundle

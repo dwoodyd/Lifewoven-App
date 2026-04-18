@@ -546,6 +546,31 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ─── Testimonials ─── */}
+      <section className="py-20 border-t border-border/40">
+        <div className="container">
+          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-10 text-center">What practitioners say</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            {[
+              { quote: "I’ve read every self-help book on the shelf. Lifewoven is the first thing that made me actually do the work — daily, without forcing it.", name: "Marisol T.", role: "Educator & Beta Practitioner" },
+              { quote: "The Oracle remembered what I journaled three weeks ago and connected it to a pattern I hadn’t seen. That’s not a chatbot. That’s a guide.", name: "Devon R.", role: "Entrepreneur, Seeker Plan" },
+              { quote: "The Alignment Audit alone was worth it. I finally understood why I kept stalling — and what to do about it.", name: "Priya K.", role: "Coach & Early Adopter" },
+            ].map((t, i) => (
+              <div key={i} className="rounded-2xl border border-border/50 bg-card/40 p-6 flex flex-col gap-4">
+                <div className="flex gap-0.5">
+                  {[...Array(5)].map((_, s) => <span key={s} className="text-amber-400 text-xs">★</span>)}
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed italic">&ldquo;{t.quote}&rdquo;</p>
+                <div className="mt-auto">
+                  <p className="text-sm font-medium text-foreground">{t.name}</p>
+                  <p className="text-xs text-muted-foreground">{t.role}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ─── Pricing ─── */}
       <section id="pricing" className="py-24">
         <div className="container">
