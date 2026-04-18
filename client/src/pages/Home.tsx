@@ -262,6 +262,13 @@ export default function Home() {
               <p className="text-sm text-muted-foreground">
                 Free to start. No credit card required.
               </p>
+
+              <p className="text-xs text-muted-foreground mt-3">
+                Have a beta code?{" "}
+                <Link href="/beta" className="text-accent underline underline-offset-2 hover:opacity-80 transition-opacity">
+                  Redeem it here →
+                </Link>
+              </p>
             </div>
 
             {/* Right: Dashboard preview */}

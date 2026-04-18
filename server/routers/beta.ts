@@ -4,6 +4,7 @@ import { z } from "zod";
 import { getDb } from "../db";
 import { betaCodes, betaAccess, users } from "../../drizzle/schema";
 import { protectedProcedure, router } from "../_core/trpc";
+import { notifyOwner } from "../_core/notification";
 import crypto from "crypto";
 
 async function requireDb() {
@@ -145,6 +146,11 @@ export const betaRouter = router({
       await db.update(betaCodes)
         .set({ usedCount: sql`${betaCodes.usedCount} + 1` })
         .where(eq(betaCodes.id, betaCode.id));
+
+      // Notify owner
+      const u = await db.select({ name: users.name, email: users.email }).from(users).where(eq(users.id, ctx.user.id)).limit(1);
+      const who = u[0]?.name || u[0]?.email || `User #${ctx.user.id}`;
+      notifyOwner({ title: "Beta code redeemed", content: `${who} activated code ${input.code} — expires ${expiresAt.toDateString()}` }).catch(() => {});
 
       return { ok: true, expiresAt, durationDays: betaCode.durationDays };
     }),
