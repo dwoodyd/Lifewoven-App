@@ -348,6 +348,11 @@
 - [ ] Add first-login onboarding flow (3 screens: welcome → pathway → habit)
 - [ ] Add Sources & Influences page
 
+## Onboarding Bug Fixes (Apr 19)
+- [x] Fix error toast appearing on onboarding open (isLast-before-init ReferenceError)
+- [x] Fix browser back/forward — pushState on open, popstate listener closes modal
+- [x] Animate slide 1 thread streaks to fly across screen on open (CSS keyframe fly-through with convergence orb)
+
 ## Onboarding v2 — Cinegraphic Rebuild
 - [x] 7-slide v2 onboarding: woven-threads SVG (slide 1), drifting EGS (slide 2), color-coded 5S pillars (slide 3), pulsing Oracle orb (slide 4), door-light animation (slide 5), Reset card (slide 6), ribbon close (slide 7)
 - [x] All v2 copy from strategy doc: next-question CTAs, eyebrow colors per module, whisper lines, signature close

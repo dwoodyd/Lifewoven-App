@@ -87,38 +87,58 @@ function WordReveal({ text, active, baseDelay = 0, color, italic = false, fontSi
   );
 }
 
-/* ─── Slide 1 — Five threads converging ─────────────────────────── */
+/* ─── Slide 1 — Five threads flying across the screen ───────────── */
 function Slide1Art({ active }: { active: boolean }) {
+  // Each thread flies from far-left off-screen to far-right off-screen
+  // They converge toward center-right as they cross, creating a weaving effect
+  const threads = [
+    { color: T.state,       startY: 10,  midY: 78, endY: 20,  delay: 0,    dur: 1.6 },
+    { color: T.story,       startY: 35,  midY: 80, endY: 55,  delay: 0.18, dur: 1.7 },
+    { color: T.standards,   startY: 80,  midY: 82, endY: 80,  delay: 0.35, dur: 1.8 },
+    { color: T.strategy,    startY: 125, midY: 84, endY: 105, delay: 0.52, dur: 1.7 },
+    { color: T.stewardship, startY: 150, midY: 86, endY: 140, delay: 0.68, dur: 1.6 },
+  ];
   return (
-    <div style={{ position: "relative", width: "100%", maxWidth: 580, margin: "0 auto 2rem", height: 140 }}>
+    <div style={{ position: "relative", width: "100%", maxWidth: 580, margin: "0 auto 2rem", height: 160, overflow: "visible" }}>
+      <style>{`
+        @keyframes threadFly0 { 0%{stroke-dashoffset:900;opacity:0} 8%{opacity:0.9} 100%{stroke-dashoffset:0;opacity:0.85} }
+        @keyframes threadFly1 { 0%{stroke-dashoffset:900;opacity:0} 8%{opacity:0.9} 100%{stroke-dashoffset:0;opacity:0.85} }
+        @keyframes threadFly2 { 0%{stroke-dashoffset:900;opacity:0} 8%{opacity:0.9} 100%{stroke-dashoffset:0;opacity:0.85} }
+        @keyframes threadFly3 { 0%{stroke-dashoffset:900;opacity:0} 8%{opacity:0.9} 100%{stroke-dashoffset:0;opacity:0.85} }
+        @keyframes threadFly4 { 0%{stroke-dashoffset:900;opacity:0} 8%{opacity:0.9} 100%{stroke-dashoffset:0;opacity:0.85} }
+        @keyframes orbPop { 0%,85%{r:0;opacity:0} 92%{r:12;opacity:1} 100%{r:9;opacity:1} }
+      `}</style>
       <svg viewBox="0 0 600 160" style={{ width: "100%", height: "100%", overflow: "visible" }}>
         <defs>
-          {[T.state, T.story, T.standards, T.strategy, T.stewardship].map((c, i) => (
-            <filter key={i} id={`glow${i}`}>
-              <feGaussianBlur stdDeviation="2.5" result="blur" />
+          {threads.map((_, i) => (
+            <filter key={i} id={`tglow${i}`}>
+              <feGaussianBlur stdDeviation="3" result="blur" />
               <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
             </filter>
           ))}
+          <filter id="orbGlow">
+            <feGaussianBlur stdDeviation="6" result="blur" />
+            <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+          </filter>
         </defs>
-        {[
-          { d: "M 0 22  C 220 22,  320 72, 480 82 L 580 82",  color: T.state,       delay: "0.1s" },
-          { d: "M 0 55  C 210 55,  300 77, 480 82 L 580 82",  color: T.story,       delay: "0.4s" },
-          { d: "M 0 88  C 210 88,  290 87, 480 82 L 580 82",  color: T.standards,   delay: "0.7s" },
-          { d: "M 0 121 C 210 121, 290 97, 480 82 L 580 82",  color: T.strategy,    delay: "1.0s" },
-          { d: "M 0 154 C 220 154, 310 112, 480 82 L 580 82", color: T.stewardship, delay: "1.3s" },
-        ].map((p, i) => (
-          <path key={i} d={p.d} fill="none" stroke={p.color} strokeWidth="1.8" strokeLinecap="round"
-            strokeDasharray="1400" strokeDashoffset={active ? "0" : "1400"}
-            filter={`url(#glow${i})`}
-            style={{ transition: `stroke-dashoffset 3.8s cubic-bezier(0.22,1,0.36,1) ${p.delay}`, opacity: 0.82 }} />
-        ))}
-        {/* Knot — golden orb */}
-        <circle cx="580" cy="82" r="0" fill={T.thread}
-          style={{
-            r: active ? "9" : "0",
-            filter: "drop-shadow(0 0 18px rgba(216,184,120,0.9)) drop-shadow(0 0 40px rgba(216,184,120,0.5))",
-            transition: "r 0.9s cubic-bezier(0.34,1.56,0.64,1) 3.8s",
-          } as any} />
+        {threads.map((t, i) => {
+          // Path: enters from left off-screen (-60), curves through convergence point (300,midY), exits right (660)
+          const d = `M -60 ${t.startY} C 150 ${t.startY}, 260 ${t.midY}, 300 ${t.midY} S 450 ${t.endY}, 660 ${t.endY}`;
+          return (
+            <path key={i} d={d}
+              fill="none" stroke={t.color} strokeWidth="2.2" strokeLinecap="round"
+              strokeDasharray="900"
+              filter={`url(#tglow${i})`}
+              style={active ? {
+                animation: `threadFly${i} ${t.dur}s cubic-bezier(0.22,1,0.36,1) ${t.delay}s both`,
+              } : { opacity: 0 }} />
+          );
+        })}
+        {/* Convergence orb — pops at the crossing point */}
+        <circle cx="300" cy="82" r="0" fill={T.thread} filter="url(#orbGlow)"
+          style={active ? {
+            animation: `orbPop 2.6s cubic-bezier(0.22,1,0.36,1) 0.4s both`,
+          } : { opacity: 0 }} />
       </svg>
     </div>
   );
@@ -578,19 +598,14 @@ export default function OnboardingModal({ userId }: Props) {
     }
   }
 
-  // Auto-start sound if user previously enabled it
+  // Auto-start / fade-out sound based on open state
   useEffect(() => {
     if (open && soundOn) {
       if (!audioRef.current) audioRef.current = createAmbientEngine();
       audioRef.current.fadeIn();
-    }
-  }, [open]);
-
-  // Fade out when modal closes
-  useEffect(() => {
-    if (!open && audioRef.current) {
+    } else if (!open && audioRef.current) {
       audioRef.current.fadeOut();
-      setSoundOn(false);
+      // Don't clear soundOn — preserve the preference
     }
   }, [open]);
 
@@ -664,6 +679,16 @@ export default function OnboardingModal({ userId }: Props) {
     if (transitioning) return;
     setIdx(i => Math.max(0, i - 1));
   }, [transitioning]);
+
+  // Push a history entry when the modal opens so browser Back closes it
+  useEffect(() => {
+    if (open) {
+      window.history.pushState({ onboarding: true }, "");
+      const onPop = () => setOpen(false);
+      window.addEventListener("popstate", onPop);
+      return () => window.removeEventListener("popstate", onPop);
+    }
+  }, [open]);
 
   if (!open) return null;
 
