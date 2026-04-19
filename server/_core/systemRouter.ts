@@ -69,6 +69,56 @@ export const systemRouter = router({
     ];
   }),
 
+  // Called by a scheduled job or admin trigger — notifies owner of beta users expiring in 7 days
+  checkBetaExpiry: adminProcedure.mutation(async () => {
+    const db = await getDb();
+    if (!db) return { notified: 0 };
+    const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
+    const now = Date.now();
+    const soon = now + sevenDaysMs;
+    // Find beta users expiring within 7 days who haven't converted yet
+    const rows = await db.execute(
+      sql`SELECT ba.user_id, ba.expires_at, u.name, u.email
+          FROM beta_access ba
+          JOIN users u ON u.id = ba.user_id
+          WHERE ba.expires_at > ${now} AND ba.expires_at <= ${soon}
+            AND NOT EXISTS (
+              SELECT 1 FROM events e
+              WHERE e.user_id = ba.user_id AND e.event = 'beta_converted'
+            )`
+    ) as any;
+    const expiring = (rows[0] as any[]);
+    if (expiring.length === 0) return { notified: 0 };
+    const names = expiring.map((r: any) => `${r.name ?? "Unknown"} (${r.email ?? ""}) — expires ${new Date(Number(r.expires_at)).toLocaleDateString()}`).join("\n");
+    await notifyOwner({
+      title: `⏰ ${expiring.length} Beta Trial${expiring.length > 1 ? "s" : ""} Expiring in 7 Days`,
+      content: `The following beta users haven't converted yet and expire soon:\n\n${names}\n\nConsider reaching out personally.`,
+    }).catch(() => {});
+    return { notified: expiring.length };
+  }),
+
+  getConvertedUsers: adminProcedure.query(async () => {
+    const db = await getDb();
+    if (!db) return [];
+    const rows = await db.execute(
+      sql`SELECT e.user_id, u.name, u.email,
+             JSON_UNQUOTE(JSON_EXTRACT(e.properties,'$.plan')) as plan,
+             e.created_at as convertedAt
+          FROM events e
+          JOIN users u ON u.id = e.user_id
+          WHERE e.event = 'beta_converted'
+          ORDER BY e.created_at DESC
+          LIMIT 50`
+    ) as any;
+    return (rows[0] as any[]).map((r: any) => ({
+      userId: Number(r.user_id),
+      name: r.name as string,
+      email: r.email as string,
+      plan: r.plan as string,
+      convertedAt: Number(r.convertedAt),
+    }));
+  }),
+
   getBetaConversionStats: adminProcedure.query(async () => {
     const db = await getDb();
     if (!db) return { totalBeta: 0, converted: 0, conversionRate: 0, byPlan: [] };

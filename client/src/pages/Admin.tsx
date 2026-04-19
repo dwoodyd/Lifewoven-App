@@ -475,55 +475,104 @@ function AdminDashboard() {
 
 function BetaConversionStats() {
   const { data, isLoading } = trpc.system.getBetaConversionStats.useQuery();
+  const { data: converted, isLoading: convertedLoading } = trpc.system.getConvertedUsers.useQuery();
+  const checkExpiry = trpc.system.checkBetaExpiry.useMutation({
+    onSuccess: (d) => toast.success(d.notified > 0 ? `Notified: ${d.notified} expiring user${d.notified > 1 ? "s" : ""}` : "No users expiring in 7 days"),
+    onError: () => toast.error("Failed to check expiry"),
+  });
+
   if (isLoading) return <div className="flex justify-center py-6"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>;
   if (!data) return null;
   return (
-    <Card className="bg-card border-border">
-      <CardHeader className="pb-2 flex flex-row items-center gap-2">
-        <TrendingUp className="h-5 w-5 text-green-400" />
-        <CardTitle className="text-base">Beta → Paid Conversion</CardTitle>
-        {data.totalBeta > 0 && (
-          <span className="ml-auto text-xs font-medium text-green-400 bg-green-500/10 border border-green-500/20 px-2.5 py-1 rounded-full">
-            {data.conversionRate}% conversion rate
-          </span>
-        )}
-      </CardHeader>
-      <CardContent>
-        {data.totalBeta === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-6">No beta users yet. Data will appear once testers redeem codes.</p>
-        ) : (
-          <div className="space-y-4">
-            <div className="grid grid-cols-3 gap-3">
-              <div className="text-center p-3 rounded-xl bg-muted">
-                <p className="text-2xl font-bold text-foreground">{data.totalBeta}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">Beta Users</p>
-              </div>
-              <div className="text-center p-3 rounded-xl bg-green-500/10 border border-green-500/20">
-                <p className="text-2xl font-bold text-green-400">{data.converted}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">Converted</p>
-              </div>
-              <div className="text-center p-3 rounded-xl bg-muted">
-                <p className="text-2xl font-bold text-foreground">{data.totalBeta - data.converted}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">Still on Beta</p>
-              </div>
-            </div>
-            {data.byPlan.length > 0 && (
-              <div>
-                <p className="text-xs text-muted-foreground mb-2 font-medium">Conversions by plan</p>
-                <div className="space-y-1.5">
-                  {data.byPlan.map(p => (
-                    <div key={p.plan} className="flex items-center justify-between text-sm">
-                      <span className="capitalize text-foreground">{p.plan}</span>
-                      <span className="font-semibold text-green-400">{p.count}</span>
-                    </div>
-                  ))}
+    <div className="space-y-4">
+      <Card className="bg-card border-border">
+        <CardHeader className="pb-2 flex flex-row items-center gap-2">
+          <TrendingUp className="h-5 w-5 text-green-400" />
+          <CardTitle className="text-base">Beta → Paid Conversion</CardTitle>
+          {data.totalBeta > 0 && (
+            <span className="ml-auto text-xs font-medium text-green-400 bg-green-500/10 border border-green-500/20 px-2.5 py-1 rounded-full">
+              {data.conversionRate}% conversion rate
+            </span>
+          )}
+        </CardHeader>
+        <CardContent>
+          {data.totalBeta === 0 ? (
+            <p className="text-sm text-muted-foreground text-center py-6">No beta users yet. Data will appear once testers redeem codes.</p>
+          ) : (
+            <div className="space-y-4">
+              <div className="grid grid-cols-3 gap-3">
+                <div className="text-center p-3 rounded-xl bg-muted">
+                  <p className="text-2xl font-bold text-foreground">{data.totalBeta}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">Beta Users</p>
+                </div>
+                <div className="text-center p-3 rounded-xl bg-green-500/10 border border-green-500/20">
+                  <p className="text-2xl font-bold text-green-400">{data.converted}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">Converted</p>
+                </div>
+                <div className="text-center p-3 rounded-xl bg-muted">
+                  <p className="text-2xl font-bold text-foreground">{data.totalBeta - data.converted}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">Still on Beta</p>
                 </div>
               </div>
+              {data.byPlan.length > 0 && (
+                <div>
+                  <p className="text-xs text-muted-foreground mb-2 font-medium">Conversions by plan</p>
+                  <div className="space-y-1.5">
+                    {data.byPlan.map(p => (
+                      <div key={p.plan} className="flex items-center justify-between text-sm">
+                        <span className="capitalize text-foreground">{p.plan}</span>
+                        <span className="font-semibold text-green-400">{p.count}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <div className="pt-1">
+                <Button size="sm" variant="outline" onClick={() => checkExpiry.mutate()} disabled={checkExpiry.isPending}>
+                  {checkExpiry.isPending ? <><Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />Checking…</> : "⏰ Check 7-Day Expiry & Notify"}
+                </Button>
+                <p className="text-xs text-muted-foreground mt-1.5">Sends you a notification listing beta users whose trial ends within 7 days and haven’t converted.</p>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Converted users table */}
+      {converted && converted.length > 0 && (
+        <Card className="bg-card border-border">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base">🏆 Early Adopters — Beta → Paid</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {convertedLoading ? (
+              <div className="flex justify-center py-6"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Plan</TableHead>
+                    <TableHead>Converted</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {converted.map(u => (
+                    <TableRow key={u.userId}>
+                      <TableCell className="font-medium">{u.name || "—"}</TableCell>
+                      <TableCell className="text-muted-foreground">{u.email || "—"}</TableCell>
+                      <TableCell><Badge variant="default" className="capitalize">{u.plan}</Badge></TableCell>
+                      <TableCell className="text-muted-foreground text-xs">{new Date(u.convertedAt).toLocaleDateString()}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             )}
-          </div>
-        )}
-      </CardContent>
-    </Card>
+          </CardContent>
+        </Card>
+      )}
+    </div>
   );
 }
 
