@@ -115,6 +115,7 @@ function Slide1Art({ active }: { active: boolean }) {
         @keyframes trailFly4 { 0%{stroke-dashoffset:900;opacity:0} 12%{opacity:0.35} 100%{stroke-dashoffset:0;opacity:0.18} }
         @keyframes orbPop { 0%,85%{r:0;opacity:0} 92%{r:12;opacity:1} 100%{r:9;opacity:1} }
         @keyframes artPulse { 0%{transform:scale(1)} 50%{transform:scale(1.045)} 100%{transform:scale(1)} }
+        @keyframes sparkle { 0%{stroke-dashoffset:32;opacity:0} 60%{opacity:1} 100%{stroke-dashoffset:0;opacity:0} }
       `}</style>
       <svg viewBox="0 0 600 160" style={{ width: "100%", height: "100%", overflow: "visible" }}>
         <defs>
@@ -154,6 +155,20 @@ function Slide1Art({ active }: { active: boolean }) {
           style={active ? {
             animation: `orbPop 2.6s cubic-bezier(0.22,1,0.36,1) 0.4s both`,
           } : { opacity: 0 }} />
+        {/* Sparkle burst — 8 radial lines shoot out on orb pop */}
+        {active && [0,45,90,135,180,225,270,315].map((angle, i) => {
+          const rad = angle * Math.PI / 180;
+          const x1 = 300 + Math.cos(rad) * 14;
+          const y1 = 82  + Math.sin(rad) * 14;
+          const x2 = 300 + Math.cos(rad) * 30;
+          const y2 = 82  + Math.sin(rad) * 30;
+          return (
+            <line key={i} x1={x1} y1={y1} x2={x2} y2={y2}
+              stroke={T.thread} strokeWidth="1.5" strokeLinecap="round"
+              strokeDasharray="32"
+              style={{ animation: `sparkle 0.55s cubic-bezier(0.22,1,0.36,1) ${2.85 + i * 0.03}s both` }} />
+          );
+        })}
       </svg>
     </div>
   );
@@ -753,7 +768,7 @@ export default function OnboardingModal({ userId }: Props) {
           }}>
             Open your dashboard whenever you're ready. The system is waiting — and now it knows your name.
           </p>
-          <button onClick={() => { dismiss(); navigate("/alignment-audit"); }}
+          <button onClick={() => { trackEvent.mutate({ event: "onboarding_complete", properties: {} }); dismiss(); navigate("/alignment-audit"); }}
             style={{
               background: `linear-gradient(135deg, ${T.thread}, #c9a55a)`,
               color: "#1a1610", border: "none",
