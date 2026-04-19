@@ -347,3 +347,10 @@
 - [ ] Implement skeleton screens for Dashboard, Pathways, module pages
 - [ ] Add first-login onboarding flow (3 screens: welcome → pathway → habit)
 - [ ] Add Sources & Influences page
+
+## Onboarding v2 — Cinegraphic Rebuild
+- [x] 7-slide v2 onboarding: woven-threads SVG (slide 1), drifting EGS (slide 2), color-coded 5S pillars (slide 3), pulsing Oracle orb (slide 4), door-light animation (slide 5), Reset card (slide 6), ribbon close (slide 7)
+- [x] All v2 copy from strategy doc: next-question CTAs, eyebrow colors per module, whisper lines, signature close
+- [x] Ambient background threads SVG across all slides
+- [x] Finished state: "The first thread is yours" screen after slide 7
+- [x] All existing wiring preserved: storage key, completeOnboarding mutation, replayOnboarding export, dismiss/navigate logic
