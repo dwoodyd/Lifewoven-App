@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Users, ShoppingBag, BookOpen, Activity, Shield, Loader2, Copy, Check, KeyRound } from "lucide-react";
+import { Users, ShoppingBag, BookOpen, Activity, Shield, Loader2, Copy, Check, KeyRound, TrendingDown } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "wouter";
 
@@ -275,6 +275,7 @@ function AdminDashboard() {
             <TabsTrigger value="orders">Orders</TabsTrigger>
             <TabsTrigger value="beta">Beta Testers</TabsTrigger>
             <TabsTrigger value="recent">Recent Activity</TabsTrigger>
+            <TabsTrigger value="funnel">Onboarding Funnel</TabsTrigger>
           </TabsList>
 
           {/* Users Tab */}
@@ -384,6 +385,10 @@ function AdminDashboard() {
           </TabsContent>
 
           {/* Recent Activity Tab */}
+          <TabsContent value="funnel" className="mt-4">
+            <OnboardingFunnel />
+          </TabsContent>
+
           <TabsContent value="recent" className="mt-4">
             <div className="grid md:grid-cols-2 gap-4">
               <Card className="bg-card border-border">
@@ -426,5 +431,75 @@ function AdminDashboard() {
         </Tabs>
       </div>
     </div>
+  );
+}
+
+function OnboardingFunnel() {
+  const { data, isLoading } = trpc.system.getOnboardingFunnel.useQuery();
+
+  const SLIDE_LABELS: Record<string, string> = {
+    thesis:    "1 · The Thesis",
+    state:     "2 · State",
+    framework: "3 · 5S Framework",
+    oracle:    "4 · The Oracle",
+    btw:       "5 · Before the Words",
+    reset:     "6 · The Reset",
+    close:     "7 · Begin",
+  };
+
+  const total = data?.[0]?.count ?? 0;
+
+  return (
+    <Card className="bg-card border-border">
+      <CardHeader className="pb-2 flex flex-row items-center gap-2">
+        <TrendingDown className="h-5 w-5 text-amber-500" />
+        <CardTitle className="text-base">Onboarding Drop-off Funnel</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {isLoading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+          </div>
+        ) : !data || total === 0 ? (
+          <div className="text-center py-12 text-muted-foreground text-sm">
+            No onboarding events yet. Data will appear once users start the intro.
+          </div>
+        ) : (
+          <div className="space-y-3 mt-2">
+            {data.map((row, i) => {
+              const pct = total > 0 ? Math.round((row.count / total) * 100) : 0;
+              const dropPct = i > 0 && data[i - 1].count > 0
+                ? Math.round(((data[i - 1].count - row.count) / data[i - 1].count) * 100)
+                : 0;
+              return (
+                <div key={row.slide}>
+                  <div className="flex items-center justify-between text-xs mb-1">
+                    <span className="text-foreground font-medium">{SLIDE_LABELS[row.slide] ?? row.slide}</span>
+                    <span className="flex items-center gap-2 text-muted-foreground">
+                      {i > 0 && dropPct > 0 && (
+                        <span className="text-red-400">-{dropPct}%</span>
+                      )}
+                      <span className="font-semibold text-foreground">{row.count.toLocaleString()}</span>
+                    </span>
+                  </div>
+                  <div className="h-2 rounded-full bg-muted overflow-hidden">
+                    <div
+                      className="h-full rounded-full transition-all duration-500"
+                      style={{
+                        width: `${pct}%`,
+                        background: `hsl(${38 - i * 4}, ${70 - i * 4}%, ${55 - i * 3}%)`,
+                      }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+            <p className="text-xs text-muted-foreground pt-2">
+              Total advances tracked: {data.reduce((s, r) => s + r.count, 0).toLocaleString()}
+            </p>
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }

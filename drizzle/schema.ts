@@ -487,3 +487,11 @@ export const betaAccess = mysqlTable("beta_access", {
   expiresAt: timestamp("expiresAt").notNull(),       // activatedAt + durationDays
   notifiedAt: timestamp("notifiedAt"),               // when expiry warning was shown
 });
+
+export const events = mysqlTable("events", {
+  id:         int("id").autoincrement().primaryKey(),
+  userId:     int("user_id"),
+  event:      varchar("event", { length: 128 }).notNull(),
+  properties: text("properties"),
+  createdAt:  int("created_at").notNull(),
+});

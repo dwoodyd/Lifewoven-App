@@ -71,6 +71,13 @@
       "when": 1776554080188,
       "tag": "0009_useful_night_thrasher",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1776624144681,
+      "tag": "0010_productive_flatman",
+      "breakpoints": true
     }
   ]
 }
