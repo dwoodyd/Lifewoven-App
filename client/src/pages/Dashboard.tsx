@@ -10,6 +10,7 @@ import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import LowBandwidthDashboard from "@/components/LowBandwidthDashboard";
+import { useBetaAccess } from "@/hooks/useBetaAccess";
 import ReentryFlow from "@/components/ReentryFlow";
 import BetterMirror from "@/components/BetterMirror";
 import PageSkeleton from "@/components/PageSkeleton";
@@ -90,6 +91,7 @@ export default function Dashboard() {
   const completedHabitIds = new Set((todayLogs ?? []).map((l: any) => l.habitId));
   const currentEmotion = EGS_EMOTIONS.find(e => e.level <= emotionalScore) ?? EGS_EMOTIONS[EGS_EMOTIONS.length - 1];
   const greeting = () => { const h = new Date().getHours(); return h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening"; };
+  const { hasAccess, daysLeft } = useBetaAccess();
 
   const hasHabits = habits && habits.length > 0;
   const hasJournal = dashData?.recentJournals && dashData.recentJournals.length > 0;
@@ -151,6 +153,20 @@ export default function Dashboard() {
             </h1>
           </div>
           <div className="flex items-center gap-2 shrink-0 self-start">
+            {hasAccess && daysLeft !== null && daysLeft <= 45 && (
+              <Link href="/pricing">
+                <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border cursor-pointer transition-colors ${
+                  daysLeft <= 7
+                    ? "bg-red-500/10 border-red-500/20 hover:bg-red-500/15"
+                    : "bg-amber-500/10 border-amber-500/20 hover:bg-amber-500/15"
+                }`}>
+                  <Sparkles className={`h-3.5 w-3.5 ${daysLeft <= 7 ? "text-red-400" : "text-amber-400"}`} />
+                  <span className={`text-xs font-medium ${daysLeft <= 7 ? "text-red-400" : "text-amber-400"}`}>
+                    {daysLeft}d beta
+                  </span>
+                </div>
+              </Link>
+            )}
             {streakData && streakData.streak > 0 && (
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20">
                 <Flame className="h-4 w-4 text-orange-400" />

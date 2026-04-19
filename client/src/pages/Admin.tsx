@@ -53,6 +53,8 @@ function CopyButton({ text }: { text: string }) {
 
 function BetaTesters() {
   const [count, setCount] = useState("5");
+  const [emailTo, setEmailTo] = useState("");
+  const [emailSent, setEmailSent] = useState(false);
   const [digestMode, setDigestMode] = useState<"instant"|"daily">(() =>
     (localStorage.getItem("betaNotifyMode") as "instant"|"daily") || "instant"
   );
@@ -76,7 +78,20 @@ function BetaTesters() {
   const handleGenerate = () => {
     const n = parseInt(count, 10);
     if (!n || n < 1 || n > 100) { toast.error("Enter a number between 1 and 100"); return; }
+    setEmailSent(false);
     generateCodes.mutate({ count: n });
+  };
+
+  const handleSendEmail = () => {
+    if (!emailTo || !generateCodes.data?.codes?.length) return;
+    const codes = generateCodes.data.codes.join("\n");
+    const subject = encodeURIComponent("Your Lifewoven Beta Access Code");
+    const body = encodeURIComponent(
+      `Hi,\n\nHere is your Lifewoven beta access code(s):\n\n${codes}\n\nRedeem at: ${window.location.origin}/beta\n\nEach code grants 45 days of full access to all features.\n\nWelcome to the journey.\n\n— The Lifewoven Team`
+    );
+    window.open(`mailto:${emailTo}?subject=${subject}&body=${body}`, "_blank");
+    setEmailSent(true);
+    toast.success("Email client opened with codes");
   };
 
   const statusVariant = (status: string) => {
@@ -135,7 +150,21 @@ function BetaTesters() {
             </Button>
           </div>
           {generateCodes.data && (
-            <div className="mt-4 p-3 bg-muted rounded-lg">
+            <div className="mt-4 space-y-3">
+              {/* Email send row */}
+              <div className="flex items-center gap-2">
+                <Input
+                  type="email"
+                  placeholder="tester@email.com"
+                  value={emailTo}
+                  onChange={(e) => setEmailTo(e.target.value)}
+                  className="flex-1"
+                />
+                <Button size="sm" variant="outline" onClick={handleSendEmail} disabled={!emailTo || emailSent}>
+                  {emailSent ? "✓ Sent" : "Send via Email"}
+                </Button>
+              </div>
+              <div className="p-3 bg-muted rounded-lg">
               <p className="text-xs text-muted-foreground mb-2 font-medium">Newly generated codes — copy and share:</p>
               <div className="space-y-1">
                 {generateCodes.data.codes.map((code) => (
@@ -144,6 +173,7 @@ function BetaTesters() {
                     <CopyButton text={code} />
                   </div>
                 ))}
+              </div>
               </div>
             </div>
           )}
@@ -449,12 +479,19 @@ function OnboardingFunnel() {
   };
 
   const total = data?.[0]?.count ?? 0;
+  const completeCount = data?.find(r => r.slide === "complete")?.count ?? 0;
+  const conversionRate = total > 0 ? Math.round((completeCount / total) * 100) : 0;
 
   return (
     <Card className="bg-card border-border">
       <CardHeader className="pb-2 flex flex-row items-center gap-2">
         <TrendingDown className="h-5 w-5 text-amber-500" />
         <CardTitle className="text-base">Onboarding Drop-off Funnel</CardTitle>
+        {total > 0 && (
+          <span className="ml-auto text-xs font-medium text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded-full">
+            {conversionRate}% converted to Audit
+          </span>
+        )}
       </CardHeader>
       <CardContent>
         {isLoading ? (
