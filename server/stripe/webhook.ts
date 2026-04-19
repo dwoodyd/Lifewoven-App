@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import Stripe from "stripe";
 import crypto from "crypto";
 import { getDb } from "../db";
-import { users, orders } from "../../drizzle/schema";
+import { users, orders, betaAccess, events } from "../../drizzle/schema";
 import { eq } from "drizzle-orm";
 import { notifyOwner } from "../_core/notification";
 import { getProductBySlug } from "../products";
@@ -96,9 +96,29 @@ export async function stripeWebhookHandler(req: Request, res: Response) {
             stripeSubscriptionId: subscriptionId,
           }).where(eq(users.id, userId));
           console.log(`[Webhook] User ${userId} upgraded to ${plan}`);
+
+          // ── Beta-to-paid conversion tracking ──────────────────────────────
+          const betaRow = await db.select().from(betaAccess)
+            .where(eq(betaAccess.userId, userId))
+            .limit(1);
+          const wasBetaUser = betaRow.length > 0;
+          await db.insert(events).values({
+            userId,
+            event: "beta_converted",
+            createdAt: Date.now(),
+            properties: JSON.stringify({
+              plan,
+              wasBetaUser,
+              customerEmail: session.metadata?.customer_email ?? "",
+              customerName: session.metadata?.customer_name ?? "",
+            }),
+          });
+
           await notifyOwner({
-            title: `🎉 New ${plan} Subscriber`,
-            content: `${session.metadata?.customer_name ?? "Someone"} (${session.metadata?.customer_email ?? ""}) subscribed to the ${plan} plan.`,
+            title: `🎉 New ${plan} Subscriber${wasBetaUser ? " (Beta → Paid)" : ""}`,
+            content: `${session.metadata?.customer_name ?? "Someone"} (${session.metadata?.customer_email ?? ""}) subscribed to the ${plan} plan.${
+              wasBetaUser ? " They converted from a beta trial. 🏆" : ""
+            }`,
           }).catch(() => {});
         }
         break;

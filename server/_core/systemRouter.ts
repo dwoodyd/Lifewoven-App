@@ -48,18 +48,43 @@ export const systemRouter = router({
   getOnboardingFunnel: adminProcedure.query(async () => {
     const db = await getDb();
     const slideOrder = ["thesis","state","framework","oracle","btw","reset","close"];
-    if (!db) return [...slideOrder.map(id => ({ slide: id, count: 0 })), { slide: "complete", count: 0 }];
-    const [slideRaw, completeRaw] = await Promise.all([
+    if (!db) return [...slideOrder.map(id => ({ slide: id, count: 0 })), { slide: "complete", count: 0 }, { slide: "beta_converted", count: 0 }];
+    const [slideRaw, completeRaw, convertedRaw] = await Promise.all([
       db.execute(
         sql`SELECT JSON_UNQUOTE(JSON_EXTRACT(properties,'$.slide')) as slide, COUNT(*) as cnt
             FROM events WHERE event='onboarding_slide_advance'
             GROUP BY JSON_UNQUOTE(JSON_EXTRACT(properties,'$.slide'))`
       ) as any,
       db.execute(sql`SELECT COUNT(*) as cnt FROM events WHERE event='onboarding_complete'`) as any,
+      db.execute(sql`SELECT COUNT(*) as cnt FROM events WHERE event='beta_converted'`) as any,
     ]);
     const counts: Record<string,number> = {};
     (slideRaw[0] as any[]).forEach((r: any) => { counts[r.slide] = Number(r.cnt); });
     const completeCount = Number((completeRaw[0] as any[])[0]?.cnt ?? 0);
-    return [...slideOrder.map(id => ({ slide: id, count: counts[id] ?? 0 })), { slide: "complete", count: completeCount }];
+    const convertedCount = Number((convertedRaw[0] as any[])[0]?.cnt ?? 0);
+    return [
+      ...slideOrder.map(id => ({ slide: id, count: counts[id] ?? 0 })),
+      { slide: "complete", count: completeCount },
+      { slide: "beta_converted", count: convertedCount },
+    ];
+  }),
+
+  getBetaConversionStats: adminProcedure.query(async () => {
+    const db = await getDb();
+    if (!db) return { totalBeta: 0, converted: 0, conversionRate: 0, byPlan: [] };
+    const [totalRaw, convertedRaw, byPlanRaw] = await Promise.all([
+      db.execute(sql`SELECT COUNT(DISTINCT user_id) as cnt FROM beta_access`) as any,
+      db.execute(sql`SELECT COUNT(*) as cnt FROM events WHERE event='beta_converted'`) as any,
+      db.execute(
+        sql`SELECT JSON_UNQUOTE(JSON_EXTRACT(properties,'$.plan')) as plan, COUNT(*) as cnt
+            FROM events WHERE event='beta_converted'
+            GROUP BY JSON_UNQUOTE(JSON_EXTRACT(properties,'$.plan'))`
+      ) as any,
+    ]);
+    const totalBeta = Number((totalRaw[0] as any[])[0]?.cnt ?? 0);
+    const converted = Number((convertedRaw[0] as any[])[0]?.cnt ?? 0);
+    const conversionRate = totalBeta > 0 ? Math.round((converted / totalBeta) * 100) : 0;
+    const byPlan = (byPlanRaw[0] as any[]).map((r: any) => ({ plan: r.plan as string, count: Number(r.cnt) }));
+    return { totalBeta, converted, conversionRate, byPlan };
   }),
 });

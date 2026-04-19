@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Users, ShoppingBag, BookOpen, Activity, Shield, Loader2, Copy, Check, KeyRound, TrendingDown } from "lucide-react";
+import { Users, ShoppingBag, BookOpen, Activity, Shield, Loader2, Copy, Check, KeyRound, TrendingDown, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "wouter";
 
@@ -423,7 +423,8 @@ function AdminDashboard() {
           </TabsContent>
 
           {/* Recent Activity Tab */}
-          <TabsContent value="funnel" className="mt-4">
+          <TabsContent value="funnel" className="mt-4 space-y-4">
+            <BetaConversionStats />
             <OnboardingFunnel />
           </TabsContent>
 
@@ -472,6 +473,60 @@ function AdminDashboard() {
   );
 }
 
+function BetaConversionStats() {
+  const { data, isLoading } = trpc.system.getBetaConversionStats.useQuery();
+  if (isLoading) return <div className="flex justify-center py-6"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>;
+  if (!data) return null;
+  return (
+    <Card className="bg-card border-border">
+      <CardHeader className="pb-2 flex flex-row items-center gap-2">
+        <TrendingUp className="h-5 w-5 text-green-400" />
+        <CardTitle className="text-base">Beta → Paid Conversion</CardTitle>
+        {data.totalBeta > 0 && (
+          <span className="ml-auto text-xs font-medium text-green-400 bg-green-500/10 border border-green-500/20 px-2.5 py-1 rounded-full">
+            {data.conversionRate}% conversion rate
+          </span>
+        )}
+      </CardHeader>
+      <CardContent>
+        {data.totalBeta === 0 ? (
+          <p className="text-sm text-muted-foreground text-center py-6">No beta users yet. Data will appear once testers redeem codes.</p>
+        ) : (
+          <div className="space-y-4">
+            <div className="grid grid-cols-3 gap-3">
+              <div className="text-center p-3 rounded-xl bg-muted">
+                <p className="text-2xl font-bold text-foreground">{data.totalBeta}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Beta Users</p>
+              </div>
+              <div className="text-center p-3 rounded-xl bg-green-500/10 border border-green-500/20">
+                <p className="text-2xl font-bold text-green-400">{data.converted}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Converted</p>
+              </div>
+              <div className="text-center p-3 rounded-xl bg-muted">
+                <p className="text-2xl font-bold text-foreground">{data.totalBeta - data.converted}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Still on Beta</p>
+              </div>
+            </div>
+            {data.byPlan.length > 0 && (
+              <div>
+                <p className="text-xs text-muted-foreground mb-2 font-medium">Conversions by plan</p>
+                <div className="space-y-1.5">
+                  {data.byPlan.map(p => (
+                    <div key={p.plan} className="flex items-center justify-between text-sm">
+                      <span className="capitalize text-foreground">{p.plan}</span>
+                      <span className="font-semibold text-green-400">{p.count}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
 function OnboardingFunnel() {
   const { data, isLoading } = trpc.system.getOnboardingFunnel.useQuery();
 
@@ -483,7 +538,8 @@ function OnboardingFunnel() {
     btw:       "5 · Before the Words",
     reset:     "6 · The Reset",
     close:     "7 · Begin",
-    complete:  "✓ Audit Started", // conversion metric — shown in amber
+    complete:       "✓ Audit Started",
+    beta_converted: "💳 Paid Subscriber", // final conversion metric — shown in green
   };
 
   const total = data?.[0]?.count ?? 0;
@@ -518,16 +574,17 @@ function OnboardingFunnel() {
                 ? Math.round(((data[i - 1].count - row.count) / data[i - 1].count) * 100)
                 : 0;
               const isComplete = row.slide === "complete";
+              const isConverted = row.slide === "beta_converted";
               return (
                 <div key={row.slide}>
-                  {isComplete && <div className="border-t border-border my-3" />}
+                  {(isComplete || isConverted) && <div className="border-t border-border my-3" />}
                   <div className="flex items-center justify-between text-xs mb-1">
-                    <span className={`font-medium ${isComplete ? "text-amber-400" : "text-foreground"}`}>{SLIDE_LABELS[row.slide] ?? row.slide}</span>
+                    <span className={`font-medium ${isConverted ? "text-green-400" : isComplete ? "text-amber-400" : "text-foreground"}`}>{SLIDE_LABELS[row.slide] ?? row.slide}</span>
                     <span className="flex items-center gap-2 text-muted-foreground">
-                      {i > 0 && dropPct > 0 && (
+                      {i > 0 && dropPct > 0 && !isConverted && (
                         <span className="text-red-400">-{dropPct}%</span>
                       )}
-                      <span className={`font-semibold ${isComplete ? "text-amber-400" : "text-foreground"}`}>{row.count.toLocaleString()}</span>
+                      <span className={`font-semibold ${isConverted ? "text-green-400" : isComplete ? "text-amber-400" : "text-foreground"}`}>{row.count.toLocaleString()}</span>
                     </span>
                   </div>
                   <div className="h-2 rounded-full bg-muted overflow-hidden">
@@ -535,7 +592,7 @@ function OnboardingFunnel() {
                       className="h-full rounded-full transition-all duration-500"
                       style={{
                         width: `${pct}%`,
-                        background: isComplete ? "rgb(251,191,36)" : `hsl(${38 - i * 4}, ${70 - i * 4}%, ${55 - i * 3}%)`,
+                        background: isConverted ? "rgb(74,222,128)" : isComplete ? "rgb(251,191,36)" : `hsl(${38 - i * 4}, ${70 - i * 4}%, ${55 - i * 3}%)`,
                       }}
                     />
                   </div>
