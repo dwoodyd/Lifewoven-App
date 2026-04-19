@@ -421,6 +421,17 @@ export default function OnboardingModal({ userId }: Props) {
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, [open, idx]);
 
+  // Arrow-key navigation
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") setIdx(i => Math.min(SLIDES.length - 1, i + 1));
+      if (e.key === "ArrowLeft")  setIdx(i => Math.max(0, i - 1));
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [open]);
+
   // Parallax glow
   useEffect(() => {
     const handler = (e: MouseEvent) => {
