@@ -2,6 +2,43 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 
+/* ─── Ambient sound engine (Web Audio API — no external files) ───── */
+function createAmbientEngine() {
+  const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+  const master = ctx.createGain();
+  master.gain.value = 0;
+  master.connect(ctx.destination);
+
+  // Three detuned sine oscillators for a warm drone
+  const freqs = [55, 82.4, 110]; // A1, E2, A2
+  const oscs = freqs.map(f => {
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = "sine";
+    o.frequency.value = f;
+    g.gain.value = f === 55 ? 0.18 : 0.09;
+    o.connect(g);
+    g.connect(master);
+    o.start();
+    return o;
+  });
+
+  // Subtle shimmer — high sine at 880 Hz, very quiet
+  const shimmer = ctx.createOscillator();
+  const shimmerGain = ctx.createGain();
+  shimmer.type = "sine";
+  shimmer.frequency.value = 880;
+  shimmerGain.gain.value = 0.012;
+  shimmer.connect(shimmerGain);
+  shimmerGain.connect(master);
+  shimmer.start();
+
+  return {
+    fadeIn()  { master.gain.setTargetAtTime(1, ctx.currentTime, 2.5); },
+    fadeOut() { master.gain.setTargetAtTime(0, ctx.currentTime, 1.5); },
+    close()   { ctx.close(); },
+  };
+}
 /* ─── Design tokens ──────────────────────────────────────────────── */
 const T = {
   bg:          "#080709",
@@ -520,6 +557,30 @@ export default function OnboardingModal({ userId }: Props) {
   const [finished, setFinished] = useState(false);
   const glowRef = useRef<HTMLDivElement>(null);
   const completeMutation = trpc.profile.completeOnboarding.useMutation();
+  const [soundOn, setSoundOn] = useState(false);
+  const audioRef = useRef<ReturnType<typeof createAmbientEngine> | null>(null);
+
+  // Boot audio engine on first user interaction
+  function toggleSound() {
+    if (!audioRef.current) {
+      audioRef.current = createAmbientEngine();
+    }
+    if (!soundOn) {
+      audioRef.current.fadeIn();
+      setSoundOn(true);
+    } else {
+      audioRef.current.fadeOut();
+      setSoundOn(false);
+    }
+  }
+
+  // Fade out when modal closes
+  useEffect(() => {
+    if (!open && audioRef.current) {
+      audioRef.current.fadeOut();
+      setSoundOn(false);
+    }
+  }, [open]);
 
   useEffect(() => {
     if (!localStorage.getItem(DEVICE_KEY)) setOpen(true);
@@ -758,6 +819,22 @@ export default function OnboardingModal({ userId }: Props) {
         style={{ fontSize: "0.62rem", color: "rgba(255,255,255,0.08)", letterSpacing: "0.1em" }}>
         {idx + 1} / {SLIDES.length}
       </p>
+
+      {/* Sound toggle */}
+      <button onClick={toggleSound}
+        className="absolute top-5 z-20"
+        style={{
+          left: idx > 0 ? 52 : 20,
+          background: "transparent",
+          border: `1px solid ${soundOn ? T.thread + "55" : "rgba(255,255,255,0.1)"}`,
+          color: soundOn ? T.thread : T.quiet,
+          fontSize: "0.7rem", letterSpacing: "0.1em",
+          padding: "0.42rem 0.8rem", borderRadius: 999, cursor: "pointer", fontFamily: "inherit",
+          transition: "border-color 0.3s, color 0.3s",
+        }}
+        title={soundOn ? "Mute ambient sound" : "Enable ambient sound"}>
+        {soundOn ? "♪ on" : "♪ off"}
+      </button>
 
       {/* Skip */}
       {idx === 0 && (
