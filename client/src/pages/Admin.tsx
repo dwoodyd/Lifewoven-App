@@ -83,15 +83,23 @@ function BetaTesters() {
   };
 
   const handleSendEmail = () => {
-    if (!emailTo || !generateCodes.data?.codes?.length) return;
-    const codes = generateCodes.data.codes.join("\n");
+    const codes = generateCodes.data?.codes ?? [];
+    if (!emailTo.trim() || !codes.length) return;
+    const emails = emailTo.split(",").map(e => e.trim()).filter(Boolean);
+    if (!emails.length) { toast.error("Enter at least one email address"); return; }
+    // Distribute codes round-robin: each recipient gets their assigned code(s)
+    const perPerson = Math.ceil(codes.length / emails.length);
     const subject = encodeURIComponent("Your Lifewoven Beta Access Code");
-    const body = encodeURIComponent(
-      `Hi,\n\nHere is your Lifewoven beta access code(s):\n\n${codes}\n\nRedeem at: ${window.location.origin}/beta\n\nEach code grants 45 days of full access to all features.\n\nWelcome to the journey.\n\n— The Lifewoven Team`
-    );
-    window.open(`mailto:${emailTo}?subject=${subject}&body=${body}`, "_blank");
+    emails.forEach((email, i) => {
+      const assigned = codes.slice(i * perPerson, (i + 1) * perPerson);
+      if (!assigned.length) return;
+      const body = encodeURIComponent(
+        `Hi,\n\nHere is your Lifewoven beta access code:\n\n${assigned.join("\n")}\n\nRedeem at: ${window.location.origin}/beta\n\nEach code grants 45 days of full access to all features.\n\nWelcome to the journey.\n\n— The Lifewoven Team`
+      );
+      setTimeout(() => window.open(`mailto:${email}?subject=${subject}&body=${body}`, "_blank"), i * 300);
+    });
     setEmailSent(true);
-    toast.success("Email client opened with codes");
+    toast.success(`Opened ${emails.length} email${emails.length > 1 ? "s" : ""} in your mail client`);
   };
 
   const statusVariant = (status: string) => {
@@ -154,8 +162,8 @@ function BetaTesters() {
               {/* Email send row */}
               <div className="flex items-center gap-2">
                 <Input
-                  type="email"
-                  placeholder="tester@email.com"
+                  type="text"
+                  placeholder="alice@email.com, bob@email.com, …"
                   value={emailTo}
                   onChange={(e) => setEmailTo(e.target.value)}
                   className="flex-1"
