@@ -11,6 +11,7 @@ import { stripeWebhookHandler } from "../stripe/webhook";
 import { downloadHandler } from "../stripe/download";
 import { paypalRouter } from "../paypal/paypal";
 import { startWeeklyDigestCron } from "../cron/weeklyDigest";
+import { startBetaExpiryCheckCron } from "../cron/betaExpiryCheck";
 import { transcribeRouter } from "../transcribeRoute";
 import rateLimit from "express-rate-limit";
 import cors from "cors";
@@ -148,3 +149,4 @@ async function startServer() {
 
 startServer().catch(console.error);
 startWeeklyDigestCron();
+startBetaExpiryCheckCron();

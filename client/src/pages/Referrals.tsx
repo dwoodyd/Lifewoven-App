@@ -5,7 +5,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { Copy, Gift, Users, DollarSign } from "lucide-react";
+import { Copy, Gift, Users, DollarSign, Sparkles } from "lucide-react";
 import { getLoginUrl } from "@/const";
 
 export default function Referrals() {
@@ -27,6 +27,16 @@ export default function Referrals() {
   const referralUrl = codeData ? `${window.location.origin}?ref=${codeData.code}` : "";
   const usedCount = history?.filter(r => r.usedAt).length ?? 0;
   const balanceDollars = ((balanceData?.balanceCents ?? 0) / 100).toFixed(2);
+
+  // 30-day trial referral (for converted beta users)
+  const [trialCode, setTrialCode] = useState("");
+  const { data: trialCodeData } = trpc.referral.myTrialCode.useQuery(undefined, { enabled: isAuthenticated });
+  const redeemTrialMutation = trpc.referral.redeemTrialCode.useMutation({
+    onSuccess: () => { toast.success("30-day trial activated! Welcome to Lifewoven."); setTrialCode(""); },
+    onError: (e) => toast.error(e.message),
+  });
+  const trialUrl = trialCodeData?.code ? `${window.location.origin}/beta?ref=${trialCodeData.code}` : "";
+  const copyTrialLink = () => { navigator.clipboard.writeText(trialUrl); toast.success("Trial link copied!"); };
 
   const copyLink = () => {
     navigator.clipboard.writeText(referralUrl);
@@ -101,6 +111,44 @@ export default function Referrals() {
             </Button>
           </div>
         </div>
+
+        {/* 30-day trial referral — only shown to converted users */}
+        {trialCodeData?.eligible && (
+          <div className="p-5 rounded-xl border border-amber-500/30 bg-amber-500/5 mb-6">
+            <div className="flex items-center gap-2 mb-1">
+              <Sparkles className="h-4 w-4 text-amber-400" />
+              <h2 className="font-serif text-lg font-light">Give a Friend 30 Days Free</h2>
+            </div>
+            <p className="text-sm text-muted-foreground mb-3">As a paying member, you can give friends a 30-day free trial — your personal way of saying "this changed things for me."</p>
+            <div className="flex gap-2 mb-2">
+              <Input value={trialUrl} readOnly className="text-sm font-mono bg-background" />
+              <Button onClick={copyTrialLink} size="icon" variant="outline"><Copy className="h-4 w-4" /></Button>
+            </div>
+            <p className="text-xs text-muted-foreground">Code: <span className="font-mono font-semibold text-amber-400">{trialCodeData.code}</span> · {trialCodeData.redeemedCount} friend{trialCodeData.redeemedCount !== 1 ? "s" : ""} activated</p>
+          </div>
+        )}
+
+        {/* Redeem a trial code (for new users) */}
+        {!trialCodeData?.eligible && (
+          <div className="p-5 rounded-xl border border-border bg-card mb-6">
+            <h2 className="font-serif text-lg font-light mb-1">Have a Trial Code?</h2>
+            <p className="text-sm text-muted-foreground mb-3">If a friend shared a <span className="font-mono">REF-XXXX-XXXX</span> code with you, enter it here for 30 days of free access.</p>
+            <div className="flex gap-2">
+              <Input
+                placeholder="REF-XXXX-XXXX"
+                value={trialCode}
+                onChange={e => setTrialCode(e.target.value.toUpperCase())}
+                className="font-mono"
+              />
+              <Button
+                onClick={() => redeemTrialMutation.mutate({ code: trialCode })}
+                disabled={!trialCode || redeemTrialMutation.isPending}
+              >
+                Activate
+              </Button>
+            </div>
+          </div>
+        )}
 
         {/* History */}
         {history && history.length > 0 && (

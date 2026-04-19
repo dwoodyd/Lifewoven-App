@@ -561,7 +561,11 @@ function BetaConversionStats() {
                   {converted.map(u => (
                     <TableRow key={u.userId}>
                       <TableCell className="font-medium">{u.name || "—"}</TableCell>
-                      <TableCell className="text-muted-foreground">{u.email || "—"}</TableCell>
+                      <TableCell className="text-muted-foreground">
+                        {u.email ? (
+                          <a href={`mailto:${u.email}?subject=Thank%20you%20for%20joining%20Lifewoven&body=Hi%20${encodeURIComponent(u.name || '')}%2C%0A%0AThank%20you%20for%20becoming%20a%20paying%20member%20of%20Lifewoven!%20We%27re%20so%20glad%20you%27re%20here.%0A%0A`} className="underline hover:text-foreground transition-colors">{u.email}</a>
+                        ) : "—"}
+                      </TableCell>
                       <TableCell><Badge variant="default" className="capitalize">{u.plan}</Badge></TableCell>
                       <TableCell className="text-muted-foreground text-xs">{new Date(u.convertedAt).toLocaleDateString()}</TableCell>
                     </TableRow>

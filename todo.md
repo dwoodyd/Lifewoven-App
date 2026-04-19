@@ -370,3 +370,8 @@
 - [x] saveMindPatterns tRPC procedure
 - [x] Save patterns from Alignment Audit on completion
 - [x] Pass patterns as Oracle system context
+
+## Referral & Automation (Apr 19)
+- [x] Weekly cron for beta expiry check (every Monday 9am)
+- [x] Mailto links in Early Adopters table
+- [x] 30-day referral code system (DB table, generate/redeem, UI for converted users)
