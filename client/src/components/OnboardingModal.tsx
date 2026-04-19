@@ -432,6 +432,25 @@ export default function OnboardingModal({ userId }: Props) {
     return () => window.removeEventListener("keydown", handler);
   }, [open]);
 
+  // Swipe gesture navigation
+  useEffect(() => {
+    if (!open) return;
+    let startX = 0;
+    const onStart = (e: TouchEvent) => { startX = e.touches[0].clientX; };
+    const onEnd   = (e: TouchEvent) => {
+      const dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) < 40) return;
+      if (dx < 0) setIdx(i => Math.min(SLIDES.length - 1, i + 1));
+      else        setIdx(i => Math.max(0, i - 1));
+    };
+    window.addEventListener("touchstart", onStart, { passive: true });
+    window.addEventListener("touchend",   onEnd,   { passive: true });
+    return () => {
+      window.removeEventListener("touchstart", onStart);
+      window.removeEventListener("touchend",   onEnd);
+    };
+  }, [open]);
+
   // Parallax glow
   useEffect(() => {
     const handler = (e: MouseEvent) => {

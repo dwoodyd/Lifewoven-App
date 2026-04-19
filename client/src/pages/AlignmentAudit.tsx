@@ -173,7 +173,7 @@ const DIM_COLORS: Record<string, string> = {
   Strategy: "bg-strategy", Stewardship: "bg-stewardship",
 };
 
-type Step = "entry" | "consent" | "preframe" | "quiz" | "optional_prompt" | "optional" | "results";
+type Step = "entry" | "consent" | "preframe" | "quiz" | "optional_prompt" | "optional" | "mind_works" | "results";
 
 export default function AlignmentAudit() {
   const [, navigate] = useLocation();
@@ -184,6 +184,7 @@ export default function AlignmentAudit() {
   const [optionalAnswers, setOptionalAnswers] = useState<Record<number, string>>({});
   const [optionalQ, setOptionalQ] = useState(0);
   const [result, setResult] = useState<{ profile: Profile; scores: ReturnType<typeof computeScores>; frictionTags: string[] } | null>(null);
+  const [mindPatterns, setMindPatterns] = useState<string[]>([]);
 
   const saveAudit = trpc.audit.save.useMutation({ onSuccess: () => toast.success("Results saved to your profile.") });
 
@@ -209,7 +210,7 @@ export default function AlignmentAudit() {
     const updated = { ...optionalAnswers, [qId]: value };
     setOptionalAnswers(updated);
     if (optionalQ < OPTIONAL_QUESTIONS.length - 1) { setTimeout(() => setOptionalQ(q => q + 1), 280); }
-    else { setStep("results"); }
+    else { setStep("mind_works"); }
   }
 
   function handleSaveResults() {
@@ -351,6 +352,42 @@ export default function AlignmentAudit() {
             ))}
           </div>
           <button onClick={() => setStep("results")} className="mt-4 text-xs text-muted-foreground hover:text-foreground transition-colors">Skip remaining →</button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const MIND_PATTERNS = [
+    { id: "scattered", label: "My thoughts scatter easily" },
+    { id: "overwhelmed", label: "I get overwhelmed by too many options" },
+    { id: "starting", label: "Starting is the hardest part" },
+    { id: "time", label: "Time feels slippery or unpredictable" },
+    { id: "energy", label: "My energy is inconsistent" },
+    { id: "reading", label: "Long text or instructions tire me out" },
+  ];
+
+  if (step === "mind_works") return (
+    <div className="min-h-screen bg-background">
+      <Nav />
+      <div className="container max-w-xl mx-auto pt-24 pb-20 px-4 sm:px-6">
+        <div className="p-5 sm:p-8 rounded-2xl border border-border bg-card animate-in fade-in slide-in-from-bottom-2 duration-300">
+          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">One last thing</p>
+          <h2 className="font-serif text-2xl font-light text-foreground mb-2">How does your mind work?</h2>
+          <p className="text-sm text-muted-foreground mb-6 leading-relaxed">Select anything that feels true. This helps Lifewoven adapt to how you actually think — not how you think you should.</p>
+          <div className="space-y-2 mb-6">
+            {MIND_PATTERNS.map(p => (
+              <button key={p.id} onClick={() => setMindPatterns(prev => prev.includes(p.id) ? prev.filter(x => x !== p.id) : [...prev, p.id])}
+                className={`w-full text-left px-4 py-3 rounded-xl border transition-all text-sm ${
+                  mindPatterns.includes(p.id) ? "border-amber-400/60 bg-amber-400/10 text-foreground" : "border-border bg-background hover:border-amber-400/30 text-muted-foreground hover:text-foreground"
+                }`}>
+                {mindPatterns.includes(p.id) ? "✓ " : ""}{p.label}
+              </button>
+            ))}
+          </div>
+          <div className="space-y-3">
+            <Button className="w-full" onClick={() => setStep("results")}>See my results →</Button>
+            <button onClick={() => setStep("results")} className="text-xs text-muted-foreground hover:text-foreground transition-colors w-full text-center">Skip this step</button>
+          </div>
         </div>
       </div>
     </div>

@@ -354,3 +354,8 @@
 - [x] Ambient background threads SVG across all slides
 - [x] Finished state: "The first thread is yours" screen after slide 7
 - [x] All existing wiring preserved: storage key, completeOnboarding mutation, replayOnboarding export, dismiss/navigate logic
+
+## Follow-up Batch (Apr 19)
+- [x] Onboarding: swipe gesture support (touchstart/touchend)
+- [x] Beta notifications: daily digest option (admin toggle)
+- [x] Alignment Audit: "How my mind works" step after Q12

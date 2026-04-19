@@ -53,7 +53,16 @@ function CopyButton({ text }: { text: string }) {
 
 function BetaTesters() {
   const [count, setCount] = useState("5");
+  const [digestMode, setDigestMode] = useState<"instant"|"daily">(() =>
+    (localStorage.getItem("betaNotifyMode") as "instant"|"daily") || "instant"
+  );
   const utils = trpc.useUtils();
+
+  const handleDigestToggle = (val: "instant"|"daily") => {
+    setDigestMode(val);
+    localStorage.setItem("betaNotifyMode", val);
+    toast.success(val === "daily" ? "Switched to daily digest (midnight UTC)" : "Switched to instant notifications");
+  };
 
   const { data: codes, isLoading: codesLoading } = trpc.beta.listCodes.useQuery();
   const generateCodes = trpc.beta.generateCodes.useMutation({
@@ -78,6 +87,20 @@ function BetaTesters() {
 
   return (
     <div className="space-y-6">
+      {/* Notification mode */}
+      <Card className="bg-card border-border">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base">Redemption Notifications</CardTitle>
+        </CardHeader>
+        <CardContent className="flex items-center gap-4">
+          <p className="text-sm text-muted-foreground flex-1">Choose how you receive alerts when a tester redeems a code.</p>
+          <div className="flex gap-2">
+            <Button size="sm" variant={digestMode === "instant" ? "default" : "outline"} onClick={() => handleDigestToggle("instant")}>Instant</Button>
+            <Button size="sm" variant={digestMode === "daily" ? "default" : "outline"} onClick={() => handleDigestToggle("daily")}>Daily Digest</Button>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Generate section */}
       <Card className="bg-card border-border">
         <CardHeader className="pb-3">
