@@ -26,4 +26,14 @@ export const systemRouter = router({
         success: delivered,
       } as const;
     }),
+  trackEvent: publicProcedure
+    .input(z.object({
+      event: z.string(),
+      properties: z.record(z.string(), z.unknown()).optional(),
+    }))
+    .mutation(({ input }) => {
+      // Lightweight server-side event log — extend with DB/analytics later
+      console.log("[event]", input.event, JSON.stringify(input.properties ?? {}));
+      return { ok: true };
+    }),
 });

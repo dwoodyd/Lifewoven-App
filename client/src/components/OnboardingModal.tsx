@@ -557,8 +557,10 @@ export default function OnboardingModal({ userId }: Props) {
   const [finished, setFinished] = useState(false);
   const glowRef = useRef<HTMLDivElement>(null);
   const completeMutation = trpc.profile.completeOnboarding.useMutation();
-  const [soundOn, setSoundOn] = useState(false);
+  const SOUND_KEY = "lifewoven_onboarding_sound";
+  const [soundOn, setSoundOn] = useState(() => localStorage.getItem("lifewoven_onboarding_sound") === "1");
   const audioRef = useRef<ReturnType<typeof createAmbientEngine> | null>(null);
+  const trackEvent = trpc.system.trackEvent.useMutation();
 
   // Boot audio engine on first user interaction
   function toggleSound() {
@@ -568,11 +570,21 @@ export default function OnboardingModal({ userId }: Props) {
     if (!soundOn) {
       audioRef.current.fadeIn();
       setSoundOn(true);
+      localStorage.setItem(SOUND_KEY, "1");
     } else {
       audioRef.current.fadeOut();
       setSoundOn(false);
+      localStorage.removeItem(SOUND_KEY);
     }
   }
+
+  // Auto-start sound if user previously enabled it
+  useEffect(() => {
+    if (open && soundOn) {
+      if (!audioRef.current) audioRef.current = createAmbientEngine();
+      audioRef.current.fadeIn();
+    }
+  }, [open]);
 
   // Fade out when modal closes
   useEffect(() => {
@@ -666,6 +678,8 @@ export default function OnboardingModal({ userId }: Props) {
   }
 
   function advance() {
+    // Track slide progression
+    trackEvent.mutate({ event: "onboarding_slide_advance", properties: { from: idx, slide: s.id } });
     if (isLast) {
       if (!finished) { setFinished(true); return; }
       dismiss();
