@@ -988,7 +988,7 @@ export default function OnboardingModal({ userId }: Props) {
             </p>
 
             {/* Slide-specific content */}
-            {s.id === "state"     && <Slide2Art active={artIn} />}
+           {s.id === "close"      && <Slide7Art key={idx} active={artIn} />}
             {s.id === "framework" && <Slide3Art active={artIn} />}
             {s.id === "oracle"    && (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "0.6rem", margin: "2rem auto 0", maxWidth: 540 }}>

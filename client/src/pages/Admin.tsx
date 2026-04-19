@@ -445,6 +445,7 @@ function OnboardingFunnel() {
     btw:       "5 · Before the Words",
     reset:     "6 · The Reset",
     close:     "7 · Begin",
+    complete:  "✓ Audit Started", // conversion metric — shown in amber
   };
 
   const total = data?.[0]?.count ?? 0;
@@ -471,15 +472,17 @@ function OnboardingFunnel() {
               const dropPct = i > 0 && data[i - 1].count > 0
                 ? Math.round(((data[i - 1].count - row.count) / data[i - 1].count) * 100)
                 : 0;
+              const isComplete = row.slide === "complete";
               return (
                 <div key={row.slide}>
+                  {isComplete && <div className="border-t border-border my-3" />}
                   <div className="flex items-center justify-between text-xs mb-1">
-                    <span className="text-foreground font-medium">{SLIDE_LABELS[row.slide] ?? row.slide}</span>
+                    <span className={`font-medium ${isComplete ? "text-amber-400" : "text-foreground"}`}>{SLIDE_LABELS[row.slide] ?? row.slide}</span>
                     <span className="flex items-center gap-2 text-muted-foreground">
                       {i > 0 && dropPct > 0 && (
                         <span className="text-red-400">-{dropPct}%</span>
                       )}
-                      <span className="font-semibold text-foreground">{row.count.toLocaleString()}</span>
+                      <span className={`font-semibold ${isComplete ? "text-amber-400" : "text-foreground"}`}>{row.count.toLocaleString()}</span>
                     </span>
                   </div>
                   <div className="h-2 rounded-full bg-muted overflow-hidden">
@@ -487,7 +490,7 @@ function OnboardingFunnel() {
                       className="h-full rounded-full transition-all duration-500"
                       style={{
                         width: `${pct}%`,
-                        background: `hsl(${38 - i * 4}, ${70 - i * 4}%, ${55 - i * 3}%)`,
+                        background: isComplete ? "rgb(251,191,36)" : `hsl(${38 - i * 4}, ${70 - i * 4}%, ${55 - i * 3}%)`,
                       }}
                     />
                   </div>

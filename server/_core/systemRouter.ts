@@ -48,14 +48,18 @@ export const systemRouter = router({
   getOnboardingFunnel: adminProcedure.query(async () => {
     const db = await getDb();
     const slideOrder = ["thesis","state","framework","oracle","btw","reset","close"];
-    if (!db) return slideOrder.map(id => ({ slide: id, count: 0 }));
-    const raw = await db.execute(
-      sql`SELECT JSON_UNQUOTE(JSON_EXTRACT(properties,'$.slide')) as slide, COUNT(*) as cnt
-          FROM events WHERE event='onboarding_slide_advance'
-          GROUP BY JSON_UNQUOTE(JSON_EXTRACT(properties,'$.slide'))`
-    ) as any;
+    if (!db) return [...slideOrder.map(id => ({ slide: id, count: 0 })), { slide: "complete", count: 0 }];
+    const [slideRaw, completeRaw] = await Promise.all([
+      db.execute(
+        sql`SELECT JSON_UNQUOTE(JSON_EXTRACT(properties,'$.slide')) as slide, COUNT(*) as cnt
+            FROM events WHERE event='onboarding_slide_advance'
+            GROUP BY JSON_UNQUOTE(JSON_EXTRACT(properties,'$.slide'))`
+      ) as any,
+      db.execute(sql`SELECT COUNT(*) as cnt FROM events WHERE event='onboarding_complete'`) as any,
+    ]);
     const counts: Record<string,number> = {};
-    (raw[0] as any[]).forEach((r: any) => { counts[r.slide] = Number(r.cnt); });
-    return slideOrder.map(id => ({ slide: id, count: counts[id] ?? 0 }));
+    (slideRaw[0] as any[]).forEach((r: any) => { counts[r.slide] = Number(r.cnt); });
+    const completeCount = Number((completeRaw[0] as any[])[0]?.cnt ?? 0);
+    return [...slideOrder.map(id => ({ slide: id, count: counts[id] ?? 0 })), { slide: "complete", count: completeCount }];
   }),
 });
