@@ -99,14 +99,22 @@ function Slide1Art({ active }: { active: boolean }) {
     { color: T.stewardship, startY: 150, midY: 86, endY: 140, delay: 0.68, dur: 1.6 },
   ];
   return (
-    <div style={{ position: "relative", width: "100%", maxWidth: 580, margin: "0 auto 2rem", height: 160, overflow: "visible" }}>
+    <div style={{ position: "relative", width: "100%", maxWidth: 580, margin: "0 auto 2rem", height: 160, overflow: "visible",
+      animation: active ? "artPulse 0.45s cubic-bezier(0.34,1.56,0.64,1) 2.8s both" : "none",
+    }}>
       <style>{`
         @keyframes threadFly0 { 0%{stroke-dashoffset:900;opacity:0} 8%{opacity:0.9} 100%{stroke-dashoffset:0;opacity:0.85} }
         @keyframes threadFly1 { 0%{stroke-dashoffset:900;opacity:0} 8%{opacity:0.9} 100%{stroke-dashoffset:0;opacity:0.85} }
         @keyframes threadFly2 { 0%{stroke-dashoffset:900;opacity:0} 8%{opacity:0.9} 100%{stroke-dashoffset:0;opacity:0.85} }
         @keyframes threadFly3 { 0%{stroke-dashoffset:900;opacity:0} 8%{opacity:0.9} 100%{stroke-dashoffset:0;opacity:0.85} }
         @keyframes threadFly4 { 0%{stroke-dashoffset:900;opacity:0} 8%{opacity:0.9} 100%{stroke-dashoffset:0;opacity:0.85} }
+        @keyframes trailFly0 { 0%{stroke-dashoffset:900;opacity:0} 12%{opacity:0.35} 100%{stroke-dashoffset:0;opacity:0.18} }
+        @keyframes trailFly1 { 0%{stroke-dashoffset:900;opacity:0} 12%{opacity:0.35} 100%{stroke-dashoffset:0;opacity:0.18} }
+        @keyframes trailFly2 { 0%{stroke-dashoffset:900;opacity:0} 12%{opacity:0.35} 100%{stroke-dashoffset:0;opacity:0.18} }
+        @keyframes trailFly3 { 0%{stroke-dashoffset:900;opacity:0} 12%{opacity:0.35} 100%{stroke-dashoffset:0;opacity:0.18} }
+        @keyframes trailFly4 { 0%{stroke-dashoffset:900;opacity:0} 12%{opacity:0.35} 100%{stroke-dashoffset:0;opacity:0.18} }
         @keyframes orbPop { 0%,85%{r:0;opacity:0} 92%{r:12;opacity:1} 100%{r:9;opacity:1} }
+        @keyframes artPulse { 0%{transform:scale(1)} 50%{transform:scale(1.045)} 100%{transform:scale(1)} }
       `}</style>
       <svg viewBox="0 0 600 160" style={{ width: "100%", height: "100%", overflow: "visible" }}>
         <defs>
@@ -122,16 +130,23 @@ function Slide1Art({ active }: { active: boolean }) {
           </filter>
         </defs>
         {threads.map((t, i) => {
-          // Path: enters from left off-screen (-60), curves through convergence point (300,midY), exits right (660)
           const d = `M -60 ${t.startY} C 150 ${t.startY}, 260 ${t.midY}, 300 ${t.midY} S 450 ${t.endY}, 660 ${t.endY}`;
           return (
-            <path key={i} d={d}
-              fill="none" stroke={t.color} strokeWidth="2.2" strokeLinecap="round"
-              strokeDasharray="900"
-              filter={`url(#tglow${i})`}
-              style={active ? {
-                animation: `threadFly${i} ${t.dur}s cubic-bezier(0.22,1,0.36,1) ${t.delay}s both`,
-              } : { opacity: 0 }} />
+            <g key={i}>
+              {/* Trail — wider, lower opacity, slight delay behind the main thread */}
+              <path d={d} fill="none" stroke={t.color} strokeWidth="7" strokeLinecap="round"
+                strokeDasharray="900"
+                style={active ? {
+                  animation: `trailFly${i} ${t.dur + 0.15}s cubic-bezier(0.22,1,0.36,1) ${t.delay + 0.08}s both`,
+                } : { opacity: 0 }} />
+              {/* Main thread */}
+              <path d={d} fill="none" stroke={t.color} strokeWidth="2.2" strokeLinecap="round"
+                strokeDasharray="900"
+                filter={`url(#tglow${i})`}
+                style={active ? {
+                  animation: `threadFly${i} ${t.dur}s cubic-bezier(0.22,1,0.36,1) ${t.delay}s both`,
+                } : { opacity: 0 }} />
+            </g>
           );
         })}
         {/* Convergence orb — pops at the crossing point */}
