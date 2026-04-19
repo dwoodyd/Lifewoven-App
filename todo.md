@@ -359,3 +359,9 @@
 - [x] Onboarding: swipe gesture support (touchstart/touchend)
 - [x] Beta notifications: daily digest option (admin toggle)
 - [x] Alignment Audit: "How my mind works" step after Q12
+
+## Mind Patterns — Server Persistence & Oracle Integration
+- [x] Add mindPatterns column to users table, migrate
+- [x] saveMindPatterns tRPC procedure
+- [x] Save patterns from Alignment Audit on completion
+- [x] Pass patterns as Oracle system context

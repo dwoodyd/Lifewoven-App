@@ -187,6 +187,7 @@ export default function AlignmentAudit() {
   const [mindPatterns, setMindPatterns] = useState<string[]>([]);
 
   const saveAudit = trpc.audit.save.useMutation({ onSuccess: () => toast.success("Results saved to your profile.") });
+  const saveMindPatterns = trpc.profile.saveMindPatterns.useMutation();
 
   const totalQ = CORE_QUESTIONS.length;
   const progress = step === "quiz" ? Math.round((currentQ / totalQ) * 100) : step === "results" ? 100 : 0;
@@ -385,7 +386,7 @@ export default function AlignmentAudit() {
             ))}
           </div>
           <div className="space-y-3">
-            <Button className="w-full" onClick={() => setStep("results")}>See my results →</Button>
+            <Button className="w-full" onClick={() => { if (isAuthenticated && mindPatterns.length > 0) saveMindPatterns.mutate({ patterns: mindPatterns }); setStep("results"); }}>See my results →</Button>
             <button onClick={() => setStep("results")} className="text-xs text-muted-foreground hover:text-foreground transition-colors w-full text-center">Skip this step</button>
           </div>
         </div>

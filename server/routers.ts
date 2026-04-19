@@ -464,6 +464,13 @@ const oracleRouter = router({
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
 
+      // Fetch user mind patterns for Oracle adaptation
+      const userRow = await db.select({ mindPatterns: users.mindPatterns }).from(users).where(eq(users.id, ctx.user.id)).limit(1);
+      const mindPats = (userRow[0]?.mindPatterns as string[] | null) ?? [];
+      const mindContext = mindPats.length > 0
+        ? `\n- How this user's mind works: ${mindPats.join(", ")}. Adapt your tone, pacing, and suggestions accordingly — shorter steps for scattered minds, gentler framing for overwhelmed ones, concrete first actions for those who struggle to start.`
+        : "";
+
       // Build system prompt with user context
       const systemPrompt = `You are the Lifewoven Oracle — a wise, warm, and deeply perceptive guide rooted in the Lifewoven 5S Framework. Use these canonical definitions consistently — they are the same definitions used throughout the Lifewoven platform:
 
@@ -484,7 +491,7 @@ You speak with warmth, precision, and wisdom. You ask powerful questions. You re
 User context:
 - Primary pathway: ${input.context?.primaryPathway ?? "not set"}
 - Recent emotional scores: ${input.context?.recentCheckIns?.map((c: any) => c.emotionalScore).join(", ") ?? "none"}
-- Habit streak: ${input.context?.habitStreak ?? 0} days`;
+- Habit streak: ${input.context?.habitStreak ?? 0} days${mindContext}`;
 
       // Get or build conversation history
       let messages: { role: string; content: string }[] = [];
@@ -868,6 +875,15 @@ const profileRouter = router({
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
       await db.update(users).set(input).where(eq(users.id, ctx.user.id));
+      return { success: true };
+    }),
+
+  saveMindPatterns: protectedProcedure
+    .input(z.object({ patterns: z.array(z.string()) }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database unavailable");
+      await db.update(users).set({ mindPatterns: input.patterns }).where(eq(users.id, ctx.user.id));
       return { success: true };
     }),
 
