@@ -91,8 +91,30 @@ function WordReveal({ text, active, baseDelay = 0, color, italic = false, fontSi
 function Slide1Art({ active }: { active: boolean }) {
   // Draggable dot state — t=0 is left edge, t=1 is right edge
   const [t, setT] = useState(0.5);
+  // Spring-interpolated t for smooth path morphing (works in all browsers)
+  const [springT, setSpringT] = useState(0.5);
+  const springRef = useRef(0.5);
+  const rafRef = useRef<number | null>(null);
   const dragging = useRef(false);
   const svgRef = useRef<SVGSVGElement>(null);
+
+  // Spring toward target t on every frame
+  useEffect(() => {
+    const stiffness = 0.18;
+    function tick() {
+      const diff = t - springRef.current;
+      if (Math.abs(diff) > 0.0005) {
+        springRef.current += diff * stiffness;
+        setSpringT(springRef.current);
+        rafRef.current = requestAnimationFrame(tick);
+      } else {
+        springRef.current = t;
+        setSpringT(t);
+      }
+    }
+    rafRef.current = requestAnimationFrame(tick);
+    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
+  }, [t]);
 
   // Convert SVG x coordinate (0–600) to t (0–1)
   const xToT = (svgX: number) => Math.max(0, Math.min(1, (svgX + 60) / 720));
@@ -124,12 +146,12 @@ function Slide1Art({ active }: { active: boolean }) {
     { color: T.stewardship, startY: 150, midY: 86, endY: 140, delay: 0.68, dur: 1.6 },
   ];
 
-  // Dot position: weighted average Y of all threads at t
-  const dotX = -60 + t * 720;
-  const dotY = threads.reduce((sum, th) => sum + bezierY(th.startY, th.midY, th.endY, t), 0) / threads.length;
+  // Dot position: use springT for smooth visual position
+  const dotX = -60 + springT * 720;
+  const dotY = threads.reduce((sum, th) => sum + bezierY(th.startY, th.midY, th.endY, springT), 0) / threads.length;
   // Active thread index: whichever thread is closest to the dot
   const activeThread = threads.reduce((best, th, i) => {
-    const dy = Math.abs(bezierY(th.startY, th.midY, th.endY, t) - dotY);
+    const dy = Math.abs(bezierY(th.startY, th.midY, th.endY, springT) - dotY);
     return dy < best.dy ? { i, dy } : best;
   }, { i: 0, dy: Infinity }).i;
 
@@ -190,24 +212,40 @@ function Slide1Art({ active }: { active: boolean }) {
           </filter>
         </defs>
         {threads.map((th, i) => {
-          const d = `M -60 ${th.startY} C 150 ${th.startY}, 260 ${th.midY}, 300 ${th.midY} S 450 ${th.endY}, 660 ${th.endY}`;
-          // Highlight the active thread slightly when dot is near it
+          // --- Weaving distortion ---
+          // The dot acts as a loom shuttle: each thread is pulled toward the dot's Y
+          // with a falloff based on horizontal distance. Threads above the dot pull down,
+          // threads below pull up — creating an over/under weave alternation.
           const isActive = i === activeThread;
+          const weavePull = 55; // max pixels of pull
+          const falloff = 180;  // horizontal influence radius in SVG units
+          const distX = Math.abs((-60 + springT * 720) - 300); // distance from center convergence point
+          const influence = Math.exp(-(distX * distX) / (2 * falloff * falloff));
+
+          // Alternate over/under: even threads go toward dot, odd threads go away
+          const direction = i % 2 === 0 ? 1 : -1;
+          const pull = weavePull * influence * direction * (dragging.current ? 1 : 0.3);
+
+          // Build a dynamic path: the mid-point is pulled by the weave
+          const wMidY = th.midY + pull;
+          // Also warp the control points near the dot X position
+          const wStartY = th.startY + pull * 0.15;
+          const wEndY = th.endY + pull * 0.15;
+          const d = `M -60 ${wStartY} C 150 ${wStartY}, 260 ${wMidY}, 300 ${wMidY} S 450 ${wEndY}, 660 ${wEndY}`;
+
           return (
             <g key={i}>
+              {/* Trail glow */}
               <path d={d} fill="none" stroke={th.color} strokeWidth="7" strokeLinecap="round"
-                strokeDasharray="900"
                 style={active ? {
-                  animation: `trailFly${i} ${th.dur + 0.15}s cubic-bezier(0.22,1,0.36,1) ${th.delay + 0.08}s both`,
                   opacity: isActive ? 0.32 : 0.18,
                 } : { opacity: 0 }} />
+              {/* Main thread */}
               <path d={d} fill="none" stroke={th.color} strokeWidth={isActive ? 3.5 : 2.2} strokeLinecap="round"
-                strokeDasharray="900"
                 filter={`url(#tglow${i})`}
                 style={active ? {
-                  animation: `threadFly${i} ${th.dur}s cubic-bezier(0.22,1,0.36,1) ${th.delay}s both`,
-                  opacity: isActive ? 1 : 0.75,
-                  transition: "stroke-width 0.2s, opacity 0.2s",
+                  opacity: isActive ? 1 : 0.82,
+                  transition: "stroke-width 0.15s, opacity 0.15s",
                 } : { opacity: 0 }} />
             </g>
           );
