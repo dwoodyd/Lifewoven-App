@@ -729,8 +729,10 @@ export default function OnboardingModal({ userId }: Props) {
     localStorage.setItem(DEVICE_KEY, "1");
     if (userId) localStorage.setItem(`${STORAGE_KEY}_${userId}`, "1");
     completeMutation.mutate({ recommendedPathway: "align" });
-    // Pop the history entry we pushed on open so the next navigate() lands cleanly
-    if (window.history.state?.onboarding) window.history.back();
+    // Replace (not pop) the onboarding history entry so browser Back doesn't reload
+    if (window.history.state?.onboarding) {
+      window.history.replaceState({}, "", window.location.pathname);
+    }
     setOpen(false);
   }
 
@@ -740,8 +742,7 @@ export default function OnboardingModal({ userId }: Props) {
     if (isLast) {
       if (!finished) { setFinished(true); return; }
       dismiss();
-      // Small delay so history.back() settles before wouter navigates
-      setTimeout(() => navigate("/alignment-audit"), 80);
+      navigate("/alignment-audit");
     } else {
       goNext();
     }
@@ -771,7 +772,7 @@ export default function OnboardingModal({ userId }: Props) {
           }}>
             Open your dashboard whenever you're ready. The system is waiting — and now it knows your name.
           </p>
-          <button onClick={() => { trackEvent.mutate({ event: "onboarding_complete", properties: {} }); dismiss(); setTimeout(() => navigate("/alignment-audit"), 80); }}
+          <button onClick={() => { trackEvent.mutate({ event: "onboarding_complete", properties: {} }); dismiss(); navigate("/alignment-audit"); }}
             style={{
               background: `linear-gradient(135deg, ${T.thread}, #c9a55a)`,
               color: "#1a1610", border: "none",
