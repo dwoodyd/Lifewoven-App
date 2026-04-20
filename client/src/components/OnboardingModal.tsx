@@ -89,8 +89,33 @@ function WordReveal({ text, active, baseDelay = 0, color, italic = false, fontSi
 
 /* ─── Slide 1 — Five threads flying across the screen ───────────── */
 function Slide1Art({ active }: { active: boolean }) {
-  // Each thread flies from far-left off-screen to far-right off-screen
-  // They converge toward center-right as they cross, creating a weaving effect
+  // Draggable dot state — t=0 is left edge, t=1 is right edge
+  const [t, setT] = useState(0.5);
+  const dragging = useRef(false);
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  // Convert SVG x coordinate (0–600) to t (0–1)
+  const xToT = (svgX: number) => Math.max(0, Math.min(1, (svgX + 60) / 720));
+
+  // Get point on cubic bezier path at parameter t
+  function bezierY(startY: number, midY: number, endY: number, t: number) {
+    // Simplified: use the same cubic formula as the SVG path
+    // M -60 startY C 150 startY, 260 midY, 300 midY S 450 endY, 660 endY
+    // Map t to x: x = -60 + t * 720
+    const x = -60 + t * 720;
+    if (x <= 300) {
+      // First cubic: from (-60,startY) to (300,midY) with CP (150,startY),(260,midY)
+      const lt = (x + 60) / 360; // 0..1 over first half
+      const mt = Math.max(0, Math.min(1, lt));
+      return (1-mt)**3 * startY + 3*(1-mt)**2*mt * startY + 3*(1-mt)*mt**2 * midY + mt**3 * midY;
+    } else {
+      // Second cubic: from (300,midY) to (660,endY) with reflected CP and (450,endY)
+      const lt = (x - 300) / 360;
+      const mt = Math.max(0, Math.min(1, lt));
+      return (1-mt)**3 * midY + 3*(1-mt)**2*mt * midY + 3*(1-mt)*mt**2 * endY + mt**3 * endY;
+    }
+  }
+
   const threads = [
     { color: T.state,       startY: 10,  midY: 78, endY: 20,  delay: 0,    dur: 1.6 },
     { color: T.story,       startY: 35,  midY: 80, endY: 55,  delay: 0.18, dur: 1.7 },
@@ -98,6 +123,34 @@ function Slide1Art({ active }: { active: boolean }) {
     { color: T.strategy,    startY: 125, midY: 84, endY: 105, delay: 0.52, dur: 1.7 },
     { color: T.stewardship, startY: 150, midY: 86, endY: 140, delay: 0.68, dur: 1.6 },
   ];
+
+  // Dot position: weighted average Y of all threads at t
+  const dotX = -60 + t * 720;
+  const dotY = threads.reduce((sum, th) => sum + bezierY(th.startY, th.midY, th.endY, t), 0) / threads.length;
+  // Active thread index: whichever thread is closest to the dot
+  const activeThread = threads.reduce((best, th, i) => {
+    const dy = Math.abs(bezierY(th.startY, th.midY, th.endY, t) - dotY);
+    return dy < best.dy ? { i, dy } : best;
+  }, { i: 0, dy: Infinity }).i;
+
+  function getSvgX(clientX: number) {
+    if (!svgRef.current) return 300;
+    const rect = svgRef.current.getBoundingClientRect();
+    const ratio = 600 / rect.width;
+    return (clientX - rect.left) * ratio;
+  }
+
+  function onPointerDown(e: React.PointerEvent) {
+    dragging.current = true;
+    (e.target as Element).setPointerCapture(e.pointerId);
+    setT(xToT(getSvgX(e.clientX)));
+  }
+  function onPointerMove(e: React.PointerEvent) {
+    if (!dragging.current) return;
+    setT(xToT(getSvgX(e.clientX)));
+  }
+  function onPointerUp() { dragging.current = false; }
+
   return (
     <div style={{ position: "relative", width: "100%", maxWidth: 580, margin: "0 auto 2rem", height: 160, overflow: "visible",
       animation: active ? "artPulse 0.45s cubic-bezier(0.34,1.56,0.64,1) 2.8s both" : "none",
@@ -116,8 +169,10 @@ function Slide1Art({ active }: { active: boolean }) {
         @keyframes orbPop { 0%,85%{r:0;opacity:0} 92%{r:12;opacity:1} 100%{r:9;opacity:1} }
         @keyframes artPulse { 0%{transform:scale(1)} 50%{transform:scale(1.045)} 100%{transform:scale(1)} }
         @keyframes sparkle { 0%{stroke-dashoffset:32;opacity:0} 60%{opacity:1} 100%{stroke-dashoffset:0;opacity:0} }
+        @keyframes dotPulse { 0%,100%{r:7} 50%{r:9} }
       `}</style>
-      <svg viewBox="0 0 600 160" style={{ width: "100%", height: "100%", overflow: "visible" }}>
+      <svg ref={svgRef} viewBox="0 0 600 160" style={{ width: "100%", height: "100%", overflow: "visible", cursor: "grab", touchAction: "none" }}
+        onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerLeave={onPointerUp}>
         <defs>
           {threads.map((_, i) => (
             <filter key={i} id={`tglow${i}`}>
@@ -129,47 +184,69 @@ function Slide1Art({ active }: { active: boolean }) {
             <feGaussianBlur stdDeviation="6" result="blur" />
             <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
           </filter>
+          <filter id="dotGlow">
+            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+          </filter>
         </defs>
-        {threads.map((t, i) => {
-          const d = `M -60 ${t.startY} C 150 ${t.startY}, 260 ${t.midY}, 300 ${t.midY} S 450 ${t.endY}, 660 ${t.endY}`;
+        {threads.map((th, i) => {
+          const d = `M -60 ${th.startY} C 150 ${th.startY}, 260 ${th.midY}, 300 ${th.midY} S 450 ${th.endY}, 660 ${th.endY}`;
+          // Highlight the active thread slightly when dot is near it
+          const isActive = i === activeThread;
           return (
             <g key={i}>
-              {/* Trail — wider, lower opacity, slight delay behind the main thread */}
-              <path d={d} fill="none" stroke={t.color} strokeWidth="7" strokeLinecap="round"
+              <path d={d} fill="none" stroke={th.color} strokeWidth="7" strokeLinecap="round"
                 strokeDasharray="900"
                 style={active ? {
-                  animation: `trailFly${i} ${t.dur + 0.15}s cubic-bezier(0.22,1,0.36,1) ${t.delay + 0.08}s both`,
+                  animation: `trailFly${i} ${th.dur + 0.15}s cubic-bezier(0.22,1,0.36,1) ${th.delay + 0.08}s both`,
+                  opacity: isActive ? 0.32 : 0.18,
                 } : { opacity: 0 }} />
-              {/* Main thread */}
-              <path d={d} fill="none" stroke={t.color} strokeWidth="2.2" strokeLinecap="round"
+              <path d={d} fill="none" stroke={th.color} strokeWidth={isActive ? 3.5 : 2.2} strokeLinecap="round"
                 strokeDasharray="900"
                 filter={`url(#tglow${i})`}
                 style={active ? {
-                  animation: `threadFly${i} ${t.dur}s cubic-bezier(0.22,1,0.36,1) ${t.delay}s both`,
+                  animation: `threadFly${i} ${th.dur}s cubic-bezier(0.22,1,0.36,1) ${th.delay}s both`,
+                  opacity: isActive ? 1 : 0.75,
+                  transition: "stroke-width 0.2s, opacity 0.2s",
                 } : { opacity: 0 }} />
             </g>
           );
         })}
-        {/* Convergence orb — pops at the crossing point */}
+        {/* Convergence orb */}
         <circle cx="300" cy="82" r="0" fill={T.thread} filter="url(#orbGlow)"
-          style={active ? {
-            animation: `orbPop 2.6s cubic-bezier(0.22,1,0.36,1) 0.4s both`,
-          } : { opacity: 0 }} />
-        {/* Sparkle burst — 8 radial lines shoot out on orb pop */}
+          style={active ? { animation: `orbPop 2.6s cubic-bezier(0.22,1,0.36,1) 0.4s both` } : { opacity: 0 }} />
+        {/* Sparkle burst */}
         {active && [0,45,90,135,180,225,270,315].map((angle, i) => {
           const rad = angle * Math.PI / 180;
-          const x1 = 300 + Math.cos(rad) * 14;
-          const y1 = 82  + Math.sin(rad) * 14;
-          const x2 = 300 + Math.cos(rad) * 30;
-          const y2 = 82  + Math.sin(rad) * 30;
-          return (
-            <line key={i} x1={x1} y1={y1} x2={x2} y2={y2}
-              stroke={T.thread} strokeWidth="1.5" strokeLinecap="round"
-              strokeDasharray="32"
-              style={{ animation: `sparkle 0.55s cubic-bezier(0.22,1,0.36,1) ${2.85 + i * 0.03}s both` }} />
-          );
+          const x1 = 300 + Math.cos(rad) * 14; const y1 = 82 + Math.sin(rad) * 14;
+          const x2 = 300 + Math.cos(rad) * 30; const y2 = 82 + Math.sin(rad) * 30;
+          return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2}
+            stroke={T.thread} strokeWidth="1.5" strokeLinecap="round" strokeDasharray="32"
+            style={{ animation: `sparkle 0.55s cubic-bezier(0.22,1,0.36,1) ${2.85 + i * 0.03}s both` }} />;
         })}
+        {/* Interactive draggable dot — appears after animation settles */}
+        {active && dotX >= -60 && dotX <= 660 && (
+          <g style={{ cursor: "grab", transition: "transform 0.05s" }}>
+            {/* Glow ring */}
+            <circle cx={dotX} cy={dotY} r="14" fill="none"
+              stroke={threads[activeThread].color} strokeWidth="1" opacity="0.4"
+              filter="url(#dotGlow)" />
+            {/* Main dot */}
+            <circle cx={dotX} cy={dotY} r="7"
+              fill={threads[activeThread].color}
+              filter="url(#dotGlow)"
+              style={{ animation: dragging.current ? "none" : "dotPulse 2s ease-in-out infinite" }} />
+            {/* White center highlight */}
+            <circle cx={dotX - 2} cy={dotY - 2} r="2" fill="white" opacity="0.7" />
+          </g>
+        )}
       </svg>
+      {/* Hint label */}
+      {active && (
+        <div style={{ textAlign: "center", marginTop: "-0.5rem", color: T.muted, fontSize: "0.62rem", letterSpacing: "0.12em", textTransform: "uppercase", opacity: 0.6, pointerEvents: "none", animation: "fadeUp 1s ease 3.5s both" }}>
+          drag the dot
+        </div>
+      )}
     </div>
   );
 }

@@ -92,6 +92,7 @@ export default function Dashboard() {
   const currentEmotion = EGS_EMOTIONS.find(e => e.level <= emotionalScore) ?? EGS_EMOTIONS[EGS_EMOTIONS.length - 1];
   const greeting = () => { const h = new Date().getHours(); return h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening"; };
   const { hasAccess, daysLeft } = useBetaAccess();
+  const { data: myReferral } = trpc.referral.myTrialCode.useQuery(undefined, { retry: false });
 
   const hasHabits = habits && habits.length > 0;
   const hasJournal = dashData?.recentJournals && dashData.recentJournals.length > 0;
@@ -144,6 +145,19 @@ export default function Dashboard() {
           </button>
         </div>
 
+        {/* 7-day expiry warning banner */}
+        {hasAccess && daysLeft !== null && daysLeft <= 7 && daysLeft > 0 && (
+          <div className="mb-4 flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-red-500/30 bg-red-500/8">
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-red-400 shrink-0" />
+              <span className="text-sm text-red-300">Your beta trial ends in <strong>{daysLeft} day{daysLeft !== 1 ? "s" : ""}</strong>. Upgrade to keep full access.</span>
+            </div>
+            <Link href="/pricing">
+              <button className="text-xs font-semibold text-red-400 border border-red-500/40 rounded-full px-3 py-1 hover:bg-red-500/15 transition-colors shrink-0">Upgrade</button>
+            </Link>
+          </div>
+        )}
+
         {/* Greeting + check-in */}
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-6">
           <div className="min-w-0">
@@ -164,6 +178,14 @@ export default function Dashboard() {
                   <span className={`text-xs font-medium ${daysLeft <= 7 ? "text-red-400" : "text-amber-400"}`}>
                     {daysLeft}d beta
                   </span>
+                </div>
+              </Link>
+            )}
+            {myReferral?.eligible && myReferral.redeemedCount > 0 && (
+              <Link href="/referrals">
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500/15 transition-colors cursor-pointer">
+                  <Heart className="h-3.5 w-3.5 text-emerald-400" />
+                  <span className="text-xs font-medium text-emerald-400">{myReferral.redeemedCount} gifted</span>
                 </div>
               </Link>
             )}

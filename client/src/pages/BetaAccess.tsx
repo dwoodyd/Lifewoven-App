@@ -12,7 +12,12 @@ import Nav from "@/components/Nav";
 export default function BetaAccess() {
   const { user } = useAuth();
   const [, navigate] = useLocation();
-  const [code, setCode] = useState("");
+  // Auto-fill code from ?ref= or ?code= query param
+  const initialCode = typeof window !== "undefined"
+    ? new URLSearchParams(window.location.search).get("ref") ||
+      new URLSearchParams(window.location.search).get("code") || ""
+    : "";
+  const [code, setCode] = useState(initialCode);
   const [success, setSuccess] = useState<{ expiresAt: Date; durationDays: number } | null>(null);
 
   const redeemMutation = trpc.beta.redeemCode.useMutation({

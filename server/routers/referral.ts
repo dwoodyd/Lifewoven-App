@@ -110,7 +110,7 @@ export const referralRouter = router({
 
     const redeemed = await db.select({ cnt: sql<number>`COUNT(*)` })
       .from(referralCodes)
-      .where(eq(referralCodes.ownerId, ctx.user.id));
+      .where(sql`${referralCodes.ownerId} = ${ctx.user.id} AND ${referralCodes.redeemedBy} IS NOT NULL`);
 
     return { code: rows[0].code, eligible: true, redeemedCount: Number(redeemed[0]?.cnt ?? 0) };
   }),
