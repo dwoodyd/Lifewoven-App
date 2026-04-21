@@ -140,11 +140,11 @@ function Slide1Art({ active }: { active: boolean }) {
   }
 
   const threads = [
-    { color: T.state,       startY: 10,  midY: 78, endY: 20,  delay: 0,    dur: 1.6 },
-    { color: T.story,       startY: 35,  midY: 80, endY: 55,  delay: 0.18, dur: 1.7 },
-    { color: T.standards,   startY: 80,  midY: 82, endY: 80,  delay: 0.35, dur: 1.8 },
-    { color: T.strategy,    startY: 125, midY: 84, endY: 105, delay: 0.52, dur: 1.7 },
-    { color: T.stewardship, startY: 150, midY: 86, endY: 140, delay: 0.68, dur: 1.6 },
+    { color: T.state,       startY: 10,  midY: 78, endY: 20,  delay: 0,    dur: 1.6, label: "State",       desc: "Your interior emotional world" },
+    { color: T.story,       startY: 35,  midY: 80, endY: 55,  delay: 0.18, dur: 1.7, label: "Story",       desc: "The narrative you live inside" },
+    { color: T.standards,   startY: 80,  midY: 82, endY: 80,  delay: 0.35, dur: 1.8, label: "Standards",   desc: "The values that guide your choices" },
+    { color: T.strategy,    startY: 125, midY: 84, endY: 105, delay: 0.52, dur: 1.7, label: "Strategy",    desc: "The systems that move you forward" },
+    { color: T.stewardship, startY: 150, midY: 86, endY: 140, delay: 0.68, dur: 1.6, label: "Stewardship", desc: "How you care for what you've built" },
   ];
 
   // Dot position: use springT for smooth visual position
@@ -280,10 +280,56 @@ function Slide1Art({ active }: { active: boolean }) {
           </g>
         )}
       </svg>
-      {/* Hint label */}
+      {/* 5S thread label tooltip — shows above the dot */}
       {active && (
-        <div style={{ textAlign: "center", marginTop: "-0.5rem", color: T.muted, fontSize: "0.62rem", letterSpacing: "0.12em", textTransform: "uppercase", opacity: 0.6, pointerEvents: "none", animation: "fadeUp 1s ease 3.5s both" }}>
-          drag the dot
+        <div style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          pointerEvents: "none",
+          overflow: "visible",
+        }}>
+          {/* Floating label that follows dot X position */}
+          <div style={{
+            position: "absolute",
+            // Convert SVG dotX (−60..660) to % of container width
+            left: `${Math.max(8, Math.min(92, ((dotX + 60) / 720) * 100))}%`,
+            top: `${Math.max(0, (dotY / 160) * 100 - 28)}%`,
+            transform: "translateX(-50%)",
+            background: threads[activeThread].color,
+            color: "#fff",
+            borderRadius: 8,
+            padding: "3px 10px",
+            fontSize: "0.65rem",
+            fontWeight: 700,
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+            whiteSpace: "nowrap",
+            boxShadow: `0 2px 12px ${threads[activeThread].color}66`,
+            opacity: dragging.current ? 1 : 0.85,
+            transition: "left 0.06s, top 0.06s, background 0.2s, opacity 0.2s",
+            animation: "fadeUp 1s ease 3.5s both",
+          }}>
+            {threads[activeThread].label}
+          </div>
+          {/* Description line below */}
+          <div style={{
+            position: "absolute",
+            left: "50%",
+            bottom: "-1.4rem",
+            transform: "translateX(-50%)",
+            color: threads[activeThread].color,
+            fontSize: "0.6rem",
+            letterSpacing: "0.06em",
+            whiteSpace: "nowrap",
+            opacity: 0.7,
+            transition: "color 0.2s",
+            animation: "fadeUp 1s ease 3.5s both",
+          }}>
+            {threads[activeThread].desc}
+          </div>
         </div>
       )}
     </div>

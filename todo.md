@@ -382,3 +382,8 @@
 - [x] Loom farewell weave on slide 7
 - [x] Loom ambient presence on Dashboard
 - [x] Loom ambient presence on Oracle page
+
+## Loom Expansion
+- [x] 5S label tooltip on slide 1 draggable dot
+- [x] Loom pulse on Alignment Audit answers
+- [x] Loom celebration on Pathways step completion

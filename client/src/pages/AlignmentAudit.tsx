@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
+import { LoomCorner } from "@/components/Loom";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -185,6 +186,7 @@ export default function AlignmentAudit() {
   const [optionalQ, setOptionalQ] = useState(0);
   const [result, setResult] = useState<{ profile: Profile; scores: ReturnType<typeof computeScores>; frictionTags: string[] } | null>(null);
   const [mindPatterns, setMindPatterns] = useState<string[]>([]);
+  const [loomPulse, setLoomPulse] = useState(false);
 
   const saveAudit = trpc.audit.save.useMutation({ onSuccess: () => toast.success("Results saved to your profile.") });
   const saveMindPatterns = trpc.profile.saveMindPatterns.useMutation();
@@ -203,6 +205,8 @@ export default function AlignmentAudit() {
   function handleAnswer(qId: number, value: ScaleValue) {
     const updated = { ...answers, [qId]: value };
     setAnswers(updated);
+    setLoomPulse(true);
+    setTimeout(() => setLoomPulse(false), 900);
     if (currentQ < totalQ - 1) { setTimeout(() => setCurrentQ(q => q + 1), 280); }
     else { finalize(updated); }
   }
@@ -471,9 +475,8 @@ export default function AlignmentAudit() {
             </p>
           </div>
         </div>
-      </div>
+       </div>
     );
   }
-
-  return null;
+  return <LoomCorner pulse={loomPulse} />;
 }
