@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
+import { Loom, type LoomState } from "@/components/Loom";
 
 /* ─── Ambient sound engine (Web Audio API — no external files) ───── */
 function createAmbientEngine() {
@@ -720,6 +721,7 @@ export default function OnboardingModal({ userId }: Props) {
   const [btnIn, setBtnIn]       = useState(false);
   const [transitioning, setTransitioning] = useState(false);
   const [finished, setFinished] = useState(false);
+  const [loomState, setLoomState] = useState<LoomState>("hidden");
   const glowRef = useRef<HTMLDivElement>(null);
   const completeMutation = trpc.profile.completeOnboarding.useMutation();
   const SOUND_KEY = "lifewoven_onboarding_sound";
@@ -771,6 +773,16 @@ export default function OnboardingModal({ userId }: Props) {
     const t1 = setTimeout(() => setArtIn(true), 60);
     const t2 = setTimeout(() => setTextIn(true), 200);
     const t3 = setTimeout(() => setBtnIn(true), 1200);
+    // Loom state per slide
+    if (idx === 0) {
+      setLoomState("emerge");
+    } else if (idx === SLIDES.length - 1) {
+      setLoomState("farewell");
+    } else {
+      setLoomState("react");
+      const tr = setTimeout(() => setLoomState("idle"), 800);
+      return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(tr); };
+    }
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, [open, idx]);
 
@@ -946,6 +958,11 @@ export default function OnboardingModal({ userId }: Props) {
           to   { opacity: 1; transform: translateX(0); }
         }
       `}</style>
+
+      {/* Loom mascot — bottom-right corner */}
+      <div style={{ position: "absolute", bottom: 72, right: 20, zIndex: 50, pointerEvents: "none" }}>
+        <Loom state={loomState} size={56} />
+      </div>
 
       {/* Ambient threads */}
       <AmbientThreads />

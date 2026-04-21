@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
+import { LoomCorner } from "@/components/Loom";
 import { useAuth } from "@/_core/hooks/useAuth";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
@@ -53,6 +54,7 @@ export default function Oracle() {
     return localStorage.getItem("oracle_consent") === "true";
   });
   const [mode, setMode] = useState<OracleMode>("guide");
+  const [loomPulse, setLoomPulse] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const insights = trpc.oracle.insights.useQuery(undefined, { enabled: isAuthenticated && hasConsented });
@@ -61,6 +63,8 @@ export default function Oracle() {
     onSuccess: (data: any) => {
       setMessages(prev => [...prev, { role: "assistant", content: data.reply }]);
       setIsLoading(false);
+      setLoomPulse(true);
+      setTimeout(() => setLoomPulse(false), 800);
     },
     onError: () => { toast.error("Oracle is unavailable. Try again."); setIsLoading(false); },
   });
@@ -351,6 +355,7 @@ export default function Oracle() {
           </div>
         )}
       </div>
+      <LoomCorner size={52} pulse={loomPulse} tooltip="Loom listens" />
     </div>
   );
 }

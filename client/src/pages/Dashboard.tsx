@@ -43,6 +43,8 @@ const MODULE_CONFIG = [
   { key: "stewardship", label: "Stewardship", icon: Leaf, color: "text-stewardship", bg: "bg-stewardship/10", href: "/stewardship" },
 ];
 
+import { LoomCorner } from "@/components/Loom";
+
 export default function Dashboard() {
   const { user, isAuthenticated } = useAuth();
   const [showCheckIn, setShowCheckIn] = useState(false);
@@ -124,6 +126,7 @@ export default function Dashboard() {
   }
 
   return (
+    <>
     <div className="min-h-screen bg-background">
       {showReentry && (
         <ReentryFlow
@@ -437,5 +440,7 @@ export default function Dashboard() {
         </div>
       </div>
     </div>
+    <LoomCorner size={52} tooltip="Loom is with you" />
+    </>
   );
 }

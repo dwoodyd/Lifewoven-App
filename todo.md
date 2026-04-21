@@ -375,3 +375,10 @@
 - [x] Weekly cron for beta expiry check (every Monday 9am)
 - [x] Mailto links in Early Adopters table
 - [x] 30-day referral code system (DB table, generate/redeem, UI for converted users)
+
+## Loom Mascot
+- [x] Loom SVG mascot component (idle, react, emerge states)
+- [x] Loom emerges from slide 1 threads in onboarding
+- [x] Loom farewell weave on slide 7
+- [x] Loom ambient presence on Dashboard
+- [x] Loom ambient presence on Oracle page
