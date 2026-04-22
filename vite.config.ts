@@ -157,8 +157,17 @@ const vitePWA = VitePWA({
   devOptions: { enabled: false },
   // Workbox config: cache app shell + assets
   workbox: {
-    globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
+    // Raise the precache size limit to 4 MiB to accommodate the main bundle
+    maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
+    // Only precache small assets; large JS chunks are served from network
+    globPatterns: ["**/*.{css,html,ico,png,svg,woff2}"],
     runtimeCaching: [
+      {
+        // Cache JS chunks at runtime with StaleWhileRevalidate for fast loads
+        urlPattern: /\/assets\/.*\.js$/,
+        handler: "StaleWhileRevalidate",
+        options: { cacheName: "js-chunks", expiration: { maxEntries: 80, maxAgeSeconds: 60 * 60 * 24 * 7 } },
+      },
       {
         urlPattern: /^\/manus-storage\//,
         handler: "NetworkFirst",
