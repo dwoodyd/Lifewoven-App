@@ -99,7 +99,7 @@ export default function StrategyModule() {
                     </div>
                   ))}
                 </div>
-              ) : <div className="text-center py-8"><p className="text-sm text-muted-foreground">No decisions captured yet.</p></div>}
+              ) : <div className="text-center py-10 px-4"><p className="text-sm font-medium text-foreground mb-2">No decisions captured yet.</p><p className="text-sm text-muted-foreground max-w-xs mx-auto">Start with a real decision you’re facing right now. Write it out, map the consequences, and let the framework help you see past the obvious choice.</p></div>}
             </div>
             <div className="p-6 rounded-2xl border border-border bg-card">
               <div className="flex items-center gap-2 mb-2"><Lightbulb className="h-4 w-4 text-muted-foreground" /><h2 className="font-serif text-xl font-light text-foreground">Leverage Mapper</h2></div>

@@ -106,7 +106,7 @@ export default function StandardsModule() {
                     );
                   })}
                 </div>
-              ) : <div className="text-center py-8"><p className="text-sm text-muted-foreground">No habits yet. Build your Stack above.</p></div>}
+              ) : <div className="text-center py-10 px-4"><p className="text-sm font-medium text-foreground mb-2">No habits in your stack yet.</p><p className="text-sm text-muted-foreground max-w-xs mx-auto">Start small. Add one habit you want to do every day — something so easy you can’t say no to it. Consistency compounds.</p></div>}
             </div>
             <div className="p-6 rounded-2xl border border-border bg-card">
               <h2 className="font-serif text-xl font-light text-foreground mb-2">The Four Laws of Behavior Change</h2>

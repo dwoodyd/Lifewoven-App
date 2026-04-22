@@ -230,52 +230,28 @@ export default function AlignmentAudit() {
   const q = CORE_QUESTIONS[currentQ];
   const oq = OPTIONAL_QUESTIONS[optionalQ];
 
-  if (step === "entry") return (
+  if (step === "entry" || step === "consent" || step === "preframe") return (
     <div className="min-h-screen bg-background">
       <Nav />
       <div className="container max-w-xl mx-auto pt-24 pb-20 text-center px-4 sm:px-6">
         <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Lifewoven · Alignment Audit</p>
         <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-6 leading-tight">Find your clearest<br />place to begin.</h1>
-        <p className="text-muted-foreground text-base leading-relaxed mb-8 max-w-md mx-auto">The Alignment Audit identifies where friction is highest in your life right now — and recommends the most honest place to start inside Lifewoven.</p>
-        <div className="flex items-center justify-center gap-3 mb-8 flex-wrap">
+        <p className="text-muted-foreground text-base leading-relaxed mb-6 max-w-md mx-auto">The Alignment Audit identifies where friction is highest in your life right now — and recommends the most honest place to start inside Lifewoven. There are four short sections. Answer as honestly as you can — this only works if you are real with it.</p>
+        <div className="flex items-center justify-center gap-3 mb-6 flex-wrap">
           {["12 questions", "3 to 5 minutes", "Free, no account required"].map(tag => (
             <span key={tag} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border text-xs text-muted-foreground">
               <span className="w-1.5 h-1.5 rounded-full bg-accent inline-block" /> {tag}
             </span>
           ))}
         </div>
-        <Button size="lg" className="gap-2 px-8" onClick={() => setStep("consent")}>Begin the Audit <ArrowRight className="h-4 w-4" /></Button>
-        <p className="text-xs text-muted-foreground mt-4">Your responses stay private and are used only to personalize your experience if you choose.</p>
-      </div>
-    </div>
-  );
-
-  if (step === "consent") return (
-    <div className="min-h-screen bg-background">
-      <Nav />
-      <div className="container max-w-xl mx-auto pt-24 pb-20 px-4 sm:px-6">
-        <div className="p-5 sm:p-8 rounded-2xl border border-border bg-card">
-          <h2 className="font-serif text-xl sm:text-2xl font-light text-foreground mb-4">One quick thing before we begin.</h2>
-          <p className="text-muted-foreground mb-4 leading-relaxed">With your permission, your responses can be used to personalize your recommendations inside Lifewoven. You can change this any time in settings.</p>
-          <p className="text-sm text-muted-foreground mb-8 leading-relaxed">Lifewoven uses your responses only to guide your experience. This audit is not a diagnosis.</p>
-          <div className="space-y-3">
-            <Button className="w-full gap-2" onClick={() => setStep("preframe")}><CheckCircle2 className="h-4 w-4" /> Yes, personalize my experience</Button>
-            <Button variant="outline" className="w-full" onClick={() => setStep("preframe")}>Not now</Button>
-          </div>
+        <div className="p-4 rounded-xl border border-border bg-card text-left mb-6">
+          <p className="text-sm font-medium text-foreground mb-1">A note on personalization</p>
+          <p className="text-sm text-muted-foreground leading-relaxed">Your responses can be used to personalize your recommendations inside Lifewoven. This audit is not a diagnosis. You can change this preference any time in settings.</p>
         </div>
-      </div>
-    </div>
-  );
-
-  if (step === "preframe") return (
-    <div className="min-h-screen bg-background">
-      <Nav />
-      <div className="container max-w-xl mx-auto pt-24 pb-20 text-center px-4 sm:px-6">
-        <div className="p-5 sm:p-8 rounded-2xl border border-border bg-card">
-          <p className="font-serif text-xl font-light text-foreground mb-4">There are four short sections.</p>
-          <p className="text-muted-foreground leading-relaxed mb-8">Answer as honestly as you can. This only works if you are real with it.</p>
-          <Button size="lg" className="gap-2 px-8" onClick={() => setStep("quiz")}>I'm ready <ArrowRight className="h-4 w-4" /></Button>
+        <div className="space-y-3 mb-4">
+          <Button size="lg" className="w-full gap-2" onClick={() => setStep("quiz")}><CheckCircle2 className="h-4 w-4" /> Begin the Audit <ArrowRight className="h-4 w-4" /></Button>
         </div>
+        <p className="text-xs text-muted-foreground">Your responses stay private and are used only to guide your experience.</p>
       </div>
     </div>
   );

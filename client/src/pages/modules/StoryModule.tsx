@@ -121,7 +121,10 @@ export default function StoryModule() {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-8"><p className="text-sm text-muted-foreground">No beliefs captured yet. Start by adding one above.</p></div>
+                <div className="text-center py-10 px-4">
+                  <p className="text-sm font-medium text-foreground mb-2">No beliefs captured yet.</p>
+                  <p className="text-sm text-muted-foreground max-w-xs mx-auto">A good place to start: write a belief you hold about yourself that has been limiting your progress. Be honest — this is private.</p>
+                </div>
               )}
             </div>
 

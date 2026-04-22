@@ -57,13 +57,20 @@ export default function Journal() {
     onError: () => setIsGettingReflection(false),
   });
 
+  // Auto-generate a title from the first 6–8 words of content when none is provided
+  function autoTitle(text: string): string {
+    const words = text.trim().split(/\s+/).slice(0, 7).join(" ");
+    return words.length < text.trim().length ? words + "\u2026" : words;
+  }
+
   const handleGetReflection = () => {
     if (!content.trim()) return;
     setIsGettingReflection(true);
+    const resolvedTitle = title.trim() || autoTitle(content);
     // First save the entry, then reflect on it
     createEntry.mutate(
-      { title: title || undefined, content, module: selectedModule as any || undefined, tags: tags ? tags.split(",").map(t => t.trim()).filter(Boolean) : undefined },
-      { onSuccess: () => { /* entry saved, but we need the id - use a workaround via direct reflection */ getReflection.mutate({ entryId: 0, content }); } }
+      { title: resolvedTitle, content, module: selectedModule as any || undefined, tags: tags ? tags.split(",").map(t => t.trim()).filter(Boolean) : undefined },
+      { onSuccess: () => { getReflection.mutate({ entryId: 0, content }); } }
     );
   };
 
@@ -120,7 +127,7 @@ export default function Journal() {
             )}
             <div className="flex gap-2 flex-wrap">
               <VoiceRecorder onTranscription={(text) => setContent(prev => prev ? prev + "\n\n" + text : text)} />
-              <Button onClick={() => createEntry.mutate({ title: title || undefined, content, module: selectedModule as any || undefined, tags: tags ? tags.split(",").map(t => t.trim()).filter(Boolean) : undefined })} disabled={!content.trim() || createEntry.isPending} className="gap-2">
+              <Button onClick={() => createEntry.mutate({ title: title.trim() || autoTitle(content), content, module: selectedModule as any || undefined, tags: tags ? tags.split(",").map(t => t.trim()).filter(Boolean) : undefined })} disabled={!content.trim() || createEntry.isPending} className="gap-2">
                 {createEntry.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Pencil className="h-4 w-4" />} Save Entry
               </Button>
               <Button variant="outline" onClick={handleGetReflection} disabled={!content.trim() || isGettingReflection} className="gap-2">

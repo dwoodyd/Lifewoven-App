@@ -6,10 +6,10 @@ import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
 import {
   Sparkles, Send, Loader2, RefreshCw, BookOpen, Brain, Heart, Zap,
   AlertCircle, TrendingUp, MessageSquare, BarChart3, Shield, ChevronRight,
+  RotateCcw, PhoneCall,
 } from "lucide-react";
 import { Streamdown } from "streamdown";
 import { Link } from "wouter";
@@ -41,7 +41,10 @@ const WISDOM_SOURCES = [
   { icon: Zap, label: "Behavioral Science", desc: "Identity-based habit formation — systems over goals" },
 ];
 
-type Message = { role: "user" | "assistant"; content: string };
+// Crisis keywords — triggers a safety resource prompt instead of LLM call
+const CRISIS_KEYWORDS = /\b(suicid|kill myself|end my life|don't want to be here|want to die|self.harm|hurt myself|no reason to live|can't go on)\b/i;
+
+type Message = { role: "user" | "assistant"; content: string; error?: boolean; crisis?: boolean };
 type OracleMode = "guide" | "unstuck" | "patterns";
 
 export default function Oracle() {
@@ -55,18 +58,29 @@ export default function Oracle() {
   });
   const [mode, setMode] = useState<OracleMode>("guide");
   const [loomPulse, setLoomPulse] = useState(false);
+  const [lastUserMessage, setLastUserMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const insights = trpc.oracle.insights.useQuery(undefined, { enabled: isAuthenticated && hasConsented });
 
   const chat = trpc.oracle.chat.useMutation({
     onSuccess: (data: any) => {
-      setMessages(prev => [...prev, { role: "assistant", content: data.reply }]);
+      setMessages(prev => [...prev.filter(m => !m.error), { role: "assistant", content: data.reply }]);
       setIsLoading(false);
       setLoomPulse(true);
       setTimeout(() => setLoomPulse(false), 800);
     },
-    onError: () => { toast.error("Oracle is unavailable. Try again."); setIsLoading(false); },
+    onError: () => {
+      setMessages(prev => [
+        ...prev.filter(m => !m.error),
+        {
+          role: "assistant",
+          content: "The Oracle couldn't reach you just now. This sometimes happens under heavy load.",
+          error: true,
+        },
+      ]);
+      setIsLoading(false);
+    },
   });
 
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
@@ -78,14 +92,42 @@ export default function Oracle() {
 
   const sendMessage = (content: string) => {
     if (!content.trim() || isLoading) return;
+
+    // Crisis safety check — route to human resources, do not call LLM
+    if (CRISIS_KEYWORDS.test(content)) {
+      setMessages(prev => [
+        ...prev,
+        { role: "user", content },
+        {
+          role: "assistant",
+          content: "crisis",
+          crisis: true,
+        },
+      ]);
+      setInput("");
+      return;
+    }
+
     const modePrefix = mode === "unstuck"
       ? "[UNSTUCK MODE] The user is feeling stuck. Respond with compassionate, practical guidance that helps them identify what is blocking them and one small next step. Do not lecture. Do not overwhelm. "
       : "";
-    const newMessages: Message[] = [...messages, { role: "user", content }];
+    const cleanMessages = messages.filter(m => !m.error);
+    const newMessages: Message[] = [...cleanMessages, { role: "user", content }];
     setMessages(newMessages);
+    setLastUserMessage(content);
     setInput("");
     setIsLoading(true);
     chat.mutate({ message: modePrefix + content });
+  };
+
+  const retryLastMessage = () => {
+    if (!lastUserMessage || isLoading) return;
+    setMessages(prev => prev.filter(m => !m.error));
+    setIsLoading(true);
+    const modePrefix = mode === "unstuck"
+      ? "[UNSTUCK MODE] The user is feeling stuck. Respond with compassionate, practical guidance that helps them identify what is blocking them and one small next step. Do not lecture. Do not overwhelm. "
+      : "";
+    chat.mutate({ message: modePrefix + lastUserMessage });
   };
 
   if (!isAuthenticated) {
@@ -235,7 +277,7 @@ export default function Oracle() {
 
             {/* Unstuck mode banner */}
             {mode === "unstuck" && (
-              <div className="rounded-xl border border-orange-200/40 bg-orange-50/20 p-4">
+              <div className="rounded-xl border border-orange-200/40 bg-orange-50/5 p-4">
                 <div className="flex items-start gap-2.5">
                   <AlertCircle className="h-4 w-4 text-orange-400 mt-0.5 shrink-0" />
                   <div>
@@ -300,18 +342,66 @@ export default function Oracle() {
                   </div>
                 </div>
               ) : (
-                messages.map((msg, i) => (
-                  <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                    {msg.role === "assistant" && (
-                      <div className="w-7 h-7 rounded-full bg-accent/10 flex items-center justify-center mr-2 mt-1 shrink-0">
-                        <Sparkles className="h-3.5 w-3.5 text-accent" />
+                messages.map((msg, i) => {
+                  // Crisis safety card
+                  if (msg.crisis) {
+                    return (
+                      <div key={i} className="flex justify-start">
+                        <div className="w-7 h-7 rounded-full bg-red-500/10 flex items-center justify-center mr-2 mt-1 shrink-0">
+                          <PhoneCall className="h-3.5 w-3.5 text-red-400" />
+                        </div>
+                        <div className="max-w-[85%] p-4 rounded-2xl rounded-bl-sm bg-red-50/10 border border-red-300/20 text-sm leading-relaxed space-y-3">
+                          <p className="font-medium text-foreground">I hear you. What you're feeling matters deeply.</p>
+                          <p className="text-muted-foreground font-light">
+                            The Oracle is not equipped to provide crisis support — but real, caring humans are available right now.
+                          </p>
+                          <div className="space-y-1.5">
+                            <p className="text-sm font-medium text-foreground">If you're in the US:</p>
+                            <p className="text-sm text-muted-foreground">Call or text <strong className="text-foreground">988</strong> — Suicide &amp; Crisis Lifeline, available 24/7.</p>
+                            <p className="text-sm text-muted-foreground">Crisis Text Line: Text <strong className="text-foreground">HOME</strong> to <strong className="text-foreground">741741</strong>.</p>
+                          </div>
+                          <p className="text-xs text-muted-foreground/70 italic">Please reach out to one of these resources. You deserve real support.</p>
+                        </div>
                       </div>
-                    )}
-                    <div className={`max-w-[80%] p-4 rounded-2xl text-sm leading-relaxed ${msg.role === "user" ? "bg-foreground text-background rounded-br-sm" : "bg-card border border-border rounded-bl-sm"}`}>
-                      {msg.role === "assistant" ? <Streamdown>{msg.content}</Streamdown> : msg.content}
+                    );
+                  }
+                  // Error card with retry
+                  if (msg.error) {
+                    return (
+                      <div key={i} className="flex justify-start">
+                        <div className="w-7 h-7 rounded-full bg-accent/10 flex items-center justify-center mr-2 mt-1 shrink-0">
+                          <Sparkles className="h-3.5 w-3.5 text-accent" />
+                        </div>
+                        <div className="max-w-[80%] p-4 rounded-2xl rounded-bl-sm bg-card border border-border/60 text-sm space-y-3">
+                          <p className="text-muted-foreground italic">{msg.content}</p>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="gap-1.5 h-7 text-xs"
+                            onClick={retryLastMessage}
+                            disabled={isLoading}
+                          >
+                            <RotateCcw className="h-3 w-3" />
+                            Try again
+                          </Button>
+                        </div>
+                      </div>
+                    );
+                  }
+                  // Normal message
+                  return (
+                    <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                      {msg.role === "assistant" && (
+                        <div className="w-7 h-7 rounded-full bg-accent/10 flex items-center justify-center mr-2 mt-1 shrink-0">
+                          <Sparkles className="h-3.5 w-3.5 text-accent" />
+                        </div>
+                      )}
+                      <div className={`max-w-[80%] p-4 rounded-2xl text-sm leading-relaxed ${msg.role === "user" ? "bg-foreground text-background rounded-br-sm" : "bg-card border border-border rounded-bl-sm"}`}>
+                        {msg.role === "assistant" ? <Streamdown>{msg.content}</Streamdown> : msg.content}
+                      </div>
                     </div>
-                  </div>
-                ))
+                  );
+                })
               )}
               {isLoading && (
                 <div className="flex justify-start items-center gap-2">
@@ -342,7 +432,7 @@ export default function Oracle() {
                   {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                 </Button>
                 {messages.length > 0 && (
-                  <Button variant="outline" size="icon" className="h-9 w-9 flex-shrink-0" onClick={() => setMessages([])} aria-label="New conversation" title="New conversation">
+                  <Button variant="outline" size="icon" className="h-9 w-9 flex-shrink-0" onClick={() => { setMessages([]); setLastUserMessage(""); }} aria-label="New conversation" title="New conversation">
                     <RefreshCw className="h-3.5 w-3.5" />
                   </Button>
                 )}

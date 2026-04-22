@@ -454,3 +454,29 @@
 - [x] Wire Support.tsx form to trpc.support.submit mutation (was fire-and-forget, now sends owner notification)
 - [x] Add support.submit tRPC procedure to routers.ts (publicProcedure, notifyOwner)
 - [x] Add isPending disabled state + "Sending…" label to Support form submit button
+
+## B+ Review Fixes (Apr 22, 2026)
+
+### Critical
+- [ ] Oracle: fix silent failure — add streaming, visible error surface, retry button
+- [ ] Oracle: add crisis-aware safety protocol (distress detection → human resource routing)
+
+### High Priority
+- [ ] Hide Admin Panel menu item from non-admin users at UI layer
+- [ ] Audit results page: move pathway recommendation above the fold as hero CTA
+- [ ] Seed Story module: one example belief in Belief Rewrite Lab
+- [ ] Seed Standards module: one example habit in Habit Stack
+- [ ] Seed Strategy module: one example decision in Decision Journal
+- [ ] Auto-draft first journal entry from audit responses after onboarding
+- [ ] Auto-title journal entries from first sentence
+
+### Medium Priority
+- [ ] Streak badge: add tooltip explaining "0d beta" (beta days streak counter)
+- [ ] Collapse two pre-audit screens (consent + "four short sections") into one
+- [ ] Theme unification: match authenticated app to system preference or dark-mode default
+- [ ] Profile page: add Identity Sentence (monthly, generated from behavior data)
+- [ ] Profile page: add 5S trend mini-chart and last pathway completed
+
+### Polish
+- [ ] Tooltips on first exposure to proprietary terms (first 7 days)
+- [ ] Oracle Sampler: 3 free questions/month for Explorer/Seeker tiers

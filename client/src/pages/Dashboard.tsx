@@ -6,6 +6,7 @@ import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
@@ -193,11 +194,21 @@ export default function Dashboard() {
               </Link>
             )}
             {streakData && streakData.streak > 0 && (
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20">
-                <Flame className="h-4 w-4 text-orange-400" />
-                <span className="text-sm font-medium text-orange-400">{streakData.streak}</span>
-                <span className="text-xs text-muted-foreground hidden sm:inline">day streak</span>
-              </div>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 cursor-default">
+                      <Flame className="h-4 w-4 text-orange-400" />
+                      <span className="text-sm font-medium text-orange-400">{streakData.streak}</span>
+                      <span className="text-xs text-muted-foreground hidden sm:inline">day streak</span>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" className="max-w-xs text-center">
+                    <p className="text-sm font-medium">{streakData.streak}-day practice streak</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">You've completed at least one pathway step or habit every day for {streakData.streak} day{streakData.streak !== 1 ? 's' : ''} in a row. Keep going.</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             )}
             <Button size="sm" className="gap-2" onClick={() => setShowCheckIn(!showCheckIn)}>
               <Heart className="h-4 w-4" />
