@@ -559,17 +559,17 @@ export default function Home() {
           <div className="max-w-2xl">
             <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-8">A note from the founder</p>
             <blockquote className="font-serif text-xl sm:text-2xl font-light text-foreground leading-relaxed mb-8">
-              &ldquo;I built Lifewoven because I was tired of knowing what to do and still not doing it. Not from laziness — from misalignment.
+              &ldquo;I built Lifewoven because I kept chasing change and ending up with notes in a hundred different places — books underlined, journals half-filled, fragments of who I was becoming scattered everywhere with nothing to hold them together.
               <br /><br />
-              The books were right. The frameworks were solid. But nothing held together long enough to become a life. I needed one place where my inner work, my daily practice, and my long-term vision could actually speak to each other.
+              The insights were real. The intention was real. But without one place to see it all, the growth stayed invisible. I needed somewhere a person could bring every piece of their inner work and actually watch their life change in front of them.
               <br /><br />
-              This is that place. We are in early access, which means you are not just a user — you are a co-creator. Your experience here will shape what this becomes. I am grateful you are here.&rdquo;
+              That is what this is. We are in early access, which means you are not just a user — you are a co-creator. Your experience here will shape what this becomes. I am grateful you are here.&rdquo;
             </blockquote>
             <div className="flex items-center gap-4">
               <div className="h-px flex-1 bg-border/40" />
               <div className="text-right shrink-0">
-                <p className="text-sm font-medium text-foreground">The Lifewoven Team</p>
-                <p className="text-xs text-muted-foreground">Early Access &middot; {new Date().getFullYear()}</p>
+                <p className="text-sm font-medium text-foreground">DeWayne Woods</p>
+                <p className="text-xs text-muted-foreground">Founder &amp; Creator, Lifewoven</p>
               </div>
             </div>
           </div>
