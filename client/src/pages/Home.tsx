@@ -553,27 +553,25 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── Testimonials ─── */}
+      {/* ─── Founder's Note ─── */}
       <section className="py-20 border-t border-border/40">
         <div className="container">
-          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-10 text-center">What practitioners say</p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            {[
-              { quote: "I’ve read every self-help book on the shelf. Lifewoven is the first thing that made me actually do the work — daily, without forcing it.", name: "Marisol T.", role: "Educator & Beta Practitioner" },
-              { quote: "The Oracle remembered what I journaled three weeks ago and connected it to a pattern I hadn’t seen. That’s not a chatbot. That’s a guide.", name: "Devon R.", role: "Entrepreneur, Seeker Plan" },
-              { quote: "The Alignment Audit alone was worth it. I finally understood why I kept stalling — and what to do about it.", name: "Priya K.", role: "Coach & Early Adopter" },
-            ].map((t, i) => (
-              <div key={i} className="rounded-2xl border border-border/50 bg-card/40 p-6 flex flex-col gap-4">
-                <div className="flex gap-0.5">
-                  {[...Array(5)].map((_, s) => <span key={s} className="text-amber-400 text-xs">★</span>)}
-                </div>
-                <p className="text-sm text-muted-foreground leading-relaxed italic">&ldquo;{t.quote}&rdquo;</p>
-                <div className="mt-auto">
-                  <p className="text-sm font-medium text-foreground">{t.name}</p>
-                  <p className="text-xs text-muted-foreground">{t.role}</p>
-                </div>
+          <div className="max-w-2xl">
+            <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-8">A note from the founder</p>
+            <blockquote className="font-serif text-xl sm:text-2xl font-light text-foreground leading-relaxed mb-8">
+              &ldquo;I built Lifewoven because I was tired of knowing what to do and still not doing it. Not from laziness — from misalignment.
+              <br /><br />
+              The books were right. The frameworks were solid. But nothing held together long enough to become a life. I needed one place where my inner work, my daily practice, and my long-term vision could actually speak to each other.
+              <br /><br />
+              This is that place. We are in early access, which means you are not just a user — you are a co-creator. Your experience here will shape what this becomes. I am grateful you are here.&rdquo;
+            </blockquote>
+            <div className="flex items-center gap-4">
+              <div className="h-px flex-1 bg-border/40" />
+              <div className="text-right shrink-0">
+                <p className="text-sm font-medium text-foreground">The Lifewoven Team</p>
+                <p className="text-xs text-muted-foreground">Early Access &middot; {new Date().getFullYear()}</p>
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>

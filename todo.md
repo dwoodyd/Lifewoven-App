@@ -160,7 +160,7 @@
 - [ ] Pathway re-entry continuity (resume where you left off)
 
 ### Phase 4: Homepage + Pricing + Community
-- [ ] Homepage: remove fake testimonials, replace with trust sections (Why LifeOS Exists, Founder Note, Built for Real Minds, How LifeOS Helps)
+- [x] Homepage: remove fake testimonials, replaced with founder's note (early access co-creator framing)
 - [ ] Homepage: primary CTA = Take the Alignment Audit, secondary = Explore LifeOS
 - [ ] Pricing: Explorer (Free), Seeker ($19/mo), Oracle ($49/mo)
 - [ ] Pricing: clear tier differences, upgrade path, support/refund clarity
