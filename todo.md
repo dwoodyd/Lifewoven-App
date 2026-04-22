@@ -434,3 +434,9 @@
 - [x] Upload icons to CDN via manus-upload-file --webdev
 - [x] Configure vite.config.ts with VitePWA plugin (manifest, icons, autoUpdate)
 - [x] Update client/index.html with theme-color meta and apple-touch-icon link
+
+## Post-PWA Follow-ups (Apr 22, 2026)
+
+- [x] invoice.payment_failed already handled in webhook.ts (confirmed)
+- [x] REDIS_URL secret set (Upstash) — rate limiter will use Redis in production
+- [x] PWA vitest coverage: manifest shape, VitePWA config, index.html meta, webhook handler, Redis env, storageProxy
