@@ -426,3 +426,11 @@
 - [x] Stripe idempotency ledger: add stripe_events table, check before processing any webhook event
 - [x] Billing resilience: map trialing/past_due subscription statuses to active tier (grace period)
 - [x] Billing resilience: handle invoice.payment_failed webhook event with owner notification
+
+## PWA Upgrade (Apr 22, 2026)
+
+- [x] Install vite-plugin-pwa and workbox-window
+- [x] Generate PWA icons: pwa-192x192.png, pwa-512x512.png, apple-touch-icon.png (180x180)
+- [x] Upload icons to CDN via manus-upload-file --webdev
+- [x] Configure vite.config.ts with VitePWA plugin (manifest, icons, autoUpdate)
+- [x] Update client/index.html with theme-color meta and apple-touch-icon link

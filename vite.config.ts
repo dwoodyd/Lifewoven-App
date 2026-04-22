@@ -5,6 +5,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { defineConfig, type Plugin, type ViteDevServer } from "vite";
 import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
+import { VitePWA } from "vite-plugin-pwa";
 
 // =============================================================================
 // Manus Debug Collector - Vite Plugin
@@ -150,7 +151,55 @@ function vitePluginManusDebugCollector(): Plugin {
   };
 }
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector()];
+const vitePWA = VitePWA({
+  registerType: "autoUpdate",
+  // In dev mode the service worker is not injected to avoid interfering with HMR
+  devOptions: { enabled: false },
+  // Workbox config: cache app shell + assets
+  workbox: {
+    globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
+    runtimeCaching: [
+      {
+        urlPattern: /^\/manus-storage\//,
+        handler: "NetworkFirst",
+        options: { cacheName: "manus-storage", expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 } },
+      },
+    ],
+  },
+  manifest: {
+    name: "Lifewoven — Personal Transformation Platform",
+    short_name: "Lifewoven",
+    description: "One intelligent operating system for your whole life, built on the 5S Framework.",
+    theme_color: "#2a2520",
+    background_color: "#2a2520",
+    display: "standalone",
+    orientation: "portrait-primary",
+    start_url: "/",
+    scope: "/",
+    categories: ["lifestyle", "health", "productivity"],
+    icons: [
+      {
+        src: "/manus-storage/pwa-192x192_455db248.png",
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "any",
+      },
+      {
+        src: "/manus-storage/pwa-512x512_ffd77718.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "any maskable",
+      },
+    ],
+    shortcuts: [
+      { name: "Dashboard", url: "/dashboard", description: "Open your daily dashboard" },
+      { name: "Oracle", url: "/oracle", description: "Ask the Oracle" },
+      { name: "Journal", url: "/journal", description: "Write a journal entry" },
+    ],
+  },
+});
+
+const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), vitePWA];
 
 export default defineConfig({
   plugins,
