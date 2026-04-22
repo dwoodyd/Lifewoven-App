@@ -567,9 +567,16 @@ export default function Home() {
             </blockquote>
             <div className="flex items-center gap-4">
               <div className="h-px flex-1 bg-border/40" />
-              <div className="text-right shrink-0">
-                <p className="text-sm font-medium text-foreground">DeWayne Woods</p>
-                <p className="text-xs text-muted-foreground">Founder &amp; Creator, Lifewoven</p>
+              <div className="flex items-center gap-3 shrink-0">
+                <img
+                  src="/manus-storage/dewayne-woods-founder_4f2325f0.webp"
+                  alt="DeWayne Woods"
+                  className="w-12 h-12 rounded-full object-cover object-top border border-border/60"
+                />
+                <div className="text-right">
+                  <p className="text-sm font-medium text-foreground">DeWayne Woods</p>
+                  <p className="text-xs text-muted-foreground">Founder &amp; Creator, Lifewoven</p>
+                </div>
               </div>
             </div>
           </div>
