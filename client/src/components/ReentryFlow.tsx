@@ -38,7 +38,7 @@ export default function ReentryFlow({ daysSinceActive, onDismiss }: ReentryFlowP
 
   const handleJustCheckIn = () => {
     toast.success("Welcome back. One check-in is a real win.");
-    navigate("/modules/state");
+    navigate("/state");
     onDismiss();
   };
 

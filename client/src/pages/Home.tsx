@@ -290,7 +290,7 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-2 text-sm">
               <Heart className="h-4 w-4" />
-              <span>Lifewoven Framework</span>
+              <span>Emotional Guidance System</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
               <Zap className="h-4 w-4" />
@@ -325,7 +325,7 @@ export default function Home() {
               {
                 step: "01",
                 title: "Take the Alignment Audit",
-                desc: "A 10-question diagnostic that identifies where you are and recommends your exact starting pathway. Takes 3 minutes.",
+                desc: "A 12-question diagnostic that identifies where you are and recommends your exact starting pathway. Takes 5 minutes.",
                 cta: "Begin the Audit",
                 href: "/audit",
                 color: "text-state",
@@ -464,7 +464,7 @@ export default function Home() {
               Take the Alignment Audit.
             </h2>
             <p className="text-lg text-muted-foreground font-light mb-10 max-w-xl mx-auto">
-              A 10-question diagnostic that identifies where you are across the 5S dimensions and recommends your starting pathway. Takes 3 minutes. Changes everything.
+              A 12-question diagnostic that identifies where you are across the 5S dimensions and recommends your starting pathway. Takes 5 minutes. Changes everything.
             </p>
             <Button size="lg" asChild className="gap-2 text-base">
               <Link href="/audit">

@@ -7,6 +7,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Mail, MessageCircle, BookOpen, ArrowRight } from "lucide-react";
 import { Link } from "wouter";
+import { trpc } from "@/lib/trpc";
 
 export default function Support() {
   const [name, setName] = useState("");
@@ -14,11 +15,18 @@ export default function Support() {
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
+  const submit = trpc.support.submit.useMutation({
+    onSuccess: () => {
+      setSubmitted(true);
+      toast.success("Message sent. We will respond within 2 business days.");
+    },
+    onError: () => toast.error("Could not send your message. Please try again."),
+  });
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!name || !email || !message) { toast.error("Please fill in all fields."); return; }
-    setSubmitted(true);
-    toast.success("Message sent. We will respond within 2 business days.");
+    submit.mutate({ name, email, message });
   }
 
   return (
@@ -68,8 +76,8 @@ export default function Support() {
               <Label htmlFor="message" className="text-sm">How can we help?</Label>
               <Textarea id="message" value={message} onChange={e => setMessage(e.target.value)} placeholder="Describe your question or issue..." rows={5} className="resize-none" />
             </div>
-            <Button type="submit" className="gap-2">
-              Send Message <ArrowRight className="h-4 w-4" />
+            <Button type="submit" className="gap-2" disabled={submit.isPending}>
+              {submit.isPending ? "Sending…" : "Send Message"} <ArrowRight className="h-4 w-4" />
             </Button>
           </form>
         )}

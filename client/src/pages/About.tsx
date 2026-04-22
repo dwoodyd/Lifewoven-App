@@ -12,11 +12,11 @@ const WISDOM_LINEAGE = [
 ];
 
 const MODULES = [
-  { icon: Heart, label: "State", color: "text-rose-400", bg: "bg-rose-400/10", desc: "Emotional alignment, nervous system regulation, and daily grounding. Your inner weather before your outer work.", href: "/modules/state" },
-  { icon: BookOpen, label: "Story", color: "text-amber-400", bg: "bg-amber-400/10", desc: "Belief rewriting, identity design, and meaning-making. The narrative you hold about yourself determines everything.", href: "/modules/story" },
-  { icon: Target, label: "Standards", color: "text-emerald-400", bg: "bg-emerald-400/10", desc: "Habit architecture, daily scorecards, and deep work planning. Consistency as a practice, not a personality trait.", href: "/modules/standards" },
-  { icon: Compass, label: "Strategy", color: "text-blue-400", bg: "bg-blue-400/10", desc: "Decision clarity, leverage mapping, and AI-powered analysis. Think fewer, better thoughts — then act.", href: "/modules/strategy" },
-  { icon: Layers, label: "Stewardship", color: "text-purple-400", bg: "bg-purple-400/10", desc: "Energy, wealth consciousness, body rituals, and time sovereignty. Tend the vessel that carries everything else.", href: "/modules/stewardship" },
+  { icon: Heart, label: "State", color: "text-rose-400", bg: "bg-rose-400/10", desc: "Emotional alignment, nervous system regulation, and daily grounding. Your inner weather before your outer work.", href: "/state" },
+  { icon: BookOpen, label: "Story", color: "text-amber-400", bg: "bg-amber-400/10", desc: "Belief rewriting, identity design, and meaning-making. The narrative you hold about yourself determines everything.", href: "/story" },
+  { icon: Target, label: "Standards", color: "text-emerald-400", bg: "bg-emerald-400/10", desc: "Habit architecture, daily scorecards, and deep work planning. Consistency as a practice, not a personality trait.", href: "/standards" },
+  { icon: Compass, label: "Strategy", color: "text-blue-400", bg: "bg-blue-400/10", desc: "Decision clarity, leverage mapping, and AI-powered analysis. Think fewer, better thoughts — then act.", href: "/strategy" },
+  { icon: Layers, label: "Stewardship", color: "text-purple-400", bg: "bg-purple-400/10", desc: "Energy, wealth consciousness, body rituals, and time sovereignty. Tend the vessel that carries everything else.", href: "/stewardship" },
 ];
 
 const HOW_TO_STEPS = [
@@ -24,7 +24,7 @@ const HOW_TO_STEPS = [
   { step: "02", icon: Heart, title: "Enter Your First Module", desc: "Based on your audit results, you'll be guided to the module where your energy is most blocked. Start there. Don't try to do everything at once.", cta: "View Your Dashboard", href: "/dashboard" },
   { step: "03", icon: Sparkles, title: "Work With the Oracle", desc: "The Oracle is your AI companion — it reads your journal entries, habit patterns, and check-ins to surface insights you haven't seen yet. Ask it anything.", cta: "Meet the Oracle", href: "/oracle" },
   { step: "04", icon: Zap, title: "Follow a Pathway", desc: "Pathways are guided practice sequences — 10 to 45 minutes — designed to move you through a specific shift. Align, Reset, Uplift, Flow, Rhythms, Purpose.", cta: "Explore Pathways", href: "/pathways" },
-  { step: "05", icon: Brain, title: "Build Your Before the Words Practice", desc: "The Before the Words section is the spiritual foundation of the system — grounding, intention, and deliberate entry into your day before the noise begins.", cta: "Enter Before the Words", href: "/before-the-words" },
+  { step: "05", icon: Brain, title: "Build Your Before the Words Practice", desc: "The Before the Words section is the spiritual foundation of the system — grounding, intention, and deliberate entry into your day before the noise begins.", cta: "Enter Before the Words", href: "/btw" },
 ];
 
 export default function About() {

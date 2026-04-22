@@ -915,7 +915,7 @@ export default function OnboardingModal({ userId }: Props) {
     if (isLast) {
       if (!finished) { setFinished(true); return; }
       dismiss();
-      navigate("/alignment-audit");
+      navigate("/audit");
     } else {
       goNext();
     }
@@ -945,7 +945,7 @@ export default function OnboardingModal({ userId }: Props) {
           }}>
             Open your dashboard whenever you're ready. The system is waiting — and now it knows your name.
           </p>
-          <button onClick={() => { trackEvent.mutate({ event: "onboarding_complete", properties: {} }); dismiss(); navigate("/alignment-audit"); }}
+          <button onClick={() => { trackEvent.mutate({ event: "onboarding_complete", properties: {} }); dismiss(); navigate("/audit"); }}
             style={{
               background: `linear-gradient(135deg, ${T.thread}, #c9a55a)`,
               color: "#1a1610", border: "none",

@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 
 const TIER_LABELS: Record<string, { label: string; color: string; desc: string }> = {
   explorer: { label: "Explorer", color: "bg-secondary text-foreground", desc: "Free tier — core tools included." },
-  seeker:   { label: "Seeker",   color: "bg-accent/20 text-accent",     desc: "Full access including Ground Guide AI." },
+  seeker:   { label: "Seeker",   color: "bg-accent/20 text-accent",     desc: "Full access including Oracle AI." },
   oracle:   { label: "Oracle",   color: "bg-primary/20 text-primary",   desc: "Complete platform — every tool unlocked." },
 };
 
@@ -51,7 +51,7 @@ function BillingSection() {
 
           {tier === "explorer" ? (
             <div className="space-y-2">
-              <p className="text-xs text-muted-foreground">Upgrade to unlock Ground Guide AI, weekly reflections, and the full Oracle suite.</p>
+              <p className="text-xs text-muted-foreground">Upgrade to unlock Oracle AI, weekly reflections, and the full Oracle suite.</p>
               <div className="flex gap-2 flex-wrap">
                 <Button size="sm" className="gap-1.5" onClick={() => createCheckout.mutate({ plan: "seeker", origin: window.location.origin })} disabled={createCheckout.isPending}>
                   Upgrade to Seeker — $19/mo

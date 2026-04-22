@@ -151,7 +151,7 @@ export default function Pricing() {
           <Sparkles className="h-8 w-8 text-amber-400 mx-auto mb-4" />
           <h2 className="font-serif text-2xl font-light text-foreground mb-3">Not sure where to start?</h2>
           <p className="text-muted-foreground text-base mb-6 max-w-md mx-auto">Take the free Alignment Audit. In 5 minutes, you will know exactly which pathway and tier is right for you.</p>
-          <Button asChild variant="outline"><Link href="/alignment-audit">Take the Alignment Audit</Link></Button>
+          <Button asChild variant="outline"><Link href="/audit">Take the Alignment Audit</Link></Button>
         </div>
       </div>
     </div>

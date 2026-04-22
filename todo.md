@@ -440,3 +440,17 @@
 - [x] invoice.payment_failed already handled in webhook.ts (confirmed)
 - [x] REDIS_URL secret set (Upstash) — rate limiter will use Redis in production
 - [x] PWA vitest coverage: manifest shape, VitePWA config, index.html meta, webhook handler, Redis env, storageProxy
+
+## Full Platform Audit Fixes (Apr 22, 2026)
+- [x] Fix OnboardingModal broken /alignment-audit → /audit navigation (2 instances)
+- [x] Fix ReentryFlow broken /modules/state → /state navigation
+- [x] Fix About.tsx broken /modules/* → /state|/story|/standards|/strategy|/stewardship links
+- [x] Fix About.tsx broken /before-the-words → /btw link
+- [x] Fix Pricing.tsx broken /alignment-audit → /audit link
+- [x] Fix Settings.tsx "Ground Guide AI" copy → "Oracle AI" (2 instances)
+- [x] Fix Home.tsx "10-question diagnostic, 3 minutes" → "12-question diagnostic, 5 minutes" (2 instances)
+- [x] Fix Home.tsx self-referential trust bar item "Lifewoven Framework" → "Emotional Guidance System"
+- [x] Fix index.css @import ordering — Google Fonts before @import tailwindcss (CSS build warning)
+- [x] Wire Support.tsx form to trpc.support.submit mutation (was fire-and-forget, now sends owner notification)
+- [x] Add support.submit tRPC procedure to routers.ts (publicProcedure, notifyOwner)
+- [x] Add isPending disabled state + "Sending…" label to Support form submit button

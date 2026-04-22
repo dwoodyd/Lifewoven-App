@@ -21,6 +21,7 @@ import { tierCanAccessOracle } from "./stripe/products";
 import { TRPCError } from "@trpc/server";
 import { transcribeAudio } from "./_core/voiceTranscription";
 import { storagePut } from "./storage";
+import { notifyOwner } from "./_core/notification";
 
 // ─── Audit Router ─────────────────────────────────────────────────────────────
 const auditRouter = router({
@@ -979,6 +980,21 @@ export const appRouter = router({
   admin: adminRouter,
   referral: referralRouter,
   beta: betaRouter,
+  support: router({
+    submit: publicProcedure
+      .input(z.object({
+        name: z.string().min(1).max(120),
+        email: z.string().email().max(255),
+        message: z.string().min(1).max(2000),
+      }))
+      .mutation(async ({ input }) => {
+        await notifyOwner({
+          title: `Support request from ${input.name}`,
+          content: `**From:** ${input.name} <${input.email}>\n\n${input.message}`,
+        });
+        return { success: true } as const;
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;
