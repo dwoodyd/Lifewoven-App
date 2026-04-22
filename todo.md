@@ -419,3 +419,10 @@
 - [x] L5: Move cron starts inside startServer(); gate with ENABLE_CRONS env var
 - [x] L7: Remove evt_test_ passthrough from Stripe webhook (done as part of C1)
 - [ ] L8: Add adminAuditLog table for admin mutations (role change, code mint/delete)
+
+## Horizontal Scaling & Billing Resilience (Apr 22, 2026)
+
+- [x] Redis-backed rate limiter: detect REDIS_URL env, use rate-limit-redis + ioredis when present, fall back to memory with warning
+- [x] Stripe idempotency ledger: add stripe_events table, check before processing any webhook event
+- [x] Billing resilience: map trialing/past_due subscription statuses to active tier (grace period)
+- [x] Billing resilience: handle invoice.payment_failed webhook event with owner notification

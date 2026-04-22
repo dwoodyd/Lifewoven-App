@@ -16,6 +16,8 @@ import { transcribeRouter } from "../transcribeRoute";
 import rateLimit from "express-rate-limit";
 import cors from "cors";
 import helmet from "helmet";
+import { Redis } from "ioredis";
+import { RedisStore } from "rate-limit-redis";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -92,6 +94,33 @@ async function startServer() {
     crossOriginEmbedderPolicy: false,
   }));
 
+  // ── Redis rate-limit store: use Redis when REDIS_URL is set, fall back to memory
+  let redisStore: RedisStore | undefined;
+  if (process.env.REDIS_URL) {
+    try {
+      const redisClient = new Redis(process.env.REDIS_URL, {
+        enableOfflineQueue: false,
+        connectTimeout: 3000,
+        lazyConnect: true,
+      });
+      await redisClient.connect().catch(() => null);
+      if (redisClient.status === "ready") {
+        redisStore = new RedisStore({
+          // ioredis `call` accepts (command, ...args) — wrap to match rate-limit-redis signature
+          sendCommand: (command: string, ...args: string[]) => redisClient.call(command, ...args) as any,
+        });
+        console.log("[RateLimit] Redis store connected — rate limits shared across replicas");
+      } else {
+        console.warn("[RateLimit] Redis connection failed — falling back to in-memory store (not suitable for multi-replica)");
+        redisClient.disconnect();
+      }
+    } catch (err) {
+      console.warn("[RateLimit] Redis init error — falling back to in-memory store:", (err as Error).message);
+    }
+  } else {
+    console.warn("[RateLimit] REDIS_URL not set — using in-memory store (not suitable for multi-replica deployments)");
+  }
+
   // ── Security: Rate limit auth/OAuth endpoints — 5 attempts per 15 minutes
   const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -100,6 +129,7 @@ async function startServer() {
     legacyHeaders: false,
     validate: { xForwardedForHeader: false },
     message: { error: "Too many requests. Please try again later." },
+    ...(redisStore ? { store: redisStore } : {}),
   });
   app.use("/api/oauth", authLimiter);
 
@@ -111,6 +141,7 @@ async function startServer() {
     legacyHeaders: false,
     validate: { xForwardedForHeader: false },
     message: { error: "Too many requests. Please try again later." },
+    ...(redisStore ? { store: redisStore } : {}),
   });
   app.use("/api/trpc", apiLimiter);
   // M5: Apply rate limiter to transcribe and PayPal endpoints too

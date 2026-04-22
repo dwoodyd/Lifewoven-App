@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import Stripe from "stripe";
 import crypto from "crypto";
 import { getDb } from "../db";
-import { users, orders, betaAccess, events } from "../../drizzle/schema";
+import { users, orders, betaAccess, events, stripeEvents } from "../../drizzle/schema";
 import { eq } from "drizzle-orm";
 import { notifyOwner } from "../_core/notification";
 import { getProductBySlug } from "../products";
@@ -40,6 +40,24 @@ export async function stripeWebhookHandler(req: Request, res: Response) {
   const db = await getDb();
   if (!db) {
     return res.status(500).json({ error: "Database unavailable" });
+  }
+
+  // Idempotency ledger: ignore duplicate events (common under heavy load)
+  try {
+    await db.insert(stripeEvents).values({
+      eventId: event.id,
+      eventType: event.type,
+    });
+  } catch (dupErr: unknown) {
+    // Unique constraint violation — this event was already processed
+    const msg = dupErr instanceof Error ? dupErr.message : String(dupErr);
+    if (msg.includes("Duplicate entry") || msg.includes("unique") || msg.includes("UNIQUE")) {
+      console.log(`[Webhook] Duplicate event ignored: ${event.id}`);
+      return res.json({ received: true, duplicate: true });
+    }
+    // Unexpected DB error — surface it
+    console.error("[Webhook] Idempotency ledger error:", msg);
+    return res.status(500).json({ error: "Ledger error" });
   }
 
   try {
@@ -138,12 +156,14 @@ export async function stripeWebhookHandler(req: Request, res: Response) {
           }
         }
 
-        if (sub.status === "active" || sub.status === "trialing") {
+        // Billing resilience: trialing and past_due keep the paid tier active
+        // (grace period during billing retries — downgrade only on hard cancellation)
+        if (["active", "trialing", "past_due"].includes(sub.status)) {
           await db.update(users).set({
             membershipTier: tier,
             stripeSubscriptionId: sub.id,
           }).where(eq(users.stripeCustomerId, customerId));
-        } else if (["canceled", "unpaid", "past_due"].includes(sub.status)) {
+        } else if (["canceled", "unpaid"].includes(sub.status)) {
           await db.update(users).set({
             membershipTier: "explorer",
             stripeSubscriptionId: null,
@@ -159,6 +179,20 @@ export async function stripeWebhookHandler(req: Request, res: Response) {
           membershipTier: "explorer",
           stripeSubscriptionId: null,
         }).where(eq(users.stripeCustomerId, customerId));
+        break;
+      }
+
+      case "invoice.payment_failed": {
+        // Billing resilience: alert owner immediately on payment failure
+        const invoice = event.data.object as Stripe.Invoice;
+        const customerId = typeof invoice.customer === "string" ? invoice.customer : invoice.customer?.id;
+        const attemptCount = invoice.attempt_count ?? 1;
+        const amountDue = ((invoice.amount_due ?? 0) / 100).toFixed(2);
+        console.warn(`[Webhook] Payment failed for customer ${customerId} — attempt ${attemptCount}, amount $${amountDue}`);
+        await notifyOwner({
+          title: `⚠️ Payment Failed (attempt ${attemptCount})`,
+          content: `Customer ${customerId} failed to pay $${amountDue}. Stripe will retry automatically. Invoice: ${invoice.id}.`,
+        }).catch(() => {});
         break;
       }
 

@@ -505,3 +505,13 @@ export const referralCodes = mysqlTable("referral_codes", {
   redeemedAt:  int("redeemed_at"),          // unix ms
   createdAt:   int("created_at").notNull(),
 });
+
+// ─── Stripe Events Idempotency Ledger ─────────────────────────────────────────
+// Tracks processed Stripe event IDs to prevent duplicate processing under load.
+// Before handling any webhook event, check this table; insert after processing.
+export const stripeEvents = mysqlTable("stripe_events", {
+  id:          int("id").autoincrement().primaryKey(),
+  eventId:     varchar("event_id", { length: 255 }).notNull().unique(), // Stripe evt_xxx
+  eventType:   varchar("event_type", { length: 128 }).notNull(),
+  processedAt: timestamp("processed_at").defaultNow().notNull(),
+});
