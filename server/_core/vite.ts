@@ -5,7 +5,6 @@ import { nanoid } from "nanoid";
 import path from "path";
 import { createServer as createViteServer } from "vite";
 import viteConfig from "../../vite.config";
-
 export async function setupVite(app: Express, server: Server) {
   const serverOptions = {
     middlewareMode: true,
@@ -21,8 +20,12 @@ export async function setupVite(app: Express, server: Server) {
   });
 
   app.use(vite.middlewares);
+  // Exclude server-side routes from the Vite HTML catch-all
   app.use("*", async (req, res, next) => {
     const url = req.originalUrl;
+    if (url.startsWith("/manus-storage/") || url.startsWith("/api/")) {
+      return next();
+    }
 
     try {
       const clientTemplate = path.resolve(
