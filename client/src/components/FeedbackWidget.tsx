@@ -31,35 +31,52 @@ export default function FeedbackWidget() {
 
   return (
     <>
-      {/* Floating trigger */}
+      {/* Floating trigger — subtle icon-only circle, palette-matched */}
       <button
         onClick={() => setOpen(o => !o)}
         aria-label="Send feedback"
-        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-4 py-2.5 rounded-full bg-foreground text-background shadow-lg hover:opacity-90 transition-opacity text-sm font-light"
+        title="Send feedback"
+        className={`
+          fixed bottom-6 right-6 z-40
+          w-10 h-10 rounded-full
+          flex items-center justify-center
+          bg-[oklch(0.22_0.02_60)] border border-[oklch(0.32_0.04_60)]
+          text-[oklch(0.72_0.08_60)]
+          shadow-md shadow-black/20
+          hover:bg-[oklch(0.28_0.04_60)] hover:text-[oklch(0.82_0.10_60)]
+          hover:border-[oklch(0.42_0.06_60)]
+          transition-all duration-200
+          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[oklch(0.72_0.08_60)]/50
+        `}
       >
         <MessageSquare className="h-4 w-4" />
-        Feedback
       </button>
 
       {/* Panel */}
       {open && (
-        <div className="fixed bottom-20 right-6 z-50 w-80 bg-card border border-border rounded-2xl shadow-2xl p-5">
+        <div
+          className="fixed bottom-[4.5rem] right-6 z-50 w-80 bg-card border border-border rounded-2xl shadow-2xl p-5"
+          style={{ boxShadow: "0 8px 40px oklch(0 0 0 / 0.35)" }}
+        >
           <div className="flex items-center justify-between mb-4">
-            <p className="text-sm font-medium text-foreground">Send Feedback</p>
-            <button onClick={reset} aria-label="Close feedback panel" className="p-1 rounded-lg text-muted-foreground hover:text-foreground transition-colors">
+            <p className="text-sm font-medium text-foreground">Share your thoughts</p>
+            <button
+              onClick={reset}
+              aria-label="Close feedback panel"
+              className="p-1 rounded-lg text-muted-foreground hover:text-foreground transition-colors"
+            >
               <X className="h-4 w-4" />
             </button>
           </div>
 
           {sent ? (
             <div className="flex flex-col items-center gap-3 py-4 text-center">
-              <CheckCircle2 className="h-8 w-8 text-green-500" />
+              <CheckCircle2 className="h-8 w-8 text-accent" />
               <p className="text-sm font-light text-foreground">Thank you — received.</p>
               <Button size="sm" variant="outline" onClick={reset}>Close</Button>
             </div>
           ) : (
             <form onSubmit={submit} className="space-y-3">
-              {/* Star rating */}
               <div>
                 <p className="text-xs text-muted-foreground mb-2">How's your experience so far?</p>
                 <div className="flex gap-1">
@@ -68,7 +85,7 @@ export default function FeedbackWidget() {
                       key={n}
                       type="button"
                       onClick={() => setRating(n)}
-                      className={`text-lg transition-opacity ${rating && n <= rating ? "opacity-100" : "opacity-30 hover:opacity-60"}`}
+                      className={`text-lg transition-opacity ${rating && n <= rating ? "opacity-100 text-[oklch(0.75_0.12_60)]" : "opacity-25 hover:opacity-50"}`}
                       aria-label={`Rate ${n} star${n > 1 ? "s" : ""}`}
                     >★</button>
                   ))}

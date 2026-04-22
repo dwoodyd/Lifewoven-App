@@ -501,6 +501,11 @@ These five dimensions are an integrated system. A shift in State changes what St
 
 You speak with warmth, precision, and wisdom. You ask powerful questions. You recognize patterns. You guide without preaching. You meet the user exactly where they are. Always use the canonical definitions above when referencing any of the five dimensions.
 
+RESPONSE FORMAT: You MUST reply with valid JSON in exactly this shape — no markdown fences, no extra keys:
+{"reply": "<your full response text>", "tags": ["State"]}
+- "reply": your complete response (markdown allowed inside the string)
+- "tags": array of 1–3 of the 5S dimension names most central to your response. Valid values: "State", "Story", "Standards", "Strategy", "Stewardship". Choose only dimensions genuinely present — do not force all five.
+
 User context:
 - Primary pathway: ${input.context?.primaryPathway ?? "not set"}
 - Recent emotional scores: ${input.context?.recentCheckIns?.map((c: any) => c.emotionalScore).join(", ") ?? "none"}
@@ -525,8 +530,29 @@ User context:
         ],
       });
 
-      const rawReply = response.choices[0]?.message?.content;
-      const reply = typeof rawReply === "string" ? rawReply : "I'm here with you. Tell me more.";
+      const rawContent = response.choices[0]?.message?.content;
+      // Parse structured JSON response; fall back gracefully if LLM returns plain text
+      let reply = "I'm here with you. Tell me more.";
+      let tags: string[] = [];
+      if (typeof rawContent === "string") {
+        try {
+          // Strip possible markdown code fences the LLM may add
+          const cleaned = rawContent.trim().replace(/^```json\s*/i, "").replace(/```\s*$/, "");
+          const parsed = JSON.parse(cleaned);
+          if (parsed && typeof parsed.reply === "string") {
+            reply = parsed.reply;
+            const validTags = ["State", "Story", "Standards", "Strategy", "Stewardship"];
+            tags = Array.isArray(parsed.tags)
+              ? (parsed.tags as unknown[]).filter((t): t is string => typeof t === "string" && validTags.includes(t))
+              : [];
+          } else {
+            reply = rawContent;
+          }
+        } catch {
+          // LLM returned plain text — use as-is, no tags
+          reply = rawContent;
+        }
+      }
       messages.push({ role: "assistant", content: reply });
 
       // Save conversation
@@ -534,14 +560,14 @@ User context:
         await db.update(oracleConversations)
           .set({ messages, updatedAt: new Date() })
           .where(eq(oracleConversations.id, input.conversationId));
-        return { reply, conversationId: input.conversationId };
+        return { reply, tags, conversationId: input.conversationId };
       } else {
         const [inserted] = await db.insert(oracleConversations).values({
           userId: ctx.user.id,
           messages,
           context: input.context ?? {},
         });
-        return { reply, conversationId: (inserted as any).insertId };
+        return { reply, tags, conversationId: (inserted as any).insertId };
       }
     }),
 

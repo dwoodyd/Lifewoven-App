@@ -480,3 +480,11 @@
 ### Polish
 - [ ] Tooltips on first exposure to proprietary terms (first 7 days)
 - [ ] Oracle Sampler: 3 free questions/month for Explorer/Seeker tiers
+
+## A+ Polish — Visual & UX Upgrades
+
+- [x] Restyle Feedback button: subtle charcoal/amber circle, no clashing color swoosh
+- [x] 5S dashboard buttons: add diffused drop shadow + ultra-thin tinted border for tactile definition
+- [x] "Simplify my view" toggle: redesign as premium mechanical switch (haute horology style)
+- [x] Page transitions: instant, seamless navigation between internal pages (no logo splash or flash)
+- [x] Oracle 5S tagging: append dimension badge (State/Story/Standards/Strategy/Stewardship) to each AI response paragraph

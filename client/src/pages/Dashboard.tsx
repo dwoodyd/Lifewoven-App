@@ -37,11 +37,11 @@ const EGS_EMOTIONS = [
 ];
 
 const MODULE_CONFIG = [
-  { key: "state", label: "State", icon: Waves, color: "text-state", bg: "bg-state/10", href: "/state" },
-  { key: "story", label: "Story", icon: BookOpen, color: "text-story", bg: "bg-story/10", href: "/story" },
-  { key: "standards", label: "Standards", icon: Target, color: "text-standards", bg: "bg-standards/10", href: "/standards" },
-  { key: "strategy", label: "Strategy", icon: Compass, color: "text-strategy", bg: "bg-strategy/10", href: "/strategy" },
-  { key: "stewardship", label: "Stewardship", icon: Leaf, color: "text-stewardship", bg: "bg-stewardship/10", href: "/stewardship" },
+  { key: "state", label: "State", icon: Waves, color: "text-state", bg: "bg-state/10", borderBase: "border-state/20", borderHover: "hover:border-state/50", href: "/state" },
+  { key: "story", label: "Story", icon: BookOpen, color: "text-story", bg: "bg-story/10", borderBase: "border-story/20", borderHover: "hover:border-story/50", href: "/story" },
+  { key: "standards", label: "Standards", icon: Target, color: "text-standards", bg: "bg-standards/10", borderBase: "border-standards/20", borderHover: "hover:border-standards/50", href: "/standards" },
+  { key: "strategy", label: "Strategy", icon: Compass, color: "text-strategy", bg: "bg-strategy/10", borderBase: "border-strategy/20", borderHover: "hover:border-strategy/50", href: "/strategy" },
+  { key: "stewardship", label: "Stewardship", icon: Leaf, color: "text-stewardship", bg: "bg-stewardship/10", borderBase: "border-stewardship/20", borderHover: "hover:border-stewardship/50", href: "/stewardship" },
 ];
 
 import { LoomCorner } from "@/components/Loom";
@@ -141,11 +141,36 @@ export default function Dashboard() {
         <div className="flex items-center justify-end mb-3">
           <button
             onClick={toggleLowBandwidth}
-            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors px-3 py-1.5 rounded-full border border-border hover:border-primary/30"
+            aria-pressed={lowBandwidthMode}
+            aria-label={lowBandwidthMode ? "Exit simplified view" : "Simplify view"}
+            className="group flex items-center gap-2.5 select-none"
           >
-            <Wind className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">{LOW_BANDWIDTH.toggleLabel}</span>
-            <span className="sm:hidden">Simplify</span>
+            {/* Label */}
+            <span className="text-[11px] tracking-widest uppercase font-mono text-muted-foreground group-hover:text-foreground transition-colors hidden sm:inline">
+              {lowBandwidthMode ? "Simplified" : "Simplify"}
+            </span>
+            {/* Mechanical switch track */}
+            <span
+              className={`
+                relative inline-flex h-5 w-9 items-center rounded-full
+                border transition-all duration-300 ease-in-out
+                ${lowBandwidthMode
+                  ? "bg-[oklch(0.28_0.04_60)] border-[oklch(0.45_0.08_60)] shadow-[inset_0_1px_3px_oklch(0_0_0/0.4),0_0_0_1px_oklch(0.45_0.08_60/0.3)]"
+                  : "bg-[oklch(0.18_0.01_60)] border-[oklch(0.28_0.02_60)] shadow-[inset_0_1px_3px_oklch(0_0_0/0.5)]"}
+              `}
+            >
+              {/* Thumb — machined knob */}
+              <span
+                className={`
+                  absolute top-0.5 h-4 w-4 rounded-full
+                  transition-all duration-300 ease-in-out
+                  shadow-[0_1px_4px_oklch(0_0_0/0.5),inset_0_1px_0_oklch(1_0_0/0.12)]
+                  ${lowBandwidthMode
+                    ? "left-[calc(100%-1.25rem)] bg-[oklch(0.78_0.10_60)]"
+                    : "left-0.5 bg-[oklch(0.42_0.02_60)]"}
+                `}
+              />
+            </span>
           </button>
         </div>
 
@@ -286,9 +311,9 @@ export default function Dashboard() {
             <div>
               <h2 className="font-serif text-lg font-light text-foreground mb-3">Your 5S Framework</h2>
               <div className="grid grid-cols-5 gap-2">
-                {MODULE_CONFIG.map(({ key, label, icon: Icon, color, bg, href }) => (
+                {MODULE_CONFIG.map(({ key, label, icon: Icon, color, bg, borderBase, borderHover, href }) => (
                   <Link key={key} href={href}>
-                    <div className={`p-2 sm:p-3 rounded-xl border border-border ${bg} hover:border-muted-foreground transition-all cursor-pointer text-center group`}>
+                    <div className={`p-2 sm:p-3 rounded-xl border ${borderBase} ${borderHover} ${bg} shadow-[0_2px_8px_0_oklch(0_0_0/0.12)] hover:shadow-[0_4px_16px_0_oklch(0_0_0/0.18)] transition-all duration-200 cursor-pointer text-center group`}>
                       <Icon className={`h-4 w-4 sm:h-5 sm:w-5 ${color} mx-auto mb-1 sm:mb-1.5 group-hover:scale-110 transition-transform`} />
                       <p className="text-[10px] sm:text-xs font-medium text-foreground leading-tight">{label}</p>
                     </div>

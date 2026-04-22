@@ -44,7 +44,7 @@ const WISDOM_SOURCES = [
 // Crisis keywords — triggers a safety resource prompt instead of LLM call
 const CRISIS_KEYWORDS = /\b(suicid|kill myself|end my life|don't want to be here|want to die|self.harm|hurt myself|no reason to live|can't go on)\b/i;
 
-type Message = { role: "user" | "assistant"; content: string; error?: boolean; crisis?: boolean };
+type Message = { role: "user" | "assistant"; content: string; error?: boolean; crisis?: boolean; tags?: string[] };
 type OracleMode = "guide" | "unstuck" | "patterns";
 
 export default function Oracle() {
@@ -65,7 +65,7 @@ export default function Oracle() {
 
   const chat = trpc.oracle.chat.useMutation({
     onSuccess: (data: any) => {
-      setMessages(prev => [...prev.filter(m => !m.error), { role: "assistant", content: data.reply }]);
+      setMessages(prev => [...prev.filter(m => !m.error), { role: "assistant", content: data.reply, tags: data.tags ?? [] }]);
       setIsLoading(false);
       setLoomPulse(true);
       setTimeout(() => setLoomPulse(false), 800);
@@ -396,8 +396,34 @@ export default function Oracle() {
                           <Sparkles className="h-3.5 w-3.5 text-accent" />
                         </div>
                       )}
-                      <div className={`max-w-[80%] p-4 rounded-2xl text-sm leading-relaxed ${msg.role === "user" ? "bg-foreground text-background rounded-br-sm" : "bg-card border border-border rounded-bl-sm"}`}>
-                        {msg.role === "assistant" ? <Streamdown>{msg.content}</Streamdown> : msg.content}
+                      <div className={`max-w-[80%] rounded-2xl text-sm leading-relaxed ${msg.role === "user" ? "bg-foreground text-background rounded-br-sm p-4" : "bg-card border border-border rounded-bl-sm"}`}>
+                        {msg.role === "assistant" ? (
+                          <>
+                            <div className="p-4">
+                              <Streamdown>{msg.content}</Streamdown>
+                            </div>
+                            {msg.tags && msg.tags.length > 0 && (
+                              <div className="flex flex-wrap gap-1.5 px-4 pb-3 pt-0 border-t border-border/40 mt-1">
+                                {msg.tags.map(tag => (
+                                  <span
+                                    key={tag}
+                                    className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium tracking-wide uppercase ${
+                                      tag === "State" ? "bg-state/15 text-state border border-state/25" :
+                                      tag === "Story" ? "bg-story/15 text-story border border-story/25" :
+                                      tag === "Standards" ? "bg-standards/15 text-standards border border-standards/25" :
+                                      tag === "Strategy" ? "bg-strategy/15 text-strategy border border-strategy/25" :
+                                      "bg-stewardship/15 text-stewardship border border-stewardship/25"
+                                    }`}
+                                  >
+                                    {tag}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                          </>
+                        ) : (
+                          <div className="p-4">{msg.content}</div>
+                        )}
                       </div>
                     </div>
                   );

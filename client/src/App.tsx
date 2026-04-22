@@ -3,10 +3,11 @@ import OnboardingModal from "./components/OnboardingModal";
 import FeedbackWidget from "./components/FeedbackWidget";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
+import { Route, Switch, useLocation } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { useAuth } from "./_core/hooks/useAuth";
+import { AnimatePresence, motion } from "framer-motion";
 
 // Public pages
 import Home from "./pages/Home";
@@ -79,7 +80,14 @@ import Refunds from "./pages/legal/Refunds";
 import Support from "./pages/Support";
 import Admin from "./pages/Admin";
 
-function Router() {
+// Subtle, near-instant opacity fade — imperceptible as "loading", just removes jitter
+const pageVariants = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1, transition: { duration: 0.15, ease: "easeOut" as const } },
+  exit:    { opacity: 0, transition: { duration: 0.10, ease: "easeIn"  as const } },
+} as const;
+
+function RouterSwitch() {
   return (
     <Switch>
       {/* Public */}
@@ -158,6 +166,22 @@ function Router() {
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
+  );
+}
+
+function Router() {
+  const [location] = useLocation();
+  return (
+    <AnimatePresence mode="wait" initial={false}>
+      <motion.div
+        key={location}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1, transition: { duration: 0.15, ease: "easeOut" } }}
+        exit={{ opacity: 0, transition: { duration: 0.10, ease: "easeIn" } }}
+      >
+        <RouterSwitch />
+      </motion.div>
+    </AnimatePresence>
   );
 }
 
