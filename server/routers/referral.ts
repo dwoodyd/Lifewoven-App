@@ -2,17 +2,19 @@ import { protectedProcedure, router } from "../_core/trpc";
 import { z } from "zod";
 import { getDb } from "../db";
 import { referrals, referralCredits, referralCodes, betaAccess, events, users } from "../../drizzle/schema";
-import { eq, sql } from "drizzle-orm";
+import { eq, sql, and as andOp, isNull } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 import { notifyOwner } from "../_core/notification";
 import crypto from "crypto";
 
 const REFERRAL_TRIAL_DAYS = 30;
 
-function genTrialCode(userId: number): string {
+// M2: Use crypto.randomBytes instead of Math.random() for security-relevant code
+function genTrialCode(): string {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  const bytes = crypto.randomBytes(8);
   let rand = "";
-  for (let i = 0; i < 8; i++) rand += chars[Math.floor(Math.random() * chars.length)];
+  for (let i = 0; i < 8; i++) rand += chars[bytes[i] % chars.length];
   return `REF-${rand.slice(0, 4)}-${rand.slice(4)}`;
 }
 
@@ -54,16 +56,19 @@ export const referralRouter = router({
       if (!ref[0]) return { success: false, message: "Invalid referral code." };
       if (ref[0].usedAt) return { success: false, message: "Code already used." };
       if (ref[0].referrerId === ctx.user.id) return { success: false, message: "Cannot use your own code." };
-      // Mark used
-      await db.update(referrals)
+      // M1: Atomic UPDATE to claim the code before crediting — prevents race conditions
+      const updated = await db.update(referrals)
         .set({ refereeId: ctx.user.id, usedAt: new Date(), creditCents: 1000 })
-        .where(eq(referrals.code, input.code.toUpperCase()));
-      // Credit referrer $10
-      const existing = await db.select().from(referralCredits)
+        .where(andOp(eq(referrals.code, input.code.toUpperCase()), isNull(referrals.usedAt)));
+      if ((updated as any).rowsAffected === 0) {
+        return { success: false, message: "Code already used." };
+      }
+      // Credit referrer $10 using atomic increment
+      const existingCredit = await db.select().from(referralCredits)
         .where(eq(referralCredits.userId, ref[0].referrerId)).limit(1);
-      if (existing[0]) {
+      if (existingCredit[0]) {
         await db.update(referralCredits)
-          .set({ balanceCents: existing[0].balanceCents + 1000 })
+          .set({ balanceCents: sql`balance_cents + 1000` })
           .where(eq(referralCredits.userId, ref[0].referrerId));
       } else {
         await db.insert(referralCredits).values({ userId: ref[0].referrerId, balanceCents: 1000 });
@@ -86,9 +91,10 @@ export const referralRouter = router({
     const db = await getDb();
     if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
 
+    // H6: Filter on event='beta_converted' specifically, not any event
     const converted = await db.select({ cnt: sql<number>`COUNT(*)` })
       .from(events)
-      .where(eq(events.userId, ctx.user.id));
+      .where(sql`${events.userId} = ${ctx.user.id} AND ${events.event} = 'beta_converted'`);
     const hasConverted = Number(converted[0]?.cnt ?? 0) > 0;
     if (!hasConverted) return { code: null, eligible: false, redeemedCount: 0 };
 
@@ -96,12 +102,12 @@ export const referralRouter = router({
       .where(eq(referralCodes.ownerId, ctx.user.id)).limit(1);
 
     if (rows.length === 0) {
-      let code = genTrialCode(ctx.user.id);
+      let code = genTrialCode();
       for (let i = 0; i < 5; i++) {
         const clash = await db.select({ id: referralCodes.id }).from(referralCodes)
           .where(eq(referralCodes.code, code)).limit(1);
         if (clash.length === 0) break;
-        code = genTrialCode(ctx.user.id + i + 1);
+        code = genTrialCode();
       }
       await db.insert(referralCodes).values({ code, ownerId: ctx.user.id, createdAt: Date.now() });
       rows = await db.select().from(referralCodes)
@@ -144,7 +150,8 @@ export const referralRouter = router({
         .set({ redeemedBy: ctx.user.id, redeemedAt: now })
         .where(eq(referralCodes.id, ref.id));
 
-      await db.insert(betaAccess).values({ userId: ctx.user.id, betaCodeId: 0, expiresAt });
+      // L4: betaCodeId should be null for referral-based access (no beta code was used)
+      await db.insert(betaAccess).values({ userId: ctx.user.id, betaCodeId: null, expiresAt });
 
       const [ownerRow] = await db.select({ name: users.name, email: users.email })
         .from(users).where(eq(users.id, ref.ownerId)).limit(1);

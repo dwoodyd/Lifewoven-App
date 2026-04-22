@@ -18,24 +18,21 @@ export async function stripeWebhookHandler(req: Request, res: Response) {
 
   const stripe = new Stripe(stripeKey, { apiVersion: "2025-03-31.basil" });
 
+  // C1: Fail closed — signature verification is mandatory in all environments.
+  // Never allow unsigned events; Stripe's dashboard verification works with real signed test events.
+  if (!webhookSecret || !sig) {
+    console.error("[Webhook] Missing STRIPE_WEBHOOK_SECRET or stripe-signature header — rejecting");
+    return res.status(400).json({ error: "Webhook signature required" });
+  }
+
   let event: Stripe.Event;
 
   try {
-    if (webhookSecret && sig) {
-      event = stripe.webhooks.constructEvent(req.body, sig as string, webhookSecret);
-    } else {
-      event = JSON.parse(req.body.toString()) as Stripe.Event;
-    }
+    event = stripe.webhooks.constructEvent(req.body, sig as string, webhookSecret);
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : "Unknown error";
     console.error("[Webhook] Signature verification failed:", msg);
     return res.status(400).json({ error: `Webhook Error: ${msg}` });
-  }
-
-  // Test event passthrough — required for webhook verification in Stripe dashboard
-  if (event.id.startsWith("evt_test_")) {
-    console.log("[Webhook] Test event detected, returning verification response");
-    return res.json({ verified: true });
   }
 
   console.log(`[Webhook] Event: ${event.type} | ${event.id}`);

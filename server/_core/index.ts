@@ -73,9 +73,22 @@ async function startServer() {
     credentials: true,
   }));
 
-  // ── Security: HTTP security headers via helmet
+  // ── Security: HTTP security headers via helmet (H5: CSP re-enabled)
+  const isDev = process.env.NODE_ENV === "development";
   app.use(helmet({
-    contentSecurityPolicy: false, // managed by Vite in dev
+    contentSecurityPolicy: isDev ? false : {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "https://js.stripe.com", "https://www.paypal.com", "https://www.sandbox.paypal.com"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
+        imgSrc: ["'self'", "data:", "blob:", "https:"],
+        connectSrc: ["'self'", "https://api.stripe.com", "https://www.paypal.com", "https://www.sandbox.paypal.com"],
+        frameSrc: ["https://js.stripe.com", "https://www.paypal.com", "https://www.sandbox.paypal.com"],
+        objectSrc: ["'none'"],
+        upgradeInsecureRequests: [],
+      },
+    },
     crossOriginEmbedderPolicy: false,
   }));
 
@@ -100,6 +113,9 @@ async function startServer() {
     message: { error: "Too many requests. Please try again later." },
   });
   app.use("/api/trpc", apiLimiter);
+  // M5: Apply rate limiter to transcribe and PayPal endpoints too
+  app.use("/api/transcribe", apiLimiter);
+  app.use("/api/paypal", apiLimiter);
 
   // Stripe webhook MUST use raw body BEFORE express.json()
   app.post("/api/stripe/webhook", express.raw({ type: "application/json" }), stripeWebhookHandler);
@@ -146,8 +162,13 @@ async function startServer() {
   server.listen(port, () => {
     console.log(`Server running on http://localhost:${port}/`);
   });
+
+  // L5: Only start cron jobs when explicitly enabled (prevents duplicate runs in multi-replica)
+  if (process.env.ENABLE_CRONS === "1") {
+    startWeeklyDigestCron();
+    startBetaExpiryCheckCron();
+    console.log("[Cron] Weekly digest and beta expiry crons started");
+  }
 }
 
 startServer().catch(console.error);
-startWeeklyDigestCron();
-startBetaExpiryCheckCron();

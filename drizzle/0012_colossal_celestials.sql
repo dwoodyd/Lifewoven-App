@@ -1,0 +1,1 @@
+ALTER TABLE `beta_access` MODIFY COLUMN `betaCodeId` int;

@@ -17,6 +17,8 @@ import {
 } from "../drizzle/schema";
 import { eq, desc, and, like, sql } from "drizzle-orm";
 import { invokeLLM } from "./_core/llm";
+import { tierCanAccessOracle } from "./stripe/products";
+import { TRPCError } from "@trpc/server";
 import { transcribeAudio } from "./_core/voiceTranscription";
 import { storagePut } from "./storage";
 
@@ -252,6 +254,10 @@ const habitsRouter = router({
     .mutation(async ({ ctx, input }) => {
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
+      // L1: Ownership check — verify the habit belongs to the requesting user
+      const [ownedHabit] = await db.select({ id: habits.id }).from(habits)
+        .where(and(eq(habits.id, input.habitId), eq(habits.userId, ctx.user.id))).limit(1);
+      if (!ownedHabit) throw new TRPCError({ code: "FORBIDDEN", message: "Habit not found." });
       await db.insert(habitLogs).values({
         habitId: input.habitId,
         userId: ctx.user.id,
@@ -464,6 +470,12 @@ const oracleRouter = router({
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
 
+      // H1: Tier gate — Oracle chat requires the oracle membership tier
+      const [userTierRow] = await db.select({ membershipTier: users.membershipTier }).from(users).where(eq(users.id, ctx.user.id)).limit(1);
+      if (!tierCanAccessOracle(userTierRow?.membershipTier as any)) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "Oracle access requires the Oracle membership tier." });
+      }
+
       // Fetch user mind patterns for Oracle adaptation
       const userRow = await db.select({ mindPatterns: users.mindPatterns }).from(users).where(eq(users.id, ctx.user.id)).limit(1);
       const mindPats = (userRow[0]?.mindPatterns as string[] | null) ?? [];
@@ -555,6 +567,12 @@ User context:
   generateInsights: protectedProcedure.mutation(async ({ ctx }) => {
     const db = await getDb();
     if (!db) throw new Error("Database unavailable");
+
+    // H1: Tier gate — Oracle insights require the oracle membership tier
+    const [userTierRow2] = await db.select({ membershipTier: users.membershipTier }).from(users).where(eq(users.id, ctx.user.id)).limit(1);
+    if (!tierCanAccessOracle(userTierRow2?.membershipTier as any)) {
+      throw new TRPCError({ code: "FORBIDDEN", message: "Oracle access requires the Oracle membership tier." });
+    }
 
     // Gather recent data
     const [recentCheckIns, recentJournals, recentHabits] = await Promise.all([
@@ -922,7 +940,20 @@ const profileRouter = router({
 export const appRouter = router({
   system: systemRouter,
   auth: router({
-    me: publicProcedure.query(opts => opts.ctx.user),
+    // H3: Project minimal fields only — never expose role, stripeCustomerId, openId on the wire
+    me: publicProcedure.query(opts => {
+      const u = opts.ctx.user;
+      if (!u) return null;
+      return {
+        id: u.id,
+        name: u.name,
+        email: u.email,
+        primaryPathway: u.primaryPathway,
+        onboardingCompleted: u.onboardingCompleted,
+        membershipTier: u.membershipTier,
+        role: u.role,
+      };
+    }),
     logout: publicProcedure.mutation(({ ctx }) => {
       const cookieOptions = getSessionCookieOptions(ctx.req);
       ctx.res.clearCookie(COOKIE_NAME, { ...cookieOptions, maxAge: -1 });

@@ -387,3 +387,35 @@
 - [x] 5S label tooltip on slide 1 draggable dot
 - [x] Loom pulse on Alignment Audit answers
 - [x] Loom celebration on Pathways step completion
+
+## Security Audit Fixes (Apr 21, 2026)
+
+### Critical
+- [x] C1: Stripe webhook — fail closed when STRIPE_WEBHOOK_SECRET or stripe-signature missing; remove evt_test_ bypass
+- [x] C2: Delete unauthenticated GET /api/paypal/my-purchases/:userId endpoint
+- [x] C3: Authenticate /api/paypal/create-order; derive userId from session, never from body
+- [x] C4: Authenticate /api/paypal/capture-order; derive userId from session; validate custom_id ownership
+- [x] M6/C4: Remove custom_id-based credit deduction from capture-order
+
+### High
+- [x] H1: Add tierCanAccessOracle gate to oracle.chat (and oracle.generateInsights)
+- [x] H2: Add per-user LLM rate limiter (10 calls/min/user) wrapping invokeLLM
+- [x] H3: auth.me — project minimal fields only (id, name, primaryPathway, onboardingCompleted, membershipTier)
+- [x] H4: Session TTL — change from 1 year to 30 days in oauth.ts
+- [x] H5: Re-enable CSP in helmet with production allowlist
+- [x] H6: trackEvent — require protectedProcedure, validate event against enum, cap properties; fix referral.myTrialCode to filter on event='beta_converted'
+
+### Medium
+- [x] M1: referral.applyCode — atomic UPDATE before SELECT to prevent race condition
+- [x] M2: genTrialCode — replace Math.random() with crypto.randomBytes
+- [x] M3: Download tokens — bind to authenticated session (require ctx.user.id === order.userId)
+- [x] M4: Cookie SameSite=Lax; add Content-Type enforcement middleware on /api/trpc
+- [x] M5: Mount apiLimiter on /api/transcribe; add per-user transcription cap
+
+### Low
+- [x] L1: habits.logCompletion — verify habitId ownership before insert
+- [ ] L2: Add .max() caps to all unbounded z.string() inputs
+- [x] L4: referral.redeemTrialCode — insert betaCodeId: null instead of 0
+- [x] L5: Move cron starts inside startServer(); gate with ENABLE_CRONS env var
+- [x] L7: Remove evt_test_ passthrough from Stripe webhook (done as part of C1)
+- [ ] L8: Add adminAuditLog table for admin mutations (role change, code mint/delete)

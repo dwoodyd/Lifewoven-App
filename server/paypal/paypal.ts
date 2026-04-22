@@ -10,6 +10,7 @@ import { getDb } from "../db";
 import { orders, referralCredits } from "../../drizzle/schema";
 import { getProductBySlug, getAllProducts } from "../products";
 import { notifyOwner } from "../_core/notification";
+import { sdk } from "../_core/sdk";
 
 const PAYPAL_BASE =
   process.env.PAYPAL_ENV === "live"
@@ -39,19 +40,23 @@ export const paypalRouter = Router();
 // ── Create Order ─────────────────────────────────────────────────────────────
 paypalRouter.post("/api/paypal/create-order", async (req: Request, res: Response) => {
   try {
-    const { productSlug, userId, useCredit } = req.body as { productSlug: string; userId?: number; useCredit?: boolean };
+    // C3: Require authentication — userId always comes from the session, never the body
+    const user = await sdk.authenticateRequest(req).catch(() => null);
+    if (!user) return res.status(401).json({ error: "Unauthorized" });
+
+    const { productSlug, useCredit } = req.body as { productSlug: string; useCredit?: boolean };
 
     const product = getProductBySlug(productSlug);
     if (!product) return res.status(404).json({ error: "Product not found" });
 
-    // For bundle: use bundle price
     let displayPrice = product.priceUsd;
     let creditApplied = 0;
-    if (useCredit && userId) {
+    // Apply referral credit for the authenticated user only
+    if (useCredit) {
       const db = await getDb();
       if (db) {
         const { eq } = await import("drizzle-orm");
-        const [cr] = await db.select().from(referralCredits).where(eq(referralCredits.userId, userId)).limit(1);
+        const [cr] = await db.select().from(referralCredits).where(eq(referralCredits.userId, user.id)).limit(1);
         if (cr && cr.balanceCents > 0) {
           creditApplied = Math.min(cr.balanceCents, Math.round(displayPrice * 100));
           displayPrice = Math.max(0.5, displayPrice - creditApplied / 100);
@@ -77,7 +82,8 @@ paypalRouter.post("/api/paypal/create-order", async (req: Request, res: Response
             currency_code: "USD",
             value: displayPrice.toFixed(2),
           },
-          custom_id: userId ? String(userId) : undefined,
+          // custom_id stores only the authenticated userId — no credit amounts (M6 fix)
+          custom_id: String(user.id),
         }],
         application_context: {
           brand_name: "Lifewoven",
@@ -103,10 +109,13 @@ paypalRouter.post("/api/paypal/create-order", async (req: Request, res: Response
 // ── Capture Order ─────────────────────────────────────────────────────────────
 paypalRouter.post("/api/paypal/capture-order", async (req: Request, res: Response) => {
   try {
-    const { orderId, productSlug, userId } = req.body as {
+    // C4: Require authentication — userId always comes from the session, never the body
+    const user = await sdk.authenticateRequest(req).catch(() => null);
+    if (!user) return res.status(401).json({ error: "Unauthorized" });
+
+    const { orderId, productSlug } = req.body as {
       orderId: string;
       productSlug: string;
-      userId?: number;
     };
 
     if (!orderId || !productSlug) {
@@ -151,27 +160,37 @@ paypalRouter.post("/api/paypal/capture-order", async (req: Request, res: Respons
     const captureDetail = captureUnit?.payments?.captures?.[0];
     const amountPaid = parseFloat(captureDetail?.amount?.value ?? "0");
     const paypalCaptureId = captureDetail?.id ?? orderId;
-    const resolvedUserId = userId ?? (captureUnit?.custom_id ? parseInt(captureUnit.custom_id) : null);
+
+    // C4: Validate that the order was created by the authenticated user
+    const orderOwner = captureUnit?.custom_id ? parseInt(captureUnit.custom_id) : null;
+    if (orderOwner !== null && orderOwner !== user.id) {
+      console.error(`[PayPal] Order ownership mismatch: order owner=${orderOwner}, requester=${user.id}`);
+      return res.status(403).json({ error: "Order does not belong to this user" });
+    }
 
     // Generate secure download token (72-hour expiry)
     const downloadToken = crypto.randomBytes(32).toString("hex");
     const downloadExpiresAt = new Date(Date.now() + 72 * 60 * 60 * 1000);
 
     const db = await getDb();
-    // Deduct referral credit if any was applied (passed via custom_id suffix)
-    const creditAppliedCents = parseInt((captureUnit?.custom_id ?? "").split(":")[1] ?? "0") || 0;
-    if (db && resolvedUserId && creditAppliedCents > 0) {
+
+    // M6: Credit deduction based on server-computed difference (full price - amount paid)
+    // Never trust custom_id suffix for credit amounts
+    const fullPriceCents = product ? Math.round(product.priceUsd * 100) : 0;
+    const paidCents = Math.round(amountPaid * 100);
+    const creditUsedCents = Math.max(0, fullPriceCents - paidCents);
+    if (db && creditUsedCents > 0) {
       const { eq, sql } = await import("drizzle-orm");
       await db.update(referralCredits)
-        .set({ balanceCents: sql`GREATEST(0, balance_cents - ${creditAppliedCents})` })
-        .where(eq(referralCredits.userId, resolvedUserId))
+        .set({ balanceCents: sql`GREATEST(0, balance_cents - ${creditUsedCents})` })
+        .where(eq(referralCredits.userId, user.id))
         .catch(() => {});
     }
-    if (db && resolvedUserId) {
+    if (db) {
       if (isBundle && bundleProducts) {
         // Insert one order row per product in the bundle
         const bundleRows = bundleProducts.map(bp => ({
-          userId: resolvedUserId as number,
+          userId: user.id,
           items: [{ type: "product", slug: bp.slug, price: bp.priceCents }],
           total: bp.priceUsd.toFixed(2),
           status: "completed" as const,
@@ -185,11 +204,11 @@ paypalRouter.post("/api/paypal/capture-order", async (req: Request, res: Respons
         await db.insert(orders).values(bundleRows);
         await notifyOwner({
           title: `💳 Bundle Purchase (PayPal): Complete Bundle`,
-          content: `User ${resolvedUserId} purchased the Complete Bundle for $${amountPaid.toFixed(2)} via PayPal. Capture ID: ${paypalCaptureId}`,
+          content: `User ${user.id} purchased the Complete Bundle for $${amountPaid.toFixed(2)} via PayPal. Capture ID: ${paypalCaptureId}`,
         }).catch(() => {});
       } else {
         await db.insert(orders).values({
-          userId: resolvedUserId,
+          userId: user.id,
           items: [{ type: "product", slug: productSlug, price: Math.round(amountPaid * 100) }],
           total: amountPaid.toFixed(2),
           status: "completed",
@@ -202,15 +221,15 @@ paypalRouter.post("/api/paypal/capture-order", async (req: Request, res: Respons
         });
         await notifyOwner({
           title: `💳 New Purchase (PayPal): ${product.title}`,
-          content: `User ${resolvedUserId} purchased "${product.title}" for $${amountPaid.toFixed(2)} via PayPal. Capture ID: ${paypalCaptureId}`,
+          content: `User ${user.id} purchased "${product.title}" for $${amountPaid.toFixed(2)} via PayPal. Capture ID: ${paypalCaptureId}`,
         }).catch(() => {});
       }
     }
 
+    // C4: Do NOT return downloadToken in the response body.
+    // The client must fetch orders via the authenticated tRPC stripe.getMyOrders procedure.
     return res.json({
       status: "COMPLETED",
-      downloadToken,
-      downloadExpiresAt: downloadExpiresAt.toISOString(),
       productTitle: isBundle ? "Complete Lifewoven Bundle (9 products)" : product.title,
       isBundle,
     });
@@ -220,33 +239,5 @@ paypalRouter.post("/api/paypal/capture-order", async (req: Request, res: Respons
   }
 });
 
-// ── Get user's purchases (for download links) ─────────────────────────────────
-paypalRouter.get("/api/paypal/my-purchases/:userId", async (req: Request, res: Response) => {
-  try {
-    const userId = parseInt(req.params.userId);
-    if (!userId) return res.status(400).json({ error: "Invalid userId" });
-
-    const db = await getDb();
-    if (!db) return res.status(500).json({ error: "Database unavailable" });
-
-    const { eq } = await import("drizzle-orm");
-    const myOrders = await db
-      .select({
-        id: orders.id,
-        productSlug: orders.productSlug,
-        status: orders.status,
-        downloadToken: orders.downloadToken,
-        downloadExpiresAt: orders.downloadExpiresAt,
-        createdAt: orders.createdAt,
-        total: orders.total,
-      })
-      .from(orders)
-      .where(eq(orders.userId, userId))
-      .orderBy(orders.createdAt);
-
-    return res.json(myOrders.filter(o => o.status === "completed" && o.productSlug));
-  } catch (err) {
-    console.error("[PayPal] my-purchases error:", err);
-    return res.status(500).json({ error: "Internal server error" });
-  }
-});
+// C2: The unauthenticated GET /api/paypal/my-purchases/:userId endpoint has been
+// permanently removed. Use the authenticated tRPC procedure stripe.getMyOrders instead.

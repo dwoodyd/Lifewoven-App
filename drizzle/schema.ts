@@ -482,7 +482,7 @@ export const betaCodes = mysqlTable("beta_codes", {
 export const betaAccess = mysqlTable("beta_access", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull(),
-  betaCodeId: int("betaCodeId").notNull(),
+  betaCodeId: int("betaCodeId"),  // L4: nullable for referral-based access (no beta code)
   activatedAt: timestamp("activatedAt").defaultNow().notNull(),
   expiresAt: timestamp("expiresAt").notNull(),       // activatedAt + durationDays
   notifiedAt: timestamp("notifiedAt"),               // when expiry warning was shown

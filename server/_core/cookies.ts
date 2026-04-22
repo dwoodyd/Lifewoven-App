@@ -42,7 +42,8 @@ export function getSessionCookieOptions(
   return {
     httpOnly: true,
     path: "/",
-    sameSite: "none",
+    // M4: SameSite=Lax provides CSRF protection; 'none' was only needed for cross-site iframes
+    sameSite: "lax",
     secure: isSecureRequest(req),
   };
 }

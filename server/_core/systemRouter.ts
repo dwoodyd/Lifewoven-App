@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { sql } from "drizzle-orm";
 import { notifyOwner } from "./notification";
-import { adminProcedure, publicProcedure, router } from "./trpc";
+import { adminProcedure, protectedProcedure, publicProcedure, router } from "./trpc";
 import { getDb } from "../db";
 import { events } from "../../drizzle/schema";
 
@@ -29,16 +29,29 @@ export const systemRouter = router({
         success: delivered,
       } as const;
     }),
-  trackEvent: publicProcedure
+  // H6: trackEvent requires authentication and validates the event against an allowlist
+  trackEvent: protectedProcedure
     .input(z.object({
-      event: z.string(),
+      event: z.enum([
+        "onboarding_slide_advance",
+        "onboarding_complete",
+        "beta_converted",
+        "pathway_started",
+        "pathway_step_completed",
+        "habit_logged",
+        "journal_created",
+        "check_in_created",
+        "oracle_chat_started",
+        "product_viewed",
+        "product_purchased",
+      ]),
       properties: z.record(z.string(), z.unknown()).optional(),
     }))
     .mutation(async ({ ctx, input }) => {
       const db = await getDb();
       if (!db) return { ok: false };
       await db.insert(events).values({
-        userId: ctx.user?.id ?? null,
+        userId: ctx.user.id,
         event: input.event,
         properties: input.properties ? JSON.stringify(input.properties) : null,
         createdAt: Math.floor(Date.now() / 1000),
