@@ -70,12 +70,15 @@ export default function Oracle() {
       setLoomPulse(true);
       setTimeout(() => setLoomPulse(false), 800);
     },
-    onError: () => {
+    onError: (err: any) => {
+      const isTierGate = err?.data?.code === "FORBIDDEN" || err?.message?.includes("Oracle membership tier");
       setMessages(prev => [
         ...prev.filter(m => !m.error),
         {
           role: "assistant",
-          content: "The Oracle couldn't reach you just now. This sometimes happens under heavy load.",
+          content: isTierGate
+            ? "__UPGRADE__"
+            : "The Oracle couldn't reach you just now. Please try again in a moment.",
           error: true,
         },
       ]);
@@ -365,25 +368,41 @@ export default function Oracle() {
                       </div>
                     );
                   }
-                  // Error card with retry
+                  // Error card with retry or upgrade CTA
                   if (msg.error) {
+                    const isUpgradePrompt = msg.content === "__UPGRADE__";
                     return (
                       <div key={i} className="flex justify-start">
                         <div className="w-7 h-7 rounded-full bg-accent/10 flex items-center justify-center mr-2 mt-1 shrink-0">
                           <Sparkles className="h-3.5 w-3.5 text-accent" />
                         </div>
                         <div className="max-w-[80%] p-4 rounded-2xl rounded-bl-sm bg-card border border-border/60 text-sm space-y-3">
-                          <p className="text-muted-foreground italic">{msg.content}</p>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="gap-1.5 h-7 text-xs"
-                            onClick={retryLastMessage}
-                            disabled={isLoading}
-                          >
-                            <RotateCcw className="h-3 w-3" />
-                            Try again
-                          </Button>
+                          {isUpgradePrompt ? (
+                            <>
+                              <p className="font-medium text-foreground">Oracle AI is available on the Oracle plan.</p>
+                              <p className="text-muted-foreground text-xs">Upgrade to unlock unlimited Oracle AI sessions — your personal guide rooted in the full 5S Framework.</p>
+                              <Link href="/pricing">
+                                <Button size="sm" className="gap-1.5 h-7 text-xs bg-accent text-accent-foreground hover:bg-accent/90">
+                                  <Sparkles className="h-3 w-3" />
+                                  Upgrade to Oracle
+                                </Button>
+                              </Link>
+                            </>
+                          ) : (
+                            <>
+                              <p className="text-muted-foreground italic">{msg.content}</p>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="gap-1.5 h-7 text-xs"
+                                onClick={retryLastMessage}
+                                disabled={isLoading}
+                              >
+                                <RotateCcw className="h-3 w-3" />
+                                Try again
+                              </Button>
+                            </>
+                          )}
                         </div>
                       </div>
                     );

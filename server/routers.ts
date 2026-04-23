@@ -471,10 +471,11 @@ const oracleRouter = router({
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
 
-      // H1: Tier gate — Oracle chat requires the oracle membership tier
-      const [userTierRow] = await db.select({ membershipTier: users.membershipTier }).from(users).where(eq(users.id, ctx.user.id)).limit(1);
-      if (!tierCanAccessOracle(userTierRow?.membershipTier as any)) {
-        throw new TRPCError({ code: "FORBIDDEN", message: "Oracle access requires the Oracle membership tier." });
+      // H1: Tier gate — Oracle chat requires oracle tier (admins bypass)
+      const [userTierRow] = await db.select({ membershipTier: users.membershipTier, role: users.role }).from(users).where(eq(users.id, ctx.user.id)).limit(1);
+      const isAdmin = userTierRow?.role === "admin";
+      if (!isAdmin && !tierCanAccessOracle(userTierRow?.membershipTier as any)) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "Oracle access requires the Oracle membership tier. Upgrade to unlock unlimited Oracle AI sessions." });
       }
 
       // Fetch user mind patterns for Oracle adaptation
@@ -595,10 +596,11 @@ User context:
     const db = await getDb();
     if (!db) throw new Error("Database unavailable");
 
-    // H1: Tier gate — Oracle insights require the oracle membership tier
-    const [userTierRow2] = await db.select({ membershipTier: users.membershipTier }).from(users).where(eq(users.id, ctx.user.id)).limit(1);
-    if (!tierCanAccessOracle(userTierRow2?.membershipTier as any)) {
-      throw new TRPCError({ code: "FORBIDDEN", message: "Oracle access requires the Oracle membership tier." });
+    // H1: Tier gate — Oracle insights require oracle tier (admins bypass)
+    const [userTierRow2] = await db.select({ membershipTier: users.membershipTier, role: users.role }).from(users).where(eq(users.id, ctx.user.id)).limit(1);
+    const isAdmin2 = userTierRow2?.role === "admin";
+    if (!isAdmin2 && !tierCanAccessOracle(userTierRow2?.membershipTier as any)) {
+      throw new TRPCError({ code: "FORBIDDEN", message: "Oracle access requires the Oracle membership tier. Upgrade to unlock unlimited Oracle AI sessions." });
     }
 
     // Gather recent data
