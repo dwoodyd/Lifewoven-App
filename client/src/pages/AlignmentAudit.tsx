@@ -435,6 +435,52 @@ export default function AlignmentAudit() {
           <div className="p-5 rounded-2xl border border-accent/20 bg-accent/5 mb-4 text-center">
             <p className="font-serif text-base font-light text-foreground italic">"{profile.truth}"</p>
           </div>
+
+          {/* Oracle nudge — connects lowest 5S dimension to upgrade */}
+          {(() => {
+            const lowestDim = (Object.entries(scores.pct) as [string, number][])
+              .sort(([, a], [, b]) => a - b)[0]?.[0] ?? "State";
+            const dimDescriptions: Record<string, string> = {
+              State: "your emotional regulation and inner state",
+              Story: "the beliefs and identity narratives shaping you",
+              Standards: "your habits, rituals, and daily execution",
+              Strategy: "your decisions, leverage, and long-term direction",
+              Stewardship: "your energy, body, and stewardship rhythms",
+            };
+            return (
+              <div className="p-6 rounded-2xl border mb-4" style={{
+                background: "linear-gradient(135deg, rgba(111,143,196,0.08), rgba(216,184,120,0.05))",
+                borderColor: "rgba(111,143,196,0.28)",
+              }}>
+                <div className="flex items-start gap-4">
+                  <div className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-xl" style={{ background: "rgba(111,143,196,0.15)", color: "#6f8fc4" }}>◎</div>
+                  <div className="flex-1">
+                    <p className="text-xs font-mono tracking-widest uppercase mb-1" style={{ color: "#6f8fc4" }}>Your Oracle is ready</p>
+                    <h3 className="font-serif text-lg font-light text-foreground mb-2">
+                      Your <span style={{ color: "#6f8fc4" }}>{lowestDim}</span> dimension needs the most attention right now.
+                    </h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                      The Oracle works directly on {dimDescriptions[lowestDim] ?? "your growth areas"} — drawing from your audit results, your journal, and your patterns to give you guidance that is specific to <em>you</em>, not generic advice.
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      {isAuthenticated ? (
+                        <Button size="sm" asChild style={{ background: "linear-gradient(135deg, #6f8fc4, #8ba8d4)", color: "white", border: "none" }}>
+                          <a href="/oracle">Ask the Oracle about my {lowestDim} →</a>
+                        </Button>
+                      ) : (
+                        <Button size="sm" asChild style={{ background: "linear-gradient(135deg, #6f8fc4, #8ba8d4)", color: "white", border: "none" }}>
+                          <a href={getLoginUrl()}>Unlock the Oracle →</a>
+                        </Button>
+                      )}
+                      <Button size="sm" variant="ghost" asChild>
+                        <a href="/pricing">See Oracle plans</a>
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
           <div className="p-6 rounded-2xl border border-border bg-card mb-6">
             <h3 className="font-serif text-lg font-light text-foreground mb-2">Want to track your progress over time?</h3>
             <p className="text-base text-muted-foreground mb-4">Create a free account to save your results, revisit your audit, and watch your patterns shift as you work through Lifewoven.</p>

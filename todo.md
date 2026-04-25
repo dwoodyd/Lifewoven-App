@@ -497,9 +497,9 @@
 
 ## Oracle Upgrade Onboarding Flow
 
-- [ ] Oracle Teaser slide: interactive simulated Oracle demo with 5S badge tagging + upgrade CTA
-- [ ] Finished state: split CTA — "Take the Audit" + "Unlock Oracle Access" for Explorer users
-- [ ] Post-audit Oracle nudge banner: "Your Oracle is ready" with dimension-specific upgrade prompt
+- [x] Oracle Teaser slide: interactive simulated Oracle demo with 5S badge tagging + upgrade CTA
+- [x] Finished state: split CTA — "Take the Audit" + "Unlock Oracle Access" for Explorer users
+- [x] Post-audit Oracle nudge banner: "Your Oracle is ready" with dimension-specific upgrade prompt
 
 ## Production Hardening (25-point audit)
 

@@ -42,6 +42,7 @@ export const systemRouter = router({
         "journal_created",
         "check_in_created",
         "oracle_chat_started",
+        "oracle_upgrade_click",
         "product_viewed",
         "product_purchased",
       ]),
@@ -60,7 +61,7 @@ export const systemRouter = router({
     }),
   getOnboardingFunnel: adminProcedure.query(async () => {
     const db = await getDb();
-    const slideOrder = ["thesis","state","framework","oracle","btw","reset","close"];
+    const slideOrder = ["thesis","state","framework","oracle","oracle_teaser","btw","reset","close"];
     if (!db) return [...slideOrder.map(id => ({ slide: id, count: 0 })), { slide: "complete", count: 0 }, { slide: "beta_converted", count: 0 }];
     const [slideRaw, completeRaw, convertedRaw] = await Promise.all([
       db.execute(

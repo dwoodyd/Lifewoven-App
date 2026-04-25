@@ -460,6 +460,153 @@ function Slide4Art({ active }: { active: boolean }) {
   );
 }
 
+/* ─── Oracle Teaser — scripted responses ────────────────────────── */
+const ORACLE_SCRIPTED: Array<{ triggers: string[]; reply: string; tags: Array<{ label: string; color: string }> }> = [
+  {
+    triggers: ["purpose", "meaning", "why", "direction", "lost"],
+    reply: "The disorientation you're feeling isn't a sign that you've failed — it's a signal that your Story dimension is asking to be rewritten. You haven't lost your direction. You've outgrown the story that used to carry it. The next step isn't to find purpose. It's to notice what you keep returning to, even when no one is watching.",
+    tags: [{ label: "Story", color: "#d6a96a" }, { label: "Strategy", color: "#6f8fc4" }],
+  },
+  {
+    triggers: ["overwhelm", "overwhelmed", "too much", "scattered", "stress", "anxious", "anxiety"],
+    reply: "Your State dimension is carrying more than it should right now. That's not weakness — it's data. When the nervous system is flooded, the mind can't access its own clarity. Before strategy, before habits, before anything else: one breath, one task, one moment. The system will still be here when you return.",
+    tags: [{ label: "State", color: "#e07b6e" }],
+  },
+  {
+    triggers: ["habit", "habits", "consistent", "consistency", "routine", "discipline", "motivation"],
+    reply: "Consistency isn't a character trait — it's a design problem. Your Standards dimension is asking for a system that accounts for your actual life, not an idealized version of it. The question isn't 'why can't I stay consistent?' It's 'what does a sustainable version of this look like on my worst day?' Build for that version of you.",
+    tags: [{ label: "Standards", color: "#6fb597" }],
+  },
+  {
+    triggers: ["relationship", "relationships", "people", "family", "friend", "connect", "lonely", "alone"],
+    reply: "The Stewardship dimension holds your relationship to others — and to yourself. What you're noticing in your connections often mirrors what's unresolved internally. The Oracle doesn't ask you to fix the relationship. It asks: what would it feel like to show up fully, without the weight you've been carrying in?",
+    tags: [{ label: "Stewardship", color: "#b89e6a" }, { label: "Story", color: "#d6a96a" }],
+  },
+  {
+    triggers: ["focus", "priority", "priorities", "decision", "decisions", "clarity", "clear", "goal", "goals"],
+    reply: "Your Strategy dimension is asking for a filter, not a longer list. The feeling of having too many priorities is usually a sign that none of them have been tested against your actual values. Try this: which of your current goals would you still pursue if no one would ever know you'd done it? Start there.",
+    tags: [{ label: "Strategy", color: "#6f8fc4" }, { label: "Standards", color: "#6fb597" }],
+  },
+];
+const ORACLE_DEFAULT_RESP = {
+  reply: "That question is worth sitting with. The Oracle works best when it knows your patterns — your State, your Story, the Standards you hold yourself to. What you've just asked touches all five dimensions. Unlock the Oracle to explore it fully, with the context of your own audit results woven in.",
+  tags: [{ label: "Story", color: "#d6a96a" }, { label: "State", color: "#e07b6e" }, { label: "Standards", color: "#6fb597" }],
+};
+function getOraclePreviewResponse(q: string) {
+  const lower = q.toLowerCase();
+  for (const s of ORACLE_SCRIPTED) {
+    if (s.triggers.some(t => lower.includes(t))) return s;
+  }
+  return ORACLE_DEFAULT_RESP;
+}
+/* ─── Oracle Teaser interactive component ───────────────────────── */
+function OracleTeaserArt({ active, onUnlock }: { active: boolean; onUnlock: () => void }) {
+  const [query, setQuery] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [response, setResponse] = useState<{ reply: string; tags: Array<{ label: string; color: string }> } | null>(null);
+  const [displayedText, setDisplayedText] = useState("");
+  const [typing, setTyping] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => { if (active && !submitted) setTimeout(() => inputRef.current?.focus(), 700); }, [active, submitted]);
+
+  function handleSubmit() {
+    if (!query.trim() || typing) return;
+    const res = getOraclePreviewResponse(query);
+    setSubmitted(true);
+    setResponse(res);
+    setDisplayedText("");
+    setTyping(true);
+    let i = 0;
+    const interval = setInterval(() => {
+      i++;
+      setDisplayedText(res.reply.slice(0, i));
+      if (i >= res.reply.length) { clearInterval(interval); setTyping(false); }
+    }, 16);
+  }
+
+  return (
+    <div style={{ margin: "1.8rem auto 0", maxWidth: 540, opacity: active ? 1 : 0, transform: active ? "translateY(0)" : "translateY(16px)", transition: "opacity 0.7s ease 0.4s, transform 0.7s ease 0.4s" }}>
+      {!submitted ? (
+        <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+          <input
+            ref={inputRef}
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            onKeyDown={e => { if (e.key === "Enter") handleSubmit(); }}
+            placeholder="Ask the Oracle anything…"
+            maxLength={200}
+            style={{
+              flex: 1, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(111,143,196,0.35)",
+              borderRadius: 12, padding: "0.85rem 1.1rem", color: T.ink, fontSize: "0.95rem",
+              fontFamily: "inherit", outline: "none", caretColor: T.strategy,
+              transition: "border-color 0.2s, box-shadow 0.2s",
+            }}
+            onFocus={e => { e.target.style.borderColor = T.strategy; e.target.style.boxShadow = `0 0 0 3px rgba(111,143,196,0.18)`; }}
+            onBlur={e => { e.target.style.borderColor = "rgba(111,143,196,0.35)"; e.target.style.boxShadow = "none"; }}
+          />
+          <button
+            onClick={handleSubmit}
+            disabled={!query.trim()}
+            style={{
+              background: query.trim() ? `linear-gradient(135deg, ${T.strategy}, #4a6fa8)` : "rgba(255,255,255,0.06)",
+              border: "none", borderRadius: 10, padding: "0.85rem 1.2rem",
+              color: query.trim() ? "white" : T.quiet, cursor: query.trim() ? "pointer" : "default",
+              fontSize: "0.9rem", fontFamily: "inherit", transition: "all 0.2s ease",
+              boxShadow: query.trim() ? `0 0 20px rgba(111,143,196,0.4)` : "none",
+            }}
+          >Ask →</button>
+        </div>
+      ) : (
+        <div style={{
+          background: "rgba(111,143,196,0.07)", border: "1px solid rgba(111,143,196,0.22)",
+          borderRadius: 16, padding: "1.4rem 1.5rem",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(111,143,196,0.08)",
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.9rem" }}>
+            <div style={{ width: 8, height: 8, borderRadius: "50%", background: T.strategy, boxShadow: `0 0 10px ${T.strategy}` }} />
+            <span style={{ fontSize: "0.65rem", letterSpacing: "0.22em", textTransform: "uppercase", color: T.strategy }}>Oracle</span>
+          </div>
+          <p style={{ color: T.ink, fontSize: "0.95rem", lineHeight: 1.75, fontFamily: "Georgia, serif", marginBottom: "1rem", minHeight: "4rem" }}>
+            {displayedText}{typing && <span style={{ opacity: 0.6 }}>▋</span>}
+          </p>
+          {!typing && response && (
+            <>
+              <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap", marginBottom: "1.2rem" }}>
+                {response.tags.map((tag, i) => (
+                  <span key={i} style={{
+                    padding: "0.22rem 0.65rem", borderRadius: 999, fontSize: "0.65rem",
+                    letterSpacing: "0.14em", textTransform: "uppercase",
+                    background: `${tag.color}22`, color: tag.color,
+                    border: `1px solid ${tag.color}44`,
+                  }}>{tag.label}</span>
+                ))}
+              </div>
+              <p style={{ fontSize: "0.72rem", color: T.muted, marginBottom: "1rem", fontStyle: "italic" }}>
+                This is a preview. Your Oracle will respond with your actual audit results woven in.
+              </p>
+              <button
+                onClick={onUnlock}
+                style={{
+                  width: "100%", background: `linear-gradient(135deg, ${T.thread}, #c9a55a)`,
+                  color: "#1a1610", border: "none", borderRadius: 10,
+                  padding: "0.85rem 1.5rem", fontSize: "0.9rem", fontWeight: 600,
+                  cursor: "pointer", fontFamily: "inherit",
+                  boxShadow: `0 0 30px rgba(216,184,120,0.4), 0 6px 24px rgba(0,0,0,0.4)`,
+                  transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                }}
+                onMouseEnter={e => { (e.target as HTMLElement).style.transform = "scale(1.02)"; }}
+                onMouseLeave={e => { (e.target as HTMLElement).style.transform = "scale(1)"; }}
+              >
+                Unlock the Oracle — $49/mo →
+              </button>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 const ORACLE_MODES = [
   { name: "Guide",          when: "Open conversation" },
   { name: "Unstuck",        when: "When you're blocked" },
@@ -581,7 +728,7 @@ function Slide7Art({ active }: { active: boolean }) {
 }
 
 /* ─── Slide definitions ──────────────────────────────────────────── */
-type SlideId = "thesis" | "state" | "framework" | "oracle" | "btw" | "reset" | "close";
+type SlideId = "thesis" | "state" | "framework" | "oracle" | "oracle_teaser" | "btw" | "reset" | "close";
 
 interface SlideConfig {
   id: SlideId;
@@ -667,6 +814,21 @@ const SLIDES: SlideConfig[] = [
     bgColors: ["#06060f", "#09091a", "#06060f"],
     glowColor: "rgba(111,143,196,0.18)",
     glowPos: { x: 50, y: 42 },
+  },
+  {
+    id: "oracle_teaser",
+    eyebrow: "The Oracle · Live Preview",
+    eyebrowColor: T.strategy,
+    headlineParts: [
+      { text: "Ask it" },
+      { break: true },
+      { text: "anything.", accent: true, italic: true },
+    ],
+    sub: "Type a real question below. The Oracle responds the way it responds to you — drawing from your 5S patterns.",
+    cta: "Unlock the Oracle →",
+    bgColors: ["#06060f", "#08081c", "#06060f"],
+    glowColor: "rgba(111,143,196,0.26)",
+    glowPos: { x: 50, y: 38 },
   },
   {
     id: "btw",
@@ -945,20 +1107,34 @@ export default function OnboardingModal({ userId }: Props) {
           }}>
             Open your dashboard whenever you're ready. The system is waiting — and now it knows your name.
           </p>
-          <button onClick={() => { trackEvent.mutate({ event: "onboarding_complete", properties: {} }); dismiss(); navigate("/audit"); }}
-            style={{
-              background: `linear-gradient(135deg, ${T.thread}, #c9a55a)`,
-              color: "#1a1610", border: "none",
-              padding: "1.05rem 2.8rem", borderRadius: 999,
-              fontSize: "1rem", fontWeight: 600, cursor: "pointer", fontFamily: "inherit",
-              boxShadow: `0 0 40px rgba(216,184,120,0.45), 0 8px 32px rgba(0,0,0,0.4)`,
-              animation: "fadeUp 0.8s ease 0.45s both",
-              transition: "transform 0.2s ease, box-shadow 0.2s ease",
-            }}
-            onMouseEnter={e => { (e.target as HTMLElement).style.transform = "scale(1.04)"; (e.target as HTMLElement).style.boxShadow = `0 0 60px rgba(216,184,120,0.65), 0 12px 40px rgba(0,0,0,0.5)`; }}
-            onMouseLeave={e => { (e.target as HTMLElement).style.transform = "scale(1)"; (e.target as HTMLElement).style.boxShadow = `0 0 40px rgba(216,184,120,0.45), 0 8px 32px rgba(0,0,0,0.4)`; }}>
-            Take the Alignment Audit →
-          </button>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.85rem", animation: "fadeUp 0.8s ease 0.45s both" }}>
+            <button onClick={() => { trackEvent.mutate({ event: "onboarding_complete", properties: {} }); dismiss(); navigate("/audit"); }}
+              style={{
+                background: `linear-gradient(135deg, ${T.thread}, #c9a55a)`,
+                color: "#1a1610", border: "none",
+                padding: "1.05rem 2.8rem", borderRadius: 999,
+                fontSize: "1rem", fontWeight: 600, cursor: "pointer", fontFamily: "inherit",
+                boxShadow: `0 0 40px rgba(216,184,120,0.45), 0 8px 32px rgba(0,0,0,0.4)`,
+                transition: "transform 0.2s ease, box-shadow 0.2s ease",
+              }}
+              onMouseEnter={e => { (e.target as HTMLElement).style.transform = "scale(1.04)"; (e.target as HTMLElement).style.boxShadow = `0 0 60px rgba(216,184,120,0.65), 0 12px 40px rgba(0,0,0,0.5)`; }}
+              onMouseLeave={e => { (e.target as HTMLElement).style.transform = "scale(1)"; (e.target as HTMLElement).style.boxShadow = `0 0 40px rgba(216,184,120,0.45), 0 8px 32px rgba(0,0,0,0.4)`; }}>
+              Take the Alignment Audit →
+            </button>
+            <button onClick={() => { trackEvent.mutate({ event: "oracle_upgrade_click", properties: { source: "onboarding_finished" } }); dismiss(); navigate("/pricing"); }}
+              style={{
+                background: "rgba(111,143,196,0.12)", color: T.strategy,
+                border: `1px solid rgba(111,143,196,0.35)`,
+                padding: "0.75rem 2rem", borderRadius: 999,
+                fontSize: "0.88rem", fontWeight: 500, cursor: "pointer", fontFamily: "inherit",
+                boxShadow: `0 0 20px rgba(111,143,196,0.2)`,
+                transition: "background 0.2s ease, box-shadow 0.2s ease",
+              }}
+              onMouseEnter={e => { (e.target as HTMLElement).style.background = "rgba(111,143,196,0.2)"; (e.target as HTMLElement).style.boxShadow = `0 0 30px rgba(111,143,196,0.35)`; }}
+              onMouseLeave={e => { (e.target as HTMLElement).style.background = "rgba(111,143,196,0.12)"; (e.target as HTMLElement).style.boxShadow = `0 0 20px rgba(111,143,196,0.2)`; }}>
+              Unlock the Oracle — $49/mo
+            </button>
+          </div>
           <button onClick={() => { setFinished(false); setIdx(0); }}
             style={{
               background: "transparent", color: T.quiet, border: "none",
@@ -1207,6 +1383,9 @@ export default function OnboardingModal({ userId }: Props) {
             )}
             {s.id === "reset" && <Slide6Art active={artIn} />}
             {s.id === "close" && <Slide7Art active={artIn} />}
+            {s.id === "oracle_teaser" && (
+              <OracleTeaserArt active={artIn} onUnlock={() => { dismiss(); navigate("/pricing"); }} />
+            )}
 
             {/* Whisper */}
             {s.whisper && (
