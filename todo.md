@@ -494,3 +494,19 @@
 - [x] Library articles: show 2-3 section preview, then paywall card (sign in / upgrade CTA)
 - [x] BTW articles: same preview + paywall gate
 - [x] Admin role bypasses all article gates
+
+## Oracle Upgrade Onboarding Flow
+
+- [ ] Oracle Teaser slide: interactive simulated Oracle demo with 5S badge tagging + upgrade CTA
+- [ ] Finished state: split CTA — "Take the Audit" + "Unlock Oracle Access" for Explorer users
+- [ ] Post-audit Oracle nudge banner: "Your Oracle is ready" with dimension-specific upgrade prompt
+
+## Production Hardening (25-point audit)
+
+- [x] #11 DB indexes: add index() on all userId foreign key columns in schema
+- [x] #13 Response compression: add compression middleware to Express
+- [x] #15 DB transactions: wrap multi-step writes (audit save, comment+count, like+count)
+- [x] #16 Health check endpoint: GET /api/health with DB ping + uptime
+- [x] #18 Graceful shutdown: SIGTERM/SIGINT handlers to drain connections
+- [x] #19/#21/#23 Timeouts + circuit breaker: AbortController on LLM and PayPal outbound calls
+- [x] #14 Error alerting: owner notification on unhandled server errors

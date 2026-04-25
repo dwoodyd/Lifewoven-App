@@ -1,6 +1,7 @@
 import {
   boolean,
   decimal,
+  index,
   int,
   json,
   mysqlEnum,
@@ -54,7 +55,7 @@ export const auditResults = mysqlTable("audit_results", {
   scores: json("scores").notNull(),   // { state: 0-100, story: 0-100, ... }
   recommendedPathway: varchar("recommendedPathway", { length: 64 }).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (t) => [index("idx_audit_results_userId").on(t.userId)]);
 
 // ─── Daily Check-ins ──────────────────────────────────────────────────────────
 
@@ -67,7 +68,7 @@ export const checkIns = mysqlTable("check_ins", {
   note: text("note"),
   module: varchar("module", { length: 32 }),       // which 5S module triggered this
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (t) => [index("idx_check_ins_userId").on(t.userId)]);
 
 // ─── Journal Entries ──────────────────────────────────────────────────────────
 
@@ -84,7 +85,7 @@ export const journalEntries = mysqlTable("journal_entries", {
   isPrivate: boolean("isPrivate").default(true).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
+}, (t) => [index("idx_journal_entries_userId").on(t.userId)]);
 
 // ─── Habits ───────────────────────────────────────────────────────────────────
 
@@ -110,7 +111,7 @@ export const habits = mysqlTable("habits", {
   returnCount: int("returnCount").default(0).notNull(),
   lastCompletedAt: timestamp("lastCompletedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (t) => [index("idx_habits_userId").on(t.userId)]);
 
 export const habitLogs = mysqlTable("habit_logs", {
   id: int("id").autoincrement().primaryKey(),
@@ -119,7 +120,10 @@ export const habitLogs = mysqlTable("habit_logs", {
   completedAt: timestamp("completedAt").defaultNow().notNull(),
   note: text("note"),
   quality: int("quality"), // 1-5 self-rating
-});
+}, (t) => [
+  index("idx_habit_logs_userId").on(t.userId),
+  index("idx_habit_logs_habitId").on(t.habitId),
+]);
 
 // ─── Daily Scorecard ──────────────────────────────────────────────────────────
 
@@ -132,7 +136,7 @@ export const scorecards = mysqlTable("scorecards", {
   wins: text("wins"),
   improvements: text("improvements"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (t) => [index("idx_scorecards_userId").on(t.userId)]);
 
 // ─── Beliefs (Story Module) ───────────────────────────────────────────────────
 
@@ -147,7 +151,7 @@ export const beliefs = mysqlTable("beliefs", {
   isRewritten: boolean("isRewritten").default(false).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
+}, (t) => [index("idx_beliefs_userId").on(t.userId)]);
 
 // ─── Decisions (Strategy Module) ─────────────────────────────────────────────
 
@@ -165,7 +169,7 @@ export const decisions = mysqlTable("decisions", {
   status: mysqlEnum("status", ["pending", "decided", "reviewing", "closed"]).default("pending").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
+}, (t) => [index("idx_decisions_userId").on(t.userId)]);
 
 // ─── Energy Audits (Stewardship Module) ──────────────────────────────────────
 
@@ -181,7 +185,7 @@ export const energyAudits = mysqlTable("energy_audits", {
   energyScore: int("energyScore"),      // 1-10
   notes: text("notes"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (t) => [index("idx_energy_audits_userId").on(t.userId)]);
 
 // ─── Oracle Insights ──────────────────────────────────────────────────────────
 
@@ -194,7 +198,7 @@ export const oracleInsights = mysqlTable("oracle_insights", {
   sourceData: json("sourceData"), // what data triggered this insight
   isRead: boolean("isRead").default(false).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (t) => [index("idx_oracle_insights_userId").on(t.userId)]);
 
 export const oracleConversations = mysqlTable("oracle_conversations", {
   id: int("id").autoincrement().primaryKey(),
@@ -203,7 +207,7 @@ export const oracleConversations = mysqlTable("oracle_conversations", {
   context: json("context"),             // snapshot of user data used
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
+}, (t) => [index("idx_oracle_conversations_userId").on(t.userId)]);
 
 // ─── Pathways ─────────────────────────────────────────────────────────────────
 
@@ -216,7 +220,7 @@ export const userPathways = mysqlTable("user_pathways", {
   totalSteps: int("totalSteps").default(0).notNull(),
   startedAt: timestamp("startedAt").defaultNow().notNull(),
   completedAt: timestamp("completedAt"),
-});
+}, (t) => [index("idx_user_pathways_userId").on(t.userId)]);
 
 // ─── Pathway Sessions ───────────────────────────────────────────────────────
 
@@ -227,11 +231,11 @@ export const pathwaySessions = mysqlTable("pathway_sessions", {
   stepsCompleted: int("stepsCompleted").notNull(),
   totalSteps: int("totalSteps").notNull(),
   completedAt: timestamp("completedAt").defaultNow().notNull(),
-});
+}, (t) => [index("idx_pathway_sessions_userId").on(t.userId)]);
 
 export type PathwaySession = typeof pathwaySessions.$inferSelect;
 
-// ─── Resources ────────────────────────────────────────────────────────────────
+// ─── Resources ─────────────────
 
 export const resources = mysqlTable("resources", {
   id: int("id").autoincrement().primaryKey(),
@@ -279,7 +283,10 @@ export const enrollments = mysqlTable("enrollments", {
   progress: int("progress").default(0).notNull(), // 0-100
   completedAt: timestamp("completedAt"),
   enrolledAt: timestamp("enrolledAt").defaultNow().notNull(),
-});
+}, (t) => [
+  index("idx_enrollments_userId").on(t.userId),
+  index("idx_enrollments_courseId").on(t.courseId),
+]);
 
 // ─── Digital Products ─────────────────────────────────────────────────────────
 
@@ -311,7 +318,7 @@ export const orders = mysqlTable("orders", {
   downloadToken: varchar("downloadToken", { length: 128 }),
   downloadExpiresAt: timestamp("downloadExpiresAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (t) => [index("idx_orders_userId").on(t.userId)]);
 
 // ─── Community ────────────────────────────────────────────────────────────────
 
@@ -326,7 +333,7 @@ export const referrals = mysqlTable("referrals", {
   creditCents: int("credit_cents").notNull().default(0),
   usedAt: timestamp("used_at"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (t) => [index("idx_referrals_referrerId").on(t.referrerId)]);
 
 export const referralCredits = mysqlTable("referral_credits", {
   id: int("id").autoincrement().primaryKey(),
@@ -348,7 +355,7 @@ export const communityPosts = mysqlTable("community_posts", {
   isPinned: boolean("isPinned").default(false).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
+}, (t) => [index("idx_community_posts_userId").on(t.userId)]);
 
 export const communityComments = mysqlTable("community_comments", {
   id: int("id").autoincrement().primaryKey(),
@@ -357,7 +364,10 @@ export const communityComments = mysqlTable("community_comments", {
   content: text("content").notNull(),
   likesCount: int("likesCount").default(0).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (t) => [
+  index("idx_community_comments_postId").on(t.postId),
+  index("idx_community_comments_userId").on(t.userId),
+]);
 
 // ─── Overflow Capture (Adaptive Intelligence Layer) ─────────────────────────
 
@@ -369,7 +379,7 @@ export const overflowCaptures = mysqlTable("overflow_captures", {
   isSorted: boolean("isSorted").default(false).notNull(),
   sortedTo: varchar("sortedTo", { length: 64 }), // module or pathway it was moved to
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (t) => [index("idx_overflow_captures_userId").on(t.userId)]);
 
 export const communityLikes = mysqlTable("community_likes", {
   id: int("id").autoincrement().primaryKey(),
@@ -377,7 +387,10 @@ export const communityLikes = mysqlTable("community_likes", {
   postId: int("postId"),
   commentId: int("commentId"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (t) => [
+  index("idx_community_likes_userId").on(t.userId),
+  index("idx_community_likes_postId").on(t.postId),
+]);
 
 // ─── Before the Words (BTW) ───────────────────────────────────────────────────
 
@@ -399,7 +412,7 @@ export const btwGroundChecks = mysqlTable("btw_ground_checks", {
   answersJson: json("answersJson").notNull(),
   recommendedPractice: varchar("recommendedPractice", { length: 64 }).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (t) => [index("idx_btw_ground_checks_userId").on(t.userId)]);
 
 export const btwDailySessions = mysqlTable("btw_daily_sessions", {
   id: int("id").autoincrement().primaryKey(),
@@ -411,7 +424,7 @@ export const btwDailySessions = mysqlTable("btw_daily_sessions", {
   completed: boolean("completed").default(false).notNull(),
   stateBeforeId: varchar("stateBeforeId", { length: 32 }),
   stateAfterId: varchar("stateAfterId", { length: 32 }),
-});
+}, (t) => [index("idx_btw_daily_sessions_userId").on(t.userId)]);
 
 export const btwReturns = mysqlTable("btw_returns", {
   id: int("id").autoincrement().primaryKey(),
@@ -422,7 +435,7 @@ export const btwReturns = mysqlTable("btw_returns", {
   afterState: varchar("afterState", { length: 32 }),
   nextAction: text("nextAction"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (t) => [index("idx_btw_returns_userId").on(t.userId)]);
 
 export const btwPrayers = mysqlTable("btw_prayers", {
   id: int("id").autoincrement().primaryKey(),
@@ -435,7 +448,7 @@ export const btwPrayers = mysqlTable("btw_prayers", {
   isPrivate: boolean("isPrivate").default(true).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
+}, (t) => [index("idx_btw_prayers_userId").on(t.userId)]);
 
 export const btwGratitudeEntries = mysqlTable("btw_gratitude_entries", {
   id: int("id").autoincrement().primaryKey(),
@@ -444,7 +457,7 @@ export const btwGratitudeEntries = mysqlTable("btw_gratitude_entries", {
   gratitudeType: mysqlEnum("gratitudeType", ["morning", "evening", "sparse_table", "hard_day", "specific_mercy"]).default("evening").notNull(),
   feltRealness: mysqlEnum("feltRealness", ["real", "forced", "mixed"]).default("real").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (t) => [index("idx_btw_gratitude_userId").on(t.userId)]);
 
 export const btwAudioItems = mysqlTable("btw_audio_items", {
   id: int("id").autoincrement().primaryKey(),
@@ -455,7 +468,7 @@ export const btwAudioItems = mysqlTable("btw_audio_items", {
   fileUrlOrText: text("fileUrlOrText").notNull(),
   favorite: boolean("favorite").default(false).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (t) => [index("idx_btw_audio_items_userId").on(t.userId)]);
 
 export const btwWeeklyReflections = mysqlTable("btw_weekly_reflections", {
   id: int("id").autoincrement().primaryKey(),
@@ -463,7 +476,7 @@ export const btwWeeklyReflections = mysqlTable("btw_weekly_reflections", {
   summaryJson: json("summaryJson").notNull(),
   focusSuggestion: text("focusSuggestion"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (t) => [index("idx_btw_weekly_reflections_userId").on(t.userId)]);
 
 // ─── Beta Access ──────────────────────────────────────────────────────────────
 
@@ -486,7 +499,7 @@ export const betaAccess = mysqlTable("beta_access", {
   activatedAt: timestamp("activatedAt").defaultNow().notNull(),
   expiresAt: timestamp("expiresAt").notNull(),       // activatedAt + durationDays
   notifiedAt: timestamp("notifiedAt"),               // when expiry warning was shown
-});
+}, (t) => [index("idx_beta_access_userId").on(t.userId)]);
 
 export const events = mysqlTable("events", {
   id:         int("id").autoincrement().primaryKey(),
@@ -494,7 +507,7 @@ export const events = mysqlTable("events", {
   event:      varchar("event", { length: 128 }).notNull(),
   properties: text("properties"),
   createdAt:  int("created_at").notNull(),
-});
+}, (t) => [index("idx_events_userId").on(t.userId)]);
 
 // Referral codes — generated by converted beta users, grant 30-day trial to new users
 export const referralCodes = mysqlTable("referral_codes", {
@@ -504,7 +517,7 @@ export const referralCodes = mysqlTable("referral_codes", {
   redeemedBy:  int("redeemed_by"),          // user who redeemed it (null if unused)
   redeemedAt:  int("redeemed_at"),          // unix ms
   createdAt:   int("created_at").notNull(),
-});
+}, (t) => [index("idx_referral_codes_ownerId").on(t.ownerId)]);
 
 // ─── Stripe Events Idempotency Ledger ─────────────────────────────────────────
 // Tracks processed Stripe event IDs to prevent duplicate processing under load.

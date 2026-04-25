@@ -309,14 +309,22 @@ export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
     payload.response_format = normalizedResponseFormat;
   }
 
-  const response = await fetch(resolveApiUrl(), {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      authorization: `Bearer ${ENV.forgeApiKey}`,
-    },
-    body: JSON.stringify(payload),
-  });
+  const llmTimeout = new AbortController();
+  const llmTimeoutId = setTimeout(() => llmTimeout.abort(), 30_000);
+  let response: Response;
+  try {
+    response = await fetch(resolveApiUrl(), {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${ENV.forgeApiKey}`,
+      },
+      body: JSON.stringify(payload),
+      signal: llmTimeout.signal,
+    });
+  } finally {
+    clearTimeout(llmTimeoutId);
+  }
 
   if (!response.ok) {
     const errorText = await response.text();

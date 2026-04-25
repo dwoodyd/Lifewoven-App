@@ -17,12 +17,23 @@ const PAYPAL_BASE =
     ? "https://api-m.paypal.com"
     : "https://api-m.sandbox.paypal.com";
 
+/** Fetch with a hard timeout (ms). Throws DOMException on timeout. */
+async function fetchWithTimeout(url: string, init: RequestInit, timeoutMs = 15_000): Promise<globalThis.Response> {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(id);
+  }
+}
+
 async function getAccessToken(): Promise<string> {
   const clientId = process.env.PAYPAL_CLIENT_ID;
   const secret = process.env.PAYPAL_CLIENT_SECRET;
   if (!clientId || !secret) throw new Error("PayPal credentials not configured");
 
-  const res = await fetch(`${PAYPAL_BASE}/v1/oauth2/token`, {
+  const res = await fetchWithTimeout(`${PAYPAL_BASE}/v1/oauth2/token`, {
     method: "POST",
     headers: {
       "Authorization": `Basic ${Buffer.from(`${clientId}:${secret}`).toString("base64")}`,
@@ -66,7 +77,7 @@ paypalRouter.post("/api/paypal/create-order", async (req: Request, res: Response
 
     const token = await getAccessToken();
 
-    const orderRes = await fetch(`${PAYPAL_BASE}/v2/checkout/orders`, {
+    const orderRes = await fetchWithTimeout(`${PAYPAL_BASE}/v2/checkout/orders`, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -102,7 +113,10 @@ paypalRouter.post("/api/paypal/create-order", async (req: Request, res: Response
     return res.json({ orderId: order.id, creditApplied, finalPrice: displayPrice });
   } catch (err) {
     console.error("[PayPal] create-order error:", err);
-    return res.status(500).json({ error: "Internal server error" });
+    const msg = err instanceof Error && err.name === "AbortError"
+      ? "PayPal is taking too long to respond. Please try again."
+      : "Internal server error";
+    return res.status(500).json({ error: msg });
   }
 });
 
@@ -132,7 +146,7 @@ paypalRouter.post("/api/paypal/capture-order", async (req: Request, res: Respons
 
     const token = await getAccessToken();
 
-    const captureRes = await fetch(`${PAYPAL_BASE}/v2/checkout/orders/${orderId}/capture`, {
+    const captureRes = await fetchWithTimeout(`${PAYPAL_BASE}/v2/checkout/orders/${orderId}/capture`, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -141,7 +155,7 @@ paypalRouter.post("/api/paypal/capture-order", async (req: Request, res: Respons
     });
 
     const capture = await captureRes.json() as {
-      status?: string;
+      status?: string | undefined;
       id?: string;
       purchase_units?: Array<{
         payments?: { captures?: Array<{ id: string; amount: { value: string } }> };
@@ -235,7 +249,10 @@ paypalRouter.post("/api/paypal/capture-order", async (req: Request, res: Respons
     });
   } catch (err) {
     console.error("[PayPal] capture-order error:", err);
-    return res.status(500).json({ error: "Internal server error" });
+    const msg = err instanceof Error && err.name === "AbortError"
+      ? "PayPal is taking too long to respond. Please try again."
+      : "Internal server error";
+    return res.status(500).json({ error: msg });
   }
 });
 

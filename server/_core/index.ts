@@ -1,5 +1,6 @@
 import "dotenv/config";
 import express from "express";
+import { notifyOwner } from "./notification";
 import { createServer } from "http";
 import net from "net";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
@@ -17,8 +18,10 @@ import { transcribeRouter } from "../transcribeRoute";
 import rateLimit from "express-rate-limit";
 import cors from "cors";
 import helmet from "helmet";
+import compression from "compression";
 import { Redis } from "ioredis";
 import { RedisStore } from "rate-limit-redis";
+import { getDb } from "../db";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -45,6 +48,9 @@ async function startServer() {
 
   // Trust the first proxy (required for accurate IP detection behind load balancers/CDN)
   app.set("trust proxy", 1);
+
+  // ── Performance: Gzip/Brotli compression for all responses
+  app.use(compression());
 
   // ── Security: HTTPS enforcement — redirect HTTP to HTTPS in production
   app.use((req, res, next) => {
@@ -149,6 +155,24 @@ async function startServer() {
   app.use("/api/transcribe", apiLimiter);
   app.use("/api/paypal", apiLimiter);
 
+  // ── Health check endpoint — DB ping + uptime (no auth required)
+  app.get("/api/health", async (_req, res) => {
+    const start = Date.now();
+    try {
+      const db = await getDb();
+      if (db) await db.execute("SELECT 1");
+      res.json({
+        status: "ok",
+        uptime: Math.floor(process.uptime()),
+        db: db ? "connected" : "unavailable",
+        latencyMs: Date.now() - start,
+        timestamp: new Date().toISOString(),
+      });
+    } catch {
+      res.status(503).json({ status: "degraded", db: "error", uptime: Math.floor(process.uptime()) });
+    }
+  });
+
   // Stripe webhook MUST use raw body BEFORE express.json()
   app.post("/api/stripe/webhook", express.raw({ type: "application/json" }), stripeWebhookHandler);
 
@@ -204,6 +228,53 @@ async function startServer() {
     startBetaExpiryCheckCron();
     console.log("[Cron] Weekly digest and beta expiry crons started");
   }
+
+  // ── Graceful shutdown: drain in-flight requests before exiting
+  const shutdown = (signal: string) => {
+    console.log(`[Server] ${signal} received — starting graceful shutdown`);
+    server.close((err) => {
+      if (err) {
+        console.error("[Server] Error during shutdown:", err);
+        process.exit(1);
+      }
+      console.log("[Server] All connections closed — exiting cleanly");
+      process.exit(0);
+    });
+    // Force-kill after 10 seconds if connections don't drain
+    setTimeout(() => {
+      console.error("[Server] Forced shutdown after timeout");
+      process.exit(1);
+    }, 10_000).unref();
+  };
+  process.on("SIGTERM", () => shutdown("SIGTERM"));
+  process.on("SIGINT",  () => shutdown("SIGINT"));
 }
 
 startServer().catch(console.error);
+
+// ── Global error alerting — catch unhandled promise rejections and exceptions
+// These indicate bugs that escaped all try/catch blocks; alert owner immediately
+const _alertedErrors = new Set<string>();
+function alertOwnerOnce(label: string, err: unknown) {
+  const key = String(err).slice(0, 120);
+  if (_alertedErrors.has(key)) return; // deduplicate within process lifetime
+  _alertedErrors.add(key);
+  const message = err instanceof Error ? err.message : String(err);
+  const stack = err instanceof Error ? (err.stack ?? "").slice(0, 500) : "";
+  notifyOwner({
+    title: `⚠️ Server Error: ${label}`,
+    content: `**${message}**\n\n${stack}\n\nTimestamp: ${new Date().toISOString()}`,
+  }).catch(() => {}); // never throw from the error handler itself
+}
+
+process.on("unhandledRejection", (reason) => {
+  console.error("[Server] Unhandled promise rejection:", reason);
+  alertOwnerOnce("Unhandled Rejection", reason);
+});
+
+process.on("uncaughtException", (err) => {
+  console.error("[Server] Uncaught exception:", err);
+  alertOwnerOnce("Uncaught Exception", err);
+  // Give the alert 2 seconds to send, then exit (Node is in undefined state)
+  setTimeout(() => process.exit(1), 2_000).unref();
+});

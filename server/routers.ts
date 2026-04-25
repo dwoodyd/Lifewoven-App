@@ -34,16 +34,18 @@ const auditRouter = router({
     .mutation(async ({ ctx, input }) => {
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
-      await db.insert(auditResults).values({
-        userId: ctx.user.id,
-        answers: input.answers,
-        scores: input.scores,
-        recommendedPathway: input.recommendedPathway,
+      await db.transaction(async (tx) => {
+        await tx.insert(auditResults).values({
+          userId: ctx.user.id,
+          answers: input.answers,
+          scores: input.scores,
+          recommendedPathway: input.recommendedPathway,
+        });
+        // Mark onboarding complete — atomic with the audit insert
+        await tx.update(users)
+          .set({ onboardingCompleted: true, primaryPathway: input.recommendedPathway })
+          .where(eq(users.id, ctx.user.id));
       });
-      // Mark onboarding complete
-      await db.update(users)
-        .set({ onboardingCompleted: true, primaryPathway: input.recommendedPathway })
-        .where(eq(users.id, ctx.user.id));
       return { success: true };
     }),
 
@@ -883,10 +885,12 @@ const communityRouter = router({
     .mutation(async ({ ctx, input }) => {
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
-      await db.insert(communityComments).values({ userId: ctx.user.id, ...input });
-      await db.update(communityPosts)
-        .set({ commentsCount: sql`commentsCount + 1` })
-        .where(eq(communityPosts.id, input.postId));
+      await db.transaction(async (tx) => {
+        await tx.insert(communityComments).values({ userId: ctx.user.id, ...input });
+        await tx.update(communityPosts)
+          .set({ commentsCount: sql`commentsCount + 1` })
+          .where(eq(communityPosts.id, input.postId));
+      });
       return { success: true };
     }),
 
@@ -895,10 +899,12 @@ const communityRouter = router({
     .mutation(async ({ ctx, input }) => {
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
-      await db.insert(communityLikes).values({ userId: ctx.user.id, postId: input.postId });
-      await db.update(communityPosts)
-        .set({ likesCount: sql`likesCount + 1` })
-        .where(eq(communityPosts.id, input.postId));
+      await db.transaction(async (tx) => {
+        await tx.insert(communityLikes).values({ userId: ctx.user.id, postId: input.postId });
+        await tx.update(communityPosts)
+          .set({ likesCount: sql`likesCount + 1` })
+          .where(eq(communityPosts.id, input.postId));
+      });
       return { success: true };
     }),
 });
