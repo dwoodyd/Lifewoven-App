@@ -488,3 +488,9 @@
 - [x] "Simplify my view" toggle: redesign as premium mechanical switch (haute horology style)
 - [x] Page transitions: instant, seamless navigation between internal pages (no logo splash or flash)
 - [x] Oracle 5S tagging: append dimension badge (State/Story/Standards/Strategy/Stewardship) to each AI response paragraph
+
+## Content Gates — Pre-Launch
+
+- [x] Library articles: show 2-3 section preview, then paywall card (sign in / upgrade CTA)
+- [x] BTW articles: same preview + paywall gate
+- [x] Admin role bypasses all article gates

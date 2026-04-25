@@ -1,8 +1,10 @@
 import { useEffect } from "react";
-import { ArrowLeft, Download, BookOpen } from "lucide-react";
+import { ArrowLeft, Download, BookOpen, Lock, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import Nav from "@/components/Nav";
+import { useAuth } from "@/_core/hooks/useAuth";
+import { getLoginUrl } from "@/const";
 
 export interface ArticleSection {
   heading?: string;
@@ -34,6 +36,9 @@ interface Props {
   article: ArticleData;
 }
 
+// Number of sections shown free before the gate
+const FREE_SECTIONS = 2;
+
 function renderBody(text: string) {
   // Bold **text**, then line breaks
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
@@ -42,12 +47,84 @@ function renderBody(text: string) {
   );
 }
 
+function ArticlePaywall({ isAuthenticated }: { isAuthenticated: boolean }) {
+  return (
+    <div className="relative mt-0 mb-16">
+      {/* Fade overlay over the last visible section */}
+      <div
+        className="absolute -top-32 left-0 right-0 h-32 pointer-events-none"
+        style={{
+          background: "linear-gradient(to bottom, transparent, var(--background))",
+        }}
+      />
+      {/* Gate card */}
+      <div className="relative rounded-2xl border border-border bg-card p-8 sm:p-10 text-center shadow-sm">
+        <div className="flex justify-center mb-5">
+          <div className="w-12 h-12 rounded-full bg-secondary/60 flex items-center justify-center">
+            <Lock className="h-5 w-5 text-muted-foreground" />
+          </div>
+        </div>
+        <h3 className="font-serif text-2xl font-light text-foreground mb-3">
+          Continue Reading
+        </h3>
+        <p className="text-base text-muted-foreground font-light mb-7 max-w-sm mx-auto leading-relaxed">
+          {isAuthenticated
+            ? "This article is part of the Lifewoven library. Get full access with any membership plan."
+            : "Sign in to continue reading — or explore a membership plan for unlimited access to the full library."}
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          {isAuthenticated ? (
+            <>
+              <Button asChild size="lg" className="gap-2">
+                <Link href="/pricing">
+                  <Sparkles className="h-4 w-4" />
+                  View Membership Plans
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg">
+                <Link href="/audit">Take the Free Audit</Link>
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button size="lg" className="gap-2" onClick={() => { window.location.href = getLoginUrl(); }}>
+                Sign In to Continue
+              </Button>
+              <Button asChild variant="outline" size="lg">
+                <Link href="/pricing">View Plans</Link>
+              </Button>
+            </>
+          )}
+        </div>
+        <p className="text-xs text-muted-foreground mt-5 font-light">
+          Explorer plan is free · No credit card required
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function ArticleReader({ article }: Props) {
+  const { user, isAuthenticated } = useAuth();
+  const isAdmin = user?.role === "admin";
+
+  // Admins and oracle/seeker tier users get full access
+  const membershipTier = (user as any)?.membershipTier as string | undefined;
+  const hasPaidAccess = isAdmin || membershipTier === "oracle" || membershipTier === "seeker";
+
+  // Gate applies when: logged out, or logged in as explorer (free tier)
+  const showGate = !hasPaidAccess && article.sections.length > FREE_SECTIONS;
+
+  const visibleSections = showGate
+    ? article.sections.slice(0, FREE_SECTIONS)
+    : article.sections;
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [article.slug]);
 
   const handleDownload = () => {
+    if (showGate) return; // prevent download on gated articles
     const printWindow = window.open("", "_blank");
     if (!printWindow) return;
 
@@ -123,10 +200,12 @@ ${article.coda ? `<p class="coda">${article.coda}</p>` : ""}
               {article.backLabel}
             </Link>
           </Button>
-          <Button variant="outline" size="sm" className="gap-2 text-muted-foreground" onClick={handleDownload}>
-            <Download className="h-3.5 w-3.5" />
-            Download PDF
-          </Button>
+          {!showGate && (
+            <Button variant="outline" size="sm" className="gap-2 text-muted-foreground" onClick={handleDownload}>
+              <Download className="h-3.5 w-3.5" />
+              Download PDF
+            </Button>
+          )}
         </div>
 
         {/* Article header */}
@@ -144,12 +223,18 @@ ${article.coda ? `<p class="coda">${article.coda}</p>` : ""}
               <span>{[article.author, article.type].filter(Boolean).join(" · ")}</span>
             </div>
           )}
+          {showGate && (
+            <div className="mt-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary/60 text-xs text-muted-foreground font-mono tracking-widest uppercase">
+              <Lock className="h-3 w-3" />
+              Preview — {FREE_SECTIONS} of {article.sections.length} sections
+            </div>
+          )}
           <hr className="mt-8 border-border" />
         </header>
 
-        {/* Article body */}
+        {/* Article body — gated or full */}
         <article className="prose-article">
-          {article.sections.map((s, i) => (
+          {visibleSections.map((s, i) => (
             <section key={i} className="mb-8">
               {s.heading && (
                 <h2 className="font-serif text-2xl font-light text-foreground mt-10 mb-4 pb-2 border-b border-border/50">{s.heading}</h2>
@@ -181,20 +266,27 @@ ${article.coda ? `<p class="coda">${article.coda}</p>` : ""}
               )}
             </section>
           ))}
-          {article.coda && (
+
+          {/* Paywall gate */}
+          {showGate && <ArticlePaywall isAuthenticated={isAuthenticated} />}
+
+          {/* Coda — only shown when full access */}
+          {!showGate && article.coda && (
             <p className="text-base italic text-muted-foreground border-t border-border pt-6 mt-8">{article.coda}</p>
           )}
         </article>
 
-        {/* Back link bottom */}
-        <div className="mt-16 pt-8 border-t border-border no-print">
-          <Button asChild variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground -ml-2">
-            <Link href={article.backHref}>
-              <ArrowLeft className="h-4 w-4" />
-              {article.backLabel}
-            </Link>
-          </Button>
-        </div>
+        {/* Back link bottom — only when full access */}
+        {!showGate && (
+          <div className="mt-16 pt-8 border-t border-border no-print">
+            <Button asChild variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground -ml-2">
+              <Link href={article.backHref}>
+                <ArrowLeft className="h-4 w-4" />
+                {article.backLabel}
+              </Link>
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
