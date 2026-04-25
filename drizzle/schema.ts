@@ -24,6 +24,7 @@ export const users = mysqlTable("users", {
   membershipExpiresAt: timestamp("membershipExpiresAt"),
   stripeCustomerId: varchar("stripeCustomerId", { length: 255 }),
   stripeSubscriptionId: varchar("stripeSubscriptionId", { length: 255 }),
+  paypalSubscriptionId: varchar("paypalSubscriptionId", { length: 255 }),
   onboardingCompleted: boolean("onboardingCompleted").default(false).notNull(),
   primaryPathway: varchar("primaryPathway", { length: 64 }),
   avatarUrl: text("avatarUrl"),

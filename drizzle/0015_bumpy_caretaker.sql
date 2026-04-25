@@ -1,0 +1,1 @@
+ALTER TABLE `users` ADD `paypalSubscriptionId` varchar(255);

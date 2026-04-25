@@ -5,7 +5,7 @@ import { Link } from "wouter";
 import { getLoginUrl } from "@/const";
 import { Settings2, Shield, Bell, User, Sparkles, Eye, CreditCard, ExternalLink, Moon, Sun } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
 import { Badge } from "@/components/ui/badge";
@@ -17,17 +17,48 @@ const TIER_LABELS: Record<string, { label: string; color: string; desc: string }
 };
 
 function BillingSection() {
-  const { data: sub, isLoading } = trpc.stripe.status.useQuery();
-  const createPortal = trpc.stripe.createPortal.useMutation({
-    onSuccess: (data) => { if (data?.url) window.open(data.url, "_blank"); },
-    onError: () => toast.error("Could not open billing portal. Please try again."),
-  });
-  const createCheckout = trpc.stripe.createCheckout.useMutation({
-    onSuccess: (data) => { if (data?.url) { toast.info("Redirecting to checkout…"); window.open(data.url, "_blank"); } },
-    onError: () => toast.error("Could not start checkout. Please try again."),
-  });
+  const [sub, setSub] = useState<{ tier: string; subscriptionId: string | null; status: string; nextBillingDate?: string | null } | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [cancelling, setCancelling] = useState(false);
+  const { user } = useAuth();
 
-  const tier = (sub as any)?.tier ?? "explorer";
+  useEffect(() => {
+    if (!user) { setIsLoading(false); return; }
+    fetch("/api/paypal/subscription/status", { credentials: "include" })
+      .then(r => r.json())
+      .then(d => setSub(d))
+      .catch(() => {})
+      .finally(() => setIsLoading(false));
+  }, [user]);
+
+  async function handleUpgrade(plan: string) {
+    const origin = window.location.origin;
+    try {
+      const res = await fetch("/api/paypal/subscription/create", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan, returnUrl: `${origin}/subscription/success?plan=${plan}`, cancelUrl: `${origin}/settings?tab=billing` }),
+      });
+      const data = await res.json() as { approvalUrl?: string; error?: string };
+      if (data.approvalUrl) { toast.info("Redirecting to PayPal…"); window.open(data.approvalUrl, "_blank"); }
+      else toast.error(data.error ?? "Could not start checkout.");
+    } catch { toast.error("Checkout failed. Please try again."); }
+  }
+
+  async function handleCancel() {
+    if (!confirm("Cancel your subscription? You will revert to the Explorer plan immediately.")) return;
+    setCancelling(true);
+    try {
+      const res = await fetch("/api/paypal/subscription/cancel", { method: "POST", credentials: "include" });
+      const data = await res.json() as { ok?: boolean; error?: string };
+      if (data.ok) { toast.success("Subscription cancelled."); setSub(s => s ? { ...s, tier: "explorer", subscriptionId: null, status: "CANCELLED" } : s); }
+      else toast.error(data.error ?? "Cancellation failed.");
+    } catch { toast.error("Cancellation failed."); }
+    finally { setCancelling(false); }
+  }
+
+  const tier = sub?.tier ?? "explorer";
   const tierInfo = TIER_LABELS[tier] ?? TIER_LABELS.explorer;
 
   return (
@@ -45,6 +76,9 @@ function BillingSection() {
             <div>
               <p className="text-sm text-foreground font-medium">Current plan</p>
               <p className="text-xs text-muted-foreground">{tierInfo.desc}</p>
+              {sub?.nextBillingDate && (
+                <p className="text-xs text-muted-foreground mt-0.5">Next billing: {new Date(sub.nextBillingDate).toLocaleDateString()}</p>
+              )}
             </div>
             <Badge className={`text-xs font-medium ${tierInfo.color}`}>{tierInfo.label}</Badge>
           </div>
@@ -53,25 +87,26 @@ function BillingSection() {
             <div className="space-y-2">
               <p className="text-xs text-muted-foreground">Upgrade to unlock Oracle AI, weekly reflections, and the full Oracle suite.</p>
               <div className="flex gap-2 flex-wrap">
-                <Button size="sm" className="gap-1.5" onClick={() => createCheckout.mutate({ plan: "seeker", origin: window.location.origin })} disabled={createCheckout.isPending}>
+                <Button size="sm" className="gap-1.5" onClick={() => handleUpgrade("seeker")}>
                   Upgrade to Seeker — $19/mo
                 </Button>
-                <Button size="sm" variant="outline" className="gap-1.5 bg-transparent" onClick={() => createCheckout.mutate({ plan: "oracle", origin: window.location.origin })} disabled={createCheckout.isPending}>
+                <Button size="sm" variant="outline" className="gap-1.5 bg-transparent" onClick={() => handleUpgrade("oracle")}>
                   Oracle — $49/mo
                 </Button>
               </div>
             </div>
           ) : (
-            <Button
-              size="sm"
-              variant="outline"
-              className="gap-1.5 bg-transparent"
-              onClick={() => createPortal.mutate({ origin: window.location.origin })}
-              disabled={createPortal.isPending}
-            >
-              <ExternalLink className="h-3.5 w-3.5" />
-              Manage subscription
-            </Button>
+            <div className="flex gap-2 flex-wrap">
+              <Button
+                size="sm"
+                variant="outline"
+                className="gap-1.5 bg-transparent"
+                onClick={handleCancel}
+                disabled={cancelling}
+              >
+                {cancelling ? "Cancelling…" : "Cancel subscription"}
+              </Button>
+            </div>
           )}
         </div>
       )}

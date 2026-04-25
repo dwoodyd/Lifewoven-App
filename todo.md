@@ -510,3 +510,13 @@
 - [x] #18 Graceful shutdown: SIGTERM/SIGINT handlers to drain connections
 - [x] #19/#21/#23 Timeouts + circuit breaker: AbortController on LLM and PayPal outbound calls
 - [x] #14 Error alerting: owner notification on unhandled server errors
+
+## PayPal Subscription Migration
+
+- [x] Create PayPal subscription plans for Seeker ($29/mo) and Oracle ($79/mo)
+- [x] Build server-side PayPal subscription router (create subscription, verify, cancel)
+- [x] Build PayPal subscription webhook handler to set membershipTier on BILLING.SUBSCRIPTION.ACTIVATED
+- [x] Update Pricing page: replace Stripe checkout buttons with PayPal subscription buttons
+- [x] Update Settings/Billing page: show PayPal subscription status and cancel option
+- [x] Remove Stripe subscription references from Pricing and Settings UI
+- [ ] Verify tier upgrade flow end-to-end (sandbox test — requires PayPal plan IDs in Secrets)

@@ -12,6 +12,7 @@ import { serveStatic, setupVite } from "./vite";
 import { stripeWebhookHandler } from "../stripe/webhook";
 import { downloadHandler } from "../stripe/download";
 import { paypalRouter } from "../paypal/paypal";
+import { paypalSubscriptionRouter } from "../paypal/subscriptions";
 import { startWeeklyDigestCron } from "../cron/weeklyDigest";
 import { startBetaExpiryCheckCron } from "../cron/betaExpiryCheck";
 import { transcribeRouter } from "../transcribeRoute";
@@ -154,6 +155,7 @@ async function startServer() {
   // M5: Apply rate limiter to transcribe and PayPal endpoints too
   app.use("/api/transcribe", apiLimiter);
   app.use("/api/paypal", apiLimiter);
+  app.use("/api/paypal/subscription", apiLimiter);
 
   // ── Health check endpoint — DB ping + uptime (no auth required)
   app.get("/api/health", async (_req, res) => {
@@ -181,6 +183,7 @@ async function startServer() {
 
   // PayPal payment routes
   app.use(paypalRouter);
+  app.use("/api/paypal/subscription", paypalSubscriptionRouter);
 
   // ── Security: Reduced body limit (50mb was excessive and a DoS risk)
   app.use(express.json({ limit: "1mb" }));

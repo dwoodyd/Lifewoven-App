@@ -58,6 +58,7 @@ import Settings from "./pages/Settings";
 import Downloads from "./pages/Downloads";
 import Referrals from "./pages/Referrals";
 import BetaAccess from "./pages/BetaAccess";
+import SubscriptionSuccess from "./pages/SubscriptionSuccess";
 import { BetaExpiredModal } from "./components/BetaExpiredModal";
 
 // Before the Words (BTW)
@@ -139,6 +140,7 @@ function RouterSwitch() {
       <Route path="/downloads" component={Downloads} />
       <Route path="/referrals" component={Referrals} />
       <Route path="/beta" component={BetaAccess} />
+      <Route path="/subscription/success" component={SubscriptionSuccess} />
 
       {/* Before the Words */}
       <Route path="/btw" component={BTWLanding} />
