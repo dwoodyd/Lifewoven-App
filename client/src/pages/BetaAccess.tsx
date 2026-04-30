@@ -5,13 +5,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
-import { Sparkles, ShieldCheck, Clock } from "lucide-react";
+import { Sparkles, ShieldCheck, Clock, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 import Nav from "@/components/Nav";
 
 export default function BetaAccess() {
   const { user } = useAuth();
   const [, navigate] = useLocation();
+  const logoutMutation = trpc.auth.logout.useMutation({
+    onSuccess: () => {
+      // After signing out, redirect to OAuth login and come back to this page
+      // with the code pre-filled so the correct account can redeem it.
+      window.location.href = getLoginUrl(currentReturnPath());
+    },
+  });
+
   // Auto-fill code from ?ref= or ?code= query param
   const initialCode = typeof window !== "undefined"
     ? new URLSearchParams(window.location.search).get("ref") ||
@@ -19,6 +27,13 @@ export default function BetaAccess() {
     : "";
   const [code, setCode] = useState(initialCode);
   const [success, setSuccess] = useState<{ expiresAt: Date; durationDays: number } | null>(null);
+
+  // Build the return path so after OAuth the user lands back here with the code
+  function currentReturnPath(): string {
+    const params = new URLSearchParams();
+    if (code.trim()) params.set("ref", code.trim());
+    return `/beta${params.toString() ? `?${params.toString()}` : ""}`;
+  }
 
   const redeemMutation = trpc.beta.redeemCode.useMutation({
     onSuccess: (data) => {
@@ -33,6 +48,15 @@ export default function BetaAccess() {
     if (!code.trim()) return;
     redeemMutation.mutate({ code: code.trim() });
   }
+
+  // Detect the "wrong account" scenario: a code is present in the URL AND
+  // someone is already signed in. Warn them so they don't accidentally redeem
+  // the code against the wrong (e.g. admin) account.
+  const codeInUrl = typeof window !== "undefined"
+    ? new URLSearchParams(window.location.search).get("ref") ||
+      new URLSearchParams(window.location.search).get("code")
+    : null;
+  const wrongAccountWarning = !!user && !!codeInUrl;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -84,7 +108,7 @@ export default function BetaAccess() {
                   <Button
                     className="w-full h-11 font-semibold rounded-xl"
                     style={{ background: "linear-gradient(135deg, #c9a84c, #e8c96a)", color: "#0d0d1a" }}
-                    onClick={() => window.location.href = getLoginUrl()}
+                    onClick={() => { window.location.href = getLoginUrl(currentReturnPath()); }}
                   >
                     Sign In to Continue
                   </Button>
@@ -93,9 +117,35 @@ export default function BetaAccess() {
                 /* ─── Code entry ─── */
                 <div>
                   <h1 className="text-2xl font-serif text-white mb-2">Enter Your Beta Code</h1>
-                  <p className="text-stone-400 text-sm mb-6">
+                  <p className="text-stone-400 text-sm mb-5">
                     You received this code from the Lifewoven team. It unlocks all features for 45 days.
                   </p>
+
+                  {/* ── Wrong-account warning ── */}
+                  {wrongAccountWarning && (
+                    <div className="mb-5 p-4 rounded-xl border border-amber-500/40 bg-amber-500/10">
+                      <div className="flex items-start gap-3">
+                        <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                        <div>
+                          <p className="text-xs font-semibold text-amber-300 mb-1">
+                            Signed in as {user.name || user.email || "your account"}
+                          </p>
+                          <p className="text-xs text-amber-200/80 mb-3">
+                            If this code was sent to a <strong>different email address</strong>, sign out first so the correct account receives the access.
+                          </p>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="h-8 text-xs border-amber-500/50 text-amber-300 hover:bg-amber-500/15 bg-transparent"
+                            disabled={logoutMutation.isPending}
+                            onClick={() => logoutMutation.mutate()}
+                          >
+                            {logoutMutation.isPending ? "Signing out…" : "Sign Out & Use a Different Account"}
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <Input

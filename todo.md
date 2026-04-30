@@ -554,3 +554,6 @@
 - [x] Server: deleteAttachment procedure (remove from DB + S3)
 - [x] Book Detail page: Attachments tab with upload, list, download, delete
 - [x] Supported types: PDF, images, Word docs, text files (up to 10 MB)
+
+## Bug: Referral Code — Wrong Account After Activation (Apr 30, 2026)
+- [x] Fix: clicking activation link while admin is logged in signs the new user in as admin instead of the new account

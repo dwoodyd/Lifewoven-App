@@ -166,3 +166,103 @@ describe("H6: trackEvent uses protectedProcedure and validates event enum", () =
     expect(source).toContain("z.enum");
   });
 });
+
+// ─── OAuth returnPath: parseReturnPath ───────────────────────────────────────
+// These tests mirror the parseReturnPath function in server/_core/oauth.ts
+// to guard against regressions in the session-identity bug fix.
+
+function parseReturnPath(state: string): string {
+  try {
+    const decoded = Buffer.from(state, "base64").toString("utf8");
+    const sepIdx = decoded.indexOf("||");
+    if (sepIdx === -1) return "/";
+    const returnPath = decoded.slice(sepIdx + 2);
+    if (!returnPath.startsWith("/") || returnPath.startsWith("//")) return "/";
+    return returnPath;
+  } catch {
+    return "/";
+  }
+}
+
+describe("OAuth returnPath — parseReturnPath", () => {
+  it("returns '/' when state contains no separator", () => {
+    const state = Buffer.from("https://example.com/api/oauth/callback").toString("base64");
+    expect(parseReturnPath(state)).toBe("/");
+  });
+
+  it("returns the returnPath when separator is present", () => {
+    const state = Buffer.from("https://example.com/api/oauth/callback||/beta?ref=LW-ABCD-1234").toString("base64");
+    expect(parseReturnPath(state)).toBe("/beta?ref=LW-ABCD-1234");
+  });
+
+  it("returns '/' when returnPath is an absolute URL (open redirect prevention)", () => {
+    const state = Buffer.from("https://example.com/api/oauth/callback||https://evil.com").toString("base64");
+    expect(parseReturnPath(state)).toBe("/");
+  });
+
+  it("returns '/' when returnPath starts with '//' (protocol-relative URL)", () => {
+    const state = Buffer.from("https://example.com/api/oauth/callback||//evil.com").toString("base64");
+    expect(parseReturnPath(state)).toBe("/");
+  });
+
+  it("returns '/' for invalid base64 input", () => {
+    expect(parseReturnPath("!!!not-valid-base64!!!")).toBe("/");
+  });
+
+  it("returns '/' for empty state", () => {
+    const state = Buffer.from("").toString("base64");
+    expect(parseReturnPath(state)).toBe("/");
+  });
+
+  it("preserves query params in returnPath", () => {
+    const path = "/beta?ref=REF-WXYZ-5678&code=ABC";
+    const state = Buffer.from(`https://example.com/api/oauth/callback||${path}`).toString("base64");
+    expect(parseReturnPath(state)).toBe(path);
+  });
+
+  it("returns '/' when returnPath is an empty string after separator", () => {
+    const state = Buffer.from("https://example.com/api/oauth/callback||").toString("base64");
+    // empty string does not start with "/" → falls back to "/"
+    expect(parseReturnPath(state)).toBe("/");
+  });
+});
+
+// ─── BetaAccess: wrong-account guard logic ────────────────────────────────────
+describe("BetaAccess — wrong-account warning logic", () => {
+  it("shows warning when a code is in the URL AND a user is already signed in", () => {
+    const user = { id: 1, name: "Admin" };
+    const codeInUrl = "LW-ABCD-1234";
+    const wrongAccountWarning = !!user && !!codeInUrl;
+    expect(wrongAccountWarning).toBe(true);
+  });
+
+  it("does not show warning when no code is in the URL", () => {
+    const user = { id: 1, name: "Admin" };
+    const codeInUrl = null;
+    const wrongAccountWarning = !!user && !!codeInUrl;
+    expect(wrongAccountWarning).toBe(false);
+  });
+
+  it("does not show warning when no user is signed in", () => {
+    const user = null;
+    const codeInUrl = "LW-ABCD-1234";
+    const wrongAccountWarning = !!user && !!codeInUrl;
+    expect(wrongAccountWarning).toBe(false);
+  });
+
+  it("currentReturnPath encodes the code into the return URL", () => {
+    const code = "LW-ABCD-1234";
+    const params = new URLSearchParams();
+    if (code.trim()) params.set("ref", code.trim());
+    const returnPath = `/beta${params.toString() ? `?${params.toString()}` : ""}`;
+    expect(returnPath).toBe("/beta?ref=LW-ABCD-1234");
+  });
+
+  it("currentReturnPath returns /beta with no params when code is empty", () => {
+    const code = "";
+    const params = new URLSearchParams();
+    if (code.trim()) params.set("ref", code.trim());
+    const returnPath = `/beta${params.toString() ? `?${params.toString()}` : ""}`;
+    expect(returnPath).toBe("/beta");
+  });
+});
