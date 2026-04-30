@@ -520,3 +520,21 @@
 - [x] Update Settings/Billing page: show PayPal subscription status and cancel option
 - [x] Remove Stripe subscription references from Pricing and Settings UI
 - [ ] Verify tier upgrade flow end-to-end (sandbox test — requires PayPal plan IDs in Secrets)
+
+## Character & Growth Section
+
+- [x] DB schema: books table (title, author, cover, status, category, userId)
+- [x] DB schema: book_notes table (bookId, userId, chapter, content, type: note/quote/highlight)
+- [x] DB schema: character_journal table (userId, bookId, content, date)
+- [x] Migration: generate + apply SQL for all three tables
+- [x] tRPC procedures: books CRUD (add, list, update status, delete)
+- [x] tRPC procedures: book notes CRUD (add, list by book, update, delete)
+- [x] tRPC procedures: character journal CRUD (add, list, update, delete)
+- [x] Character hub page (/character): bookshelf grid with reading status filters
+- [x] Add Book modal: title, author, cover image upload, category, reading status
+- [x] Book Detail page (/character/:bookId): notes tab, quotes tab, journal tab
+- [x] Notes tab: chapter-organized notes with rich text input
+- [x] Quotes/Highlights tab: save underlined passages with page reference
+- [x] Journal tab: reading journal entries tied to the book
+- [x] Character nav item: add to sidebar and main navigation
+- [x] Tests: cover books and notes procedures (12 tests, all passing)

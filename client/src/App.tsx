@@ -59,6 +59,8 @@ import Downloads from "./pages/Downloads";
 import Referrals from "./pages/Referrals";
 import BetaAccess from "./pages/BetaAccess";
 import SubscriptionSuccess from "./pages/SubscriptionSuccess";
+import Character from "./pages/Character";
+import CharacterBook from "./pages/CharacterBook";
 import { BetaExpiredModal } from "./components/BetaExpiredModal";
 
 // Before the Words (BTW)
@@ -130,6 +132,10 @@ function RouterSwitch() {
 
       {/* Community */}
       <Route path="/community" component={Community} />
+
+      {/* Character & Growth */}
+      <Route path="/character" component={Character} />
+      <Route path="/character/:id" component={CharacterBook} />
 
       {/* Resources */}
       <Route path="/library" component={ResourceLibrary} />

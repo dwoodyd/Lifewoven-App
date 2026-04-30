@@ -529,3 +529,60 @@ export const stripeEvents = mysqlTable("stripe_events", {
   eventType:   varchar("event_type", { length: 128 }).notNull(),
   processedAt: timestamp("processed_at").defaultNow().notNull(),
 });
+
+// ─── Character & Growth ───────────────────────────────────────────────────────
+// Books the user is reading / has read — the personal growth library
+
+export const books = mysqlTable("books", {
+  id:          int("id").autoincrement().primaryKey(),
+  userId:      int("userId").notNull(),
+  title:       varchar("title", { length: 255 }).notNull(),
+  author:      varchar("author", { length: 255 }),
+  coverUrl:    text("coverUrl"),                                   // S3 URL or external
+  category:    varchar("category", { length: 64 }),                // e.g. "Mindset", "Leadership"
+  status:      mysqlEnum("status", ["want_to_read", "reading", "completed", "paused"]).default("want_to_read").notNull(),
+  rating:      int("rating"),                                      // 1-5 stars, nullable
+  startedAt:   timestamp("startedAt"),
+  finishedAt:  timestamp("finishedAt"),
+  createdAt:   timestamp("createdAt").defaultNow().notNull(),
+  updatedAt:   timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (t) => [index("idx_books_userId").on(t.userId)]);
+
+export type Book = typeof books.$inferSelect;
+export type InsertBook = typeof books.$inferInsert;
+
+// Notes, quotes, and highlights attached to a book
+export const bookNotes = mysqlTable("book_notes", {
+  id:        int("id").autoincrement().primaryKey(),
+  bookId:    int("bookId").notNull(),
+  userId:    int("userId").notNull(),
+  type:      mysqlEnum("type", ["note", "quote", "highlight", "lesson"]).default("note").notNull(),
+  content:   text("content").notNull(),
+  chapter:   varchar("chapter", { length: 128 }),                  // optional chapter / page ref
+  pageRef:   varchar("pageRef", { length: 32 }),                   // e.g. "p.47"
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (t) => [
+  index("idx_book_notes_bookId").on(t.bookId),
+  index("idx_book_notes_userId").on(t.userId),
+]);
+
+export type BookNote = typeof bookNotes.$inferSelect;
+export type InsertBookNote = typeof bookNotes.$inferInsert;
+
+// Free-form reading journal entries — reflections tied to a book (or standalone)
+export const characterJournal = mysqlTable("character_journal", {
+  id:        int("id").autoincrement().primaryKey(),
+  userId:    int("userId").notNull(),
+  bookId:    int("bookId"),                                        // nullable — can be standalone
+  title:     varchar("title", { length: 255 }),
+  content:   text("content").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (t) => [
+  index("idx_character_journal_userId").on(t.userId),
+  index("idx_character_journal_bookId").on(t.bookId),
+]);
+
+export type CharacterJournal = typeof characterJournal.$inferSelect;
+export type InsertCharacterJournal = typeof characterJournal.$inferInsert;

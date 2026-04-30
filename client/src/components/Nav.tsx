@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Moon, Sun, Menu, X, Sparkles, LayoutDashboard, BookOpen, User, Settings, Download, Gift, Play } from "lucide-react";
+import { Moon, Sun, Menu, X, Sparkles, LayoutDashboard, BookOpen, BookHeart, User, Settings, Download, Gift, Play } from "lucide-react";
 import { replayOnboarding } from "@/components/OnboardingModal";
 import { trpc } from "@/lib/trpc";
 
@@ -21,6 +21,7 @@ const navLinks = [
   { label: "Pathways", href: "/#pathways" },
   { label: "Before the Words", href: "/btw" },
   { label: "Library", href: "/library" },
+  { label: "Character", href: "/character" },
   { label: "Community", href: "/community" },
   { label: "Store", href: "/store" },
   { label: "Pricing", href: "/pricing" },
@@ -124,6 +125,9 @@ export default function Nav() {
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/journal" className="flex items-center gap-2"><BookOpen className="h-3.5 w-3.5" />Journal</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/character" className="flex items-center gap-2"><BookHeart className="h-3.5 w-3.5" />Character &amp; Growth</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/downloads" className="flex items-center gap-2"><Download className="h-3.5 w-3.5" />My Downloads</Link>
