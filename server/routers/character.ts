@@ -2,7 +2,8 @@ import { z } from "zod";
 import { eq, and, desc } from "drizzle-orm";
 import { router, protectedProcedure } from "../_core/trpc";
 import { getDb } from "../db";
-import { books, bookNotes, characterJournal } from "../../drizzle/schema";
+import { books, bookNotes, characterJournal, bookAttachments } from "../../drizzle/schema";
+import { storagePut } from "../storage";
 
 async function requireDb() {
   const db = await getDb();
@@ -89,11 +90,63 @@ export const characterRouter = router({
     .mutation(async ({ ctx, input }) => {
       const db = await requireDb();
       await db.transaction(async (tx) => {
+        await tx.delete(bookAttachments).where(and(eq(bookAttachments.bookId, input.id), eq(bookAttachments.userId, ctx.user.id)));
         await tx.delete(bookNotes).where(and(eq(bookNotes.bookId, input.id), eq(bookNotes.userId, ctx.user.id)));
         await tx.delete(characterJournal).where(and(eq(characterJournal.bookId, input.id), eq(characterJournal.userId, ctx.user.id)));
         await tx.delete(books).where(and(eq(books.id, input.id), eq(books.userId, ctx.user.id)));
       });
       return { success: true } as const;
+    }),
+
+  // ── Book Cover: Auto-lookup via Open Library ───────────────────────────────
+
+  lookupBookCover: protectedProcedure
+    .input(z.object({
+      title:  z.string().min(1).max(255),
+      author: z.string().max(255).optional(),
+    }))
+    .query(async ({ input }) => {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 8000);
+      try {
+        const query = encodeURIComponent(
+          input.author ? `${input.title} ${input.author}` : input.title
+        );
+        const searchUrl = `https://openlibrary.org/search.json?q=${query}&fields=key,title,author_name,cover_i&limit=5`;
+        const res = await fetch(searchUrl, { signal: controller.signal });
+        if (!res.ok) return { covers: [] as string[] };
+        const data = await res.json() as { docs?: Array<{ cover_i?: number }> };
+        const covers: string[] = [];
+        for (const doc of (data.docs ?? []).slice(0, 5)) {
+          if (doc.cover_i) {
+            covers.push(`https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg`);
+          }
+        }
+        return { covers };
+      } catch {
+        return { covers: [] as string[] };
+      } finally {
+        clearTimeout(timer);
+      }
+    }),
+
+  // ── Book Cover: Manual upload (base64 → S3) ────────────────────────────────
+
+  uploadBookCover: protectedProcedure
+    .input(z.object({
+      imageDataUrl: z.string().min(1),   // data:image/...;base64,...
+      mimeType:     z.string().default("image/jpeg"),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const base64 = input.imageDataUrl.split(",")[1];
+      if (!base64) throw new Error("Invalid image data");
+      const buffer = Buffer.from(base64, "base64");
+      const maxBytes = 5 * 1024 * 1024; // 5 MB
+      if (buffer.byteLength > maxBytes) throw new Error("Image too large (max 5 MB)");
+      const ext = input.mimeType.includes("png") ? "png" : input.mimeType.includes("webp") ? "webp" : "jpg";
+      const key = `book-covers/${ctx.user.id}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const { url } = await storagePut(key, buffer, input.mimeType);
+      return { url };
     }),
 
   // ── Book Notes / Quotes / Highlights ──────────────────────────────────────
@@ -211,6 +264,63 @@ export const characterRouter = router({
     .mutation(async ({ ctx, input }) => {
       const db = await requireDb();
       await db.delete(characterJournal).where(and(eq(characterJournal.id, input.id), eq(characterJournal.userId, ctx.user.id)));
+      return { success: true } as const;
+    }),
+
+  // ── Book Attachments ───────────────────────────────────────────────────────
+
+  listAttachments: protectedProcedure
+    .input(z.object({ bookId: z.number().int().positive() }))
+    .query(async ({ ctx, input }) => {
+      const db = await requireDb();
+      return db
+        .select()
+        .from(bookAttachments)
+        .where(and(eq(bookAttachments.bookId, input.bookId), eq(bookAttachments.userId, ctx.user.id)))
+        .orderBy(desc(bookAttachments.createdAt));
+    }),
+
+  uploadAttachment: protectedProcedure
+    .input(z.object({
+      bookId:      z.number().int().positive(),
+      fileName:    z.string().min(1).max(255),
+      mimeType:    z.string().max(128).default("application/octet-stream"),
+      fileDataB64: z.string().min(1),  // base64-encoded file content
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const buffer = Buffer.from(input.fileDataB64, "base64");
+      const maxBytes = 10 * 1024 * 1024; // 10 MB
+      if (buffer.byteLength > maxBytes) throw new Error("File too large (max 10 MB)");
+
+      // Sanitise filename
+      const safeName = input.fileName.replace(/[^a-zA-Z0-9._\-]/g, "_").slice(0, 200);
+      const key = `book-attachments/${ctx.user.id}/${input.bookId}/${Date.now()}-${Math.random().toString(36).slice(2)}-${safeName}`;
+      const { url } = await storagePut(key, buffer, input.mimeType);
+
+      const db = await requireDb();
+      const [result] = await db.insert(bookAttachments).values({
+        bookId:   input.bookId,
+        userId:   ctx.user.id,
+        fileName: safeName,
+        fileUrl:  url,
+        fileKey:  key,
+        mimeType: input.mimeType,
+        fileSize: buffer.byteLength,
+      });
+      return { id: (result as any).insertId as number, url, fileName: safeName };
+    }),
+
+  deleteAttachment: protectedProcedure
+    .input(z.object({ id: z.number().int().positive() }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await requireDb();
+      // Verify ownership before deleting
+      const [att] = await db
+        .select()
+        .from(bookAttachments)
+        .where(and(eq(bookAttachments.id, input.id), eq(bookAttachments.userId, ctx.user.id)));
+      if (!att) throw new Error("Attachment not found");
+      await db.delete(bookAttachments).where(eq(bookAttachments.id, input.id));
       return { success: true } as const;
     }),
 });

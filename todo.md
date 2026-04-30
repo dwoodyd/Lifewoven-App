@@ -538,3 +538,19 @@
 - [x] Journal tab: reading journal entries tied to the book
 - [x] Character nav item: add to sidebar and main navigation
 - [x] Tests: cover books and notes procedures (12 tests, all passing)
+
+## Book Cover Art (Character Section)
+- [x] Server: Open Library cover lookup by title + author
+- [x] Server: S3 upload endpoint for manual book cover images
+- [x] Add Book modal: auto-fetch cover on title/author input with preview
+- [x] Add Book modal: manual image upload fallback if no cover found
+- [ ] Edit Book: allow replacing cover image at any time
+
+## Book Attachments (Character Section)
+- [x] DB schema: book_attachments table (bookId, userId, fileName, fileUrl, fileKey, mimeType, fileSize)
+- [x] Migration: generate + apply SQL for book_attachments table
+- [x] Server: uploadAttachment procedure (base64 → S3, save metadata to DB)
+- [x] Server: listAttachments procedure (by bookId)
+- [x] Server: deleteAttachment procedure (remove from DB + S3)
+- [x] Book Detail page: Attachments tab with upload, list, download, delete
+- [x] Supported types: PDF, images, Word docs, text files (up to 10 MB)

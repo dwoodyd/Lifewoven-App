@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useLocation } from "wouter";
 import Nav from "@/components/Nav";
 import { LoomCorner } from "@/components/Loom";
@@ -13,7 +13,7 @@ import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import { toast } from "sonner";
-import { BookOpen, Plus, MoreVertical, Star, BookMarked, CheckCircle2, Pause, BookHeart, Sparkles } from "lucide-react";
+import { BookOpen, Plus, MoreVertical, Star, BookMarked, CheckCircle2, Pause, BookHeart, Sparkles, Search, Upload, X, Check, ImageIcon } from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -34,22 +34,65 @@ const CATEGORIES = [
 // ─── Add Book Modal ───────────────────────────────────────────────────────────
 
 function AddBookModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [title, setTitle]       = useState("");
-  const [author, setAuthor]     = useState("");
-  const [coverUrl, setCoverUrl] = useState("");
-  const [category, setCategory] = useState("");
-  const [status, setStatus]     = useState<BookStatus>("want_to_read");
+  const [title, setTitle]             = useState("");
+  const [author, setAuthor]           = useState("");
+  const [coverUrl, setCoverUrl]       = useState("");
+  const [category, setCategory]       = useState("");
+  const [status, setStatus]           = useState<BookStatus>("want_to_read");
+  const [coverResults, setCoverResults] = useState<string[]>([]);
+  const [coverSearched, setCoverSearched] = useState(false);
+  const [uploadingCover, setUploadingCover] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const utils = trpc.useUtils();
+
+  const lookupCover = trpc.character.lookupBookCover.useQuery(
+    { title: title.trim(), author: author.trim() || undefined },
+    { enabled: false }
+  );
+
+  const uploadCoverMutation = trpc.character.uploadBookCover.useMutation({
+    onSuccess: ({ url }) => { setCoverUrl(url); toast.success("Cover uploaded"); },
+    onError: () => toast.error("Upload failed"),
+    onSettled: () => setUploadingCover(false),
+  });
 
   const addBook = trpc.character.addBook.useMutation({
     onSuccess: () => {
       utils.character.listBooks.invalidate();
       toast.success("Book added to your library");
-      setTitle(""); setAuthor(""); setCoverUrl(""); setCategory(""); setStatus("want_to_read");
+      resetForm();
       onClose();
     },
     onError: () => toast.error("Failed to add book"),
   });
+
+  const resetForm = () => {
+    setTitle(""); setAuthor(""); setCoverUrl(""); setCategory("");
+    setStatus("want_to_read"); setCoverResults([]); setCoverSearched(false);
+  };
+
+  const handleSearchCover = async () => {
+    if (!title.trim()) { toast.error("Enter a title first"); return; }
+    const result = await lookupCover.refetch();
+    const covers = result.data?.covers ?? [];
+    setCoverResults(covers);
+    setCoverSearched(true);
+    if (covers.length === 0) toast.info("No covers found — upload one below");
+    else toast.success(`Found ${covers.length} cover option${covers.length > 1 ? "s" : ""}`);
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { toast.error("Image must be under 5 MB"); return; }
+    setUploadingCover(true);
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = reader.result as string;
+      uploadCoverMutation.mutate({ imageDataUrl: dataUrl, mimeType: file.type });
+    };
+    reader.readAsDataURL(file);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,8 +107,8 @@ function AddBookModal({ open, onClose }: { open: boolean; onClose: () => void })
   };
 
   return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-md">
+    <Dialog open={open} onOpenChange={(o) => { if (!o) resetForm(); onClose(); }}>
+      <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle className="font-serif font-light text-xl">Add a Book</DialogTitle>
         </DialogHeader>
@@ -100,12 +143,68 @@ function AddBookModal({ open, onClose }: { open: boolean; onClose: () => void })
               </Select>
             </div>
           </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="cover">Cover Image URL <span className="text-muted-foreground text-xs">(optional)</span></Label>
-            <Input id="cover" value={coverUrl} onChange={e => setCoverUrl(e.target.value)} placeholder="https://…" />
+
+          {/* Cover section */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label>Cover Art <span className="text-muted-foreground text-xs">(optional)</span></Label>
+              <div className="flex gap-2">
+                <Button type="button" size="sm" variant="outline" className="h-7 text-xs gap-1.5"
+                  onClick={handleSearchCover} disabled={lookupCover.isFetching || !title.trim()}>
+                  <Search className="h-3 w-3" />
+                  {lookupCover.isFetching ? "Searching…" : "Find Cover"}
+                </Button>
+                <Button type="button" size="sm" variant="outline" className="h-7 text-xs gap-1.5"
+                  onClick={() => fileInputRef.current?.click()} disabled={uploadingCover}>
+                  <Upload className="h-3 w-3" />
+                  {uploadingCover ? "Uploading…" : "Upload"}
+                </Button>
+                <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileUpload} />
+              </div>
+            </div>
+
+            {/* Auto-fetched cover grid */}
+            {coverResults.length > 0 && (
+              <div className="grid grid-cols-5 gap-2">
+                {coverResults.map((url) => (
+                  <button key={url} type="button"
+                    onClick={() => setCoverUrl(url)}
+                    className={`relative aspect-[2/3] rounded-lg overflow-hidden border-2 transition-all ${
+                      coverUrl === url ? "border-amber-500 ring-2 ring-amber-500/30" : "border-border/50 hover:border-amber-500/50"
+                    }`}>
+                    <img src={url} alt="cover option" className="w-full h-full object-cover" />
+                    {coverUrl === url && (
+                      <div className="absolute inset-0 bg-amber-500/20 flex items-center justify-center">
+                        <Check className="h-5 w-5 text-amber-400" />
+                      </div>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Selected cover preview or empty state */}
+            {coverUrl ? (
+              <div className="flex items-center gap-3 p-2 rounded-lg bg-card border border-border/50">
+                <img src={coverUrl} alt="selected cover" className="h-14 w-10 object-cover rounded" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs text-muted-foreground truncate">{coverUrl.length > 50 ? coverUrl.slice(0, 50) + "…" : coverUrl}</p>
+                  <p className="text-xs text-green-400 mt-0.5 flex items-center gap-1"><Check className="h-3 w-3" /> Cover selected</p>
+                </div>
+                <Button type="button" size="icon" variant="ghost" className="h-7 w-7 shrink-0" onClick={() => setCoverUrl("")}>
+                  <X className="h-3.5 w-3.5" />
+                </Button>
+              </div>
+            ) : coverSearched && coverResults.length === 0 ? (
+              <div className="flex items-center gap-2 p-3 rounded-lg bg-muted/30 border border-dashed border-border/50">
+                <ImageIcon className="h-4 w-4 text-muted-foreground shrink-0" />
+                <p className="text-xs text-muted-foreground">No covers found automatically. Click <strong>Upload</strong> to add your own image.</p>
+              </div>
+            ) : null}
           </div>
+
           <DialogFooter>
-            <Button type="button" variant="ghost" onClick={onClose}>Cancel</Button>
+            <Button type="button" variant="ghost" onClick={() => { resetForm(); onClose(); }}>Cancel</Button>
             <Button type="submit" disabled={addBook.isPending || !title.trim()}>
               {addBook.isPending ? "Adding…" : "Add Book"}
             </Button>

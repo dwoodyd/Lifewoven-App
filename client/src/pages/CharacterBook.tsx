@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useLocation, useParams } from "wouter";
 import Nav from "@/components/Nav";
 import { LoomCorner } from "@/components/Loom";
@@ -15,7 +15,8 @@ import { toast } from "sonner";
 import {
   ArrowLeft, BookOpen, Quote, Highlighter, Lightbulb, PenLine,
   Plus, MoreVertical, Star, Edit2, Trash2, BookHeart, CheckCircle2,
-  BookMarked, Pause, ChevronDown,
+  BookMarked, Pause, ChevronDown, Paperclip, Upload, FileText,
+  FileImage, FileVideo, FileAudio, File, Download, X,
 } from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -38,12 +39,195 @@ const STATUS_CONFIG: Record<BookStatus, { label: string; icon: React.ElementType
 };
 
 const TABS = [
-  { id: "notes",    label: "Notes",      icon: PenLine },
-  { id: "quotes",   label: "Quotes",     icon: Quote },
-  { id: "lessons",  label: "Lessons",    icon: Lightbulb },
-  { id: "journal",  label: "Journal",    icon: BookHeart },
+  { id: "notes",       label: "Notes",       icon: PenLine },
+  { id: "quotes",      label: "Quotes",      icon: Quote },
+  { id: "lessons",     label: "Lessons",     icon: Lightbulb },
+  { id: "journal",     label: "Journal",     icon: BookHeart },
+  { id: "attachments", label: "Attachments", icon: Paperclip },
 ] as const;
 type TabId = typeof TABS[number]["id"];
+
+// ─── File type icon helper ────────────────────────────────────────────────────
+
+function FileTypeIcon({ mimeType, className }: { mimeType: string; className?: string }) {
+  if (mimeType.startsWith("image/"))       return <FileImage className={className} />;
+  if (mimeType.startsWith("video/"))       return <FileVideo className={className} />;
+  if (mimeType.startsWith("audio/"))       return <FileAudio className={className} />;
+  if (mimeType === "application/pdf")      return <FileText className={className} />;
+  if (mimeType.includes("word") || mimeType.includes("document")) return <FileText className={className} />;
+  return <File className={className} />;
+}
+
+function formatFileSize(bytes: number): string {
+  if (bytes < 1024)        return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+// ─── Attachments Tab ──────────────────────────────────────────────────────────
+
+function AttachmentsTab({ bookId }: { bookId: number }) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const utils = trpc.useUtils();
+
+  const { data: attachments = [], isLoading } = trpc.character.listAttachments.useQuery({ bookId });
+
+  const uploadMutation = trpc.character.uploadAttachment.useMutation({
+    onSuccess: ({ fileName }) => {
+      utils.character.listAttachments.invalidate({ bookId });
+      toast.success(`"${fileName}" uploaded`);
+    },
+    onError: (err) => toast.error(err.message ?? "Upload failed"),
+    onSettled: () => setUploading(false),
+  });
+
+  const deleteMutation = trpc.character.deleteAttachment.useMutation({
+    onSuccess: () => {
+      utils.character.listAttachments.invalidate({ bookId });
+      toast.success("Attachment deleted");
+    },
+    onError: () => toast.error("Failed to delete"),
+  });
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const maxBytes = 10 * 1024 * 1024;
+    if (file.size > maxBytes) {
+      toast.error("File must be under 10 MB");
+      e.target.value = "";
+      return;
+    }
+    setUploading(true);
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = reader.result as string;
+      const base64 = dataUrl.split(",")[1];
+      if (!base64) { toast.error("Failed to read file"); setUploading(false); return; }
+      uploadMutation.mutate({
+        bookId,
+        fileName: file.name,
+        mimeType: file.type || "application/octet-stream",
+        fileDataB64: base64,
+      });
+    };
+    reader.onerror = () => { toast.error("Failed to read file"); setUploading(false); };
+    reader.readAsDataURL(file);
+    // Reset so same file can be re-uploaded
+    e.target.value = "";
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Upload button row */}
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-muted-foreground">
+          {attachments.length > 0
+            ? `${attachments.length} file${attachments.length > 1 ? "s" : ""} attached`
+            : "Attach PDFs, images, documents, or any file to this book."}
+        </p>
+        <Button
+          size="sm"
+          variant="outline"
+          className="gap-1.5"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={uploading}
+        >
+          <Upload className="h-3.5 w-3.5" />
+          {uploading ? "Uploading…" : "Upload File"}
+        </Button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          className="hidden"
+          onChange={handleFileChange}
+          accept="*/*"
+        />
+      </div>
+
+      {/* List */}
+      {isLoading ? (
+        <div className="space-y-2">
+          {[1, 2, 3].map(i => <div key={i} className="h-14 rounded-xl bg-card/50 animate-pulse" />)}
+        </div>
+      ) : attachments.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-16 gap-4 text-center">
+          <div className="w-16 h-16 rounded-full bg-zinc-800/60 flex items-center justify-center">
+            <Paperclip className="h-7 w-7 text-muted-foreground/40" />
+          </div>
+          <div>
+            <p className="font-serif text-lg font-light text-foreground mb-1">No attachments yet</p>
+            <p className="text-muted-foreground text-sm max-w-sm">
+              Attach study guides, PDFs, summaries, or any file you want to keep alongside this book.
+            </p>
+          </div>
+          <Button
+            size="sm"
+            variant="outline"
+            className="gap-1.5"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+          >
+            <Upload className="h-3.5 w-3.5" />
+            Upload your first file
+          </Button>
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {attachments.map((att) => (
+            <div
+              key={att.id}
+              className="flex items-center gap-3 p-3 rounded-xl border border-border/50 bg-card/50 group hover:border-border transition-all"
+            >
+              {/* Icon */}
+              <div className="w-9 h-9 rounded-lg bg-zinc-800/60 flex items-center justify-center shrink-0">
+                <FileTypeIcon mimeType={att.mimeType ?? ""} className="h-4 w-4 text-muted-foreground" />
+              </div>
+
+              {/* Info */}
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-foreground font-medium truncate">{att.fileName}</p>
+                <p className="text-xs text-muted-foreground">
+                  {formatFileSize(att.fileSize ?? 0)}
+                  <span className="mx-1.5 text-border">·</span>
+                  {new Date(att.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                </p>
+              </div>
+
+              {/* Actions */}
+              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="h-7 w-7"
+                  asChild
+                >
+                  <a href={att.fileUrl} target="_blank" rel="noopener noreferrer" download={att.fileName}>
+                    <Download className="h-3.5 w-3.5" />
+                  </a>
+                </Button>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="h-7 w-7 text-destructive hover:text-destructive"
+                  onClick={() => {
+                    if (confirm(`Delete "${att.fileName}"?`)) {
+                      deleteMutation.mutate({ id: att.id });
+                    }
+                  }}
+                  disabled={deleteMutation.isPending}
+                >
+                  <X className="h-3.5 w-3.5" />
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 // ─── Add Note Modal ───────────────────────────────────────────────────────────
 
@@ -225,7 +409,7 @@ function JournalCard({ entry, bookId }: {
   });
 
   return (
-    <div className="rounded-xl border border-border/50 bg-card p-5 group transition-all hover:border-border">
+    <div className="rounded-xl border border-border/50 bg-card/50 p-5 group transition-all hover:border-border">
       <div className="flex items-start justify-between gap-2 mb-3">
         <div>
           {editing ? (
@@ -332,14 +516,15 @@ export default function CharacterBook() {
 
   // Notes filtered by tab
   const noteTypeForTab: Record<TabId, NoteType | undefined> = {
-    notes:   "note",
-    quotes:  "quote",
-    lessons: "lesson",
-    journal: undefined,
+    notes:       "note",
+    quotes:      "quote",
+    lessons:     "lesson",
+    journal:     undefined,
+    attachments: undefined,
   };
   const { data: notes = [], isLoading: notesLoading } = trpc.character.listNotes.useQuery(
     { bookId, type: noteTypeForTab[activeTab] },
-    { enabled: !!bookId && activeTab !== "journal" }
+    { enabled: !!bookId && activeTab !== "journal" && activeTab !== "attachments" }
   );
   const { data: journalEntries = [], isLoading: journalLoading } = trpc.character.listJournal.useQuery(
     { bookId },
@@ -440,12 +625,12 @@ export default function CharacterBook() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 mb-6 border-b border-border/50">
+        <div className="flex gap-1 mb-6 border-b border-border/50 overflow-x-auto">
           {TABS.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-mono transition-all border-b-2 -mb-px ${
+              className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-mono transition-all border-b-2 -mb-px whitespace-nowrap ${
                 activeTab === tab.id
                   ? "border-amber-500 text-amber-400"
                   : "border-transparent text-muted-foreground hover:text-foreground"
@@ -458,7 +643,9 @@ export default function CharacterBook() {
         </div>
 
         {/* Tab content */}
-        {activeTab !== "journal" ? (
+        {activeTab === "attachments" ? (
+          <AttachmentsTab bookId={bookId} />
+        ) : activeTab !== "journal" ? (
           <div className="space-y-4">
             {/* Add button */}
             <div className="flex justify-end">

@@ -586,3 +586,23 @@ export const characterJournal = mysqlTable("character_journal", {
 
 export type CharacterJournal = typeof characterJournal.$inferSelect;
 export type InsertCharacterJournal = typeof characterJournal.$inferInsert;
+
+// ─── Book Attachments ─────────────────────────────────────────────────────────
+// Files uploaded by the user and linked to a book (PDFs, images, Word docs, etc.)
+export const bookAttachments = mysqlTable("book_attachments", {
+  id:        int("id").autoincrement().primaryKey(),
+  bookId:    int("book_id").notNull(),
+  userId:    int("user_id").notNull(),
+  fileName:  varchar("file_name", { length: 255 }).notNull(),
+  fileUrl:   varchar("file_url", { length: 2048 }).notNull(),
+  fileKey:   varchar("file_key", { length: 512 }).notNull(),
+  mimeType:  varchar("mime_type", { length: 128 }).notNull().default("application/octet-stream"),
+  fileSize:  int("file_size").notNull().default(0),   // bytes
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (t) => [
+  index("idx_book_attachments_bookId").on(t.bookId),
+  index("idx_book_attachments_userId").on(t.userId),
+]);
+
+export type BookAttachment = typeof bookAttachments.$inferSelect;
+export type InsertBookAttachment = typeof bookAttachments.$inferInsert;
