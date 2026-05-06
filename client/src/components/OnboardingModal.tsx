@@ -104,8 +104,8 @@ const SCENES: Scene[] = [
   },
   {
     id: "launch",
-    videoId: "pointing_energy",
-    overlayOpacity: 0.32,
+    videoId: "scene_9",
+    overlayOpacity: 0.28,
     lines: [
       { text: "You weren't lacking.", startAt: 0.5, size: "xl" },
       { text: "You were unwoven.", startAt: 1.8, size: "xl", accent: true, italic: true },
