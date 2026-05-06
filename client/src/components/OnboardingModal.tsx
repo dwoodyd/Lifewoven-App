@@ -38,6 +38,7 @@ interface Scene {
   cta: string;
   whisper?: string;
   overlayOpacity: number;
+  loop?: boolean;  // default true; set false to play once and hold last frame
 }
 
 const SCENES: Scene[] = [
@@ -57,6 +58,7 @@ const SCENES: Scene[] = [
     id: "arrival",
     videoId: "sliding_in_1",
     overlayOpacity: 0.4,
+    loop: false,
     lines: [
       { text: "Meet Lumin.", startAt: 0.8, size: "xl", accent: true },
       { text: "She's been waiting for you.", startAt: 2.0, size: "lg" },
@@ -179,6 +181,8 @@ export default function OnboardingModal({ userId }: Props) {
   const [slotA, setSlotA] = useState({ url: "", visible: false, ready: false });
   const [slotB, setSlotB] = useState({ url: "", visible: false, ready: false });
   const [activeSlot, setActiveSlot] = useState<"a" | "b">("a");
+  // Per-scene loop flag — derived from current scene
+  const activeSceneLoop = finished ? true : (SCENES[sceneIdx]?.loop ?? true);
   const videoARef = useRef<HTMLVideoElement>(null);
   const videoBRef = useRef<HTMLVideoElement>(null);
 
@@ -204,15 +208,33 @@ export default function OnboardingModal({ userId }: Props) {
   /* ── Swap to the inactive slot (called when it signals canplay) ── */
   const swapToInactiveSlot = useCallback(() => {
     if (activeSlot === "a") {
-      // B is now ready — show B, hide A
+      // B is now ready — reset it to t=0 and play, then show it
+      const vidB = videoBRef.current;
+      if (vidB) {
+        vidB.currentTime = 0;
+        vidB.play().catch(() => {});
+      }
       setSlotB(s => ({ ...s, visible: true }));
       setActiveSlot("b");
-      setTimeout(() => setSlotA(s => ({ ...s, visible: false })), 50);
+      setTimeout(() => {
+        setSlotA(s => ({ ...s, visible: false }));
+        // Pause the now-hidden slot A so it doesn't drift
+        if (videoARef.current) videoARef.current.pause();
+      }, 50);
     } else {
-      // A is now ready — show A, hide B
+      // A is now ready — reset it to t=0 and play, then show it
+      const vidA = videoARef.current;
+      if (vidA) {
+        vidA.currentTime = 0;
+        vidA.play().catch(() => {});
+      }
       setSlotA(s => ({ ...s, visible: true }));
       setActiveSlot("a");
-      setTimeout(() => setSlotB(s => ({ ...s, visible: false })), 50);
+      setTimeout(() => {
+        setSlotB(s => ({ ...s, visible: false }));
+        // Pause the now-hidden slot B so it doesn't drift
+        if (videoBRef.current) videoBRef.current.pause();
+      }, 50);
     }
   }, [activeSlot]);
 
@@ -418,8 +440,16 @@ export default function OnboardingModal({ userId }: Props) {
       <video
         ref={videoARef}
         {...(slotA.url ? { src: slotA.url } : {})}
-        autoPlay muted loop playsInline
-        onCanPlay={() => setSlotA(s => ({ ...s, ready: true }))}
+        muted playsInline
+        loop={activeSlot === "a" ? activeSceneLoop : false}
+        autoPlay={activeSlot === "a"}
+        onCanPlay={() => {
+          // When preloading into inactive slot, pause immediately so it doesn't drift
+          if (activeSlot !== "a" && videoARef.current) {
+            videoARef.current.pause();
+          }
+          setSlotA(s => ({ ...s, ready: true }));
+        }}
         style={{
           position: "absolute", inset: 0,
           width: "100%", height: "100%",
@@ -435,8 +465,16 @@ export default function OnboardingModal({ userId }: Props) {
       <video
         ref={videoBRef}
         {...(slotB.url ? { src: slotB.url } : {})}
-        autoPlay muted loop playsInline
-        onCanPlay={() => setSlotB(s => ({ ...s, ready: true }))}
+        muted playsInline
+        loop={activeSlot === "b" ? activeSceneLoop : false}
+        autoPlay={activeSlot === "b"}
+        onCanPlay={() => {
+          // When preloading into inactive slot, pause immediately so it doesn't drift
+          if (activeSlot !== "b" && videoBRef.current) {
+            videoBRef.current.pause();
+          }
+          setSlotB(s => ({ ...s, ready: true }));
+        }}
         style={{
           position: "absolute", inset: 0,
           width: "100%", height: "100%",
