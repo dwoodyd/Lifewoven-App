@@ -49,7 +49,11 @@ type Message = { role: "user" | "assistant"; content: string; error?: boolean; c
 type OracleMode = "guide" | "unstuck" | "patterns";
 
 export default function Oracle() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  // Tier detection: oracle tier = full access; seeker = partial; explorer/null = threshold view
+  const membershipTier = (user as any)?.membershipTier as string | null | undefined;
+  const hasOracleAccess = membershipTier === "oracle" || (user as any)?.role === "admin";
+  const hasSeekerAccess = membershipTier === "seeker" || hasOracleAccess;
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -185,31 +189,94 @@ export default function Oracle() {
           </div>
         </div>
 
-        {/* Consent Gate — shown once, then remembered */}
-        {!hasConsented && (
-          <div className="rounded-xl border border-border bg-card p-6 mb-5">
-            <div className="flex items-start gap-3 mb-4">
-              <Shield className="h-5 w-5 text-accent mt-0.5 shrink-0" />
-              <div>
-                <p className="font-medium text-sm text-foreground mb-1">Before we begin — a note on personalization</p>
-                <p className="text-sm text-muted-foreground font-light leading-relaxed">
-                  The Oracle can provide more relevant guidance when it draws on patterns from your journal entries, emotional check-ins, and habit history. This is entirely optional. You can use the Oracle without enabling this feature.
-                </p>
+        {/* Oracle Threshold View — shown to free-tier (explorer) users */}
+        {!hasOracleAccess && (
+          <div
+            style={{
+              position: "relative",
+              borderRadius: "1rem",
+              overflow: "hidden",
+              marginBottom: "1.5rem",
+              background: "linear-gradient(135deg, rgba(216,184,120,0.04) 0%, rgba(111,143,196,0.06) 100%)",
+              border: "1px solid rgba(216,184,120,0.18)",
+              padding: "2.5rem 2rem",
+              textAlign: "center",
+            }}
+          >
+            {/* Dimmed deeper weave background */}
+            <div style={{
+              position: "absolute", inset: 0,
+              background: "radial-gradient(ellipse at 70% 40%, rgba(216,184,120,0.08) 0%, transparent 70%)",
+              pointerEvents: "none",
+            }} />
+
+            {/* Lumin watching from the right edge — dimmed, present, waiting */}
+            <div style={{
+              position: "absolute", right: "-2%", bottom: 0,
+              width: "min(28vw, 220px)",
+              opacity: 0.35,
+              pointerEvents: "none",
+              zIndex: 0,
+            }}>
+              <video
+                src={(() => {
+                  const { LUMIN_VIDEOS } = require("@/data/lumin") as any;
+                  return LUMIN_VIDEOS?.find((v: any) => v.id === "self_soothing")?.url ?? "";
+                })()}
+                autoPlay muted playsInline loop
+                style={{ width: "100%", mixBlendMode: "screen" }}
+              />
+            </div>
+
+            <div style={{ position: "relative", zIndex: 1 }}>
+              <p style={{
+                fontFamily: "Georgia, serif",
+                fontSize: "clamp(1.4rem, 3vw, 2rem)",
+                fontWeight: 400,
+                color: "var(--foreground)",
+                marginBottom: "0.75rem",
+                lineHeight: 1.3,
+              }}>
+                The weave runs deeper here.
+              </p>
+              <p style={{
+                color: "var(--muted-foreground)",
+                fontSize: "0.95rem",
+                lineHeight: 1.7,
+                maxWidth: 420,
+                margin: "0 auto 1.5rem",
+              }}>
+                The Oracle reads your patterns across all five dimensions — state, story, standards, systems, and soul — and offers the next right step.
+              </p>
+              <p style={{
+                color: "rgba(216,184,120,0.7)",
+                fontSize: "0.8rem",
+                fontStyle: "italic",
+                marginBottom: "1.5rem",
+              }}>
+                Available on the Oracle plan.
+              </p>
+              <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", flexWrap: "wrap" }}>
+                <Link href="/pricing">
+                  <Button
+                    style={{
+                      background: "linear-gradient(135deg, #d8b878, #c9a55a)",
+                      color: "#1a1610",
+                      border: "none",
+                      fontWeight: 600,
+                    }}
+                  >
+                    <Sparkles className="h-3.5 w-3.5 mr-1.5" />
+                    Unlock the Oracle
+                  </Button>
+                </Link>
+                <Link href="/pricing">
+                  <Button variant="ghost" size="sm" style={{ color: "var(--muted-foreground)", fontStyle: "italic" }}>
+                    See all plans
+                  </Button>
+                </Link>
               </div>
             </div>
-            <div className="flex gap-3 flex-wrap">
-              <Button size="sm" onClick={handleConsent} className="gap-1.5">
-                <Sparkles className="h-3.5 w-3.5" />
-                Enable personalized guidance
-              </Button>
-              <Button size="sm" variant="ghost" onClick={() => setHasConsented(true)} className="text-muted-foreground">
-                Use without personalization
-              </Button>
-            </div>
-            <p className="text-xs text-muted-foreground mt-3">
-              You can change this preference anytime in{" "}
-              <Link href="/settings" className="text-accent hover:underline">Settings → Oracle Preferences</Link>.
-            </p>
           </div>
         )}
 
@@ -348,21 +415,15 @@ export default function Oracle() {
             {/* Messages */}
             <div className="flex-1 overflow-y-auto space-y-4 mb-2 min-h-[200px] max-h-[45vh] sm:max-h-[50vh]">
               {messages.length === 0 ? (
-                <div className="pt-2">
-                  <p className="font-serif text-base font-light text-muted-foreground mb-4">
-                    {mode === "unstuck" ? "What is blocking you right now?" : "What would you like to explore today?"}
+                <div className="pt-8 pb-4 flex flex-col items-center justify-center text-center">
+                  <p className="font-serif text-xl font-light text-foreground mb-2" style={{ letterSpacing: "0.01em" }}>
+                    Ask, and we will read.
                   </p>
-                  <div className="grid grid-cols-1 gap-2">
-                    {(mode === "unstuck" ? UNSTUCK_STARTERS : ORACLE_STARTERS).map(s => (
-                      <button
-                        key={s}
-                        onClick={() => sendMessage(s)}
-                        className="text-left p-3.5 rounded-xl border border-border hover:border-accent/40 hover:bg-accent/5 transition-all text-sm text-muted-foreground hover:text-foreground"
-                      >
-                        {s}
-                      </button>
-                    ))}
-                  </div>
+                  <p className="text-sm text-muted-foreground font-light max-w-xs" style={{ lineHeight: 1.7 }}>
+                    {mode === "unstuck"
+                      ? "Describe what is blocking you. The Oracle will meet you there."
+                      : "The Oracle reads across all five dimensions. Begin anywhere."}
+                  </p>
                 </div>
               ) : (
                 messages.map((msg, i) => {
@@ -459,6 +520,12 @@ export default function Oracle() {
                                 ))}
                               </div>
                             )}
+                            {/* Oracle response footer */}
+                            <div className="px-4 pb-3 pt-0 flex items-center gap-1.5">
+                              <span className="text-[10px] text-muted-foreground/50 font-mono tracking-wider italic">
+                                From the Oracle · {new Date().toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+                              </span>
+                            </div>
                           </>
                         ) : (
                           <div className="p-4">{msg.content}</div>

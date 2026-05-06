@@ -620,3 +620,28 @@
 - [x] Oracle page: cycle phase badge pill near prompt area (shows "Rising", "Peak", "Falling", "Trough" in color-coded pill)
 - [x] Dashboard: evening mood prompt nudge in Quick Actions sidebar when no mood logged today (shows after 5pm)
 - [x] Oracle page: Lumin Oracle-mode treatment — 44vw, 0.65 opacity, core_unfurls clip (her core lights up and unfurls)
+
+## Builder Brief Implementation (May 6, 2026)
+
+### Onboarding Rewrite (7 → 6 screens)
+- [x] Remove AI/Oracle introduction screen entirely
+- [x] Reorder screens: pain → reframe → system → Reset → contemplative → Audit CTA
+- [x] Screen 1: "FOR PEOPLE WHO'VE READ THE BOOKS" — new copy, secondary CTA as italic text
+- [x] Screen 2: Reframe + Lumin first appearance (idle, small, right-third). "Lumin will be here." only
+- [x] Screen 3: 5S Framework — pruned body copy, no Lumin
+- [x] Screen 4: Reset flagship pathway card — moved up
+- [x] Screen 5: Contemplative wedge — Before the Words
+- [x] Screen 6: Audit CTA — WOVEN header, soft secondary CTA in italics
+
+### Oracle Threshold / Open Architecture
+- [x] Free-tier Oracle nav: threshold view (dimmed deeper weave, Lumin watching at 0.35 opacity, single CTA)
+- [x] Paid-tier Oracle nav: open view (full weave, Lumin Oracle-mode 44vw/0.65)
+- [x] Remove four seed-prompt grid from Oracle empty state → replaced with "Ask, and we will read."
+- [x] Move personalization consent from first-chat screen to Settings → Oracle toggle
+- [ ] Post-upgrade animation: weave opens, Lumin lifts (celebratory) then settles to watching (future)
+
+### Copy Audit
+- [x] Oracle empty state → "Ask, and we will read."
+- [x] Oracle response footer → "From the Oracle · {date}"
+- [x] Audit all in-app copy — first-person Lumin voice found only in onboarding (now removed); AlignmentAudit/Journal first-person is user voice (correct)
+- [x] Pricing page tier descriptions: "Lumin walks" / "Lumin opens the full system" / "Lumin and the Oracle work continuously"

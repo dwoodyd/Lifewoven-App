@@ -41,83 +41,108 @@ interface Scene {
   loop?: boolean;  // default true; set false to play once and hold last frame
 }
 
+// ── Scene 2: Lumin's small idle presence lives in the right-third of the screen.
+// The brief says: she is introduced as a presence, not a feature.
+// "Lumin will be here." is the ONLY line of copy about her in the entire intro.
+const SCENE2_LUMIN_VIDEO_URL = "/manus-storage/Lumen_sliding_into_view_202605051841_2c0e24db.mp4";
+
 const SCENES: Scene[] = [
+  // ── Screen 1: Pain ──────────────────────────────────────────────────────
   {
-    id: "birth",
+    id: "pain",
     videoId: "core_unfurls",
-    overlayOpacity: 0.35,
-    loop: false,
-    lines: [
-      { text: "Something in you", startAt: 0.5, size: "xl" },
-      { text: "has always known", startAt: 1.4, size: "xl" },
-      { text: "you were made for more.", startAt: 2.4, size: "xl", accent: true, italic: true },
-      { text: "You just couldn't hold it all together.", startAt: 4.2, size: "md" },
-    ],
-    cta: "I know this feeling →",
-  },
-  {
-    id: "arrival",
-    videoId: "sliding_in_1",
-    overlayOpacity: 0.4,
-    loop: false,
-    lines: [
-      { text: "Meet Lumin.", startAt: 0.8, size: "xl", accent: true },
-      { text: "She's been waiting for you.", startAt: 2.0, size: "lg" },
-      { text: "Not a chatbot. Not a coach.", startAt: 3.8, size: "md" },
-      { text: "A living companion for your inner work.", startAt: 5.0, size: "md" },
-    ],
-    cta: "What does she do? →",
-  },
-  {
-    id: "state",
-    videoId: "self_soothing",
     overlayOpacity: 0.38,
     loop: false,
     lines: [
-      { text: "She feels what you feel.", startAt: 0.6, size: "xl" },
-      { text: "Your emotional state isn't noise.", startAt: 2.2, size: "lg" },
-      { text: "It's data.", startAt: 3.8, size: "xl", accent: true, italic: true },
-      { text: "Lumin uses it to shape your whole day.", startAt: 5.2, size: "md" },
+      { text: "FOR PEOPLE WHO'VE READ THE BOOKS", startAt: 0.5, size: "sm", accent: true },
+      { text: "You have the books.", startAt: 1.8, size: "xl" },
+      { text: "Something still isn't woven.", startAt: 3.0, size: "xl", accent: true, italic: true },
+      { text: "The wisdom you've gathered doesn't need more reading.", startAt: 4.8, size: "md" },
+      { text: "It needs a place to land.", startAt: 6.2, size: "md", accent: true },
     ],
     cta: "Show me how →",
+    whisper: "I'm tired of starting over.",
   },
+
+  // ── Screen 2: Reframe + Lumin's first appearance ─────────────────────
+  // Lumin appears small, right-third, idle. "Lumin will be here." — three words, third person.
   {
-    id: "oracle",
-    videoId: "bobs_taps",
-    overlayOpacity: 0.42,
+    id: "reframe",
+    videoId: "self_soothing",
+    overlayOpacity: 0.35,
+    loop: false,
     lines: [
-      { text: "She listens.", startAt: 0.5, size: "xl" },
-      { text: "To your check-ins. Your journal.", startAt: 1.8, size: "lg" },
-      { text: "The patterns you can't see yourself.", startAt: 3.2, size: "lg" },
-      { text: "Then she tells you the next right step.", startAt: 5.0, size: "md", accent: true },
+      { text: "Your inner state isn't noise.", startAt: 0.6, size: "xl" },
+      { text: "It's the first signal.", startAt: 2.0, size: "xl", accent: true, italic: true },
+      { text: "Most days you push through it.", startAt: 3.6, size: "md" },
+      { text: "We'll start by asking — once, honestly — where you actually are.", startAt: 5.0, size: "md" },
+      { text: "Lumin will be here.", startAt: 6.8, size: "lg", accent: true },
     ],
-    cta: "What about when I fall? →",
-    whisper: "The Oracle — available on Seeker & Oracle plans.",
+    cta: "And the story I tell myself? →",
   },
+
+  // ── Screen 3: 5S Framework — no Lumin ────────────────────────────────
+  {
+    id: "system",
+    videoId: "scene_9",
+    overlayOpacity: 0.32,
+    loop: false,
+    lines: [
+      { text: "THE 5S FRAMEWORK", startAt: 0.5, size: "sm", accent: true },
+      { text: "Five dimensions. One life, woven.", startAt: 1.8, size: "xl" },
+      { text: "Your state shapes your story.", startAt: 3.4, size: "md" },
+      { text: "Your story sets your standards.", startAt: 4.6, size: "md" },
+      { text: "Hold them as one thing.", startAt: 5.8, size: "lg", accent: true, italic: true },
+    ],
+    cta: "What if I fall? →",
+  },
+
+  // ── Screen 4: Reset flagship — moved up while attention is high ───────
   {
     id: "reset",
     videoId: "bouncing_joyfully",
     overlayOpacity: 0.35,
+    loop: false,
     lines: [
-      { text: "When you break the streak —", startAt: 0.6, size: "xl" },
-      { text: "she doesn't shame you back.", startAt: 1.8, size: "xl", accent: true, italic: true },
-      { text: "She bounces.", startAt: 3.2, size: "lg" },
-      { text: "Because she knows you'll come back.", startAt: 4.6, size: "md" },
+      { text: "PATHWAY · FLAGSHIP", startAt: 0.4, size: "sm", accent: true },
+      { text: "When you fall —", startAt: 1.4, size: "xl" },
+      { text: "Reset doesn't shame you back.", startAt: 2.6, size: "xl", accent: true, italic: true },
+      { text: "Most systems break the moment you break the streak.", startAt: 4.2, size: "md" },
+      { text: "The flagship pathway is built for the day after.", startAt: 5.8, size: "md" },
     ],
-    cta: "Begin the weave →",
+    cta: "And before the words? →",
   },
+
+  // ── Screen 5: Contemplative wedge (Before the Words) ─────────────────
+  {
+    id: "contemplative",
+    videoId: "scene_11",
+    overlayOpacity: 0.30,
+    loop: false,
+    lines: [
+      { text: "A contemplative practice —", startAt: 0.5, size: "xl" },
+      { text: "before prayer, before speech.", startAt: 1.8, size: "xl", italic: true },
+      { text: "For the moments when language fails.", startAt: 3.4, size: "md" },
+      { text: "Two-minute practices for the days you don't have ten.", startAt: 5.0, size: "md" },
+    ],
+    cta: "Show me where to start →",
+  },
+
+  // ── Screen 6: Audit CTA ───────────────────────────────────────────────
   {
     id: "launch",
-    videoId: "scene_9",
+    videoId: "scene_14",
     overlayOpacity: 0.28,
     loop: false,
     lines: [
-      { text: "You weren't lacking.", startAt: 0.5, size: "xl" },
-      { text: "You were unwoven.", startAt: 1.8, size: "xl", accent: true, italic: true },
-      { text: "Lumin is here to weave it back.", startAt: 3.8, size: "lg" },
-      { text: "Let's begin.", startAt: 5.5, size: "lg", accent: true },
+      { text: "WOVEN", startAt: 0.4, size: "sm", accent: true },
+      { text: "You were unwoven.", startAt: 1.6, size: "xl", accent: true, italic: true },
+      { text: "Let's begin the weave.", startAt: 2.8, size: "xl" },
+      { text: "Twelve questions. Three to five minutes.", startAt: 4.4, size: "md" },
+      { text: "Free, no account required.", startAt: 5.6, size: "md" },
     ],
-    cta: "Take the Alignment Audit →",
+    cta: "Take the Audit →",
+    whisper: "I'll come back to it.",
   },
 ];
 
@@ -519,6 +544,25 @@ export default function OnboardingModal({ userId }: Props) {
         </button>
       )}
 
+      {/* ── Screen 2 only: Lumin small idle presence — right-third, she is a presence not a feature ── */}
+      {!finished && currentScene?.id === "reframe" && (
+        <video
+          src={SCENE2_LUMIN_VIDEO_URL}
+          autoPlay muted playsInline loop
+          style={{
+            position: "absolute",
+            right: "5%",
+            bottom: "18%",
+            width: "min(22vw, 200px)",
+            zIndex: 5,
+            mixBlendMode: "screen",
+            opacity: videoTime >= 6.5 ? 0.75 : 0.45,
+            transition: "opacity 1.2s ease",
+            pointerEvents: "none",
+          }}
+        />
+      )}
+
       {/* ── Scene dot progress ── */}
       {!finished && (
         <div style={{
@@ -594,9 +638,19 @@ export default function OnboardingModal({ userId }: Props) {
               {currentScene.cta}
             </button>
             {currentScene.whisper && (
-              <p style={{ color: T.quiet, fontSize: "0.75rem", fontStyle: "italic", letterSpacing: "0.04em" }}>
+              <button
+                onClick={handleAdvance}
+                style={{
+                  background: "transparent", border: "none", cursor: "pointer",
+                  color: T.quiet, fontSize: "0.82rem", fontStyle: "italic",
+                  letterSpacing: "0.04em", fontFamily: "inherit",
+                  transition: "color 0.2s",
+                }}
+                onMouseEnter={e => { (e.target as HTMLElement).style.color = T.muted; }}
+                onMouseLeave={e => { (e.target as HTMLElement).style.color = T.quiet; }}
+              >
                 {currentScene.whisper}
-              </p>
+              </button>
             )}
           </div>
         </div>
