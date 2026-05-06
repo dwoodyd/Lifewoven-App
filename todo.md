@@ -645,3 +645,8 @@
 - [x] Oracle response footer → "From the Oracle · {date}"
 - [x] Audit all in-app copy — first-person Lumin voice found only in onboarding (now removed); AlignmentAudit/Journal first-person is user voice (correct)
 - [x] Pricing page tier descriptions: "Lumin walks" / "Lumin opens the full system" / "Lumin and the Oracle work continuously"
+
+## Post-Upgrade & Settings Polish (May 6, 2026)
+- [x] Post-upgrade Lumin animation: bouncing_joyfully for 3.2s on Oracle plan activation, then settles to core_unfurls, then fades out — "The weave is open."
+- [x] Settings → Oracle: personalization consent toggle (allow Oracle to draw from journal/check-ins) — already existed, now properly labeled
+- [x] Settings → Account: "Replay the intro" button — clears lifeos_onboarding_done and reloads page

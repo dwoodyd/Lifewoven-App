@@ -95,7 +95,7 @@ export const stripeRouter = router({
         customer: customerId,
         mode: "subscription",
         line_items: [{ price: price.id, quantity: 1 }],
-        success_url: `${input.origin}/settings?tab=billing&success=1`,
+        success_url: `${input.origin}/settings?tab=billing&success=1&plan=${input.plan}`,
         cancel_url: `${input.origin}/pricing`,
         allow_promotion_codes: true,
         client_reference_id: ctx.user.id.toString(),
