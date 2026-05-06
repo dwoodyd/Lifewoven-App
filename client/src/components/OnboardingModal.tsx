@@ -417,7 +417,7 @@ export default function OnboardingModal({ userId }: Props) {
       {/* ── Video slot A ── */}
       <video
         ref={videoARef}
-        src={slotA.url}
+        {...(slotA.url ? { src: slotA.url } : {})}
         autoPlay muted loop playsInline
         onCanPlay={() => setSlotA(s => ({ ...s, ready: true }))}
         style={{
@@ -434,7 +434,7 @@ export default function OnboardingModal({ userId }: Props) {
       {/* ── Video slot B ── */}
       <video
         ref={videoBRef}
-        src={slotB.url}
+        {...(slotB.url ? { src: slotB.url } : {})}
         autoPlay muted loop playsInline
         onCanPlay={() => setSlotB(s => ({ ...s, ready: true }))}
         style={{
