@@ -569,3 +569,5 @@
 - [ ] Dashboard welcome: Lumin slide-in on first visit
 - [ ] Pathways listing: Lumin pointing/energy video as scene backdrop
 - [ ] Rename Loom → Lumin throughout codebase
+- [x] Fix broken S3 URLs (wrong base domain) — all 24 videos now use correct /manus-storage/ relative paths
+- [x] Rebuild OnboardingModal: Lumin IS the screen — 6 full-bleed scenes, copy authored around her movements, no chrome, word-sync, dissolve transition
