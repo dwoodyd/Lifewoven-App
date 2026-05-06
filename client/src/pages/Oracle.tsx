@@ -63,6 +63,7 @@ export default function Oracle() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const insights = trpc.oracle.insights.useQuery(undefined, { enabled: isAuthenticated && hasConsented });
+  const cycleAnalysis = trpc.moodLog.getCycleAnalysis.useQuery(undefined, { enabled: isAuthenticated });
 
   const chat = trpc.oracle.chat.useMutation({
     onSuccess: (data: any) => {
@@ -134,6 +135,16 @@ export default function Oracle() {
     chat.mutate({ message: modePrefix + lastUserMessage });
   };
 
+  const PHASE_CONFIG: Record<string, { label: string; color: string; desc: string }> = {
+    rising:  { label: "Rising",  color: "text-emerald-400 border-emerald-400/30 bg-emerald-400/10", desc: "Your energy is building" },
+    peak:    { label: "Peak",    color: "text-amber-400 border-amber-400/30 bg-amber-400/10",   desc: "You are at your high point" },
+    falling: { label: "Falling", color: "text-blue-400 border-blue-400/30 bg-blue-400/10",     desc: "Energy is transitioning" },
+    trough:  { label: "Trough",  color: "text-violet-400 border-violet-400/30 bg-violet-400/10", desc: "A natural low — rest and reset" },
+    unknown: { label: "",        color: "",                                                       desc: "" },
+  };
+  const currentPhase = cycleAnalysis.data?.currentPhase ?? "unknown";
+  const phaseConfig = PHASE_CONFIG[currentPhase];
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-background flex flex-col">
@@ -150,12 +161,12 @@ export default function Oracle() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col" style={{ position: "relative" }}>
-      {/* Lumin ambient — floats in the top-right, blends over the dark bg */}
+      {/* Lumin Oracle-mode — larger, higher opacity: she IS the Oracle's embodied presence */}
       <LuminAmbient
-        videoId="bobs_taps"
+        videoId="core_unfurls"
         position="top-right"
-        size="min(38vw, 480px)"
-        opacity={0.55}
+        size="min(44vw, 560px)"
+        opacity={0.65}
         zIndex={0}
       />
       <Nav />
@@ -470,6 +481,20 @@ export default function Oracle() {
               )}
               <div ref={messagesEndRef} />
             </div>
+
+            {/* Cycle phase badge — shown when mood data is available */}
+            {currentPhase !== "unknown" && phaseConfig.label && (
+              <div className="flex items-center gap-2 mb-1">
+                <span
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono border ${phaseConfig.color}`}
+                  title={phaseConfig.desc}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-current opacity-80" />
+                  {phaseConfig.label} phase
+                </span>
+                <span className="text-xs text-muted-foreground/60 font-light">{phaseConfig.desc}</span>
+              </div>
+            )}
 
             {/* Input */}
             <div className="flex gap-2 items-end">

@@ -78,6 +78,11 @@ export default function Dashboard() {
   const { data: oracleInsights } = trpc.oracle.insights.useQuery(undefined, { enabled: isAuthenticated });
   const { data: lastPracticed } = trpc.pathways.lastPracticed.useQuery(undefined, { enabled: isAuthenticated });
   const { data: streakData } = trpc.pathways.practiceStreak.useQuery(undefined, { enabled: isAuthenticated });
+  const { data: todayMood } = trpc.moodLog.getTodayMood.useQuery(undefined, { enabled: isAuthenticated });
+  const hasMoodToday = !!(todayMood as any)?.score;
+  // Evening nudge: show after 5pm local time when no mood logged today
+  const isEvening = new Date().getHours() >= 17;
+  const showMoodNudge = isEvening && !hasMoodToday;
 
   const createCheckIn = trpc.checkIn.create.useMutation({
     onSuccess: () => { toast.success("Check-in saved. The Oracle is listening."); setShowCheckIn(false); refetch(); },
@@ -463,6 +468,22 @@ export default function Dashboard() {
                 </div>
               )}
             </div>
+
+            {/* Evening mood nudge */}
+            {showMoodNudge && (
+              <div className="p-4 rounded-2xl border border-amber-500/20 bg-amber-500/5">
+                <div className="flex items-start gap-2.5">
+                  <Activity className="h-4 w-4 text-amber-400 mt-0.5 shrink-0" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-foreground mb-0.5">How are you feeling tonight?</p>
+                    <p className="text-xs text-muted-foreground font-light leading-relaxed mb-2">You haven't logged your mood today. A moment of reflection helps the Oracle know where you are.</p>
+                    <Button asChild size="sm" variant="outline" className="text-xs h-7 border-amber-500/30 hover:border-amber-500/60">
+                      <Link href="/mood-rhythm">Log today's mood</Link>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Quick Actions */}
             <div className="p-4 sm:p-5 rounded-2xl border border-border bg-card">

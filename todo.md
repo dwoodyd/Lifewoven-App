@@ -615,3 +615,8 @@
 - [x] Pass current cycle phase (rising/peak/falling/trough) as system context to Oracle LLM
 - [x] Oracle tRPC procedure fetches last 5 mood logs, detects phase, injects rich description into system prompt
 - [ ] Oracle UI: show subtle cycle phase badge near the prompt area (optional future enhancement)
+
+## Oracle & Lumin Polish (May 6, 2026)
+- [x] Oracle page: cycle phase badge pill near prompt area (shows "Rising", "Peak", "Falling", "Trough" in color-coded pill)
+- [x] Dashboard: evening mood prompt nudge in Quick Actions sidebar when no mood logged today (shows after 5pm)
+- [x] Oracle page: Lumin Oracle-mode treatment — 44vw, 0.65 opacity, core_unfurls clip (her core lights up and unfurls)
