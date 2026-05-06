@@ -571,3 +571,8 @@
 - [ ] Rename Loom → Lumin throughout codebase
 - [x] Fix broken S3 URLs (wrong base domain) — all 24 videos now use correct /manus-storage/ relative paths
 - [x] Rebuild OnboardingModal: Lumin IS the screen — 6 full-bleed scenes, copy authored around her movements, no chrome, word-sync, dissolve transition
+
+## Onboarding Polish (May 6, 2026)
+- [x] Fix: dashboard flashes between onboarding scenes — persistent portal with A/B video cross-fade, no unmount
+- [x] Fix: "the weave begins now" italic text blends into Lumin's yellow — dark pill background + stronger text-shadow
+- [x] New: Untitledvideo(2).mp4 (watermark cropped) used for the Alignment Audit finished screen

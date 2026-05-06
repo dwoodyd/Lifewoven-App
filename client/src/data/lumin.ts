@@ -171,6 +171,14 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
     role: "onboarding",
     duration: 8,
   },
+  // ── Special screens ────────────────────────────────────────────────────────
+  {
+    id: "alignment_audit",
+    url: "/manus-storage/Lumin_alignment_audit_clean_041dec4e.mp4",
+    action: "Lumin smiling and ready — Alignment Audit finished screen",
+    role: "onboarding",
+    duration: 8,
+  },
   // ── Landscape backgrounds ────────────────────────────────────────────────
   {
     id: "landscape_cinematic",
