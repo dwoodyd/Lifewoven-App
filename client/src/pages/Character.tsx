@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { useLocation } from "wouter";
 import Nav from "@/components/Nav";
-import { LoomCorner } from "@/components/Loom";
+import { LuminCorner } from "@/components/LuminCorner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
@@ -14,6 +14,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import { toast } from "sonner";
 import { BookOpen, Plus, MoreVertical, Star, BookMarked, CheckCircle2, Pause, BookHeart, Sparkles, Search, Upload, X, Check, ImageIcon } from "lucide-react";
+import { LuminAmbient } from "@/components/LuminAmbient";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -340,8 +341,16 @@ export default function Character() {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Lumin bounces joyfully — she loves books as much as you do */}
+      <LuminAmbient
+        videoId="bouncing_joyfully"
+        position="top-right"
+        size="min(26vw, 300px)"
+        opacity={0.35}
+        zIndex={0}
+      />
       <Nav />
-      <LoomCorner />
+      <LuminCorner />
 
       <div className="max-w-6xl mx-auto px-4 pt-28 pb-20">
         {/* Header */}

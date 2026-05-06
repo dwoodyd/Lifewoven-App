@@ -45,7 +45,7 @@ const MODULE_CONFIG = [
   { key: "stewardship", label: "Stewardship", icon: Leaf, color: "text-stewardship", bg: "bg-stewardship/10", borderBase: "border-stewardship/20", borderHover: "hover:border-stewardship/50", href: "/stewardship" },
 ];
 
-import { LoomCorner } from "@/components/Loom";
+import { LuminCorner } from "@/components/LuminCorner";
 
 export default function Dashboard() {
   const { user, isAuthenticated } = useAuth();
@@ -486,7 +486,7 @@ export default function Dashboard() {
         </div>
       </div>
     </div>
-    <LoomCorner size={52} tooltip="Loom is with you" />
+    <LuminCorner size={52} tooltip="Lumin is with you" />
     </>
   );
 }

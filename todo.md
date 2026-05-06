@@ -599,3 +599,19 @@
 - [x] MoodRhythmChart: Lumin ambient (top-right, scene_9, 26vw, 0.32 opacity)
 - [x] AlignmentAudit: Lumin ambient (bottom-right, pointing, 28vw, 0.40 opacity)
 - [ ] Character/Book section: Lumin subtle ambient
+
+## Loom → Lumin Rename (May 6, 2026)
+- [x] Rename Loom component file: Loom.tsx → LuminCorner.tsx (new canonical file)
+- [x] Rename LuminCorner export → LuminCorner (LuminState, Lumin, LuminCorner)
+- [x] Update all imports of LoomCorner across pages (Dashboard, Oracle, AlignmentAudit, PathwayPage, Character, CharacterBook)
+- [x] Rename tooltip text: "Loom is with you" → "Lumin is with you", "Loom listens" → "Lumin listens"
+- [x] Verify 0 TS errors after rename
+
+## Character/Book Lumin Placement (May 6, 2026)
+- [x] Character hub page (/character): LuminAmbient bouncing_joyfully, top-right, 0.35 opacity
+- [x] Book Detail page (/character/:bookId): LuminAmbient lumen_reaching, bottom-right, 0.30 opacity
+
+## Oracle Mood Rhythm Integration (May 6, 2026)
+- [x] Pass current cycle phase (rising/peak/falling/trough) as system context to Oracle LLM
+- [x] Oracle tRPC procedure fetches last 5 mood logs, detects phase, injects rich description into system prompt
+- [ ] Oracle UI: show subtle cycle phase badge near the prompt area (optional future enhancement)

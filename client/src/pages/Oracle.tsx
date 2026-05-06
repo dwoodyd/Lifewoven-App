@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
-import { LoomCorner } from "@/components/Loom";
+import { LuminCorner } from "@/components/LuminCorner";
 import { LuminAmbient } from "@/components/LuminAmbient";
 import { useAuth } from "@/_core/hooks/useAuth";
 import Nav from "@/components/Nav";
@@ -58,7 +58,7 @@ export default function Oracle() {
     return localStorage.getItem("oracle_consent") === "true";
   });
   const [mode, setMode] = useState<OracleMode>("guide");
-  const [loomPulse, setLoomPulse] = useState(false);
+  const [luminPulse, setLoomPulse] = useState(false);
   const [lastUserMessage, setLastUserMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -499,7 +499,7 @@ export default function Oracle() {
           </div>
         )}
       </div>
-      <LoomCorner size={52} pulse={loomPulse} tooltip="Loom listens" />
+      <LuminCorner size={52} pulse={luminPulse} tooltip="Lumin listens" />
     </div>
   );
 }

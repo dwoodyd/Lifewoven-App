@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { useLocation, useParams } from "wouter";
 import Nav from "@/components/Nav";
-import { LoomCorner } from "@/components/Loom";
+import { LuminCorner } from "@/components/LuminCorner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { trpc } from "@/lib/trpc";
+import { LuminAmbient } from "@/components/LuminAmbient";
 import { toast } from "sonner";
 import {
   ArrowLeft, BookOpen, Quote, Highlighter, Lightbulb, PenLine,
@@ -559,8 +560,16 @@ export default function CharacterBook() {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Lumin reaches upward — aspirational, present for deep reading work */}
+      <LuminAmbient
+        videoId="lumen_reaching"
+        position="bottom-right"
+        size="min(24vw, 280px)"
+        opacity={0.30}
+        zIndex={0}
+      />
       <Nav />
-      <LoomCorner />
+      <LuminCorner />
 
       <div className="max-w-4xl mx-auto px-4 pt-28 pb-20">
         {/* Back */}

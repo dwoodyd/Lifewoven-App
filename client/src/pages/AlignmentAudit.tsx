@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { LoomCorner } from "@/components/Loom";
+import { LuminCorner } from "@/components/LuminCorner";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -187,7 +187,7 @@ export default function AlignmentAudit() {
   const [optionalQ, setOptionalQ] = useState(0);
   const [result, setResult] = useState<{ profile: Profile; scores: ReturnType<typeof computeScores>; frictionTags: string[] } | null>(null);
   const [mindPatterns, setMindPatterns] = useState<string[]>([]);
-  const [loomPulse, setLoomPulse] = useState(false);
+  const [luminPulse, setLoomPulse] = useState(false);
 
   const saveAudit = trpc.audit.save.useMutation({ onSuccess: () => toast.success("Results saved to your profile.") });
   const saveMindPatterns = trpc.profile.saveMindPatterns.useMutation();
@@ -509,5 +509,5 @@ export default function AlignmentAudit() {
        </div>
     );
   }
-  return <LoomCorner pulse={loomPulse} />;
+  return <LuminCorner pulse={luminPulse} />;
 }

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useRoute, Link } from "wouter";
-import { LoomCorner } from "@/components/Loom";
+import { LuminCorner } from "@/components/LuminCorner";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -148,7 +148,7 @@ export default function PathwayPage() {
     try { return localStorage.getItem(`${storageKey}_started`) === "1"; } catch { return false; }
   });
   const [sessionComplete, setSessionComplete] = useState(false);
-  const [loomCelebrate, setLoomCelebrate] = useState(false);
+  const [luminCelebrate, setLoomCelebrate] = useState(false);
 
   // Sync completedSteps to localStorage
   useEffect(() => {
@@ -432,7 +432,7 @@ export default function PathwayPage() {
           </div>
         </div>
       </div>
-      <LoomCorner pulse={loomCelebrate} />
+      <LuminCorner pulse={luminCelebrate} />
     </div>
   );
 }

@@ -15,7 +15,7 @@ import {
   auditResults, checkIns, journalEntries, habits, habitLogs,
   scorecards, beliefs, decisions, energyAudits, oracleInsights,
   oracleConversations, userPathways, pathwaySessions, resources, courses, enrollments,
-  products, communityPosts, communityComments, communityLikes, orders, users
+  products, communityPosts, communityComments, communityLikes, orders, users, moodLogs
 } from "../drizzle/schema";
 import { eq, desc, and, like, sql } from "drizzle-orm";
 import { invokeLLM } from "./_core/llm";
@@ -489,6 +489,31 @@ const oracleRouter = router({
         ? `\n- How this user's mind works: ${mindPats.join(", ")}. Adapt your tone, pacing, and suggestions accordingly — shorter steps for scattered minds, gentler framing for overwhelmed ones, concrete first actions for those who struggle to start.`
         : "";
 
+      // Fetch mood rhythm cycle phase for Oracle context
+      const recentMoods = await db.select({ score: moodLogs.score, logDate: moodLogs.logDate })
+        .from(moodLogs)
+        .where(eq(moodLogs.userId, ctx.user.id))
+        .orderBy(desc(moodLogs.logDate))
+        .limit(5);
+      let cyclePhase: "rising" | "peak" | "falling" | "trough" | "unknown" = "unknown";
+      if (recentMoods.length >= 3) {
+        const [s0, s1, s2] = recentMoods.map(m => m.score);
+        if (s0 > s1 && s1 > s2) cyclePhase = "rising";
+        else if (s0 < s1 && s1 < s2) cyclePhase = "falling";
+        else if (s0 > s1 && s0 > s2) cyclePhase = "peak";
+        else if (s0 < s1 && s0 < s2) cyclePhase = "trough";
+      }
+      const cyclePhaseDescriptions: Record<string, string> = {
+        rising:  "Their emotional energy is building — they are in an ascending phase. This is a good moment for new commitments, clarity work, and forward momentum.",
+        peak:    "They are at or near an emotional high point. Celebrate wins, set intentions, and plant seeds for the next cycle.",
+        falling: "Their energy is beginning to descend. This is a natural transition — encourage rest, reflection, and consolidation rather than pushing harder.",
+        trough:  "They are in a low-energy phase. Lead with compassion, reduce demands, and focus on the smallest possible next step. This is a reset, not a failure.",
+        unknown: "",
+      };
+      const cycleContext = cyclePhase !== "unknown"
+        ? `\n- Emotional rhythm phase: ${cyclePhase}. ${cyclePhaseDescriptions[cyclePhase]}`
+        : "";
+
       // Build system prompt with user context
       const systemPrompt = `You are the Lifewoven Oracle — a wise, warm, and deeply perceptive guide rooted in the Lifewoven 5S Framework. Use these canonical definitions consistently — they are the same definitions used throughout the Lifewoven platform:
 
@@ -514,7 +539,7 @@ RESPONSE FORMAT: You MUST reply with valid JSON in exactly this shape — no mar
 User context:
 - Primary pathway: ${input.context?.primaryPathway ?? "not set"}
 - Recent emotional scores: ${input.context?.recentCheckIns?.map((c: any) => c.emotionalScore).join(", ") ?? "none"}
-- Habit streak: ${input.context?.habitStreak ?? 0} days${mindContext}`;
+- Habit streak: ${input.context?.habitStreak ?? 0} days${mindContext}${cycleContext}`;
 
       // Get or build conversation history
       let messages: { role: string; content: string }[] = [];
