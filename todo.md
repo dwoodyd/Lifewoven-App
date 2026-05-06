@@ -576,3 +576,15 @@
 - [x] Fix: dashboard flashes between onboarding scenes — persistent portal with A/B video cross-fade, no unmount
 - [x] Fix: "the weave begins now" italic text blends into Lumin's yellow — dark pill background + stronger text-shadow
 - [x] New: Untitledvideo(2).mp4 (watermark cropped) used for the Alignment Audit finished screen
+
+## Emotional Cycle Tracker / Mood Rhythm Chart (May 6, 2026)
+- [x] DB schema: mood_logs table (userId, date, score 1-10, note optional)
+- [x] Migration: generate + apply SQL for mood_logs
+- [x] Server: moodLog router — logMood, getMoodHistory, getTodayMood, getCycleAnalysis
+- [x] Cycle detection algorithm: peak-to-peak average, confidence score, phase detection
+- [x] UI: MoodRhythmChart page — connected dot-plot (90 days), cycle stats card, predictive window
+- [ ] Evening prompt: gentle reminder to log mood (shown in dashboard)
+- [ ] Oracle integration: cycle phase context passed to Oracle for guidance
+- [x] Wire into State module navigation card
+- [x] Wire into Dashboard Quick Actions sidebar
+- [x] Tests: 17 tests for cycle detection algorithm (detectPeaksAndTroughs, avgCycleLength, Hersey reference)

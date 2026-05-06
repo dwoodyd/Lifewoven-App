@@ -5,6 +5,7 @@ import { adminRouter } from "./routers/admin";
 import { referralRouter } from "./routers/referral";
 import { betaRouter } from "./routers/beta";
 import { characterRouter } from "./routers/character";
+import { moodLogRouter } from "./routers/moodLog";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
@@ -1016,6 +1017,7 @@ export const appRouter = router({
   referral: referralRouter,
   beta: betaRouter,
   character: characterRouter,
+  moodLog: moodLogRouter,
   support: router({
     submit: publicProcedure
       .input(z.object({

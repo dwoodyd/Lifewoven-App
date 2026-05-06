@@ -61,6 +61,7 @@ import BetaAccess from "./pages/BetaAccess";
 import SubscriptionSuccess from "./pages/SubscriptionSuccess";
 import Character from "./pages/Character";
 import CharacterBook from "./pages/CharacterBook";
+import MoodRhythmChart from "./pages/MoodRhythmChart";
 import { BetaExpiredModal } from "./components/BetaExpiredModal";
 
 // Before the Words (BTW)
@@ -136,6 +137,9 @@ function RouterSwitch() {
       {/* Character & Growth */}
       <Route path="/character" component={Character} />
       <Route path="/character/:id" component={CharacterBook} />
+
+      {/* Mood Rhythm */}
+      <Route path="/mood-rhythm" component={MoodRhythmChart} />
 
       {/* Resources */}
       <Route path="/library" component={ResourceLibrary} />

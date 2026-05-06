@@ -19,7 +19,7 @@ import { REENTRY, LOW_BANDWIDTH } from "../../../shared/adaptive-language";
 import {
   Waves, BookOpen, Target, Compass, Leaf, Sparkles,
   CheckCircle2, Circle, TrendingUp, MessageCircle,
-  ArrowRight, Flame, Brain, Heart, Wind
+  ArrowRight, Flame, Brain, Heart, Wind, Activity
 } from "lucide-react";
 
 const EGS_EMOTIONS = [
@@ -462,6 +462,7 @@ export default function Dashboard() {
                 {[
                   { href: "/btw", icon: Leaf, label: "Before the Words" },
                   { href: "/journal", icon: Brain, label: "New Journal Entry" },
+                  { href: "/mood-rhythm", icon: Activity, label: "Mood Rhythm Chart" },
                   { href: "/oracle", icon: Sparkles, label: "Ask the Oracle" },
                   { href: "/community", icon: MessageCircle, label: "Community" },
                   { href: "/library", icon: BookOpen, label: "Resource Library" },
