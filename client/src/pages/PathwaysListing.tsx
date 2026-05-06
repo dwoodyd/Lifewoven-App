@@ -99,9 +99,8 @@ export default function PathwaysListing() {
       {/* Lumin reaches toward the path ahead — aspirational, guiding */}
       <LuminAmbient
         videoId="lumen_reaching"
-        position="bottom-right"
-        size="min(32vw, 380px)"
-        opacity={0.42}
+        mode="dominant"
+        opacity={0.60}
         zIndex={0}
       />
       <Nav />

@@ -138,9 +138,8 @@ export default function Dashboard() {
       {/* Lumin floats in the bottom-right — she's in the space, not on the page */}
       <LuminAmbient
         videoId="self_soothing"
-        position="bottom-right"
-        size="min(28vw, 340px)"
-        opacity={0.45}
+        mode="dominant"
+        opacity={0.55}
         zIndex={0}
       />
       {showReentry && (

@@ -563,9 +563,8 @@ export default function CharacterBook() {
       {/* Lumin reaches upward — aspirational, present for deep reading work */}
       <LuminAmbient
         videoId="lumen_reaching"
-        position="bottom-right"
-        size="min(24vw, 280px)"
-        opacity={0.30}
+        mode="dominant"
+        opacity={0.55}
         zIndex={0}
       />
       <Nav />

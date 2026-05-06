@@ -80,9 +80,8 @@ export default function StateModule() {
       {/* Lumin holds space in the center-right — a gentle soothing presence */}
       <LuminAmbient
         videoId="self_soothing"
-        position="center-right"
-        size="min(30vw, 360px)"
-        opacity={0.38}
+        mode="dominant"
+        opacity={0.55}
         zIndex={0}
       />
       <Nav />

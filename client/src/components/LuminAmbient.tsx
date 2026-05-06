@@ -1,10 +1,12 @@
 /**
- * LuminAmbient — places Lumin as a scene element, not a UI element.
- * She floats in the space behind the content using mix-blend-mode: screen,
- * so her black background disappears and only her woven form glows through.
+ * LuminAmbient — Lumin as the dominant visual presence on a page.
  *
- * Design principle: Lumin is IN the page, not ON the page.
- * The content lives inside her world, not on top of her.
+ * Design principle: The page revolves around Lumin.
+ * She is larger than life — content floats over her world.
+ *
+ * Two modes:
+ *   dominant (default) — Lumin fills the viewport center, content overlaid on top.
+ *   corner             — Legacy small placement for secondary contexts.
  */
 
 import { useEffect, useRef } from "react";
@@ -18,43 +20,56 @@ export type LuminPosition =
   | "center-right"
   | "center-left"
   | "top-center"
-  | "bottom-center";
+  | "bottom-center"
+  | "center";
+
+export type LuminMode = "dominant" | "corner";
 
 interface LuminAmbientProps {
   /** Video ID from the LUMIN_VIDEOS catalogue */
   videoId: string;
-  /** Where to anchor Lumin in the viewport */
+  /**
+   * "dominant" — Lumin fills the viewport, content floats over her (default).
+   * "corner"   — Small fixed placement at an edge (legacy).
+   */
+  mode?: LuminMode;
+  /** Where to anchor Lumin (only used in "corner" mode, default: "center") */
   position?: LuminPosition;
-  /** Width as a CSS value (default: "min(32vw, 400px)") */
+  /**
+   * In "dominant" mode: width as CSS value (default: "min(90vw, 900px)").
+   * In "corner" mode: width as CSS value (default: "min(32vw, 400px)").
+   */
   size?: string;
-  /** Overall opacity (default: 0.55) */
+  /** Overall opacity (default: dominant=0.65, corner=0.45) */
   opacity?: number;
   /** Whether to loop the video (default: true) */
   loop?: boolean;
   /** Extra CSS applied to the outer wrapper */
   style?: React.CSSProperties;
-  /** z-index (default: 0 — behind content) */
+  /** z-index (default: dominant=0, corner=0) */
   zIndex?: number;
-  /** Offset from the anchor edge in px (default: 0) */
+  /** Offset from the anchor edge in px — corner mode only */
   offset?: number;
 }
 
-const POSITION_STYLES: Record<LuminPosition, React.CSSProperties> = {
+const CORNER_POSITION_STYLES: Record<LuminPosition, React.CSSProperties> = {
   "top-right":     { top: 0,    right: 0 },
   "top-left":      { top: 0,    left: 0 },
   "bottom-right":  { bottom: 0, right: 0 },
   "bottom-left":   { bottom: 0, left: 0 },
-  "center-right":  { top: "50%", right: 0,  transform: "translateY(-50%)" },
-  "center-left":   { top: "50%", left: 0,   transform: "translateY(-50%)" },
+  "center-right":  { top: "50%", right: 0,   transform: "translateY(-50%)" },
+  "center-left":   { top: "50%", left: 0,    transform: "translateY(-50%)" },
   "top-center":    { top: 0,    left: "50%", transform: "translateX(-50%)" },
   "bottom-center": { bottom: 0, left: "50%", transform: "translateX(-50%)" },
+  "center":        { top: "50%", left: "50%", transform: "translate(-50%, -50%)" },
 };
 
 export function LuminAmbient({
   videoId,
-  position = "top-right",
-  size = "min(32vw, 400px)",
-  opacity = 0.55,
+  mode = "dominant",
+  position = "center",
+  size,
+  opacity,
   loop = true,
   style,
   zIndex = 0,
@@ -66,21 +81,62 @@ export function LuminAmbient({
   useEffect(() => {
     const el = videoRef.current;
     if (!el) return;
-    // Ensure autoplay starts even if browser deferred it
     el.play().catch(() => {/* autoplay blocked — silent fail */});
   }, [videoId]);
 
   if (!video?.url) return null;
 
-  const posStyle = POSITION_STYLES[position];
+  // ── Dominant mode ──────────────────────────────────────────────────────────
+  if (mode === "dominant") {
+    const dominantSize  = size    ?? "min(88vw, 860px)";
+    const dominantOpacity = opacity ?? 0.65;
 
-  // Apply offset to the relevant edge
+    return (
+      <div
+        aria-hidden="true"
+        style={{
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: dominantSize,
+          aspectRatio: "16/9",
+          zIndex,
+          pointerEvents: "none",
+          opacity: dominantOpacity,
+          ...style,
+        }}
+      >
+        <video
+          ref={videoRef}
+          src={video.url}
+          autoPlay
+          muted
+          loop={loop}
+          playsInline
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+            mixBlendMode: "screen",
+            display: "block",
+          }}
+        />
+      </div>
+    );
+  }
+
+  // ── Corner mode (legacy) ───────────────────────────────────────────────────
+  const cornerSize    = size    ?? "min(32vw, 400px)";
+  const cornerOpacity = opacity ?? 0.45;
+  const posStyle = CORNER_POSITION_STYLES[position];
+
   const offsetStyle: React.CSSProperties = {};
   if (offset) {
-    if ("top" in posStyle && posStyle.top === 0)    offsetStyle.top    = offset;
+    if ("top"    in posStyle && posStyle.top    === 0) offsetStyle.top    = offset;
     if ("bottom" in posStyle && posStyle.bottom === 0) offsetStyle.bottom = offset;
-    if ("left" in posStyle && posStyle.left === 0)  offsetStyle.left   = offset;
-    if ("right" in posStyle && posStyle.right === 0) offsetStyle.right  = offset;
+    if ("left"   in posStyle && posStyle.left   === 0) offsetStyle.left   = offset;
+    if ("right"  in posStyle && posStyle.right  === 0) offsetStyle.right  = offset;
   }
 
   return (
@@ -88,11 +144,11 @@ export function LuminAmbient({
       aria-hidden="true"
       style={{
         position: "fixed",
-        width: size,
+        width: cornerSize,
         aspectRatio: "16/9",
         zIndex,
         pointerEvents: "none",
-        opacity,
+        opacity: cornerOpacity,
         ...posStyle,
         ...offsetStyle,
         ...style,

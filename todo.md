@@ -650,3 +650,15 @@
 - [x] Post-upgrade Lumin animation: bouncing_joyfully for 3.2s on Oracle plan activation, then settles to core_unfurls, then fades out — "The weave is open."
 - [x] Settings → Oracle: personalization consent toggle (allow Oracle to draw from journal/check-ins) — already existed, now properly labeled
 - [x] Settings → Account: "Replay the intro" button — clears lifeos_onboarding_done and reloads page
+
+## Lumin Dominant Presence Redesign (May 6, 2026)
+- [x] Redesign LuminAmbient component: added "dominant" mode — 88vw centered, content overlaid on top via zIndex
+- [x] Dashboard: Lumin dominant centered (self_soothing, 0.55)
+- [x] Oracle: Lumin dominant centered (core_unfurls, 0.70)
+- [x] StateModule: Lumin dominant centered (self_soothing, 0.55)
+- [x] PathwaysListing: Lumin dominant centered (lumen_reaching, 0.60)
+- [x] Journal: Lumin dominant centered (scene_9, 0.50)
+- [x] MoodRhythmChart: Lumin dominant centered (scene_9, 0.50)
+- [x] AlignmentAudit: Lumin dominant centered (pointing, 0.58)
+- [x] Character: Lumin dominant centered (bouncing_joyfully, 0.55)
+- [x] CharacterBook: Lumin dominant centered (lumen_reaching, 0.55)

@@ -344,9 +344,8 @@ export default function Character() {
       {/* Lumin bounces joyfully — she loves books as much as you do */}
       <LuminAmbient
         videoId="bouncing_joyfully"
-        position="top-right"
-        size="min(26vw, 300px)"
-        opacity={0.35}
+        mode="dominant"
+        opacity={0.55}
         zIndex={0}
       />
       <Nav />

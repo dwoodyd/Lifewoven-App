@@ -82,9 +82,8 @@ export default function Journal() {
       {/* Lumin floats softly in the corner — a quiet witness to your writing */}
       <LuminAmbient
         videoId="scene_9"
-        position="bottom-right"
-        size="min(26vw, 300px)"
-        opacity={0.30}
+        mode="dominant"
+        opacity={0.50}
         zIndex={0}
       />
       <Nav />
