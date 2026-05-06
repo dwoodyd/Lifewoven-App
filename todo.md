@@ -557,3 +557,15 @@
 
 ## Bug: Referral Code — Wrong Account After Activation (Apr 30, 2026)
 - [x] Fix: clicking activation link while admin is logged in signs the new user in as admin instead of the new account
+
+## Lumin Video Integration (May 5, 2026)
+- [x] Upload all 24 Lumin MP4s to S3 via manus-upload-file --webdev
+- [x] Crop VEO watermarks from 12 affected videos (Untitled 1-11, 14)
+- [x] Create LuminScene component: full-bleed video, mix-blend-mode:screen, no-chrome shell
+- [x] Word-by-word synchronized copy tied to video currentTime
+- [x] Dissolve transition from Lumin scene into dashboard (CSS opacity + scale)
+- [x] Immersive onboarding: Lumin video layer added to each OnboardingModal slide
+- [x] Oracle page: Lumin ambient presence (blend-mode overlay, idle loop)
+- [ ] Dashboard welcome: Lumin slide-in on first visit
+- [ ] Pathways listing: Lumin pointing/energy video as scene backdrop
+- [ ] Rename Loom → Lumin throughout codebase

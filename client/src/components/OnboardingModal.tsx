@@ -2,6 +2,73 @@ import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Loom, type LoomState } from "@/components/Loom";
+import { LUMIN_VIDEOS } from "@/data/lumin";
+
+/* ─── Per-slide Lumin video map ──────────────────────────────────── */
+const SLIDE_VIDEO: Record<string, string> = {
+  thesis:        "core_unfurls",
+  state:         "self_soothing",
+  framework:     "sliding_in_1",
+  oracle:        "bobs_taps",
+  oracle_teaser: "pointing_energy",
+  btw:           "taps_camera",
+  reset:         "bouncing_joyfully",
+  close:         "sliding_in_2",
+};
+
+function getLuminUrl(id: string): string {
+  return LUMIN_VIDEOS.find(v => v.id === id)?.url ?? "";
+}
+
+/* ─── Full-bleed Lumin video layer ───────────────────────────────── */
+function LuminVideoLayer({ slideId }: { slideId: string }) {
+  const videoId = SLIDE_VIDEO[slideId];
+  const url = videoId ? getLuminUrl(videoId) : "";
+  const [visible, setVisible] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    setVisible(false);
+    const t = setTimeout(() => setVisible(true), 80);
+    return () => clearTimeout(t);
+  }, [slideId]);
+
+  if (!url) return null;
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        inset: 0,
+        zIndex: 1,
+        overflow: "hidden",
+        pointerEvents: "none",
+        transition: "opacity 0.8s ease",
+        opacity: visible ? 1 : 0,
+      }}
+    >
+      <video
+        ref={videoRef}
+        key={url}
+        src={url}
+        autoPlay
+        muted
+        loop
+        playsInline
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          // Strip the black background — Lumin's woven limbs float transparently
+          mixBlendMode: "screen",
+          opacity: 0.72,
+        }}
+      />
+    </div>
+  );
+}
 
 /* ─── Ambient sound engine (Web Audio API — no external files) ───── */
 function createAmbientEngine() {
@@ -1180,6 +1247,9 @@ export default function OnboardingModal({ userId }: Props) {
           to   { opacity: 1; transform: translateX(0); }
         }
       `}</style>
+
+      {/* Lumin full-bleed video background */}
+      <LuminVideoLayer slideId={s.id} />
 
       {/* Loom mascot — bottom-right corner */}
       <div style={{ position: "absolute", bottom: 72, right: 20, zIndex: 50, pointerEvents: "none" }}>
