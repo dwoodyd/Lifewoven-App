@@ -4,7 +4,7 @@ import { trpc } from "@/lib/trpc";
 import { LUMIN_VIDEOS } from "@/data/lumin";
 
 /* ─── Storage keys ───────────────────────────────────────────────── */
-const STORAGE_KEY = "lifewoven_onboarded_v8";
+const STORAGE_KEY = "lifewoven_onboarded_v9";
 const DEVICE_KEY  = `${STORAGE_KEY}_device`;
 
 export function replayOnboarding(userId?: number | null) {
@@ -116,6 +116,10 @@ const SCENES: Scene[] = [
   },
 ];
 
+function getVideoUrl(videoId: string) {
+  return LUMIN_VIDEOS.find(v => v.id === videoId)?.url ?? "";
+}
+
 /* ─── Word-by-word reveal ────────────────────────────────────────── */
 function WordReveal({
   text, active, accent = false, italic = false, size = "md",
@@ -140,8 +144,8 @@ function WordReveal({
       fontWeight: size === "xl" ? 500 : 400,
       lineHeight: 1.15,
       textShadow: accent
-        ? `0 0 40px ${T.threadGlow}, 0 2px 8px rgba(0,0,0,0.9), 0 1px 3px rgba(0,0,0,0.9)`
-        : "0 2px 16px rgba(0,0,0,0.95), 0 1px 4px rgba(0,0,0,0.95)",
+        ? `0 0 40px ${T.threadGlow}, 0 2px 8px rgba(0,0,0,0.95), 0 1px 3px rgba(0,0,0,0.95)`
+        : "0 2px 16px rgba(0,0,0,0.98), 0 1px 4px rgba(0,0,0,0.98)",
     }}>
       {words.map((w, i) => (
         <span key={i} style={{
@@ -157,7 +161,7 @@ function WordReveal({
   );
 }
 
-/* ─── Main onboarding component — persistent portal, never unmounts ─ */
+/* ─── Main component ─────────────────────────────────────────────── */
 interface Props { userId?: number | null; }
 
 export default function OnboardingModal({ userId }: Props) {
@@ -165,156 +169,177 @@ export default function OnboardingModal({ userId }: Props) {
   const [open, setOpen]         = useState(false);
   const [sceneIdx, setSceneIdx] = useState(0);
   const [finished, setFinished] = useState(false);
+  const [fadeIn, setFadeIn]     = useState(false);   // portal entrance fade
+  const [dissolving, setDissolving] = useState(false); // portal exit fade
 
-  // Portal visibility — controls the outer wrapper opacity only
-  const [portalVisible, setPortalVisible] = useState(false);
-
-  // A/B video cross-fade: two <video> elements always mounted, we swap which is visible
+  // ── A/B video cross-fade ──────────────────────────────────────────
+  // We keep TWO <video> elements always mounted.
+  // "active" slot is the one currently showing.
+  // When advancing: load next URL into inactive slot → wait for canplay → swap active → fade out old.
+  const [slotA, setSlotA] = useState({ url: "", visible: false, ready: false });
+  const [slotB, setSlotB] = useState({ url: "", visible: false, ready: false });
   const [activeSlot, setActiveSlot] = useState<"a" | "b">("a");
-  const [slotAUrl, setSlotAUrl]     = useState("");
-  const [slotBUrl, setSlotBUrl]     = useState("");
-  const [slotAReady, setSlotAReady] = useState(false);
-  const [slotBReady, setSlotBReady] = useState(false);
   const videoARef = useRef<HTMLVideoElement>(null);
   const videoBRef = useRef<HTMLVideoElement>(null);
 
-  // Text / button state
+  // ── Scene UI state ────────────────────────────────────────────────
   const [videoTime, setVideoTime]   = useState(0);
   const [btnVisible, setBtnVisible] = useState(false);
-  const [overlayOp, setOverlayOp]   = useState(0.35);
-  const [lines, setLines]           = useState<Line[]>([]);
-  const [cta, setCta]               = useState("");
-  const [whisper, setWhisper]       = useState<string | undefined>();
-  const [sceneKey, setSceneKey]     = useState(0); // bumped to reset word animations
+  const [sceneKey, setSceneKey]     = useState(0);
+  const currentScene = finished ? null : SCENES[sceneIdx];
 
-  // Dissolve-out before closing
-  const [dissolving, setDissolving] = useState(false);
-
+  // ── tRPC ──────────────────────────────────────────────────────────
   const completeMutation = trpc.profile.completeOnboarding.useMutation();
   const trackEvent       = trpc.system.trackEvent.useMutation();
 
-  /* ── helpers ── */
-  function getVideoUrl(videoId: string) {
-    return LUMIN_VIDEOS.find(v => v.id === videoId)?.url ?? "";
-  }
-
-  function loadScene(idx: number) {
-    const scene = SCENES[idx];
-    if (!scene) return;
-
-    const url = getVideoUrl(scene.videoId);
-    const nextSlot = activeSlot === "a" ? "b" : "a";
-
-    // Load the next video into the inactive slot
-    if (nextSlot === "b") {
-      setSlotBReady(false);
-      setSlotBUrl(url);
+  /* ── Preload next video into the inactive slot ─────────────────── */
+  const preloadIntoInactiveSlot = useCallback((url: string) => {
+    if (activeSlot === "a") {
+      setSlotB(s => ({ ...s, url, ready: false, visible: false }));
     } else {
-      setSlotAReady(false);
-      setSlotAUrl(url);
+      setSlotA(s => ({ ...s, url, ready: false, visible: false }));
     }
+  }, [activeSlot]);
 
-    setOverlayOp(scene.overlayOpacity);
-    setLines(scene.lines);
-    setCta(scene.cta);
-    setWhisper(scene.whisper);
-    setVideoTime(0);
-    setBtnVisible(false);
-    setSceneKey(k => k + 1);
+  /* ── Swap to the inactive slot (called when it signals canplay) ── */
+  const swapToInactiveSlot = useCallback(() => {
+    if (activeSlot === "a") {
+      // B is now ready — show B, hide A
+      setSlotB(s => ({ ...s, visible: true }));
+      setActiveSlot("b");
+      setTimeout(() => setSlotA(s => ({ ...s, visible: false })), 50);
+    } else {
+      // A is now ready — show A, hide B
+      setSlotA(s => ({ ...s, visible: true }));
+      setActiveSlot("a");
+      setTimeout(() => setSlotB(s => ({ ...s, visible: false })), 50);
+    }
+  }, [activeSlot]);
 
-    // Schedule CTA reveal
-    const lastLine = scene.lines[scene.lines.length - 1];
-    const wordCount = lastLine.text.split(" ").length;
-    const btnDelay = (lastLine.startAt + wordCount * 0.07 + 1.2) * 1000;
-    const t = setTimeout(() => setBtnVisible(true), btnDelay);
-
-    // Swap to the new slot once it's ready (or after a short timeout)
-    const swapTimeout = setTimeout(() => {
-      setActiveSlot(nextSlot);
-    }, 300); // give the video 300ms to start loading before swapping
-
-    return () => { clearTimeout(t); clearTimeout(swapTimeout); };
-  }
-
-  /* ── initial load ── */
+  /* ── Initial open: seed slot A ───────────────────────────────────── */
   useEffect(() => {
     if (!localStorage.getItem(DEVICE_KEY)) setOpen(true);
   }, []);
 
-  /* ── replay event ── */
   useEffect(() => {
     const handler = () => {
-      setSceneIdx(0);
-      setFinished(false);
-      setDissolving(false);
+      setSceneIdx(0); setFinished(false); setDissolving(false);
       setOpen(true);
     };
     window.addEventListener("lifewoven:replay-onboarding", handler);
     return () => window.removeEventListener("lifewoven:replay-onboarding", handler);
   }, []);
 
-  /* ── when open, fade in the portal ── */
+  // Lock body scroll while onboarding is open
   useEffect(() => {
-    if (open) {
-      setPortalVisible(false);
-      // Seed slot A with scene 0 immediately
-      const scene0 = SCENES[0];
-      setSlotAUrl(getVideoUrl(scene0.videoId));
-      setSlotAReady(false);
-      setActiveSlot("a");
-      setOverlayOp(scene0.overlayOpacity);
-      setLines(scene0.lines);
-      setCta(scene0.cta);
-      setWhisper(scene0.whisper);
-      setVideoTime(0);
-      setBtnVisible(false);
-      setSceneKey(1);
-      // Fade in after a tick
-      requestAnimationFrame(() => requestAnimationFrame(() => setPortalVisible(true)));
-
-      // CTA for scene 0
-      const lastLine = scene0.lines[scene0.lines.length - 1];
-      const wordCount = lastLine.text.split(" ").length;
-      const btnDelay = (lastLine.startAt + wordCount * 0.07 + 1.2) * 1000;
-      const t = setTimeout(() => setBtnVisible(true), btnDelay);
-
-      // History
-      window.history.pushState({ onboarding: true }, "");
-      const onPop = () => setOpen(false);
-      window.addEventListener("popstate", onPop);
-      return () => {
-        clearTimeout(t);
-        window.removeEventListener("popstate", onPop);
-      };
-    }
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
   }, [open]);
 
-  /* ── video time tracking ── */
+  useEffect(() => {
+    if (!open) return;
+    const scene0 = SCENES[0];
+    const url0 = getVideoUrl(scene0.videoId);
+    setSlotA({ url: url0, visible: false, ready: false });
+    setSlotB({ url: "", visible: false, ready: false });
+    setActiveSlot("a");
+    setSceneIdx(0);
+    setFinished(false);
+    setVideoTime(0);
+    setBtnVisible(false);
+    setSceneKey(1);
+    setDissolving(false);
+
+    // Fade in portal after a tick
+    requestAnimationFrame(() => requestAnimationFrame(() => setFadeIn(true)));
+
+    // History
+    window.history.pushState({ onboarding: true }, "");
+    const onPop = () => { setOpen(false); setFadeIn(false); };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, [open]);
+
+  /* ── When slot A becomes ready and it's the active slot, show it ── */
+  useEffect(() => {
+    if (slotA.ready && activeSlot === "a" && !slotA.visible) {
+      setSlotA(s => ({ ...s, visible: true }));
+    }
+  }, [slotA.ready, activeSlot]);
+
+  useEffect(() => {
+    if (slotB.ready && activeSlot === "b" && !slotB.visible) {
+      setSlotB(s => ({ ...s, visible: true }));
+    }
+  }, [slotB.ready, activeSlot]);
+
+  /* ── Preload next scene's video as soon as current scene starts ── */
+  useEffect(() => {
+    if (!open || finished) return;
+    const nextIdx = sceneIdx + 1;
+    if (nextIdx < SCENES.length) {
+      const nextUrl = getVideoUrl(SCENES[nextIdx].videoId);
+      preloadIntoInactiveSlot(nextUrl);
+    } else {
+      // Preload finished screen video
+      preloadIntoInactiveSlot(getVideoUrl("alignment_audit"));
+    }
+  }, [sceneIdx, open, finished]);
+
+  /* ── CTA timer ───────────────────────────────────────────────────── */
+  useEffect(() => {
+    if (!currentScene) return;
+    setBtnVisible(false);
+    setVideoTime(0);
+    const lastLine = currentScene.lines[currentScene.lines.length - 1];
+    const wordCount = lastLine.text.split(" ").length;
+    const delay = (lastLine.startAt + wordCount * 0.07 + 1.2) * 1000;
+    const t = setTimeout(() => setBtnVisible(true), delay);
+    return () => clearTimeout(t);
+  }, [sceneKey]);
+
+  /* ── Video time tracking — always track the active slot ─────────── */
   useEffect(() => {
     const vid = activeSlot === "a" ? videoARef.current : videoBRef.current;
     if (!vid) return;
+    // Reset time for new scene
+    setVideoTime(vid.currentTime);
     const onTime = () => setVideoTime(vid.currentTime);
     vid.addEventListener("timeupdate", onTime);
-    return () => vid.removeEventListener("timeupdate", onTime);
-  }, [activeSlot]);
+    // Also use requestAnimationFrame for smoother updates
+    let rafId: number;
+    const rafLoop = () => {
+      if (vid) setVideoTime(vid.currentTime);
+      rafId = requestAnimationFrame(rafLoop);
+    };
+    rafId = requestAnimationFrame(rafLoop);
+    return () => {
+      vid.removeEventListener("timeupdate", onTime);
+      cancelAnimationFrame(rafId);
+    };
+  }, [activeSlot, sceneKey]);
 
-  /* ── keyboard / swipe ── */
+  /* ── Keyboard / swipe ────────────────────────────────────────────── */
+  const handleAdvanceRef = useRef<() => void>(() => {});
+
   useEffect(() => {
     if (!open || finished) return;
     const handler = (e: KeyboardEvent) => {
-      if (e.key === "ArrowRight" || e.key === " ") handleAdvance();
+      if (e.key === "ArrowRight" || e.key === " ") handleAdvanceRef.current();
       if (e.key === "Escape") handleSkip();
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [open, finished, sceneIdx]);
+  }, [open, finished]);
 
   useEffect(() => {
     if (!open || finished) return;
     let startX = 0;
     const onStart = (e: TouchEvent) => { startX = e.touches[0].clientX; };
     const onEnd   = (e: TouchEvent) => {
-      if (e.changedTouches[0].clientX - startX < -40) handleAdvance();
+      if (e.changedTouches[0].clientX - startX < -40) handleAdvanceRef.current();
     };
     window.addEventListener("touchstart", onStart, { passive: true });
     window.addEventListener("touchend",   onEnd,   { passive: true });
@@ -322,9 +347,9 @@ export default function OnboardingModal({ userId }: Props) {
       window.removeEventListener("touchstart", onStart);
       window.removeEventListener("touchend",   onEnd);
     };
-  }, [open, finished, sceneIdx]);
+  }, [open, finished]);
 
-  /* ── actions ── */
+  /* ── Actions ─────────────────────────────────────────────────────── */
   function dismiss() {
     localStorage.setItem(DEVICE_KEY, "1");
     if (userId) localStorage.setItem(`${STORAGE_KEY}_${userId}`, "1");
@@ -332,26 +357,29 @@ export default function OnboardingModal({ userId }: Props) {
     if (window.history.state?.onboarding) {
       window.history.replaceState({}, "", window.location.pathname);
     }
-    setOpen(false);
-    setPortalVisible(false);
+    setFadeIn(false);
+    setTimeout(() => setOpen(false), 800);
   }
 
   const handleAdvance = useCallback(() => {
     trackEvent.mutate({ event: "onboarding_slide_advance", properties: { from: sceneIdx, scene: SCENES[sceneIdx]?.id } });
     const next = sceneIdx + 1;
     if (next < SCENES.length) {
+      // Swap to the preloaded slot immediately
+      swapToInactiveSlot();
       setSceneIdx(next);
-      loadScene(next);
+      setSceneKey(k => k + 1);
+      setBtnVisible(false);
+      setVideoTime(0);
     } else {
+      // Swap to the preloaded finished video
+      swapToInactiveSlot();
       setFinished(true);
-      // Load the finished screen video into the inactive slot
-      const finUrl = getVideoUrl("alignment_audit");
-      const nextSlot = activeSlot === "a" ? "b" : "a";
-      if (nextSlot === "b") { setSlotBReady(false); setSlotBUrl(finUrl); }
-      else { setSlotAReady(false); setSlotAUrl(finUrl); }
-      setTimeout(() => setActiveSlot(nextSlot), 300);
     }
-  }, [sceneIdx, activeSlot]);
+  }, [sceneIdx, swapToInactiveSlot]);
+
+  // Keep ref in sync so keyboard handler always has latest version
+  useEffect(() => { handleAdvanceRef.current = handleAdvance; }, [handleAdvance]);
 
   function handleSkip() {
     trackEvent.mutate({ event: "onboarding_complete", properties: { skipped: true, at: sceneIdx } });
@@ -366,35 +394,39 @@ export default function OnboardingModal({ userId }: Props) {
 
   if (!open) return null;
 
-  const isSlotAActive = activeSlot === "a";
-
   return (
-    /* ── Persistent outer wrapper — NEVER unmounts while open ── */
+    /* ── Persistent portal — never unmounts while open ── */
     <div style={{
-      position: "fixed", inset: 0, zIndex: 200,
+      position: "fixed",
+      inset: 0,
+      zIndex: 9999,           // High enough to cover everything including nav
       background: "#000",
-      opacity: dissolving ? 0 : portalVisible ? 1 : 0,
-      transition: dissolving
-        ? "opacity 0.8s ease"
-        : portalVisible
-          ? "opacity 0.6s ease"
-          : "none",
-      pointerEvents: portalVisible && !dissolving ? "auto" : "none",
+      opacity: dissolving ? 0 : fadeIn ? 1 : 0,
+      transition: dissolving ? "opacity 0.8s ease" : "opacity 0.5s ease",
+      pointerEvents: fadeIn && !dissolving ? "auto" : "none",
+      isolation: "isolate",
     }}>
+
+      {/* ── Solid black base — prevents nav/page bleed-through under mix-blend-mode:screen ── */}
+      <div style={{
+        position: "absolute", inset: 0, zIndex: 0,
+        background: "#000",
+        pointerEvents: "none",
+      }} />
 
       {/* ── Video slot A ── */}
       <video
         ref={videoARef}
-        src={slotAUrl}
+        src={slotA.url}
         autoPlay muted loop playsInline
-        onCanPlay={() => setSlotAReady(true)}
+        onCanPlay={() => setSlotA(s => ({ ...s, ready: true }))}
         style={{
           position: "absolute", inset: 0,
           width: "100%", height: "100%",
           objectFit: "cover",
           mixBlendMode: "screen",
-          opacity: isSlotAActive && slotAReady ? 1 : 0,
-          transition: "opacity 0.6s ease",
+          opacity: slotA.visible ? 1 : 0,
+          transition: "opacity 0.7s ease",
           zIndex: 1,
         }}
       />
@@ -402,16 +434,16 @@ export default function OnboardingModal({ userId }: Props) {
       {/* ── Video slot B ── */}
       <video
         ref={videoBRef}
-        src={slotBUrl}
+        src={slotB.url}
         autoPlay muted loop playsInline
-        onCanPlay={() => setSlotBReady(true)}
+        onCanPlay={() => setSlotB(s => ({ ...s, ready: true }))}
         style={{
           position: "absolute", inset: 0,
           width: "100%", height: "100%",
           objectFit: "cover",
           mixBlendMode: "screen",
-          opacity: !isSlotAActive && slotBReady ? 1 : 0,
-          transition: "opacity 0.6s ease",
+          opacity: slotB.visible ? 1 : 0,
+          transition: "opacity 0.7s ease",
           zIndex: 1,
         }}
       />
@@ -421,12 +453,12 @@ export default function OnboardingModal({ userId }: Props) {
         position: "absolute", inset: 0, zIndex: 2,
         background: `linear-gradient(
           to top,
-          rgba(0,0,0,${overlayOp + 0.35}) 0%,
-          rgba(0,0,0,${overlayOp * 0.6}) 40%,
-          rgba(0,0,0,${overlayOp * 0.2}) 100%
+          rgba(0,0,0,${(currentScene?.overlayOpacity ?? 0.4) + 0.35}) 0%,
+          rgba(0,0,0,${(currentScene?.overlayOpacity ?? 0.4) * 0.6}) 40%,
+          rgba(0,0,0,${(currentScene?.overlayOpacity ?? 0.4) * 0.2}) 100%
         )`,
         pointerEvents: "none",
-        transition: "background 0.6s ease",
+        transition: "background 0.8s ease",
       }} />
 
       {/* ── Skip button (scene 0 only) ── */}
@@ -468,7 +500,7 @@ export default function OnboardingModal({ userId }: Props) {
       )}
 
       {/* ── Scene text ── */}
-      {!finished && (
+      {!finished && currentScene && (
         <div style={{
           position: "absolute", bottom: 0, left: 0, right: 0,
           padding: "0 clamp(1.5rem,6vw,5rem) 2.5rem",
@@ -476,12 +508,11 @@ export default function OnboardingModal({ userId }: Props) {
           display: "flex", flexDirection: "column", alignItems: "center",
           textAlign: "center", gap: "0.6rem",
         }}>
-          {/* Lines */}
           <div key={sceneKey} style={{
             display: "flex", flexDirection: "column",
             alignItems: "center", gap: "0.5rem", marginBottom: "1.6rem",
           }}>
-            {lines.map((line, li) => (
+            {currentScene.lines.map((line, li) => (
               <div key={li} style={{ lineHeight: 1.2 }}>
                 <WordReveal
                   text={line.text}
@@ -494,7 +525,6 @@ export default function OnboardingModal({ userId }: Props) {
             ))}
           </div>
 
-          {/* CTA */}
           <div style={{
             opacity: btnVisible ? 1 : 0,
             transform: btnVisible ? "translateY(0)" : "translateY(16px)",
@@ -520,36 +550,40 @@ export default function OnboardingModal({ userId }: Props) {
                 (e.target as HTMLElement).style.boxShadow = `0 0 40px rgba(216,184,120,0.5), 0 8px 28px rgba(0,0,0,0.5)`;
               }}
             >
-              {cta}
+              {currentScene.cta}
             </button>
-            {whisper && (
+            {currentScene.whisper && (
               <p style={{ color: T.quiet, fontSize: "0.75rem", fontStyle: "italic", letterSpacing: "0.04em" }}>
-                {whisper}
+                {currentScene.whisper}
               </p>
             )}
           </div>
         </div>
       )}
 
-      {/* ── Finished screen content ── */}
+      {/* ── Finished screen ── */}
       {finished && (
         <div style={{
           position: "absolute", bottom: 0, left: 0, right: 0,
           padding: "0 clamp(1.5rem,6vw,5rem) 3rem",
           display: "flex", flexDirection: "column", alignItems: "center",
           textAlign: "center", gap: "1rem", zIndex: 10,
-          opacity: finished ? 1 : 0,
-          transform: finished ? "translateY(0)" : "translateY(24px)",
-          transition: "opacity 0.9s ease 0.5s, transform 0.9s ease 0.5s",
+          animation: "fadeSlideUp 0.9s ease 0.3s both",
         }}>
-          {/* "the weave begins now" — dark background pill so it reads against Lumin's glow */}
+          <style>{`
+            @keyframes fadeSlideUp {
+              from { opacity: 0; transform: translateY(24px); }
+              to   { opacity: 1; transform: translateY(0); }
+            }
+          `}</style>
+
           <p style={{
             fontFamily: "Georgia, serif", fontStyle: "italic",
             color: T.thread,
             fontSize: "clamp(0.85rem,1.5vw,1rem)",
             letterSpacing: "0.06em",
             textShadow: "0 2px 12px rgba(0,0,0,1), 0 1px 4px rgba(0,0,0,1)",
-            background: "rgba(0,0,0,0.55)",
+            background: "rgba(0,0,0,0.6)",
             padding: "0.3rem 1rem",
             borderRadius: 999,
             backdropFilter: "blur(6px)",
@@ -611,7 +645,7 @@ export default function OnboardingModal({ userId }: Props) {
             </button>
 
             <button
-              onClick={() => { setFinished(false); setSceneIdx(0); loadScene(0); }}
+              onClick={() => { setFinished(false); setSceneIdx(0); setSceneKey(k => k + 1); setVideoTime(0); setBtnVisible(false); }}
               style={{
                 background: "transparent", color: T.quiet, border: "none",
                 cursor: "pointer", fontSize: "0.85rem", fontFamily: "inherit",
