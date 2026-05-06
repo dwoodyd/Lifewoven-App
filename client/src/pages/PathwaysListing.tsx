@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "wouter";
 import { ArrowRight, Zap, Waves, TrendingUp, Eye, Layers, Compass, RefreshCw } from "lucide-react";
+import { LuminAmbient } from "@/components/LuminAmbient";
 
 const PATHWAYS = [
   {
@@ -95,6 +96,14 @@ const PATHWAYS = [
 export default function PathwaysListing() {
   return (
     <div className="min-h-screen bg-background">
+      {/* Lumin reaches toward the path ahead — aspirational, guiding */}
+      <LuminAmbient
+        videoId="lumen_reaching"
+        position="bottom-right"
+        size="min(32vw, 380px)"
+        opacity={0.42}
+        zIndex={0}
+      />
       <Nav />
       <div className="container pt-20 pb-20 max-w-4xl mx-auto px-4 sm:px-6">
 

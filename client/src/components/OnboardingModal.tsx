@@ -46,6 +46,7 @@ const SCENES: Scene[] = [
     id: "birth",
     videoId: "core_unfurls",
     overlayOpacity: 0.35,
+    loop: false,
     lines: [
       { text: "Something in you", startAt: 0.5, size: "xl" },
       { text: "has always known", startAt: 1.4, size: "xl" },
@@ -71,6 +72,7 @@ const SCENES: Scene[] = [
     id: "state",
     videoId: "self_soothing",
     overlayOpacity: 0.38,
+    loop: false,
     lines: [
       { text: "She feels what you feel.", startAt: 0.6, size: "xl" },
       { text: "Your emotional state isn't noise.", startAt: 2.2, size: "lg" },
@@ -108,6 +110,7 @@ const SCENES: Scene[] = [
     id: "launch",
     videoId: "scene_9",
     overlayOpacity: 0.28,
+    loop: false,
     lines: [
       { text: "You weren't lacking.", startAt: 0.5, size: "xl" },
       { text: "You were unwoven.", startAt: 1.8, size: "xl", accent: true, italic: true },

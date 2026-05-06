@@ -10,6 +10,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import { toast } from "sonner";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { LuminAmbient } from "@/components/LuminAmbient";
 
 // ─────────────────────────────────────────────
 // CANONICAL QUESTIONS — source: lifeos-audit-copy-system.html
@@ -232,6 +233,14 @@ export default function AlignmentAudit() {
 
   if (step === "entry" || step === "consent" || step === "preframe") return (
     <div className="min-h-screen bg-background">
+      {/* Lumin points the way — energetic, guiding through the audit */}
+      <LuminAmbient
+        videoId="pointing"
+        position="bottom-right"
+        size="min(28vw, 320px)"
+        opacity={0.40}
+        zIndex={0}
+      />
       <Nav />
       <div className="container max-w-xl mx-auto pt-24 pb-20 text-center px-4 sm:px-6">
         <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Lifewoven · Alignment Audit</p>

@@ -11,6 +11,7 @@ import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import LowBandwidthDashboard from "@/components/LowBandwidthDashboard";
+import { LuminAmbient } from "@/components/LuminAmbient";
 import { useBetaAccess } from "@/hooks/useBetaAccess";
 import ReentryFlow from "@/components/ReentryFlow";
 import BetterMirror from "@/components/BetterMirror";
@@ -129,6 +130,14 @@ export default function Dashboard() {
   return (
     <>
     <div className="min-h-screen bg-background">
+      {/* Lumin floats in the bottom-right — she's in the space, not on the page */}
+      <LuminAmbient
+        videoId="self_soothing"
+        position="bottom-right"
+        size="min(28vw, 340px)"
+        opacity={0.45}
+        zIndex={0}
+      />
       {showReentry && (
         <ReentryFlow
           daysSinceActive={daysSinceActive}

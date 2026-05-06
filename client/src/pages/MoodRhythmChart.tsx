@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
 import { toast } from "sonner";
 import { TrendingUp, TrendingDown, Minus, Activity, Calendar, Info } from "lucide-react";
+import { LuminAmbient } from "@/components/LuminAmbient";
 
 // ─── Score label helpers ──────────────────────────────────────────────────────
 
@@ -201,6 +202,14 @@ export default function MoodRhythmChart() {
   }[analysis?.currentPhase ?? "unknown"];
 
   return (
+    <>
+    <LuminAmbient
+      videoId="scene_9"
+      position="top-right"
+      size="min(26vw, 300px)"
+      opacity={0.32}
+      zIndex={0}
+    />
     <div className="container max-w-3xl py-8 space-y-6">
       {/* Header */}
       <div>
@@ -383,5 +392,6 @@ export default function MoodRhythmChart() {
         </Card>
       )}
     </div>
+    </>
   );
 }

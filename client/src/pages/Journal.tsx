@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { BookOpen, Plus, Sparkles, Search, Tag, ArrowRight, Loader2, Pencil } from "lucide-react";
+import { LuminAmbient } from "@/components/LuminAmbient";
 import VoiceRecorder from "@/components/VoiceRecorder";
 import { Streamdown } from "streamdown";
 
@@ -78,6 +79,14 @@ export default function Journal() {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Lumin floats softly in the corner — a quiet witness to your writing */}
+      <LuminAmbient
+        videoId="scene_9"
+        position="bottom-right"
+        size="min(26vw, 300px)"
+        opacity={0.30}
+        zIndex={0}
+      />
       <Nav />
       <div className="container pt-20 pb-24 max-w-5xl mx-auto px-4 sm:px-6">
         <div className="flex items-start justify-between gap-3 mb-6">

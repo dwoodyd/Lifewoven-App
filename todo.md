@@ -588,3 +588,14 @@
 - [x] Wire into State module navigation card
 - [x] Wire into Dashboard Quick Actions sidebar
 - [x] Tests: 17 tests for cycle detection algorithm (detectPeaksAndTroughs, avgCycleLength, Hersey reference)
+
+## Lumin In-App Placement (May 6, 2026)
+- [x] Onboarding: audit all 6 scenes and set loop:false on entrance/exit arc videos
+- [x] Dashboard: Lumin ambient presence (bottom-right, self_soothing, 28vw, 0.45 opacity)
+- [x] Oracle page: Lumin ambient (top-right, bobs_taps, 38vw, 0.55 opacity)
+- [x] State module: Lumin ambient (center-right, self_soothing, 30vw, 0.38 opacity)
+- [x] Pathways listing: Lumin ambient (bottom-right, lumen_reaching, 32vw, 0.42 opacity)
+- [x] Journal page: Lumin ambient (bottom-right, scene_9, 26vw, 0.30 opacity)
+- [x] MoodRhythmChart: Lumin ambient (top-right, scene_9, 26vw, 0.32 opacity)
+- [x] AlignmentAudit: Lumin ambient (bottom-right, pointing, 28vw, 0.40 opacity)
+- [ ] Character/Book section: Lumin subtle ambient

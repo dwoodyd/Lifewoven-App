@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
 import { LoomCorner } from "@/components/Loom";
-import { LUMIN_VIDEOS } from "@/data/lumin";
+import { LuminAmbient } from "@/components/LuminAmbient";
 import { useAuth } from "@/_core/hooks/useAuth";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
@@ -148,40 +148,16 @@ export default function Oracle() {
     );
   }
 
-  const luminUrl = LUMIN_VIDEOS.find(v => v.id === "bobs_taps")?.url ?? "";
-
   return (
     <div className="min-h-screen bg-background flex flex-col" style={{ position: "relative" }}>
       {/* Lumin ambient — floats in the top-right, blends over the dark bg */}
-      {luminUrl && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            right: 0,
-            width: "min(38vw, 480px)",
-            aspectRatio: "16/9",
-            zIndex: 0,
-            pointerEvents: "none",
-            opacity: 0.55,
-          }}
-        >
-          <video
-            src={luminUrl}
-            autoPlay
-            muted
-            loop
-            playsInline
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              mixBlendMode: "screen",
-              display: "block",
-            }}
-          />
-        </div>
-      )}
+      <LuminAmbient
+        videoId="bobs_taps"
+        position="top-right"
+        size="min(38vw, 480px)"
+        opacity={0.55}
+        zIndex={0}
+      />
       <Nav />
       <div className="container pt-20 pb-6 max-w-3xl mx-auto flex flex-col flex-1 px-4 sm:px-6" style={{ position: "relative", zIndex: 1 }}>
 

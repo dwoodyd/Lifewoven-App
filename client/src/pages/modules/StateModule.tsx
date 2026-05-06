@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Waves, ArrowRight, Play, BookOpen, Heart, Sparkles, TrendingUp } from "lucide-react";
+import { LuminAmbient } from "@/components/LuminAmbient";
 
 const EGS_SCALE = [
   { level: 22, name: "Joy / Appreciation / Freedom / Love / Empowerment" },
@@ -76,6 +77,14 @@ export default function StateModule() {
   if (isAuthenticated && moduleLoading) return <PageSkeleton rows={3} />;
   return (
     <div className="min-h-screen bg-background">
+      {/* Lumin holds space in the center-right — a gentle soothing presence */}
+      <LuminAmbient
+        videoId="self_soothing"
+        position="center-right"
+        size="min(30vw, 360px)"
+        opacity={0.38}
+        zIndex={0}
+      />
       <Nav />
       <div className="container pt-20 pb-24 max-w-5xl mx-auto px-4 sm:px-6">
         <div className="flex items-start gap-4 mb-10">
