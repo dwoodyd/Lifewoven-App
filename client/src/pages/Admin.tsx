@@ -82,24 +82,28 @@ function BetaTesters() {
     generateCodes.mutate({ count: n });
   };
 
+  const sendInvites = trpc.beta.sendInvites.useMutation({
+    onSuccess: (data) => {
+      setEmailSent(true);
+      if (data.failed.length > 0) {
+        toast.error(`${data.sent} sent, ${data.failed.length} failed: ${data.failed.map(f => f.email).join(", ")}`);
+      } else {
+        toast.success(`${data.sent} invite email${data.sent !== 1 ? "s" : ""} sent successfully via Resend`);
+      }
+    },
+    onError: (err) => toast.error(err.message || "Failed to send emails"),
+  });
+
   const handleSendEmail = () => {
-    const codes = generateCodes.data?.codes ?? [];
-    if (!emailTo.trim() || !codes.length) return;
+    const generatedCodes = generateCodes.data?.codes ?? [];
+    if (!emailTo.trim() || !generatedCodes.length) return;
     const emails = emailTo.split(",").map(e => e.trim()).filter(Boolean);
     if (!emails.length) { toast.error("Enter at least one email address"); return; }
-    // Distribute codes round-robin: each recipient gets their assigned code(s)
-    const perPerson = Math.ceil(codes.length / emails.length);
-    const subject = encodeURIComponent("Your Lifewoven Beta Access Code");
-    emails.forEach((email, i) => {
-      const assigned = codes.slice(i * perPerson, (i + 1) * perPerson);
-      if (!assigned.length) return;
-      const body = encodeURIComponent(
-        `Hi,\n\nHere is your Lifewoven beta access code:\n\n${assigned.join("\n")}\n\nRedeem at: ${window.location.origin}/beta\n\nEach code grants 45 days of full access to all features.\n\nWelcome to the journey.\n\n— The Lifewoven Team`
-      );
-      setTimeout(() => window.open(`mailto:${email}?subject=${subject}&body=${body}`, "_blank"), i * 300);
+    sendInvites.mutate({
+      emails,
+      codes: generatedCodes,
+      origin: window.location.origin,
     });
-    setEmailSent(true);
-    toast.success(`Opened ${emails.length} email${emails.length > 1 ? "s" : ""} in your mail client`);
   };
 
   const statusVariant = (status: string) => {
@@ -168,8 +172,8 @@ function BetaTesters() {
                   onChange={(e) => setEmailTo(e.target.value)}
                   className="flex-1"
                 />
-                <Button size="sm" variant="outline" onClick={handleSendEmail} disabled={!emailTo || emailSent}>
-                  {emailSent ? "✓ Sent" : "Send via Email"}
+                <Button size="sm" variant="outline" onClick={handleSendEmail} disabled={!emailTo || emailSent || sendInvites.isPending}>
+                  {sendInvites.isPending ? <><Loader2 className="h-4 w-4 mr-1 animate-spin" />Sending…</> : emailSent ? "✓ Sent" : "Send via Email"}
                 </Button>
               </div>
               <div className="p-3 bg-muted rounded-lg">

@@ -5,6 +5,7 @@ import { getDb } from "../db";
 import { betaCodes, betaAccess, users } from "../../drizzle/schema";
 import { protectedProcedure, router } from "../_core/trpc";
 import { notifyOwner } from "../_core/notification";
+import { sendBetaInviteEmail } from "../email";
 import crypto from "crypto";
 
 async function requireDb() {
@@ -161,4 +162,51 @@ export const betaRouter = router({
     const hasAccess = await hasBetaOrPaidAccess(ctx.user.id);
     return { access, hasAccess };
   }),
+
+  /**
+   * Admin: send beta invite emails via Resend.
+   * Each recipient gets their assigned code(s) in a branded HTML email.
+   */
+  sendInvites: protectedProcedure
+    .input(z.object({
+      /** Comma-separated or array of email addresses */
+      emails: z.array(z.string().email()).min(1).max(50),
+      /** Codes to distribute — assigned round-robin across recipients */
+      codes: z.array(z.string()).min(1),
+      /** Frontend origin for the redeem link */
+      origin: z.string().url(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
+
+      const redeemUrl = `${input.origin}/beta`;
+      const perPerson = Math.ceil(input.codes.length / input.emails.length);
+      const results: { email: string; ok: boolean; error?: string }[] = [];
+
+      for (let i = 0; i < input.emails.length; i++) {
+        const email = input.emails[i];
+        const assigned = input.codes.slice(i * perPerson, (i + 1) * perPerson);
+        if (!assigned.length) continue;
+        try {
+          await sendBetaInviteEmail({ to: email, codes: assigned, redeemUrl });
+          results.push({ email, ok: true });
+        } catch (err: unknown) {
+          const msg = err instanceof Error ? err.message : "Unknown error";
+          results.push({ email, ok: false, error: msg });
+        }
+      }
+
+      const sent = results.filter(r => r.ok).length;
+      const failed = results.filter(r => !r.ok);
+
+      // Notify owner
+      notifyOwner({
+        title: `Beta invites sent: ${sent}/${input.emails.length}`,
+        content: failed.length
+          ? `Failed: ${failed.map(f => `${f.email} (${f.error})`).join(", ")}`
+          : `All ${sent} invite${sent !== 1 ? "s" : ""} delivered successfully.`,
+      }).catch(() => {});
+
+      return { sent, failed, results };
+    }),
 });

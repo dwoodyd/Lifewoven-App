@@ -662,3 +662,13 @@
 - [x] AlignmentAudit: Lumin dominant centered (pointing, 0.58)
 - [x] Character: Lumin dominant centered (bouncing_joyfully, 0.55)
 - [x] CharacterBook: Lumin dominant centered (lumen_reaching, 0.55)
+
+## Resend Email Integration (May 7, 2026)
+- [x] Install Resend SDK (pnpm add resend)
+- [x] Store RESEND_API_KEY as environment secret
+- [x] Create server/email.ts with branded HTML beta invite email template
+- [x] Add beta.sendInvites tRPC procedure — admin-only, distributes codes round-robin, sends via Resend
+- [x] Update Admin.tsx: replace mailto: window.open with trpc.beta.sendInvites.useMutation
+- [x] Add loading/sent/error states to Send button
+- [x] Verified Resend API key valid (HTTP 200)
+- [ ] Add custom sending domain in Resend dashboard (currently using onboarding@resend.dev)
