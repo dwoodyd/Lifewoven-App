@@ -151,11 +151,11 @@ export default function Oracle() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-background flex flex-col">
+      <div className="min-h-screen bg-[oklch(0.10_0.015_260)] flex flex-col">
         <Nav />
         <div className="container pt-20 pb-6 max-w-3xl mx-auto flex flex-col flex-1 items-center justify-center text-center py-12 px-4 sm:px-6">
           <Sparkles className="h-16 w-16 text-accent mb-6" />
-          <h2 className="font-serif text-2xl font-light text-foreground mb-3">The Oracle awaits you.</h2>
+          <h2 className="font-serif text-2xl font-light text-[oklch(0.93_0.04_60)] mb-3" style={{fontFamily:'"Playfair Display",Georgia,serif'}}>The Oracle awaits you.</h2>
           <p className="text-muted-foreground text-sm mb-8 max-w-sm">Sign in to access your personal AI guide, powered by the wisdom of the ages.</p>
           <Button asChild><a href={getLoginUrl()}>Begin Your Journey</a></Button>
         </div>
@@ -164,7 +164,7 @@ export default function Oracle() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col" style={{ position: "relative" }}>
+    <div className="min-h-screen bg-[oklch(0.10_0.015_260)] flex flex-col" style={{ position: "relative" }}>
       {/* Lumin Oracle-mode — dominant centered: she IS the Oracle's embodied presence */}
       <LuminAmbient
         videoId="core_unfurls"
@@ -181,7 +181,7 @@ export default function Oracle() {
             <Sparkles className="h-6 w-6 text-accent" />
           </div>
           <div className="flex-1">
-            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-1">The Oracle</h1>
+            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-[oklch(0.93_0.04_60)] mb-1" style={{fontFamily:'"Playfair Display",Georgia,serif'}}>The Oracle</h1>
             <p className="text-muted-foreground text-sm font-light">
               Your personal AI guide, drawing from four pillars of transformational wisdom.
             </p>
@@ -280,7 +280,7 @@ export default function Oracle() {
         )}
 
         {/* Mode Tabs */}
-        <div className="flex gap-1.5 sm:gap-2 mb-5 border-b border-border pb-4 overflow-x-auto">
+        <div className="flex gap-1.5 sm:gap-2 mb-5 border-b border-[oklch(0.22_0.02_260)] pb-4 overflow-x-auto">
           {[
             { id: "guide" as OracleMode, label: "Guide", icon: MessageSquare, desc: "Open conversation" },
             { id: "unstuck" as OracleMode, label: "Unstuck", icon: AlertCircle, desc: "When you're blocked" },
@@ -319,7 +319,7 @@ export default function Oracle() {
             ) : insights.data && insights.data.length > 0 ? (
               <div className="space-y-4">
                 {insights.data.map((insight: any) => (
-                  <div key={insight.id} className="p-5 rounded-xl border border-border bg-card">
+                    <div key={insight.id} className="p-5 rounded-xl border border-[oklch(0.25_0.02_260)] bg-[oklch(0.13_0.015_260)]">
                     <div className="flex items-start gap-3">
                       <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center shrink-0 mt-0.5">
                         <Sparkles className="h-4 w-4 text-accent" />
@@ -381,7 +381,7 @@ export default function Oracle() {
 
             {/* Orientation panel — shown only before first message in guide mode */}
             {messages.length === 0 && mode === "guide" && (
-              <div className="rounded-xl border border-border bg-card p-5">
+              <div className="rounded-xl border border-[oklch(0.25_0.02_260)] bg-[oklch(0.13_0.015_260)] p-5">
                 <p className="text-base font-light text-foreground leading-relaxed mb-4">
                   The Oracle is not a search engine. It is a reflective guide — trained to meet you where you are, draw connections across your 5S dimensions, and offer wisdom that is both timeless and personally relevant to your situation.
                 </p>
@@ -456,7 +456,7 @@ export default function Oracle() {
                         <div className="w-7 h-7 rounded-full bg-accent/10 flex items-center justify-center mr-2 mt-1 shrink-0">
                           <Sparkles className="h-3.5 w-3.5 text-accent" />
                         </div>
-                        <div className="max-w-[80%] p-4 rounded-2xl rounded-bl-sm bg-card border border-border/60 text-sm space-y-3">
+                        <div className="max-w-[80%] p-4 rounded-2xl rounded-bl-sm bg-[oklch(0.14_0.015_260)] border border-[oklch(0.28_0.02_260)] text-sm space-y-3">
                           {isUpgradePrompt ? (
                             <>
                               <p className="font-medium text-foreground">Oracle AI is available on the Oracle plan.</p>
@@ -495,7 +495,7 @@ export default function Oracle() {
                           <Sparkles className="h-3.5 w-3.5 text-accent" />
                         </div>
                       )}
-                      <div className={`max-w-[80%] rounded-2xl text-sm leading-relaxed ${msg.role === "user" ? "bg-foreground text-background rounded-br-sm p-4" : "bg-card border border-border rounded-bl-sm"}`}>
+                      <div className={`max-w-[80%] rounded-2xl text-sm leading-relaxed ${msg.role === "user" ? "bg-[oklch(0.55_0.12_60)] text-[oklch(0.10_0.015_260)] rounded-br-sm p-4 font-medium" : "bg-[oklch(0.14_0.015_260)] border border-[oklch(0.28_0.02_260)] rounded-bl-sm"}`}>
                         {msg.role === "assistant" ? (
                           <>
                             <div className="p-4">
@@ -539,7 +539,7 @@ export default function Oracle() {
                   <div className="w-7 h-7 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
                     <Sparkles className="h-3.5 w-3.5 text-accent" />
                   </div>
-                  <div className="bg-card border border-border p-4 rounded-2xl rounded-bl-sm flex items-center gap-2">
+                  <div className="bg-[oklch(0.14_0.015_260)] border border-[oklch(0.28_0.02_260)] p-4 rounded-2xl rounded-bl-sm flex items-center gap-2">
                     <Loader2 className="h-4 w-4 animate-spin text-accent" />
                     <span className="text-xs text-muted-foreground italic">The Oracle is reflecting...</span>
                   </div>

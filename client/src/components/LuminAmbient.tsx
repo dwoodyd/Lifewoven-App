@@ -9,7 +9,7 @@
  *   corner             — Legacy small placement for secondary contexts.
  */
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LUMIN_VIDEOS } from "@/data/lumin";
 
 export type LuminPosition =
@@ -78,6 +78,20 @@ export function LuminAmbient({
   const videoRef = useRef<HTMLVideoElement>(null);
   const video = LUMIN_VIDEOS.find(v => v.id === videoId);
 
+  // Screenshot mode — hide Lumin when user has enabled it in Settings
+  const [screenshotMode, setScreenshotMode] = useState(
+    () => localStorage.getItem("lifeos_screenshot_mode") === "true"
+  );
+  useEffect(() => {
+    const handler = (e: StorageEvent) => {
+      if (e.key === "lifeos_screenshot_mode") {
+        setScreenshotMode(e.newValue === "true");
+      }
+    };
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
+  }, []);
+
   useEffect(() => {
     const el = videoRef.current;
     if (!el) return;
@@ -85,6 +99,7 @@ export function LuminAmbient({
   }, [videoId]);
 
   if (!video?.url) return null;
+  if (screenshotMode) return null;
 
   // ── Dominant mode ──────────────────────────────────────────────────────────
   if (mode === "dominant") {

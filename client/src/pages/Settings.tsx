@@ -184,6 +184,9 @@ export default function Settings() {
     () => localStorage.getItem("lifeos_low_bandwidth") === "true"
   );
   const [showProfile, setShowProfile] = useState(() => localStorage.getItem("showProfile") !== "false");
+  const [screenshotMode, setScreenshotMode] = useState(
+    () => localStorage.getItem("lifeos_screenshot_mode") === "true"
+  );
   const { theme, toggleTheme } = useTheme();
 
   // ── Post-upgrade Oracle animation ──────────────────────────────────────────
@@ -239,6 +242,14 @@ export default function Settings() {
     localStorage.removeItem("lifeos_onboarding_done");
     toast.success("Onboarding reset. Reload the page to replay the intro.");
     setTimeout(() => window.location.reload(), 800);
+  };
+
+  const handleScreenshotMode = (value: boolean) => {
+    localStorage.setItem("lifeos_screenshot_mode", value ? "true" : "false");
+    // Dispatch a storage event so LuminAmbient and LuminCorner can react immediately
+    window.dispatchEvent(new StorageEvent("storage", { key: "lifeos_screenshot_mode", newValue: value ? "true" : "false" }));
+    setScreenshotMode(value);
+    toast.success(value ? "Screenshot mode on — Lumin hidden." : "Screenshot mode off — Lumin restored.");
   };
 
   return (
@@ -379,7 +390,7 @@ export default function Settings() {
               </button>
             </div>
 
-            <div className="flex items-start justify-between gap-3 py-4">
+            <div className="flex items-start justify-between gap-3 py-4 border-b border-border/50">
               <div>
                 <p className="text-sm font-medium text-foreground mb-0.5">Show profile in navigation</p>
                 <p className="text-xs text-muted-foreground font-light leading-relaxed max-w-sm">
@@ -391,6 +402,23 @@ export default function Settings() {
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 mt-0.5 ${showProfile ? "bg-accent" : "bg-muted"}`}
               >
                 <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${showProfile ? "translate-x-6" : "translate-x-1"}`} />
+              </button>
+            </div>
+
+            {/* Screenshot Mode */}
+            <div className="flex items-start justify-between gap-3 py-4">
+              <div>
+                <p className="text-sm font-medium text-foreground mb-0.5">Screenshot mode</p>
+                <p className="text-xs text-muted-foreground font-light leading-relaxed max-w-sm">
+                  Hide Lumin's video backgrounds across all pages so you can take clean UI screenshots for marketing or sharing.
+                </p>
+              </div>
+              <button
+                onClick={() => handleScreenshotMode(!screenshotMode)}
+                aria-label={screenshotMode ? "Disable screenshot mode" : "Enable screenshot mode"}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 mt-0.5 ${screenshotMode ? "bg-accent" : "bg-muted"}`}
+              >
+                <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${screenshotMode ? "translate-x-6" : "translate-x-1"}`} />
               </button>
             </div>
           </div>

@@ -688,3 +688,9 @@
 - [ ] Update Onboarding video IDs to use new V2 semantic IDs
 - [ ] Update LuminCorner default video to use new V2 idle video
 - [ ] Verify all pages render correctly with new Lumin V2 character
+
+## V2 Onboarding, Design Refresh & Screenshot Mode (May 9, 2026)
+- [x] Update onboarding scene video assignments to V2 semantic IDs (protect_head, nodding_gently, holographic_panel, transformation, self_hug, burst_joy)
+- [x] Apply deep navy design system to Dashboard page (cards, sidebar, typography)
+- [x] Apply deep navy design system to Oracle page (chat bubbles, header, input area, user/assistant bubble colors)
+- [x] Add Screenshot Mode toggle in Settings → Display Preferences — hides LuminAmbient and LuminCorner globally via localStorage + storage event

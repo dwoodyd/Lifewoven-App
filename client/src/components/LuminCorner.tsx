@@ -260,6 +260,18 @@ export function LuminCorner({ pulse = false, size = 48, tooltip, onClick }: Lumi
   const [luminState, setLuminState] = useState<LuminState>("hidden");
   const pulsed = useRef(false);
 
+  // Screenshot mode — hide when user has enabled it in Settings
+  const [screenshotMode, setScreenshotMode] = useState(
+    () => localStorage.getItem("lifeos_screenshot_mode") === "true"
+  );
+  useEffect(() => {
+    const handler = (e: StorageEvent) => {
+      if (e.key === "lifeos_screenshot_mode") setScreenshotMode(e.newValue === "true");
+    };
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
+  }, []);
+
   useEffect(() => {
     // Emerge after a short delay on mount
     const t = setTimeout(() => setLuminState("emerge"), 800);
@@ -276,6 +288,8 @@ export function LuminCorner({ pulse = false, size = 48, tooltip, onClick }: Lumi
       }, 700);
     }
   }, [pulse]);
+
+  if (screenshotMode) return null;
 
   return (
     <div

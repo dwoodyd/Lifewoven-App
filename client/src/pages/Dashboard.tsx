@@ -133,7 +133,7 @@ export default function Dashboard() {
 
   return (
     <>
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[oklch(0.10_0.015_260)]">
       {showReentry && (
         <ReentryFlow
           daysSinceActive={daysSinceActive}
@@ -141,7 +141,7 @@ export default function Dashboard() {
         />
       )}
       <Nav />
-      <div className="container pt-20 pb-24 max-w-5xl mx-auto px-3 sm:px-6">
+      <div className="container pt-20 pb-24 max-w-5xl mx-auto px-3 sm:px-6 font-sans">
         {/* Adaptive top bar */}
         <div className="flex items-center justify-end mb-3">
           <button
@@ -195,8 +195,8 @@ export default function Dashboard() {
         {/* Greeting + check-in */}
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-6">
           <div className="min-w-0">
-            <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-1">Welcome back to your Lifewoven</p>
-            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-foreground leading-tight">
+            <p className="text-xs font-mono tracking-[0.18em] text-[oklch(0.65_0.08_60)] uppercase mb-1">Welcome back to your Lifewoven</p>
+            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-[oklch(0.93_0.04_60)] leading-tight" style={{fontFamily:'"Playfair Display",Georgia,serif'}}>
               {greeting()}, {user?.name?.split(" ")[0] ?? "friend"}.
             </h1>
           </div>
@@ -249,7 +249,7 @@ export default function Dashboard() {
 
         {/* Next Step Hero Card */}
         {!showCheckIn && (
-          <div className="p-4 sm:p-5 rounded-2xl border border-accent/30 bg-gradient-to-r from-accent/5 to-transparent mb-6 sm:mb-8">
+          <div className="p-4 sm:p-5 rounded-2xl border border-[oklch(0.55_0.12_60)/0.35] bg-gradient-to-r from-[oklch(0.55_0.12_60)/0.08] to-transparent mb-6 sm:mb-8">
             <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
               <div className="flex items-start gap-3 flex-1 min-w-0">
                 <div className="w-9 h-9 rounded-full bg-accent/10 flex items-center justify-center shrink-0 mt-0.5">
@@ -314,11 +314,11 @@ export default function Dashboard() {
           <div className="lg:col-span-2 space-y-6">
             {/* 5S Grid */}
             <div>
-              <h2 className="font-serif text-lg font-light text-foreground mb-3">Your 5S Framework</h2>
+              <h2 className="text-xs font-mono tracking-[0.18em] text-[oklch(0.65_0.08_60)] uppercase mb-3">Your 5S Framework</h2>
               <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
                 {MODULE_CONFIG.map(({ key, label, icon: Icon, color, bg, borderBase, borderHover, href }) => (
                   <Link key={key} href={href}>
-                    <div className={`p-2 sm:p-3 rounded-xl border ${borderBase} ${borderHover} ${bg} shadow-[0_2px_8px_0_oklch(0_0_0/0.12)] hover:shadow-[0_4px_16px_0_oklch(0_0_0/0.18)] transition-all duration-200 cursor-pointer text-center group overflow-hidden`}>
+                    <div className={`p-2 sm:p-3 rounded-xl border ${borderBase} ${borderHover} bg-[oklch(0.14_0.015_260)] hover:bg-[oklch(0.17_0.02_260)] shadow-[0_2px_12px_0_oklch(0_0_0/0.35)] hover:shadow-[0_4px_20px_0_oklch(0_0_0/0.5)] transition-all duration-200 cursor-pointer text-center group overflow-hidden`}>
                       <Icon className={`h-3.5 w-3.5 sm:h-5 sm:w-5 ${color} mx-auto mb-1 sm:mb-1.5 group-hover:scale-110 transition-transform`} />
                       <p className="text-[9px] sm:text-xs font-medium text-foreground leading-tight truncate">{label}</p>
                     </div>
@@ -330,7 +330,7 @@ export default function Dashboard() {
             {/* Habits */}
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h2 className="font-serif text-lg font-light text-foreground">Today's Rhythms</h2>
+                <h2 className="font-serif text-lg font-light text-[oklch(0.93_0.04_60)]" style={{fontFamily:'"Playfair Display",Georgia,serif'}}>Today's Rhythms</h2>
                 <Link href="/standards"><Button variant="ghost" size="sm" className="gap-1 text-xs text-muted-foreground h-8 px-2">Manage <ArrowRight className="h-3 w-3" /></Button></Link>
               </div>
               {habits && habits.length > 0 ? (
@@ -372,7 +372,7 @@ export default function Dashboard() {
             {/* Journal */}
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h2 className="font-serif text-lg font-light text-foreground">Recent Journal</h2>
+                <h2 className="font-serif text-lg font-light text-[oklch(0.93_0.04_60)]" style={{fontFamily:'"Playfair Display",Georgia,serif'}}>Recent Journal</h2>
                 <Link href="/journal"><Button variant="ghost" size="sm" className="gap-1 text-xs text-muted-foreground h-8 px-2">All entries <ArrowRight className="h-3 w-3" /></Button></Link>
               </div>
               {dashData?.recentJournals && dashData.recentJournals.length > 0 ? (
@@ -403,7 +403,7 @@ export default function Dashboard() {
           {/* Right column: Oracle, Pathways, Quick Actions */}
           <div className="space-y-6">
             {/* Oracle Insights */}
-            <div className="p-4 sm:p-5 rounded-2xl border border-border bg-card">
+            <div className="p-4 sm:p-5 rounded-2xl border border-[oklch(0.25_0.02_260)] bg-[oklch(0.13_0.015_260)]">
               <div className="flex items-center gap-2 mb-4">
                 <div className="p-1.5 rounded-lg bg-accent/10"><Sparkles className="h-4 w-4 text-accent" /></div>
                 <h2 className="font-serif text-base font-light text-foreground">Oracle Insights</h2>
@@ -429,7 +429,7 @@ export default function Dashboard() {
             </div>
 
             {/* Active Pathways */}
-            <div className="p-4 sm:p-5 rounded-2xl border border-border bg-card">
+            <div className="p-4 sm:p-5 rounded-2xl border border-[oklch(0.25_0.02_260)] bg-[oklch(0.13_0.015_260)]">
               <div className="flex items-center gap-2 mb-4">
                 <div className="p-1.5 rounded-lg bg-secondary"><TrendingUp className="h-4 w-4 text-foreground" /></div>
                 <h2 className="font-serif text-base font-light text-foreground">Active Pathways</h2>
@@ -477,8 +477,8 @@ export default function Dashboard() {
             )}
 
             {/* Quick Actions */}
-            <div className="p-4 sm:p-5 rounded-2xl border border-border bg-card">
-              <h2 className="font-serif text-base font-light text-foreground mb-3">Quick Actions</h2>
+            <div className="p-4 sm:p-5 rounded-2xl border border-[oklch(0.25_0.02_260)] bg-[oklch(0.13_0.015_260)]">
+              <h2 className="text-xs font-mono tracking-[0.18em] text-[oklch(0.65_0.08_60)] uppercase mb-3">Quick Actions</h2>
               <div className="space-y-1">
                 {[
                   { href: "/btw", icon: Leaf, label: "Before the Words" },

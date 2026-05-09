@@ -50,7 +50,7 @@ const SCENES: Scene[] = [
   // ── Screen 1: Pain ──────────────────────────────────────────────────────
   {
     id: "pain",
-    videoId: "core_unfurls",
+    videoId: "protect_head",
     overlayOpacity: 0.38,
     loop: false,
     lines: [
@@ -68,7 +68,7 @@ const SCENES: Scene[] = [
   // Lumin appears small, right-third, idle. "Lumin will be here." — three words, third person.
   {
     id: "reframe",
-    videoId: "self_soothing",
+    videoId: "nodding_gently",
     overlayOpacity: 0.35,
     loop: false,
     lines: [
@@ -84,7 +84,7 @@ const SCENES: Scene[] = [
   // ── Screen 3: 5S Framework — no Lumin ────────────────────────────────
   {
     id: "system",
-    videoId: "peaceful_idle",
+    videoId: "holographic_panel",
     overlayOpacity: 0.32,
     loop: false,
     lines: [
@@ -100,7 +100,7 @@ const SCENES: Scene[] = [
   // ── Screen 4: Reset flagship — moved up while attention is high ───────
   {
     id: "reset",
-    videoId: "bouncing_joyfully",
+    videoId: "transformation",
     overlayOpacity: 0.35,
     loop: false,
     lines: [
@@ -116,7 +116,7 @@ const SCENES: Scene[] = [
   // ── Screen 5: Contemplative wedge (Before the Words) ─────────────────
   {
     id: "contemplative",
-    videoId: "idle_wriggle",
+    videoId: "self_hug",
     overlayOpacity: 0.30,
     loop: false,
     lines: [
@@ -131,7 +131,7 @@ const SCENES: Scene[] = [
   // ── Screen 6: Audit CTA ───────────────────────────────────────────────
   {
     id: "launch",
-    videoId: "awakening",
+    videoId: "burst_joy",
     overlayOpacity: 0.28,
     loop: false,
     lines: [
