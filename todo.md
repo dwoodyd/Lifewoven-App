@@ -699,3 +699,7 @@
 - [x] Upload Untitledvideo(86).mp4 as screen1_hero and set as screen 1 videoId
 - [x] Remove old colorful Lumin from onboarding screen 2 (SCENE2_LUMIN_VIDEO_URL purged, overlay removed)
 - [x] Audited all 6 onboarding screens — zero old colorful Lumin URLs remain anywhere in codebase
+
+## VEO Watermark Crop (May 9, 2026)
+- [x] Crop VEO watermark from Lumin V2 videos in LuminAmbient.tsx (dominant + corner modes)
+- [x] Crop VEO watermark from Lumin V2 videos in OnboardingModal.tsx (video slots A + B)
