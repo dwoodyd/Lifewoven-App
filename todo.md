@@ -676,3 +676,15 @@
 ## Dashboard Screenshot Cleanup (May 8, 2026)
 - [x] Remove LuminAmbient from Dashboard (was blocking UI for screenshots)
 - [x] Clean up Dashboard mobile layout: greeting row flex-wrap, 5S grid gap/icon sizing, container px-3 on mobile
+
+## Lumin V2 Video Swap & Design Refresh (May 9, 2026)
+- [x] Upload all 46 new Lumin V2 videos (knitted sun character) to S3 via manus-upload-file --webdev
+- [x] Analyze all Untitled videos via manus-analyze-video to build semantic descriptions
+- [x] Rebuild lumin.ts with correct S3 URLs for all 46 videos and new semantic IDs
+- [x] Replace all old video ID references across all pages and components
+- [x] Add Playfair Display and DM Mono fonts to index.html
+- [x] Update index.css dark theme to deep navy (oklch(0.10 0.015 260)) with gold accents
+- [x] Rewrite Home.tsx with marketing-site-level design: deep navy, Playfair serif headlines, gold italic emphasis, Lumin video hero, gold pill CTAs, pricing section
+- [ ] Update Onboarding video IDs to use new V2 semantic IDs
+- [ ] Update LuminCorner default video to use new V2 idle video
+- [ ] Verify all pages render correctly with new Lumin V2 character

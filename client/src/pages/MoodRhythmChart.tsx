@@ -204,7 +204,7 @@ export default function MoodRhythmChart() {
   return (
     <>
     <LuminAmbient
-      videoId="scene_9"
+      videoId="peaceful_idle"
       mode="dominant"
       opacity={0.50}
       zIndex={0}

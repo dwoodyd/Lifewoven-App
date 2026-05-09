@@ -98,7 +98,7 @@ export default function PathwaysListing() {
     <div className="min-h-screen bg-background">
       {/* Lumin reaches toward the path ahead — aspirational, guiding */}
       <LuminAmbient
-        videoId="lumen_reaching"
+        videoId="turning_extending"
         mode="dominant"
         opacity={0.60}
         zIndex={0}

@@ -81,7 +81,7 @@ export default function Journal() {
     <div className="min-h-screen bg-background">
       {/* Lumin floats softly in the corner — a quiet witness to your writing */}
       <LuminAmbient
-        videoId="scene_9"
+        videoId="peaceful_idle"
         mode="dominant"
         opacity={0.50}
         zIndex={0}

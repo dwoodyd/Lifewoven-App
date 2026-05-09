@@ -562,7 +562,7 @@ export default function CharacterBook() {
     <div className="min-h-screen bg-background">
       {/* Lumin reaches upward — aspirational, present for deep reading work */}
       <LuminAmbient
-        videoId="lumen_reaching"
+        videoId="turning_extending"
         mode="dominant"
         opacity={0.55}
         zIndex={0}

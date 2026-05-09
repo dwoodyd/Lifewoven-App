@@ -84,7 +84,7 @@ const SCENES: Scene[] = [
   // ── Screen 3: 5S Framework — no Lumin ────────────────────────────────
   {
     id: "system",
-    videoId: "scene_9",
+    videoId: "peaceful_idle",
     overlayOpacity: 0.32,
     loop: false,
     lines: [
@@ -116,7 +116,7 @@ const SCENES: Scene[] = [
   // ── Screen 5: Contemplative wedge (Before the Words) ─────────────────
   {
     id: "contemplative",
-    videoId: "scene_11",
+    videoId: "idle_wriggle",
     overlayOpacity: 0.30,
     loop: false,
     lines: [
@@ -131,7 +131,7 @@ const SCENES: Scene[] = [
   // ── Screen 6: Audit CTA ───────────────────────────────────────────────
   {
     id: "launch",
-    videoId: "scene_14",
+    videoId: "awakening",
     overlayOpacity: 0.28,
     loop: false,
     lines: [
@@ -334,7 +334,7 @@ export default function OnboardingModal({ userId }: Props) {
       preloadIntoInactiveSlot(nextUrl);
     } else {
       // Preload finished screen video
-      preloadIntoInactiveSlot(getVideoUrl("alignment_audit"));
+      preloadIntoInactiveSlot(getVideoUrl("starburst_joy"));
     }
   }, [sceneIdx, open, finished]);
 

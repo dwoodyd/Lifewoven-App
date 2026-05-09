@@ -1,5 +1,6 @@
 /**
- * Lumin video catalogue — all S3 paths served as relative /manus-storage/ URLs.
+ * Lumin V2 video catalogue — knitted sun character.
+ * All old colorful geometric Lumin videos replaced with new character.
  * Black backgrounds are stripped at render time via CSS mix-blend-mode: screen.
  */
 
@@ -10,7 +11,7 @@ export interface LuminVideo {
   action: string;
   /** Suggested use-case in the UI */
   role: "onboarding" | "ambient" | "reaction" | "landscape";
-  /** Duration in seconds (all are 8s) */
+  /** Duration in seconds */
   duration: number;
 }
 
@@ -18,186 +19,321 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   // ── Named / clean originals ──────────────────────────────────────────────
   {
     id: "bouncy_dance",
-    url: "/manus-storage/Lumen_performs_bouncy_dance_202605051720_dbc48df8.mp4",
-    action: "Bouncy celebratory dance",
+    url: "/manus-storage/Lumen_performs_bouncy_dance_202605082004_672236c5.mp4",
+    action: "Bouncy celebratory dance with sparkles",
+    role: "reaction",
+    duration: 8,
+  },
+  {
+    id: "peek_a_boo_sparkles",
+    url: "/manus-storage/Lumen_playing_peek-a-boo_sparkles_202605081918_7695be2b.mp4",
+    action: "Plays peek-a-boo with sparkles",
     role: "reaction",
     duration: 8,
   },
   {
     id: "pointing_energy",
-    url: "/manus-storage/Lumen_pointing_with_energy_202605051726_99b22815.mp4",
-    action: "Points forward with energy",
+    url: "/manus-storage/Lumen_pointing_with_energetic_smile_202605082000_7f9cfe4f.mp4",
+    action: "Points forward with energetic smile",
     role: "onboarding",
     duration: 8,
   },
   {
-    id: "sliding_in_1",
-    url: "/manus-storage/Lumen_sliding_into_view_202605051841_2c0e24db.mp4",
+    id: "sliding_in",
+    url: "/manus-storage/Lumen_sliding_into_view_202605082009_7ad94aa5.mp4",
     action: "Slides into view from the side",
     role: "onboarding",
     duration: 8,
   },
   {
-    id: "sliding_in_2",
-    url: "/manus-storage/Lumen_sliding_into_view_202605051843_f159069c.mp4",
-    action: "Slides into view (variant 2)",
-    role: "onboarding",
-    duration: 8,
-  },
-  {
-    id: "spins_dizzy",
-    url: "/manus-storage/Lumen_spins_and_stops_dizzy_202605051638_f1b454e5.mp4",
-    action: "Spins and stops dizzy",
-    role: "reaction",
-    duration: 8,
-  },
-  {
     id: "taps_camera",
-    url: "/manus-storage/Lumen_taps_camera_lens_202605051708_a725a928.mp4",
-    action: "Taps the camera lens",
+    url: "/manus-storage/Lumen_taps_camera_lens_202605081958_44c95a10.mp4",
+    action: "Taps the camera lens playfully",
     role: "onboarding",
     duration: 8,
   },
   {
     id: "bouncing_joyfully",
-    url: "/manus-storage/Mascot_Lumen_bouncing_joyfully_202605051832_86b6101e.mp4",
+    url: "/manus-storage/Mascot_Lumen_bouncing_joyfully_202605081915_0baedd24.mp4",
     action: "Bounces joyfully",
     role: "reaction",
     duration: 8,
   },
   {
-    id: "bobs_taps",
-    url: "/manus-storage/Mascot_bobs_up_down_taps_202605051744_fab360ba.mp4",
-    action: "Bobs up and down, taps",
+    id: "analyzing",
+    url: "/manus-storage/Mascot_analyzing_with_magnifying\u2026_202605081817_54ece545.mp4",
+    action: "Analyzing with magnifying glass — curious",
     role: "ambient",
     duration: 8,
   },
   {
     id: "core_unfurls",
-    url: "/manus-storage/Mascot_core_lights_up_unfurls_202605051825_63db4081.mp4",
-    action: "Core lights up and unfurls",
+    url: "/manus-storage/Mascot_core_lights_up_unfurls_202605081910_09362c4a.mp4",
+    action: "Core lights up and unfurls — Oracle mode",
     role: "onboarding",
+    duration: 8,
+  },
+  {
+    id: "crosses_face",
+    url: "/manus-storage/Mascot_crosses_limbs_over_face_202605081729_f9c17066.mp4",
+    action: "Crosses limbs over face — overwhelmed",
+    role: "reaction",
+    duration: 8,
+  },
+  {
+    id: "starburst_pose",
+    url: "/manus-storage/Mascot_in_dynamic_starburst_pose_202605081833_70151f12.mp4",
+    action: "Dynamic starburst pose — high energy",
+    role: "reaction",
+    duration: 8,
+  },
+  {
+    id: "pushing_table",
+    url: "/manus-storage/Mascot_pushing_holographic_table_202605081828_ad59eb2f.mp4",
+    action: "Pushes holographic UI table",
+    role: "ambient",
     duration: 8,
   },
   {
     id: "self_soothing",
-    url: "/manus-storage/Mascot_self-soothing_hug_202605051747_a5efca78.mp4",
-    action: "Self-soothing hug",
+    url: "/manus-storage/Mascot_self-soothing_hug_glowing_202605081857_f43381f6.mp4",
+    action: "Self-soothing hug with glow",
     role: "ambient",
     duration: 8,
   },
-  // ── Cropped (watermark removed) ──────────────────────────────────────────
   {
-    id: "scene_1",
-    url: "/manus-storage/Untitled_video_1_cb165677.mp4",
-    action: "Lumin emerges in cosmic space",
+    id: "smiles_sweeping",
+    url: "/manus-storage/Mascot_smiles_sweeping_outward_f\u2026_202605081522_985e11eb.mp4",
+    action: "Smiles and sweeps arms outward — welcoming",
     role: "onboarding",
     duration: 8,
   },
   {
-    id: "scene_2",
-    url: "/manus-storage/Untitled_video_2_de8986b2.mp4",
-    action: "Lumin floats in warm light",
+    id: "taps_chin",
+    url: "/manus-storage/Mascot_taps_chin_pulsing_light_202605081534_ea0a6928.mp4",
+    action: "Taps chin with pulsing light — thinking",
     role: "ambient",
     duration: 8,
   },
   {
-    id: "scene_3",
-    url: "/manus-storage/Untitled_video_3_b30af40f.mp4",
-    action: "Lumin in cosmic energy burst",
+    id: "tilting_listening",
+    url: "/manus-storage/Mascot_tilting_core_listening_202605081754_00589b96.mp4",
+    action: "Tilts core while listening — attentive",
+    role: "ambient",
+    duration: 8,
+  },
+  {
+    id: "turning_dial",
+    url: "/manus-storage/Mascot_turning_holographic_UI_dial_202605081825_e6f69148.mp4",
+    action: "Turns holographic UI dial",
+    role: "ambient",
+    duration: 8,
+  },
+  {
+    id: "turning_extending",
+    url: "/manus-storage/Mascot_turning_right_extending_l\u2026_202605081518_73b0d78a.mp4",
+    action: "Turns right and extends limb — pointing/directing",
     role: "onboarding",
     duration: 8,
   },
   {
-    id: "scene_4",
-    url: "/manus-storage/Untitled_video_4_45e76ae5.mp4",
-    action: "Lumin drifts in deep space",
+    id: "twirls_sparkles",
+    url: "/manus-storage/Mascot_twirls_releasing_sparkles_202605081724_c52b7bf8.mp4",
+    action: "Twirls releasing sparkles",
+    role: "reaction",
+    duration: 8,
+  },
+  {
+    id: "floating_center",
+    url: "/manus-storage/Woven_mascot_floating_center_202605081537_eb205f5f.mp4",
+    action: "Floating centered — calm ambient",
     role: "ambient",
     duration: 8,
   },
   {
-    id: "scene_5",
-    url: "/manus-storage/Untitled_video_5_5695431b.mp4",
-    action: "Lumin glows softly",
+    id: "nodding_gently",
+    url: "/manus-storage/Woven_mascot_nodding_gently_202605081527_6cef9690.mp4",
+    action: "Nodding gently — affirming",
+    role: "ambient",
+    duration: 8,
+  },
+
+  // ── Untitled videos (analyzed) ────────────────────────────────────────────
+  {
+    id: "waves_sparkles",
+    url: "/manus-storage/Untitledvideo(31)_f3caad09.mp4",
+    action: "Waves arms with magical sparkles — peaceful happy",
     role: "ambient",
     duration: 8,
   },
   {
-    id: "scene_6",
-    url: "/manus-storage/Untitled_video_6_279360f8.mp4",
-    action: "Lumin in dark atmospheric scene",
-    role: "ambient",
+    id: "burst_arms",
+    url: "/manus-storage/Untitledvideo(32)_c8031332.mp4",
+    action: "Bursts arms outward with magical dust — wide happy smile",
+    role: "reaction",
     duration: 8,
   },
   {
-    id: "scene_7",
-    url: "/manus-storage/Untitled_video_7_0bc00db2.mp4",
-    action: "Lumin underwater/deep scene",
-    role: "ambient",
-    duration: 8,
-  },
-  {
-    id: "scene_8",
-    url: "/manus-storage/Untitled_video_8_db93ddff.mp4",
-    action: "Lumin with energy streaks",
+    id: "gentle_open",
+    url: "/manus-storage/Untitledvideo(37)_dd0f4f1a.mp4",
+    action: "Brings arms together gently then spreads wide — opening",
     role: "onboarding",
     duration: 8,
   },
   {
-    id: "scene_9",
-    url: "/manus-storage/Untitled_video_9_23b03c25.mp4",
-    action: "Lumin in soft glow",
+    id: "peaceful_idle",
+    url: "/manus-storage/Untitledvideo(53)_b4aa31f0.mp4",
+    action: "Smiling peacefully, eyes closed, gently waving — IDLE",
     role: "ambient",
     duration: 8,
   },
   {
-    id: "scene_10",
-    url: "/manus-storage/Untitled_video_10_729527b4.mp4",
-    action: "Lumin radiant burst",
-    role: "onboarding",
+    id: "spin_return",
+    url: "/manus-storage/Untitledvideo(54)_50091211.mp4",
+    action: "Waves, spins with sparks, returns to calm — transition",
+    role: "reaction",
     duration: 8,
   },
   {
-    id: "scene_11",
-    url: "/manus-storage/Untitled_video_11_9cfb3b71.mp4",
-    action: "Lumin warm atmospheric",
+    id: "spin_celebrate",
+    url: "/manus-storage/Untitledvideo(55)_03a2cf54.mp4",
+    action: "Spins rapidly then celebratory pose with sparks",
+    role: "reaction",
+    duration: 8,
+  },
+  {
+    id: "protect_head",
+    url: "/manus-storage/Untitledvideo(56)_0b690d72.mp4",
+    action: "Open arms then wraps around head — overwhelmed/protect",
+    role: "reaction",
+    duration: 8,
+  },
+  {
+    id: "idle_wriggle",
+    url: "/manus-storage/Untitledvideo(57)_92946994.mp4",
+    action: "Standing, rays wriggling — idle loop",
     role: "ambient",
     duration: 8,
   },
   {
-    id: "scene_14",
-    url: "/manus-storage/Untitled_video_14_1b1346ae.mp4",
-    action: "Lumin cinematic reveal",
+    id: "magnifying",
+    url: "/manus-storage/Untitledvideo(58)_bad25587.mp4",
+    action: "Holds glowing magnifying glass with curiosity — analyzing",
+    role: "ambient",
+    duration: 8,
+  },
+  {
+    id: "awakening",
+    url: "/manus-storage/Untitledvideo(60)_fb3ba5b0.mp4",
+    action: "Arms outstretched, magical circle, face glows — awakening",
     role: "onboarding",
     duration: 8,
   },
-  // ── Special screens ────────────────────────────────────────────────────────
   {
-    id: "alignment_audit",
-    url: "/manus-storage/Lumin_alignment_audit_clean_041dec4e.mp4",
-    action: "Lumin smiling and ready — Alignment Audit finished screen",
+    id: "elder_book",
+    url: "/manus-storage/Untitledvideo(63)_812252f5.mp4",
+    action: "Felt elder man holding Before the Words book — reading/character",
+    role: "ambient",
+    duration: 8,
+  },
+  {
+    id: "holographic_panel",
+    url: "/manus-storage/Untitledvideo(64)_fb3c0b06.mp4",
+    action: "Raises arms to lift holographic panel — presenting data",
+    role: "ambient",
+    duration: 8,
+  },
+  {
+    id: "starburst_joy",
+    url: "/manus-storage/Untitledvideo(65)_f9a9be24.mp4",
+    action: "Throws arms wide, star pose, sparkles — starburst joy",
+    role: "reaction",
+    duration: 8,
+  },
+  {
+    id: "winking_idle",
+    url: "/manus-storage/Untitledvideo(66)_69cd4878.mp4",
+    action: "Standing, smiling, eyes closed, winking — content idle",
+    role: "ambient",
+    duration: 8,
+  },
+  {
+    id: "self_hug",
+    url: "/manus-storage/Untitledvideo(67)_e7ac1e23.mp4",
+    action: "Wraps rays around glowing face — self-soothing hug",
+    role: "ambient",
+    duration: 8,
+  },
+  {
+    id: "dancing",
+    url: "/manus-storage/Untitledvideo(68)_12b4860e.mp4",
+    action: "Joyfully dances, waving rays",
+    role: "reaction",
+    duration: 8,
+  },
+  {
+    id: "settling",
+    url: "/manus-storage/Untitledvideo(69)_589a6792.mp4",
+    action: "Gently lowers arms — settling/calm",
+    role: "ambient",
+    duration: 8,
+  },
+  {
+    id: "burst_joy",
+    url: "/manus-storage/Untitledvideo(70)_bb14a87e.mp4",
+    action: "Claps, glows, jumps, explodes into yarn puff — burst of joy",
+    role: "reaction",
+    duration: 8,
+  },
+  {
+    id: "peekaboo_reveal",
+    url: "/manus-storage/Untitledvideo(71)_d746cd92.mp4",
+    action: "Peekaboo then throws arms wide with laugh and light — reveal",
     role: "onboarding",
     duration: 8,
   },
-  // ── Landscape backgrounds ────────────────────────────────────────────────
   {
-    id: "landscape_cinematic",
-    url: "/manus-storage/p_landscape_Cinemat_2a8ca9da.mp4",
-    action: "Cinematic landscape background",
-    role: "landscape",
+    id: "transformation",
+    url: "/manus-storage/Untitledvideo(72)_4c5e73ba.mp4",
+    action: "Spins in magical burst, surprised then dancing — transformation",
+    role: "reaction",
     duration: 8,
   },
   {
-    id: "landscape_fun",
-    url: "/manus-storage/p_landscape_Fun_pl_3fb54b73.mp4",
-    action: "Fun landscape background",
-    role: "landscape",
+    id: "pure_joy",
+    url: "/manus-storage/Untitledvideo(73)_03b3bd15.mp4",
+    action: "Joyfully dancing and laughing — pure joy",
+    role: "reaction",
+    duration: 8,
+  },
+  {
+    id: "pointing_down",
+    url: "/manus-storage/Untitledvideo(74)_da0c331b.mp4",
+    action: "Enthusiastically points downward — CTA/directing",
+    role: "onboarding",
+    duration: 8,
+  },
+  {
+    id: "spinning",
+    url: "/manus-storage/Untitledvideo(75)_b8896f89.mp4",
+    action: "Joyfully spins, twirling rays",
+    role: "reaction",
+    duration: 8,
+  },
+  {
+    id: "peeking",
+    url: "/manus-storage/Untitledvideo(76)_7ea1b82b.mp4",
+    action: "Waves arms, hides behind wall, peeks out — shy/playful",
+    role: "reaction",
     duration: 8,
   },
 ];
 
-/** Ambient video to loop on the Oracle page */
-export const ORACLE_AMBIENT = "bobs_taps";
+/** Ambient video to loop on the Oracle page — core unfurls, listening presence */
+export const ORACLE_AMBIENT = "core_unfurls";
 
-/** Ambient video for the Dashboard welcome moment */
-export const DASHBOARD_AMBIENT = "self_soothing";
+/** Ambient video for the Dashboard welcome moment — peaceful idle */
+export const DASHBOARD_AMBIENT = "peaceful_idle";
+
+/** Default idle loop for any ambient placement */
+export const DEFAULT_AMBIENT = "idle_wriggle";
