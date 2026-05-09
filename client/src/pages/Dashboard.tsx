@@ -11,7 +11,6 @@ import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import LowBandwidthDashboard from "@/components/LowBandwidthDashboard";
-import { LuminAmbient } from "@/components/LuminAmbient";
 import { useBetaAccess } from "@/hooks/useBetaAccess";
 import ReentryFlow from "@/components/ReentryFlow";
 import BetterMirror from "@/components/BetterMirror";
@@ -135,13 +134,6 @@ export default function Dashboard() {
   return (
     <>
     <div className="min-h-screen bg-background">
-      {/* Lumin floats in the bottom-right — she's in the space, not on the page */}
-      <LuminAmbient
-        videoId="self_soothing"
-        mode="dominant"
-        opacity={0.55}
-        zIndex={0}
-      />
       {showReentry && (
         <ReentryFlow
           daysSinceActive={daysSinceActive}
@@ -149,7 +141,7 @@ export default function Dashboard() {
         />
       )}
       <Nav />
-      <div className="container pt-20 pb-24 max-w-5xl mx-auto px-4 sm:px-6">
+      <div className="container pt-20 pb-24 max-w-5xl mx-auto px-3 sm:px-6">
         {/* Adaptive top bar */}
         <div className="flex items-center justify-end mb-3">
           <button
@@ -208,7 +200,7 @@ export default function Dashboard() {
               {greeting()}, {user?.name?.split(" ")[0] ?? "friend"}.
             </h1>
           </div>
-          <div className="flex items-center gap-2 shrink-0 self-start">
+          <div className="flex flex-wrap items-center gap-2 shrink-0 self-start">
             {hasAccess && daysLeft !== null && daysLeft <= 45 && (
               <Link href="/pricing">
                 <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border cursor-pointer transition-colors ${
@@ -323,12 +315,12 @@ export default function Dashboard() {
             {/* 5S Grid */}
             <div>
               <h2 className="font-serif text-lg font-light text-foreground mb-3">Your 5S Framework</h2>
-              <div className="grid grid-cols-5 gap-2">
+              <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
                 {MODULE_CONFIG.map(({ key, label, icon: Icon, color, bg, borderBase, borderHover, href }) => (
                   <Link key={key} href={href}>
-                    <div className={`p-2 sm:p-3 rounded-xl border ${borderBase} ${borderHover} ${bg} shadow-[0_2px_8px_0_oklch(0_0_0/0.12)] hover:shadow-[0_4px_16px_0_oklch(0_0_0/0.18)] transition-all duration-200 cursor-pointer text-center group`}>
-                      <Icon className={`h-4 w-4 sm:h-5 sm:w-5 ${color} mx-auto mb-1 sm:mb-1.5 group-hover:scale-110 transition-transform`} />
-                      <p className="text-[10px] sm:text-xs font-medium text-foreground leading-tight">{label}</p>
+                    <div className={`p-2 sm:p-3 rounded-xl border ${borderBase} ${borderHover} ${bg} shadow-[0_2px_8px_0_oklch(0_0_0/0.12)] hover:shadow-[0_4px_16px_0_oklch(0_0_0/0.18)] transition-all duration-200 cursor-pointer text-center group overflow-hidden`}>
+                      <Icon className={`h-3.5 w-3.5 sm:h-5 sm:w-5 ${color} mx-auto mb-1 sm:mb-1.5 group-hover:scale-110 transition-transform`} />
+                      <p className="text-[9px] sm:text-xs font-medium text-foreground leading-tight truncate">{label}</p>
                     </div>
                   </Link>
                 ))}

@@ -672,3 +672,7 @@
 - [x] Add loading/sent/error states to Send button
 - [x] Verified Resend API key valid (HTTP 200)
 - [ ] Add custom sending domain in Resend dashboard (currently using onboarding@resend.dev)
+
+## Dashboard Screenshot Cleanup (May 8, 2026)
+- [x] Remove LuminAmbient from Dashboard (was blocking UI for screenshots)
+- [x] Clean up Dashboard mobile layout: greeting row flex-wrap, 5S grid gap/icon sizing, container px-3 on mobile
