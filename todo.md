@@ -694,3 +694,8 @@
 - [x] Apply deep navy design system to Dashboard page (cards, sidebar, typography)
 - [x] Apply deep navy design system to Oracle page (chat bubbles, header, input area, user/assistant bubble colors)
 - [x] Add Screenshot Mode toggle in Settings → Display Preferences — hides LuminAmbient and LuminCorner globally via localStorage + storage event
+
+## Onboarding Old Lumin Purge (May 9, 2026)
+- [x] Upload Untitledvideo(86).mp4 as screen1_hero and set as screen 1 videoId
+- [x] Remove old colorful Lumin from onboarding screen 2 (SCENE2_LUMIN_VIDEO_URL purged, overlay removed)
+- [x] Audited all 6 onboarding screens — zero old colorful Lumin URLs remain anywhere in codebase

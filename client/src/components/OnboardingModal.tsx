@@ -44,13 +44,13 @@ interface Scene {
 // ── Scene 2: Lumin's small idle presence lives in the right-third of the screen.
 // The brief says: she is introduced as a presence, not a feature.
 // "Lumin will be here." is the ONLY line of copy about her in the entire intro.
-const SCENE2_LUMIN_VIDEO_URL = "/manus-storage/Lumen_sliding_into_view_202605051841_2c0e24db.mp4";
+// SCENE2_LUMIN_VIDEO_URL removed — old colorful Lumin purged
 
 const SCENES: Scene[] = [
   // ── Screen 1: Pain ──────────────────────────────────────────────────────
   {
     id: "pain",
-    videoId: "protect_head",
+    videoId: "screen1_hero",
     overlayOpacity: 0.38,
     loop: false,
     lines: [
@@ -544,24 +544,7 @@ export default function OnboardingModal({ userId }: Props) {
         </button>
       )}
 
-      {/* ── Screen 2 only: Lumin small idle presence — right-third, she is a presence not a feature ── */}
-      {!finished && currentScene?.id === "reframe" && (
-        <video
-          src={SCENE2_LUMIN_VIDEO_URL}
-          autoPlay muted playsInline loop
-          style={{
-            position: "absolute",
-            right: "5%",
-            bottom: "18%",
-            width: "min(22vw, 200px)",
-            zIndex: 5,
-            mixBlendMode: "screen",
-            opacity: videoTime >= 6.5 ? 0.75 : 0.45,
-            transition: "opacity 1.2s ease",
-            pointerEvents: "none",
-          }}
-        />
-      )}
+      {/* Screen 2 Lumin overlay removed — no old colorful Lumin in onboarding */}
 
       {/* ── Scene dot progress ── */}
       {!finished && (

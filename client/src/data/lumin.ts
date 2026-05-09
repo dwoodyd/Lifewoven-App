@@ -16,6 +16,14 @@ export interface LuminVideo {
 }
 
 export const LUMIN_VIDEOS: LuminVideo[] = [
+  // ── Onboarding screen 1 hero ─────────────────────────────────────────────
+  {
+    id: "screen1_hero",
+    url: "/manus-storage/screen1_hero_8746357b.mp4",
+    action: "Opening hero video for onboarding screen 1",
+    role: "onboarding",
+    duration: 10,
+  },
   // ── Named / clean originals ──────────────────────────────────────────────
   {
     id: "bouncy_dance",
