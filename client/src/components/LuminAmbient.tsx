@@ -8,9 +8,9 @@
  *   dominant (default) — Lumin fills the viewport center, content overlaid on top.
  *   corner             — Legacy small placement for secondary contexts.
  *
- * VEO watermark crop: The container uses overflow:hidden and the video is scaled
- * to 112% and shifted slightly left/up so the bottom-right watermark is clipped
- * outside the visible area. The character remains fully centered.
+ * VEO watermark masking: A solid black rectangle is absolutely positioned in the
+ * bottom-right corner of the video container, covering the watermark zone.
+ * The container uses overflow:hidden to clip any overflow.
  */
 
 import { useEffect, useRef, useState } from "react";
@@ -69,20 +69,25 @@ const CORNER_POSITION_STYLES: Record<LuminPosition, React.CSSProperties> = {
 };
 
 /**
- * Watermark crop style applied to every <video> element.
- *
- * The VEO watermark sits in the bottom-right corner of the video frame.
- * We scale the video to 112% and shift it slightly left and up so the
- * watermark is pushed outside the container's overflow:hidden boundary.
- * The character stays visually centered because we compensate with a
- * negative translate on both axes.
+ * VEO watermark mask — a solid black rectangle that covers the bottom-right
+ * corner of the video where the VEO watermark appears.
+ * Width/height are percentages of the video container.
  */
-const VIDEO_CROP_STYLE: React.CSSProperties = {
-  // Scale up so we have room to shift without leaving gaps
-  transform: "scale(1.12) translate(-5%, -5%)",
-  // Ensure the transform origin is the center of the video
-  transformOrigin: "center center",
-};
+const WatermarkMask = () => (
+  <div
+    aria-hidden="true"
+    style={{
+      position: "absolute",
+      bottom: 0,
+      right: 0,
+      width: "18%",
+      height: "14%",
+      background: "#000",
+      pointerEvents: "none",
+      zIndex: 1,
+    }}
+  />
+);
 
 export function LuminAmbient({
   videoId,
@@ -123,7 +128,7 @@ export function LuminAmbient({
 
   // ── Dominant mode ──────────────────────────────────────────────────────────
   if (mode === "dominant") {
-    const dominantSize  = size    ?? "min(88vw, 860px)";
+    const dominantSize    = size    ?? "min(88vw, 860px)";
     const dominantOpacity = opacity ?? 0.65;
 
     return (
@@ -139,7 +144,7 @@ export function LuminAmbient({
           zIndex,
           pointerEvents: "none",
           opacity: dominantOpacity,
-          overflow: "hidden",   // clips the watermark
+          overflow: "hidden",
           ...style,
         }}
       >
@@ -156,9 +161,9 @@ export function LuminAmbient({
             objectFit: "contain",
             mixBlendMode: "screen",
             display: "block",
-            ...VIDEO_CROP_STYLE,
           }}
         />
+        <WatermarkMask />
       </div>
     );
   }
@@ -186,7 +191,7 @@ export function LuminAmbient({
         zIndex,
         pointerEvents: "none",
         opacity: cornerOpacity,
-        overflow: "hidden",   // clips the watermark
+        overflow: "hidden",
         ...posStyle,
         ...offsetStyle,
         ...style,
@@ -205,9 +210,9 @@ export function LuminAmbient({
           objectFit: "cover",
           mixBlendMode: "screen",
           display: "block",
-          ...VIDEO_CROP_STYLE,
         }}
       />
+      <WatermarkMask />
     </div>
   );
 }

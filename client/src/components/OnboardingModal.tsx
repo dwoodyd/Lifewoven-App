@@ -52,7 +52,7 @@ const SCENES: Scene[] = [
     id: "pain",
     videoId: "screen1_hero",
     overlayOpacity: 0.38,
-    loop: false,
+    loop: true,
     lines: [
       { text: "FOR PEOPLE WHO'VE READ THE BOOKS", startAt: 0.5, size: "sm", accent: true },
       { text: "You have the books.", startAt: 1.8, size: "xl" },
@@ -70,7 +70,7 @@ const SCENES: Scene[] = [
     id: "reframe",
     videoId: "nodding_gently",
     overlayOpacity: 0.35,
-    loop: false,
+    loop: true,
     lines: [
       { text: "Your inner state isn't noise.", startAt: 0.6, size: "xl" },
       { text: "It's the first signal.", startAt: 2.0, size: "xl", accent: true, italic: true },
@@ -86,7 +86,7 @@ const SCENES: Scene[] = [
     id: "system",
     videoId: "holographic_panel",
     overlayOpacity: 0.32,
-    loop: false,
+    loop: true,
     lines: [
       { text: "THE 5S FRAMEWORK", startAt: 0.5, size: "sm", accent: true },
       { text: "Five dimensions. One life, woven.", startAt: 1.8, size: "xl" },
@@ -102,7 +102,7 @@ const SCENES: Scene[] = [
     id: "reset",
     videoId: "transformation",
     overlayOpacity: 0.35,
-    loop: false,
+    loop: true,
     lines: [
       { text: "PATHWAY · FLAGSHIP", startAt: 0.4, size: "sm", accent: true },
       { text: "When you fall —", startAt: 1.4, size: "xl" },
@@ -118,7 +118,7 @@ const SCENES: Scene[] = [
     id: "contemplative",
     videoId: "self_hug",
     overlayOpacity: 0.30,
-    loop: false,
+    loop: true,
     lines: [
       { text: "A contemplative practice —", startAt: 0.5, size: "xl" },
       { text: "before prayer, before speech.", startAt: 1.8, size: "xl", italic: true },
@@ -133,7 +133,7 @@ const SCENES: Scene[] = [
     id: "launch",
     videoId: "burst_joy",
     overlayOpacity: 0.28,
-    loop: false,
+    loop: true,
     lines: [
       { text: "WOVEN", startAt: 0.4, size: "sm", accent: true },
       { text: "You were unwoven.", startAt: 1.6, size: "xl", accent: true, italic: true },
@@ -555,6 +555,24 @@ export default function OnboardingModal({ userId }: Props) {
       )}
 
       {/* Screen 2 Lumin overlay removed — no old colorful Lumin in onboarding */}
+
+      {/* ── VEO watermark mask — solid black block covers bottom-right corner ── */}
+      {/* The VEO watermark sits in the bottom-right ~12% width × ~8% height of the video frame.
+          A solid black rectangle permanently covers that zone, blending seamlessly with the
+          dark gradient that already darkens the bottom of each scene. */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          bottom: 0,
+          right: 0,
+          width: "15%",
+          height: "12%",
+          background: "#000",
+          zIndex: 3,
+          pointerEvents: "none",
+        }}
+      />
 
       {/* ── Scene dot progress ── */}
       {!finished && (
