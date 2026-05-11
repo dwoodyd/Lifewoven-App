@@ -33,6 +33,12 @@ function parseReturnPath(state: string): string {
 }
 
 export function registerOAuthRoutes(app: Express) {
+  // The Manus OAuth portal may redirect to /manus-oauth/callback — forward to the real handler
+  app.get("/manus-oauth/callback", (req: Request, res: Response) => {
+    const qs = new URLSearchParams(req.query as Record<string, string>).toString();
+    res.redirect(302, `/api/oauth/callback${qs ? `?${qs}` : ""}`);
+  });
+
   app.get("/api/oauth/callback", async (req: Request, res: Response) => {
     const code = getQueryParam(req, "code");
     const state = getQueryParam(req, "state");
