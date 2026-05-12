@@ -303,6 +303,19 @@ export default function Pricing() {
                     <p className="text-xs text-violet-300/70 mt-1">Combined retail: $607. Yours with Oracle.</p>
                   </div>
                 )}
+
+                {/* Founding Access CTA — shown below Oracle card for non-current-plan users */}
+                {tier.id === "oracle" && !isCurrent && (
+                  <div className="rounded-xl border border-violet-400/25 bg-violet-500/8 p-4 text-center">
+                    <p className="text-xs text-violet-300/80 leading-relaxed mb-3">
+                      Founding Members lock Oracle at{" "}
+                      <strong className="text-violet-300">$25/mo</strong> — rate held for life.
+                    </p>
+                    <Button asChild size="sm" variant="outline" className="w-full border-violet-400/40 text-violet-300 hover:bg-violet-400/10">
+                      <Link href="/apply">Apply for Founding Access</Link>
+                    </Button>
+                  </div>
+                )}
               </div>
             );
           })}

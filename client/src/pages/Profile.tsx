@@ -3,7 +3,7 @@ import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "wouter";
-import { User, BookOpen, Activity, Star, LogOut, ArrowRight, Flame } from "lucide-react";
+import { User, BookOpen, Activity, Star, LogOut, ArrowRight, Flame, Lock, Sparkles } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { getLoginUrl } from "@/const";
 
@@ -41,6 +41,8 @@ export default function Profile() {
   const tier = (user as any)?.membershipTier ?? "explorer";
   const pathway = user?.primaryPathway;
   const scores = latestAudit?.scores as Record<string, number> | null | undefined;
+  const isFoundingMember = (user as any)?.foundingMember === true;
+  const foundingTier = (user as any)?.foundingTier as string | null | undefined;
 
   return (
     <div className="min-h-screen bg-background">
@@ -54,12 +56,25 @@ export default function Profile() {
           </div>
           <h1 className="font-serif text-2xl font-light text-foreground mb-1">{user?.name || "Seeker"}</h1>
           <p className="text-sm text-muted-foreground mb-3">{user?.email || ""}</p>
-          <div className="flex items-center justify-center gap-2 mb-5">
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-5">
             <Badge variant="secondary" className="capitalize">{TIER_LABELS[tier] ?? tier}</Badge>
             {pathway && (
               <Badge variant="outline" className="capitalize gap-1">
                 <Flame className="h-3 w-3" /> {pathway} pathway
               </Badge>
+            )}
+            {isFoundingMember && (
+              <span
+                className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium"
+                style={{
+                  background: "oklch(0.55 0.18 280 / 0.18)",
+                  border: "1px solid oklch(0.65 0.18 280 / 0.35)",
+                  color: "oklch(0.82 0.14 280)",
+                }}
+              >
+                <Sparkles className="h-3 w-3" />
+                Founding Member
+              </span>
             )}
           </div>
           {pathway && (
@@ -71,6 +86,33 @@ export default function Profile() {
             <LogOut className="h-3.5 w-3.5" /> Sign Out
           </Button>
         </div>
+
+        {/* Founding member rate-lock card */}
+        {isFoundingMember && (
+          <div
+            className="p-5 rounded-2xl flex items-start gap-4"
+            style={{
+              background: "linear-gradient(135deg, oklch(0.14 0.025 260) 0%, oklch(0.12 0.035 280) 100%)",
+              border: "1px solid oklch(0.55 0.18 280 / 0.30)",
+              boxShadow: "0 0 24px oklch(0.55 0.18 280 / 0.08)",
+            }}
+          >
+            <div
+              className="shrink-0 w-9 h-9 rounded-full flex items-center justify-center mt-0.5"
+              style={{ background: "oklch(0.55 0.18 280 / 0.20)", border: "1px solid oklch(0.65 0.18 280 / 0.30)" }}
+            >
+              <Lock className="h-4 w-4" style={{ color: "oklch(0.80 0.14 280)" }} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium mb-0.5" style={{ color: "oklch(0.90 0.08 280)" }}>
+                Founding Member · {TIER_LABELS[foundingTier ?? ""] ?? foundingTier ?? "Oracle"}
+              </p>
+              <p className="text-xs leading-relaxed" style={{ color: "oklch(0.65 0.06 260)" }}>
+                Your founding rate is <strong style={{ color: "oklch(0.78 0.12 280)" }}>locked for life</strong>. As long as your subscription stays active, you'll never pay more than your founding price — even as retail pricing rises.
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Stats row */}
         {dashData && (

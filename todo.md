@@ -774,3 +774,7 @@
 - [x] Build FoundingWelcomeCard component (one-time, gated by needsIntro flag)
 - [x] Wire into Dashboard above the greeting section
 - [x] Dismiss calls applications.completeIntro, sets needsIntro=false
+
+## Founding Member — Pricing CTA + Profile Badge (May 12, 2026)
+- [x] Add Founding Access CTA below Oracle tier card on Pricing page
+- [x] Add founding member badge to Profile/Settings page
