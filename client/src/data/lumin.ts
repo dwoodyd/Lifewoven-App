@@ -246,7 +246,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "holographic_panel",
-    url: "/manus-storage/Untitledvideo(64)_fb3c0b06.mp4",
+    url: "/manus-storage/onboarding_scene3_v2_2e4f9665.mov",
     action: "Raises arms to lift holographic panel — presenting data",
     role: "ambient",
     duration: 8,
