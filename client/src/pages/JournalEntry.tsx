@@ -10,7 +10,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 export default function JournalEntry() {
-  const [, params] = useRoute("/journal/:id");
+  const [, params] = useRoute("/weave/:id");
   const id = parseInt(params?.id || "0");
   const { isAuthenticated } = useAuth();
   const [isReflecting, setIsReflecting] = useState(false);
@@ -25,7 +25,7 @@ export default function JournalEntry() {
     <div className="min-h-screen bg-background">
       <Nav />
       <div className="container pt-20 pb-24 max-w-2xl mx-auto px-4 sm:px-6">
-        <Link href="/journal"><div className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer mb-6"><ArrowLeft className="h-3.5 w-3.5" /> Back to Journal</div></Link>
+        <Link href="/weave"><div className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer mb-6"><ArrowLeft className="h-3.5 w-3.5" /> Back to The Weave</div></Link>
         {entry ? (
           <div>
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-6">

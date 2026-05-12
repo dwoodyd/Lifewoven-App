@@ -171,7 +171,7 @@ export default function BetaAccess() {
                       "All 7 guided Pathways",
                       "AI Oracle — unlimited sessions",
                       "Full course & resource library",
-                      "Journal with voice input",
+                      "The Weave with voice input",
                       "Daily habits & check-ins",
                     ].map((item) => (
                       <div key={item} className="flex items-center gap-2 text-xs text-stone-400">

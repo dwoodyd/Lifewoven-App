@@ -108,7 +108,7 @@ export default function Dashboard() {
   const nextStep = !hasHabits
     ? { label: "Build your first habit", sub: "Your Rhythms are empty. Start with one small identity-based habit.", href: "/standards", cta: "Build My Rhythms" }
     : !hasJournal
-    ? { label: "Write your first journal entry", sub: "Reflection is where transformation begins. Take 5 minutes to write.", href: "/journal", cta: "Open Journal" }
+    ? { label: "Add your first entry to The Weave", sub: "Reflection is where transformation begins. Take 5 minutes to write.", href: "/weave", cta: "Open The Weave" }
     : { label: "Begin today's check-in", sub: "How you feel right now is data. Check in and let the Oracle listen.", href: null, cta: "Start Check-in", action: () => setShowCheckIn(true) };
 
   useEffect(() => {
@@ -372,13 +372,13 @@ export default function Dashboard() {
             {/* Journal */}
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h2 className="font-serif text-lg font-light text-[oklch(0.93_0.04_60)]" style={{fontFamily:'"Playfair Display",Georgia,serif'}}>Recent Journal</h2>
-                <Link href="/journal"><Button variant="ghost" size="sm" className="gap-1 text-xs text-muted-foreground h-8 px-2">All entries <ArrowRight className="h-3 w-3" /></Button></Link>
+                <h2 className="font-serif text-lg font-light text-[oklch(0.93_0.04_60)]" style={{fontFamily:'"Playfair Display",Georgia,serif'}}>The Weave</h2>
+                <Link href="/weave"><Button variant="ghost" size="sm" className="gap-1 text-xs text-muted-foreground h-8 px-2">All entries <ArrowRight className="h-3 w-3" /></Button></Link>
               </div>
               {dashData?.recentJournals && dashData.recentJournals.length > 0 ? (
                 <div className="space-y-2">
                   {dashData.recentJournals.map((entry: any) => (
-                    <Link key={entry.id} href={`/journal/${entry.id}`}>
+                    <Link key={entry.id} href={`/weave/${entry.id}`}>
                       <div className="p-3 rounded-xl border border-border bg-card hover:border-muted-foreground transition-all cursor-pointer">
                         <div className="flex items-start justify-between gap-2">
                           <p className="text-sm sm:text-base font-medium text-foreground truncate">{entry.title || entry.content.slice(0, 60) + "..."}</p>
@@ -392,9 +392,9 @@ export default function Dashboard() {
               ) : (
                 <div className="p-5 rounded-2xl border border-dashed border-story/30 bg-story/3 text-center">
                   <Brain className="h-7 w-7 text-story/40 mx-auto mb-3" />
-                  <p className="font-serif text-base font-light text-foreground mb-1">Your journal is a blank canvas.</p>
+                  <p className="font-serif text-base font-light text-foreground mb-1">The Weave is waiting for your first entry.</p>
                   <p className="text-sm text-muted-foreground mb-4">Five minutes of honest writing can reveal more than five hours of thinking. What is alive in you right now?</p>
-                  <Button asChild size="sm"><Link href="/journal">Begin Writing</Link></Button>
+                  <Button asChild size="sm"><Link href="/weave">Begin Writing</Link></Button>
                 </div>
               )}
             </div>
@@ -482,7 +482,7 @@ export default function Dashboard() {
               <div className="space-y-1">
                 {[
                   { href: "/btw", icon: Leaf, label: "Before the Words" },
-                  { href: "/journal", icon: Brain, label: "New Journal Entry" },
+                  { href: "/weave", icon: Brain, label: "Add to The Weave" },
                   { href: "/mood-rhythm", icon: Activity, label: "Mood Rhythm Chart" },
                   { href: "/oracle", icon: Sparkles, label: "Ask the Oracle" },
                   { href: "/community", icon: MessageCircle, label: "Community" },

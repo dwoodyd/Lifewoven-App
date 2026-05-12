@@ -353,7 +353,7 @@ export default function Oracle() {
                   The Oracle needs a few journal entries and check-ins before it can recognize patterns. Start there.
                 </p>
                 <Button variant="outline" size="sm" className="mt-4" asChild>
-                  <Link href="/journal">Open Journal</Link>
+                  <Link href="/weave">Open The Weave</Link>
                 </Button>
               </div>
             )}

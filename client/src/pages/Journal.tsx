@@ -92,8 +92,8 @@ export default function Journal() {
           <div className="flex items-start gap-3">
             <div className="p-2.5 sm:p-3 rounded-xl bg-secondary flex-shrink-0"><BookOpen className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" /></div>
             <div>
-              <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-1">Journal</h1>
-              <p className="text-muted-foreground text-sm font-light">Your private space for reflection, clarity, and growth.</p>
+              <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-1">The Weave</h1>
+              <p className="text-muted-foreground text-sm font-light">The private record that holds every entry, every check-in, every reflection. The receipt that you’re doing the work.</p>
             </div>
           </div>
           {isAuthenticated && !isWriting && (
@@ -162,7 +162,7 @@ export default function Journal() {
                 {entries && entries.length > 0 ? (
                   <div className="space-y-3">
                     {entries.map((entry: any) => (
-                      <Link key={entry.id} href={`/journal/${entry.id}`}>
+                      <Link key={entry.id} href={`/weave/${entry.id}`}>
                         <div className="p-4 rounded-xl border border-border bg-card hover:border-muted-foreground transition-all cursor-pointer">
                           <div className="flex items-start justify-between gap-2 mb-2">
                             <h3 className="font-medium text-foreground text-base">{entry.title || "Untitled Entry"}</h3>
@@ -180,7 +180,7 @@ export default function Journal() {
                 ) : (
                   <div className="text-center py-16">
                     <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                    <p className="font-serif text-lg font-light text-foreground mb-2">Your journal is empty.</p>
+                    <p className="font-serif text-lg font-light text-foreground mb-2">The Weave is waiting for your first entry.</p>
                     <p className="text-base text-muted-foreground mb-6">Begin with a prompt below, or write freely.</p>
                     <Button onClick={() => setIsWriting(true)} className="gap-2"><Plus className="h-4 w-4" /> First Entry</Button>
                   </div>
@@ -189,7 +189,7 @@ export default function Journal() {
             ) : (
               <div className="text-center py-16">
                 <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <p className="font-serif text-lg font-light text-foreground mb-2">Sign in to access your journal.</p>
+                <p className="font-serif text-lg font-light text-foreground mb-2">Sign in to access The Weave.</p>
                 <Button asChild variant="outline"><Link href="/dashboard">Get Started</Link></Button>
               </div>
             )}

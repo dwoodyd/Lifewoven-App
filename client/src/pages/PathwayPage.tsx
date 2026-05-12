@@ -408,12 +408,12 @@ export default function PathwayPage() {
 
         <div className="p-6 rounded-2xl border border-border bg-card mb-8">
           <h2 className="font-serif text-lg font-light text-foreground mb-3">
-            <BookOpen className="inline h-4 w-4 mr-2 opacity-60" />Journal After This Practice
+            <BookOpen className="inline h-4 w-4 mr-2 opacity-60" />Weave After This Practice
           </h2>
           <p className="text-base text-muted-foreground italic mb-4">"{pathway.journalPrompt}"</p>
           <Button asChild variant="outline" className="gap-2">
-            <Link href={`/journal?module=${pathway.color}&prompt=${encodeURIComponent(pathway.journalPrompt)}`}>
-              <ArrowRight className="h-4 w-4" /> Open Journal with This Prompt
+            <Link href={`/weave?module=${pathway.color}&prompt=${encodeURIComponent(pathway.journalPrompt)}`}>
+              <ArrowRight className="h-4 w-4" /> Open The Weave with This Prompt
             </Link>
           </Button>
         </div>

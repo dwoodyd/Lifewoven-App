@@ -31,7 +31,7 @@ const TIERS = [
     features: [
       "Alignment Audit diagnostic",
       "Daily emotional check-in",
-      "Journal (up to 30 entries in The Weave)",
+      "The Weave (up to 30 entries)",
       "Align & Uplift pathways",
       "5S Framework overview",
       "Public resource library",
@@ -53,7 +53,7 @@ const TIERS = [
     libraryItems: null as string[] | null,
     features: [
       "Everything in Explorer",
-      "Unlimited journal entries (The Weave)",
+      "Unlimited Weave entries",
       "All 7 branded pathways",
       "Full 5S module suite",
       "Habit tracker & scorecard",
@@ -87,7 +87,7 @@ const TIERS = [
     features: [
       "Everything in Seeker",
       "Unlimited Oracle AI sessions (Guide / Unstuck / Pattern Mirror)",
-      "AI-powered journal reflections",
+      "AI-powered Weave reflections",
       "Cross-module pattern insights",
       "Personalized pathway recommendations",
       "Monthly Oracle deep-dive report",
@@ -158,7 +158,7 @@ export default function Pricing() {
 
   const COMPARISON_ROWS: [string, string | boolean, string | boolean, string | boolean][] = [
     ["Alignment Audit", true, true, true],
-    ["Daily check-in & journal", true, true, true],
+    ["Daily check-in & The Weave", true, true, true],
     ["5S Framework tools", "Overview", "Full suite", "Full suite"],
     ["Habit tracker & scorecard", false, true, true],
     ["Belief rewrite system", false, true, true],
@@ -167,7 +167,7 @@ export default function Pricing() {
     ["All 7 pathways", false, true, true],
     ["Community access", "Read only", "Full", "Full"],
     ["Oracle AI chat", false, false, "Unlimited"],
-    ["AI journal reflections", false, false, true],
+    ["AI Weave reflections", false, false, true],
     ["AI decision analysis", false, false, true],
     ["Pattern insights", false, false, true],
     ["1-on-1 onboarding call", false, false, true],

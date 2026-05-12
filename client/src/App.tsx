@@ -121,9 +121,11 @@ function RouterSwitch() {
       <Route path="/pathways" component={PathwaysListing} />
       <Route path="/pathway/:slug" component={PathwayPage} />
 
-      {/* Journal */}
-      <Route path="/journal" component={Journal} />
-      <Route path="/journal/:id" component={JournalEntry} />
+      {/* The Weave (journal) — /weave is canonical; /journal redirects */}
+      <Route path="/weave" component={Journal} />
+      <Route path="/weave/:id" component={JournalEntry} />
+      <Route path="/journal">{() => { window.location.replace("/weave"); return null; }}</Route>
+      <Route path="/journal/:id">{(params: { id: string }) => { window.location.replace(`/weave/${params.id}`); return null; }}</Route>
 
       {/* Oracle */}
       <Route path="/oracle" component={Oracle} />

@@ -24,7 +24,8 @@ import { trpc } from "@/lib/trpc";
 // Primary nav links — always visible on desktop
 const primaryLinks = [
   { label: "Pathways", href: "/#pathways" },
-  { label: "The Weave", href: "/btw" },
+  { label: "Before the Words", href: "/btw" },
+  { label: "The Weave", href: "/weave" },
   { label: "Oracle", href: "/oracle" },
   { label: "Resources", href: "/library" },
   { label: "Community", href: "/community" },
@@ -130,8 +131,8 @@ export default function Nav() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/journal" className="flex items-center gap-2">
-                    <BookMarked className="h-3.5 w-3.5" />My Reading
+                  <Link href="/weave" className="flex items-center gap-2">
+                    <BookMarked className="h-3.5 w-3.5" />The Weave
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
@@ -279,7 +280,7 @@ export default function Nav() {
                   <Link href="/btw" onClick={closeMobile}><BookOpen className="h-4 w-4" />Before the Words</Link>
                 </Button>
                 <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground justify-start">
-                  <Link href="/journal" onClick={closeMobile}><BookMarked className="h-4 w-4" />My Reading</Link>
+                  <Link href="/weave" onClick={closeMobile}><BookMarked className="h-4 w-4" />The Weave</Link>
                 </Button>
                 <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground justify-start">
                   <Link href="/mood-rhythm" onClick={closeMobile}><BarChart2 className="h-4 w-4" />Mood Rhythm</Link>
