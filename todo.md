@@ -721,3 +721,46 @@
 - [x] Remove More dropdown from primary nav (collapse all secondary links into user dropdown)
 - [x] Rename "Library" → "Resources" in nav
 - [x] Add "The Weave" as a primary nav link
+
+## Store + Subscription Rebuild (May 11, 2026)
+
+- [ ] Backend: store.getAccess procedure (library/discount/standalone based on membershipTier)
+- [ ] Backend: store.getProducts procedure returns tier-adjusted prices
+- [ ] Backend: store.purchaseProduct handles Seeker 30% discount in PayPal flow
+- [ ] Pricing page: rewrite with founding rates, annual toggle, Oracle library positioning
+- [ ] Pricing page: update feature comparison table with Complete Library Access rows
+- [ ] Store page: three-state product cards (included / 30% off / full price)
+- [ ] Store page: retire $297 bundle, replace with Oracle upsell footer
+- [ ] Store page: dynamic header per subscriber state
+- [ ] Dashboard: add "Browse the Library" CTA widget
+- [ ] Settings/Account: show library access status for Oracle subscribers
+- [ ] Oracle onboarding card: "Welcome to Oracle. The complete library is now yours."
+
+## Founding Member Flow (May 11, 2026)
+- [ ] Pricing page rewrite: founding rates, annual toggle, Oracle library positioning
+- [ ] Store page rewrite: three subscriber-state variants, retire bundle, Oracle upsell footer
+- [ ] DB schema: applications table, invite_codes table, founding_member/founding_tier/needs_intro fields on users
+- [ ] Backend: applications router (submit, admin CRUD, approve/decline, invite code gen, Resend emails)
+- [ ] Frontend: /apply form page
+- [ ] Frontend: /invite/<code> magic-link redemption page
+- [ ] Frontend: Admin Applications panel (/admin/applications)
+- [ ] Frontend: First-run Lumin intro auto-fire on dashboard (needs_intro flag)
+- [ ] Downstream: dashboard "Browse the Library" CTA
+- [ ] Downstream: settings page library status + Replay Intro wires to needs_intro
+- [ ] Downstream: Oracle onboarding card "Welcome to Oracle. The complete library is now yours."
+
+## Founding Member Funnel (May 11, 2026)
+- [x] DB schema: applications table (name, email, answer, status, tier, ip, ua, timestamps)
+- [x] DB schema: invite_codes table (code, email, tier, applicationId, redeemedBy, expiresAt)
+- [x] DB schema: users table — added foundingMember, foundingTier, foundingRateLocked, needsIntro, inviteCode fields
+- [x] Migration 0019: generate + apply SQL for all new tables and user columns
+- [x] server/email.ts: sendApplicationQueueEmail (in-queue confirmation from Lumin)
+- [x] server/email.ts: sendApplicationApprovalEmail (approval + invite code + CTA button)
+- [x] server/routers/applications.ts: submit, list (admin), approve (admin), decline (admin), resendInvite (admin), validateCode (public), redeemCode (protected), completeIntro, replayIntro
+- [x] auth.me: expose foundingMember, foundingTier, foundingRateLocked, needsIntro fields
+- [x] Admin.tsx: Applications tab (default) — list all apps, approve/decline/resend actions, tier selector
+- [x] /apply page: full-bleed dark application form with tier cards and 50-char minimum answer
+- [x] /invite/:code page: validates code, prompts login if needed, auto-redeems on login, success/error states
+- [x] App.tsx: /apply and /invite/:code routes registered
+- [x] Vitest: 5 tests for applications router (validateCode, submit, list admin guard) — all passing
+- [x] TypeScript: 0 errors across entire codebase

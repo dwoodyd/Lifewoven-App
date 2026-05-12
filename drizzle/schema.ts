@@ -42,6 +42,12 @@ export const users = mysqlTable("users", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
+  // Founding member fields
+  foundingMember: boolean("foundingMember").default(false).notNull(),
+  foundingTier: mysqlEnum("foundingTier", ["explorer", "seeker", "oracle"]).default("explorer"),
+  foundingRateLocked: boolean("foundingRateLocked").default(false).notNull(),
+  needsIntro: boolean("needsIntro").default(false).notNull(),
+  inviteCode: varchar("inviteCode", { length: 32 }),
 });
 
 export type User = typeof users.$inferSelect;
@@ -625,3 +631,48 @@ export const moodLogs = mysqlTable("mood_logs", {
 
 export type MoodLog = typeof moodLogs.$inferSelect;
 export type InsertMoodLog = typeof moodLogs.$inferInsert;
+
+// ─── Founding Member Applications ────────────────────────────────────────────
+// Applications submitted via the /apply form on the marketing site.
+
+export const applications = mysqlTable("applications", {
+  id:          int("id").autoincrement().primaryKey(),
+  name:        varchar("name", { length: 255 }).notNull(),
+  email:       varchar("email", { length: 320 }).notNull(),
+  answer:      text("answer").notNull(),          // 200-char qualifying answer
+  ipAddress:   varchar("ip_address", { length: 64 }),
+  userAgent:   text("user_agent"),
+  status:      mysqlEnum("status", ["new", "reviewing", "approved", "declined"]).default("new").notNull(),
+  reviewedAt:  timestamp("reviewed_at"),
+  reviewedBy:  int("reviewed_by"),               // admin userId
+  inviteCodeId: int("invite_code_id"),           // FK to inviteCodes.id after approval
+  tier:        mysqlEnum("tier", ["explorer", "seeker", "oracle"]).default("seeker").notNull(),
+  createdAt:   timestamp("created_at").defaultNow().notNull(),
+}, (t) => [
+  index("idx_applications_email").on(t.email),
+  index("idx_applications_status").on(t.status),
+]);
+
+export type Application = typeof applications.$inferSelect;
+export type InsertApplication = typeof applications.$inferInsert;
+
+// ─── Founding Member Invite Codes ─────────────────────────────────────────────
+// Single-use magic-link codes generated on approval.
+
+export const inviteCodes = mysqlTable("invite_codes", {
+  id:           int("id").autoincrement().primaryKey(),
+  code:         varchar("code", { length: 32 }).notNull().unique(),
+  email:        varchar("email", { length: 320 }).notNull(),
+  tier:         mysqlEnum("tier", ["explorer", "seeker", "oracle"]).default("seeker").notNull(),
+  applicationId: int("application_id"),          // FK to applications.id
+  redeemedBy:   int("redeemed_by"),              // userId after redemption
+  redeemedAt:   timestamp("redeemed_at"),
+  expiresAt:    timestamp("expires_at").notNull(), // 30 days from creation
+  createdAt:    timestamp("created_at").defaultNow().notNull(),
+}, (t) => [
+  index("idx_invite_codes_code").on(t.code),
+  index("idx_invite_codes_email").on(t.email),
+]);
+
+export type InviteCode = typeof inviteCodes.$inferSelect;
+export type InsertInviteCode = typeof inviteCodes.$inferInsert;

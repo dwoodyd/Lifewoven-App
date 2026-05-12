@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Users, ShoppingBag, BookOpen, Activity, Shield, Loader2, Copy, Check, KeyRound, TrendingDown, TrendingUp } from "lucide-react";
+import { Users, ShoppingBag, BookOpen, Activity, Shield, Loader2, Copy, Check, KeyRound, TrendingDown, TrendingUp, ClipboardList, CheckCircle, XCircle, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "wouter";
 
@@ -311,8 +311,9 @@ function AdminDashboard() {
         )}
 
         {/* Tabs */}
-        <Tabs defaultValue="users">
+        <Tabs defaultValue="applications">
           <TabsList className="bg-muted flex-wrap h-auto gap-1">
+            <TabsTrigger value="applications">Applications</TabsTrigger>
             <TabsTrigger value="users">Users</TabsTrigger>
             <TabsTrigger value="orders">Orders</TabsTrigger>
             <TabsTrigger value="beta">Beta Testers</TabsTrigger>
@@ -320,6 +321,10 @@ function AdminDashboard() {
             <TabsTrigger value="funnel">Onboarding Funnel</TabsTrigger>
           </TabsList>
 
+          {/* Applications Tab */}
+          <TabsContent value="applications" className="mt-4">
+            <ApplicationsPanel />
+          </TabsContent>
           {/* Users Tab */}
           <TabsContent value="users" className="mt-4">
             <Card className="bg-card border-border">
@@ -663,5 +668,170 @@ function OnboardingFunnel() {
         )}
       </CardContent>
     </Card>
+  );
+}
+
+// ─── Applications Panel ───────────────────────────────────────────────────────
+function ApplicationsPanel() {
+  const utils = trpc.useUtils();
+  const { data: apps, isLoading } = trpc.applications.list.useQuery();
+  const [approvingId, setApprovingId] = useState<number | null>(null);
+  const [tierMap, setTierMap] = useState<Record<number, "explorer" | "seeker" | "oracle">>({});
+
+  const approve = trpc.applications.approve.useMutation({
+    onSuccess: (data) => {
+      toast.success(`Approved! Code: ${data.code}`);
+      utils.applications.list.invalidate();
+    },
+    onError: (err) => toast.error(err.message || "Approval failed"),
+    onSettled: () => setApprovingId(null),
+  });
+
+  const decline = trpc.applications.decline.useMutation({
+    onSuccess: () => {
+      toast.success("Application declined");
+      utils.applications.list.invalidate();
+    },
+    onError: (err) => toast.error(err.message || "Failed to decline"),
+  });
+
+  const resend = trpc.applications.resendInvite.useMutation({
+    onSuccess: (data) => {
+      toast.success(`Resent! New code: ${data.code}`);
+      utils.applications.list.invalidate();
+    },
+    onError: (err) => toast.error(err.message || "Failed to resend"),
+  });
+
+  const statusBadge = (status: string) => {
+    if (status === "approved") return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">approved</Badge>;
+    if (status === "declined") return <Badge variant="destructive">declined</Badge>;
+    if (status === "reviewing") return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">reviewing</Badge>;
+    return <Badge variant="secondary">new</Badge>;
+  };
+
+  const tierColor = (tier: string) => {
+    if (tier === "oracle") return "text-violet-400";
+    if (tier === "seeker") return "text-amber-400";
+    return "text-sky-400";
+  };
+
+  const newCount = (apps ?? []).filter(a => a.status === "new").length;
+
+  return (
+    <div className="space-y-4">
+      <Card className="bg-card border-border">
+        <CardHeader className="pb-3 flex flex-row items-center gap-2">
+          <ClipboardList className="h-5 w-5 text-amber-400" />
+          <CardTitle className="text-base">Founding Member Applications</CardTitle>
+          {newCount > 0 && (
+            <Badge className="ml-auto bg-amber-500/20 text-amber-400 border-amber-500/30">{newCount} new</Badge>
+          )}
+        </CardHeader>
+        <CardContent className="p-0">
+          {isLoading ? (
+            <div className="flex justify-center py-12"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
+          ) : (apps ?? []).length === 0 ? (
+            <div className="text-center py-12 text-muted-foreground text-sm">No applications yet. Share /apply to get started.</div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow className="border-border hover:bg-transparent">
+                  <TableHead>Name / Email</TableHead>
+                  <TableHead>Answer</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Tier</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {(apps ?? []).map((app) => (
+                  <TableRow key={app.id} className="border-border align-top">
+                    <TableCell>
+                      <p className="font-medium text-sm">{app.name}</p>
+                      <p className="text-xs text-muted-foreground">{app.email}</p>
+                    </TableCell>
+                    <TableCell className="max-w-xs">
+                      <p className="text-sm text-muted-foreground line-clamp-3">{app.answer}</p>
+                    </TableCell>
+                    <TableCell>{statusBadge(app.status)}</TableCell>
+                    <TableCell>
+                      {app.status === "new" || app.status === "reviewing" ? (
+                        <Select
+                          value={tierMap[app.id] ?? "seeker"}
+                          onValueChange={(v) => setTierMap(prev => ({ ...prev, [app.id]: v as "explorer" | "seeker" | "oracle" }))}
+                        >
+                          <SelectTrigger className="h-7 w-28 text-xs">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="explorer">Explorer</SelectItem>
+                            <SelectItem value="seeker">Seeker</SelectItem>
+                            <SelectItem value="oracle">Oracle</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      ) : (
+                        <span className={`text-sm font-medium capitalize ${tierColor(app.tier)}`}>{app.tier}</span>
+                      )}
+                    </TableCell>
+                    <TableCell className="text-xs text-muted-foreground whitespace-nowrap">
+                      {new Date(app.createdAt).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex items-center justify-end gap-1">
+                        {(app.status === "new" || app.status === "reviewing") && (
+                          <>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-7 px-2 text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10"
+                              disabled={approve.isPending && approvingId === app.id}
+                              onClick={() => {
+                                setApprovingId(app.id);
+                                approve.mutate({
+                                  applicationId: app.id,
+                                  tier: tierMap[app.id] ?? "seeker",
+                                  origin: window.location.origin,
+                                });
+                              }}
+                            >
+                              {approve.isPending && approvingId === app.id
+                                ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                : <CheckCircle className="h-3.5 w-3.5" />}
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-7 px-2 text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                              disabled={decline.isPending}
+                              onClick={() => decline.mutate({ applicationId: app.id })}
+                            >
+                              <XCircle className="h-3.5 w-3.5" />
+                            </Button>
+                          </>
+                        )}
+                        {app.status === "approved" && (
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-7 px-2 text-amber-400 hover:text-amber-300 hover:bg-amber-500/10"
+                            disabled={resend.isPending}
+                            onClick={() => resend.mutate({ applicationId: app.id, origin: window.location.origin })}
+                            title="Resend invite"
+                          >
+                            <RefreshCw className="h-3.5 w-3.5" />
+                          </Button>
+                        )}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
 }

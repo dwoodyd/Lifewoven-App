@@ -1,20 +1,22 @@
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { ShoppingBag, BookOpen, Headphones, Layers, Star } from "lucide-react";
+import { ShoppingBag, BookOpen, Headphones, Layers, Star, Library, Lock, Percent, Check, Loader2 } from "lucide-react";
 import { useState } from "react";
-import { PayPalButton } from "@/components/PayPalButton";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { trpc } from "@/lib/trpc";
+import { getLoginUrl } from "@/const";
+import { toast } from "sonner";
 
-const PRODUCTS = [
+const PRODUCT_CATALOG = [
   {
     id: "alignment-fundamentals",
     category: "course",
     icon: "📐",
     title: "Alignment Fundamentals",
     subtitle: "The 5S Framework in Practice",
-    price: "$97",
-    description: "Six weeks. Five dimensions. One coherent life. Alignment Fundamentals is the complete introduction to the 5S Framework — State, Story, Standards, Strategy, Stewardship — built for people who are ready to move from insight to practice.",
+    price: 97,
+    description: "Six weeks. Five dimensions. One coherent life. The complete introduction to the 5S Framework — State, Story, Standards, Strategy, Stewardship — built for people ready to move from insight to practice.",
     tags: ["5S Framework", "Foundations", "6 weeks"],
   },
   {
@@ -23,8 +25,8 @@ const PRODUCTS = [
     icon: "🌀",
     title: "The Alignment Current",
     subtitle: "Advanced Alignment Practice",
-    price: "$147",
-    description: "Most people touch alignment occasionally. This course teaches you to live there. The Alignment Current is a four-week deep-immersion in the daily practices, emotional tools, and inner conditions that make sustained interior coherence not a peak experience but a way of being.",
+    price: 147,
+    description: "Most people touch alignment occasionally. This course teaches you to live there. A four-week deep-immersion in the daily practices and inner conditions that make sustained interior coherence a way of being.",
     tags: ["Interior Alignment", "Advanced", "4 weeks"],
   },
   {
@@ -33,8 +35,8 @@ const PRODUCTS = [
     icon: "⚛️",
     title: "Identity in Motion",
     subtitle: "Habit Architecture for the Whole Self",
-    price: "$127",
-    description: "Behavior change fails when it is built on willpower. Identity in Motion teaches you to build habits from the inside out — starting with who you are becoming, then designing the daily practices that make that identity real. Behavior science, applied to the whole self.",
+    price: 127,
+    description: "Behavior change fails when built on willpower. Identity in Motion teaches you to build habits from the inside out — starting with who you are becoming, then designing the daily practices that make that identity real.",
     tags: ["Habits", "Identity", "Behavior Science"],
   },
   {
@@ -43,8 +45,8 @@ const PRODUCTS = [
     icon: "🔍",
     title: "The Meaning Foundation",
     subtitle: "Purpose, Resilience & the Unshakeable Why",
-    price: "$97",
-    description: "Meaning is not found — it is made. The Meaning Foundation is a four-week course in the practice of meaning-centered living: how to locate your deepest why, use it as an anchor through difficulty, and build a life that holds its shape under pressure.",
+    price: 97,
+    description: "Meaning is not found — it is made. A four-week course in meaning-centered living: how to locate your deepest why, use it as an anchor through difficulty, and build a life that holds its shape under pressure.",
     tags: ["Meaning", "Purpose", "Resilience"],
   },
   {
@@ -53,8 +55,8 @@ const PRODUCTS = [
     icon: "✍️",
     title: "Belief Rewrite Workbook",
     subtitle: "Rewire Your Story in 30 Days",
-    price: "$19",
-    description: "The story you tell about yourself is not a description of reality. It is a set of instructions. This 30-day workbook is a structured process for surfacing the specific beliefs that are most actively limiting your experience — and rewriting them with evidence, not optimism.",
+    price: 19,
+    description: "The story you tell about yourself is not a description of reality — it is a set of instructions. A structured 30-day process for surfacing the beliefs most actively limiting your experience and rewriting them with evidence.",
     tags: ["Beliefs", "PDF", "30 days"],
   },
   {
@@ -63,8 +65,8 @@ const PRODUCTS = [
     icon: "🧱",
     title: "The Identity Stack Workbook",
     subtitle: "Design the Habits That Make You, You",
-    price: "$22",
-    description: "Who you are becoming shapes what you do. This workbook walks you through the complete identity-based habit design process — from surfacing your current identity architecture to writing a credible identity declaration to building the habit stack that carries it into daily life.",
+    price: 22,
+    description: "Who you are becoming shapes what you do. This workbook walks you through the complete identity-based habit design process — from surfacing your current identity architecture to building the habit stack that carries it into daily life.",
     tags: ["Habits", "Identity", "PDF"],
   },
   {
@@ -73,34 +75,34 @@ const PRODUCTS = [
     icon: "🎧",
     title: "Morning Alignment Series",
     subtitle: "7 Guided Morning Practices",
-    price: "$37",
-    description: "Fifteen minutes, before the day asks anything of you. The Morning Alignment Series is seven complete guided sessions — one for each day of the week — moving through Arrive, Acknowledge, Appreciate, Intend, and Release. A full interior practice that sets the tone for everything that follows.",
+    price: 37,
+    description: "Fifteen minutes, before the day asks anything of you. Seven complete guided sessions — one for each day of the week — moving through Arrive, Acknowledge, Appreciate, Intend, and Release.",
     tags: ["Audio", "Morning", "7 sessions"],
   },
   {
-    id: "reset-protocol-audio",
+    id: "reset-audio",
     category: "audio",
     icon: "🔄",
     title: "Reset Audio",
-    subtitle: "The Full Resilience Protocol",
-    price: "$27",
-    description: "Returning is not failure. It is the practice. The Reset Audio is a 45-minute guided experience for the specific moment when alignment feels distant and the path forward is unclear. It meets you where you are — without judgment — and walks you back. (Narrated audio; AI-voiced first edition, owner-voiced version coming.)",
-    tags: ["Audio", "Resilience", "45 min"],
+    subtitle: "Guided Re-entry Practices",
+    price: 27,
+    description: "When you fall off — and you will — this is how you come back. Six guided audio sessions for re-entry: after a hard week, a broken streak, a season of drift. No shame. Just return.",
+    tags: ["Audio", "Reset", "6 sessions"],
   },
   {
     id: "wisdom-card-deck",
     category: "cards",
     icon: "🃏",
     title: "Wisdom Card Deck",
-    subtitle: "52 Cards of Timeless Insight",
-    price: "$34",
-    description: "One card. One week. One practice. The Wisdom Card Deck is 52 distilled insights from the four wisdom traditions at the heart of Lifewoven — Mind Science, Interior Alignment, Meaning-Centered Philosophy, and Behavioral Science. Sit with each card for seven days and let it work on you.",
-    tags: ["Cards", "PDF", "52 cards"],
+    subtitle: "52 Principles for the Aligned Life",
+    price: 34,
+    description: "One card. One principle. One day. The Wisdom Card Deck is a year of daily practice distilled into 52 cards — each one a prompt for reflection, a lens for the day, a reminder of what you already know.",
+    tags: ["Cards", "Daily Practice", "52 cards"],
   },
 ];
 
 const CATEGORIES = [
-  { id: "all", label: "All Products", icon: ShoppingBag },
+  { id: "all", label: "All", icon: ShoppingBag },
   { id: "course", label: "Courses", icon: Layers },
   { id: "workbook", label: "Workbooks", icon: BookOpen },
   { id: "audio", label: "Audio", icon: Headphones },
@@ -109,20 +111,86 @@ const CATEGORIES = [
 
 export default function Store() {
   const [activeCategory, setActiveCategory] = useState("all");
-  const { user, isAuthenticated } = useAuth();
-  const filtered = activeCategory === "all" ? PRODUCTS : PRODUCTS.filter(p => p.category === activeCategory);
+  const [purchasingId, setPurchasingId] = useState<string | null>(null);
+  const { isAuthenticated } = useAuth();
+
+  const { data: access } = trpc.store.getAccess.useQuery();
+  const { data: serverProducts } = trpc.store.getProducts.useQuery();
+
+  const accessLevel = access?.level ?? "standalone";
+
+  const products = PRODUCT_CATALOG.map(p => {
+    const sp = serverProducts?.find(s => s.slug === p.id);
+    return {
+      ...p,
+      effectivePrice: sp?.effectivePrice ?? p.price * 100,
+      originalPrice: p.price * 100,
+      isIncluded: sp?.isIncluded ?? false,
+    };
+  });
+
+  const filtered = activeCategory === "all" ? products : products.filter(p => p.category === activeCategory);
+
+  async function handlePurchase(productId: string, priceUsd: number) {
+    if (!isAuthenticated) {
+      window.location.href = getLoginUrl();
+      return;
+    }
+    setPurchasingId(productId);
+    try {
+      const res = await fetch("/api/paypal/product/checkout", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          productId,
+          priceUsd,
+          returnUrl: `${window.location.origin}/store?purchased=${productId}`,
+          cancelUrl: `${window.location.origin}/store`,
+        }),
+      });
+      const data = await res.json() as { approvalUrl?: string; error?: string };
+      if (!data.approvalUrl) {
+        toast.error(data.error ?? "Could not start checkout. Please try again.");
+        return;
+      }
+      toast.info("Redirecting to PayPal…");
+      window.open(data.approvalUrl, "_blank");
+    } catch {
+      toast.error("Checkout failed. Please try again.");
+    } finally {
+      setPurchasingId(null);
+    }
+  }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background text-foreground">
       <Nav />
-      <div className="container pt-20 pb-24 max-w-6xl mx-auto px-4 sm:px-6">
+      <div className="max-w-6xl mx-auto px-4 py-16 sm:py-24">
+
+        {/* Header */}
         <div className="text-center mb-12">
-          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Store</p>
-          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-4">Wisdom Tools</h1>
-          <p className="text-muted-foreground text-lg font-light max-w-xl mx-auto">
-            Courses, workbooks, audio programs, and card decks — each one an original Lifewoven creation, distilling timeless wisdom into practical tools for modern life.
-          </p>
+          <p className="text-xs tracking-[0.2em] uppercase text-amber-400/80 mb-4 font-light">Store</p>
+          <h1 className="font-serif text-4xl sm:text-5xl font-light text-foreground mb-5">Wisdom Tools</h1>
+
+          {accessLevel === "library" ? (
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-violet-400/30 bg-violet-400/10 text-violet-300 text-sm mb-4">
+              <Library className="h-4 w-4" />
+              All items included with your Oracle membership
+            </div>
+          ) : accessLevel === "discount" ? (
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-amber-400/30 bg-amber-400/10 text-amber-300 text-sm mb-4">
+              <Percent className="h-4 w-4" />
+              Seeker discount — 30% off all items
+            </div>
+          ) : (
+            <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto">
+              Courses, workbooks, audio programs, and card decks — each one an original Lifewoven creation.
+            </p>
+          )}
         </div>
+
+        {/* Category filter */}
         <div className="flex flex-wrap gap-2 justify-center mb-8">
           {CATEGORIES.map(cat => {
             const Icon = cat.icon;
@@ -141,17 +209,38 @@ export default function Store() {
             );
           })}
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {filtered.map(product => (
-            <Link key={product.id} href={product.category === "course" ? `/course/${product.id}` : `/product/${product.id}`}>
-              <div className="p-4 sm:p-6 rounded-2xl border border-border bg-card hover:border-muted-foreground transition-all cursor-pointer h-full flex flex-col">
-                <div className="text-3xl mb-4">{product.icon}</div>
-                <div className="flex items-start justify-between gap-2 mb-2">
-                  <h3 className="font-serif text-lg font-light text-foreground">{product.title}</h3>
-                  <span className="text-sm font-medium text-foreground flex-shrink-0">{product.price}</span>
+
+        {/* Product grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-14">
+          {filtered.map(product => {
+            const discountedPrice = Math.round(product.effectivePrice / 100);
+            const originalPrice = Math.round(product.originalPrice / 100);
+            const hasDiscount = discountedPrice < originalPrice;
+
+            return (
+              <div
+                key={product.id}
+                className={`relative p-5 sm:p-6 rounded-2xl border flex flex-col gap-4 transition-all ${
+                  product.isIncluded
+                    ? "border-violet-400/30 bg-violet-400/5"
+                    : "border-border bg-card hover:border-muted-foreground"
+                }`}
+              >
+                {product.isIncluded && (
+                  <div className="absolute -top-2.5 left-4 px-2.5 py-0.5 rounded-full text-xs bg-violet-500/20 text-violet-300 border border-violet-400/30 flex items-center gap-1">
+                    <Library className="h-3 w-3" /> Included
+                  </div>
+                )}
+
+                <div className="text-3xl">{product.icon}</div>
+
+                <div>
+                  <h3 className="font-serif text-lg font-light text-foreground mb-0.5">{product.title}</h3>
+                  <p className="text-sm text-muted-foreground">{product.subtitle}</p>
                 </div>
-                <p className="text-base text-muted-foreground mb-3">{product.subtitle}</p>
-                <p className="text-base text-muted-foreground font-light leading-relaxed flex-1 mb-4">{product.description}</p>
+
+                <p className="text-sm text-muted-foreground leading-relaxed flex-1">{product.description}</p>
+
                 <div className="flex flex-wrap gap-1.5">
                   {product.tags.map(tag => (
                     <span key={tag} className="text-xs px-2 py-0.5 rounded-full bg-secondary text-muted-foreground">
@@ -159,31 +248,78 @@ export default function Store() {
                     </span>
                   ))}
                 </div>
+
+                {/* Price + CTA */}
+                {product.isIncluded ? (
+                  <div className="flex items-center justify-between pt-2 border-t border-violet-400/20">
+                    <div className="flex items-center gap-1.5 text-violet-300 text-sm">
+                      <Check className="h-3.5 w-3.5" /> In your library
+                    </div>
+                    <Button size="sm" variant="outline" className="border-violet-400/30 text-violet-300 hover:bg-violet-400/10" asChild>
+                      <Link href={`/course/${product.id}`}>Open</Link>
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-between pt-2 border-t border-border">
+                    <div>
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-lg font-light text-foreground">${discountedPrice}</span>
+                        {hasDiscount && (
+                          <span className="text-sm text-muted-foreground/60 line-through">${originalPrice}</span>
+                        )}
+                      </div>
+                      {hasDiscount && (
+                        <span className="text-xs text-amber-400">Seeker rate</span>
+                      )}
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handlePurchase(product.id, discountedPrice)}
+                      disabled={purchasingId === product.id}
+                    >
+                      {purchasingId === product.id ? (
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      ) : isAuthenticated ? (
+                        "Buy"
+                      ) : (
+                        <span className="flex items-center gap-1"><Lock className="h-3 w-3" />Sign in</span>
+                      )}
+                    </Button>
+                  </div>
+                )}
               </div>
-            </Link>
-          ))}
+            );
+          })}
         </div>
-        <div className="mt-12 p-6 sm:p-8 rounded-2xl border border-border bg-card text-center">
-          <h2 className="font-serif text-2xl font-light text-foreground mb-3">Bundle & Save</h2>
-          <p className="text-muted-foreground text-base mb-6 max-w-md mx-auto">
-            Get the complete Lifewoven toolkit — all courses, workbooks, audio programs, and card decks — at one transformational price.
-          </p>
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <span className="text-muted-foreground line-through text-lg">$566</span>
-            <span className="text-3xl font-light text-foreground">$297</span>
-            <span className="text-xs px-2 py-1 rounded-full bg-secondary text-muted-foreground">Save 52%</span>
-          </div>
-          {isAuthenticated ? (
-            <div className="flex justify-center">
-              <PayPalButton productSlug="complete-bundle" priceUsd={297} />
+
+        {/* Oracle upsell footer (only for non-Oracle users) */}
+        {accessLevel !== "library" && (
+          <div className="rounded-2xl border border-violet-400/30 bg-violet-400/5 p-6 sm:p-10 text-center">
+            <Library className="h-8 w-8 text-violet-400 mx-auto mb-4" />
+            <h2 className="font-serif text-2xl sm:text-3xl font-light text-foreground mb-3">
+              Get everything. Pay once a month.
+            </h2>
+            <p className="text-muted-foreground text-base max-w-2xl mx-auto mb-2 leading-relaxed">
+              Oracle members get the complete Lifewoven library — all 4 courses, both workbooks, all audio programs, and the Wisdom Card Deck — included with their membership. Combined retail value: $607.
+            </p>
+            <p className="text-violet-300 text-sm mb-8">
+              Founding rate: $25/mo (retail $49/mo). Locked for life.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Button asChild className="border-violet-400/40 text-violet-300 hover:bg-violet-400/10" variant="outline">
+                <Link href="/pricing">See Oracle plan →</Link>
+              </Button>
+              {!isAuthenticated && (
+                <Button asChild variant="ghost" className="text-muted-foreground">
+                  <a href={getLoginUrl()}>Sign in first</a>
+                </Button>
+              )}
             </div>
-          ) : (
-            <Button size="lg" className="gap-2" asChild>
-              <Link href="/store"><ShoppingBag className="h-4 w-4" /> Get the Complete Bundle — Sign in to Purchase</Link>
-            </Button>
-          )}
-        </div>
-        <p className="text-center text-base text-muted-foreground mt-8 max-w-2xl mx-auto">
+          </div>
+        )}
+
+        <p className="text-center text-xs text-muted-foreground/50 mt-10 max-w-2xl mx-auto">
           All Lifewoven courses, workbooks, and audio programs are original creations. They are informed by wisdom traditions and personal development ideas but are independently produced and not affiliated with, endorsed by, or licensed by any named author, teacher, or publisher.
         </p>
       </div>

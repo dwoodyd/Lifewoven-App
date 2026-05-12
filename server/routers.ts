@@ -6,6 +6,8 @@ import { referralRouter } from "./routers/referral";
 import { betaRouter } from "./routers/beta";
 import { characterRouter } from "./routers/character";
 import { moodLogRouter } from "./routers/moodLog";
+import { storeRouter } from "./routers/store";
+import { applicationsRouter } from "./routers/applications";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
@@ -1014,6 +1016,10 @@ export const appRouter = router({
         onboardingCompleted: u.onboardingCompleted,
         membershipTier: u.membershipTier,
         role: u.role,
+        foundingMember: u.foundingMember,
+        foundingTier: u.foundingTier,
+        foundingRateLocked: u.foundingRateLocked,
+        needsIntro: u.needsIntro,
       };
     }),
     logout: publicProcedure.mutation(({ ctx }) => {
@@ -1034,6 +1040,7 @@ export const appRouter = router({
   resources: resourcesRouter,
   courses: coursesRouter,
   products: productsRouter,
+  store: storeRouter,
   community: communityRouter,
   profile: profileRouter,
   btw: btwRouter,
@@ -1043,6 +1050,7 @@ export const appRouter = router({
   beta: betaRouter,
   character: characterRouter,
   moodLog: moodLogRouter,
+  applications: applicationsRouter,
   support: router({
     submit: publicProcedure
       .input(z.object({
