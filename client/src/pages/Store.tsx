@@ -181,14 +181,36 @@ export default function Store() {
               All items included with your Oracle membership
             </div>
           ) : accessLevel === "discount" ? (
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-amber-400/30 bg-amber-400/10 text-amber-300 text-sm mb-4">
-              <Percent className="h-4 w-4" />
-              Seeker discount — 30% off all items
+            <div className="space-y-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-amber-400/30 bg-amber-400/10 text-amber-300 text-sm">
+                <Percent className="h-4 w-4" />
+                Seeker discount — 30% off all items
+              </div>
+              <div className="max-w-2xl mx-auto px-5 py-4 rounded-2xl border border-violet-400/20 bg-violet-400/5 flex flex-col sm:flex-row items-center gap-4 text-left">
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-violet-300 mb-0.5">Oracle Founding Members get the complete Library included.</p>
+                  <p className="text-xs text-muted-foreground">Lock in Oracle at $25/mo — all 4 courses, both workbooks, all audio, and the card deck. Founding rate, for life.</p>
+                </div>
+                <Button asChild size="sm" className="shrink-0 bg-violet-500 hover:bg-violet-600 text-white border-0">
+                  <Link href="/apply">Apply for Founding Access</Link>
+                </Button>
+              </div>
             </div>
           ) : (
-            <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto">
-              Courses, workbooks, audio programs, and card decks — each one an original Lifewoven creation.
-            </p>
+            <div className="space-y-4">
+              <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto">
+                Courses, workbooks, audio programs, and card decks — each one an original Lifewoven creation.
+              </p>
+              <div className="max-w-2xl mx-auto px-5 py-4 rounded-2xl border border-[oklch(0.72_0.12_55)/0.25] bg-[oklch(0.72_0.12_55)/0.05] flex flex-col sm:flex-row items-center gap-4 text-left">
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-[oklch(0.82_0.14_55)] mb-0.5">Oracle Founding Members get the complete Library — included free.</p>
+                  <p className="text-xs text-muted-foreground">Apply now to lock in Oracle at $25/mo (founding rate, for life) and get every item in this store included with your membership.</p>
+                </div>
+                <Button asChild size="sm" className="shrink-0" style={{background:"linear-gradient(135deg,oklch(0.75 0.14 55),oklch(0.65 0.18 45))",color:"oklch(0.12 0.02 260)",border:"none"}}>
+                  <Link href="/apply">Apply for Founding Access</Link>
+                </Button>
+              </div>
+            </div>
           )}
         </div>
 

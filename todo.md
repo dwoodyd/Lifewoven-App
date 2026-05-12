@@ -764,3 +764,8 @@
 - [x] App.tsx: /apply and /invite/:code routes registered
 - [x] Vitest: 5 tests for applications router (validateCode, submit, list admin guard) — all passing
 - [x] TypeScript: 0 errors across entire codebase
+
+## May 12 — Follow-up Items
+- [x] Add Founding Member CTA banner to Store header (non-Oracle users, links to /apply)
+- [x] Wire syncAccess mutation on Dashboard after auth resolves
+- [x] Checkpoint and publish to app.lifewoven.click

@@ -71,6 +71,12 @@ export default function Dashboard() {
     localStorage.setItem("lifeos_last_visit", String(now));
   }, [isAuthenticated]);
 
+  const syncAccess = trpc.store.syncAccess.useMutation();
+  useEffect(() => {
+    if (isAuthenticated) syncAccess.mutate();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated]);
+
   const { data: dashData, refetch, isLoading: dashLoading } = trpc.profile.dashboard.useQuery(undefined, { enabled: isAuthenticated });
   const { data: habits } = trpc.habits.list.useQuery(undefined, { enabled: isAuthenticated });
   const { data: todayLogs } = trpc.habits.todayLogs.useQuery(undefined, { enabled: isAuthenticated });
