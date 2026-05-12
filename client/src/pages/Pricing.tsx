@@ -124,7 +124,7 @@ export default function Pricing() {
     if (tierId === "explorer") return;
     const plan = tierId as "seeker" | "oracle";
     if (!user) {
-      window.location.href = getLoginUrl();
+      window.location.href = getLoginUrl(window.location.pathname + window.location.search);
       return;
     }
     if (currentTier === plan) return;
@@ -262,7 +262,7 @@ export default function Pricing() {
                   </div>
                 ) : tier.id === "explorer" ? (
                   <Button asChild variant="outline" className="w-full">
-                    <a href={getLoginUrl()}>Start Free</a>
+                    <a href={getLoginUrl('/pricing')}>Start Free</a>
                   </Button>
                 ) : (
                   <Button

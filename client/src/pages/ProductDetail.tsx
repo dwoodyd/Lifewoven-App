@@ -432,7 +432,7 @@ export default function ProductDetail() {
                 />
               </div>
             ) : (
-              <Button size="lg" className="gap-2" onClick={() => { window.location.href = getLoginUrl(); }}>
+              <Button size="lg" className="gap-2" onClick={() => { window.location.href = getLoginUrl(window.location.pathname + window.location.search); }}>
                 <ShoppingCart className="h-4 w-4" /> Sign in to Purchase
               </Button>
             )
@@ -513,7 +513,7 @@ export default function ProductDetail() {
                   />
                 </div>
               ) : (
-                <Button size="lg" className="gap-2" onClick={() => { window.location.href = getLoginUrl(); }}>
+                <Button size="lg" className="gap-2" onClick={() => { window.location.href = getLoginUrl(window.location.pathname + window.location.search); }}>
                   <ShoppingCart className="h-4 w-4" /> Sign in to Purchase
                 </Button>
               )}

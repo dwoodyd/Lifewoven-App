@@ -87,7 +87,7 @@ function ArticlePaywall({ isAuthenticated }: { isAuthenticated: boolean }) {
             </>
           ) : (
             <>
-              <Button size="lg" className="gap-2" onClick={() => { window.location.href = getLoginUrl(); }}>
+              <Button size="lg" className="gap-2" onClick={() => { window.location.href = getLoginUrl(window.location.pathname + window.location.search); }}>
                 Sign In to Continue
               </Button>
               <Button asChild variant="outline" size="lg">

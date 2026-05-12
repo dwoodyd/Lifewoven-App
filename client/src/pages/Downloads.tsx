@@ -63,7 +63,7 @@ export default function Downloads() {
           <ShoppingBag className="h-12 w-12 text-muted-foreground mx-auto mb-6 opacity-40" />
           <h1 className="font-serif text-3xl font-light text-foreground mb-4">My Downloads</h1>
           <p className="text-muted-foreground mb-8">Sign in to view your purchased products and download links.</p>
-          <Button onClick={() => { window.location.href = getLoginUrl(); }}>Sign In</Button>
+          <Button onClick={() => { window.location.href = getLoginUrl(window.location.pathname + window.location.search); }}>Sign In</Button>
         </div>
       </div>
     );

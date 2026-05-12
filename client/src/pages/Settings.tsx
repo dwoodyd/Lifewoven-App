@@ -214,7 +214,7 @@ export default function Settings() {
           <Settings2 className="h-12 w-12 text-muted-foreground mb-4" />
           <h2 className="font-serif text-2xl font-light text-foreground mb-3">Settings</h2>
           <p className="text-muted-foreground text-sm mb-8">Sign in to manage your preferences.</p>
-          <Button asChild><a href={getLoginUrl()}>Sign In</a></Button>
+          <Button asChild><a href={getLoginUrl('/settings')}>Sign In</a></Button>
         </div>
       </div>
     );

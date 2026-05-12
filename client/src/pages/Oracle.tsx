@@ -157,7 +157,7 @@ export default function Oracle() {
           <Sparkles className="h-16 w-16 text-accent mb-6" />
           <h2 className="font-serif text-2xl font-light text-foreground mb-3" style={{fontFamily:'"Playfair Display",Georgia,serif'}}>The Oracle awaits you.</h2>
           <p className="text-muted-foreground text-sm mb-8 max-w-sm">Sign in to access your personal AI guide, powered by the wisdom of the ages.</p>
-          <Button asChild><a href={getLoginUrl()}>Begin Your Journey</a></Button>
+          <Button asChild><a href={getLoginUrl('/oracle')}>Begin Your Journey</a></Button>
         </div>
       </div>
     );

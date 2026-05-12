@@ -89,7 +89,7 @@ export default function CourseDetail() {
 
   const handleEnroll = () => {
     if (!user) {
-      window.location.href = getLoginUrl();
+      window.location.href = getLoginUrl(window.location.pathname + window.location.search);
       return;
     }
     if (effectiveAdmin) {

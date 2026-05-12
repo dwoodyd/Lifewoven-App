@@ -329,7 +329,7 @@ export default function Character() {
           <h1 className="font-serif text-3xl font-light text-foreground">Your Character Library</h1>
           <p className="text-muted-foreground max-w-md">Track the books shaping your character, capture quotes that move you, and journal your growth — all in one place.</p>
           <Button asChild>
-            <a href={getLoginUrl()}>Sign in to begin</a>
+            <a href={getLoginUrl(window.location.pathname)}>Sign in to begin</a>
           </Button>
         </div>
       </div>

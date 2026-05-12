@@ -135,7 +135,7 @@ export default function Store() {
 
   async function handlePurchase(productId: string, priceUsd: number) {
     if (!isAuthenticated) {
-      window.location.href = getLoginUrl();
+      window.location.href = getLoginUrl(window.location.pathname + window.location.search);
       return;
     }
     setPurchasingId(productId);
@@ -336,7 +336,7 @@ export default function Store() {
               </Button>
               {!isAuthenticated && (
                 <Button asChild variant="ghost" className="text-muted-foreground">
-                  <a href={getLoginUrl()}>Sign in first</a>
+                  <a href={getLoginUrl('/store')}>Sign in first</a>
                 </Button>
               )}
             </div>

@@ -32,7 +32,7 @@ export default function Profile() {
           <User className="h-16 w-16 text-muted-foreground mx-auto mb-6" />
           <h1 className="font-serif text-3xl font-light text-foreground mb-3">Your Profile</h1>
           <p className="text-muted-foreground mb-8">Sign in to view your profile, track your progress, and manage your account.</p>
-          <Button asChild><a href={getLoginUrl()}>Sign In</a></Button>
+          <Button asChild><a href={getLoginUrl('/profile')}>Sign In</a></Button>
         </div>
       </div>
     );

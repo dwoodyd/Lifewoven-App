@@ -220,7 +220,7 @@ export default function AlignmentAudit() {
   }
 
   function handleSaveResults() {
-    if (!isAuthenticated) { window.location.href = getLoginUrl(); return; }
+    if (!isAuthenticated) { window.location.href = getLoginUrl("/audit"); return; }
     if (result) {
       const stringAnswers: Record<string, number> = {};
       Object.entries(answers).forEach(([k, v]) => { stringAnswers[k] = v; });
@@ -477,7 +477,7 @@ export default function AlignmentAudit() {
                         </Button>
                       ) : (
                         <Button size="sm" asChild style={{ background: "linear-gradient(135deg, #6f8fc4, #8ba8d4)", color: "white", border: "none" }}>
-                          <a href={getLoginUrl()}>Unlock the Oracle →</a>
+                          <a href={getLoginUrl("/audit")}>Unlock the Oracle →</a>
                         </Button>
                       )}
                       <Button size="sm" variant="ghost" asChild>

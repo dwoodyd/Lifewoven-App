@@ -51,7 +51,7 @@ export default function Referrals() {
           <Gift className="h-12 w-12 text-accent mx-auto mb-4" />
           <h1 className="font-serif text-3xl font-light mb-4">Refer & Earn</h1>
           <p className="text-muted-foreground mb-6">Sign in to get your personal referral link and earn $10 store credit for every friend who makes a purchase.</p>
-          <Button asChild><a href={getLoginUrl()}>Sign In</a></Button>
+          <Button asChild><a href={getLoginUrl('/referrals')}>Sign In</a></Button>
         </div>
       </div>
     );

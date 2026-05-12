@@ -208,7 +208,7 @@ export default function Nav() {
             /* ── Unauthenticated ── */
             <>
               <Button variant="ghost" size="sm" asChild className="hidden md:flex">
-                <a href={getLoginUrl()}>Sign in</a>
+                <a href={getLoginUrl(window.location.pathname + window.location.search)}>Sign in</a>
               </Button>
               <Button size="sm" asChild className="hidden sm:flex">
                 <Link href="/audit">Take the Audit</Link>
@@ -328,7 +328,7 @@ export default function Nav() {
                   <Link href="/audit" onClick={closeMobile}>Take the Alignment Audit</Link>
                 </Button>
                 <Button variant="outline" size="default" asChild className="w-full bg-transparent">
-                  <a href={getLoginUrl()} onClick={closeMobile}>Sign in</a>
+                  <a href={getLoginUrl(window.location.pathname + window.location.search)} onClick={closeMobile}>Sign in</a>
                 </Button>
               </>
             )}
