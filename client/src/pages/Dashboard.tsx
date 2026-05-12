@@ -255,6 +255,19 @@ export default function Dashboard() {
                 </Tooltip>
               </TooltipProvider>
             )}
+            {(user as any)?.foundingMember && (
+              <span
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium shrink-0"
+                style={{
+                  background: "oklch(0.55 0.18 280 / 0.15)",
+                  border: "1px solid oklch(0.65 0.18 280 / 0.30)",
+                  color: "oklch(0.82 0.14 280)",
+                }}
+              >
+                <Sparkles className="h-3.5 w-3.5" />
+                Founding Member
+              </span>
+            )}
             <Button size="sm" className="gap-2" onClick={() => setShowCheckIn(!showCheckIn)}>
               <Heart className="h-4 w-4" />
               <span>Daily Check-in</span>

@@ -12,6 +12,7 @@ import { notifyOwner } from "../_core/notification";
 import {
   sendApplicationQueueEmail,
   sendApplicationApprovalEmail,
+  sendRedemptionConfirmationEmail,
 } from "../email";
 
 async function requireDb() {
@@ -257,6 +258,15 @@ export const applicationsRouter = router({
         title: `Founding member joined: ${ctx.user.name || ctx.user.email}`,
         content: `Tier: ${row.tier} · Code: ${input.code} · Store access: ${storeAccess}`,
       }).catch(() => {});
+
+      // Send redemption confirmation email (non-blocking)
+      if (ctx.user.email) {
+        sendRedemptionConfirmationEmail({
+          to:   ctx.user.email,
+          name: ctx.user.name || ctx.user.email,
+          tier: row.tier,
+        }).catch(() => {});
+      }
 
       return { ok: true, tier: row.tier };
     }),

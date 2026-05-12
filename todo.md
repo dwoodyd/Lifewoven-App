@@ -778,3 +778,7 @@
 ## Founding Member — Pricing CTA + Profile Badge (May 12, 2026)
 - [x] Add Founding Access CTA below Oracle tier card on Pricing page
 - [x] Add founding member badge to Profile/Settings page
+
+## Founding Member — Dashboard Badge + Redemption Email (May 12, 2026)
+- [x] Add founding member badge pill to Dashboard greeting header
+- [x] Send post-redemption confirmation email in applications.redeem
