@@ -769,3 +769,8 @@
 - [x] Add Founding Member CTA banner to Store header (non-Oracle users, links to /apply)
 - [x] Wire syncAccess mutation on Dashboard after auth resolves
 - [x] Checkpoint and publish to app.lifewoven.click
+
+## Founding Member Welcome Card (May 12, 2026)
+- [x] Build FoundingWelcomeCard component (one-time, gated by needsIntro flag)
+- [x] Wire into Dashboard above the greeting section
+- [x] Dismiss calls applications.completeIntro, sets needsIntro=false

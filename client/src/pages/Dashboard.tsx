@@ -45,6 +45,7 @@ const MODULE_CONFIG = [
 ];
 
 import { LuminCorner } from "@/components/LuminCorner";
+import FoundingWelcomeCard from "@/components/FoundingWelcomeCard";
 
 export default function Dashboard() {
   const { user, isAuthenticated } = useAuth();
@@ -184,6 +185,14 @@ export default function Dashboard() {
             </span>
           </button>
         </div>
+
+        {/* Founding Member welcome card — shown once when needsIntro is true */}
+        {user?.needsIntro && user?.foundingMember && (
+          <FoundingWelcomeCard
+            tier={user.foundingTier ?? null}
+            onDismiss={() => {}}
+          />
+        )}
 
         {/* 7-day expiry warning banner */}
         {hasAccess && daysLeft !== null && daysLeft <= 7 && daysLeft > 0 && (
