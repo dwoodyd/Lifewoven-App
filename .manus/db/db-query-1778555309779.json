@@ -1,0 +1,9 @@
+{
+  "query": "SELECT id, slug, title, price, isPublished FROM products ORDER BY id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4A9VQZNRBpHGiCF.a37aec6b9c0f --database kRrwoPFbyNWaiJXLmscJ4t --execute SELECT id, slug, title, price, isPublished FROM products ORDER BY id;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 261
+}

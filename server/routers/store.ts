@@ -259,4 +259,18 @@ export const storeRouter = router({
         downloadUrl: product?.downloadUrl ?? null,
       };
     }),
+
+  /**
+   * Syncs the storeAccess field on the user record to match their current tier.
+   * Called after login and after subscription changes.
+   */
+  syncAccess: protectedProcedure.mutation(async ({ ctx }) => {
+    const db = await getDb();
+    if (!db) return { storeAccess: "standalone" as StoreAccessLevel };
+    const level = getAccessLevel(ctx.user.membershipTier ?? "explorer", ctx.user.role ?? "user");
+    await db.update(users)
+      .set({ storeAccess: level })
+      .where(eq(users.id, ctx.user.id));
+    return { storeAccess: level };
+  }),
 });

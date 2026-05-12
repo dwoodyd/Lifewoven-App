@@ -39,8 +39,11 @@ class OAuthService {
   }
 
   private decodeState(state: string): string {
-    const redirectUri = atob(state);
-    return redirectUri;
+    const decoded = atob(state);
+    // State format: "<redirectUri>" OR "<redirectUri>||<returnPath>"
+    // Only the part before "||" is the actual redirectUri sent to the OAuth server.
+    const sepIdx = decoded.indexOf("||");
+    return sepIdx === -1 ? decoded : decoded.slice(0, sepIdx);
   }
 
   async getTokenByCode(

@@ -412,18 +412,29 @@ export default function OnboardingModal({ userId }: Props) {
     return () => clearTimeout(t);
   }, [sceneIdx]); // only re-run when scene changes, NOT on video loop
 
+  /* ── Wall-clock scene start time (fallback for slow/buffering video) ── */
+  const sceneStartTimeRef = useRef<number>(Date.now());
+  useEffect(() => {
+    sceneStartTimeRef.current = Date.now();
+  }, [sceneIdx]);
+
   /* ── Video time tracking ─────────────────────────────────────────
    * We track videoTime to trigger the initial word reveals.
    * Because WordReveal latches (revealed stays true), video loops
    * resetting currentTime to 0 won't hide the copy again.
+   *
+   * Wall-clock fallback: if the video hasn't advanced past a line's
+   * startAt (e.g. still buffering on Safari), we use elapsed wall-clock
+   * time so copy always appears even on slow connections.
    */
   useEffect(() => {
     const vid = activeSlot === "a" ? videoARef.current : videoBRef.current;
-    if (!vid) return;
-    setVideoTime(vid.currentTime);
     let rafId: number;
     const rafLoop = () => {
-      if (vid) setVideoTime(vid.currentTime);
+      const vidTime = vid ? vid.currentTime : 0;
+      // Use whichever is further along — video time or wall-clock elapsed
+      const wallTime = (Date.now() - sceneStartTimeRef.current) / 1000;
+      setVideoTime(Math.max(vidTime, wallTime));
       rafId = requestAnimationFrame(rafLoop);
     };
     rafId = requestAnimationFrame(rafLoop);

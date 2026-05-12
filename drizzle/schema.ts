@@ -48,6 +48,8 @@ export const users = mysqlTable("users", {
   foundingRateLocked: boolean("foundingRateLocked").default(false).notNull(),
   needsIntro: boolean("needsIntro").default(false).notNull(),
   inviteCode: varchar("inviteCode", { length: 32 }),
+  // Store access level — derived from tier, stored for fast reads
+  storeAccess: mysqlEnum("storeAccess", ["standalone", "discount", "library"]).default("standalone").notNull(),
 });
 
 export type User = typeof users.$inferSelect;
@@ -302,7 +304,7 @@ export const products = mysqlTable("products", {
   slug: varchar("slug", { length: 128 }).notNull().unique(),
   title: varchar("title", { length: 255 }).notNull(),
   description: text("description"),
-  type: mysqlEnum("type", ["workbook", "card_deck", "audio_bundle", "planner", "guide"]).notNull(),
+  type: mysqlEnum("type", ["course", "workbook", "card_deck", "audio_bundle", "planner", "guide"]).notNull(),
   price: decimal("price", { precision: 8, scale: 2 }).notNull(),
   thumbnailUrl: text("thumbnailUrl"),
   downloadUrl: text("downloadUrl"),

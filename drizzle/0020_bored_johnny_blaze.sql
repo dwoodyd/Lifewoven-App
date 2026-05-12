@@ -1,0 +1,2 @@
+ALTER TABLE `products` MODIFY COLUMN `type` enum('course','workbook','card_deck','audio_bundle','planner','guide') NOT NULL;--> statement-breakpoint
+ALTER TABLE `users` ADD `storeAccess` enum('standalone','discount','library') DEFAULT 'standalone' NOT NULL;

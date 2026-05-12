@@ -71,7 +71,7 @@ async function startServer() {
     /\.us1\.manus\.computer$/,
     /^https:\/\/lifewovenapp\.manus\.space$/,
     /^https:\/\/lifeosplatform-krrwopfb\.manus\.space$/,
-    /^https:\/\/(www\.)?lifewoven\.click$/,
+    /^https:\/\/([a-z0-9-]+\.)?lifewoven\.click$/,
     ...(process.env.NODE_ENV !== "production" ? [/^http:\/\/localhost(:\d+)?$/] : []),
   ];
   app.use(cors({

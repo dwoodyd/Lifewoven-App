@@ -141,6 +141,13 @@
       "when": 1778552878741,
       "tag": "0019_violet_natasha_romanoff",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "5",
+      "when": 1778555373940,
+      "tag": "0020_bored_johnny_blaze",
+      "breakpoints": true
     }
   ]
 }

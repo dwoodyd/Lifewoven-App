@@ -121,11 +121,13 @@ export default function Store() {
 
   const products = PRODUCT_CATALOG.map(p => {
     const sp = serverProducts?.find(s => s.slug === p.id);
+    // Server returns prices in dollars (e.g. 97.00), not cents
     return {
       ...p,
-      effectivePrice: sp?.effectivePrice ?? p.price * 100,
-      originalPrice: p.price * 100,
+      effectivePrice: sp?.effectivePrice ?? p.price,
+      originalPrice: p.price,
       isIncluded: sp?.isIncluded ?? false,
+      hasDiscount: sp?.hasDiscount ?? false,
     };
   });
 
@@ -213,9 +215,9 @@ export default function Store() {
         {/* Product grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-14">
           {filtered.map(product => {
-            const discountedPrice = Math.round(product.effectivePrice / 100);
-            const originalPrice = Math.round(product.originalPrice / 100);
-            const hasDiscount = discountedPrice < originalPrice;
+            const discountedPrice = product.effectivePrice;
+            const originalPrice = product.originalPrice;
+            const hasDiscount = product.hasDiscount;
 
             return (
               <div
