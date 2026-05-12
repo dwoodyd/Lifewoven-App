@@ -19,7 +19,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   // ── Onboarding screen 1 hero ─────────────────────────────────────────────
   {
     id: "screen1_hero",
-    url: "/manus-storage/screen1_hero_8746357b.mp4",
+    url: "/manus-storage/scene1_hero_v2_cropped_3f793bf0.mp4",
     action: "Opening hero video for onboarding screen 1",
     role: "onboarding",
     duration: 10,
@@ -160,7 +160,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "nodding_gently",
-    url: "/manus-storage/Woven_mascot_nodding_gently_202605081527_6cef9690.mp4",
+    url: "/manus-storage/nodding_gently_cropped_d8a18bac.mp4",
     action: "Nodding gently — affirming",
     role: "ambient",
     duration: 8,
@@ -253,7 +253,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "starburst_joy",
-    url: "/manus-storage/Untitledvideo(65)_f9a9be24.mp4",
+    url: "/manus-storage/scene1_hero_cropped_78f454f5.mp4",
     action: "Throws arms wide, star pose, sparkles — starburst joy",
     role: "reaction",
     duration: 8,
@@ -267,7 +267,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "self_hug",
-    url: "/manus-storage/Untitledvideo(67)_e7ac1e23.mp4",
+    url: "/manus-storage/self_hug_cropped_5c99c7fe.mp4",
     action: "Wraps rays around glowing face — self-soothing hug",
     role: "ambient",
     duration: 8,
@@ -288,7 +288,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "burst_joy",
-    url: "/manus-storage/Untitledvideo(70)_bb14a87e.mp4",
+    url: "/manus-storage/burst_joy_cropped_21bc11b5.mp4",
     action: "Claps, glows, jumps, explodes into yarn puff — burst of joy",
     role: "reaction",
     duration: 8,
@@ -302,7 +302,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "transformation",
-    url: "/manus-storage/Untitledvideo(72)_4c5e73ba.mp4",
+    url: "/manus-storage/transformation_cropped_f7f54faa.mp4",
     action: "Spins in magical burst, surprised then dancing — transformation",
     role: "reaction",
     duration: 8,

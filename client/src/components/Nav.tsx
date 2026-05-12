@@ -12,19 +12,27 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Moon, Sun, Menu, X, Sparkles, LayoutDashboard, BookOpen, BookHeart, User, Settings, Download, Gift, Play } from "lucide-react";
+import {
+  Moon, Sun, Menu, X, Sparkles, LayoutDashboard, BookOpen, BookHeart,
+  User, Settings, Download, Gift, Play, ChevronDown, Info, Store,
+  Library, Users, DollarSign,
+} from "lucide-react";
 import { replayOnboarding } from "@/components/OnboardingModal";
 import { trpc } from "@/lib/trpc";
 
-const navLinks = [
-  { label: "About", href: "/about" },
+// Primary links — always visible on desktop
+const primaryLinks = [
   { label: "Pathways", href: "/#pathways" },
-  { label: "Before the Words", href: "/btw" },
   { label: "Library", href: "/library" },
-  { label: "Character", href: "/character" },
   { label: "Community", href: "/community" },
-  { label: "Store", href: "/store" },
   { label: "Pricing", href: "/pricing" },
+];
+
+// Secondary links — collapsed into "More" dropdown on desktop, shown in mobile menu
+const moreLinks = [
+  { label: "About", href: "/about", icon: Info },
+  { label: "Before the Words", href: "/btw", icon: BookOpen },
+  { label: "Store", href: "/store", icon: Store },
 ];
 
 export default function Nav() {
@@ -57,9 +65,9 @@ export default function Nav() {
           </span>
         </Link>
 
-        {/* Desktop Nav */}
-        <nav className="hidden lg:flex items-center gap-5 xl:gap-6" aria-label="Main navigation">
-          {navLinks.map((link) => (
+        {/* Desktop Nav — primary links + More dropdown */}
+        <nav className="hidden md:flex items-center gap-4 xl:gap-6" aria-label="Main navigation">
+          {primaryLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -72,6 +80,25 @@ export default function Nav() {
               {link.label}
             </Link>
           ))}
+
+          {/* "More" dropdown for secondary links */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="flex items-center gap-1 text-sm font-sans text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap">
+                More <ChevronDown className="h-3.5 w-3.5" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-44">
+              {moreLinks.map((link) => (
+                <DropdownMenuItem key={link.href} asChild>
+                  <Link href={link.href} className="flex items-center gap-2">
+                    <link.icon className="h-3.5 w-3.5" />
+                    {link.label}
+                  </Link>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </nav>
 
         {/* Right Actions */}
@@ -103,6 +130,8 @@ export default function Nav() {
               <Button variant="default" size="sm" asChild className="hidden md:flex">
                 <Link href="/dashboard">Dashboard</Link>
               </Button>
+
+              {/* User avatar dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Avatar className="h-8 w-8 cursor-pointer border border-border hover:border-accent transition-colors">
@@ -124,6 +153,10 @@ export default function Nav() {
                     <Link href="/profile" className="flex items-center gap-2"><User className="h-3.5 w-3.5" />Profile</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
+                    <Link href="/settings" className="flex items-center gap-2"><Settings className="h-3.5 w-3.5" />Settings</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
                     <Link href="/journal" className="flex items-center gap-2"><BookOpen className="h-3.5 w-3.5" />Journal</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
@@ -134,6 +167,10 @@ export default function Nav() {
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/referrals" className="flex items-center gap-2"><Gift className="h-3.5 w-3.5" />Refer &amp; Earn</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/about" className="flex items-center gap-2"><Info className="h-3.5 w-3.5" />About</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem className="flex items-center gap-2 cursor-pointer" onClick={() => replayOnboarding(user?.id)}>
                     <Play className="h-3.5 w-3.5" />Replay Intro
@@ -167,11 +204,11 @@ export default function Nav() {
             </>
           )}
 
-          {/* Mobile Menu Toggle */}
+          {/* Mobile Menu Toggle — only on small screens */}
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden w-9 h-9"
+            className="md:hidden w-9 h-9"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={mobileOpen}
@@ -186,13 +223,13 @@ export default function Nav() {
       {mobileOpen && (
         <div
           id="mobile-nav"
-          className="lg:hidden border-t border-border bg-background/95 backdrop-blur-md"
+          className="md:hidden border-t border-border bg-background/95 backdrop-blur-md"
           role="navigation"
           aria-label="Mobile navigation"
         >
-          {/* Nav links */}
+          {/* All nav links */}
           <div className="px-4 py-3 space-y-0.5">
-            {navLinks.map((link) => (
+            {[...primaryLinks, ...moreLinks].map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -226,6 +263,18 @@ export default function Nav() {
                   <Link href="/oracle" onClick={closeMobile}><Sparkles className="h-4 w-4" />Oracle</Link>
                 </Button>
                 <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground">
+                  <Link href="/journal" onClick={closeMobile}><BookOpen className="h-4 w-4" />Journal</Link>
+                </Button>
+                <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground">
+                  <Link href="/character" onClick={closeMobile}><BookHeart className="h-4 w-4" />Character &amp; Growth</Link>
+                </Button>
+                <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground">
+                  <Link href="/profile" onClick={closeMobile}><User className="h-4 w-4" />Profile</Link>
+                </Button>
+                <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground">
+                  <Link href="/settings" onClick={closeMobile}><Settings className="h-4 w-4" />Settings</Link>
+                </Button>
+                <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground">
                   <Link href="/downloads" onClick={closeMobile}><Download className="h-4 w-4" />My Downloads</Link>
                 </Button>
                 <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground">
@@ -234,7 +283,12 @@ export default function Nav() {
                 <Button variant="ghost" size="default" className="w-full gap-2 text-muted-foreground" onClick={() => { replayOnboarding(user?.id); closeMobile(); }}>
                   <Play className="h-4 w-4" />Replay Intro
                 </Button>
-                <Button variant="ghost" size="default" className="w-full text-muted-foreground" onClick={() => { logoutMutation.mutate(); closeMobile(); }}>
+                {user?.role === "admin" && (
+                  <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground">
+                    <Link href="/admin" onClick={closeMobile}><Settings className="h-4 w-4" />Admin Panel</Link>
+                  </Button>
+                )}
+                <Button variant="ghost" size="default" className="w-full text-destructive" onClick={() => { logoutMutation.mutate(); closeMobile(); }}>
                   Sign out
                 </Button>
               </>

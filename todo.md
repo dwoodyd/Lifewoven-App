@@ -703,3 +703,11 @@
 ## VEO Watermark Crop (May 9, 2026)
 - [x] Crop VEO watermark from Lumin V2 videos in LuminAmbient.tsx (dominant + corner modes)
 - [x] Crop VEO watermark from Lumin V2 videos in OnboardingModal.tsx (video slots A + B)
+
+## Nav & Video Fixes (May 11, 2026)
+- [x] Replace onboarding videos 1,2,4,5,6 with user-cropped watermark-free versions
+- [x] Fix responsive nav: reduce primary links to 4, add More dropdown (About, Before the Words, Store)
+- [x] Move About to user dropdown and More dropdown
+- [x] Surface Settings link in user dropdown and mobile menu
+- [x] Add Journal, Character, Profile, Settings to mobile hamburger menu
+- [x] Fix mobile menu hamburger breakpoint: now shows at md and below (not just lg)
