@@ -240,7 +240,7 @@ function BookCard({ book }: { book: { id: number; title: string; author?: string
       style={{ boxShadow: "0 2px 12px rgba(0,0,0,0.15)" }}
     >
       {/* Cover */}
-      <div className="aspect-[2/3] w-full overflow-hidden bg-zinc-800/60 relative">
+      <div className="aspect-[2/3] w-full overflow-hidden bg-muted relative">
         {book.coverUrl ? (
           <img src={book.coverUrl} alt={book.title} className="w-full h-full object-cover" />
         ) : (

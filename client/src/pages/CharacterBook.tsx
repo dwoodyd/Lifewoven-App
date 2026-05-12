@@ -154,7 +154,7 @@ function AttachmentsTab({ bookId }: { bookId: number }) {
         </div>
       ) : attachments.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 gap-4 text-center">
-          <div className="w-16 h-16 rounded-full bg-zinc-800/60 flex items-center justify-center">
+          <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center">
             <Paperclip className="h-7 w-7 text-muted-foreground/40" />
           </div>
           <div>
@@ -182,7 +182,7 @@ function AttachmentsTab({ bookId }: { bookId: number }) {
               className="flex items-center gap-3 p-3 rounded-xl border border-border/50 bg-card/50 group hover:border-border transition-all"
             >
               {/* Icon */}
-              <div className="w-9 h-9 rounded-lg bg-zinc-800/60 flex items-center justify-center shrink-0">
+              <div className="w-9 h-9 rounded-lg bg-muted flex items-center justify-center shrink-0">
                 <FileTypeIcon mimeType={att.mimeType ?? ""} className="h-4 w-4 text-muted-foreground" />
               </div>
 
@@ -580,7 +580,7 @@ export default function CharacterBook() {
         {/* Book header */}
         <div className="flex gap-6 mb-8">
           {/* Cover */}
-          <div className="w-24 sm:w-32 shrink-0 rounded-xl overflow-hidden bg-zinc-800/60 aspect-[2/3] flex items-center justify-center">
+          <div className="w-24 sm:w-32 shrink-0 rounded-xl overflow-hidden bg-muted aspect-[2/3] flex items-center justify-center">
             {book.coverUrl ? (
               <img src={book.coverUrl} alt={book.title} className="w-full h-full object-cover" />
             ) : (

@@ -114,7 +114,7 @@ export default function Home() {
               </Link>
               <a
                 href="#system"
-                className="flex items-center gap-2 px-6 py-4 rounded-full text-sm font-light border border-[oklch(0.35_0.02_260)] text-[oklch(0.65_0.01_260)] hover:border-[oklch(0.72_0.12_55)/0.5] hover:text-[oklch(0.82_0.14_55)] transition-all duration-300"
+                className="flex items-center gap-2 px-6 py-4 rounded-full text-sm font-light border border-border text-[oklch(0.65_0.01_260)] hover:border-[oklch(0.72_0.12_55)/0.5] hover:text-[oklch(0.82_0.14_55)] transition-all duration-300"
               >
                 Explore the system
               </a>
@@ -134,7 +134,7 @@ export default function Home() {
       </section>
 
       {/* ─── TRUST BAR ─── */}
-      <section className="border-y border-[oklch(0.20_0.02_260)] py-6 bg-[oklch(0.10_0.015_260)]">
+      <section className="border-y border-border py-6 bg-[oklch(0.10_0.015_260)]">
         <div className="max-w-5xl mx-auto px-6">
           <p className="font-mono text-[9px] tracking-[0.3em] text-[oklch(0.40_0.01_260)] uppercase text-center mb-4">
             Informed by wisdom traditions including
@@ -169,7 +169,7 @@ export default function Home() {
               {modules.map((mod) => (
                 <Link key={mod.id} href={`/${mod.id}`}>
                   <div
-                    className="group flex items-center gap-5 p-5 rounded-2xl border border-[oklch(0.20_0.02_260)] bg-[oklch(0.12_0.015_260)] hover:border-[oklch(0.35_0.05_260)] transition-all duration-300 cursor-pointer"
+                    className="group flex items-center gap-5 p-5 rounded-2xl border border-border bg-[oklch(0.12_0.015_260)] hover:border-border transition-all duration-300 cursor-pointer"
                   >
                     <div
                       className="w-1 h-12 rounded-full shrink-0"
@@ -251,7 +251,7 @@ export default function Home() {
             {pathways.map((p, i) => (
               <Link key={p.slug} href={`/pathway/${p.slug}`}>
                 <div
-                  className="group p-6 rounded-2xl border border-[oklch(0.20_0.02_260)] bg-[oklch(0.12_0.015_260)] hover:border-[oklch(0.72_0.12_55)/0.40] hover:bg-[oklch(0.13_0.02_260)] transition-all duration-300 cursor-pointer"
+                  className="group p-6 rounded-2xl border border-border bg-[oklch(0.12_0.015_260)] hover:border-[oklch(0.72_0.12_55)/0.40] hover:bg-[oklch(0.13_0.02_260)] transition-all duration-300 cursor-pointer"
                 >
                   <p className="font-mono text-[9px] tracking-[0.25em] text-[oklch(0.40_0.01_260)] uppercase mb-3">
                     {String(i + 1).padStart(2, "0")}
@@ -289,7 +289,7 @@ export default function Home() {
               { step: "02", title: "Enter Your First Pathway", desc: "Follow the guided protocol recommended for you. Step-by-step. No guesswork.", cta: "See All Pathways", href: "/pathways" },
               { step: "03", title: "Let the Oracle Guide You", desc: "As you journal and check in, the Oracle recognizes your patterns and tells you what to work on next.", cta: "Meet the Oracle", href: "/oracle" },
             ].map((item) => (
-              <div key={item.step} className="p-8 rounded-2xl border border-[oklch(0.20_0.02_260)] bg-[oklch(0.12_0.015_260)]">
+              <div key={item.step} className="p-8 rounded-2xl border border-border bg-[oklch(0.12_0.015_260)]">
                 <p className="font-mono text-[9px] tracking-[0.3em] text-[oklch(0.72_0.12_55)] uppercase mb-5">{item.step}</p>
                 <h3
                   className="text-xl mb-4 text-[oklch(0.88_0.02_60)]"
@@ -335,7 +335,7 @@ export default function Home() {
                   </button>
                 </Link>
                 <Link href="/btw/ground-check">
-                  <button className="flex items-center gap-2 px-6 py-3 rounded-full text-sm font-light border border-[oklch(0.30_0.02_260)] text-[oklch(0.60_0.01_260)] hover:border-[oklch(0.72_0.12_55)/0.5] transition-all">
+                  <button className="flex items-center gap-2 px-6 py-3 rounded-full text-sm font-light border border-border text-[oklch(0.60_0.01_260)] hover:border-[oklch(0.72_0.12_55)/0.5] transition-all">
                     Take the Ground Check
                   </button>
                 </Link>
@@ -375,7 +375,7 @@ export default function Home() {
               <img
                 src="/manus-storage/dewayne-woods-founder_4f2325f0.webp"
                 alt="DeWayne Woods"
-                className="w-12 h-12 rounded-full object-cover object-top border border-[oklch(0.25_0.02_260)]"
+                className="w-12 h-12 rounded-full object-cover object-top border border-border"
               />
               <div className="text-right">
                 <p className="text-sm font-medium text-[oklch(0.80_0.02_60)]">DeWayne Woods</p>
@@ -534,7 +534,7 @@ export default function Home() {
       </section>
 
       {/* ─── FOOTER ─── */}
-      <footer className="border-t border-[oklch(0.18_0.02_260)] py-16 bg-[oklch(0.08_0.02_260)]">
+      <footer className="border-t border-border py-16 bg-[oklch(0.08_0.02_260)]">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
             <div className="col-span-2">
@@ -587,7 +587,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="pt-8 border-t border-[oklch(0.15_0.02_260)]">
+          <div className="pt-8 border-t border-border">
             <p className="text-xs text-[oklch(0.30_0.01_260)]">
               © {new Date().getFullYear()} Lifewoven. Built on the wisdom of the ages. Designed for the present moment.
             </p>

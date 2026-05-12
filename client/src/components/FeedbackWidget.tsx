@@ -40,11 +40,11 @@ export default function FeedbackWidget() {
           fixed bottom-6 right-6 z-40
           w-10 h-10 rounded-full
           flex items-center justify-center
-          bg-[oklch(0.22_0.02_60)] border border-[oklch(0.32_0.04_60)]
+          bg-[oklch(0.22_0.02_60)] border border-border
           text-[oklch(0.72_0.08_60)]
           shadow-md shadow-black/20
           hover:bg-[oklch(0.28_0.04_60)] hover:text-[oklch(0.82_0.10_60)]
-          hover:border-[oklch(0.42_0.06_60)]
+          hover:border-border
           transition-all duration-200
           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[oklch(0.72_0.08_60)]/50
         `}

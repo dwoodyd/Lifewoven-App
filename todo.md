@@ -788,3 +788,19 @@
 - [x] Redesign The Weave page Lumin — edge-fade mode at 0.22 opacity
 - [x] Redesign LuminCorner — 36px, warm amber breathing pulse, 0.72 base opacity, fade-in instead of emerge
 - [x] Redesign LuminAmbient: three modes (edge-fade, floor-glow, dominant). All 7 pages updated to safe modes
+
+## Lumin Toggle (May 12, 2026)
+- [ ] Add luminEnabled field to users table in DB schema
+- [ ] Generate + apply migration for luminEnabled
+- [ ] Add profile.setLuminEnabled tRPC procedure
+- [ ] Expose luminEnabled in auth.me response
+- [ ] Create useLumin hook (reads from user prefs, falls back to localStorage for logged-out users)
+- [ ] Update LuminAmbient to return null when lumin is disabled (except dominant/onboarding mode)
+- [ ] Update LuminCorner to return null when lumin is disabled
+- [ ] Add Lumin toggle to Settings page (Appearance section)
+
+## Light/Dark Mode Contrast Overhaul (May 12, 2026)
+- [x] Audit and fix CSS variable palette in index.css (light mode backgrounds, foregrounds, muted, borders, cards, inputs)
+- [x] Fix hardcoded dark-only colors in Nav, Dashboard, Store, Pricing, Profile, Settings, Admin
+- [x] Fix visibility in Journal/Weave, Oracle, Pathways, Community, Character, and module pages
+- [x] Ensure all text, icons, borders, badges, and inputs are clearly visible in both themes

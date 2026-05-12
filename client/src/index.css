@@ -69,37 +69,37 @@
   /* Lifewoven — Warm Stone + Deep Slate + Gold Accent */
   --radius: 0.5rem;
   --background: oklch(0.98 0.005 60);
-  --foreground: oklch(0.18 0.015 240);
-  --card: oklch(0.97 0.006 55);
-  --card-foreground: oklch(0.18 0.015 240);
-  --popover: oklch(0.97 0.006 55);
-  --popover-foreground: oklch(0.18 0.015 240);
-  --primary: oklch(0.28 0.045 240);
-  --primary-foreground: oklch(0.97 0.006 55);
-  --secondary: oklch(0.92 0.012 60);
-  --secondary-foreground: oklch(0.28 0.045 240);
-  --muted: oklch(0.93 0.008 55);
-  --muted-foreground: oklch(0.52 0.018 240);
-  --accent: oklch(0.78 0.12 75);
-  --accent-foreground: oklch(0.18 0.015 240);
-  --destructive: oklch(0.55 0.22 25);
-  --destructive-foreground: oklch(0.97 0.006 55);
-  --border: oklch(0.88 0.010 55);
-  --input: oklch(0.88 0.010 55);
-  --ring: oklch(0.78 0.12 75);
-  --sidebar: oklch(0.96 0.007 55);
-  --sidebar-foreground: oklch(0.18 0.015 240);
-  --sidebar-primary: oklch(0.28 0.045 240);
-  --sidebar-primary-foreground: oklch(0.97 0.006 55);
-  --sidebar-accent: oklch(0.92 0.012 60);
-  --sidebar-accent-foreground: oklch(0.28 0.045 240);
-  --sidebar-border: oklch(0.88 0.010 55);
-  --sidebar-ring: oklch(0.78 0.12 75);
-  --chart-1: oklch(0.62 0.14 200);
-  --chart-2: oklch(0.60 0.14 280);
-  --chart-3: oklch(0.58 0.16 145);
-  --chart-4: oklch(0.52 0.14 240);
-  --chart-5: oklch(0.62 0.12 55);
+  --foreground: oklch(0.14 0.018 240);         /* darker — better contrast on light bg */
+  --card: oklch(1.00 0.000 0);                 /* pure white cards — clear separation */
+  --card-foreground: oklch(0.14 0.018 240);
+  --popover: oklch(1.00 0.000 0);
+  --popover-foreground: oklch(0.14 0.018 240);
+  --primary: oklch(0.26 0.050 240);            /* deep navy — strong CTA contrast */
+  --primary-foreground: oklch(0.98 0.005 60);
+  --secondary: oklch(0.90 0.014 60);
+  --secondary-foreground: oklch(0.20 0.040 240);
+  --muted: oklch(0.92 0.010 55);
+  --muted-foreground: oklch(0.42 0.022 240);   /* was 0.52 — now 7:1+ contrast on muted bg */
+  --accent: oklch(0.72 0.14 75);               /* slightly deeper gold for light bg */
+  --accent-foreground: oklch(0.10 0.022 240);
+  --destructive: oklch(0.50 0.24 25);
+  --destructive-foreground: oklch(0.98 0.005 60);
+  --border: oklch(0.82 0.012 55);              /* was 0.88 — now clearly visible on white cards */
+  --input: oklch(0.82 0.012 55);
+  --ring: oklch(0.72 0.14 75);
+  --sidebar: oklch(0.96 0.008 55);
+  --sidebar-foreground: oklch(0.14 0.018 240);
+  --sidebar-primary: oklch(0.26 0.050 240);
+  --sidebar-primary-foreground: oklch(0.98 0.005 60);
+  --sidebar-accent: oklch(0.90 0.014 60);
+  --sidebar-accent-foreground: oklch(0.20 0.040 240);
+  --sidebar-border: oklch(0.82 0.012 55);
+  --sidebar-ring: oklch(0.72 0.14 75);
+  --chart-1: oklch(0.52 0.16 200);
+  --chart-2: oklch(0.50 0.16 280);
+  --chart-3: oklch(0.48 0.18 145);
+  --chart-4: oklch(0.42 0.16 240);
+  --chart-5: oklch(0.52 0.14 55);
 }
 
 .dark {

@@ -367,7 +367,7 @@ export default function AlignmentAudit() {
             {MIND_PATTERNS.map(p => (
               <button key={p.id} onClick={() => setMindPatterns(prev => prev.includes(p.id) ? prev.filter(x => x !== p.id) : [...prev, p.id])}
                 className={`w-full text-left px-4 py-3 rounded-xl border transition-all text-sm ${
-                  mindPatterns.includes(p.id) ? "border-amber-400/60 bg-amber-400/10 text-foreground" : "border-border bg-background hover:border-amber-400/30 text-muted-foreground hover:text-foreground"
+                  mindPatterns.includes(p.id) ? "border-amber-400/60 bg-amber-400/10 text-amber-900 dark:text-amber-100" : "border-border bg-background hover:border-amber-400/30 text-muted-foreground hover:text-foreground"
                 }`}>
                 {mindPatterns.includes(p.id) ? "✓ " : ""}{p.label}
               </button>

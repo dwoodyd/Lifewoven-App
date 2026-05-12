@@ -50,6 +50,8 @@ export const users = mysqlTable("users", {
   inviteCode: varchar("inviteCode", { length: 32 }),
   // Store access level — derived from tier, stored for fast reads
   storeAccess: mysqlEnum("storeAccess", ["standalone", "discount", "library"]).default("standalone").notNull(),
+  // UI preferences
+  luminEnabled: boolean("luminEnabled").default(true).notNull(),
 });
 
 export type User = typeof users.$inferSelect;

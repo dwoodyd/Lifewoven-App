@@ -201,12 +201,12 @@ export default function Store() {
               <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto">
                 Courses, workbooks, audio programs, and card decks — each one an original Lifewoven creation.
               </p>
-              <div className="max-w-2xl mx-auto px-5 py-4 rounded-2xl border border-[oklch(0.72_0.12_55)/0.25] bg-[oklch(0.72_0.12_55)/0.05] flex flex-col sm:flex-row items-center gap-4 text-left">
+              <div className="max-w-2xl mx-auto px-5 py-4 rounded-2xl border border-amber-500/25 bg-amber-500/5 flex flex-col sm:flex-row items-center gap-4 text-left">
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-[oklch(0.82_0.14_55)] mb-0.5">Oracle Founding Members get the complete Library — included free.</p>
+                  <p className="text-sm font-medium text-amber-700 dark:text-amber-300 mb-0.5">Oracle Founding Members get the complete Library — included free.</p>
                   <p className="text-xs text-muted-foreground">Apply now to lock in Oracle at $25/mo (founding rate, for life) and get every item in this store included with your membership.</p>
                 </div>
-                <Button asChild size="sm" className="shrink-0" style={{background:"linear-gradient(135deg,oklch(0.75 0.14 55),oklch(0.65 0.18 45))",color:"oklch(0.12 0.02 260)",border:"none"}}>
+                <Button asChild size="sm" className="shrink-0 bg-amber-600 hover:bg-amber-700 text-white border-none">
                   <Link href="/apply">Apply for Founding Access</Link>
                 </Button>
               </div>

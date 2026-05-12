@@ -65,12 +65,7 @@ export default function Profile() {
             )}
             {isFoundingMember && (
               <span
-                className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium"
-                style={{
-                  background: "oklch(0.55 0.18 280 / 0.18)",
-                  border: "1px solid oklch(0.65 0.18 280 / 0.35)",
-                  color: "oklch(0.82 0.14 280)",
-                }}
+                className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-violet-500/15 border border-violet-500/30 text-violet-600 dark:text-violet-300"
               >
                 <Sparkles className="h-3 w-3" />
                 Founding Member
@@ -90,25 +85,19 @@ export default function Profile() {
         {/* Founding member rate-lock card */}
         {isFoundingMember && (
           <div
-            className="p-5 rounded-2xl flex items-start gap-4"
-            style={{
-              background: "linear-gradient(135deg, oklch(0.14 0.025 260) 0%, oklch(0.12 0.035 280) 100%)",
-              border: "1px solid oklch(0.55 0.18 280 / 0.30)",
-              boxShadow: "0 0 24px oklch(0.55 0.18 280 / 0.08)",
-            }}
+            className="p-5 rounded-2xl flex items-start gap-4 bg-violet-500/10 border border-violet-500/25 shadow-sm"
           >
             <div
-              className="shrink-0 w-9 h-9 rounded-full flex items-center justify-center mt-0.5"
-              style={{ background: "oklch(0.55 0.18 280 / 0.20)", border: "1px solid oklch(0.65 0.18 280 / 0.30)" }}
+              className="shrink-0 w-9 h-9 rounded-full flex items-center justify-center mt-0.5 bg-violet-500/20 border border-violet-500/30"
             >
-              <Lock className="h-4 w-4" style={{ color: "oklch(0.80 0.14 280)" }} />
+              <Lock className="h-4 w-4 text-violet-500 dark:text-violet-300" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium mb-0.5" style={{ color: "oklch(0.90 0.08 280)" }}>
+              <p className="text-sm font-medium mb-0.5 text-violet-700 dark:text-violet-200">
                 Founding Member · {TIER_LABELS[foundingTier ?? ""] ?? foundingTier ?? "Oracle"}
               </p>
-              <p className="text-xs leading-relaxed" style={{ color: "oklch(0.65 0.06 260)" }}>
-                Your founding rate is <strong style={{ color: "oklch(0.78 0.12 280)" }}>locked for life</strong>. As long as your subscription stays active, you'll never pay more than your founding price — even as retail pricing rises.
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                Your founding rate is <strong className="text-violet-600 dark:text-violet-300">locked for life</strong>. As long as your subscription stays active, you'll never pay more than your founding price — even as retail pricing rises.
               </p>
             </div>
           </div>
