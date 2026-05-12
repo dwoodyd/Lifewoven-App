@@ -465,64 +465,50 @@ export default function OnboardingModal({ userId }: Props) {
       }} />
 
       {/* ── Video slot A ── */}
-      {/* VEO watermark crop wrapper: overflow:hidden clips the bottom-right corner */}
-      <div style={{ position: "absolute", inset: 0, zIndex: 1, overflow: "hidden", pointerEvents: "none" }}>
-        <video
-          ref={videoARef}
-          {...(slotA.url ? { src: slotA.url } : {})}
-          muted playsInline
-          loop={activeSlot === "a" ? activeSceneLoop : false}
-          autoPlay={activeSlot === "a"}
-          onCanPlay={() => {
-            // When preloading into inactive slot, pause immediately so it doesn't drift
-            if (activeSlot !== "a" && videoARef.current) {
-              videoARef.current.pause();
-            }
-            setSlotA(s => ({ ...s, ready: true }));
-          }}
-          style={{
-            position: "absolute", inset: 0,
-            width: "100%", height: "100%",
-            objectFit: "cover",
-            mixBlendMode: "screen",
-            opacity: slotA.visible ? 1 : 0,
-            transition: "opacity 0.7s ease",
-            // Watermark crop: scale up 12% and shift left+up to push watermark out of frame
-            transform: "scale(1.12) translate(-5%, -5%)",
-            transformOrigin: "center center",
-          }}
-        />
-      </div>
+      <video
+        ref={videoARef}
+        {...(slotA.url ? { src: slotA.url } : {})}
+        muted playsInline
+        loop={activeSlot === "a" ? activeSceneLoop : false}
+        autoPlay={activeSlot === "a"}
+        onCanPlay={() => {
+          if (activeSlot !== "a" && videoARef.current) {
+            videoARef.current.pause();
+          }
+          setSlotA(s => ({ ...s, ready: true }));
+        }}
+        style={{
+          position: "absolute", inset: 0, zIndex: 1,
+          width: "100%", height: "100%",
+          objectFit: "cover",
+          mixBlendMode: "screen",
+          opacity: slotA.visible ? 1 : 0,
+          transition: "opacity 0.7s ease",
+        }}
+      />
 
       {/* ── Video slot B ── */}
-      {/* VEO watermark crop wrapper: overflow:hidden clips the bottom-right corner */}
-      <div style={{ position: "absolute", inset: 0, zIndex: 1, overflow: "hidden", pointerEvents: "none" }}>
-        <video
-          ref={videoBRef}
-          {...(slotB.url ? { src: slotB.url } : {})}
-          muted playsInline
-          loop={activeSlot === "b" ? activeSceneLoop : false}
-          autoPlay={activeSlot === "b"}
-          onCanPlay={() => {
-            // When preloading into inactive slot, pause immediately so it doesn't drift
-            if (activeSlot !== "b" && videoBRef.current) {
-              videoBRef.current.pause();
-            }
-            setSlotB(s => ({ ...s, ready: true }));
-          }}
-          style={{
-            position: "absolute", inset: 0,
-            width: "100%", height: "100%",
-            objectFit: "cover",
-            mixBlendMode: "screen",
-            opacity: slotB.visible ? 1 : 0,
-            transition: "opacity 0.7s ease",
-            // Watermark crop: scale up 12% and shift left+up to push watermark out of frame
-            transform: "scale(1.12) translate(-5%, -5%)",
-            transformOrigin: "center center",
-          }}
-        />
-      </div>
+      <video
+        ref={videoBRef}
+        {...(slotB.url ? { src: slotB.url } : {})}
+        muted playsInline
+        loop={activeSlot === "b" ? activeSceneLoop : false}
+        autoPlay={activeSlot === "b"}
+        onCanPlay={() => {
+          if (activeSlot !== "b" && videoBRef.current) {
+            videoBRef.current.pause();
+          }
+          setSlotB(s => ({ ...s, ready: true }));
+        }}
+        style={{
+          position: "absolute", inset: 0, zIndex: 1,
+          width: "100%", height: "100%",
+          objectFit: "cover",
+          mixBlendMode: "screen",
+          opacity: slotB.visible ? 1 : 0,
+          transition: "opacity 0.7s ease",
+        }}
+      />
 
       {/* ── Gradient overlay ── */}
       <div style={{
@@ -555,24 +541,6 @@ export default function OnboardingModal({ userId }: Props) {
       )}
 
       {/* Screen 2 Lumin overlay removed — no old colorful Lumin in onboarding */}
-
-      {/* ── VEO watermark mask — solid black block covers bottom-right corner ── */}
-      {/* The VEO watermark sits in the bottom-right ~12% width × ~8% height of the video frame.
-          A solid black rectangle permanently covers that zone, blending seamlessly with the
-          dark gradient that already darkens the bottom of each scene. */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          bottom: 0,
-          right: 0,
-          width: "15%",
-          height: "12%",
-          background: "#000",
-          zIndex: 3,
-          pointerEvents: "none",
-        }}
-      />
 
       {/* ── Scene dot progress ── */}
       {!finished && (

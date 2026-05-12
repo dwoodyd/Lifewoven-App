@@ -7,10 +7,6 @@
  * Two modes:
  *   dominant (default) — Lumin fills the viewport center, content overlaid on top.
  *   corner             — Legacy small placement for secondary contexts.
- *
- * VEO watermark masking: A solid black rectangle is absolutely positioned in the
- * bottom-right corner of the video container, covering the watermark zone.
- * The container uses overflow:hidden to clip any overflow.
  */
 
 import { useEffect, useRef, useState } from "react";
@@ -68,27 +64,6 @@ const CORNER_POSITION_STYLES: Record<LuminPosition, React.CSSProperties> = {
   "center":        { top: "50%", left: "50%", transform: "translate(-50%, -50%)" },
 };
 
-/**
- * VEO watermark mask — a solid black rectangle that covers the bottom-right
- * corner of the video where the VEO watermark appears.
- * Width/height are percentages of the video container.
- */
-const WatermarkMask = () => (
-  <div
-    aria-hidden="true"
-    style={{
-      position: "absolute",
-      bottom: 0,
-      right: 0,
-      width: "18%",
-      height: "14%",
-      background: "#000",
-      pointerEvents: "none",
-      zIndex: 1,
-    }}
-  />
-);
-
 export function LuminAmbient({
   videoId,
   mode = "dominant",
@@ -144,7 +119,6 @@ export function LuminAmbient({
           zIndex,
           pointerEvents: "none",
           opacity: dominantOpacity,
-          overflow: "hidden",
           ...style,
         }}
       >
@@ -163,7 +137,6 @@ export function LuminAmbient({
             display: "block",
           }}
         />
-        <WatermarkMask />
       </div>
     );
   }
@@ -191,7 +164,6 @@ export function LuminAmbient({
         zIndex,
         pointerEvents: "none",
         opacity: cornerOpacity,
-        overflow: "hidden",
         ...posStyle,
         ...offsetStyle,
         ...style,
@@ -212,7 +184,6 @@ export function LuminAmbient({
           display: "block",
         }}
       />
-      <WatermarkMask />
     </div>
   );
 }
