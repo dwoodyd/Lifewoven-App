@@ -711,3 +711,13 @@
 - [x] Surface Settings link in user dropdown and mobile menu
 - [x] Add Journal, Character, Profile, Settings to mobile hamburger menu
 - [x] Fix mobile menu hamburger breakpoint: now shows at md and below (not just lg)
+
+## Nav Rebuild — Canonical Spec (May 11, 2026)
+- [x] Primary nav: Lifewoven logo | Pathways | The Weave | Oracle | Resources | Community | [DW avatar]
+- [x] User dropdown: Practice Tools section (Today's Check-in, The Audit, Before the Words, My Reading, Mood Rhythm)
+- [x] User dropdown: More from Soul Engineer section (Books → soulengineer.online/shop new tab)
+- [x] User dropdown: Account section (Subscription, About, Settings, Help)
+- [x] User dropdown: Sign Out
+- [x] Remove More dropdown from primary nav (collapse all secondary links into user dropdown)
+- [x] Rename "Library" → "Resources" in nav
+- [x] Add "The Weave" as a primary nav link
