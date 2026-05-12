@@ -1,92 +1,58 @@
 /**
- * LuminAmbient — Lumin as the dominant visual presence on a page.
+ * LuminAmbient — Lumin as an environmental presence, not a face.
  *
- * Design principle: The page revolves around Lumin.
- * She is larger than life — content floats over her world.
+ * Three modes:
+ *  "edge-fade"   — bleeds in from the right edge, heavily masked, opacity ~0.25.
+ *                  She's felt, not watched. Use on content pages (Weave, Oracle, Pathways).
+ *  "floor-glow"  — anchored to the bottom of the viewport, only lower-third visible.
+ *                  Like candlelight. Use on Dashboard, Character, MoodRhythm.
+ *  "dominant"    — large centered presence (kept for OnboardingModal / FoundingWelcomeCard).
+ *                  Do NOT use on regular app pages.
  *
- * Two modes:
- *   dominant (default) — Lumin fills the viewport center, content overlaid on top.
- *   corner             — Legacy small placement for secondary contexts.
+ * Legacy props (position, size, offset) are accepted but ignored — they were only
+ * used by the removed "corner" mode. Callers can be updated lazily.
  */
-
 import { useEffect, useRef, useState } from "react";
 import { LUMIN_VIDEOS } from "@/data/lumin";
 
-export type LuminPosition =
-  | "top-right"
-  | "top-left"
-  | "bottom-right"
-  | "bottom-left"
-  | "center-right"
-  | "center-left"
-  | "top-center"
-  | "bottom-center"
-  | "center";
+export type LuminMode = "edge-fade" | "floor-glow" | "dominant" | "corner";
+// "corner" is kept as a type alias for "edge-fade" so existing callers don't break.
 
-export type LuminMode = "dominant" | "corner";
+export type LuminPosition =
+  | "top-right" | "top-left" | "bottom-right" | "bottom-left"
+  | "center-right" | "center-left" | "top-center" | "bottom-center" | "center";
 
 interface LuminAmbientProps {
-  /** Video ID from the LUMIN_VIDEOS catalogue */
   videoId: string;
-  /**
-   * "dominant" — Lumin fills the viewport, content floats over her (default).
-   * "corner"   — Small fixed placement at an edge (legacy).
-   */
   mode?: LuminMode;
-  /** Where to anchor Lumin (only used in "corner" mode, default: "center") */
-  position?: LuminPosition;
-  /**
-   * In "dominant" mode: width as CSS value (default: "min(90vw, 900px)").
-   * In "corner" mode: width as CSS value (default: "min(32vw, 400px)").
-   */
-  size?: string;
-  /** Overall opacity (default: dominant=0.65, corner=0.45) */
+  /** Override opacity. Defaults: edge-fade=0.25, floor-glow=0.20, dominant=0.65 */
   opacity?: number;
-  /** Whether to loop the video (default: true) */
   loop?: boolean;
-  /** Extra CSS applied to the outer wrapper */
   style?: React.CSSProperties;
-  /** z-index (default: dominant=0, corner=0) */
   zIndex?: number;
-  /** Offset from the anchor edge in px — corner mode only */
+  // Legacy props — accepted but ignored
+  position?: LuminPosition;
+  size?: string;
   offset?: number;
 }
 
-const CORNER_POSITION_STYLES: Record<LuminPosition, React.CSSProperties> = {
-  "top-right":     { top: 0,    right: 0 },
-  "top-left":      { top: 0,    left: 0 },
-  "bottom-right":  { bottom: 0, right: 0 },
-  "bottom-left":   { bottom: 0, left: 0 },
-  "center-right":  { top: "50%", right: 0,   transform: "translateY(-50%)" },
-  "center-left":   { top: "50%", left: 0,    transform: "translateY(-50%)" },
-  "top-center":    { top: 0,    left: "50%", transform: "translateX(-50%)" },
-  "bottom-center": { bottom: 0, left: "50%", transform: "translateX(-50%)" },
-  "center":        { top: "50%", left: "50%", transform: "translate(-50%, -50%)" },
-};
-
 export function LuminAmbient({
   videoId,
-  mode = "dominant",
-  position = "center",
-  size,
+  mode = "edge-fade",
   opacity,
   loop = true,
   style,
   zIndex = 0,
-  offset = 0,
 }: LuminAmbientProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const video = LUMIN_VIDEOS.find(v => v.id === videoId);
 
-  // Screenshot mode — hide Lumin when user has enabled it in Settings
   const [screenshotMode, setScreenshotMode] = useState(
     () => localStorage.getItem("lifeos_screenshot_mode") === "true"
   );
   useEffect(() => {
     const handler = (e: StorageEvent) => {
-      if (e.key === "lifeos_screenshot_mode") {
-        setScreenshotMode(e.newValue === "true");
-      }
+      if (e.key === "lifeos_screenshot_mode") setScreenshotMode(e.newValue === "true");
     };
     window.addEventListener("storage", handler);
     return () => window.removeEventListener("storage", handler);
@@ -95,30 +61,31 @@ export function LuminAmbient({
   useEffect(() => {
     const el = videoRef.current;
     if (!el) return;
-    el.play().catch(() => {/* autoplay blocked — silent fail */});
+    el.play().catch(() => {});
   }, [videoId]);
 
-  if (!video?.url) return null;
-  if (screenshotMode) return null;
+  if (!video?.url || screenshotMode) return null;
 
-  // ── Dominant mode ──────────────────────────────────────────────────────────
-  if (mode === "dominant") {
-    const dominantSize    = size    ?? "min(88vw, 860px)";
-    const dominantOpacity = opacity ?? 0.65;
-
+  // ── Edge-fade mode (default for content pages) ─────────────────────────────
+  // Lumin bleeds in from the right, masked so only a soft glow/silhouette shows.
+  if (mode === "edge-fade" || mode === "corner") {
+    const o = opacity ?? 0.25;
     return (
       <div
         aria-hidden="true"
         style={{
           position: "fixed",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: dominantSize,
-          aspectRatio: "16/9",
+          top: 0,
+          right: 0,
+          width: "min(52vw, 520px)",
+          height: "100vh",
           zIndex,
           pointerEvents: "none",
-          opacity: dominantOpacity,
+          WebkitMaskImage:
+            "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.55) 40%, rgba(0,0,0,0.85) 100%)",
+          maskImage:
+            "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.55) 40%, rgba(0,0,0,0.85) 100%)",
+          opacity: o,
           ...style,
         }}
       >
@@ -132,7 +99,8 @@ export function LuminAmbient({
           style={{
             width: "100%",
             height: "100%",
-            objectFit: "contain",
+            objectFit: "cover",
+            objectPosition: "center center",
             mixBlendMode: "screen",
             display: "block",
           }}
@@ -141,31 +109,65 @@ export function LuminAmbient({
     );
   }
 
-  // ── Corner mode (legacy) ───────────────────────────────────────────────────
-  const cornerSize    = size    ?? "min(32vw, 400px)";
-  const cornerOpacity = opacity ?? 0.45;
-  const posStyle = CORNER_POSITION_STYLES[position];
-
-  const offsetStyle: React.CSSProperties = {};
-  if (offset) {
-    if ("top"    in posStyle && posStyle.top    === 0) offsetStyle.top    = offset;
-    if ("bottom" in posStyle && posStyle.bottom === 0) offsetStyle.bottom = offset;
-    if ("left"   in posStyle && posStyle.left   === 0) offsetStyle.left   = offset;
-    if ("right"  in posStyle && posStyle.right  === 0) offsetStyle.right  = offset;
+  // ── Floor-glow mode ────────────────────────────────────────────────────────
+  // Lumin anchored to the bottom, only her lower third visible — like candlelight.
+  if (mode === "floor-glow") {
+    const o = opacity ?? 0.20;
+    return (
+      <div
+        aria-hidden="true"
+        style={{
+          position: "fixed",
+          bottom: 0,
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "min(70vw, 700px)",
+          height: "min(50vh, 500px)",
+          zIndex,
+          pointerEvents: "none",
+          WebkitMaskImage:
+            "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.9) 100%)",
+          maskImage:
+            "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.9) 100%)",
+          opacity: o,
+          ...style,
+        }}
+      >
+        <video
+          ref={videoRef}
+          src={video.url}
+          autoPlay
+          muted
+          loop={loop}
+          playsInline
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            objectPosition: "center bottom",
+            mixBlendMode: "screen",
+            display: "block",
+          }}
+        />
+      </div>
+    );
   }
 
+  // ── Dominant mode (onboarding / founding welcome only) ─────────────────────
+  const o = opacity ?? 0.65;
   return (
     <div
       aria-hidden="true"
       style={{
         position: "fixed",
-        width: cornerSize,
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        width: "min(88vw, 860px)",
         aspectRatio: "16/9",
         zIndex,
         pointerEvents: "none",
-        opacity: cornerOpacity,
-        ...posStyle,
-        ...offsetStyle,
+        opacity: o,
         ...style,
       }}
     >
@@ -179,7 +181,7 @@ export function LuminAmbient({
         style={{
           width: "100%",
           height: "100%",
-          objectFit: "cover",
+          objectFit: "contain",
           mixBlendMode: "screen",
           display: "block",
         }}

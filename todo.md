@@ -782,3 +782,9 @@
 ## Founding Member — Dashboard Badge + Redemption Email (May 12, 2026)
 - [x] Add founding member badge pill to Dashboard greeting header
 - [x] Send post-redemption confirmation email in applications.redeem
+
+## Lumin Video Layout Redesign (May 12, 2026)
+- [x] Audit all Lumin video placements (LuminCorner, LuminAmbient, Journal/Weave, Oracle, PathwayPage, Dashboard, FoundingWelcomeCard)
+- [x] Redesign The Weave page Lumin — edge-fade mode at 0.22 opacity
+- [x] Redesign LuminCorner — 36px, warm amber breathing pulse, 0.72 base opacity, fade-in instead of emerge
+- [x] Redesign LuminAmbient: three modes (edge-fade, floor-glow, dominant). All 7 pages updated to safe modes

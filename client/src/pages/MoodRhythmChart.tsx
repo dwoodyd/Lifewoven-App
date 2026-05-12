@@ -205,8 +205,8 @@ export default function MoodRhythmChart() {
     <>
     <LuminAmbient
       videoId="peaceful_idle"
-      mode="dominant"
-      opacity={0.50}
+      mode="floor-glow"
+      opacity={0.18}
       zIndex={0}
     />
     <div className="container max-w-3xl py-8 space-y-6">

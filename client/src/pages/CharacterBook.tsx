@@ -563,8 +563,8 @@ export default function CharacterBook() {
       {/* Lumin reaches upward — aspirational, present for deep reading work */}
       <LuminAmbient
         videoId="turning_extending"
-        mode="dominant"
-        opacity={0.55}
+        mode="floor-glow"
+        opacity={0.18}
         zIndex={0}
       />
       <Nav />

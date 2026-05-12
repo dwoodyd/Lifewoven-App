@@ -165,11 +165,11 @@ export default function Oracle() {
 
   return (
     <div className="min-h-screen bg-[oklch(0.10_0.015_260)] flex flex-col" style={{ position: "relative" }}>
-      {/* Lumin Oracle-mode — dominant centered: she IS the Oracle's embodied presence */}
+      {/* Lumin breathes in from the right edge — a quiet presence, not a face */}
       <LuminAmbient
         videoId="core_unfurls"
-        mode="dominant"
-        opacity={0.70}
+        mode="edge-fade"
+        opacity={0.22}
         zIndex={0}
       />
       <Nav />

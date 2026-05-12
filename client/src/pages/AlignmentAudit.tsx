@@ -236,8 +236,8 @@ export default function AlignmentAudit() {
       {/* Lumin points the way — energetic, guiding through the audit */}
       <LuminAmbient
         videoId="pointing"
-        mode="dominant"
-        opacity={0.58}
+        mode="edge-fade"
+        opacity={0.22}
         zIndex={0}
       />
       <Nav />

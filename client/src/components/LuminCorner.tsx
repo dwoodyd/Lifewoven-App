@@ -256,8 +256,9 @@ interface LuminCornerProps {
   onClick?: () => void;
 }
 
-export function LuminCorner({ pulse = false, size = 48, tooltip, onClick }: LuminCornerProps) {
+export function LuminCorner({ pulse = false, size = 36, tooltip, onClick }: LuminCornerProps) {
   const [luminState, setLuminState] = useState<LuminState>("hidden");
+  const [visible, setVisible] = useState(false);
   const pulsed = useRef(false);
 
   // Screenshot mode — hide when user has enabled it in Settings
@@ -273,8 +274,11 @@ export function LuminCorner({ pulse = false, size = 48, tooltip, onClick }: Lumi
   }, []);
 
   useEffect(() => {
-    // Emerge after a short delay on mount
-    const t = setTimeout(() => setLuminState("emerge"), 800);
+    // Gentle fade-in instead of hard emerge — less startling
+    const t = setTimeout(() => {
+      setLuminState("idle");
+      setVisible(true);
+    }, 1200);
     return () => clearTimeout(t);
   }, []);
 
@@ -297,16 +301,31 @@ export function LuminCorner({ pulse = false, size = 48, tooltip, onClick }: Lumi
       onClick={onClick}
       style={{
         position: "fixed",
-        bottom: 24,
-        right: 24,
+        bottom: 20,
+        right: 20,
         zIndex: 40,
         cursor: onClick ? "pointer" : "default",
-        filter: "drop-shadow(0 2px 8px rgba(245,158,11,0.35))",
-        transition: "transform 0.2s",
+        // Warm amber glow — ember, not spotlight
+        filter: "drop-shadow(0 1px 6px rgba(251,191,36,0.28))",
+        transition: "opacity 0.8s ease, transform 0.2s",
+        opacity: visible ? 0.72 : 0,
+        animation: visible ? "lumin-corner-breathe 4s ease-in-out infinite" : "none",
       }}
-      onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.15)")}
-      onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
+      onMouseEnter={e => {
+        e.currentTarget.style.opacity = "1";
+        e.currentTarget.style.transform = "scale(1.12)";
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.opacity = "0.72";
+        e.currentTarget.style.transform = "scale(1)";
+      }}
     >
+      <style>{`
+        @keyframes lumin-corner-breathe {
+          0%, 100% { filter: drop-shadow(0 1px 6px rgba(251,191,36,0.28)); }
+          50%       { filter: drop-shadow(0 2px 10px rgba(251,191,36,0.48)); }
+        }
+      `}</style>
       <Lumin state={luminState} size={size} />
     </div>
   );

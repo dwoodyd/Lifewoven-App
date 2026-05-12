@@ -341,11 +341,11 @@ export default function Character() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Lumin bounces joyfully — she loves books as much as you do */}
+      {/* Lumin glows warmly from the floor — candlelight, not spotlight */}
       <LuminAmbient
         videoId="bouncing_joyfully"
-        mode="dominant"
-        opacity={0.55}
+        mode="floor-glow"
+        opacity={0.18}
         zIndex={0}
       />
       <Nav />

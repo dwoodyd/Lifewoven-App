@@ -79,11 +79,11 @@ export default function Journal() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Lumin floats softly in the corner — a quiet witness to your writing */}
+      {/* Lumin breathes in from the right edge — felt, not watched */}
       <LuminAmbient
         videoId="peaceful_idle"
-        mode="dominant"
-        opacity={0.50}
+        mode="edge-fade"
+        opacity={0.22}
         zIndex={0}
       />
       <Nav />
