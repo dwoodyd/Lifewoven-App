@@ -118,6 +118,8 @@ export default function Store() {
   const { data: serverProducts } = trpc.store.getProducts.useQuery();
 
   const accessLevel = access?.level ?? "standalone";
+  const isBetaMember = (access as { isBetaMember?: boolean } | undefined)?.isBetaMember ?? false;
+  const betaEndDate = (access as { betaEndDate?: Date | string | null } | undefined)?.betaEndDate;
 
   const products = PRODUCT_CATALOG.map(p => {
     const sp = serverProducts?.find(s => s.slug === p.id);
@@ -176,10 +178,24 @@ export default function Store() {
           <h1 className="font-serif text-4xl sm:text-5xl font-light text-foreground mb-5">Wisdom Tools</h1>
 
           {accessLevel === "library" ? (
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-violet-400/30 bg-violet-400/10 text-violet-300 text-sm mb-4">
-              <Library className="h-4 w-4" />
-              All items included with your Oracle membership
-            </div>
+            isBetaMember ? (
+              <div className="space-y-3">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-amber-400/30 bg-amber-400/10 text-amber-300 text-sm">
+                  <Library className="h-4 w-4" />
+                  Founding Member Beta — Full Library Included
+                </div>
+                {betaEndDate && (
+                  <p className="text-xs text-muted-foreground">
+                    Your founding access runs through {new Date(betaEndDate).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })}. After that, choose a plan to keep your founding rate.
+                  </p>
+                )}
+              </div>
+            ) : (
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-violet-400/30 bg-violet-400/10 text-violet-300 text-sm mb-4">
+                <Library className="h-4 w-4" />
+                All items included with your Oracle membership
+              </div>
+            )
           ) : accessLevel === "discount" ? (
             <div className="space-y-4">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-amber-400/30 bg-amber-400/10 text-amber-300 text-sm">

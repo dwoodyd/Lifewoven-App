@@ -1,0 +1,1 @@
+ALTER TABLE `users` MODIFY COLUMN `billingStatus` enum('trialing_no_card','explorer_tier_founding_rate_waiting','explorer_tier','active','cancelled') DEFAULT 'trialing_no_card';

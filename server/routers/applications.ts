@@ -242,7 +242,9 @@ export const applicationsRouter = router({
         .where(eq(inviteCodes.id, row.id));
 
       // Set founding member flags on the user
-      const storeAccess = row.tier === "oracle" ? "library" : row.tier === "seeker" ? "discount" : "standalone";
+      // All founding members get 90-day beta: full library access, no card required
+      const betaStart = new Date();
+      const betaEnd   = new Date(betaStart.getTime() + 90 * 24 * 60 * 60 * 1000);
       await db.update(users)
         .set({
           foundingMember:     true,
@@ -251,12 +253,16 @@ export const applicationsRouter = router({
           needsIntro:         true,
           inviteCode:         input.code,
           membershipTier:     row.tier,
+          billingStatus:      "trialing_no_card",
+          betaStartDate:      betaStart,
+          betaEndDate:        betaEnd,
+          storeAccess:        "library_during_beta",
         })
         .where(eq(users.id, ctx.user.id));
 
       notifyOwner({
         title: `Founding member joined: ${ctx.user.name || ctx.user.email}`,
-        content: `Tier: ${row.tier} · Code: ${input.code} · Store access: ${storeAccess}`,
+        content: `Tier: ${row.tier} · Code: ${input.code} · Beta ends: ${betaEnd.toISOString().slice(0, 10)}`,
       }).catch(() => {});
 
       // Send redemption confirmation email (non-blocking)

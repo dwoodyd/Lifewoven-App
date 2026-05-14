@@ -1,0 +1,9 @@
+{
+  "query": "ALTER TABLE `users` MODIFY COLUMN `storeAccess` enum('standalone','discount','library','library_during_beta') NOT NULL DEFAULT 'standalone';\nALTER TABLE `users` ADD `billingStatus` enum('trialing_no_card','explorer_tier_founding_rate_waiting','active','cancelled') DEFAULT 'trialing_no_card';\nALTER TABLE `users` ADD `betaStartDate` timestamp;\nALTER TABLE `users` ADD `betaEndDate` timestamp;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4A9VQZNRBpHGiCF.a37aec6b9c0f --database kRrwoPFbyNWaiJXLmscJ4t --execute ALTER TABLE `users` MODIFY COLUMN `storeAccess` enum('standalone','discount','library','library_during_beta') NOT NULL DEFAULT 'standalone';\nALTER TABLE `users` ADD `billingStatus` enum('trialing_no_card','explorer_tier_founding_rate_waiting','active','cancelled') DEFAULT 'trialing_no_card';\nALTER TABLE `users` ADD `betaStartDate` timestamp;\nALTER TABLE `users` ADD `betaEndDate` timestamp;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 939
+}

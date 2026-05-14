@@ -2,9 +2,13 @@
  * PayPal Subscription routes for membership tiers.
  *
  * POST /api/paypal/subscription/create  — creates a PayPal subscription, returns approvalUrl
+ * POST /api/paypal/subscription/capture — saves subscriptionId after user approves
  * POST /api/paypal/subscription/cancel  — cancels the user's active subscription
  * GET  /api/paypal/subscription/status  — returns current subscription info from PayPal
  * POST /api/paypal/subscription/webhook — PayPal webhook for subscription lifecycle events
+ *
+ * 8 plans: Seeker/Oracle × Founding/Retail × Monthly/Annual
+ * Plan IDs are stored in env vars (see PLAN_IDS below).
  */
 import { Router, type Request, type Response } from "express";
 import { getDb } from "../db";
@@ -12,24 +16,52 @@ import { users } from "../../drizzle/schema";
 import { eq } from "drizzle-orm";
 import { sdk } from "../_core/sdk";
 import { notifyOwner } from "../_core/notification";
-import crypto from "crypto";
 
 const PAYPAL_BASE =
   process.env.PAYPAL_ENV === "live"
     ? "https://api-m.paypal.com"
     : "https://api-m.sandbox.paypal.com";
 
-// ── Plan IDs (set via env vars, created once in PayPal dashboard / setup script) ──
-// PAYPAL_PLAN_SEEKER_ID and PAYPAL_PLAN_ORACLE_ID are set in Secrets
+// ── Plan IDs ──────────────────────────────────────────────────────────────────
+// Set these in Settings → Secrets after creating plans in PayPal dashboard.
+// Founding rates are locked for life; retail rates are standard public pricing.
 const PLAN_IDS: Record<string, string | undefined> = {
-  seeker: process.env.PAYPAL_PLAN_SEEKER_ID,
-  oracle: process.env.PAYPAL_PLAN_ORACLE_ID,
+  // Founding rates (locked for life)
+  "seeker-founding-monthly":  process.env.PAYPAL_PLAN_SEEKER_FOUNDING_MONTHLY_ID,
+  "seeker-founding-annual":   process.env.PAYPAL_PLAN_SEEKER_FOUNDING_ANNUAL_ID,
+  "oracle-founding-monthly":  process.env.PAYPAL_PLAN_ORACLE_FOUNDING_MONTHLY_ID,
+  "oracle-founding-annual":   process.env.PAYPAL_PLAN_ORACLE_FOUNDING_ANNUAL_ID,
+  // Retail rates
+  "seeker-retail-monthly":    process.env.PAYPAL_PLAN_SEEKER_RETAIL_MONTHLY_ID,
+  "seeker-retail-annual":     process.env.PAYPAL_PLAN_SEEKER_RETAIL_ANNUAL_ID,
+  "oracle-retail-monthly":    process.env.PAYPAL_PLAN_ORACLE_RETAIL_MONTHLY_ID,
+  "oracle-retail-annual":     process.env.PAYPAL_PLAN_ORACLE_RETAIL_ANNUAL_ID,
+  // Legacy keys (backwards compat with older frontend code)
+  seeker: process.env.PAYPAL_PLAN_SEEKER_FOUNDING_MONTHLY_ID ?? process.env.PAYPAL_PLAN_SEEKER_ID,
+  oracle: process.env.PAYPAL_PLAN_ORACLE_FOUNDING_MONTHLY_ID ?? process.env.PAYPAL_PLAN_ORACLE_ID,
 };
 
 const TIER_LABELS: Record<string, string> = {
-  seeker: "Seeker",
-  oracle: "Oracle",
+  seeker: "Seeker", oracle: "Oracle",
+  "seeker-founding-monthly": "Seeker Founding Monthly",
+  "seeker-founding-annual":  "Seeker Founding Annual",
+  "oracle-founding-monthly": "Oracle Founding Monthly",
+  "oracle-founding-annual":  "Oracle Founding Annual",
+  "seeker-retail-monthly":   "Seeker Retail Monthly",
+  "seeker-retail-annual":    "Seeker Retail Annual",
+  "oracle-retail-monthly":   "Oracle Retail Monthly",
+  "oracle-retail-annual":    "Oracle Retail Annual",
 };
+
+/** Derive base tier (seeker | oracle) from plan key */
+function baseTier(plan: string): "seeker" | "oracle" {
+  return plan.startsWith("oracle") ? "oracle" : "seeker";
+}
+
+/** Derive store access from tier */
+function tierToStoreAccess(tier: "seeker" | "oracle"): "discount" | "library" {
+  return tier === "oracle" ? "library" : "discount";
+}
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -95,7 +127,9 @@ paypalSubscriptionRouter.post("/create", async (req: Request, res: Response) => 
 
     const planId = PLAN_IDS[plan];
     if (!planId) {
-      return res.status(400).json({ error: `Unknown plan: ${plan}. Configure PAYPAL_PLAN_${plan.toUpperCase()}_ID in Secrets.` });
+      return res.status(400).json({
+        error: `Unknown plan: ${plan}. Configure the matching PAYPAL_PLAN_*_ID secret in Settings → Secrets.`,
+      });
     }
 
     const body = {
@@ -156,17 +190,23 @@ paypalSubscriptionRouter.post("/capture", async (req: Request, res: Response) =>
       return res.status(400).json({ error: `Subscription not active (status: ${sub.status})` });
     }
 
-    const tier = plan === "oracle" ? "oracle" : "seeker";
+    const tier = baseTier(plan);
+    const storeAccess = tierToStoreAccess(tier);
     const db = await getDb();
     if (!db) return res.status(500).json({ error: "Database unavailable" });
 
     await db.update(users)
-      .set({ membershipTier: tier, paypalSubscriptionId: subscriptionId })
+      .set({
+        membershipTier: tier,
+        paypalSubscriptionId: subscriptionId,
+        billingStatus: "active",
+        storeAccess,
+      })
       .where(eq(users.id, user.id));
 
     await notifyOwner({
-      title: `🎉 New ${TIER_LABELS[tier] ?? tier} Subscription`,
-      content: `${user.name ?? user.email ?? "A user"} just subscribed to the ${TIER_LABELS[tier]} plan.\nSubscription ID: ${subscriptionId}`,
+      title: `🎉 New ${TIER_LABELS[plan] ?? tier} Subscription`,
+      content: `${user.name ?? user.email ?? "A user"} just subscribed to the ${TIER_LABELS[plan] ?? tier} plan.\nSubscription ID: ${subscriptionId}`,
     }).catch(() => {});
 
     return res.json({ ok: true, tier });
@@ -194,8 +234,14 @@ paypalSubscriptionRouter.post("/cancel", async (req: Request, res: Response) => 
       body: JSON.stringify({ reason: "User requested cancellation" }),
     });
 
+    // Founding members keep their rate locked; store access reverts to standalone
     await db.update(users)
-      .set({ membershipTier: "explorer", paypalSubscriptionId: null })
+      .set({
+        membershipTier: "explorer",
+        paypalSubscriptionId: null,
+        billingStatus: row?.foundingMember ? "explorer_tier_founding_rate_waiting" : "explorer_tier",
+        storeAccess: "standalone",
+      })
       .where(eq(users.id, user.id));
 
     return res.json({ ok: true });
@@ -223,7 +269,14 @@ paypalSubscriptionRouter.get("/status", async (req: Request, res: Response) => {
 
     const subId = row?.paypalSubscriptionId;
     if (!subId) {
-      return res.json({ tier: row?.membershipTier ?? "explorer", subscriptionId: null, status: "none" });
+      return res.json({
+        tier: row?.membershipTier ?? "explorer",
+        subscriptionId: null,
+        status: row?.billingStatus ?? "none",
+        billingStatus: row?.billingStatus ?? null,
+        foundingMember: row?.foundingMember ?? false,
+        betaEndDate: row?.betaEndDate ?? null,
+      });
     }
 
     // Fetch live status from PayPal
@@ -237,7 +290,10 @@ paypalSubscriptionRouter.get("/status", async (req: Request, res: Response) => {
       tier: row?.membershipTier ?? "explorer",
       subscriptionId: subId,
       status: sub.status ?? "unknown",
+      billingStatus: row?.billingStatus ?? null,
       nextBillingDate: sub.billing_info?.next_billing_time ?? null,
+      foundingMember: row?.foundingMember ?? false,
+      betaEndDate: row?.betaEndDate ?? null,
     });
   } catch (err) {
     console.error("[PayPal Subscription] /status error:", err);
@@ -274,11 +330,17 @@ paypalSubscriptionRouter.post("/webhook", async (req: Request, res: Response) =>
         return res.json({ ok: true });
       }
 
-      const tier = plan === "oracle" ? "oracle" : "seeker";
+      const tier = baseTier(plan);
+      const storeAccess = tierToStoreAccess(tier);
       const db = await getDb();
       if (db) {
         await db.update(users)
-          .set({ membershipTier: tier, paypalSubscriptionId: resource?.id ?? null })
+          .set({
+            membershipTier: tier,
+            paypalSubscriptionId: resource?.id ?? null,
+            billingStatus: "active",
+            storeAccess,
+          })
           .where(eq(users.id, userId));
         console.log(`[PayPal Webhook] Upgraded user ${userId} to ${tier}`);
       }
@@ -291,8 +353,17 @@ paypalSubscriptionRouter.post("/webhook", async (req: Request, res: Response) =>
       if (subId) {
         const db = await getDb();
         if (db) {
+          // Look up user to check founding status before downgrade
+          const [userRow] = await db.select({ id: users.id, foundingMember: users.foundingMember })
+            .from(users)
+            .where(eq(users.paypalSubscriptionId, subId));
           await db.update(users)
-            .set({ membershipTier: "explorer", paypalSubscriptionId: null })
+            .set({
+              membershipTier: "explorer",
+              paypalSubscriptionId: null,
+              billingStatus: userRow?.foundingMember ? "explorer_tier_founding_rate_waiting" : "explorer_tier",
+              storeAccess: "standalone",
+            })
             .where(eq(users.paypalSubscriptionId, subId));
           console.log(`[PayPal Webhook] Downgraded subscription ${subId} to explorer`);
         }

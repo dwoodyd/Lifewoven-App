@@ -1,0 +1,9 @@
+{
+  "query": "ALTER TABLE `users` MODIFY COLUMN `billingStatus` enum('trialing_no_card','explorer_tier_founding_rate_waiting','explorer_tier','active','cancelled') DEFAULT 'trialing_no_card';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4A9VQZNRBpHGiCF.a37aec6b9c0f --database kRrwoPFbyNWaiJXLmscJ4t --execute ALTER TABLE `users` MODIFY COLUMN `billingStatus` enum('trialing_no_card','explorer_tier_founding_rate_waiting','explorer_tier','active','cancelled') DEFAULT 'trialing_no_card';",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 584
+}

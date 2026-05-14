@@ -42,10 +42,19 @@ export const storeRouter = router({
    */
   getAccess: publicProcedure.query(async ({ ctx }) => {
     if (!ctx.user) {
-      return { level: "standalone" as StoreAccessLevel, tier: "explorer" };
+      return { level: "standalone" as StoreAccessLevel, tier: "explorer", isBetaMember: false };
+    }
+    // Founding members in beta get full library access without a paid subscription
+    if (ctx.user.storeAccess === "library_during_beta" || ctx.user.role === "admin") {
+      return {
+        level: "library" as StoreAccessLevel,
+        tier: ctx.user.membershipTier ?? "explorer",
+        isBetaMember: ctx.user.storeAccess === "library_during_beta",
+        betaEndDate: ctx.user.betaEndDate ?? null,
+      };
     }
     const level = getAccessLevel(ctx.user.membershipTier ?? "explorer", ctx.user.role ?? "user");
-    return { level, tier: ctx.user.membershipTier ?? "explorer" };
+    return { level, tier: ctx.user.membershipTier ?? "explorer", isBetaMember: false, betaEndDate: null };
   }),
 
   /**
@@ -59,7 +68,9 @@ export const storeRouter = router({
     const rows = await db.select().from(products).where(eq(products.isPublished, true));
 
     const level: StoreAccessLevel = ctx.user
-      ? getAccessLevel(ctx.user.membershipTier ?? "explorer", ctx.user.role ?? "user")
+      ? (ctx.user.storeAccess === "library_during_beta" || ctx.user.role === "admin"
+          ? "library"
+          : getAccessLevel(ctx.user.membershipTier ?? "explorer", ctx.user.role ?? "user"))
       : "standalone";
 
     return rows.map((p) => {

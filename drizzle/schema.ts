@@ -48,8 +48,19 @@ export const users = mysqlTable("users", {
   foundingRateLocked: boolean("foundingRateLocked").default(false).notNull(),
   needsIntro: boolean("needsIntro").default(false).notNull(),
   inviteCode: varchar("inviteCode", { length: 32 }),
+  // Billing / subscription lifecycle
+  billingStatus: mysqlEnum("billingStatus", [
+    "trialing_no_card",           // founding member during 90-day beta (no card required)
+    "explorer_tier_founding_rate_waiting", // post-beta founding member, dropped to Explorer, rate locked
+    "explorer_tier",             // non-founding explorer (no subscription)
+    "active",                    // paying subscriber (Seeker or Oracle)
+    "cancelled",                 // cancelled subscription
+  ]).default("trialing_no_card"),
+  betaStartDate: timestamp("betaStartDate"),  // date founding member was admitted
+  betaEndDate:   timestamp("betaEndDate"),    // betaStartDate + 90 days
   // Store access level — derived from tier, stored for fast reads
-  storeAccess: mysqlEnum("storeAccess", ["standalone", "discount", "library"]).default("standalone").notNull(),
+  // library_during_beta: founding member in beta (full library, no payment)
+  storeAccess: mysqlEnum("storeAccess", ["standalone", "discount", "library", "library_during_beta"]).default("standalone").notNull(),
   // UI preferences
   luminEnabled: boolean("luminEnabled").default(true).notNull(),
 });

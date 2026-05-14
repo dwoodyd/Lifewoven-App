@@ -77,7 +77,15 @@ function OracleUpgradeAnimation({ onDone }: { onDone: () => void }) {
 
 // ── Billing section ────────────────────────────────────────────────────────────
 function BillingSection() {
-  const [sub, setSub] = useState<{ tier: string; subscriptionId: string | null; status: string; nextBillingDate?: string | null } | null>(null);
+  const [sub, setSub] = useState<{
+    tier: string;
+    subscriptionId: string | null;
+    status: string;
+    nextBillingDate?: string | null;
+    foundingMember?: boolean;
+    betaEndDate?: string | null;
+    billingStatus?: string | null;
+  } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [cancelling, setCancelling] = useState(false);
   const { user } = useAuth();
@@ -120,6 +128,8 @@ function BillingSection() {
 
   const tier = sub?.tier ?? "explorer";
   const tierInfo = TIER_LABELS[tier] ?? TIER_LABELS.explorer;
+  const isBetaMember = sub?.foundingMember && sub?.billingStatus === "beta";
+  const betaEndDate = sub?.betaEndDate;
 
   return (
     <div className="rounded-xl border border-border bg-card p-6 mb-5">
@@ -130,7 +140,38 @@ function BillingSection() {
 
       {isLoading ? (
         <div className="h-10 bg-secondary animate-pulse rounded-lg" />
+      ) : isBetaMember ? (
+        // ── State 1: Founding member in 90-day beta (no subscription yet) ──
+        <div className="space-y-4">
+          <div className="flex items-center justify-between py-2 border-b border-border/50">
+            <div>
+              <p className="text-sm text-foreground font-medium">Founding Member — Beta Access</p>
+              <p className="text-xs text-muted-foreground">Full Oracle Library included during your 90-day founding period.</p>
+              {betaEndDate && (
+                <p className="text-xs text-amber-400/80 mt-0.5">
+                  Beta ends {new Date(betaEndDate).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })} — choose your plan before then to keep your founding rate.
+                </p>
+              )}
+            </div>
+            <Badge className="text-xs font-medium bg-amber-500/15 text-amber-300 border-amber-400/30">Founding</Badge>
+          </div>
+          <div className="space-y-2">
+            <p className="text-xs text-muted-foreground font-medium">Lock in your founding rate — available only to this cohort:</p>
+            <div className="flex gap-2 flex-wrap">
+              <Button size="sm" className="gap-1.5 bg-amber-600 hover:bg-amber-700 text-white border-0" onClick={() => handleUpgrade("oracle-founding-monthly")}>
+                Oracle — $25/mo (founding)
+              </Button>
+              <Button size="sm" variant="outline" className="gap-1.5 bg-transparent" onClick={() => handleUpgrade("oracle-founding-annual")}>
+                Oracle Annual — $250/yr (founding)
+              </Button>
+              <Button size="sm" variant="outline" className="gap-1.5 bg-transparent" onClick={() => handleUpgrade("seeker-founding-monthly")}>
+                Seeker — $12/mo (founding)
+              </Button>
+            </div>
+          </div>
+        </div>
       ) : (
+        // ── State 2 & 3: Active subscriber or Explorer ──
         <div className="space-y-4">
           <div className="flex items-center justify-between py-2 border-b border-border/50">
             <div>
