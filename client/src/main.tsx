@@ -19,15 +19,41 @@ const queryClient = new QueryClient({
   },
 });
 
+// Public pages where guests are expected — never redirect them to login
+// even if a background mutation (e.g. trackEvent, completeOnboarding) fails with 401.
+const PUBLIC_PATHS = [
+  "/",
+  "/audit",
+  "/pricing",
+  "/store",
+  "/pathways",
+  "/oracle",
+  "/community",
+  "/resources",
+  "/before-the-words",
+  "/character",
+  "/beta",
+];
+
+const isPublicPage = () => {
+  if (typeof window === "undefined") return true;
+  const path = window.location.pathname;
+  return PUBLIC_PATHS.some(p => path === p || path.startsWith(p + "/"));
+};
+
 const redirectToLoginIfUnauthorized = (error: unknown) => {
   if (!(error instanceof TRPCClientError)) return;
   if (typeof window === "undefined") return;
 
   const isUnauthorized = error.message === UNAUTHED_ERR_MSG;
-
   if (!isUnauthorized) return;
 
-  window.location.href = getLoginUrl();
+  // Never redirect guests away from public/marketing pages.
+  // The onboarding modal fires auth-required mutations (trackEvent, completeOnboarding)
+  // before the user logs in — those should fail silently, not trigger a login redirect.
+  if (isPublicPage()) return;
+
+  window.location.href = getLoginUrl(window.location.pathname + window.location.search);
 };
 
 queryClient.getQueryCache().subscribe(event => {
