@@ -258,9 +258,13 @@ function SceneText({
               color: T.quiet, fontSize: "0.82rem", fontStyle: "italic",
               letterSpacing: "0.04em", fontFamily: "inherit",
               transition: "color 0.2s",
+              padding: "12px 20px",
+              minHeight: "44px",
+              minWidth: "44px",
+              WebkitTapHighlightColor: "transparent",
             }}
-            onMouseEnter={e => { (e.target as HTMLElement).style.color = T.muted; }}
-            onMouseLeave={e => { (e.target as HTMLElement).style.color = T.quiet; }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = T.muted; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = T.quiet; }}
           >
             {scene.whisper}
           </button>
