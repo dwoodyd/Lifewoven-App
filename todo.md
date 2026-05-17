@@ -817,3 +817,4 @@
 - [ ] Trial-state banner on dashboard (dismissable per session)
 - [x] Day-75 + Day-91 scheduled jobs (full lifecycle cron: Day-3, Day-7, Day-30, Day-75, Day-91)
 - [ ] POST /apply public endpoint for marketing site form
+- [x] Fix OAuth login 500 error on app.lifewoven.click — cross-domain token handoff via /api/auth/complete

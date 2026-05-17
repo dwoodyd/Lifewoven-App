@@ -13,22 +13,38 @@ function getQueryParam(req: Request, key: string): string | undefined {
 }
 
 /**
- * Parse the post-login return path from the OAuth state parameter.
- * State format (base64): "<redirectUri>" OR "<redirectUri>||<returnPath>"
- * The returnPath is a relative path like "/beta?ref=LW-XXXX-XXXX".
- * We only allow relative paths (must start with "/") to prevent open redirects.
+ * Parse the OAuth state parameter.
+ * State format (base64): "<redirectUri>||<returnPath>||<finalOrigin>"
+ * - redirectUri: the registered redirect URI used for the OAuth exchange
+ * - returnPath: relative path to redirect to after login (defaults to "/")
+ * - finalOrigin: if set, redirect to this origin after setting the cookie
+ *   (used when the user is on a custom domain like app.lifewoven.click)
  */
-function parseReturnPath(state: string): string {
+function parseState(state: string): { returnPath: string; finalOrigin: string } {
   try {
     const decoded = Buffer.from(state, "base64").toString("utf8");
-    const sepIdx = decoded.indexOf("||");
-    if (sepIdx === -1) return "/";
-    const returnPath = decoded.slice(sepIdx + 2);
+    const parts = decoded.split("||");
+    // parts[0] = redirectUri, parts[1] = returnPath, parts[2] = finalOrigin
+    const returnPath = parts[1] || "/";
+    const finalOrigin = parts[2] || "";
+
     // Security: only allow relative paths to prevent open redirect attacks
-    if (!returnPath.startsWith("/") || returnPath.startsWith("//")) return "/";
-    return returnPath;
+    const safePath = returnPath.startsWith("/") && !returnPath.startsWith("//")
+      ? returnPath
+      : "/";
+
+    // Security: only allow known safe origins for cross-domain redirect
+    const safeOrigins = [
+      /^https:\/\/([a-z0-9-]+\.)*lifewoven\.click$/,
+      /^https:\/\/([a-z0-9-]+\.)*manus\.space$/,
+      /^https:\/\/([a-z0-9-]+\.)*manus\.computer$/,
+      /^http:\/\/localhost(:\d+)?$/,
+    ];
+    const safeFinalOrigin = safeOrigins.some(r => r.test(finalOrigin)) ? finalOrigin : "";
+
+    return { returnPath: safePath, finalOrigin: safeFinalOrigin };
   } catch {
-    return "/";
+    return { returnPath: "/", finalOrigin: "" };
   }
 }
 
@@ -44,7 +60,7 @@ export function registerOAuthRoutes(app: Express) {
     const state = getQueryParam(req, "state");
 
     if (!code || !state) {
-      res.status(400).json({ error: "code and state are required" });
+      res.redirect(302, "/?login_error=missing_params");
       return;
     }
 
@@ -53,7 +69,7 @@ export function registerOAuthRoutes(app: Express) {
       const userInfo = await sdk.getUserInfo(tokenResponse.accessToken);
 
       if (!userInfo.openId) {
-        res.status(400).json({ error: "openId missing from user info" });
+        res.redirect(302, "/?login_error=missing_openid");
         return;
       }
 
@@ -70,15 +86,59 @@ export function registerOAuthRoutes(app: Express) {
         expiresInMs: THIRTY_DAYS_MS,
       });
 
+      const { returnPath, finalOrigin } = parseState(state);
+
+      // Cross-domain redirect: user is on a custom domain (e.g. app.lifewoven.click)
+      // but the OAuth callback landed on manus.space. We need to hand off the session
+      // token to the custom domain so it can set its own cookie.
+      if (finalOrigin) {
+        const handoffUrl = new URL(`${finalOrigin}/api/auth/complete`);
+        handoffUrl.searchParams.set("token", sessionToken);
+        handoffUrl.searchParams.set("returnPath", returnPath);
+        res.redirect(302, handoffUrl.toString());
+        return;
+      }
+
+      // Same-domain: set cookie directly
       const cookieOptions = getSessionCookieOptions(req);
       res.cookie(COOKIE_NAME, sessionToken, { ...cookieOptions, maxAge: THIRTY_DAYS_MS });
-
-      // Redirect to the post-login destination encoded in state (defaults to "/")
-      const returnPath = parseReturnPath(state);
       res.redirect(302, returnPath);
     } catch (error) {
       console.error("[OAuth] Callback failed", error);
-      res.status(500).json({ error: "OAuth callback failed" });
+      res.redirect(302, "/?login_error=callback_failed");
+    }
+  });
+
+  // Cross-domain auth complete: receives a session token from the manus.space callback
+  // and sets it as a cookie on the current domain (e.g. app.lifewoven.click).
+  app.get("/api/auth/complete", async (req: Request, res: Response) => {
+    const token = getQueryParam(req, "token");
+    const returnPath = getQueryParam(req, "returnPath") || "/";
+
+    if (!token) {
+      res.redirect(302, "/?login_error=missing_token");
+      return;
+    }
+
+    try {
+      // Verify the token is valid (signed with our JWT_SECRET)
+      const payload = await sdk.verifySession(token);
+      if (!payload) {
+        res.redirect(302, "/?login_error=invalid_token");
+        return;
+      }
+
+      // Security: only allow relative paths
+      const safePath = returnPath.startsWith("/") && !returnPath.startsWith("//")
+        ? returnPath
+        : "/";
+
+      const cookieOptions = getSessionCookieOptions(req);
+      res.cookie(COOKIE_NAME, token, { ...cookieOptions, maxAge: THIRTY_DAYS_MS });
+      res.redirect(302, safePath);
+    } catch (error) {
+      console.error("[Auth] Complete failed", error);
+      res.redirect(302, "/?login_error=complete_failed");
     }
   });
 }
