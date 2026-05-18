@@ -1,7 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { tierCanAccessGroundGuide, tierCanAccessWeeklyReflection, tierCanAccessOracle } from "./stripe/products";
+import { describe, it, expect } from "vitest";
+import { tierCanAccessGroundGuide, tierCanAccessWeeklyReflection, tierCanAccessOracle } from "./tierHelpers";
 
 // ─── Tier helper unit tests ────────────────────────────────────────────────────
+// These tests verify the PayPal membership tier access control helpers.
 
 describe("tierCanAccessGroundGuide", () => {
   it("returns false for explorer", () => {

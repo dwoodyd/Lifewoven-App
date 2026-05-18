@@ -6,6 +6,7 @@ import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Loader2, Sparkles, Trash2, Plus, Lock } from "lucide-react";
 import { toast } from "sonner";
+import { Link } from "wouter";
 
 const TONE_TAGS = ["trust", "fear", "striving", "grief", "gratitude", "honest", "mixed"] as const;
 const TOPIC_TAGS = ["long_wait", "fear", "provision", "relationship", "calling", "grief", "uncertainty", "gratitude", "not_yet", "answered", "still_carrying"] as const;
@@ -37,11 +38,8 @@ export default function LivingAsHeard() {
   const [reflectingId, setReflectingId] = useState<number | null>(null);
 
   const { user } = useAuth();
-  const { data: subStatus } = trpc.stripe.status.useQuery();
-  const canUseGroundGuide = user?.role === "admin" || subStatus?.tier === "seeker" || subStatus?.tier === "oracle";
-  const checkoutMutation = trpc.stripe.createCheckout.useMutation({
-    onSuccess: (d) => { if (d.url) { toast.info("Opening checkout…"); window.open(d.url, "_blank"); } },
-  });
+  const { data: memberStatus } = trpc.paypalOrders.getMembershipStatus.useQuery(undefined, { enabled: !!user });
+  const canUseGroundGuide = user?.role === "admin" || memberStatus?.tier === "seeker" || memberStatus?.tier === "oracle";
 
   const { data: prayers, refetch } = trpc.btw.getPrayers.useQuery();
   const saveMutation = trpc.btw.savePrayer.useMutation({ onSuccess: () => { refetch(); setWriting(false); setBody(""); setTitle(""); setReflection(null); } });
@@ -118,9 +116,11 @@ export default function LivingAsHeard() {
                         <Sparkles className="h-3 w-3" /> Ask the Ground Guide
                       </Button>
                     ) : (
-                      <Button variant="ghost" size="sm" className="gap-1.5 text-xs text-muted-foreground" onClick={() => checkoutMutation.mutate({ plan: "seeker", origin: window.location.origin })}>
-                        <Lock className="h-3 w-3" /> Ground Guide — Seeker only
-                      </Button>
+                      <Link href="/pricing">
+                        <Button variant="ghost" size="sm" className="gap-1.5 text-xs text-muted-foreground">
+                          <Lock className="h-3 w-3" /> Ground Guide — Seeker only
+                        </Button>
+                      </Link>
                     )}
 
                     {reflectingId !== prayer.id && reflection && (

@@ -213,20 +213,20 @@ export default function ProductDetail() {
   const [location] = useLocation();
   const [notifyEmail, setNotifyEmail] = useState("");
   const [notifySent, setNotifySent] = useState(false);
-  const joinWaitlist = trpc.stripe.joinWaitlist.useMutation({
+  const joinWaitlist = trpc.paypalOrders.joinWaitlist.useMutation({
     onSuccess: () => setNotifySent(true),
     onError: () => setNotifySent(true),
   });
 
-  // Check for post-purchase success redirect (legacy Stripe param, kept for compatibility)
+  // Check for post-purchase success redirect
   const urlParams = new URLSearchParams(window.location.search);
   const purchaseSuccess = urlParams.get("purchase") === "success";
 
   // Fetch user's existing orders to check if already purchased
-  const { data: myOrders, refetch: refetchOrders } = trpc.stripe.getMyOrders.useQuery(undefined, {
+  const { data: myOrders, refetch: refetchOrders } = trpc.paypalOrders.getMyOrders.useQuery(undefined, {
     enabled: !!user,
   });
-  const existingOrder = myOrders?.find(o => o.productSlug === productId);
+  const existingOrder = myOrders?.find((o: { productSlug: string | null }) => o.productSlug === productId);
   const alreadyPurchased = !!existingOrder;
 
   // After PayPal capture, store the download token locally

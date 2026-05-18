@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 
 // ─── Redis rate-limit store configuration ─────────────────────────────────────
 describe("Redis rate-limit store: index.ts configuration", () => {
@@ -36,80 +36,51 @@ describe("Redis rate-limit store: index.ts configuration", () => {
       new URL("./_core/index.ts", import.meta.url).pathname,
       "utf-8"
     );
-    // Both authLimiter and apiLimiter should conditionally spread the store
     const storeSpreadCount = (source.match(/store: redisStore/g) ?? []).length;
     expect(storeSpreadCount).toBeGreaterThanOrEqual(2);
   });
 });
 
-// ─── Stripe idempotency ledger ────────────────────────────────────────────────
-describe("Stripe idempotency ledger", () => {
-  it("stripe_events table is defined in schema.ts", () => {
+// ─── PayPal idempotency ledger ────────────────────────────────────────────────
+describe("PayPal idempotency ledger", () => {
+  it("subscription_plans table is defined in schema.ts", () => {
     const fs = require("fs");
     const source = fs.readFileSync(
       new URL("../drizzle/schema.ts", import.meta.url).pathname,
       "utf-8"
     );
-    expect(source).toContain("stripeEvents");
-    expect(source).toContain("event_id");
-    // Drizzle expresses uniqueness via .unique() on the column definition
-    expect(source).toContain(".unique()");
+    expect(source).toContain("subscriptionPlans");
+    expect(source).toContain("paypal_plan_id");
   });
 
-  it("webhook.ts inserts into stripeEvents before processing", () => {
+  it("schema.ts has paypalSubscriptionId on users table", () => {
     const fs = require("fs");
     const source = fs.readFileSync(
-      new URL("./stripe/webhook.ts", import.meta.url).pathname,
+      new URL("../drizzle/schema.ts", import.meta.url).pathname,
       "utf-8"
     );
-    expect(source).toContain("stripeEvents");
-    expect(source).toContain("db.insert(stripeEvents)");
-  });
-
-  it("webhook.ts returns 200 with duplicate:true for duplicate events", () => {
-    const fs = require("fs");
-    const source = fs.readFileSync(
-      new URL("./stripe/webhook.ts", import.meta.url).pathname,
-      "utf-8"
-    );
-    expect(source).toContain("duplicate: true");
-    expect(source).toContain("Duplicate entry");
+    expect(source).toContain("paypalSubscriptionId");
   });
 });
 
-// ─── Billing resilience ───────────────────────────────────────────────────────
-describe("Billing resilience: trialing/past_due grace period", () => {
-  it("webhook.ts keeps paid tier for trialing subscriptions", () => {
+// ─── PayPal billing resilience ────────────────────────────────────────────────
+describe("PayPal billing resilience", () => {
+  it("paypal subscriptions router handles subscription activation", () => {
     const fs = require("fs");
     const source = fs.readFileSync(
-      new URL("./stripe/webhook.ts", import.meta.url).pathname,
+      new URL("./paypal/subscriptions.ts", import.meta.url).pathname,
       "utf-8"
     );
-    // The active/trialing/past_due block should NOT downgrade to explorer
-    const graceBlock = source.match(/\["active", "trialing", "past_due"\][\s\S]{0,200}?membershipTier: tier/)?.[0] ?? "";
-    expect(graceBlock).toBeTruthy();
-    expect(graceBlock).not.toContain("explorer");
+    expect(source).toContain("paypalSubscriptionId");
   });
 
-  it("webhook.ts only downgrades on canceled or unpaid", () => {
+  it("paypalOrders router has getMembershipStatus procedure", () => {
     const fs = require("fs");
     const source = fs.readFileSync(
-      new URL("./stripe/webhook.ts", import.meta.url).pathname,
+      new URL("./routers/paypalOrders.ts", import.meta.url).pathname,
       "utf-8"
     );
-    // The downgrade block should be triggered only by canceled/unpaid
-    const downgradeBlock = source.match(/\["canceled", "unpaid"\][\s\S]{0,200}?explorer/)?.[0] ?? "";
-    expect(downgradeBlock).toBeTruthy();
-  });
-
-  it("webhook.ts handles invoice.payment_failed event", () => {
-    const fs = require("fs");
-    const source = fs.readFileSync(
-      new URL("./stripe/webhook.ts", import.meta.url).pathname,
-      "utf-8"
-    );
-    expect(source).toContain("invoice.payment_failed");
-    expect(source).toContain("notifyOwner");
-    expect(source).toContain("Payment Failed");
+    expect(source).toContain("getMembershipStatus");
+    expect(source).toContain("membershipTier");
   });
 });

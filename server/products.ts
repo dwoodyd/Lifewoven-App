@@ -1,7 +1,7 @@
 /**
  * Lifewoven Product Catalog
  * S3 URLs are permanent CDN links (uploaded via manus-upload-file --webdev).
- * Prices are in USD cents for Stripe.
+ * Prices are in USD cents for PayPal.
  */
 
 export interface LWProduct {
@@ -10,11 +10,10 @@ export interface LWProduct {
   subtitle: string;
   type: "course" | "workbook" | "audio" | "deck" | "bundle";
   priceUsd: number;       // display price
-  priceCents: number;     // Stripe amount_total (cents)
+  priceCents: number;     // PayPal amount in cents
   description: string;
   s3Url: string;          // permanent CDN URL — only revealed after purchase
-  stripePriceId?: string; // populated after Stripe seeding
-  stripeProductId?: string;
+  paypalProductId?: string; // PayPal product ID if needed
 }
 
 export const LIFEWOVEN_PRODUCTS: LWProduct[] = [

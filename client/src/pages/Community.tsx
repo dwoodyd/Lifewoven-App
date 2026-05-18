@@ -20,7 +20,7 @@ export default function Community() {
   const [email, setEmail] = useState(user?.email || "");
   const [joined, setJoined] = useState(false);
 
-  const joinWaitlist = trpc.stripe.joinWaitlist.useMutation({
+  const joinWaitlist = trpc.paypalOrders.joinWaitlist.useMutation({
     onSuccess: () => {
       setJoined(true);
       toast.success("You're on the list. We'll reach out when the community opens.");

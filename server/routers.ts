@@ -1,6 +1,6 @@
 import { COOKIE_NAME } from "@shared/const";
 import { btwRouter } from "./routers/btw";
-import { stripeRouter } from "./routers/stripe";
+import { paypalOrdersRouter } from "./routers/paypalOrders";
 import { adminRouter } from "./routers/admin";
 import { referralRouter } from "./routers/referral";
 import { betaRouter } from "./routers/beta";
@@ -21,7 +21,7 @@ import {
 } from "../drizzle/schema";
 import { eq, desc, and, like, sql } from "drizzle-orm";
 import { invokeLLM } from "./_core/llm";
-import { tierCanAccessOracle } from "./stripe/products";
+import { tierCanAccessOracle } from "./tierHelpers";
 import { TRPCError } from "@trpc/server";
 import { transcribeAudio } from "./_core/voiceTranscription";
 import { storagePut } from "./storage";
@@ -1004,7 +1004,7 @@ const profileRouter = router({
 export const appRouter = router({
   system: systemRouter,
   auth: router({
-    // H3: Project minimal fields only — never expose role, stripeCustomerId, openId on the wire
+    // H3: Project minimal fields only — never expose role, paypalSubscriptionId, openId on the wire
     me: publicProcedure.query(opts => {
       const u = opts.ctx.user;
       if (!u) return null;
@@ -1044,7 +1044,7 @@ export const appRouter = router({
   community: communityRouter,
   profile: profileRouter,
   btw: btwRouter,
-  stripe: stripeRouter,
+  paypalOrders: paypalOrdersRouter,
   admin: adminRouter,
   referral: referralRouter,
   beta: betaRouter,

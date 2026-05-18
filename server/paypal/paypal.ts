@@ -208,7 +208,6 @@ paypalRouter.post("/api/paypal/capture-order", async (req: Request, res: Respons
           items: [{ type: "product", slug: bp.slug, price: bp.priceCents }],
           total: bp.priceUsd.toFixed(2),
           status: "completed" as const,
-          stripeSessionId: null,
           paypalCaptureId,
           productSlug: bp.slug,
           downloadUrl: bp.s3Url,
@@ -226,7 +225,6 @@ paypalRouter.post("/api/paypal/capture-order", async (req: Request, res: Respons
           items: [{ type: "product", slug: productSlug, price: Math.round(amountPaid * 100) }],
           total: amountPaid.toFixed(2),
           status: "completed",
-          stripeSessionId: null,
           paypalCaptureId,
           productSlug,
           downloadUrl: product.s3Url,
@@ -241,7 +239,7 @@ paypalRouter.post("/api/paypal/capture-order", async (req: Request, res: Respons
     }
 
     // C4: Do NOT return downloadToken in the response body.
-    // The client must fetch orders via the authenticated tRPC stripe.getMyOrders procedure.
+    // The client must fetch orders via the authenticated tRPC paypalOrders.getMyOrders procedure.
     return res.json({
       status: "COMPLETED",
       productTitle: isBundle ? "Complete Lifewoven Bundle (9 products)" : product.title,
@@ -257,4 +255,4 @@ paypalRouter.post("/api/paypal/capture-order", async (req: Request, res: Respons
 });
 
 // C2: The unauthenticated GET /api/paypal/my-purchases/:userId endpoint has been
-// permanently removed. Use the authenticated tRPC procedure stripe.getMyOrders instead.
+// permanently removed. Use the authenticated tRPC procedure paypalOrders.getMyOrders instead.

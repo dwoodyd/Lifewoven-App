@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE `subscription_plans` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`name` varchar(128) NOT NULL,\n\t`tier` enum('explorer','seeker','oracle') NOT NULL,\n\t`billingInterval` enum('monthly','annual') NOT NULL,\n\t`price_usd` decimal(8,2) NOT NULL,\n\t`retail_price_usd` decimal(8,2),\n\t`paypal_plan_id` varchar(64),\n\t`is_founding_rate` boolean NOT NULL DEFAULT false,\n\t`is_active` boolean NOT NULL DEFAULT true,\n\t`features` json NOT NULL,\n\t`sort_order` int NOT NULL DEFAULT 0,\n\t`created_at` timestamp NOT NULL DEFAULT (now()),\n\t`updated_at` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,\n\tCONSTRAINT `subscription_plans_id` PRIMARY KEY(`id`)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4A9VQZNRBpHGiCF.a37aec6b9c0f --database kRrwoPFbyNWaiJXLmscJ4t --execute CREATE TABLE `subscription_plans` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`name` varchar(128) NOT NULL,\n\t`tier` enum('explorer','seeker','oracle') NOT NULL,\n\t`billingInterval` enum('monthly','annual') NOT NULL,\n\t`price_usd` decimal(8,2) NOT NULL,\n\t`retail_price_usd` decimal(8,2),\n\t`paypal_plan_id` varchar(64),\n\t`is_founding_rate` boolean NOT NULL DEFAULT false,\n\t`is_active` boolean NOT NULL DEFAULT true,\n\t`features` json NOT NULL,\n\t`sort_order` int NOT NULL DEFAULT 0,\n\t`created_at` timestamp NOT NULL DEFAULT (now()),\n\t`updated_at` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,\n\tCONSTRAINT `subscription_plans_id` PRIMARY KEY(`id`)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 406
+}

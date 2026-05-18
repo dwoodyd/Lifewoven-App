@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Lock, Sparkles } from "lucide-react";
-import { trpc } from "@/lib/trpc";
-import { toast } from "sonner";
+import { Link } from "wouter";
 
 interface UpgradeGateProps {
   feature: string;
@@ -12,16 +11,6 @@ interface UpgradeGateProps {
 }
 
 export function UpgradeGate({ feature, description, requiredTier = "seeker", children, isLocked }: UpgradeGateProps) {
-  const checkoutMutation = trpc.stripe.createCheckout.useMutation({
-    onSuccess: (data) => {
-      if (data.url) {
-        toast.info("Opening Stripe checkout…");
-        window.open(data.url, "_blank");
-      }
-    },
-    onError: (err) => toast.error(err.message),
-  });
-
   if (!isLocked) return <>{children}</>;
 
   const planLabel = requiredTier === "oracle" ? "Oracle" : "Seeker";
@@ -41,15 +30,12 @@ export function UpgradeGate({ feature, description, requiredTier = "seeker", chi
         </div>
         <p className="text-sm font-light text-foreground mb-1">{feature}</p>
         <p className="text-xs text-muted-foreground font-light mb-4 max-w-xs">{description}</p>
-        <Button
-          size="sm"
-          className="gap-1.5"
-          onClick={() => checkoutMutation.mutate({ plan: requiredTier, origin: window.location.origin })}
-          disabled={checkoutMutation.isPending}
-        >
-          <Sparkles className="h-3 w-3" />
-          Unlock with {planLabel} — {planPrice}
-        </Button>
+        <Link href="/pricing">
+          <Button size="sm" className="gap-1.5">
+            <Sparkles className="h-3 w-3" />
+            Unlock with {planLabel} — {planPrice}
+          </Button>
+        </Link>
       </div>
     </div>
   );
@@ -57,28 +43,18 @@ export function UpgradeGate({ feature, description, requiredTier = "seeker", chi
 
 // Inline compact version for buttons
 export function UpgradeButton({ requiredTier = "seeker" }: { requiredTier?: "seeker" | "oracle" }) {
-  const checkoutMutation = trpc.stripe.createCheckout.useMutation({
-    onSuccess: (data) => {
-      if (data.url) {
-        toast.info("Opening Stripe checkout…");
-        window.open(data.url, "_blank");
-      }
-    },
-    onError: (err) => toast.error(err.message),
-  });
-
   const planLabel = requiredTier === "oracle" ? "Oracle ($49/mo)" : "Seeker ($19/mo)";
 
   return (
-    <Button
-      size="sm"
-      variant="outline"
-      className="gap-1.5 border-primary/40 text-primary hover:bg-primary/10"
-      onClick={() => checkoutMutation.mutate({ plan: requiredTier, origin: window.location.origin })}
-      disabled={checkoutMutation.isPending}
-    >
-      <Lock className="h-3 w-3" />
-      Upgrade to {planLabel}
-    </Button>
+    <Link href="/pricing">
+      <Button
+        size="sm"
+        variant="outline"
+        className="gap-1.5 border-primary/40 text-primary hover:bg-primary/10"
+      >
+        <Lock className="h-3 w-3" />
+        Upgrade to {planLabel}
+      </Button>
+    </Link>
   );
 }

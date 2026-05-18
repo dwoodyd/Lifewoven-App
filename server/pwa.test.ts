@@ -1,6 +1,6 @@
 /**
  * PWA & Infrastructure Tests
- * Covers: manifest shape, invoice.payment_failed handler, REDIS_URL env, storageProxy route
+ * Covers: manifest shape, PayPal webhook handler, REDIS_URL env, storageProxy route
  */
 import { describe, it, expect } from "vitest";
 import fs from "node:fs";
@@ -76,19 +76,28 @@ describe("index.html PWA meta", () => {
   });
 });
 
-// ── 4. Stripe webhook: invoice.payment_failed handler ────────────────────────
-describe("Stripe webhook invoice.payment_failed", () => {
-  const webhookSrc = fs.readFileSync(
-    path.resolve(__dirname, "./stripe/webhook.ts"),
-    "utf-8"
-  );
-
-  it("handles invoice.payment_failed case", () => {
-    expect(webhookSrc).toContain("invoice.payment_failed");
+// ── 4. PayPal webhook handler ─────────────────────────────────────────────────
+describe("PayPal webhook handler", () => {
+  it("paypal.ts exists in server/paypal", () => {
+    expect(
+      fs.existsSync(path.resolve(__dirname, "./paypal/paypal.ts"))
+    ).toBe(true);
   });
 
-  it("calls notifyOwner on payment failure", () => {
-    expect(webhookSrc).toContain("notifyOwner");
+  it("paypal.ts has capture-order endpoint", () => {
+    const src = fs.readFileSync(
+      path.resolve(__dirname, "./paypal/paypal.ts"),
+      "utf-8"
+    );
+    expect(src).toContain("capture-order");
+  });
+
+  it("paypal.ts calls notifyOwner on payment", () => {
+    const src = fs.readFileSync(
+      path.resolve(__dirname, "./paypal/paypal.ts"),
+      "utf-8"
+    );
+    expect(src).toContain("notifyOwner");
   });
 });
 

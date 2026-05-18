@@ -818,3 +818,19 @@
 - [x] Day-75 + Day-91 scheduled jobs (full lifecycle cron: Day-3, Day-7, Day-30, Day-75, Day-91)
 - [ ] POST /apply public endpoint for marketing site form
 - [x] Fix OAuth login 500 error on app.lifewoven.click — cross-domain token handoff via /api/auth/complete
+
+## Stripe Removal & Admin Products/Plans
+
+- [x] Remove server/stripe/ directory (webhook.ts, products.ts, download.ts)
+- [x] Remove server/routers/stripe.ts
+- [x] Remove Stripe imports and routes from server/_core/index.ts
+- [x] Remove stripeRouter from server/routers.ts
+- [x] Remove Stripe columns from drizzle/schema.ts kept as legacy (live DB — not dropped to avoid data loss)
+- [x] Remove stripe package from package.json
+- [x] Remove Stripe CSP headers from server/_core/index.ts
+- [x] Rewire UpgradeGate.tsx to use PayPal / link to /pricing instead of Stripe
+- [x] Add subscription_plans table to drizzle/schema.ts
+- [x] Add admin.products.* tRPC procedures (list, create, update, delete)
+- [x] Add admin.plans.* tRPC procedures (list, create, update, delete)
+- [x] Add Products & Plans tabs to Admin panel UI
+- [x] All 149 tests passing after Stripe removal

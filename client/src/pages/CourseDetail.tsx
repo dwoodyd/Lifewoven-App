@@ -71,17 +71,7 @@ export default function CourseDetail() {
   const courseId = params?.id ?? "";
   const course = COURSES[courseId];
   const { user } = useAuth();
-  const { data: subStatus } = trpc.stripe.status.useQuery(undefined, { enabled: !!user });
-
-  const checkoutMutation = trpc.stripe.createCheckout.useMutation({
-    onSuccess: (d) => {
-      if (d.url) {
-        toast.info("Redirecting to checkout…");
-        window.open(d.url, "_blank");
-      }
-    },
-    onError: () => toast.error("Something went wrong", { description: "We couldn't start checkout. Please try again or email hello@lifewoven.com if the issue persists." }),
-  });
+  const { data: memberStatus } = trpc.paypalOrders.getMembershipStatus.useQuery(undefined, { enabled: !!user });
 
   const isAdmin = user?.role === "admin";
   const { previewAsUser, togglePreview } = useAdminPreview();
@@ -97,13 +87,14 @@ export default function CourseDetail() {
       return;
     }
     const requiredPlan = COURSE_PLANS[courseId] ?? "seeker";
-    const currentTier = subStatus?.tier ?? "explorer";
-    const tierOrder = { explorer: 0, seeker: 1, oracle: 2 };
-    if (tierOrder[currentTier] >= tierOrder[requiredPlan]) {
+    const currentTier = (memberStatus?.tier ?? "explorer") as "explorer" | "seeker" | "oracle";
+    const tierOrder: Record<"explorer" | "seeker" | "oracle", number> = { explorer: 0, seeker: 1, oracle: 2 };
+    if (tierOrder[currentTier] >= tierOrder[requiredPlan as "explorer" | "seeker" | "oracle"]) {
       toast.success("You already have access!", { description: "Head to your dashboard to start this course." });
       return;
     }
-    checkoutMutation.mutate({ plan: requiredPlan, origin: window.location.origin });
+    // Redirect to pricing page for PayPal subscription
+    window.location.href = "/pricing";
   };
 
   if (!course) {
@@ -121,8 +112,7 @@ export default function CourseDetail() {
   }
 
   const EnrollButton = ({ size = "lg" as "lg" | "default" }) => effectiveAdmin ? null : (
-    <Button size={size} className="gap-2" onClick={handleEnroll} disabled={checkoutMutation.isPending}>
-      {checkoutMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+    <Button size={size} className="gap-2" onClick={handleEnroll}>
       Enroll Now — {course.price}
     </Button>
   );

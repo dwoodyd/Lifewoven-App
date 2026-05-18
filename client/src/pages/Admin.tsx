@@ -8,7 +8,11 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Users, ShoppingBag, BookOpen, Activity, Shield, Loader2, Copy, Check, KeyRound, TrendingDown, TrendingUp, ClipboardList, CheckCircle, XCircle, RefreshCw } from "lucide-react";
+import { Users, ShoppingBag, BookOpen, Activity, Shield, Loader2, Copy, Check, KeyRound, TrendingDown, TrendingUp, ClipboardList, CheckCircle, XCircle, RefreshCw, Package, CreditCard, Plus, Pencil, Trash2, X, Save } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Link } from "wouter";
 
@@ -316,6 +320,8 @@ function AdminDashboard() {
             <TabsTrigger value="applications">Applications</TabsTrigger>
             <TabsTrigger value="users">Users</TabsTrigger>
             <TabsTrigger value="orders">Orders</TabsTrigger>
+            <TabsTrigger value="products" className="gap-1.5"><Package className="h-3.5 w-3.5" />Products</TabsTrigger>
+            <TabsTrigger value="plans" className="gap-1.5"><CreditCard className="h-3.5 w-3.5" />Plans</TabsTrigger>
             <TabsTrigger value="beta">Beta Testers</TabsTrigger>
             <TabsTrigger value="recent">Recent Activity</TabsTrigger>
             <TabsTrigger value="funnel">Onboarding Funnel</TabsTrigger>
@@ -424,6 +430,16 @@ function AdminDashboard() {
                 )}
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* Products Tab */}
+          <TabsContent value="products" className="mt-4">
+            <ProductsPanel />
+          </TabsContent>
+
+          {/* Plans Tab */}
+          <TabsContent value="plans" className="mt-4">
+            <PlansPanel />
           </TabsContent>
 
           {/* Beta Testers Tab */}
@@ -832,6 +848,378 @@ function ApplicationsPanel() {
           )}
         </CardContent>
       </Card>
+    </div>
+  );
+}
+
+// ─── Products Panel ───────────────────────────────────────────────────────────
+type ProductRow = {
+  id: number;
+  slug: string;
+  title: string;
+  description: string | null;
+  type: "course" | "workbook" | "card_deck" | "audio_bundle" | "planner" | "guide";
+  price: string;
+  thumbnailUrl: string | null;
+  downloadUrl: string | null;
+  isPublished: boolean;
+};
+
+const PRODUCT_TYPES = ["course", "workbook", "card_deck", "audio_bundle", "planner", "guide"] as const;
+
+function ProductsPanel() {
+  const utils = trpc.useUtils();
+  const { data: products, isLoading } = trpc.admin.listProducts.useQuery();
+  const [editProduct, setEditProduct] = useState<ProductRow | null>(null);
+  const [showCreate, setShowCreate] = useState(false);
+  const [form, setForm] = useState({ slug: "", title: "", description: "", type: "course" as typeof PRODUCT_TYPES[number], price: "", thumbnailUrl: "", downloadUrl: "", isPublished: false });
+
+  const createMutation = trpc.admin.createProduct.useMutation({
+    onSuccess: () => { toast.success("Product created"); utils.admin.listProducts.invalidate(); setShowCreate(false); setForm({ slug: "", title: "", description: "", type: "course", price: "", thumbnailUrl: "", downloadUrl: "", isPublished: false }); },
+    onError: (e) => toast.error(e.message),
+  });
+  const updateMutation = trpc.admin.updateProduct.useMutation({
+    onSuccess: () => { toast.success("Product updated"); utils.admin.listProducts.invalidate(); setEditProduct(null); },
+    onError: (e) => toast.error(e.message),
+  });
+  const deleteMutation = trpc.admin.deleteProduct.useMutation({
+    onSuccess: () => { toast.success("Product deleted"); utils.admin.listProducts.invalidate(); },
+    onError: (e) => toast.error(e.message),
+  });
+
+  const openEdit = (p: ProductRow) => {
+    setEditProduct(p);
+    setForm({ slug: p.slug, title: p.title, description: p.description ?? "", type: p.type, price: p.price, thumbnailUrl: p.thumbnailUrl ?? "", downloadUrl: p.downloadUrl ?? "", isPublished: p.isPublished });
+  };
+
+  const handleSave = () => {
+    if (editProduct) {
+      updateMutation.mutate({ id: editProduct.id, ...form, price: form.price });
+    } else {
+      createMutation.mutate({ ...form, price: form.price });
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-semibold">Products</h2>
+        <Button size="sm" className="gap-1.5" onClick={() => { setEditProduct(null); setForm({ slug: "", title: "", description: "", type: "course", price: "", thumbnailUrl: "", downloadUrl: "", isPublished: false }); setShowCreate(true); }}>
+          <Plus className="h-4 w-4" /> Add Product
+        </Button>
+      </div>
+
+      <Card className="bg-card border-border">
+        <CardContent className="p-0">
+          {isLoading ? (
+            <div className="flex justify-center py-12"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow className="border-border hover:bg-transparent">
+                  <TableHead>Title</TableHead>
+                  <TableHead>Slug</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Price</TableHead>
+                  <TableHead>Published</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {(products ?? []).map((p) => (
+                  <TableRow key={p.id} className="border-border">
+                    <TableCell className="font-medium">{p.title}</TableCell>
+                    <TableCell className="text-muted-foreground text-sm font-mono">{p.slug}</TableCell>
+                    <TableCell><Badge variant="outline" className="text-xs">{p.type}</Badge></TableCell>
+                    <TableCell>${p.price}</TableCell>
+                    <TableCell>
+                      <Badge variant={p.isPublished ? "default" : "secondary"} className="text-xs">
+                        {p.isPublished ? "Published" : "Draft"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex gap-1">
+                        <Button variant="ghost" size="sm" className="h-7 w-7 p-0" onClick={() => openEdit(p as ProductRow)}>
+                          <Pencil className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-destructive hover:text-destructive" onClick={() => { if (confirm(`Delete "${p.title}"?`)) deleteMutation.mutate({ id: p.id }); }}>
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+                {(products ?? []).length === 0 && (
+                  <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">No products yet. Click "Add Product" to create one.</TableCell></TableRow>
+                )}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Create / Edit Dialog */}
+      <Dialog open={showCreate || !!editProduct} onOpenChange={(open) => { if (!open) { setShowCreate(false); setEditProduct(null); } }}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>{editProduct ? "Edit Product" : "Add Product"}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 py-2">
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <Label>Title</Label>
+                <Input value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} placeholder="Alignment Fundamentals" />
+              </div>
+              <div className="space-y-1">
+                <Label>Slug</Label>
+                <Input value={form.slug} onChange={e => setForm(f => ({ ...f, slug: e.target.value }))} placeholder="alignment-fundamentals" />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <Label>Type</Label>
+                <Select value={form.type} onValueChange={v => setForm(f => ({ ...f, type: v as typeof PRODUCT_TYPES[number] }))}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {PRODUCT_TYPES.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1">
+                <Label>Price (USD)</Label>
+                <Input value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} placeholder="97.00" />
+              </div>
+            </div>
+            <div className="space-y-1">
+              <Label>Description</Label>
+              <Textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} rows={3} placeholder="Product description…" />
+            </div>
+            <div className="space-y-1">
+              <Label>Thumbnail URL</Label>
+              <Input value={form.thumbnailUrl} onChange={e => setForm(f => ({ ...f, thumbnailUrl: e.target.value }))} placeholder="https://…" />
+            </div>
+            <div className="space-y-1">
+              <Label>Download URL</Label>
+              <Input value={form.downloadUrl} onChange={e => setForm(f => ({ ...f, downloadUrl: e.target.value }))} placeholder="https://…" />
+            </div>
+            <div className="flex items-center gap-2">
+              <Switch checked={form.isPublished} onCheckedChange={v => setForm(f => ({ ...f, isPublished: v }))} id="published-switch" />
+              <Label htmlFor="published-switch">Published</Label>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => { setShowCreate(false); setEditProduct(null); }}>Cancel</Button>
+            <Button onClick={handleSave} disabled={createMutation.isPending || updateMutation.isPending} className="gap-1.5">
+              {(createMutation.isPending || updateMutation.isPending) ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+              {editProduct ? "Save Changes" : "Create Product"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
+
+// ─── Plans Panel ──────────────────────────────────────────────────────────────
+type PlanRow = {
+  id: number;
+  name: string;
+  tier: "explorer" | "seeker" | "oracle";
+  billingInterval: "monthly" | "annual";
+  priceUsd: string;
+  retailPriceUsd: string | null;
+  paypalPlanId: string | null;
+  isFoundingRate: boolean;
+  isActive: boolean;
+  features: string[];
+  sortOrder: number;
+};
+
+const PLAN_TIERS = ["explorer", "seeker", "oracle"] as const;
+const BILLING_INTERVALS = ["monthly", "annual"] as const;
+
+function PlansPanel() {
+  const utils = trpc.useUtils();
+  const { data: plans, isLoading } = trpc.admin.listPlans.useQuery();
+  const [editPlan, setEditPlan] = useState<PlanRow | null>(null);
+  const [showCreate, setShowCreate] = useState(false);
+  const [featuresText, setFeaturesText] = useState("");
+  const [form, setForm] = useState({
+    name: "", tier: "seeker" as typeof PLAN_TIERS[number], billingInterval: "monthly" as typeof BILLING_INTERVALS[number],
+    priceUsd: "", retailPriceUsd: "", paypalPlanId: "", isFoundingRate: false, isActive: true, sortOrder: 0,
+  });
+
+  const createMutation = trpc.admin.createPlan.useMutation({
+    onSuccess: () => { toast.success("Plan created"); utils.admin.listPlans.invalidate(); setShowCreate(false); resetForm(); },
+    onError: (e) => toast.error(e.message),
+  });
+  const updateMutation = trpc.admin.updatePlan.useMutation({
+    onSuccess: () => { toast.success("Plan updated"); utils.admin.listPlans.invalidate(); setEditPlan(null); },
+    onError: (e) => toast.error(e.message),
+  });
+  const deleteMutation = trpc.admin.deletePlan.useMutation({
+    onSuccess: () => { toast.success("Plan deleted"); utils.admin.listPlans.invalidate(); },
+    onError: (e) => toast.error(e.message),
+  });
+
+  const resetForm = () => setForm({ name: "", tier: "seeker", billingInterval: "monthly", priceUsd: "", retailPriceUsd: "", paypalPlanId: "", isFoundingRate: false, isActive: true, sortOrder: 0 });
+
+  const openEdit = (p: PlanRow) => {
+    setEditPlan(p);
+    setFeaturesText((p.features ?? []).join("\n"));
+    setForm({ name: p.name, tier: p.tier, billingInterval: p.billingInterval, priceUsd: p.priceUsd, retailPriceUsd: p.retailPriceUsd ?? "", paypalPlanId: p.paypalPlanId ?? "", isFoundingRate: p.isFoundingRate, isActive: p.isActive, sortOrder: p.sortOrder });
+  };
+
+  const handleSave = () => {
+    const features = featuresText.split("\n").map(s => s.trim()).filter(Boolean);
+    if (editPlan) {
+      updateMutation.mutate({ id: editPlan.id, ...form, features });
+    } else {
+      createMutation.mutate({ ...form, features });
+    }
+  };
+
+  const tierColor: Record<string, string> = { explorer: "bg-slate-500/20 text-slate-300", seeker: "bg-indigo-500/20 text-indigo-300", oracle: "bg-amber-500/20 text-amber-300" };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-semibold">Subscription Plans</h2>
+        <Button size="sm" className="gap-1.5" onClick={() => { setEditPlan(null); resetForm(); setFeaturesText(""); setShowCreate(true); }}>
+          <Plus className="h-4 w-4" /> Add Plan
+        </Button>
+      </div>
+
+      <Card className="bg-card border-border">
+        <CardContent className="p-0">
+          {isLoading ? (
+            <div className="flex justify-center py-12"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow className="border-border hover:bg-transparent">
+                  <TableHead>Name</TableHead>
+                  <TableHead>Tier</TableHead>
+                  <TableHead>Billing</TableHead>
+                  <TableHead>Price</TableHead>
+                  <TableHead>PayPal Plan ID</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {(plans ?? []).map((p) => (
+                  <TableRow key={p.id} className="border-border">
+                    <TableCell className="font-medium">
+                      {p.name}
+                      {p.isFoundingRate && <Badge variant="outline" className="ml-2 text-xs text-amber-400 border-amber-400/30">Founding</Badge>}
+                    </TableCell>
+                    <TableCell><span className={`text-xs px-2 py-0.5 rounded-full font-medium ${tierColor[p.tier] ?? ""}`}>{p.tier}</span></TableCell>
+                    <TableCell className="text-muted-foreground text-sm capitalize">{p.billingInterval}</TableCell>
+                    <TableCell>
+                      <span className="font-medium">${p.priceUsd}</span>
+                      {p.retailPriceUsd && <span className="text-muted-foreground line-through text-xs ml-1">${p.retailPriceUsd}</span>}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground text-xs font-mono">{p.paypalPlanId || "—"}</TableCell>
+                    <TableCell>
+                      <Badge variant={p.isActive ? "default" : "secondary"} className="text-xs">
+                        {p.isActive ? "Active" : "Inactive"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex gap-1">
+                        <Button variant="ghost" size="sm" className="h-7 w-7 p-0" onClick={() => openEdit(p as PlanRow)}>
+                          <Pencil className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-destructive hover:text-destructive" onClick={() => { if (confirm(`Delete plan "${p.name}"?`)) deleteMutation.mutate({ id: p.id }); }}>
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+                {(plans ?? []).length === 0 && (
+                  <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground py-8">No plans yet. Click "Add Plan" to create one.</TableCell></TableRow>
+                )}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Create / Edit Dialog */}
+      <Dialog open={showCreate || !!editPlan} onOpenChange={(open) => { if (!open) { setShowCreate(false); setEditPlan(null); } }}>
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{editPlan ? "Edit Plan" : "Add Plan"}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 py-2">
+            <div className="space-y-1">
+              <Label>Plan Name</Label>
+              <Input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} placeholder="Seeker Founding Monthly" />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <Label>Tier</Label>
+                <Select value={form.tier} onValueChange={v => setForm(f => ({ ...f, tier: v as typeof PLAN_TIERS[number] }))}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {PLAN_TIERS.map(t => <SelectItem key={t} value={t} className="capitalize">{t}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1">
+                <Label>Billing Interval</Label>
+                <Select value={form.billingInterval} onValueChange={v => setForm(f => ({ ...f, billingInterval: v as typeof BILLING_INTERVALS[number] }))}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {BILLING_INTERVALS.map(b => <SelectItem key={b} value={b} className="capitalize">{b}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <Label>Price (USD)</Label>
+                <Input value={form.priceUsd} onChange={e => setForm(f => ({ ...f, priceUsd: e.target.value }))} placeholder="19.00" />
+              </div>
+              <div className="space-y-1">
+                <Label>Retail Price (crossed out)</Label>
+                <Input value={form.retailPriceUsd} onChange={e => setForm(f => ({ ...f, retailPriceUsd: e.target.value }))} placeholder="29.00 (optional)" />
+              </div>
+            </div>
+            <div className="space-y-1">
+              <Label>PayPal Plan ID</Label>
+              <Input value={form.paypalPlanId} onChange={e => setForm(f => ({ ...f, paypalPlanId: e.target.value }))} placeholder="P-XXXXXXXXXXXXXXXXXXXXXXXX" />
+            </div>
+            <div className="space-y-1">
+              <Label>Features (one per line)</Label>
+              <Textarea value={featuresText} onChange={e => setFeaturesText(e.target.value)} rows={5} placeholder={"All 5S Modules\nBefore the Words full suite\nGround Guide AI reflection"} />
+            </div>
+            <div className="space-y-1">
+              <Label>Sort Order</Label>
+              <Input type="number" value={form.sortOrder} onChange={e => setForm(f => ({ ...f, sortOrder: parseInt(e.target.value) || 0 }))} placeholder="0" />
+            </div>
+            <div className="flex gap-6">
+              <div className="flex items-center gap-2">
+                <Switch checked={form.isFoundingRate} onCheckedChange={v => setForm(f => ({ ...f, isFoundingRate: v }))} id="founding-switch" />
+                <Label htmlFor="founding-switch">Founding Rate</Label>
+              </div>
+              <div className="flex items-center gap-2">
+                <Switch checked={form.isActive} onCheckedChange={v => setForm(f => ({ ...f, isActive: v }))} id="active-switch" />
+                <Label htmlFor="active-switch">Active</Label>
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => { setShowCreate(false); setEditPlan(null); }}>Cancel</Button>
+            <Button onClick={handleSave} disabled={createMutation.isPending || updateMutation.isPending} className="gap-1.5">
+              {(createMutation.isPending || updateMutation.isPending) ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+              {editPlan ? "Save Changes" : "Create Plan"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

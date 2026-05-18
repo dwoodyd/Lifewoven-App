@@ -9,8 +9,7 @@ import { registerStorageProxy } from "./storageProxy";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
-import { stripeWebhookHandler } from "../stripe/webhook";
-import { downloadHandler } from "../stripe/download";
+import { downloadHandler } from "../downloadHandler";
 import { paypalRouter } from "../paypal/paypal";
 import { paypalSubscriptionRouter } from "../paypal/subscriptions";
 import { startWeeklyDigestCron } from "../cron/weeklyDigest";
@@ -90,12 +89,12 @@ async function startServer() {
     contentSecurityPolicy: isDev ? false : {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'", "https://js.stripe.com", "https://www.paypal.com", "https://www.sandbox.paypal.com"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "https://www.paypal.com", "https://www.sandbox.paypal.com"],
         styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
         fontSrc: ["'self'", "https://fonts.gstatic.com"],
         imgSrc: ["'self'", "data:", "blob:", "https:"],
-        connectSrc: ["'self'", "https://api.stripe.com", "https://www.paypal.com", "https://www.sandbox.paypal.com"],
-        frameSrc: ["https://js.stripe.com", "https://www.paypal.com", "https://www.sandbox.paypal.com"],
+        connectSrc: ["'self'", "https://www.paypal.com", "https://www.sandbox.paypal.com"],
+        frameSrc: ["https://www.paypal.com", "https://www.sandbox.paypal.com"],
         objectSrc: ["'none'"],
         upgradeInsecureRequests: [],
       },
@@ -175,9 +174,6 @@ async function startServer() {
       res.status(503).json({ status: "degraded", db: "error", uptime: Math.floor(process.uptime()) });
     }
   });
-
-  // Stripe webhook MUST use raw body BEFORE express.json()
-  app.post("/api/stripe/webhook", express.raw({ type: "application/json" }), stripeWebhookHandler);
 
   // Secure download endpoint — token-based, server-side redirect to S3
   app.get("/api/download/:token", downloadHandler);

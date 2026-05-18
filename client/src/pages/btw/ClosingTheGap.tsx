@@ -3,17 +3,14 @@ import Nav from "@/components/Nav";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Loader2, RefreshCw, Lock } from "lucide-react";
-import { toast } from "sonner";
+import { Link } from "wouter";
 
 export default function ClosingTheGap() {
   const { user } = useAuth();
   const { data: stats, isLoading: statsLoading } = trpc.btw.getStats.useQuery();
   const { data: weeklyReflection, refetch: refetchWeekly } = trpc.btw.getLatestWeeklyReflection.useQuery();
-  const { data: subStatus } = trpc.stripe.status.useQuery();
-  const canUseWeeklyReflection = user?.role === "admin" || subStatus?.tier === "seeker" || subStatus?.tier === "oracle";
-  const checkoutMutation = trpc.stripe.createCheckout.useMutation({
-    onSuccess: (d) => { if (d.url) { toast.info("Opening checkout…"); window.open(d.url, "_blank"); } },
-  });
+  const { data: memberStatus } = trpc.paypalOrders.getMembershipStatus.useQuery(undefined, { enabled: !!user });
+  const canUseWeeklyReflection = user?.role === "admin" || memberStatus?.tier === "seeker" || memberStatus?.tier === "oracle";
   const generateMutation = trpc.btw.generateWeeklyReflection.useMutation({ onSuccess: () => refetchWeekly() });
 
   const METRIC_CARDS = stats ? [
@@ -62,9 +59,11 @@ export default function ClosingTheGap() {
                 Generate
               </Button>
             ) : (
-              <Button variant="ghost" size="sm" className="gap-1.5 text-xs text-muted-foreground" onClick={() => checkoutMutation.mutate({ plan: "seeker", origin: window.location.origin })}>
-                <Lock className="h-3 w-3" /> Seeker only
-              </Button>
+              <Link href="/pricing">
+                <Button variant="ghost" size="sm" className="gap-1.5 text-xs text-muted-foreground">
+                  <Lock className="h-3 w-3" /> Seeker only
+                </Button>
+              </Link>
             )}
           </div>
 

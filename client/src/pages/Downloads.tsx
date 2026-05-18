@@ -35,11 +35,11 @@ const PRODUCT_ICONS: Record<string, string> = {
 
 export default function Downloads() {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
-  const { data: orders, isLoading: ordersLoading, refetch } = trpc.stripe.getMyOrders.useQuery(undefined, {
+  const { data: orders, isLoading: ordersLoading, refetch } = trpc.paypalOrders.getMyOrders.useQuery(undefined, {
     enabled: !!user,
   });
 
-  const reissue = trpc.stripe.reissueDownload.useMutation({
+  const reissue = trpc.paypalOrders.reissueDownload.useMutation({
     onSuccess: (data: { token: string }) => {
       refetch();
       toast.success("New download link generated", {
@@ -69,7 +69,7 @@ export default function Downloads() {
     );
   }
 
-  const completedOrders = orders?.filter(o => o.status === "completed") ?? [];
+  const completedOrders = orders?.filter((o: { status: string }) => o.status === "completed") ?? [];
 
   return (
     <div className="min-h-screen bg-background">
@@ -95,7 +95,7 @@ export default function Downloads() {
           </div>
         ) : (
           <div className="space-y-4">
-            {completedOrders.map(order => {
+            {completedOrders.map((order: { id: number; productSlug: string | null; downloadToken: string | null; downloadExpiresAt: Date | null; createdAt: Date }) => {
               const title = PRODUCT_TITLES[order.productSlug ?? ""] ?? order.productSlug ?? "Product";
               const icon = PRODUCT_ICONS[order.productSlug ?? ""] ?? "📄";
               const token = order.downloadToken;

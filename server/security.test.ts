@@ -1,40 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import crypto from "crypto";
-
-// ─── C1: Stripe webhook fails closed ──────────────────────────────────────────
-// Tested via the webhook handler's guard logic (unit-level)
-describe("C1: Stripe webhook signature guard", () => {
-  it("rejects when STRIPE_WEBHOOK_SECRET is missing", async () => {
-    const originalSecret = process.env.STRIPE_WEBHOOK_SECRET;
-    delete process.env.STRIPE_WEBHOOK_SECRET;
-    const mockRes = { status: vi.fn().mockReturnThis(), json: vi.fn() };
-    const mockReq = {
-      headers: { "stripe-signature": "sig123" },
-      body: Buffer.from("{}"),
-    };
-    // Import handler dynamically so env is read at call time
-    const { stripeWebhookHandler } = await import("./stripe/webhook");
-    await stripeWebhookHandler(mockReq as any, mockRes as any);
-    expect(mockRes.status).toHaveBeenCalledWith(400);
-    process.env.STRIPE_WEBHOOK_SECRET = originalSecret;
-  });
-
-  it("rejects when stripe-signature header is missing", async () => {
-    const mockRes = { status: vi.fn().mockReturnThis(), json: vi.fn() };
-    const mockReq = {
-      headers: {},
-      body: Buffer.from("{}"),
-    };
-    const { stripeWebhookHandler } = await import("./stripe/webhook");
-    await stripeWebhookHandler(mockReq as any, mockRes as any);
-    expect(mockRes.status).toHaveBeenCalledWith(400);
-  });
-});
 
 // ─── M2: genTrialCode uses crypto.randomBytes ─────────────────────────────────
 describe("M2: Referral code generation uses crypto.randomBytes", () => {
   it("generates codes with the expected REF-XXXX-XXXX format", () => {
-    // Test the pattern by calling crypto.randomBytes directly and verifying format
     const bytes = crypto.randomBytes(8);
     const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
     let rand = "";
@@ -52,7 +21,6 @@ describe("M2: Referral code generation uses crypto.randomBytes", () => {
       for (let j = 0; j < 8; j++) rand += chars[bytes[j] % chars.length];
       codes.add(`REF-${rand.slice(0, 4)}-${rand.slice(4)}`);
     }
-    // With 20 iterations, collision probability is negligible
     expect(codes.size).toBeGreaterThan(15);
   });
 });
@@ -61,7 +29,7 @@ describe("M2: Referral code generation uses crypto.randomBytes", () => {
 describe("H2: Per-user LLM rate limiter", () => {
   it("allows up to 10 calls per minute", async () => {
     const { checkLlmRateLimit } = await import("./_core/llmRateLimiter");
-    const userId = 999_001; // unique test user
+    const userId = 999_001;
     let allowed = 0;
     for (let i = 0; i < 10; i++) {
       if (checkLlmRateLimit(userId)) allowed++;
@@ -71,7 +39,7 @@ describe("H2: Per-user LLM rate limiter", () => {
 
   it("blocks the 11th call within the same window", async () => {
     const { checkLlmRateLimit } = await import("./_core/llmRateLimiter");
-    const userId = 999_002; // unique test user
+    const userId = 999_002;
     for (let i = 0; i < 10; i++) checkLlmRateLimit(userId);
     const result = checkLlmRateLimit(userId);
     expect(result).toBe(false);
@@ -81,24 +49,21 @@ describe("H2: Per-user LLM rate limiter", () => {
     const { checkLlmRateLimit } = await import("./_core/llmRateLimiter");
     const userA = 999_003;
     const userB = 999_004;
-    // Exhaust userA
     for (let i = 0; i < 10; i++) checkLlmRateLimit(userA);
-    // userB should still be allowed
     expect(checkLlmRateLimit(userB)).toBe(true);
   });
 });
 
 // ─── H3: auth.me minimal projection ──────────────────────────────────────────
 describe("H3: auth.me returns only safe fields", () => {
-  it("does not include stripeCustomerId or openId in the projection", () => {
-    // Verify the field list by inspecting the source
+  it("does not include paypalSubscriptionId or openId in the projection", () => {
     const fs = require("fs");
     const source = fs.readFileSync(
       new URL("./routers.ts", import.meta.url).pathname,
       "utf-8"
     );
     const meBlock = source.match(/me: publicProcedure\.query[\s\S]{0,500}?\}\)/)?.[0] ?? "";
-    expect(meBlock).not.toContain("stripeCustomerId");
+    expect(meBlock).not.toContain("paypalSubscriptionId");
     expect(meBlock).not.toContain("openId");
   });
 });
@@ -142,7 +107,6 @@ describe("L5: Cron jobs are gated on ENABLE_CRONS env var", () => {
       "utf-8"
     );
     expect(source).toContain("ENABLE_CRONS");
-    // Cron calls must be inside the ENABLE_CRONS block
     const enableBlock = source.match(/if \(process\.env\.ENABLE_CRONS[\s\S]+?\}/)?.[0] ?? "";
     expect(enableBlock).toContain("startWeeklyDigestCron");
     expect(enableBlock).toContain("startBetaExpiryCheckCron");
@@ -157,20 +121,14 @@ describe("H6: trackEvent uses protectedProcedure and validates event enum", () =
       new URL("./_core/systemRouter.ts", import.meta.url).pathname,
       "utf-8"
     );
-    // The file must import protectedProcedure
     expect(source).toContain("protectedProcedure");
-    // trackEvent must not use publicProcedure
     const trackBlock = source.match(/trackEvent:[\.\s\S]{0,1200}?return \{ ok: true \};/)?.[0] ?? source;
     expect(trackBlock).not.toContain("publicProcedure");
-    // Should use z.enum for event validation
     expect(source).toContain("z.enum");
   });
 });
 
 // ─── OAuth returnPath: parseReturnPath ───────────────────────────────────────
-// These tests mirror the parseReturnPath function in server/_core/oauth.ts
-// to guard against regressions in the session-identity bug fix.
-
 function parseReturnPath(state: string): string {
   try {
     const decoded = Buffer.from(state, "base64").toString("utf8");
@@ -222,7 +180,6 @@ describe("OAuth returnPath — parseReturnPath", () => {
 
   it("returns '/' when returnPath is an empty string after separator", () => {
     const state = Buffer.from("https://example.com/api/oauth/callback||").toString("base64");
-    // empty string does not start with "/" → falls back to "/"
     expect(parseReturnPath(state)).toBe("/");
   });
 });

@@ -691,3 +691,26 @@ export const inviteCodes = mysqlTable("invite_codes", {
 
 export type InviteCode = typeof inviteCodes.$inferSelect;
 export type InsertInviteCode = typeof inviteCodes.$inferInsert;
+
+// ─── Subscription Plans ───────────────────────────────────────────────────────
+// Admin-managed subscription plan definitions (PayPal-only).
+// These are the source of truth for pricing displayed on the Pricing page.
+
+export const subscriptionPlans = mysqlTable("subscription_plans", {
+  id:              int("id").autoincrement().primaryKey(),
+  name:            varchar("name", { length: 128 }).notNull(),          // e.g. "Seeker Founding Monthly"
+  tier:            mysqlEnum("tier", ["explorer", "seeker", "oracle"]).notNull(),
+  billingInterval: mysqlEnum("billingInterval", ["monthly", "annual"]).notNull(),
+  priceUsd:        decimal("price_usd", { precision: 8, scale: 2 }).notNull(),
+  retailPriceUsd:  decimal("retail_price_usd", { precision: 8, scale: 2 }),  // shown as crossed-out
+  paypalPlanId:    varchar("paypal_plan_id", { length: 64 }),           // PayPal billing plan ID
+  isFoundingRate:  boolean("is_founding_rate").default(false).notNull(),
+  isActive:        boolean("is_active").default(true).notNull(),
+  features:        json("features").notNull().$type<string[]>(),         // feature bullet list
+  sortOrder:       int("sort_order").default(0).notNull(),
+  createdAt:       timestamp("created_at").defaultNow().notNull(),
+  updatedAt:       timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
+});
+
+export type SubscriptionPlan = typeof subscriptionPlans.$inferSelect;
+export type InsertSubscriptionPlan = typeof subscriptionPlans.$inferInsert;
