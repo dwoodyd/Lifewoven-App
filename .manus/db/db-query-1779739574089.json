@@ -1,0 +1,50 @@
+{
+  "query": "SELECT code, open_id, return_path, created_at, expires_at, used_at FROM auth_handoff_codes ORDER BY created_at DESC LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4A9VQZNRBpHGiCF.a37aec6b9c0f --database kRrwoPFbyNWaiJXLmscJ4t --execute SELECT code, open_id, return_path, created_at, expires_at, used_at FROM auth_handoff_codes ORDER BY created_at DESC LIMIT 5;",
+  "rows": [
+    {
+      "code": "pDJMxNveGQCnW3RwWt1sm5rpOJ0yKDBlMgW85fxVoTnVnZa1",
+      "open_id": "84zCX3KGvpReVMXP9YyCdq",
+      "return_path": "/",
+      "created_at": "2026-05-25 20:01:45",
+      "expires_at": "2026-05-25 20:06:46",
+      "used_at": "NULL"
+    },
+    {
+      "code": "TsWdPI8HXY5PtM-vPJd1rFBqfM9dL9Bm03lCmxz3rX4G71HL",
+      "open_id": "84zCX3KGvpReVMXP9YyCdq",
+      "return_path": "/",
+      "created_at": "2026-05-25 20:01:22",
+      "expires_at": "2026-05-25 20:06:22",
+      "used_at": "NULL"
+    },
+    {
+      "code": "Jou8UwSEFUQ9TPTUfTjP6FYCIHgqRd8W76AOF_oHG95SvqqI",
+      "open_id": "84zCX3KGvpReVMXP9YyCdq",
+      "return_path": "/",
+      "created_at": "2026-05-25 19:35:28",
+      "expires_at": "2026-05-25 19:40:29",
+      "used_at": "NULL"
+    },
+    {
+      "code": "luDOdxEJQ61CHpAl6cySxA7-S_ltDc1GyJWH7FCEHQWY9iwW",
+      "open_id": "84zCX3KGvpReVMXP9YyCdq",
+      "return_path": "/",
+      "created_at": "2026-05-25 19:35:03",
+      "expires_at": "2026-05-25 19:40:04",
+      "used_at": "NULL"
+    },
+    {
+      "code": "dDVGKpdFArcfI-uQmv4UrJRVlr1TXeTXbx54nI31xRN4Cx3k",
+      "open_id": "84zCX3KGvpReVMXP9YyCdq",
+      "return_path": "/",
+      "created_at": "2026-05-25 19:22:38",
+      "expires_at": "2026-05-25 19:27:39",
+      "used_at": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "code\topen_id\treturn_path\tcreated_at\texpires_at\tused_at\npDJMxNveGQCnW3RwWt1sm5rpOJ0yKDBlMgW85fxVoTnVnZa1\t84zCX3KGvpReVMXP9YyCdq\t/\t2026-05-25 20:01:45\t2026-05-25 20:06:46\tNULL\nTsWdPI8HXY5PtM-vPJd1rFBqfM9dL9Bm03lCmxz3rX4G71HL\t84zCX3KGvpReVMXP9YyCdq\t/\t2026-05-25 20:01:22\t2026-05-25 20:06:22\tNULL\nJou8UwSEFUQ9TPTUfTjP6FYCIHgqRd8W76AOF_oHG95SvqqI\t84zCX3KGvpReVMXP9YyCdq\t/\t2026-05-25 19:35:28\t2026-05-25 19:40:29\tNULL\nluDOdxEJQ61CHpAl6cySxA7-S_ltDc1GyJWH7FCEHQWY9iwW\t84zCX3KGvpReVMXP9YyCdq\t/\t2026-05-25 19:35:03\t2026-05-25 19:40:04\tNULL\ndDVGKpdFArcfI-uQmv4UrJRVlr1TXeTXbx54nI31xRN4Cx3k\t84zCX3KGvpReVMXP9YyCdq\t/\t2026-05-25 19:22:38\t2026-05-25 19:27:39\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 266
+}
