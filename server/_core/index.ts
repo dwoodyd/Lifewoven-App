@@ -89,11 +89,12 @@ async function startServer() {
     contentSecurityPolicy: isDev ? false : {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'", "https://www.paypal.com", "https://www.sandbox.paypal.com"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "https://www.paypal.com", "https://www.sandbox.paypal.com", "https://manus-analytics.com"],
         styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-        fontSrc: ["'self'", "https://fonts.gstatic.com"],
+        fontSrc: ["'self'", "data:", "https://fonts.gstatic.com"],
         imgSrc: ["'self'", "data:", "blob:", "https:"],
-        connectSrc: ["'self'", "https://www.paypal.com", "https://www.sandbox.paypal.com"],
+        mediaSrc: ["'self'", "blob:", "https://d36hbw14aib5lz.cloudfront.net", "https://*.cloudfront.net", "https://*.manus.space"],
+        connectSrc: ["'self'", "https://www.paypal.com", "https://www.sandbox.paypal.com", "https://manus-analytics.com", "https://*.cloudfront.net"],
         frameSrc: ["https://www.paypal.com", "https://www.sandbox.paypal.com"],
         objectSrc: ["'none'"],
         upgradeInsecureRequests: [],
