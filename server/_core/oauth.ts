@@ -36,7 +36,7 @@ function parseState(state: string): { returnPath: string; finalOrigin: string } 
 
     // Security: only allow known safe origins for cross-domain redirect
     const safeOrigins = [
-      /^https:\/\/([a-z0-9-]+\.)*lifewoven\.click$/,
+      /^https:\/\/(([a-z0-9-]+)\.)*lifewoven\.click$/, // matches lifewoven.click AND app.lifewoven.click etc.
       /^https:\/\/([a-z0-9-]+\.)*manus\.space$/,
       /^https:\/\/([a-z0-9-]+\.)*manus\.computer$/,
       /^http:\/\/localhost(:\d+)?$/,
