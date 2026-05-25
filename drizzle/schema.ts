@@ -714,3 +714,19 @@ export const subscriptionPlans = mysqlTable("subscription_plans", {
 
 export type SubscriptionPlan = typeof subscriptionPlans.$inferSelect;
 export type InsertSubscriptionPlan = typeof subscriptionPlans.$inferInsert;
+
+// ─── Auth Handoff Codes ───────────────────────────────────────────────────────
+// Short-lived one-time codes used for cross-domain OAuth handoff.
+// The manus.space callback domain creates a code + stores user info here,
+// then the custom domain (app.lifewoven.click) exchanges it for a fresh JWT.
+export const authHandoffCodes = mysqlTable("auth_handoff_codes", {
+  id:          int("id").autoincrement().primaryKey(),
+  code:        varchar("code", { length: 64 }).notNull().unique(),
+  openId:      varchar("open_id", { length: 64 }).notNull(),
+  name:        text("name"),
+  returnPath:  varchar("return_path", { length: 512 }).default("/").notNull(),
+  expiresAt:   timestamp("expires_at").notNull(),
+  usedAt:      timestamp("used_at"),
+  createdAt:   timestamp("created_at").defaultNow().notNull(),
+});
+export type AuthHandoffCode = typeof authHandoffCodes.$inferSelect;

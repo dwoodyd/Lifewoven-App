@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE `auth_handoff_codes` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`code` varchar(64) NOT NULL,\n\t`open_id` varchar(64) NOT NULL,\n\t`name` text,\n\t`return_path` varchar(512) NOT NULL DEFAULT '/',\n\t`expires_at` timestamp NOT NULL,\n\t`used_at` timestamp,\n\t`created_at` timestamp NOT NULL DEFAULT (now()),\n\tCONSTRAINT `auth_handoff_codes_id` PRIMARY KEY(`id`),\n\tCONSTRAINT `auth_handoff_codes_code_unique` UNIQUE(`code`)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4A9VQZNRBpHGiCF.a37aec6b9c0f --database kRrwoPFbyNWaiJXLmscJ4t --execute CREATE TABLE `auth_handoff_codes` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`code` varchar(64) NOT NULL,\n\t`open_id` varchar(64) NOT NULL,\n\t`name` text,\n\t`return_path` varchar(512) NOT NULL DEFAULT '/',\n\t`expires_at` timestamp NOT NULL,\n\t`used_at` timestamp,\n\t`created_at` timestamp NOT NULL DEFAULT (now()),\n\tCONSTRAINT `auth_handoff_codes_id` PRIMARY KEY(`id`),\n\tCONSTRAINT `auth_handoff_codes_code_unique` UNIQUE(`code`)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 375
+}

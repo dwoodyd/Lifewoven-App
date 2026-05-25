@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, authHandoffCodes, users } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -87,6 +87,41 @@ export async function getUserByOpenId(openId: string) {
   const result = await db.select().from(users).where(eq(users.openId, openId)).limit(1);
 
   return result.length > 0 ? result[0] : undefined;
+}
+
+// ─── Auth Handoff Code helpers ───────────────────────────────────────────────
+
+/** Create a one-time handoff code valid for 5 minutes. */
+export async function createHandoffCode(opts: {
+  code: string;
+  openId: string;
+  name: string | null;
+  returnPath: string;
+}): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("[Database] Cannot create handoff code: database not available");
+  const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
+  await db.insert(authHandoffCodes).values({
+    code: opts.code,
+    openId: opts.openId,
+    name: opts.name,
+    returnPath: opts.returnPath,
+    expiresAt,
+  });
+}
+
+/** Consume a handoff code (returns null if missing, expired, or already used). */
+export async function consumeHandoffCode(code: string): Promise<{ openId: string; name: string | null; returnPath: string } | null> {
+  const db = await getDb();
+  if (!db) return null;
+  const rows = await db.select().from(authHandoffCodes).where(eq(authHandoffCodes.code, code)).limit(1);
+  const row = rows[0];
+  if (!row) return null;
+  if (row.usedAt) return null;          // already consumed
+  if (row.expiresAt < new Date()) return null; // expired
+  // Mark as used
+  await db.update(authHandoffCodes).set({ usedAt: new Date() }).where(eq(authHandoffCodes.code, code));
+  return { openId: row.openId, name: row.name ?? null, returnPath: row.returnPath };
 }
 
 // TODO: add feature queries here as your schema grows.

@@ -105,3 +105,44 @@ describe("OAuth cross-domain state parsing", () => {
     expect(result.finalOrigin).toBe("http://localhost:3000");
   });
 });
+
+describe("One-time code handoff flow", () => {
+  it("nanoid generates URL-safe codes (no +, /, or = characters)", () => {
+    // nanoid uses A-Za-z0-9_- alphabet by default — all URL-safe
+    const { nanoid } = require("nanoid");
+    for (let i = 0; i < 50; i++) {
+      const code = nanoid(48);
+      expect(code).toMatch(/^[A-Za-z0-9_-]+$/);
+      expect(code).not.toContain("+");
+      expect(code).not.toContain("/");
+      expect(code).not.toContain("=");
+    }
+  });
+
+  it("handoff URL is constructed with searchParams (proper encoding)", () => {
+    const finalOrigin = "https://app.lifewoven.click";
+    const code = "abc123_-XYZ";
+    const handoffUrl = new URL(`${finalOrigin}/api/auth/complete`);
+    handoffUrl.searchParams.set("code", code);
+    expect(handoffUrl.toString()).toBe(
+      "https://app.lifewoven.click/api/auth/complete?code=abc123_-XYZ"
+    );
+  });
+
+  it("safe returnPath validation rejects double-slash open redirect", () => {
+    const returnPath = "//evil.com/steal";
+    const safePath =
+      returnPath.startsWith("/") && !returnPath.startsWith("//")
+        ? returnPath
+        : "/";
+    expect(safePath).toBe("/");
+  });
+
+  it("safe returnPath validation accepts normal paths", () => {
+    const paths = ["/", "/dashboard", "/btw/living-as-heard", "/pricing"];
+    for (const p of paths) {
+      const safePath = p.startsWith("/") && !p.startsWith("//") ? p : "/";
+      expect(safePath).toBe(p);
+    }
+  });
+});

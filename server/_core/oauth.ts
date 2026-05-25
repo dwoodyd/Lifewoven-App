@@ -1,5 +1,6 @@
 import { COOKIE_NAME } from "@shared/const";
 import type { Express, Request, Response } from "express";
+import { nanoid } from "nanoid";
 import * as db from "../db";
 import { getSessionCookieOptions } from "./cookies";
 import { sdk } from "./sdk";
@@ -81,25 +82,34 @@ export function registerOAuthRoutes(app: Express) {
         lastSignedIn: new Date(),
       });
 
-      const sessionToken = await sdk.createSessionToken(userInfo.openId, {
-        name: userInfo.name || "",
-        expiresInMs: THIRTY_DAYS_MS,
-      });
-
       const { returnPath, finalOrigin } = parseState(state);
 
       // Cross-domain redirect: user is on a custom domain (e.g. app.lifewoven.click)
-      // but the OAuth callback landed on manus.space. We need to hand off the session
-      // token to the custom domain so it can set its own cookie.
+      // but the OAuth callback landed on manus.space.
+      //
+      // IMPORTANT: We cannot pass the JWT token cross-domain because each Cloud Run
+      // instance may have a different JWT_SECRET. Instead, we store a short-lived
+      // one-time code in the shared database and redirect the custom domain to exchange
+      // it for a fresh JWT signed with its own secret.
       if (finalOrigin) {
+        const handoffCode = nanoid(48); // cryptographically random, URL-safe
+        await db.createHandoffCode({
+          code: handoffCode,
+          openId: userInfo.openId,
+          name: userInfo.name || null,
+          returnPath,
+        });
         const handoffUrl = new URL(`${finalOrigin}/api/auth/complete`);
-        handoffUrl.searchParams.set("token", sessionToken);
-        handoffUrl.searchParams.set("returnPath", returnPath);
+        handoffUrl.searchParams.set("code", handoffCode);
         res.redirect(302, handoffUrl.toString());
         return;
       }
 
-      // Same-domain: set cookie directly
+      // Same-domain: create session token and set cookie directly
+      const sessionToken = await sdk.createSessionToken(userInfo.openId, {
+        name: userInfo.name || "",
+        expiresInMs: THIRTY_DAYS_MS,
+      });
       const cookieOptions = getSessionCookieOptions(req);
       res.cookie(COOKIE_NAME, sessionToken, { ...cookieOptions, maxAge: THIRTY_DAYS_MS });
       res.redirect(302, returnPath);
@@ -109,32 +119,38 @@ export function registerOAuthRoutes(app: Express) {
     }
   });
 
-  // Cross-domain auth complete: receives a session token from the manus.space callback
-  // and sets it as a cookie on the current domain (e.g. app.lifewoven.click).
+  // Cross-domain auth complete: receives a one-time code from the manus.space callback,
+  // looks up the user in the shared database, and creates a fresh JWT signed with THIS
+  // instance's JWT_SECRET before setting the session cookie.
   app.get("/api/auth/complete", async (req: Request, res: Response) => {
-    const token = getQueryParam(req, "token");
-    const returnPath = getQueryParam(req, "returnPath") || "/";
+    const code = getQueryParam(req, "code");
 
-    if (!token) {
-      res.redirect(302, "/?login_error=missing_token");
+    if (!code) {
+      res.redirect(302, "/?login_error=missing_code");
       return;
     }
 
     try {
-      // Verify the token is valid (signed with our JWT_SECRET)
-      const payload = await sdk.verifySession(token);
-      if (!payload) {
-        res.redirect(302, "/?login_error=invalid_token");
+      // Exchange the one-time code for user info (marks code as used)
+      const handoff = await db.consumeHandoffCode(code);
+      if (!handoff) {
+        res.redirect(302, "/?login_error=invalid_or_expired_code");
         return;
       }
 
       // Security: only allow relative paths
-      const safePath = returnPath.startsWith("/") && !returnPath.startsWith("//")
-        ? returnPath
+      const safePath = handoff.returnPath.startsWith("/") && !handoff.returnPath.startsWith("//")
+        ? handoff.returnPath
         : "/";
 
+      // Create a fresh JWT signed with THIS instance's JWT_SECRET
+      const sessionToken = await sdk.createSessionToken(handoff.openId, {
+        name: handoff.name || "",
+        expiresInMs: THIRTY_DAYS_MS,
+      });
+
       const cookieOptions = getSessionCookieOptions(req);
-      res.cookie(COOKIE_NAME, token, { ...cookieOptions, maxAge: THIRTY_DAYS_MS });
+      res.cookie(COOKIE_NAME, sessionToken, { ...cookieOptions, maxAge: THIRTY_DAYS_MS });
       res.redirect(302, safePath);
     } catch (error) {
       console.error("[Auth] Complete failed", error);

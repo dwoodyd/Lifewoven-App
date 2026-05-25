@@ -176,6 +176,13 @@
       "when": 1779067781139,
       "tag": "0024_bright_silverclaw",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "5",
+      "when": 1779733705099,
+      "tag": "0025_lean_jack_flag",
+      "breakpoints": true
     }
   ]
 }
