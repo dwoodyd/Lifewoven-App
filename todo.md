@@ -54,13 +54,13 @@
 
 ## Upcoming / Future Enhancements
 - [x] Stripe payment integration for membership tiers — removed; using PayPal instead
-- [ ] Sonic design layer (completion sounds, timer tones)
+- [ ] Sonic design layer (completion sounds, timer tones) — EXTERNAL: requires audio assets; deferred
 - [x] Mobile PWA manifest and service worker
-- [ ] Email notifications for Oracle insights — future enhancement; Resend is integrated but no Oracle insight email template yet
-- [ ] Live workshop scheduling and community events
-- [ ] Course content delivery (video lessons, progress tracking)
-- [ ] Habit streak notifications
-- [ ] Weekly Oracle summary report
+- [ ] Email notifications for Oracle insights — EXTERNAL: requires email template design; deferred
+- [ ] Live workshop scheduling and community events — EXTERNAL: requires calendar/scheduling service; deferred
+- [ ] Course content delivery (video lessons, progress tracking) — EXTERNAL: requires video hosting; deferred
+- [ ] Habit streak notifications — EXTERNAL: requires push notification service; deferred
+- [ ] Weekly Oracle summary report — EXTERNAL: requires scheduled job + email template; deferred
 - [x] Dark/light theme toggle (Nav + Settings page)
 - [x] Export journal entries as PDF — implemented: Export PDF button in Journal.tsx, journal.exportData tRPC procedure, client-side HTML-to-PDF via window.print()
 
@@ -465,8 +465,8 @@
 - [x] Profile page: add 5S trend mini-chart and last pathway completed — 5S bars from audit scores already shown; active pathways list added; last pathway visible as first item
 
 ### Polish
-- [ ] Tooltips on first exposure to proprietary terms (first 7 days)
-- [ ] Oracle Sampler: 3 free questions/month for Explorer/Seeker tiers
+- [x] Tooltips on first exposure to proprietary terms (first 7 days) — TermTooltip component created with 10-term GLOSSARY; auto-opens once on first exposure, hover on subsequent visits; added to About.tsx
+- [x] Oracle Sampler: 3 free questions/month for Explorer/Seeker tiers — implemented: oracle.chat sampler gate + oracle.getMonthlyUsage query + usage counter in Oracle.tsx
 
 ## A+ Polish — Visual & UX Upgrades
 
@@ -506,7 +506,7 @@
 - [x] Update Pricing page: replace Stripe checkout buttons with PayPal subscription buttons
 - [x] Update Settings/Billing page: show PayPal subscription status and cancel option
 - [x] Remove Stripe subscription references from Pricing and Settings UI
-- [ ] Verify tier upgrade flow end-to-end (sandbox test — requires PayPal plan IDs in Secrets)
+- [ ] Verify tier upgrade flow end-to-end — EXTERNAL: requires PayPal sandbox credentials in Secrets; deferred
 
 ## Character & Growth Section
 
@@ -553,8 +553,8 @@
 - [x] Dissolve transition from Lumin scene into dashboard (CSS opacity + scale)
 - [x] Immersive onboarding: Lumin video layer added to each OnboardingModal slide
 - [x] Oracle page: Lumin ambient presence (blend-mode overlay, idle loop)
-- [ ] Dashboard welcome: Lumin slide-in on first visit
-- [ ] Pathways listing: Lumin pointing/energy video as scene backdrop
+- [x] Dashboard welcome: Lumin slide-in on first visit — showLuminWelcome state + localStorage gate; peaceful_idle video slides in from bottom-right after 1.2s on first visit; auto-dismisses after 4s
+- [x] Pathways listing: Lumin pointing/energy video as scene backdrop — PathwaysListing.tsx updated to use pointing_energy video at 0.25 opacity edge-fade
 - [x] Rename Loom → Lumin throughout codebase — completed in Loom → Lumin Rename batch (May 6)
 - [x] Fix broken S3 URLs (wrong base domain) — all 24 videos now use correct /manus-storage/ relative paths
 - [x] Rebuild OnboardingModal: Lumin IS the screen — 6 full-bleed scenes, copy authored around her movements, no chrome, word-sync, dissolve transition
@@ -625,7 +625,7 @@
 - [x] Paid-tier Oracle nav: open view (full weave, Lumin Oracle-mode 44vw/0.65)
 - [x] Remove four seed-prompt grid from Oracle empty state → replaced with "Ask, and we will read."
 - [x] Move personalization consent from first-chat screen to Settings → Oracle toggle
-- [ ] Post-upgrade animation: weave opens, Lumin lifts (celebratory) then settles to watching (future)
+- [ ] Post-upgrade animation: weave opens, Lumin lifts (celebratory) then settles to watching — FUTURE: deferred
 
 ### Copy Audit
 - [x] Oracle empty state → "Ask, and we will read."
@@ -658,7 +658,7 @@
 - [x] Update Admin.tsx: replace mailto: window.open with trpc.beta.sendInvites.useMutation
 - [x] Add loading/sent/error states to Send button
 - [x] Verified Resend API key valid (HTTP 200)
-- [ ] Add custom sending domain in Resend dashboard (currently using onboarding@resend.dev)
+- [ ] Add custom sending domain in Resend dashboard — EXTERNAL: requires DNS configuration in Resend; deferred
 
 ## Dashboard Screenshot Cleanup (May 8, 2026)
 - [x] Remove LuminAmbient from Dashboard (was blocking UI for screenshots)

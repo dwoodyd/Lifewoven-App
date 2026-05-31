@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { ArrowRight, BookOpen, Brain, Compass, Heart, Layers, Sparkles, Target, Users, Zap, Info, ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { TermTooltip } from "@/components/TermTooltip";
 
 const WISDOM_LINEAGE = [
   { name: "Ernest Holmes", years: "1887–1960", role: "Philosopher, Founder of Religious Science", contribution: "Holmes' Science of Mind established that consciousness shapes experience — that thought is creative and that a disciplined mental practice can transform every area of life. His work is the philosophical spine of the Lifewoven State and Story modules.", status: "Public Domain (pre-1928 works)" },
@@ -20,7 +21,7 @@ const MODULES = [
 ];
 
 const HOW_TO_STEPS = [
-  { step: "01", icon: Compass, title: "Take the Alignment Audit", desc: "A 12-question diagnostic that maps your current state across all 5 dimensions and recommends your first pathway. Takes 5 minutes. Starts everything.", cta: "Begin the Audit", href: "/audit" },
+  { step: "01", icon: Compass, title: "Take the Alignment Audit", desc: "A 12-question diagnostic that maps your current state across all 5 dimensions and recommends your first pathway. Takes 5 minutes. Starts everything.", cta: "Begin the Audit", href: "/audit", termKey: "Alignment Audit" },
   { step: "02", icon: Heart, title: "Enter Your First Module", desc: "Based on your audit results, you'll be guided to the module where your energy is most blocked. Start there. Don't try to do everything at once.", cta: "View Your Dashboard", href: "/dashboard" },
   { step: "03", icon: Sparkles, title: "Work With the Oracle", desc: "The Oracle is your AI companion — it reads your journal entries, habit patterns, and check-ins to surface insights you haven't seen yet. Ask it anything.", cta: "Meet the Oracle", href: "/oracle" },
   { step: "04", icon: Zap, title: "Follow a Pathway", desc: "Pathways are guided practice sequences — 10 to 45 minutes — designed to move you through a specific shift. Align, Reset, Uplift, Flow, Rhythms, Purpose.", cta: "Explore Pathways", href: "/pathways" },
@@ -58,7 +59,7 @@ export default function About() {
           </div>
           <div className="hidden md:block mt-4">
             <div className="relative p-8 rounded-3xl border border-border bg-card">
-              <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-6">The 5S Framework</p>
+              <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-6"><TermTooltip term="5S Framework">The 5S Framework</TermTooltip></p>
               <div className="space-y-3">
                 {MODULES.map(({ icon: Icon, label, color, bg, desc }) => (
                   <div key={label} className={`flex items-start gap-3 p-3 rounded-xl ${bg}`}>
@@ -100,7 +101,7 @@ export default function About() {
         <div className="container max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">The Framework</p>
-            <h2 className="font-serif text-3xl md:text-4xl font-light text-foreground">The 5S Personal Transformation System</h2>
+            <h2 className="font-serif text-3xl md:text-4xl font-light text-foreground">The <TermTooltip term="5S Framework">5S</TermTooltip> Personal Transformation System</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {MODULES.map(({ icon: Icon, label, color, bg, desc, href }) => (
@@ -139,7 +140,12 @@ export default function About() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                       <Icon className="h-4 w-4 text-muted-foreground" />
-                      <h3 className="font-medium text-foreground text-sm sm:text-base">{title}</h3>
+                      <h3 className="font-medium text-foreground text-sm sm:text-base">
+                      {step === "01" ? <TermTooltip term="Alignment Audit">{title}</TermTooltip>
+                        : step === "03" ? <TermTooltip term="The Oracle">{title}</TermTooltip>
+                        : step === "04" ? <TermTooltip term="Pathway">{title}</TermTooltip>
+                        : title}
+                    </h3>
                     </div>
                     <p className="text-sm text-muted-foreground font-light leading-relaxed mb-3">{desc}</p>
                     <Link href={href}>

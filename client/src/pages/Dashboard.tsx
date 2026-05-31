@@ -45,6 +45,7 @@ const MODULE_CONFIG = [
 ];
 
 import { LuminCorner } from "@/components/LuminCorner";
+import { LuminScene } from "@/components/LuminScene";
 import FoundingWelcomeCard from "@/components/FoundingWelcomeCard";
 
 export default function Dashboard() {
@@ -64,6 +65,22 @@ export default function Dashboard() {
   const [showReentry, setShowReentry] = useState(false);
   const [daysSinceActive, setDaysSinceActive] = useState(0);
   const [reentryTrigger, setReentryTrigger] = useState<"absence" | "overwhelm" | "shame" | "burnout">("absence");
+  const [showLuminWelcome, setShowLuminWelcome] = useState(false);
+
+  // First-visit Lumin slide-in: show once per session when user has never visited before
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    const hasSeenWelcome = localStorage.getItem("lifeos_lumin_welcome_seen");
+    if (!hasSeenWelcome) {
+      const timer = setTimeout(() => {
+        setShowLuminWelcome(true);
+        localStorage.setItem("lifeos_lumin_welcome_seen", "1");
+        // Auto-dismiss after 4 seconds
+        setTimeout(() => setShowLuminWelcome(false), 4000);
+      }, 1200);
+      return () => clearTimeout(timer);
+    }
+  }, [isAuthenticated]);
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -680,6 +697,18 @@ export default function Dashboard() {
       </div>
     </div>
     <LuminCorner size={52} tooltip="Lumin is with you" />
+    {/* First-visit Lumin slide-in — appears once, auto-dismisses after 4s */}
+    {showLuminWelcome && (
+      <div
+        className="fixed bottom-20 right-4 sm:right-8 z-50 flex flex-col items-end gap-2 animate-in slide-in-from-bottom-4 fade-in duration-700"
+        style={{ pointerEvents: "none" }}
+      >
+        <div className="bg-card/90 backdrop-blur-sm border border-border rounded-2xl px-4 py-2.5 shadow-lg max-w-[220px] text-right">
+          <p className="text-sm font-light text-foreground leading-snug">Welcome. I'm here whenever you need me.</p>
+        </div>
+        <LuminScene videoId="peaceful_idle" ambientSize="80px" className="opacity-90" />
+      </div>
+    )}
     </>
   );
 }

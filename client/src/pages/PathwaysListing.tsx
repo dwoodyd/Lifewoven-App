@@ -96,11 +96,11 @@ const PATHWAYS = [
 export default function PathwaysListing() {
   return (
     <div className="min-h-screen bg-background">
-      {/* Lumin reaches toward the path ahead — aspirational, guiding */}
+      {/* Lumin points forward with energy — aspirational, guiding */}
       <LuminAmbient
-        videoId="turning_extending"
+        videoId="pointing_energy"
         mode="edge-fade"
-        opacity={0.22}
+        opacity={0.25}
         zIndex={0}
       />
       <Nav />
