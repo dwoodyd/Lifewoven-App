@@ -972,3 +972,17 @@
 - [x] Wire LuminMoment to Oracle thinking in Oracle.tsx (taps_chin on send)
 - [x] Wire LuminMoment to Oracle response in Oracle.tsx (nodding_gently on reply)
 - [x] Wire LuminMoment to journal save in Journal.tsx (waves_sparkles or nodding_gently)
+
+## Animation Polish Pass
+
+- [x] Global CSS: slide-up-fade, scale-in, pop-in, chat-bubble-in, stagger-in keyframes + utilities
+- [x] Global CSS: hover-lift, hover-lift-sm, hover-lift-gold, press-effect, card-interactive, nav-item-hover, focus-gold, transition-smooth utilities
+- [x] Global CSS: stagger delay classes (stagger-1 through stagger-8)
+- [x] Sidebar nav items: stagger-in entrance, active gold left border + icon scale, hover translateX
+- [x] Nav top bar: animated underline slide-in on hover/active, theme toggle icon rotate on hover
+- [x] SwipeableCard: icon scale pop (0.7→1.0) as swipe threshold crossed, drag shadow depth
+- [x] PullToRefresh: gold accent color when triggered, icon scale bounce on threshold cross
+- [x] Journal entries: stagger fade-in (0.04s delay per item, max 0.32s), card hover gold border + bg tint
+- [x] Oracle chat bubbles: spring slide-up-fade entrance for all message types (crisis, error, normal)
+- [x] ResponsiveDialog: backdrop blur on mobile overlay
+- [x] LuminMoment: dramatic spring pop entrance (scale 0.5→1, rotate -8→0) + gold drop-shadow glow

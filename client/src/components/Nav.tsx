@@ -64,19 +64,26 @@ export default function Nav() {
 
         {/* Desktop Primary Nav */}
         <nav className="hidden md:flex items-center gap-5 xl:gap-7" aria-label="Main navigation">
-          {primaryLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`text-sm font-sans transition-colors hover:text-foreground whitespace-nowrap ${
-                location === link.href || (link.href !== "/" && location.startsWith(link.href.split("?")[0].split("#")[0]) && link.href !== "/")
-                  ? "text-foreground font-medium"
-                  : "text-muted-foreground"
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {primaryLinks.map((link) => {
+            const isActive = location === link.href || (link.href !== "/" && location.startsWith(link.href.split("?")[0].split("#")[0]) && link.href !== "/");
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`text-sm font-sans whitespace-nowrap relative group transition-colors duration-150 ${
+                  isActive ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {link.label}
+                {/* Animated underline */}
+                <span
+                  className={`absolute -bottom-0.5 left-0 h-px bg-accent transition-all duration-200 ${
+                    isActive ? "w-full" : "w-0 group-hover:w-full"
+                  }`}
+                />
+              </Link>
+            );
+          })}
         </nav>
 
         {/* Right: Theme + User */}
@@ -86,10 +93,12 @@ export default function Nav() {
             variant="ghost"
             size="icon"
             onClick={toggleTheme}
-            className="text-muted-foreground hover:text-foreground w-9 h-9"
+            className="text-muted-foreground hover:text-foreground w-9 h-9 transition-colors duration-150 hover:bg-accent/10 group"
             aria-label="Toggle theme"
           >
-            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            {theme === "dark"
+              ? <Sun className="h-4 w-4 transition-transform duration-300 group-hover:rotate-45 group-hover:scale-110" />
+              : <Moon className="h-4 w-4 transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110" />}
           </Button>
 
           {isAuthenticated ? (

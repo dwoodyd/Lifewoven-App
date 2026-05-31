@@ -182,20 +182,27 @@ function DashboardLayoutContent({
 
           <SidebarContent className="gap-0">
             <SidebarMenu className="px-2 py-1">
-              {menuItems.map(item => {
+              {menuItems.map((item, idx) => {
                 const isActive = location === item.path;
+                const staggerClass = [`stagger-1`,`stagger-2`,`stagger-3`,`stagger-4`,`stagger-5`,`stagger-6`,`stagger-7`,`stagger-8`][idx] ?? "";
                 return (
-                  <SidebarMenuItem key={item.path}>
+                  <SidebarMenuItem key={item.path} className={`animate-slide-up-fade ${staggerClass}`}>
                     <SidebarMenuButton
                       isActive={isActive}
                       onClick={() => navigate(item.path)}
                       tooltip={item.label}
-                      className={`h-10 transition-all font-normal`}
+                      className={`h-10 font-normal transition-all duration-150 group ${
+                        isActive
+                          ? "bg-accent/15 text-accent border-l-2 border-accent pl-[calc(0.5rem-2px)]"
+                          : "hover:bg-accent/8 hover:translate-x-0.5"
+                      }`}
                     >
                       <item.icon
-                        className={`h-4 w-4 ${isActive ? "text-primary" : ""}`}
+                        className={`h-4 w-4 transition-transform duration-150 ${
+                          isActive ? "text-accent scale-110" : "group-hover:scale-105"
+                        }`}
                       />
-                      <span>{item.label}</span>
+                      <span className={isActive ? "font-medium" : ""}>{item.label}</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );

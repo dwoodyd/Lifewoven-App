@@ -17,6 +17,7 @@ import { SkeletonTyping } from "@/components/ui/skeleton";
 import { Streamdown } from "streamdown";
 import { Link } from "wouter";
 import { getLoginUrl } from "@/const";
+import { AnimatePresence, motion } from "framer-motion";
 
 const ORACLE_STARTERS = [
   "I feel stuck and don't know where to start.",
@@ -522,10 +523,18 @@ export default function Oracle() {
                 </div>
               ) : (
                 messages.map((msg, i) => {
+                  const isUser = msg.role === "user";
+                  const animVariants = {
+                    initial: { opacity: 0, y: 8, scale: 0.97 },
+                    animate: { opacity: 1, y: 0, scale: 1 },
+                    exit: { opacity: 0, y: -4, scale: 0.97 },
+                  };
+                  const animTransition = { type: "spring" as const, stiffness: 380, damping: 28 };
                   // Crisis safety card
                   if (msg.crisis) {
                     return (
-                      <div key={i} className="flex justify-start">
+                      <motion.div key={i} className="flex justify-start"
+                        variants={animVariants} initial="initial" animate="animate" exit="exit" transition={animTransition}>
                         <div className="w-7 h-7 rounded-full bg-red-500/10 flex items-center justify-center mr-2 mt-1 shrink-0">
                           <PhoneCall className="h-3.5 w-3.5 text-red-400" />
                         </div>
@@ -541,14 +550,15 @@ export default function Oracle() {
                           </div>
                           <p className="text-xs text-muted-foreground/70 italic">Please reach out to one of these resources. You deserve real support.</p>
                         </div>
-                      </div>
+                      </motion.div>
                     );
                   }
                   // Error card with retry or upgrade CTA
                   if (msg.error) {
                     const isUpgradePrompt = msg.content === "__UPGRADE__";
                     return (
-                      <div key={i} className="flex justify-start">
+                      <motion.div key={i} className="flex justify-start"
+                        variants={animVariants} initial="initial" animate="animate" exit="exit" transition={animTransition}>
                         <div className="w-7 h-7 rounded-full bg-accent/10 flex items-center justify-center mr-2 mt-1 shrink-0">
                           <Sparkles className="h-3.5 w-3.5 text-accent" />
                         </div>
@@ -580,12 +590,13 @@ export default function Oracle() {
                             </>
                           )}
                         </div>
-                      </div>
+                      </motion.div>
                     );
                   }
                   // Normal message
                   return (
-                    <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                    <motion.div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                      variants={animVariants} initial="initial" animate="animate" exit="exit" transition={animTransition}>
                       {msg.role === "assistant" && (
                         <div className="w-7 h-7 rounded-full bg-accent/10 flex items-center justify-center mr-2 mt-1 shrink-0">
                           <Sparkles className="h-3.5 w-3.5 text-accent" />
@@ -626,7 +637,7 @@ export default function Oracle() {
                           <div className="p-4">{msg.content}</div>
                         )}
                       </div>
-                    </div>
+                    </motion.div>
                   );
                 })
               )}

@@ -101,10 +101,20 @@ export function PullToRefresh({ onRefresh, children, className = "" }: PullToRef
         <motion.div
           style={{ scale: indicatorScale }}
           className={`mt-2 flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono
-            bg-card border border-border/50 shadow-sm
-            ${triggered ? "text-primary" : "text-muted-foreground"}`}
+            shadow-md transition-colors duration-200
+            ${
+              refreshing
+                ? "bg-accent/15 border border-accent/30 text-accent"
+                : triggered
+                  ? "bg-accent/10 border border-accent/40 text-accent"
+                  : "bg-card border border-border/50 text-muted-foreground"
+            }`}
         >
-          <motion.div style={{ rotate: refreshing ? indicatorRotate : 0 }}>
+          <motion.div
+            style={{ rotate: refreshing ? indicatorRotate : 0 }}
+            animate={triggered && !refreshing ? { scale: [1, 1.2, 1] } : {}}
+            transition={{ duration: 0.3 }}
+          >
             <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`} />
           </motion.div>
           {refreshing ? "Refreshing…" : triggered ? "Release to refresh" : "Pull to refresh"}

@@ -16,6 +16,7 @@ import { EmptyState } from "@/components/EmptyState";
 import { LuminAmbient } from "@/components/LuminAmbient";
 import VoiceRecorder from "@/components/VoiceRecorder";
 import { Streamdown } from "streamdown";
+import { motion } from "framer-motion";
 
 const MODULE_COLORS: Record<string, string> = {
   state: "text-state", story: "text-story", standards: "text-standards",
@@ -246,9 +247,14 @@ export default function Journal() {
                 {entries && entries.length > 0 ? (
                   <PullToRefresh onRefresh={async () => { await refetch(); }}>
                   <div className="space-y-3">
-                    {entries.map((entry: any) => (
-                      <SwipeableCard
+                    {entries.map((entry: any, idx: number) => (
+                      <motion.div
                         key={entry.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.25, delay: Math.min(idx * 0.04, 0.32), ease: [0.22, 1, 0.36, 1] }}
+                      >
+                      <SwipeableCard
                         leftActions={[{
                           icon: <Trash2 className="h-4 w-4" />,
                           label: "Delete",
@@ -261,7 +267,7 @@ export default function Journal() {
                         }]}
                       >
                         <Link href={`/weave/${entry.id}`}>
-                          <div className="p-4 border border-border bg-card hover:border-muted-foreground transition-all cursor-pointer">
+                          <div className="p-4 border border-border bg-card hover:border-accent/30 hover:bg-accent/3 transition-all duration-150 cursor-pointer group">
                             <div className="flex items-start justify-between gap-2 mb-2">
                               <h3 className="font-medium text-foreground text-base">{entry.title || "Untitled Entry"}</h3>
                               <span className="text-xs text-muted-foreground flex-shrink-0">{new Date(entry.createdAt).toLocaleDateString()}</span>
@@ -274,6 +280,7 @@ export default function Journal() {
                           </div>
                         </Link>
                       </SwipeableCard>
+                      </motion.div>
                     ))}
                   </div>
                   </PullToRefresh>

@@ -126,10 +126,10 @@ function LuminMomentOverlay({ videoId, onComplete }: LuminMomentOverlayProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.7, y: 20 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.6, y: 16 }}
-      transition={gentleSpring}
+      initial={{ opacity: 0, scale: 0.5, y: 32, rotate: -8 }}
+      animate={{ opacity: 1, scale: 1, y: 0, rotate: 0 }}
+      exit={{ opacity: 0, scale: 0.55, y: 20, rotate: 6 }}
+      transition={{ type: "spring", stiffness: 260, damping: 22 }}
       style={{
         position: "fixed",
         bottom: "5rem",
@@ -138,6 +138,7 @@ function LuminMomentOverlay({ videoId, onComplete }: LuminMomentOverlayProps) {
         pointerEvents: "none",
         width: "clamp(120px, 18vw, 200px)",
         aspectRatio: "1 / 1",
+        filter: "drop-shadow(0 0 18px oklch(0.80 0.14 78 / 0.25))",
       }}
       aria-hidden="true"
     >

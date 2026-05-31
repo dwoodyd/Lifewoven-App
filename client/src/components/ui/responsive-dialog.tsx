@@ -61,7 +61,7 @@ export function ResponsiveDialog({
     return (
       <Drawer.Root open={open} onOpenChange={onOpenChange} dismissible={dismissible}>
         <Drawer.Portal>
-          <Drawer.Overlay className="fixed inset-0 z-50 bg-black/50" />
+          <Drawer.Overlay className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm transition-opacity duration-200" />
           <Drawer.Content
             className={cn(
               "fixed bottom-0 left-0 right-0 z-50 flex flex-col rounded-t-2xl bg-background",

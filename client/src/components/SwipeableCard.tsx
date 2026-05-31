@@ -1,15 +1,7 @@
 /**
  * SwipeableCard — swipe-left to reveal actions, swipe-right for primary action
  *
- * Uses framer-motion drag for smooth physics.
- *
- * Usage:
- *   <SwipeableCard
- *     leftActions={[{ icon: <Trash2 />, label: "Delete", color: "destructive", onAction: () => {} }]}
- *     rightAction={{ icon: <Star />, label: "Favorite", onAction: () => {} }}
- *   >
- *     <YourCardContent />
- *   </SwipeableCard>
+ * Uses framer-motion drag for smooth physics + icon scale pop + drag shadow.
  */
 
 import { useRef, useState } from "react";
@@ -53,10 +45,24 @@ export function SwipeableCard({
 
   const leftRevealWidth = leftActions.length * ACTION_WIDTH;
 
-  // Opacity of right action (swipe right)
+  // Opacity transforms
   const rightOpacity = useTransform(x, [0, SWIPE_THRESHOLD], [0, 1]);
-  // Opacity of left actions (swipe left)
-  const leftOpacity = useTransform(x, [-SWIPE_THRESHOLD, 0], [1, 0]);
+  const leftOpacity  = useTransform(x, [-SWIPE_THRESHOLD, 0], [1, 0]);
+
+  // Icon scale — pop in as threshold is crossed
+  const rightIconScale = useTransform(x, [0, SWIPE_THRESHOLD], [0.7, 1.0]);
+  const leftIconScale  = useTransform(x, [-SWIPE_THRESHOLD, 0], [1.0, 0.7]);
+
+  // Drag shadow depth
+  const dragShadow = useTransform(
+    x,
+    [-leftRevealWidth, 0, SWIPE_THRESHOLD],
+    [
+      "0 4px 20px oklch(0.10 0.020 240 / 0.25)",
+      "0 1px 4px oklch(0.10 0.020 240 / 0.08)",
+      "0 4px 20px oklch(0.10 0.020 240 / 0.25)",
+    ]
+  );
 
   function snapBack() {
     animate(x, 0, { type: "spring", stiffness: 400, damping: 30 });
@@ -81,10 +87,13 @@ export function SwipeableCard({
           style={{ opacity: rightOpacity }}
           className="absolute inset-y-0 left-0 flex items-center pl-4"
         >
-          <div className={`flex flex-col items-center gap-1 ${colorMap[rightAction.color ?? "accent"]?.split(" ")[1] ?? "text-accent"}`}>
+          <motion.div
+            style={{ scale: rightIconScale }}
+            className={`flex flex-col items-center gap-1 ${colorMap[rightAction.color ?? "accent"]?.split(" ")[1] ?? "text-accent"}`}
+          >
             {rightAction.icon}
             <span className="text-xs font-medium">{rightAction.label}</span>
-          </div>
+          </motion.div>
         </motion.div>
       )}
 
@@ -98,10 +107,15 @@ export function SwipeableCard({
             <button
               key={i}
               onClick={() => { action.onAction(); snapBack(); }}
-              className={`flex flex-col items-center justify-center gap-1 w-[72px] text-xs font-medium ${colorMap[action.color ?? "muted"]}`}
+              className={`flex flex-col items-center justify-center gap-1 w-[72px] text-xs font-medium transition-opacity duration-100 active:opacity-70 ${colorMap[action.color ?? "muted"]}`}
             >
-              {action.icon}
-              {action.label}
+              <motion.span
+                style={{ scale: leftIconScale }}
+                className="flex flex-col items-center gap-1"
+              >
+                {action.icon}
+                {action.label}
+              </motion.span>
             </button>
           ))}
         </motion.div>
@@ -115,9 +129,8 @@ export function SwipeableCard({
           right: rightAction ? SWIPE_THRESHOLD * 1.5 : 0,
         }}
         dragElastic={0.15}
-        style={{ x }}
+        style={{ x, boxShadow: dragShadow }}
         onDrag={(_, info) => {
-          // Haptic tick when crossing threshold
           const current = info.offset.x;
           if (!hasTriggered.current && Math.abs(current) > SWIPE_THRESHOLD) {
             haptics.light();
@@ -131,12 +144,10 @@ export function SwipeableCard({
           const velocity = info.velocity.x;
 
           if (rightAction && (offset > SWIPE_THRESHOLD || velocity > 500)) {
-            // Trigger right action
             haptics.medium();
             rightAction.onAction();
             snapBack();
           } else if (leftActions.length > 0 && (offset < -SWIPE_THRESHOLD || velocity < -500)) {
-            // Reveal left actions
             snapToLeft();
           } else {
             snapBack();
