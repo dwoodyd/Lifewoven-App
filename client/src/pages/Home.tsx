@@ -346,7 +346,7 @@ export default function Home() {
                 A contemplative formation practice for people who know the right words — but want to be settled before they say them.
               </p>
               <p className="text-[oklch(0.55_0.01_260)] font-light leading-relaxed mb-8 max-w-md">
-                A companion to <em>Build a Life That Doesn&rsquo;t Break You</em>. A practice for the space before prayer, conversation, and decision.
+                A companion to <em>Build a Life That Does Not Break You</em>. A practice for the space before prayer, conversation, and decision.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Link href="/ground">

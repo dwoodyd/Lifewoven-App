@@ -116,7 +116,7 @@ export default function BTWLanding() {
             This pathway lives inside a larger philosophy.
           </p>
           <p className="text-sm text-muted-foreground font-light leading-relaxed max-w-lg mx-auto mt-2">
-            <em>Build a Life That Doesn&rsquo;t Break You</em> by DeWayne Woods brings the practice forth in its full form &mdash; the deeper framework that The Ground operationalizes, day by day.
+            <em>Build a Life That Does Not Break You</em> by DeWayne Woods brings the practice forth in its full form &mdash; the deeper framework that The Ground operationalizes, day by day.
           </p>
           <p className="text-sm text-muted-foreground font-light leading-relaxed max-w-lg mx-auto mt-2">
             The pathway is the practice. The book is the philosophy. Both come from the same place.
