@@ -326,6 +326,43 @@ export default function Pricing() {
           })}
         </div>
 
+        {/* What's the difference? plain-language section — directly below pricing cards */}
+        <div className="mb-10 sm:mb-14">
+          <h3 className="font-serif text-xl font-light text-foreground mb-6 text-center">What's the difference?</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="rounded-xl border border-border bg-card p-5">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-xs font-semibold tracking-widest uppercase text-muted-foreground">Explorer</span>
+                <span className="text-xs text-muted-foreground/50">Free</span>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                You get the core of Lifewoven — the Alignment Audit, The Weave journal (up to 30 entries), two foundational pathways, and the public resource library. It's a genuine starting point, not a teaser. You can build real clarity here.
+              </p>
+              <p className="text-xs text-muted-foreground/60 mt-3 italic">Best for: exploring the framework before committing.</p>
+            </div>
+            <div className="rounded-xl border border-amber-400/30 bg-amber-400/5 p-5">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-xs font-semibold tracking-widest uppercase text-amber-300">Seeker</span>
+                <span className="text-xs text-amber-300/60">$9/mo founding · $19 retail</span>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                The full system unlocks. Every module, every pathway, unlimited Weave entries, habit tracker, belief rewrite, decision journal, energy audit, and The Ground complete practice suite. This is where transformation becomes a daily practice.
+              </p>
+              <p className="text-xs text-muted-foreground/60 mt-3 italic">Best for: people who are ready to do the work daily.</p>
+            </div>
+            <div className="rounded-xl border border-violet-400/30 bg-violet-400/5 p-5">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-xs font-semibold tracking-widest uppercase text-violet-300">Oracle</span>
+                <span className="text-xs text-violet-300/60">$25/mo founding · $49 retail</span>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Everything in Seeker, plus the Oracle AI works continuously on your behalf — reading your patterns, naming what you can't yet see, generating weekly deep-dive reports. Plus the complete library of all 4 courses, both workbooks, all audio programs, and the Wisdom Card Deck.
+              </p>
+              <p className="text-xs text-muted-foreground/60 mt-3 italic">Best for: people who want AI-powered insight alongside daily practice.</p>
+            </div>
+          </div>
+        </div>
+
         {/* Locked-for-life callout */}
         <div className="mb-14 rounded-2xl border border-amber-400/20 bg-amber-400/5 p-6 sm:p-8 text-center">
           <Lock className="h-6 w-6 text-amber-400 mx-auto mb-3" />

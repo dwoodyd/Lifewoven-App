@@ -37,7 +37,7 @@ const EGS_SCALE = [
   { level: 1, name: "Fear / Grief / Depression / Despair / Powerlessness" },
 ];
 
-const VORTEX_PRACTICES = [
+const RESONANCE_PRACTICES = [
   { id: "morning-alignment", title: "Morning Alignment", duration: "10 min", description: "Begin your day in alignment. A guided practice to set your interior tone before the world gets in.", pathway: "align", type: "meditation" },
   { id: "appreciation-flood", title: "Appreciation Flood", duration: "5 min", description: "The fastest path to alignment. Flood your awareness with genuine appreciation and watch your set-point shift.", pathway: "align", type: "practice" },
   { id: "segment-intending", title: "Segment Intending", duration: "3 min", description: "Before each new segment of your day, pause and set your intention. A powerful Lifewoven practice for staying in alignment throughout the day.", pathway: "align", type: "practice" },
@@ -138,9 +138,9 @@ export default function StateModule() {
             </div>
 
             <div>
-              <h2 className="font-serif text-xl font-light text-foreground mb-4">Vortex Practices</h2>
+              <h2 className="font-serif text-xl font-light text-foreground mb-4">Resonance Practices</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {VORTEX_PRACTICES.map(practice => (
+                {RESONANCE_PRACTICES.map(practice => (
                   <div key={practice.id} className="p-4 rounded-xl border border-border bg-card hover:border-muted-foreground transition-all group">
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-2">

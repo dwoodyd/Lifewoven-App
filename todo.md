@@ -76,7 +76,7 @@
 - [x] Dashboard: Daily Check-in button is now primary/filled and always visible — it is the most important daily action
 - [x] Oracle page: add a brief orienting paragraph explaining what the Oracle is and how it works explaining what the Oracle is and how it works before the prompt buttons
 - [x] Pricing page: rename tiers to match the platform language (Explorer/Seeker/Oracle — verified consistent) (Explorer/Seeker/Oracle already done — verify consistency with landing page which says Free/Core/Premium)
-- [ ] Pricing page: add a "What's the difference?" plain-language comparison below the cards
+- [x] Pricing page: add a "What's the difference?" plain-language comparison below the cards
 - [x] Add legal pages: Terms of Service, Privacy Policy, Refund Policy
 - [x] Add Support/Contact page
 - [x] Add content rights system: label all library content as Public Domain / Licensed / Original LifeOS Content
@@ -136,11 +136,11 @@
 ## Canonical Build Directive — Final Pass
 
 ### Phase 1: Global Rename
-- [ ] Rename Vortex → Resonance everywhere (pathways, routes, nav, dashboard, Oracle, audit)
-- [ ] Rename Stack → Rhythms everywhere
-- [ ] Rename Why → Purpose everywhere
-- [ ] Rename Reset After Setback → Reset everywhere (single word, no variants)
-- [ ] Remove all old pathway name variants: Begin Again, Return, Re-enter Gently
+- [x] Rename Vortex → Resonance everywhere (pathways, routes, nav, dashboard, Oracle, audit) — StateModule heading + constant renamed; all other occurrences were already using Resonance
+- [x] Rename Stack → Rhythms everywhere — already done; PathwaysListing uses Rhythms slug
+- [x] Rename Why → Purpose everywhere — already done; PathwaysListing uses Purpose slug
+- [x] Rename Reset After Setback → Reset everywhere — already done; PathwaysListing uses Reset slug
+- [x] Remove all old pathway name variants: Begin Again, Return, Re-enter Gently — none found in codebase
 
 ### Phase 2: Alignment Audit Rebuild (Canonical HTML)
 - [ ] 3-screen opening: Entry, Consent, Pre-question framing (exact copy from canonical HTML)
@@ -812,7 +812,7 @@
 - [x] PayPal subscription plans: 8 plans (Seeker/Oracle × Founding/Retail × Monthly/Annual)
 - [x] PayPal billing flow: plan-key mismatch fixed — Pricing.tsx now sends founding vs retail plan keys based on user.foundingMember; subscription creation + webhook handling already existed
 - [x] Store page rewrite: 3 subscriber-state variants (standalone / discount / library)
-- [ ] Pricing page update: founding rates, retail strikethrough, Oracle Library inclusion
+- [x] Pricing page update: founding rates, retail strikethrough, Oracle Library inclusion — all already in Pricing.tsx; confirmed complete
 - [x] Settings → Subscription page: 3 states (trialing_no_card / explorer_waiting / active)
 - [x] Trial-state banner on dashboard (dismissable per session) — trialing_no_card (violet) + explorer_tier_founding_rate_waiting (amber) banners
 - [x] Day-75 + Day-91 scheduled jobs (full lifecycle cron: Day-3, Day-7, Day-30, Day-75, Day-91)
