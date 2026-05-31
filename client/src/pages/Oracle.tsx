@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   Sparkles, Send, Loader2, RefreshCw, BookOpen, Brain, Heart, Zap,
   AlertCircle, TrendingUp, MessageSquare, BarChart3, Shield, ChevronRight,
-  RotateCcw, PhoneCall,
+  RotateCcw, PhoneCall, Calendar, Lock,
 } from "lucide-react";
 import { Streamdown } from "streamdown";
 import { Link } from "wouter";
@@ -46,7 +46,7 @@ const WISDOM_SOURCES = [
 const CRISIS_KEYWORDS = /\b(suicid|kill myself|end my life|don't want to be here|want to die|self.harm|hurt myself|no reason to live|can't go on)\b/i;
 
 type Message = { role: "user" | "assistant"; content: string; error?: boolean; crisis?: boolean; tags?: string[] };
-type OracleMode = "guide" | "unstuck" | "patterns";
+type OracleMode = "guide" | "unstuck" | "patterns" | "weekly";
 
 export default function Oracle() {
   const { isAuthenticated, user } = useAuth();
@@ -67,6 +67,12 @@ export default function Oracle() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const insights = trpc.oracle.insights.useQuery(undefined, { enabled: isAuthenticated && hasConsented });
+  const weeklyReflection = trpc.btw.getLatestWeeklyReflection.useQuery(undefined, { enabled: isAuthenticated && hasSeekerAccess });
+  const generateWeekly = trpc.btw.generateWeeklyReflection.useMutation({
+    onSuccess: () => weeklyReflection.refetch(),
+    onError: () => { /* error shown inline in weekly tab */ },
+  });
+  const weeklyData = weeklyReflection.data?.summaryJson as Record<string, string> | null ?? null;
   const cycleAnalysis = trpc.moodLog.getCycleAnalysis.useQuery(undefined, { enabled: isAuthenticated });
 
   const chat = trpc.oracle.chat.useMutation({
@@ -285,6 +291,7 @@ export default function Oracle() {
             { id: "guide" as OracleMode, label: "Guide", icon: MessageSquare, desc: "Open conversation" },
             { id: "unstuck" as OracleMode, label: "Unstuck", icon: AlertCircle, desc: "When you're blocked" },
             { id: "patterns" as OracleMode, label: "Pattern Mirror", icon: BarChart3, desc: "Your insights" },
+            { id: "weekly" as OracleMode, label: "Weekly Summary", icon: Calendar, desc: "7-day reflection" },
           ].map(({ id, label, icon: Icon, desc }) => (
             <button
               key={id}
@@ -360,8 +367,75 @@ export default function Oracle() {
           </div>
         )}
 
+        {/* Weekly Reflection Tab */}
+        {mode === "weekly" && (
+          <div className="flex-1">
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <p className="text-xs font-mono text-muted-foreground uppercase tracking-wider mb-1">Weekly Summary</p>
+                <p className="text-sm text-muted-foreground font-light">
+                  The Oracle's synthesis of your week — where you drifted, how you returned, and what to carry forward.
+                </p>
+              </div>
+              {hasSeekerAccess && (
+                <Button variant="ghost" size="sm" className="gap-1.5 text-xs" onClick={() => generateWeekly.mutate()} disabled={generateWeekly.isPending}>
+                  {generateWeekly.isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <RefreshCw className="h-3 w-3" />}
+                  Generate
+                </Button>
+              )}
+            </div>
+            {!hasSeekerAccess ? (
+              <div className="rounded-2xl border border-border bg-secondary/20 p-8 text-center">
+                <Lock className="h-8 w-8 text-muted-foreground/40 mx-auto mb-3" />
+                <p className="text-base font-light text-foreground mb-2">Weekly AI Reflection</p>
+                <p className="text-sm text-muted-foreground mb-4">Available on the Seeker plan and above.</p>
+                <Button size="sm" asChild><Link href="/pricing">Upgrade to Seeker</Link></Button>
+              </div>
+            ) : weeklyReflection.isLoading ? (
+              <div className="flex items-center gap-2 text-muted-foreground py-8">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span className="text-sm">Loading your weekly reflection...</span>
+              </div>
+            ) : weeklyReflection.isError ? (
+              <div className="p-6 rounded-xl border border-destructive/20 bg-destructive/5 text-center">
+                <p className="text-sm text-destructive mb-3">Could not load your weekly reflection.</p>
+                <Button variant="outline" size="sm" onClick={() => weeklyReflection.refetch()}>Try again</Button>
+              </div>
+            ) : weeklyData ? (
+              <div className="space-y-4">
+                {([
+                  { key: "stateShowedUp", label: "State that showed up most" },
+                  { key: "driftedMost", label: "Where you drifted" },
+                  { key: "returnedBest", label: "How you returned" },
+                  { key: "helpedMost", label: "What helped most" },
+                  { key: "focusNextWeek", label: "Focus for next week" },
+                ] as { key: string; label: string }[]).map(({ key, label }) => weeklyData[key] && (
+                  <div key={key} className="p-5 rounded-xl border border-border bg-card">
+                    <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-2">{label}</p>
+                    <p className="text-base text-foreground font-light leading-relaxed">{weeklyData[key]}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="p-8 rounded-2xl border border-border bg-card text-center">
+                <Calendar className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" />
+                <p className="text-base font-light text-muted-foreground mb-4">
+                  No weekly reflection yet. Generate one to see the Oracle's synthesis of your week.
+                </p>
+                <Button onClick={() => generateWeekly.mutate()} disabled={generateWeekly.isPending} className="gap-2">
+                  {generateWeekly.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+                  Generate Weekly Reflection
+                </Button>
+                {generateWeekly.isError && (
+                  <p className="text-xs text-destructive mt-2">Generation failed. Please try again in a moment.</p>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Chat Area (Guide + Unstuck modes) */}
-        {mode !== "patterns" && (
+        {mode !== "patterns" && mode !== "weekly" && (
           <div className="flex flex-col flex-1 min-h-0 gap-4">
 
             {/* Unstuck mode banner */}

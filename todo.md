@@ -167,10 +167,10 @@
 - [x] Community: public preview state (not an empty login wall) — email waitlist form + What's Coming cards for logged-out users
 
 ### Phase 5: Oracle Strengthened
-- [ ] Oracle personalization opt-in consent (explicit, user-controlled)
-- [ ] Oracle unstuck mode ("Why Am I Stuck?" mode)
-- [ ] Oracle pattern mirror (recurring themes from journal entries)
-- [ ] Oracle weekly reflection summary
+- [x] Oracle personalization opt-in consent (explicit, user-controlled) — localStorage oracle_consent toggle in Settings + Oracle consent gate
+- [x] Oracle unstuck mode ("Why Am I Stuck?" mode) — unstuck mode tab with compassionate system prompt
+- [x] Oracle pattern mirror (recurring themes from journal entries) — patterns tab with oracle.insights query
+- [x] Oracle weekly reflection summary — weekly tab added to Oracle page, reuses btw.getLatestWeeklyReflection + generateWeeklyReflection, Seeker+ gated
 
 ### Phase 6: QA Pass
 - [x] All routes load without 404 — all App.tsx routes verified against page components
@@ -180,7 +180,7 @@
 - [x] Mobile responsiveness verified — completed in previous sprint
 - [x] No fake testimonials anywhere — removed in previous sprint
 - [x] No old pathway names anywhere — confirmed in Phase 9 sweep
-- [ ] Consent settings page exists and works
+- [x] Consent settings page exists and works — Oracle personalization consent toggle in Settings.tsx Privacy section
 
 ## Brand Rename: LifeOS → Steadora (Full Visible Sweep)
 
@@ -221,20 +221,7 @@
 - [x] Home dashboard cards
 - [x] Vitest coverage for BTW procedures
 
-## Stripe Integration
-
-- [ ] Add Stripe feature scaffold
-- [ ] Create Stripe products/prices (Seeker $19/mo, Oracle $49/mo)
-- [ ] Subscription checkout procedure (create checkout session)
-- [ ] Stripe webhook handler (subscription created/updated/deleted)
-- [ ] Store subscription tier in user table
-- [ ] Backend gate: Ground Guide AI reflection (Seeker+)
-- [ ] Backend gate: Weekly AI reflection (Seeker+)
-- [ ] Pricing page upgrade CTA wired to Stripe checkout
-- [ ] UI gate: Ground Guide locked state with upgrade prompt
-- [ ] UI gate: Weekly reflection locked state with upgrade prompt
-- [ ] Customer portal link (manage/cancel subscription)
-- [ ] Vitest coverage for tier enforcement
+## Stripe Integration (DUPLICATE — see second block below, all done)
 
 ## Stripe Integration
 
@@ -273,7 +260,7 @@
 ## Feature Sprint (Apr 11, 2026 — Session 2)
 
 - [x] Fix Begin Your Journey broken link (404) — link uses getLoginUrl() which is correct; verified working
-- [ ] Voice-to-text journaling: mic button, browser audio recording, Whisper transcription, text populates journal field
+- [x] Voice-to-text journaling: mic button, browser audio recording, Whisper transcription, text populates journal field — VoiceRecorder component + journal.transcribeVoice procedure + wired into Journal.tsx
 - [ ] Admin dashboard: owner-only access gate, user list, orders, content status, system health
 - [ ] Admin bypass: owner account has full unrestricted access to all gated pages
 
