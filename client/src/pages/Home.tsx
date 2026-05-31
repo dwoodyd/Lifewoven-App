@@ -270,14 +270,32 @@ export default function Home() {
               Seven curated pathways. Each a complete transformation protocol, not just a feature list.
             </p>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-            {pathways.map((p, i) => (
+          {/* Row 1: first 4 cards */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
+            {pathways.slice(0, 4).map((p, i) => (
               <Link key={p.slug} href={`/pathway/${p.slug}`}>
-                <div
-                  className="group p-6 rounded-2xl border border-border bg-[oklch(0.12_0.015_260)] hover:border-[oklch(0.72_0.12_55)/0.40] hover:bg-[oklch(0.13_0.02_260)] transition-all duration-300 cursor-pointer"
-                >
+                <div className="group p-6 rounded-2xl border border-border bg-[oklch(0.12_0.015_260)] hover:border-[oklch(0.72_0.12_55)/0.40] hover:bg-[oklch(0.13_0.02_260)] transition-all duration-300 cursor-pointer h-full">
                   <p className="font-mono text-[9px] tracking-[0.25em] text-[oklch(0.40_0.01_260)] uppercase mb-3">
                     {String(i + 1).padStart(2, "0")}
+                  </p>
+                  <h3
+                    className="text-lg mb-1 text-[oklch(0.88_0.02_60)] group-hover:text-[oklch(0.82_0.14_55)] transition-colors"
+                    style={{ fontFamily: "'Playfair Display', serif", fontWeight: 400 }}
+                  >
+                    {p.label}
+                  </h3>
+                  <p className="text-xs text-[oklch(0.45_0.01_260)] font-light">{p.desc}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+          {/* Row 2: last 3 cards — centred so no orphan */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:max-w-[75%] sm:mx-auto">
+            {pathways.slice(4).map((p, i) => (
+              <Link key={p.slug} href={`/pathway/${p.slug}`}>
+                <div className="group p-6 rounded-2xl border border-border bg-[oklch(0.12_0.015_260)] hover:border-[oklch(0.72_0.12_55)/0.40] hover:bg-[oklch(0.13_0.02_260)] transition-all duration-300 cursor-pointer h-full">
+                  <p className="font-mono text-[9px] tracking-[0.25em] text-[oklch(0.40_0.01_260)] uppercase mb-3">
+                    {String(i + 5).padStart(2, "0")}
                   </p>
                   <h3
                     className="text-lg mb-1 text-[oklch(0.88_0.02_60)] group-hover:text-[oklch(0.82_0.14_55)] transition-colors"
