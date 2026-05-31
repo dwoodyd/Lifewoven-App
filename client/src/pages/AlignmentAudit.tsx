@@ -388,13 +388,32 @@ export default function AlignmentAudit() {
       <div className="min-h-screen bg-background">
         <Nav />
         <div className="container max-w-2xl mx-auto pt-24 pb-20 px-4 sm:px-6">
-          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-2">Your Alignment Audit Results</p>
-          <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-1">
-            Your current pattern: <span className="text-accent">{profile.name}</span>
-          </h1>
-          <p className="text-base text-muted-foreground mb-6">This reflects patterns in your responses, not fixed traits. Patterns shift.</p>
+          {/* Hero CTA — pathway recommendation first */}
+          <div className="p-6 sm:p-8 rounded-2xl border border-accent/30 bg-gradient-to-br from-accent/8 to-accent/3 mb-5">
+            <p className="text-xs font-mono tracking-widest text-accent uppercase mb-2">Your Recommended Path</p>
+            <h1 className="font-serif text-2xl sm:text-3xl font-light text-foreground mb-1">
+              Start with <span className="text-accent">{profile.firstPathway}</span>
+            </h1>
+            <p className="text-base text-muted-foreground leading-relaxed mb-1">
+              Based on your responses, this is the most important place to begin. Right now, support matters more than pressure.
+            </p>
+            <p className="text-sm text-muted-foreground mb-5">Then continue into <strong className="text-foreground">{profile.secondPathway}</strong> to deepen the work.</p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Button asChild className="gap-2">
+                <a href={`/pathway/${profile.firstPathway.toLowerCase()}`}>Start {profile.firstPathway} <ArrowRight className="h-4 w-4" /></a>
+              </Button>
+              <Button variant="outline" asChild><a href="/pathways">Explore all pathways</a></Button>
+            </div>
+          </div>
+
+          {/* Profile name + pattern */}
+          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-1">Your Current Pattern</p>
+          <h2 className="font-serif text-xl sm:text-2xl font-light text-foreground mb-1">
+            <span className="text-accent">{profile.name}</span>
+          </h2>
+          <p className="text-sm text-muted-foreground mb-4">This reflects patterns in your responses, not fixed traits. Patterns shift.</p>
           {frictionTags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-6">
+            <div className="flex flex-wrap gap-2 mb-5">
               {frictionTags.map(tag => <Badge key={tag} variant="secondary" className="text-xs capitalize">{tag}</Badge>)}
             </div>
           )}
@@ -425,19 +444,6 @@ export default function AlignmentAudit() {
                   <span className="text-xs text-muted-foreground w-8 text-right">{scores.pct[dim]}%</span>
                 </div>
               ))}
-            </div>
-          </div>
-          <div className="p-6 rounded-2xl border border-border bg-card mb-4">
-            <h3 className="font-serif text-lg font-light text-foreground mb-3">Start here</h3>
-            <p className="text-base text-muted-foreground leading-relaxed mb-1">
-              Based on your responses, the best next step is <strong className="text-foreground">{profile.firstPathway}</strong>. Right now, support matters more than pressure.
-            </p>
-            <p className="text-base text-muted-foreground mb-5"><strong className="text-foreground">Then continue into</strong> {profile.secondPathway} to deepen the work.</p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Button asChild className="gap-2">
-                <a href={`/pathway/${profile.firstPathway.toLowerCase()}`}>Start {profile.firstPathway} <ArrowRight className="h-4 w-4" /></a>
-              </Button>
-              <Button variant="outline" asChild><a href="/pathways">Explore all pathways</a></Button>
             </div>
           </div>
           <div className="p-5 rounded-2xl border border-accent/20 bg-accent/5 mb-4 text-center">

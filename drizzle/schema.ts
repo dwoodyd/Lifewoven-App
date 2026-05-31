@@ -63,6 +63,9 @@ export const users = mysqlTable("users", {
   storeAccess: mysqlEnum("storeAccess", ["standalone", "discount", "library", "library_during_beta"]).default("standalone").notNull(),
   // UI preferences
   luminEnabled: boolean("luminEnabled").default(true).notNull(),
+  // Identity Sentence — LLM-generated monthly from behavior data
+  identitySentence: text("identitySentence"),
+  identitySentenceGeneratedAt: timestamp("identitySentenceGeneratedAt"),
 });
 
 export type User = typeof users.$inferSelect;

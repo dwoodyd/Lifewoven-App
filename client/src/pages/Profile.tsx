@@ -3,9 +3,10 @@ import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "wouter";
-import { User, BookOpen, Activity, Star, LogOut, ArrowRight, Flame, Lock, Sparkles } from "lucide-react";
+import { User, BookOpen, Activity, Star, LogOut, ArrowRight, Flame, Lock, Sparkles, RefreshCw, Quote } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { getLoginUrl } from "@/const";
+import { toast } from "sonner";
 
 const DIM_LABELS: Record<string, string> = {
   state: "State", story: "Story", standards: "Standards",
@@ -21,8 +22,18 @@ const TIER_LABELS: Record<string, string> = {
 
 export default function Profile() {
   const { user, isAuthenticated, logout } = useAuth();
+  const utils = trpc.useUtils();
   const { data: dashData } = trpc.profile.dashboard.useQuery(undefined, { enabled: isAuthenticated });
   const { data: latestAudit } = trpc.audit.latest.useQuery(undefined, { enabled: isAuthenticated });
+  const { data: identityData, isLoading: identityLoading } = trpc.profile.getIdentitySentence.useQuery(undefined, { enabled: isAuthenticated });
+
+  const generateIdentity = trpc.profile.generateIdentitySentence.useMutation({
+    onSuccess: (data) => {
+      toast.success("Identity Sentence generated.");
+      utils.profile.getIdentitySentence.invalidate();
+    },
+    onError: (err) => toast.error(err.message),
+  });
 
   if (!isAuthenticated) {
     return (
@@ -43,6 +54,17 @@ export default function Profile() {
   const scores = latestAudit?.scores as Record<string, number> | null | undefined;
   const isFoundingMember = (user as any)?.foundingMember === true;
   const foundingTier = (user as any)?.foundingTier as string | null | undefined;
+
+  // Last pathway completed — from activePathways, pick the one with highest progress
+  const lastPathway = dashData?.activePathways?.[0];
+
+  // Identity sentence — from DB or fallback
+  const identitySentence = identityData?.identitySentence;
+  const identityGeneratedAt = identityData?.identitySentenceGeneratedAt;
+  const daysSinceGenerated = identityGeneratedAt
+    ? Math.floor((Date.now() - new Date(identityGeneratedAt).getTime()) / (1000 * 60 * 60 * 24))
+    : null;
+  const canRegenerate = daysSinceGenerated === null || daysSinceGenerated >= 28;
 
   return (
     <div className="min-h-screen bg-background">
@@ -72,14 +94,58 @@ export default function Profile() {
               </span>
             )}
           </div>
-          {pathway && (
-            <p className="text-sm text-muted-foreground italic max-w-xs mx-auto mb-5">
-              "I am someone who shows up consistently for my {pathway} — and it is changing everything."
-            </p>
-          )}
           <Button variant="outline" size="sm" className="gap-2" onClick={() => logout()}>
             <LogOut className="h-3.5 w-3.5" /> Sign Out
           </Button>
+        </div>
+
+        {/* Identity Sentence card */}
+        <div className="p-6 rounded-2xl border border-border bg-card">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Quote className="h-4 w-4 text-accent" />
+              <h2 className="font-serif text-lg font-light text-foreground">Identity Sentence</h2>
+            </div>
+            {identityGeneratedAt && (
+              <span className="text-xs text-muted-foreground">
+                {canRegenerate ? "Ready to refresh" : `Refresh in ${28 - (daysSinceGenerated ?? 0)}d`}
+              </span>
+            )}
+          </div>
+          {identityLoading ? (
+            <div className="h-10 bg-secondary/50 rounded-lg animate-pulse" />
+          ) : identitySentence ? (
+            <div className="space-y-3">
+              <p className="font-serif text-xl font-light text-foreground italic leading-relaxed">
+                "{identitySentence}"
+              </p>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="gap-1.5 text-xs text-muted-foreground"
+                disabled={!canRegenerate || generateIdentity.isPending}
+                onClick={() => generateIdentity.mutate()}
+              >
+                <RefreshCw className={`h-3 w-3 ${generateIdentity.isPending ? "animate-spin" : ""}`} />
+                {generateIdentity.isPending ? "Generating…" : canRegenerate ? "Regenerate" : `Refresh in ${28 - (daysSinceGenerated ?? 0)} days`}
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Your Identity Sentence is a one-line reflection of who you are becoming — generated from your behavior data. It updates monthly as you grow.
+              </p>
+              <Button
+                size="sm"
+                className="gap-2"
+                disabled={generateIdentity.isPending}
+                onClick={() => generateIdentity.mutate()}
+              >
+                <Sparkles className="h-3.5 w-3.5" />
+                {generateIdentity.isPending ? "Generating…" : "Generate My Identity Sentence"}
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* Founding member rate-lock card */}
@@ -148,7 +214,7 @@ export default function Profile() {
           </div>
         )}
 
-        {/* Active pathways */}
+        {/* Active pathways + last completed */}
         {dashData?.activePathways && dashData.activePathways.length > 0 && (
           <div className="p-6 rounded-2xl border border-border bg-card">
             <h2 className="font-serif text-xl font-light text-foreground mb-4">Active Pathways</h2>

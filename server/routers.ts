@@ -38,6 +38,11 @@ const auditRouter = router({
     .mutation(async ({ ctx, input }) => {
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
+      // Check if this is the user's first audit (for auto-draft journal)
+      const existingAudits = await db.select({ id: auditResults.id })
+        .from(auditResults).where(eq(auditResults.userId, ctx.user.id)).limit(1);
+      const isFirstAudit = existingAudits.length === 0;
+
       await db.transaction(async (tx) => {
         await tx.insert(auditResults).values({
           userId: ctx.user.id,
@@ -50,6 +55,48 @@ const auditRouter = router({
           .set({ onboardingCompleted: true, primaryPathway: input.recommendedPathway })
           .where(eq(users.id, ctx.user.id));
       });
+
+      // Auto-draft first journal entry from audit responses (fire-and-forget, non-blocking)
+      if (isFirstAudit) {
+        const dimNames: Record<string, string> = {
+          state: "State", story: "Story", standards: "Standards",
+          strategy: "Strategy", stewardship: "Stewardship",
+        };
+        const scoreLines = Object.entries(input.scores)
+          .sort(([, a], [, b]) => (b as number) - (a as number))
+          .map(([dim, pct]) => `${dimNames[dim] ?? dim}: ${Math.round(pct as number)}%`)
+          .join(", ");
+        const lowestDim = Object.entries(input.scores)
+          .sort(([, a], [, b]) => (a as number) - (b as number))[0]?.[0] ?? "";
+        const prompt = `You are writing a brief, warm, first-person journal entry for someone who just completed a personal alignment audit.
+Audit results: pathway recommended = ${input.recommendedPathway}, 5S scores = ${scoreLines}.
+Lowest dimension: ${lowestDim}.
+Write 3-4 sentences as if the person is reflecting on their results. Use "I" voice. Be honest, compassionate, and forward-looking. No headers, no lists. Plain prose only.`;
+        invokeLLM({
+          messages: [
+            { role: "system", content: "You write warm, honest personal journal entries. Respond with only the journal text." },
+            { role: "user", content: prompt },
+          ],
+        }).then(async (llmRes) => {
+          const rawContent = llmRes.choices?.[0]?.message?.content ?? "";
+          const body = typeof rawContent === "string" ? rawContent.trim() : "";
+          if (!body) return;
+          const firstSentence = body.split(/[.!?]/)[0]?.trim() ?? "";
+          const title = firstSentence.length > 80
+            ? firstSentence.slice(0, 77) + "…"
+            : firstSentence || "My Alignment Audit Reflection";
+          const db2 = await getDb();
+          if (!db2) return;
+          await db2.insert(journalEntries).values({
+            userId: ctx.user.id,
+            title,
+            content: body,
+            module: "state",
+            isPrivate: true,
+          });
+        }).catch(() => { /* non-blocking — ignore errors */ });
+      }
+
       return { success: true };
     }),
 
@@ -993,6 +1040,61 @@ const profileRouter = router({
       await db.update(users).set({ luminEnabled: input.enabled }).where(eq(users.id, ctx.user.id));
       return { success: true };
     }),
+
+  getIdentitySentence: protectedProcedure.query(async ({ ctx }) => {
+    const db = await getDb();
+    if (!db) return null;
+    const result = await db.select({
+      identitySentence: users.identitySentence,
+      identitySentenceGeneratedAt: users.identitySentenceGeneratedAt,
+    }).from(users).where(eq(users.id, ctx.user.id)).limit(1);
+    return result[0] ?? null;
+  }),
+
+  generateIdentitySentence: protectedProcedure.mutation(async ({ ctx }) => {
+    const db = await getDb();
+    if (!db) throw new Error("Database unavailable");
+    // Rate-limit: once per 28 days
+    const existing = await db.select({
+      identitySentenceGeneratedAt: users.identitySentenceGeneratedAt,
+    }).from(users).where(eq(users.id, ctx.user.id)).limit(1);
+    const lastGen = existing[0]?.identitySentenceGeneratedAt;
+    if (lastGen) {
+      const daysSince = (Date.now() - new Date(lastGen).getTime()) / (1000 * 60 * 60 * 24);
+      if (daysSince < 28) throw new Error(`Identity Sentence can be regenerated in ${Math.ceil(28 - daysSince)} days.`);
+    }
+    // Gather behavior data
+    const [journalCount, habitRows, auditRow] = await Promise.all([
+      db.select({ count: sql<number>`count(*)` }).from(journalEntries).where(eq(journalEntries.userId, ctx.user.id)),
+      db.select({ name: habits.name, streak: habits.streak }).from(habits)
+        .where(and(eq(habits.userId, ctx.user.id), eq(habits.isActive, true))).limit(5),
+      db.select({ recommendedPathway: auditResults.recommendedPathway, scores: auditResults.scores })
+        .from(auditResults).where(eq(auditResults.userId, ctx.user.id))
+        .orderBy(desc(auditResults.createdAt)).limit(1),
+    ]);
+    const jCount = journalCount[0]?.count ?? 0;
+    const topHabits = habitRows.map(h => h.name).join(", ") || "no habits yet";
+    const pathway = auditRow[0]?.recommendedPathway ?? ctx.user.primaryPathway ?? "general growth";
+    const scores = auditRow[0]?.scores as Record<string, number> | null;
+    const topDim = scores ? Object.entries(scores).sort(([,a],[,b]) => (b as number)-(a as number))[0]?.[0] ?? "" : "";
+    const prompt = `You are writing a one-sentence identity affirmation for a personal growth app user.
+Behavior data: ${jCount} journal entries, active habits: ${topHabits}, recommended pathway: ${pathway}${topDim ? `, strongest dimension: ${topDim}` : ""}.
+Write a single, personal, present-tense identity sentence (max 20 words) that reflects who this person is becoming. Start with "I am". No quotes, no period.`;
+    const llmRes = await invokeLLM({
+      messages: [
+        { role: "system", content: "You write concise, powerful identity affirmations. Respond with only the sentence." },
+        { role: "user", content: prompt },
+      ],
+    });
+    const rawContent = llmRes.choices?.[0]?.message?.content ?? "";
+    const sentence = (typeof rawContent === "string" ? rawContent : "").trim().replace(/^["']|["']$/g, "");
+    if (!sentence) throw new Error("Failed to generate identity sentence");
+    await db.update(users).set({
+      identitySentence: sentence,
+      identitySentenceGeneratedAt: new Date(),
+    }).where(eq(users.id, ctx.user.id));
+    return { sentence };
+  }),
 
   dashboard: protectedProcedure.query(async ({ ctx }) => {
     const db = await getDb();

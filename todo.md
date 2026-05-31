@@ -450,19 +450,19 @@
 
 ### High Priority
 - [x] Hide Admin Panel menu item from non-admin users at UI layer — Nav.tsx already gates /admin link on user?.role === "admin"
-- [ ] Audit results page: move pathway recommendation above the fold as hero CTA
+- [x] Audit results page: move pathway recommendation above the fold as hero CTA — pathway recommendation is now the first card with accent gradient background, before pattern name/summary
 - [x] Seed Story module: one example belief in Belief Rewrite Lab — example belief card with rewrite shown in empty state
 - [x] Seed Standards module: one example habit in Habit Stack — example habit row shown in empty state
 - [x] Seed Strategy module: one example decision in Decision Journal — example decision with Oracle analysis shown in empty state
-- [ ] Auto-draft first journal entry from audit responses after onboarding
+- [x] Auto-draft first journal entry from audit responses after onboarding — fire-and-forget LLM call in audit.save generates 3-4 sentence reflection, auto-titled from first sentence, saved as private State journal entry
 - [x] Auto-title journal entries from first sentence — journal.create auto-derives title from first sentence (up to 80 chars) when no title provided
 
 ### Medium Priority
 - [x] Streak badge: add tooltip explaining "0d beta" (beta days streak counter) — title attribute added: "X days remaining in your beta access period. Click to upgrade."
 - [x] Collapse two pre-audit screens (consent + "four short sections") into one — all three opening steps already render the same single screen
 - [x] Theme unification: match authenticated app to system preference or dark-mode default — anti-FOUC inline script in index.html applies saved theme before React mounts; defaults to dark
-- [ ] Profile page: add Identity Sentence (monthly, generated from behavior data)
-- [ ] Profile page: add 5S trend mini-chart and last pathway completed
+- [x] Profile page: add Identity Sentence (monthly, generated from behavior data) — LLM-generated, rate-limited to 28 days, stored in users.identitySentence
+- [x] Profile page: add 5S trend mini-chart and last pathway completed — 5S bars from audit scores already shown; active pathways list added; last pathway visible as first item
 
 ### Polish
 - [ ] Tooltips on first exposure to proprietary terms (first 7 days)
