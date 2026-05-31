@@ -47,11 +47,11 @@ export default function Nav() {
   const closeMobile = () => setMobileOpen(false);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border" style={{ viewTransitionName: 'nav-bar' }}>
       <div className="container flex items-center justify-between h-16 px-4 sm:px-6">
 
         {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-2 shrink-0" onClick={closeMobile}>
+        <Link href="/" className="flex items-center gap-2 shrink-0" onClick={closeMobile} style={{ viewTransitionName: 'nav-brand' }}>
           <img
             src="https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/app-icon_e26b6bab.png"
             alt="Lifewoven"
@@ -96,7 +96,7 @@ export default function Nav() {
             /* ── Authenticated: DW avatar dropdown ── */
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Avatar className="h-8 w-8 cursor-pointer border border-border hover:border-accent transition-colors">
+                <Avatar className="h-8 w-8 cursor-pointer border border-border hover:border-accent transition-colors" style={{ viewTransitionName: 'user-avatar' } as React.CSSProperties}>
                   <AvatarFallback className="bg-secondary text-secondary-foreground text-xs font-medium">
                     {initials}
                   </AvatarFallback>

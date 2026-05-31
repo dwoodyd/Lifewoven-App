@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Users, ShoppingBag, BookOpen, Activity, Shield, Loader2, Copy, Check, KeyRound, TrendingDown, TrendingUp, ClipboardList, CheckCircle, XCircle, RefreshCw, Package, CreditCard, Plus, Pencil, Trash2, X, Save, ScrollText } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -1016,63 +1016,64 @@ function ProductsPanel() {
       </Card>
 
       {/* Create / Edit Dialog */}
-      <Dialog open={showCreate || !!editProduct} onOpenChange={(open) => { if (!open) { setShowCreate(false); setEditProduct(null); } }}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle>{editProduct ? "Edit Product" : "Add Product"}</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-3 py-2">
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1">
-                <Label>Title</Label>
-                <Input value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} placeholder="Alignment Fundamentals" />
-              </div>
-              <div className="space-y-1">
-                <Label>Slug</Label>
-                <Input value={form.slug} onChange={e => setForm(f => ({ ...f, slug: e.target.value }))} placeholder="alignment-fundamentals" />
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1">
-                <Label>Type</Label>
-                <Select value={form.type} onValueChange={v => setForm(f => ({ ...f, type: v as typeof PRODUCT_TYPES[number] }))}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    {PRODUCT_TYPES.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-1">
-                <Label>Price (USD)</Label>
-                <Input value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} placeholder="97.00" />
-              </div>
-            </div>
-            <div className="space-y-1">
-              <Label>Description</Label>
-              <Textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} rows={3} placeholder="Product description…" />
-            </div>
-            <div className="space-y-1">
-              <Label>Thumbnail URL</Label>
-              <Input value={form.thumbnailUrl} onChange={e => setForm(f => ({ ...f, thumbnailUrl: e.target.value }))} placeholder="https://…" />
-            </div>
-            <div className="space-y-1">
-              <Label>Download URL</Label>
-              <Input value={form.downloadUrl} onChange={e => setForm(f => ({ ...f, downloadUrl: e.target.value }))} placeholder="https://…" />
-            </div>
-            <div className="flex items-center gap-2">
-              <Switch checked={form.isPublished} onCheckedChange={v => setForm(f => ({ ...f, isPublished: v }))} id="published-switch" />
-              <Label htmlFor="published-switch">Published</Label>
-            </div>
-          </div>
-          <DialogFooter>
+      <ResponsiveDialog
+        open={showCreate || !!editProduct}
+        onOpenChange={(open) => { if (!open) { setShowCreate(false); setEditProduct(null); } }}
+        title={editProduct ? "Edit Product" : "Add Product"}
+        footer={
+          <div className="flex gap-2 justify-end">
             <Button variant="outline" onClick={() => { setShowCreate(false); setEditProduct(null); }}>Cancel</Button>
             <Button onClick={handleSave} disabled={createMutation.isPending || updateMutation.isPending} className="gap-1.5">
               {(createMutation.isPending || updateMutation.isPending) ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               {editProduct ? "Save Changes" : "Create Product"}
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </div>
+        }
+      >
+        <div className="space-y-3 py-2">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <Label>Title</Label>
+              <Input value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} placeholder="Alignment Fundamentals" />
+            </div>
+            <div className="space-y-1">
+              <Label>Slug</Label>
+              <Input value={form.slug} onChange={e => setForm(f => ({ ...f, slug: e.target.value }))} placeholder="alignment-fundamentals" />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <Label>Type</Label>
+              <Select value={form.type} onValueChange={v => setForm(f => ({ ...f, type: v as typeof PRODUCT_TYPES[number] }))}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {PRODUCT_TYPES.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-1">
+              <Label>Price (USD)</Label>
+              <Input value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} placeholder="97.00" />
+            </div>
+          </div>
+          <div className="space-y-1">
+            <Label>Description</Label>
+            <Textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} rows={3} placeholder="Product description…" />
+          </div>
+          <div className="space-y-1">
+            <Label>Thumbnail URL</Label>
+            <Input value={form.thumbnailUrl} onChange={e => setForm(f => ({ ...f, thumbnailUrl: e.target.value }))} placeholder="https://…" />
+          </div>
+          <div className="space-y-1">
+            <Label>Download URL</Label>
+            <Input value={form.downloadUrl} onChange={e => setForm(f => ({ ...f, downloadUrl: e.target.value }))} placeholder="https://…" />
+          </div>
+          <div className="flex items-center gap-2">
+            <Switch checked={form.isPublished} onCheckedChange={v => setForm(f => ({ ...f, isPublished: v }))} id="published-switch" />
+            <Label htmlFor="published-switch">Published</Label>
+          </div>
+        </div>
+      </ResponsiveDialog>
     </div>
   );
 }
@@ -1205,11 +1206,20 @@ function PlansPanel() {
       </Card>
 
       {/* Create / Edit Dialog */}
-      <Dialog open={showCreate || !!editPlan} onOpenChange={(open) => { if (!open) { setShowCreate(false); setEditPlan(null); } }}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>{editPlan ? "Edit Plan" : "Add Plan"}</DialogTitle>
-          </DialogHeader>
+      <ResponsiveDialog
+        open={showCreate || !!editPlan}
+        onOpenChange={(open) => { if (!open) { setShowCreate(false); setEditPlan(null); } }}
+        title={editPlan ? "Edit Plan" : "Add Plan"}
+        footer={
+          <div className="flex gap-2 justify-end">
+            <Button variant="outline" onClick={() => { setShowCreate(false); setEditPlan(null); }}>Cancel</Button>
+            <Button onClick={handleSave} disabled={createMutation.isPending || updateMutation.isPending} className="gap-1.5">
+              {(createMutation.isPending || updateMutation.isPending) ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+              {editPlan ? "Save Changes" : "Create Plan"}
+            </Button>
+          </div>
+        }
+      >
           <div className="space-y-3 py-2">
             <div className="space-y-1">
               <Label>Plan Name</Label>
@@ -1268,15 +1278,7 @@ function PlansPanel() {
               </div>
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => { setShowCreate(false); setEditPlan(null); }}>Cancel</Button>
-            <Button onClick={handleSave} disabled={createMutation.isPending || updateMutation.isPending} className="gap-1.5">
-              {(createMutation.isPending || updateMutation.isPending) ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-              {editPlan ? "Save Changes" : "Create Plan"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      </ResponsiveDialog>
     </div>
   );
 }

@@ -337,6 +337,61 @@
   .surface-5 { background-color: var(--surface-5); }
 }
 
+/* ─── OKLCH Tonal Scales ─────────────────────────────────────────────────── */
+:root {
+  /* Gold tonal scale (11 stops: 50–950) */
+  --gold-50:  oklch(0.97 0.030 78);
+  --gold-100: oklch(0.94 0.055 78);
+  --gold-200: oklch(0.89 0.080 78);
+  --gold-300: oklch(0.84 0.105 78);
+  --gold-400: oklch(0.80 0.130 78);
+  --gold-500: oklch(0.76 0.145 78);
+  --gold-600: oklch(0.70 0.140 78);
+  --gold-700: oklch(0.62 0.130 78);
+  --gold-800: oklch(0.50 0.110 78);
+  --gold-900: oklch(0.38 0.085 78);
+  --gold-950: oklch(0.26 0.060 78);
+
+  /* Parchment / warm-neutral tonal scale */
+  --parchment-50:  oklch(0.99 0.004 60);
+  --parchment-100: oklch(0.97 0.008 60);
+  --parchment-200: oklch(0.94 0.012 60);
+  --parchment-300: oklch(0.90 0.016 60);
+  --parchment-400: oklch(0.84 0.020 60);
+  --parchment-500: oklch(0.76 0.020 60);
+  --parchment-600: oklch(0.65 0.018 60);
+  --parchment-700: oklch(0.52 0.016 60);
+  --parchment-800: oklch(0.38 0.014 60);
+  --parchment-900: oklch(0.26 0.012 60);
+  --parchment-950: oklch(0.16 0.010 60);
+
+  /* Cool-neutral / text tonal scale */
+  --slate-50:  oklch(0.97 0.006 240);
+  --slate-100: oklch(0.94 0.010 240);
+  --slate-200: oklch(0.88 0.014 240);
+  --slate-300: oklch(0.78 0.016 240);
+  --slate-400: oklch(0.64 0.018 240);
+  --slate-500: oklch(0.50 0.020 240);
+  --slate-600: oklch(0.38 0.022 240);
+  --slate-700: oklch(0.28 0.024 240);
+  --slate-800: oklch(0.20 0.022 240);
+  --slate-900: oklch(0.14 0.018 240);
+  --slate-950: oklch(0.08 0.015 240);
+}
+
+/* ─── Reduced Motion ─────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 @keyframes shimmer {
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }

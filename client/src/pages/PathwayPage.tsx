@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useRoute, Link } from "wouter";
 import { useLuminMoment } from "@/components/LuminMoment";
+import { useHaptics } from "@/hooks/useHaptics";
 import { LuminCorner } from "@/components/LuminCorner";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
@@ -154,6 +155,7 @@ export default function PathwayPage() {
   const [luminCelebrate, setLoomCelebrate] = useState(false);
   const [backendHydrated, setBackendHydrated] = useState(false);
   const { triggerMoment } = useLuminMoment();
+  const haptics = useHaptics();
 
   // Backend progress hydration for authenticated users
   const { data: serverProgress } = trpc.pathways.getProgress.useQuery(
@@ -263,8 +265,11 @@ export default function PathwayPage() {
         }
         if (next.size === totalSteps) {
           setSessionComplete(true);
+          haptics.heavy();
           // Pathway finish — Lumin celebrates with a starburst or transformation
           triggerMoment(Math.random() < 0.5 ? "starburst_joy" : "transformation");
+        } else {
+          haptics.success();
         }
         // Loom celebration pulse
         setLoomCelebrate(true);

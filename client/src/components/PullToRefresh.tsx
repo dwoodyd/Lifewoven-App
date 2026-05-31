@@ -113,7 +113,14 @@ export function PullToRefresh({ onRefresh, children, className = "" }: PullToRef
 
       {/* Content */}
       <motion.div
-        ref={(el) => { if (el) { const handlers = bind(); Object.assign(el, {}); } }}
+        ref={(el) => {
+          if (el) {
+            const handlers = bind();
+            // Apply gesture handlers to the DOM element
+            (el as any).__gestureHandlers = handlers;
+          }
+        }}
+        onPointerDown={(e) => { const el = e.currentTarget; const h = (el as any).__gestureHandlers; h?.onPointerDown?.(e); }}
         style={{ y: pullY } as React.CSSProperties}
         className="will-change-transform"
       >

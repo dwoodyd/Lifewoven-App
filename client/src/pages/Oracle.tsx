@@ -13,6 +13,7 @@ import {
   AlertCircle, TrendingUp, MessageSquare, BarChart3, Shield, ChevronRight,
   RotateCcw, PhoneCall, Calendar, Lock,
 } from "lucide-react";
+import { SkeletonTyping } from "@/components/ui/skeleton";
 import { Streamdown } from "streamdown";
 import { Link } from "wouter";
 import { getLoginUrl } from "@/const";
@@ -634,9 +635,8 @@ export default function Oracle() {
                   <div className="w-7 h-7 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
                     <Sparkles className="h-3.5 w-3.5 text-accent" />
                   </div>
-                  <div className="bg-card border border-border p-4 rounded-2xl rounded-bl-sm flex items-center gap-2">
-                    <Loader2 className="h-4 w-4 animate-spin text-accent" />
-                    <span className="text-xs text-muted-foreground italic">The Oracle is reflecting...</span>
+                  <div className="bg-card border border-border rounded-2xl rounded-bl-sm">
+                    <SkeletonTyping />
                   </div>
                 </div>
               )}

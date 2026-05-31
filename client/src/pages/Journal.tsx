@@ -9,7 +9,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { BookOpen, Plus, Sparkles, Search, Tag, ArrowRight, Loader2, Pencil, Download } from "lucide-react";
+import { BookOpen, Plus, Sparkles, Search, Tag, ArrowRight, Loader2, Pencil, Download, Trash2 } from "lucide-react";
+import { PullToRefresh } from "@/components/PullToRefresh";
+import { SwipeableCard } from "@/components/SwipeableCard";
+import { EmptyState } from "@/components/EmptyState";
 import { LuminAmbient } from "@/components/LuminAmbient";
 import VoiceRecorder from "@/components/VoiceRecorder";
 import { Streamdown } from "streamdown";
@@ -115,6 +118,7 @@ export default function Journal() {
 
   const { data: entries, refetch } = trpc.journal.list.useQuery({ module: selectedModule || undefined, search: searchQuery || undefined }, { enabled: isAuthenticated });
   const { triggerMoment } = useLuminMoment();
+  const deleteMutation = trpc.journal.delete.useMutation({ onSuccess: () => { toast.success("Entry deleted."); refetch(); } });
   const createEntry = trpc.journal.create.useMutation({
     onSuccess: () => {
       toast.success("Entry saved.");
@@ -240,30 +244,46 @@ export default function Journal() {
                   </div>
                 </div>
                 {entries && entries.length > 0 ? (
+                  <PullToRefresh onRefresh={async () => { await refetch(); }}>
                   <div className="space-y-3">
                     {entries.map((entry: any) => (
-                      <Link key={entry.id} href={`/weave/${entry.id}`}>
-                        <div className="p-4 rounded-xl border border-border bg-card hover:border-muted-foreground transition-all cursor-pointer">
-                          <div className="flex items-start justify-between gap-2 mb-2">
-                            <h3 className="font-medium text-foreground text-base">{entry.title || "Untitled Entry"}</h3>
-                            <span className="text-xs text-muted-foreground flex-shrink-0">{new Date(entry.createdAt).toLocaleDateString()}</span>
+                      <SwipeableCard
+                        key={entry.id}
+                        leftActions={[{
+                          icon: <Trash2 className="h-4 w-4" />,
+                          label: "Delete",
+                          color: "destructive",
+                          onAction: () => {
+                            if (confirm("Delete this entry?")) {
+                              deleteMutation.mutate({ id: entry.id });
+                            }
+                          },
+                        }]}
+                      >
+                        <Link href={`/weave/${entry.id}`}>
+                          <div className="p-4 border border-border bg-card hover:border-muted-foreground transition-all cursor-pointer">
+                            <div className="flex items-start justify-between gap-2 mb-2">
+                              <h3 className="font-medium text-foreground text-base">{entry.title || "Untitled Entry"}</h3>
+                              <span className="text-xs text-muted-foreground flex-shrink-0">{new Date(entry.createdAt).toLocaleDateString()}</span>
+                            </div>
+                            <p className="text-sm text-muted-foreground line-clamp-2 mb-2">{entry.content}</p>
+                            <div className="flex items-center gap-2">
+                              {entry.module && <Badge variant="secondary" className={`text-xs capitalize ${MODULE_COLORS[entry.module]}`}>{entry.module}</Badge>}
+                              {entry.tags && entry.tags.slice(0, 3).map((tag: string) => <span key={tag} className="text-xs text-muted-foreground">#{tag}</span>)}
+                            </div>
                           </div>
-                          <p className="text-sm text-muted-foreground line-clamp-2 mb-2">{entry.content}</p>
-                          <div className="flex items-center gap-2">
-                            {entry.module && <Badge variant="secondary" className={`text-xs capitalize ${MODULE_COLORS[entry.module]}`}>{entry.module}</Badge>}
-                            {entry.tags && entry.tags.slice(0, 3).map((tag: string) => <span key={tag} className="text-xs text-muted-foreground">#{tag}</span>)}
-                          </div>
-                        </div>
-                      </Link>
+                        </Link>
+                      </SwipeableCard>
                     ))}
                   </div>
+                  </PullToRefresh>
                 ) : (
-                  <div className="text-center py-16">
-                    <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                    <p className="font-serif text-lg font-light text-foreground mb-2">The Weave is waiting for your first entry.</p>
-                    <p className="text-base text-muted-foreground mb-6">Begin with a prompt below, or write freely.</p>
-                    <Button onClick={() => setIsWriting(true)} className="gap-2"><Plus className="h-4 w-4" /> First Entry</Button>
-                  </div>
+                  <EmptyState
+                    variant="journal"
+                    title="The Weave is waiting for your first entry."
+                    description="Begin with a prompt below, or write freely."
+                    action={{ label: "First Entry", onClick: () => setIsWriting(true) }}
+                  />
                 )}
               </div>
             ) : (

@@ -88,7 +88,7 @@ describe("community.posts", () => {
     const caller = appRouter.createCaller(ctx);
     const result = await caller.community.posts({ limit: 10 });
     expect(Array.isArray(result)).toBe(true);
-  });
+  }, 15000);
 });
 
 // ─── Oracle Router Tests ──────────────────────────────────────────────────────

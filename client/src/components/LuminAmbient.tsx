@@ -13,7 +13,10 @@
  * used by the removed "corner" mode. Callers can be updated lazily.
  */
 import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import { LUMIN_VIDEOS } from "@/data/lumin";
+
+
 
 export type LuminMode = "edge-fade" | "floor-glow" | "dominant" | "corner";
 // "corner" is kept as a type alias for "edge-fade" so existing callers don't break.
@@ -75,8 +78,11 @@ export function LuminAmbient({
   if (mode === "edge-fade" || mode === "corner") {
     const o = opacity ?? 0.25;
     return (
-      <div
+      <motion.div
         aria-hidden="true"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 2.2, ease: "easeOut" }}
         style={{
           position: "fixed",
           top: 0,
@@ -109,7 +115,7 @@ export function LuminAmbient({
             display: "block",
           }}
         />
-      </div>
+      </motion.div>
     );
   }
 
@@ -118,8 +124,11 @@ export function LuminAmbient({
   if (mode === "floor-glow") {
     const o = opacity ?? 0.20;
     return (
-      <div
+      <motion.div
         aria-hidden="true"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 2.2, ease: "easeOut" }}
         style={{
           position: "fixed",
           bottom: 0,
@@ -153,15 +162,18 @@ export function LuminAmbient({
             display: "block",
           }}
         />
-      </div>
+      </motion.div>
     );
   }
 
   // ── Dominant mode (onboarding / founding welcome only) ─────────────────────
   const o = opacity ?? 0.65;
   return (
-    <div
+    <motion.div
       aria-hidden="true"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 2.2, ease: "easeOut" }}
       style={{
         position: "fixed",
         top: "50%",
@@ -190,6 +202,6 @@ export function LuminAmbient({
           display: "block",
         }}
       />
-    </div>
+    </motion.div>
   );
 }

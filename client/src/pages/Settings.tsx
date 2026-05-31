@@ -3,13 +3,14 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Link } from "wouter";
 import { getLoginUrl } from "@/const";
-import { Settings2, Shield, Bell, User, Sparkles, Eye, CreditCard, ExternalLink, Moon, Sun, RefreshCw } from "lucide-react";
+import { Settings2, Shield, Bell, User, Sparkles, Eye, CreditCard, ExternalLink, Moon, Sun, RefreshCw, Vibrate } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
 import { Badge } from "@/components/ui/badge";
 import { LUMIN_VIDEOS } from "@/data/lumin";
+import { setHapticsEnabled, getHapticsEnabled } from "@/hooks/useHaptics";
 
 const TIER_LABELS: Record<string, { label: string; color: string; desc: string }> = {
   explorer: { label: "Explorer", color: "bg-secondary text-foreground", desc: "Free tier — core tools included." },
@@ -235,6 +236,7 @@ export default function Settings() {
   });
   const setLuminEnabledMutation = trpc.profile.setLuminEnabled.useMutation();
   const { theme, toggleTheme } = useTheme();
+  const [hapticsOn, setHapticsOn] = useState(() => getHapticsEnabled());
 
   // ── Post-upgrade Oracle animation ──────────────────────────────────────────
   const [showUpgradeAnim, setShowUpgradeAnim] = useState(false);
@@ -297,6 +299,12 @@ export default function Settings() {
     setLuminEnabled(value);
     setLuminEnabledMutation.mutate({ enabled: value });
     toast.success(value ? "Lumin restored." : "Lumin hidden across all pages.");
+  };
+
+  const handleHaptics = (value: boolean) => {
+    setHapticsEnabled(value);
+    setHapticsOn(value);
+    toast.success(value ? "Haptic feedback enabled." : "Haptic feedback disabled.");
   };
 
   const handleScreenshotMode = (value: boolean) => {
@@ -474,6 +482,23 @@ export default function Settings() {
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 mt-0.5 ${luminEnabled ? "bg-accent" : "bg-muted"}`}
               >
                 <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${luminEnabled ? "translate-x-6" : "translate-x-1"}`} />
+              </button>
+            </div>
+
+            {/* Haptic Feedback */}
+            <div className="flex items-start justify-between gap-3 py-4 border-b border-border/50">
+              <div>
+                <p className="text-sm font-medium text-foreground mb-0.5">Haptic feedback</p>
+                <p className="text-xs text-muted-foreground font-light leading-relaxed max-w-sm">
+                  Enable vibration on key interactions — habit completions, pathway milestones, and form submissions. Requires a device with a vibration motor.
+                </p>
+              </div>
+              <button
+                onClick={() => handleHaptics(!hapticsOn)}
+                aria-label={hapticsOn ? "Disable haptic feedback" : "Enable haptic feedback"}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 mt-0.5 ${hapticsOn ? "bg-accent" : "bg-muted"}`}
+              >
+                <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${hapticsOn ? "translate-x-6" : "translate-x-1"}`} />
               </button>
             </div>
 
