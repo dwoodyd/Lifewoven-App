@@ -60,6 +60,7 @@ export default function Dashboard() {
   const [lowBandwidthMode, setLowBandwidthMode] = useState(false);
   const [showReentry, setShowReentry] = useState(false);
   const [daysSinceActive, setDaysSinceActive] = useState(0);
+  const [reentryTrigger, setReentryTrigger] = useState<"absence" | "overwhelm" | "shame" | "burnout">("absence");
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -69,6 +70,7 @@ export default function Dashboard() {
       const days = Math.floor((now - parseInt(lastVisit)) / (1000 * 60 * 60 * 24));
       if (days >= 2) {
         setDaysSinceActive(days);
+        setReentryTrigger("absence");
         setShowReentry(true);
       }
     }
@@ -92,6 +94,33 @@ export default function Dashboard() {
   // Evening nudge: show after 5pm local time when no mood logged today
   const isEvening = new Date().getHours() >= 17;
   const showMoodNudge = isEvening && !hasMoodToday;
+
+  // Wire Reset surfacing to check-in score < 4 and audit friction tags
+  useEffect(() => {
+    if (!dashData || showReentry) return; // don't override absence trigger
+    const recentCheckIns = (dashData as any).recentCheckIns ?? [];
+    const latestCheckIn = recentCheckIns[0];
+    if (latestCheckIn) {
+      const score = latestCheckIn.emotionalScore ?? latestCheckIn.score ?? 10;
+      if (score <= 4) {
+        // Low check-in score — overwhelm or burnout
+        const trigger = score <= 2 ? "burnout" : "overwhelm";
+        setReentryTrigger(trigger);
+        setShowReentry(true);
+        return;
+      }
+    }
+    // Audit friction tags: shame after interruption or burnout
+    const auditFrictionTags = (user as any)?.auditFrictionTags as string[] | null | undefined;
+    if (auditFrictionTags?.includes("shame after interruption")) {
+      setReentryTrigger("shame");
+      setShowReentry(true);
+    } else if (auditFrictionTags?.includes("burnout")) {
+      setReentryTrigger("burnout");
+      setShowReentry(true);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dashData]);
 
   const utils = trpc.useUtils();
   const createCheckIn = trpc.checkIn.create.useMutation({
@@ -178,6 +207,7 @@ export default function Dashboard() {
       {showReentry && (
         <ReentryFlow
           daysSinceActive={daysSinceActive}
+          trigger={reentryTrigger}
           onDismiss={() => setShowReentry(false)}
         />
       )}

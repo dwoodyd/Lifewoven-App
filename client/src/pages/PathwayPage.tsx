@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { ArrowRight, Clock, Star, ChevronDown, ChevronUp, CheckCircle2, Circle, BookOpen, RotateCcw, Play, Pause, Timer } from "lucide-react";
 import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 
 const PATHWAYS: Record<string, any> = {
   align: {
@@ -133,8 +134,9 @@ export default function PathwayPage() {
   const id = (params?.id || "align").toLowerCase();
   const pathway = PATHWAYS[id] || PATHWAYS.align;
   const accentClass = COLOR_MAP[pathway.color] || COLOR_MAP.state;
+  const { isAuthenticated } = useAuth();
 
-  // Persist progress per pathway in localStorage
+  // Persist progress per pathway in localStorage (guest fallback)
   const storageKey = `lifeos_pathway_${id}`;
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(() => {
     try {
@@ -149,6 +151,22 @@ export default function PathwayPage() {
   });
   const [sessionComplete, setSessionComplete] = useState(false);
   const [luminCelebrate, setLoomCelebrate] = useState(false);
+  const [backendHydrated, setBackendHydrated] = useState(false);
+
+  // Backend progress hydration for authenticated users
+  const { data: serverProgress } = trpc.pathways.getProgress.useQuery(
+    { pathway: id },
+    { enabled: isAuthenticated, staleTime: 30_000 }
+  );
+  const saveProgressMutation = trpc.pathways.saveProgress.useMutation();
+
+  // Hydrate from server on first load (override localStorage)
+  useEffect(() => {
+    if (!serverProgress || backendHydrated) return;
+    setCompletedSteps(new Set(serverProgress.completedSteps));
+    setSessionStarted(serverProgress.sessionStarted);
+    setBackendHydrated(true);
+  }, [serverProgress, backendHydrated]);
 
   // Sync completedSteps to localStorage
   useEffect(() => {
@@ -159,6 +177,22 @@ export default function PathwayPage() {
   useEffect(() => {
     try { localStorage.setItem(`${storageKey}_started`, sessionStarted ? "1" : "0"); } catch {}
   }, [sessionStarted, storageKey]);
+
+  // Debounced backend sync (500ms after last change, authenticated only)
+  const syncTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (!isAuthenticated || !backendHydrated) return;
+    if (syncTimerRef.current) clearTimeout(syncTimerRef.current);
+    syncTimerRef.current = setTimeout(() => {
+      saveProgressMutation.mutate({
+        pathway: id,
+        completedSteps: Array.from(completedSteps),
+        sessionStarted,
+      });
+    }, 500);
+    return () => { if (syncTimerRef.current) clearTimeout(syncTimerRef.current); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [completedSteps, sessionStarted, isAuthenticated, backendHydrated]);
 
   // Per-step timer state
   const [activeTimerStep, setActiveTimerStep] = useState<number | null>(null);
@@ -258,6 +292,9 @@ export default function PathwayPage() {
       localStorage.removeItem(storageKey);
       localStorage.removeItem(`${storageKey}_started`);
     } catch {}
+    if (isAuthenticated) {
+      saveProgressMutation.mutate({ pathway: id, completedSteps: [], sessionStarted: false });
+    }
     toast("Progress cleared. Ready to begin again.");
   }
 

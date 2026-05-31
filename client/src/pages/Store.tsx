@@ -123,7 +123,6 @@ export default function Store() {
 
   const products = PRODUCT_CATALOG.map(p => {
     const sp = serverProducts?.find(s => s.slug === p.id);
-    // Server returns prices in dollars (e.g. 97.00), not cents
     return {
       ...p,
       effectivePrice: sp?.effectivePrice ?? p.price,
@@ -135,36 +134,35 @@ export default function Store() {
 
   const filtered = activeCategory === "all" ? products : products.filter(p => p.category === activeCategory);
 
-  async function handlePurchase(productId: string, priceUsd: number) {
+  const createOrder = trpc.store.createOrder.useMutation({
+    onSuccess: (data) => {
+      if (data.alreadyIncluded) {
+        toast.success("This product is already included in your plan.");
+        setPurchasingId(null);
+        return;
+      }
+      if (data.checkoutUrl) {
+        toast.info("Redirecting to PayPal…");
+        window.open(data.checkoutUrl, "_blank");
+      }
+      setPurchasingId(null);
+    },
+    onError: (err) => {
+      toast.error(err.message ?? "Could not start checkout. Please try again.");
+      setPurchasingId(null);
+    },
+  });
+
+  function handlePurchase(productId: string, _priceUsd: number) {
     if (!isAuthenticated) {
       window.location.href = getLoginUrl(window.location.pathname + window.location.search);
       return;
     }
     setPurchasingId(productId);
-    try {
-      const res = await fetch("/api/paypal/product/checkout", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          productId,
-          priceUsd,
-          returnUrl: `${window.location.origin}/store?purchased=${productId}`,
-          cancelUrl: `${window.location.origin}/store`,
-        }),
-      });
-      const data = await res.json() as { approvalUrl?: string; error?: string };
-      if (!data.approvalUrl) {
-        toast.error(data.error ?? "Could not start checkout. Please try again.");
-        return;
-      }
-      toast.info("Redirecting to PayPal…");
-      window.open(data.approvalUrl, "_blank");
-    } catch {
-      toast.error("Checkout failed. Please try again.");
-    } finally {
-      setPurchasingId(null);
-    }
+    createOrder.mutate({
+      productSlug: productId,
+      origin: window.location.origin,
+    });
   }
 
   return (

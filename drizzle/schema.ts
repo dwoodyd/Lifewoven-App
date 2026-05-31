@@ -8,6 +8,7 @@ import {
   mysqlTable,
   text,
   timestamp,
+  uniqueIndex,
   varchar,
 } from "drizzle-orm/mysql-core";
 
@@ -259,6 +260,22 @@ export const pathwaySessions = mysqlTable("pathway_sessions", {
 }, (t) => [index("idx_pathway_sessions_userId").on(t.userId)]);
 
 export type PathwaySession = typeof pathwaySessions.$inferSelect;
+
+// ─── Pathway Progress ──────────────────────────────────────────────────────────
+
+export const pathwayProgress = mysqlTable("pathway_progress", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  pathway: varchar("pathway", { length: 64 }).notNull(),
+  completedSteps: json("completedSteps").$type<number[]>().default([]).notNull(),
+  sessionStarted: boolean("sessionStarted").default(false).notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (t) => [
+  index("idx_pathway_progress_userId").on(t.userId),
+  uniqueIndex("uq_pathway_progress_user_pathway").on(t.userId, t.pathway),
+]);
+
+export type PathwayProgress = typeof pathwayProgress.$inferSelect;
 
 // ─── Resources ─────────────────
 

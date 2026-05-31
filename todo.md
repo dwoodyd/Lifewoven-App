@@ -711,30 +711,31 @@
 
 ## Store + Subscription Rebuild (May 11, 2026)
 
-- [ ] Backend: store.getAccess procedure (library/discount/standalone based on membershipTier)
-- [ ] Backend: store.getProducts procedure returns tier-adjusted prices
-- [ ] Backend: store.purchaseProduct handles Seeker 30% discount in PayPal flow
-- [ ] Pricing page: rewrite with founding rates, annual toggle, Oracle library positioning
-- [ ] Pricing page: update feature comparison table with Complete Library Access rows
-- [ ] Store page: three-state product cards (included / 30% off / full price)
-- [ ] Store page: retire $297 bundle, replace with Oracle upsell footer
-- [ ] Store page: dynamic header per subscriber state
-- [ ] Dashboard: add "Browse the Library" CTA widget
-- [ ] Settings/Account: show library access status for Oracle subscribers
-- [ ] Oracle onboarding card: "Welcome to Oracle. The complete library is now yours."
+- [x] Backend: store.getAccess procedure (library/discount/standalone based on membershipTier) — already in server/routers/store.ts
+- [x] Backend: store.getProducts procedure returns tier-adjusted prices — already in server/routers/store.ts
+- [x] Backend: store.purchaseProduct handles Seeker 30% discount in PayPal flow — store.createOrder + store.captureOrder already in server/routers/store.ts
+- [x] Pricing page: rewrite with founding rates, annual toggle, Oracle library positioning — already in Pricing.tsx
+- [x] Pricing page: update feature comparison table with Complete Library Access rows — LIBRARY_ROWS already in Pricing.tsx
+- [x] Store page: three-state product cards (included / 30% off / full price) — already in Store.tsx
+- [x] Store page: retire $297 bundle, replace with Oracle upsell footer — already done
+- [x] Store page: dynamic header per subscriber state — already in Store.tsx
+- [x] Store page: wired to trpc.store.createOrder (was using legacy REST endpoint) — fixed to use createOrder.mutate with origin param
+- [x] Dashboard: add "Browse the Library" CTA widget — already in Dashboard Quick Actions
+- [x] Settings/Account: show library access status for Oracle subscribers — BillingSection already shows tier/library status
+- [x] Oracle onboarding card: "Welcome to Oracle. The complete library is now yours." — post-upgrade Lumin animation + toast already implemented
 
-## Founding Member Flow (May 11, 2026)
-- [ ] Pricing page rewrite: founding rates, annual toggle, Oracle library positioning
-- [ ] Store page rewrite: three subscriber-state variants, retire bundle, Oracle upsell footer
-- [ ] DB schema: applications table, invite_codes table, founding_member/founding_tier/needs_intro fields on users
-- [ ] Backend: applications router (submit, admin CRUD, approve/decline, invite code gen, Resend emails)
-- [ ] Frontend: /apply form page
-- [ ] Frontend: /invite/<code> magic-link redemption page
-- [ ] Frontend: Admin Applications panel (/admin/applications)
-- [ ] Frontend: First-run Lumin intro auto-fire on dashboard (needs_intro flag)
-- [ ] Downstream: dashboard "Browse the Library" CTA
-- [ ] Downstream: settings page library status + Replay Intro wires to needs_intro
-- [ ] Downstream: Oracle onboarding card "Welcome to Oracle. The complete library is now yours."
+## Founding Member Flow (May 11, 2026) — DUPLICATE of Founding Member Funnel below, all done
+- [x] Pricing page rewrite: founding rates, annual toggle, Oracle library positioning
+- [x] Store page rewrite: three subscriber-state variants, retire bundle, Oracle upsell footer
+- [x] DB schema: applications table, invite_codes table, founding_member/founding_tier/needs_intro fields on users
+- [x] Backend: applications router (submit, admin CRUD, approve/decline, invite code gen, Resend emails)
+- [x] Frontend: /apply form page
+- [x] Frontend: /invite/<code> magic-link redemption page
+- [x] Frontend: Admin Applications panel (/admin/applications)
+- [x] Frontend: First-run Lumin intro auto-fire on dashboard (needs_intro flag)
+- [x] Downstream: dashboard "Browse the Library" CTA
+- [x] Downstream: settings page library status + Replay Intro wires to needs_intro
+- [x] Downstream: Oracle onboarding card "Welcome to Oracle. The complete library is now yours."
 
 ## Founding Member Funnel (May 11, 2026)
 - [x] DB schema: applications table (name, email, answer, status, tier, ip, ua, timestamps)
@@ -849,5 +850,5 @@
 - [x] Fix Pathways time inconsistency: Align description said "five minutes" but steps total 7 min — updated to "seven minutes" and duration to "7-10 minutes"
 
 ## Phase 3 Follow-up Gaps (May 2026)
-- [ ] Wire Reset surfacing to overwhelm/shame/burnout signals (check-in score < 4, audit friction tags) in addition to absence
-- [ ] Persist pathway progress to backend (pathwayProgress table) keyed to authenticated user, hydrate PathwayPage from server state
+- [x] Wire Reset surfacing to overwhelm/shame/burnout signals (check-in score < 4, audit friction tags) in addition to absence — ReentryFlow now accepts trigger prop; Dashboard detects low check-in score (≤4) and audit friction tags (shame/burnout)
+- [x] Persist pathway progress to backend (pathwayProgress table) keyed to authenticated user, hydrate PathwayPage from server state — pathwayProgress table + getProgress/saveProgress tRPC procedures + debounced 500ms sync in PathwayPage; localStorage used as guest fallback

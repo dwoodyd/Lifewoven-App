@@ -848,6 +848,41 @@ const pathwaysRouter = router({
     }
     return { streak, lastDate: sessions[0].completedAt };
   }),
+
+  getProgress: protectedProcedure
+    .input(z.object({ pathway: z.string().max(100) }))
+    .query(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) return { completedSteps: [] as number[], sessionStarted: false };
+      const { pathwayProgress } = await import("../drizzle/schema");
+      const rows = await db.select().from(pathwayProgress)
+        .where(and(eq(pathwayProgress.userId, ctx.user.id), eq(pathwayProgress.pathway, input.pathway)))
+        .limit(1);
+      if (!rows.length) return { completedSteps: [] as number[], sessionStarted: false };
+      return { completedSteps: rows[0].completedSteps as number[], sessionStarted: rows[0].sessionStarted };
+    }),
+
+  saveProgress: protectedProcedure
+    .input(z.object({ pathway: z.string().max(100), completedSteps: z.array(z.number()), sessionStarted: z.boolean().optional() }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database unavailable");
+      const { pathwayProgress } = await import("../drizzle/schema");
+      await db.insert(pathwayProgress)
+        .values({
+          userId: ctx.user.id,
+          pathway: input.pathway,
+          completedSteps: input.completedSteps,
+          sessionStarted: input.sessionStarted ?? false,
+        })
+        .onDuplicateKeyUpdate({
+          set: {
+            completedSteps: input.completedSteps,
+            sessionStarted: input.sessionStarted ?? false,
+          },
+        });
+      return { success: true };
+    }),
 });
 
 // ─── Resources Router ─────────────────────────────────────────────────────────
