@@ -139,9 +139,14 @@ const journalRouter = router({
     .mutation(async ({ ctx, input }) => {
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
+      // Auto-title from first sentence if no title provided
+      const autoTitle = input.title ||
+        input.content.split(/[.!?\n]/)[0].trim().slice(0, 80) ||
+        "Untitled entry";
       await db.insert(journalEntries).values({
         userId: ctx.user.id,
         ...input,
+        title: autoTitle,
         tags: input.tags ?? [],
       });
       return { success: true };

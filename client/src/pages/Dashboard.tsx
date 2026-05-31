@@ -298,11 +298,14 @@ export default function Dashboard() {
           <div className="flex flex-wrap items-center gap-2 shrink-0 self-start">
             {hasAccess && daysLeft !== null && daysLeft <= 45 && (
               <Link href="/pricing">
-                <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border cursor-pointer transition-colors ${
-                  daysLeft <= 7
-                    ? "bg-red-500/10 border-red-500/20 hover:bg-red-500/15"
-                    : "bg-amber-500/10 border-amber-500/20 hover:bg-amber-500/15"
-                }`}>
+                <div
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border cursor-pointer transition-colors ${
+                    daysLeft <= 7
+                      ? "bg-red-500/10 border-red-500/20 hover:bg-red-500/15"
+                      : "bg-amber-500/10 border-amber-500/20 hover:bg-amber-500/15"
+                  }`}
+                  title={`${daysLeft} day${daysLeft !== 1 ? 's' : ''} remaining in your beta access period. Click to upgrade and keep full access.`}
+                >
                   <Sparkles className={`h-3.5 w-3.5 ${daysLeft <= 7 ? "text-red-400" : "text-amber-400"}`} />
                   <span className={`text-xs font-medium ${daysLeft <= 7 ? "text-red-400" : "text-amber-400"}`}>
                     {daysLeft}d beta

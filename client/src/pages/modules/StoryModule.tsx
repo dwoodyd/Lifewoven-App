@@ -121,9 +121,22 @@ export default function StoryModule() {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-10 px-4">
-                  <p className="text-sm font-medium text-foreground mb-2">No beliefs captured yet.</p>
-                  <p className="text-sm text-muted-foreground max-w-xs mx-auto">A good place to start: write a belief you hold about yourself that has been limiting your progress. Be honest — this is private.</p>
+                <div className="space-y-4">
+                  {/* Seed example belief */}
+                  <div className="p-4 rounded-xl border border-story/20 bg-story/5">
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <p className="text-sm text-muted-foreground italic">“I always start strong and then fall apart. I don’t have the consistency to follow through.”</p>
+                      <Badge variant="default" className="text-xs flex-shrink-0">Example</Badge>
+                    </div>
+                    <div className="mt-2 pt-2 border-t border-story/20">
+                      <p className="text-xs text-muted-foreground mb-1">Empowering Belief:</p>
+                      <p className="text-sm font-medium text-foreground">“I am someone who returns. Every time I drift, I practice coming back — and that is the skill.”</p>
+                      <p className="text-xs text-story mt-1 italic">Declaration: I am a person who returns.</p>
+                    </div>
+                  </div>
+                  <div className="text-center py-4 px-4">
+                    <p className="text-sm text-muted-foreground max-w-xs mx-auto">Add your first belief above. Be honest — this is private.</p>
+                  </div>
                 </div>
               )}
             </div>

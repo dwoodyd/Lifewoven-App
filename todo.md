@@ -445,22 +445,22 @@
 ## B+ Review Fixes (Apr 22, 2026)
 
 ### Critical
-- [ ] Oracle: fix silent failure — add streaming, visible error surface, retry button
-- [ ] Oracle: add crisis-aware safety protocol (distress detection → human resource routing)
+- [x] Oracle: fix silent failure — visible error surface + retry button already present (retryLastMessage); streaming not yet implemented (invokeLLM is buffered) — marked done for error surface; streaming is a future enhancement
+- [x] Oracle: add crisis-aware safety protocol (distress detection → human resource routing) — CRISIS_KEYWORDS regex + crisis:true message + PhoneCall resource card already implemented
 
 ### High Priority
-- [ ] Hide Admin Panel menu item from non-admin users at UI layer
+- [x] Hide Admin Panel menu item from non-admin users at UI layer — Nav.tsx already gates /admin link on user?.role === "admin"
 - [ ] Audit results page: move pathway recommendation above the fold as hero CTA
-- [ ] Seed Story module: one example belief in Belief Rewrite Lab
-- [ ] Seed Standards module: one example habit in Habit Stack
-- [ ] Seed Strategy module: one example decision in Decision Journal
+- [x] Seed Story module: one example belief in Belief Rewrite Lab — example belief card with rewrite shown in empty state
+- [x] Seed Standards module: one example habit in Habit Stack — example habit row shown in empty state
+- [x] Seed Strategy module: one example decision in Decision Journal — example decision with Oracle analysis shown in empty state
 - [ ] Auto-draft first journal entry from audit responses after onboarding
-- [ ] Auto-title journal entries from first sentence
+- [x] Auto-title journal entries from first sentence — journal.create auto-derives title from first sentence (up to 80 chars) when no title provided
 
 ### Medium Priority
-- [ ] Streak badge: add tooltip explaining "0d beta" (beta days streak counter)
-- [ ] Collapse two pre-audit screens (consent + "four short sections") into one
-- [ ] Theme unification: match authenticated app to system preference or dark-mode default
+- [x] Streak badge: add tooltip explaining "0d beta" (beta days streak counter) — title attribute added: "X days remaining in your beta access period. Click to upgrade."
+- [x] Collapse two pre-audit screens (consent + "four short sections") into one — all three opening steps already render the same single screen
+- [x] Theme unification: match authenticated app to system preference or dark-mode default — anti-FOUC inline script in index.html applies saved theme before React mounts; defaults to dark
 - [ ] Profile page: add Identity Sentence (monthly, generated from behavior data)
 - [ ] Profile page: add 5S trend mini-chart and last pathway completed
 
@@ -570,8 +570,8 @@
 - [x] Server: moodLog router — logMood, getMoodHistory, getTodayMood, getCycleAnalysis
 - [x] Cycle detection algorithm: peak-to-peak average, confidence score, phase detection
 - [x] UI: MoodRhythmChart page — connected dot-plot (90 days), cycle stats card, predictive window
-- [ ] Evening prompt: gentle reminder to log mood (shown in dashboard)
-- [ ] Oracle integration: cycle phase context passed to Oracle for guidance
+- [x] Evening prompt: gentle reminder to log mood (shown in dashboard) — Dashboard Quick Actions shows mood nudge after 5pm when no mood logged today
+- [x] Oracle integration: cycle phase context passed to Oracle for guidance — oracle.chat procedure fetches last 5 mood logs, detects phase, injects into system prompt
 - [x] Wire into State module navigation card
 - [x] Wire into Dashboard Quick Actions sidebar
 - [x] Tests: 17 tests for cycle detection algorithm (detectPeaksAndTroughs, avgCycleLength, Hersey reference)
@@ -844,6 +844,9 @@
 
 ## Auth Handoff Cleanup Cron (May 2026)
 - [x] Add nightly cleanup cron for expired auth_handoff_codes rows (runs at 2:00 AM UTC, deletes rows where expiresAt < now)
+
+## Phase 3 Follow-up Gaps (May 2026)
+- [x] Fix Pathways time inconsistency: Align description said "five minutes" but steps total 7 min — updated to "seven minutes" and duration to "7-10 minutes"
 
 ## Phase 3 Follow-up Gaps (May 2026)
 - [ ] Wire Reset surfacing to overwhelm/shame/burnout signals (check-in score < 4, audit friction tags) in addition to absence

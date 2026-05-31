@@ -12,8 +12,8 @@ import { trpc } from "@/lib/trpc";
 const PATHWAYS: Record<string, any> = {
   align: {
     name: "Align", tagline: "Daily Grounding Practice", color: "state", badge: "Daily Foundation",
-    description: "Align is your daily grounding ritual — the practice of returning to your center before the world asks anything of you. It takes five minutes and sets the tone for everything that follows.",
-    duration: "5-10 minutes", frequency: "Every morning", source: "Lifewoven Original Practice",
+    description: "Align is your daily grounding ritual — the practice of returning to your center before the world asks anything of you. It takes seven minutes and sets the tone for everything that follows.",
+    duration: "7-10 minutes", frequency: "Every morning", source: "Lifewoven Original Practice",
     steps: [
       { title: "Arrive (1 min)", desc: "Sit comfortably. Close your eyes. Take three slow, deep breaths. Let your nervous system know: you are safe, you are here, you are present." },
       { title: "Body Scan (2 min)", desc: "Slowly scan from the top of your head to the soles of your feet. Notice any tension, tightness, or holding. Do not try to fix it — just notice it with curiosity." },
