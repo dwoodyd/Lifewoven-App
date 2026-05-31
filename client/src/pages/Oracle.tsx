@@ -74,6 +74,7 @@ export default function Oracle() {
   });
   const weeklyData = weeklyReflection.data?.summaryJson as Record<string, string> | null ?? null;
   const cycleAnalysis = trpc.moodLog.getCycleAnalysis.useQuery(undefined, { enabled: isAuthenticated });
+  const monthlyUsage = trpc.oracle.getMonthlyUsage.useQuery(undefined, { enabled: isAuthenticated && !hasOracleAccess });
 
   const chat = trpc.oracle.chat.useMutation({
     onSuccess: (data: any) => {
@@ -194,8 +195,22 @@ export default function Oracle() {
           </div>
         </div>
 
-        {/* Oracle Threshold View — shown to free-tier (explorer) users */}
-        {!hasOracleAccess && (
+        {/* Oracle Sampler Counter — shown to Explorer/Seeker users with remaining questions */}
+        {!hasOracleAccess && monthlyUsage.data && !monthlyUsage.data.hasFullAccess && (
+          <div className="flex items-center justify-between px-4 py-2.5 rounded-lg bg-accent/5 border border-accent/15 mb-4 text-sm">
+            <span className="text-muted-foreground">
+              <span className="text-foreground font-medium">{Math.max(0, 3 - (monthlyUsage.data.used ?? 0))}</span> of 3 free Oracle questions remaining this month
+            </span>
+            {(monthlyUsage.data.used ?? 0) >= 3 ? (
+              <Link href="/pricing"><Button size="sm" variant="outline" className="text-xs h-7 border-accent/30 text-accent hover:bg-accent/10"><Sparkles className="h-3 w-3 mr-1" />Upgrade</Button></Link>
+            ) : (
+              <span className="text-xs text-muted-foreground/60 italic">Resets monthly</span>
+            )}
+          </div>
+        )}
+
+        {/* Oracle Threshold View — shown to free-tier (explorer) users when sampler exhausted */}
+        {!hasOracleAccess && monthlyUsage.data && (monthlyUsage.data.used ?? 0) >= 3 && (
           <div
             style={{
               position: "relative",

@@ -19,7 +19,7 @@ import {
   oracleConversations, userPathways, pathwaySessions, resources, courses, enrollments,
   products, communityPosts, communityComments, communityLikes, orders, users, moodLogs
 } from "../drizzle/schema";
-import { eq, desc, and, like, sql } from "drizzle-orm";
+import { eq, desc, and, like, sql, gte } from "drizzle-orm";
 import { invokeLLM } from "./_core/llm";
 import { tierCanAccessOracle } from "./tierHelpers";
 import { TRPCError } from "@trpc/server";
@@ -551,11 +551,22 @@ const oracleRouter = router({
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
 
-      // H1: Tier gate — Oracle chat requires oracle tier (admins bypass)
+      // H1: Tier gate — Oracle chat requires oracle tier OR sampler (3 free/month for Explorer/Seeker)
       const [userTierRow] = await db.select({ membershipTier: users.membershipTier, role: users.role }).from(users).where(eq(users.id, ctx.user.id)).limit(1);
       const isAdmin = userTierRow?.role === "admin";
-      if (!isAdmin && !tierCanAccessOracle(userTierRow?.membershipTier as any)) {
-        throw new TRPCError({ code: "FORBIDDEN", message: "Oracle access requires the Oracle membership tier. Upgrade to unlock unlimited Oracle AI sessions." });
+      const hasFullOracle = tierCanAccessOracle(userTierRow?.membershipTier as any);
+      if (!isAdmin && !hasFullOracle) {
+        // Oracle Sampler: allow 3 free questions per calendar month for Explorer/Seeker
+        const SAMPLER_LIMIT = 3;
+        const now = new Date();
+        const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+        const [{ count: monthlyCount }] = await db
+          .select({ count: sql<number>`COUNT(*)` })
+          .from(oracleConversations)
+          .where(and(eq(oracleConversations.userId, ctx.user.id), gte(oracleConversations.createdAt, monthStart)));
+        if (monthlyCount >= SAMPLER_LIMIT) {
+          throw new TRPCError({ code: "FORBIDDEN", message: `You've used all ${SAMPLER_LIMIT} free Oracle questions for this month. Upgrade to Oracle for unlimited sessions.` });
+        }
       }
 
       // Fetch user mind patterns for Oracle adaptation
@@ -771,6 +782,22 @@ Active habits: ${recentHabits.map(h => `${h.name} (streak: ${h.streak})`).join("
       });
     }
     return { insights };
+  }),
+
+  getMonthlyUsage: protectedProcedure.query(async ({ ctx }) => {
+    const db = await getDb();
+    if (!db) return { used: 0, limit: 3, hasFullAccess: false };
+    const [userTierRow] = await db.select({ membershipTier: users.membershipTier, role: users.role }).from(users).where(eq(users.id, ctx.user.id)).limit(1);
+    const isAdmin = userTierRow?.role === "admin";
+    const hasFullAccess = isAdmin || tierCanAccessOracle(userTierRow?.membershipTier as any);
+    if (hasFullAccess) return { used: 0, limit: null, hasFullAccess: true };
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const [{ count: used }] = await db
+      .select({ count: sql<number>`COUNT(*)` })
+      .from(oracleConversations)
+      .where(and(eq(oracleConversations.userId, ctx.user.id), gte(oracleConversations.createdAt, monthStart)));
+    return { used: Number(used), limit: 3, hasFullAccess: false };
   }),
 });
 
@@ -1205,6 +1232,8 @@ export const appRouter = router({
         luminEnabled: u.luminEnabled,
         billingStatus: u.billingStatus,
         betaEndDate: u.betaEndDate,
+        mindPatterns: u.mindPatterns,
+        lowBandwidthMode: u.lowBandwidthMode,
       };
     }),
     logout: publicProcedure.mutation(({ ctx }) => {

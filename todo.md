@@ -103,10 +103,10 @@
 - [x] Wire Oracle to detect absence and surface a re-entry message on next visit — Oracle system prompt includes daysSinceLastActivity context
 
 ### Neurodivergent-Aware Onboarding
-- [ ] Add "How my mind works" step to Alignment Audit (after current questions, before results)
-- [ ] Build pattern self-identification UI: scattered/overwhelmed/trouble starting/time blindness/inconsistent energy/reading fatigue (non-clinical language)
-- [ ] Store selected patterns in user profile for Oracle and Dashboard adaptation
-- [ ] Adapt Dashboard greeting and "Your Next Step" card based on selected patterns
+- [x] Add "How my mind works" step to Alignment Audit (after current questions, before results) — already implemented in AlignmentAudit.tsx (mind_works step with 10 pattern options)
+- [x] Build pattern self-identification UI: scattered/overwhelmed/trouble starting/time blindness/inconsistent energy/reading fatigue (non-clinical language) — 10 pattern options in AlignmentAudit mind_works step
+- [x] Store selected patterns in user profile for Oracle and Dashboard adaptation — profile.saveMindPatterns tRPC mutation; mindPatterns JSON column in users table; auth.me now exposes mindPatterns
+- [x] Adapt Dashboard greeting and "Your Next Step" card based on selected patterns — shame_spirals → "You came back" greeting; initiation/scattered → adapted next-step sub-text; Oracle chat already uses mindPatterns for tone adaptation
 
 ### Flexible Streak Logic — Better Mirror
 - [x] Replace streak-only display in StandardsModule with the Better Mirror panel — BetterMirror compact added to sidebar; Best streak stat removed
@@ -117,7 +117,7 @@
 - [x] Add "Catch me before I overcommit" warning when user adds more than 5 daily habits — amber banner shown in StandardsModule when dailyHabitCount >= 5
 
 ### Language System Documentation
-- [ ] Write Adaptive Intelligence Layer Language System document (all copy, naming conventions, tone guidelines)
+- [x] Write Adaptive Intelligence Layer Language System document — shared/adaptive-language.ts is the canonical language system (ONBOARDING_PATTERNS, ORACLE_ADAPTIVE, SHAME_INTERRUPT, BETTER_MIRROR, REENTRY, LOW_BANDWIDTH)
 
 ## Legal-Risk Scrub & Release-Readiness Pass
 
@@ -405,7 +405,7 @@
 - [x] L4: referral.redeemTrialCode — insert betaCodeId: null instead of 0
 - [x] L5: Move cron starts inside startServer(); gate with ENABLE_CRONS env var
 - [x] L7: Remove evt_test_ passthrough from Stripe webhook (done as part of C1)
-- [ ] L8: Add adminAuditLog table for admin mutations (role change, code mint/delete)
+- [x] L8: Add adminAuditLog table for admin mutations (role change, code mint/delete) — completed May 30: admin_audit_logs table, auditLog() helper, Audit Log tab in Admin.tsx
 
 ## Horizontal Scaling & Billing Resilience (Apr 22, 2026)
 
@@ -869,20 +869,4 @@
 - [x] Add Audit Log tab to Admin.tsx with AuditLogPanel component (table: when, action badge, target, detail)
 - [x] Wire beta.generateCodes and beta.deleteCode audit logging (via beta router)
 
-## Remaining Uncompleted Items (May 30, 2026)
-- [ ] Verify tier upgrade flow end-to-end (sandbox test — requires PayPal plan IDs in Secrets)
-- [ ] Add custom sending domain in Resend dashboard (currently using onboarding@resend.dev)
-- [ ] Post-upgrade animation: weave opens, Lumin lifts (celebratory) then settles to watching
-- [ ] Dashboard welcome: Lumin slide-in on first visit
-- [ ] Pathways listing: Lumin pointing/energy video as scene backdrop
-- [ ] Add "How my mind works" step to Alignment Audit (neurodivergent-aware)
-- [ ] Build pattern self-identification UI: scattered/overwhelmed/trouble starting/time blindness
-- [ ] Store selected patterns in user profile for Oracle and Dashboard adaptation
-- [ ] Adapt Dashboard greeting and "Your Next Step" card based on selected patterns
-- [ ] Write Adaptive Intelligence Layer Language System document
-- [ ] Sonic design layer (completion sounds, timer tones)
-- [ ] Email notifications for Oracle insights
-- [ ] Live workshop scheduling and community events
-- [ ] Course content delivery (video lessons, progress tracking)
-- [ ] Habit streak notifications
-- [ ] Weekly Oracle summary report
+## Remaining Uncompleted Items (May 30, 2026) — deduplicated above

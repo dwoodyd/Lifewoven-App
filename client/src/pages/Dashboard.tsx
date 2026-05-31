@@ -174,15 +174,31 @@ export default function Dashboard() {
 
   const auditNextStep = primaryPathway ? PATHWAY_ROUTES[primaryPathway.toLowerCase()] : null;
 
-  const nextStep = auditNextStep && !hasHabits
-    ? auditNextStep
-    : !hasHabits
-    ? { label: "Build your first habit", sub: "Your Rhythms are empty. Start with one small identity-based habit.", href: "/standards", cta: "Build My Rhythms" }
-    : !hasJournal
-    ? { label: "Add your first entry to The Weave", sub: "Reflection is where transformation begins. Take 5 minutes to write.", href: "/weave", cta: "Open The Weave" }
-    : auditNextStep
-    ? auditNextStep
-    : { label: "Begin today's check-in", sub: "How you feel right now is data. Check in and let the Oracle listen.", href: null, cta: "Start Check-in", action: () => setShowCheckIn(true) };
+  // Adaptive Intelligence: read mind patterns from user profile
+  const mindPatterns = ((user as any)?.mindPatterns as string[] | null) ?? [];
+  const isScattered = mindPatterns.includes("scattered") || mindPatterns.includes("open_loops");
+  const hasInitiationDifficulty = mindPatterns.includes("initiation");
+  const hasShameSpiralPattern = mindPatterns.includes("shame_spirals");
+
+  // Adapt "Your Next Step" sub-text based on mind patterns
+  const adaptNextStepSub = (sub: string): string => {
+    if (hasInitiationDifficulty) return sub + " Start with the smallest possible first move — even 30 seconds counts.";
+    if (isScattered) return sub + " One thing only. Everything else can wait.";
+    return sub;
+  };
+
+  const nextStep = (() => {
+    const base = auditNextStep && !hasHabits
+      ? auditNextStep
+      : !hasHabits
+      ? { label: "Build your first habit", sub: "Your Rhythms are empty. Start with one small identity-based habit.", href: "/standards", cta: "Build My Rhythms" }
+      : !hasJournal
+      ? { label: "Add your first entry to The Weave", sub: "Reflection is where transformation begins. Take 5 minutes to write.", href: "/weave", cta: "Open The Weave" }
+      : auditNextStep
+      ? auditNextStep
+      : { label: "Begin today's check-in", sub: "How you feel right now is data. Check in and let the Oracle listen.", href: null as string | null, cta: "Start Check-in", action: () => setShowCheckIn(true) };
+    return { ...base, sub: adaptNextStepSub(base.sub) };
+  })();
 
   const setLowBandwidthModeMutation = trpc.profile.setLowBandwidthMode.useMutation();
 
@@ -331,7 +347,9 @@ export default function Dashboard() {
         {/* Greeting + check-in */}
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-6">
           <div className="min-w-0">
-            <p className="text-xs font-mono tracking-[0.18em] text-[oklch(0.65_0.08_60)] uppercase mb-1">Welcome back to your Lifewoven</p>
+            <p className="text-xs font-mono tracking-[0.18em] text-[oklch(0.65_0.08_60)] uppercase mb-1">
+              {hasShameSpiralPattern ? "You came back. That's the whole practice." : "Welcome back to your Lifewoven"}
+            </p>
             <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-[oklch(0.93_0.04_60)] leading-tight" style={{fontFamily:'"Playfair Display",Georgia,serif'}}>
               {greeting()}, {user?.name?.split(" ")[0] ?? "friend"}.
             </h1>
