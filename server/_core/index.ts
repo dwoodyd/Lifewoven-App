@@ -15,6 +15,7 @@ import { paypalSubscriptionRouter } from "../paypal/subscriptions";
 import { startWeeklyDigestCron } from "../cron/weeklyDigest";
 import { startBetaExpiryCheckCron } from "../cron/betaExpiryCheck";
 import { startFoundingLifecycleCron } from "../cron/foundingLifecycle";
+import { startHandoffCleanupCron } from "../cron/handoffCleanup";
 import { transcribeRouter } from "../transcribeRoute";
 import rateLimit from "express-rate-limit";
 import cors from "cors";
@@ -235,7 +236,8 @@ async function startServer() {
     startWeeklyDigestCron();
     startBetaExpiryCheckCron();
     startFoundingLifecycleCron();
-    console.log("[Cron] Weekly digest, beta expiry, and founding lifecycle crons started");
+    startHandoffCleanupCron();
+    console.log("[Cron] Weekly digest, beta expiry, founding lifecycle, and handoff cleanup crons started");
   }
 
   // ── Graceful shutdown: drain in-flight requests before exiting

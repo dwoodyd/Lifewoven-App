@@ -265,9 +265,13 @@ export function LuminCorner({ pulse = false, size = 36, tooltip, onClick }: Lumi
   const [screenshotMode, setScreenshotMode] = useState(
     () => localStorage.getItem("lifeos_screenshot_mode") === "true"
   );
+  const [luminEnabled, setLuminEnabled] = useState(
+    () => localStorage.getItem("lifeos_lumin_enabled") !== "false"
+  );
   useEffect(() => {
     const handler = (e: StorageEvent) => {
       if (e.key === "lifeos_screenshot_mode") setScreenshotMode(e.newValue === "true");
+      if (e.key === "lifeos_lumin_enabled") setLuminEnabled(e.newValue !== "false");
     };
     window.addEventListener("storage", handler);
     return () => window.removeEventListener("storage", handler);
@@ -293,7 +297,7 @@ export function LuminCorner({ pulse = false, size = 36, tooltip, onClick }: Lumi
     }
   }, [pulse]);
 
-  if (screenshotMode) return null;
+  if (screenshotMode || !luminEnabled) return null;
 
   return (
     <div

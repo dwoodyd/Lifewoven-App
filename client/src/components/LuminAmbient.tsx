@@ -50,9 +50,13 @@ export function LuminAmbient({
   const [screenshotMode, setScreenshotMode] = useState(
     () => localStorage.getItem("lifeos_screenshot_mode") === "true"
   );
+  const [luminEnabled, setLuminEnabled] = useState(
+    () => localStorage.getItem("lifeos_lumin_enabled") !== "false"
+  );
   useEffect(() => {
     const handler = (e: StorageEvent) => {
       if (e.key === "lifeos_screenshot_mode") setScreenshotMode(e.newValue === "true");
+      if (e.key === "lifeos_lumin_enabled") setLuminEnabled(e.newValue !== "false");
     };
     window.addEventListener("storage", handler);
     return () => window.removeEventListener("storage", handler);
@@ -64,7 +68,7 @@ export function LuminAmbient({
     el.play().catch(() => {});
   }, [videoId]);
 
-  if (!video?.url || screenshotMode) return null;
+  if (!video?.url || screenshotMode || !luminEnabled) return null;
 
   // ── Edge-fade mode (default for content pages) ─────────────────────────────
   // Lumin bleeds in from the right, masked so only a soft glow/silhouette shows.

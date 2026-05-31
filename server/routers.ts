@@ -980,6 +980,15 @@ const profileRouter = router({
       return { success: true };
     }),
 
+  setLuminEnabled: protectedProcedure
+    .input(z.object({ enabled: z.boolean() }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database unavailable");
+      await db.update(users).set({ luminEnabled: input.enabled }).where(eq(users.id, ctx.user.id));
+      return { success: true };
+    }),
+
   dashboard: protectedProcedure.query(async ({ ctx }) => {
     const db = await getDb();
     if (!db) return null;
@@ -1020,6 +1029,7 @@ export const appRouter = router({
         foundingTier: u.foundingTier,
         foundingRateLocked: u.foundingRateLocked,
         needsIntro: u.needsIntro,
+        luminEnabled: u.luminEnabled,
       };
     }),
     logout: publicProcedure.mutation(({ ctx }) => {

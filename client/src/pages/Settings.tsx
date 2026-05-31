@@ -228,6 +228,12 @@ export default function Settings() {
   const [screenshotMode, setScreenshotMode] = useState(
     () => localStorage.getItem("lifeos_screenshot_mode") === "true"
   );
+  const [luminEnabled, setLuminEnabled] = useState(() => {
+    const stored = localStorage.getItem("lifeos_lumin_enabled");
+    // Default to user's server preference if not yet stored locally
+    return stored !== null ? stored !== "false" : true;
+  });
+  const setLuminEnabledMutation = trpc.profile.setLuminEnabled.useMutation();
   const { theme, toggleTheme } = useTheme();
 
   // ── Post-upgrade Oracle animation ──────────────────────────────────────────
@@ -283,6 +289,14 @@ export default function Settings() {
     localStorage.removeItem("lifeos_onboarding_done");
     toast.success("Onboarding reset. Reload the page to replay the intro.");
     setTimeout(() => window.location.reload(), 800);
+  };
+
+  const handleLuminEnabled = (value: boolean) => {
+    localStorage.setItem("lifeos_lumin_enabled", value ? "true" : "false");
+    window.dispatchEvent(new StorageEvent("storage", { key: "lifeos_lumin_enabled", newValue: value ? "true" : "false" }));
+    setLuminEnabled(value);
+    setLuminEnabledMutation.mutate({ enabled: value });
+    toast.success(value ? "Lumin restored." : "Lumin hidden across all pages.");
   };
 
   const handleScreenshotMode = (value: boolean) => {
@@ -443,6 +457,23 @@ export default function Settings() {
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 mt-0.5 ${showProfile ? "bg-accent" : "bg-muted"}`}
               >
                 <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${showProfile ? "translate-x-6" : "translate-x-1"}`} />
+              </button>
+            </div>
+
+            {/* Lumin Toggle */}
+            <div className="flex items-start justify-between gap-3 py-4 border-b border-border/50">
+              <div>
+                <p className="text-sm font-medium text-foreground mb-0.5">Show Lumin</p>
+                <p className="text-xs text-muted-foreground font-light leading-relaxed max-w-sm">
+                  Show Lumin's ambient video presence across the app. Disable if you prefer a cleaner, distraction-free interface.
+                </p>
+              </div>
+              <button
+                onClick={() => handleLuminEnabled(!luminEnabled)}
+                aria-label={luminEnabled ? "Hide Lumin" : "Show Lumin"}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 mt-0.5 ${luminEnabled ? "bg-accent" : "bg-muted"}`}
+              >
+                <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${luminEnabled ? "translate-x-6" : "translate-x-1"}`} />
               </button>
             </div>
 

@@ -6,6 +6,8 @@ import Nav from "@/components/Nav";
 import { ArrowRight, ChevronRight, Sparkles } from "lucide-react";
 import { LUMIN_VIDEOS } from "@/data/lumin";
 import { useRef, useEffect } from "react";
+import { toast } from "sonner";
+import { useLocation } from "wouter";
 
 // Pick the floating/idle Lumin video for the hero
 const HERO_LUMIN = LUMIN_VIDEOS.find((v) => v.id === "floating_center") ?? LUMIN_VIDEOS[0];
@@ -53,6 +55,27 @@ const pathways = [
 
 export default function Home() {
   const { isAuthenticated } = useAuth();
+  const [location] = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const loginError = params.get("login_error");
+    if (loginError) {
+      const messages: Record<string, string> = {
+        invalid_token: "Login failed — the session token was invalid. Please try again.",
+        expired_code: "Login link expired. Please sign in again.",
+        used_code: "This login link has already been used. Please sign in again.",
+        missing_code: "Login failed — missing verification code. Please try again.",
+        oauth_error: "Login failed — OAuth error. Please try again.",
+      };
+      const msg = messages[loginError] ?? "Login failed. Please try again.";
+      toast.error("Sign-in error", { description: msg });
+      // Remove the query param from the URL without a reload
+      const clean = window.location.pathname;
+      window.history.replaceState({}, "", clean);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]);
 
   return (
     <div className="min-h-screen bg-[oklch(0.10_0.015_260)] text-[oklch(0.95_0.01_60)]">

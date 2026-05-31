@@ -790,14 +790,14 @@
 - [x] Redesign LuminAmbient: three modes (edge-fade, floor-glow, dominant). All 7 pages updated to safe modes
 
 ## Lumin Toggle (May 12, 2026)
-- [ ] Add luminEnabled field to users table in DB schema
-- [ ] Generate + apply migration for luminEnabled
-- [ ] Add profile.setLuminEnabled tRPC procedure
-- [ ] Expose luminEnabled in auth.me response
-- [ ] Create useLumin hook (reads from user prefs, falls back to localStorage for logged-out users)
-- [ ] Update LuminAmbient to return null when lumin is disabled (except dominant/onboarding mode)
-- [ ] Update LuminCorner to return null when lumin is disabled
-- [ ] Add Lumin toggle to Settings page (Appearance section)
+- [x] Add luminEnabled field to users table in DB schema
+- [x] Generate + apply migration for luminEnabled (column already existed in live DB)
+- [x] Add profile.setLuminEnabled tRPC procedure
+- [x] Expose luminEnabled in auth.me response
+- [x] Create useLumin hook (reads from user prefs, falls back to localStorage for logged-out users — implemented via localStorage + StorageEvent pattern)
+- [x] Update LuminAmbient to return null when lumin is disabled (except dominant/onboarding mode)
+- [x] Update LuminCorner to return null when lumin is disabled
+- [x] Add Lumin toggle to Settings page (Appearance section)
 
 ## Light/Dark Mode Contrast Overhaul (May 12, 2026)
 - [x] Audit and fix CSS variable palette in index.css (light mode backgrounds, foregrounds, muted, borders, cards, inputs)
@@ -808,7 +808,7 @@
 ## Handoff Build — Founding Cohort Launch (May 2026)
 - [x] DB: add billingStatus, betaStartDate, betaEndDate to users; add library_during_beta to storeAccess enum
 - [x] Email Templates 3–8: Day-75 founder note, Day-91 transition, Day-0 welcome, Day-3 check-in, Day-7 recap, Day-30 milestone
-- [ ] Admin queue at /admin/applications (list, approve with tier override, decline, re-send invite)
+- [x] Admin queue at /admin/applications (list, approve with tier override, decline, re-send invite) — implemented as default tab in /admin
 - [x] PayPal subscription plans: 8 plans (Seeker/Oracle × Founding/Retail × Monthly/Annual)
 - [ ] PayPal billing flow: lock-in page (/founding), subscription creation, webhook handling
 - [x] Store page rewrite: 3 subscriber-state variants (standalone / discount / library)
@@ -834,19 +834,26 @@
 - [x] Add admin.plans.* tRPC procedures (list, create, update, delete)
 - [x] Add Products & Plans tabs to Admin panel UI
 - [x] All 149 tests passing after Stripe removal
+- [x] All 153 tests passing after Lumin toggle + login error toast + handoff cleanup cron (May 2026)
 
 ## The Ground Rename (Before the Words → The Ground)
 
-- [ ] Wave 1: Rename top nav "Before the Words" → "The Ground"
-- [ ] Wave 1: Add /btw and /btw/* → /ground and /ground/* 301 redirects in server
-- [ ] Wave 1: Rename /btw route to /ground in App.tsx (keep /btw as redirect)
-- [ ] Wave 1: Rename page hero title "Before the Words" → "The Ground" on /ground page
-- [ ] Wave 1: Rename "BTW Library" → "The Ground Library" in the pathway
-- [ ] Wave 1: Update page meta title to "The Ground — Lifewoven"
-- [ ] Wave 2: Update home page COMPANION PRACTICE section header → THE GROUND PATHWAY
-- [ ] Wave 2: Update home page section title "Before the Words" → "The Ground"
-- [ ] Wave 2: Update home page section body copy per spec
-- [ ] Wave 2: Update badge text "BTW" → "The Ground"
-- [ ] Wave 2: Add italic book reference line below home page section CTAs
-- [ ] Wave 3: Add THE DEEPER PRACTICE book section at bottom of /ground page
-- [ ] Wave 3: Update Ground Library description to mention forthcoming book
+- [x] Wave 1: Rename top nav "Before the Words" → "The Ground"
+- [x] Wave 1: Add /btw and /btw/* → /ground and /ground/* 301 redirects in server
+- [x] Wave 1: Rename /btw route to /ground in App.tsx (keep /btw as redirect)
+- [x] Wave 1: Rename page hero title "Before the Words" → "The Ground" on /ground page
+- [x] Wave 1: Rename "BTW Library" → "The Ground Library" in the pathway
+- [x] Wave 1: Update page meta title to "The Ground — Lifewoven"
+- [x] Wave 2: Update home page COMPANION PRACTICE section header → THE GROUND PATHWAY
+- [x] Wave 2: Update home page section title "Before the Words" → "The Ground"
+- [x] Wave 2: Update home page section body copy per spec
+- [x] Wave 2: Update badge text "BTW" → "The Ground"
+- [x] Wave 2: Add italic book reference line below home page section CTAs
+- [x] Wave 3: Add THE DEEPER PRACTICE book section at bottom of /ground page
+- [x] Wave 3: Update Ground Library description to mention forthcoming book
+
+## Login Error Toast (May 2026)
+- [x] Add login error toast on homepage when ?login_error= is in URL (invalid_token, expired_code, used_code, missing_code, oauth_error)
+
+## Auth Handoff Cleanup Cron (May 2026)
+- [x] Add nightly cleanup cron for expired auth_handoff_codes rows (runs at 2:00 AM UTC, deletes rows where expiresAt < now)
