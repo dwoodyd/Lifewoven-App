@@ -311,14 +311,17 @@ const habitsRouter = router({
 
   create: protectedProcedure
     .input(z.object({
-      name: z.string().min(1),
-      description: z.string().optional(),
+      name: z.string().min(1).max(200),
+      description: z.string().max(500).optional(),
       module: z.enum(["state", "story", "standards", "strategy", "stewardship"]).default("standards"),
-      cue: z.string().optional(),
-      reward: z.string().optional(),
-      identityStatement: z.string().optional(),
+      cue: z.string().max(300).optional(),
+      reward: z.string().max(300).optional(),
+      identityStatement: z.string().max(300).optional(),
       frequency: z.enum(["daily", "weekly", "custom"]).default("daily"),
       targetDays: z.array(z.number()).optional(),
+      fullVersion: z.string().max(300).optional(),
+      smallVersion: z.string().max(300).optional(),
+      tinyVersion: z.string().max(300).optional(),
     }))
     .mutation(async ({ ctx, input }) => {
       const db = await getDb();
@@ -1092,6 +1095,15 @@ const profileRouter = router({
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
       await db.update(users).set({ luminEnabled: input.enabled }).where(eq(users.id, ctx.user.id));
+      return { success: true };
+    }),
+
+  setLowBandwidthMode: protectedProcedure
+    .input(z.object({ enabled: z.boolean() }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database unavailable");
+      await db.update(users).set({ lowBandwidthMode: input.enabled }).where(eq(users.id, ctx.user.id));
       return { success: true };
     }),
 

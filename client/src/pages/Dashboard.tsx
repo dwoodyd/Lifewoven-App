@@ -57,7 +57,10 @@ export default function Dashboard() {
   const [energyLevel, setEnergyLevel] = useState(7);
   const [clarityLevel, setClarityLevel] = useState(7);
   const [checkInNote, setCheckInNote] = useState("");
-  const [lowBandwidthMode, setLowBandwidthMode] = useState(false);
+  const [lowBandwidthMode, setLowBandwidthMode] = useState(() => {
+    // Initialize from localStorage immediately to avoid flash
+    return localStorage.getItem("lifeos_low_bandwidth") === "true";
+  });
   const [showReentry, setShowReentry] = useState(false);
   const [daysSinceActive, setDaysSinceActive] = useState(0);
   const [reentryTrigger, setReentryTrigger] = useState<"absence" | "overwhelm" | "shame" | "burnout">("absence");
@@ -143,7 +146,7 @@ export default function Dashboard() {
       utils.habits.todayLogs.invalidate();
       refetch();
     },
-    onSuccess: () => { toast.success("Habit logged. 1% better."); },
+    onSuccess: () => { toast.success("You showed up. That's who you are."); },
   });
   const markInsightRead = trpc.oracle.markRead.useMutation({ onSuccess: () => refetch() });
 
@@ -181,15 +184,23 @@ export default function Dashboard() {
     ? auditNextStep
     : { label: "Begin today's check-in", sub: "How you feel right now is data. Check in and let the Oracle listen.", href: null, cta: "Start Check-in", action: () => setShowCheckIn(true) };
 
+  const setLowBandwidthModeMutation = trpc.profile.setLowBandwidthMode.useMutation();
+
+  // Hydrate from user profile when auth resolves
   useEffect(() => {
-    const stored = localStorage.getItem("lifeos_low_bandwidth");
-    if (stored === "true") setLowBandwidthMode(true);
-  }, []);
+    if (!user) return;
+    const serverPref = (user as any).lowBandwidthMode as boolean | null | undefined;
+    if (serverPref != null) {
+      setLowBandwidthMode(serverPref);
+      localStorage.setItem("lifeos_low_bandwidth", String(serverPref));
+    }
+  }, [user]);
 
   const toggleLowBandwidth = () => {
     const next = !lowBandwidthMode;
     setLowBandwidthMode(next);
     localStorage.setItem("lifeos_low_bandwidth", String(next));
+    setLowBandwidthModeMutation.mutate({ enabled: next });
     if (next) toast("Simplified view on. One thing at a time.", { icon: "🌿" });
   };
 
@@ -358,12 +369,12 @@ export default function Dashboard() {
                     <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 cursor-default">
                       <Flame className="h-4 w-4 text-orange-400" />
                       <span className="text-sm font-medium text-orange-400">{streakData.streak}</span>
-                      <span className="text-xs text-muted-foreground hidden sm:inline">day streak</span>
+                      <span className="text-xs text-muted-foreground hidden sm:inline">days returning</span>
                     </div>
                   </TooltipTrigger>
                   <TooltipContent side="bottom" className="max-w-xs text-center">
-                    <p className="text-sm font-medium">{streakData.streak}-day practice streak</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">You've completed at least one pathway step or habit every day for {streakData.streak} day{streakData.streak !== 1 ? 's' : ''} in a row. Keep going.</p>
+                    <p className="text-sm font-medium">{streakData.streak}-day practice run</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">You've shown up for {streakData.streak} day{streakData.streak !== 1 ? 's' : ''} in a row. The return is the practice.</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>

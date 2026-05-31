@@ -86,7 +86,7 @@ const PRODUCT_CATALOG = [
     title: "Reset Audio",
     subtitle: "Guided Re-entry Practices",
     price: 27,
-    description: "When you fall off — and you will — this is how you come back. Six guided audio sessions for re-entry: after a hard week, a broken streak, a season of drift. No shame. Just return.",
+    description: "When you fall off — and you will — this is how you come back. Six guided audio sessions for re-entry: after a hard week, a pause, a season of drift. No shame. Just return.",
     tags: ["Audio", "Reset", "6 sessions"],
   },
   {

@@ -9,7 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
-import { Target, Plus, CheckCircle2, Circle, Flame, ArrowRight, BarChart3 } from "lucide-react";
+import { Target, Plus, CheckCircle2, Circle, Flame, ArrowRight, BarChart3, ChevronDown, ChevronUp } from "lucide-react";
+import BetterMirror from "@/components/BetterMirror";
 
 const HABIT_CATEGORIES = ["morning", "health", "mind", "work", "evening", "social", "creative"];
 const ATOMIC_HABITS_LAWS = [
@@ -26,15 +27,31 @@ export default function StandardsModule() {
   const [habitIdentity, setHabitIdentity] = useState("");
   const [habitCategory, setHabitCategory] = useState("morning");
   const [habitFrequency, setHabitFrequency] = useState<"daily" | "weekly">("daily");
+  const [showMVH, setShowMVH] = useState(false);
+  const [habitFull, setHabitFull] = useState("");
+  const [habitSmall, setHabitSmall] = useState("");
+  const [habitTiny, setHabitTiny] = useState("");
 
   const { data: habits, refetch, isLoading: moduleLoading } = trpc.habits.list.useQuery(undefined, { enabled: isAuthenticated });
   const { data: todayLogs, refetch: refetchLogs } = trpc.habits.todayLogs.useQuery(undefined, { enabled: isAuthenticated });
-  const createHabit = trpc.habits.create.useMutation({ onSuccess: () => { toast.success("Habit added to your Stack."); setHabitName(""); setHabitIdentity(""); setShowAddHabit(false); refetch(); } });
-  const logHabit = trpc.habits.logCompletion.useMutation({ onSuccess: () => { toast.success("1% better. Keep going."); refetch(); refetchLogs(); } });
+  const createHabit = trpc.habits.create.useMutation({
+    onSuccess: () => {
+      toast.success("Habit added to your Stack.");
+      setHabitName(""); setHabitIdentity(""); setShowAddHabit(false); refetch();
+    }
+  });
+  const handleCreateHabit = () => {
+    if (habitFrequency === 'daily' && dailyHabitCount >= 5) {
+      toast.warning("Catch me before I overcommit. You already have 5 daily habits — consider a tiny version or weekly frequency instead.", { duration: 5000 });
+    }
+    createHabit.mutate({ name: habitName, identityStatement: habitIdentity || undefined, frequency: habitFrequency, fullVersion: habitFull || undefined, smallVersion: habitSmall || undefined, tinyVersion: habitTiny || undefined });
+  };
+  const logHabit = trpc.habits.logCompletion.useMutation({ onSuccess: () => { toast.success("You showed up. That's who you are."); refetch(); refetchLogs(); } });
   const archiveHabit = trpc.habits.delete.useMutation({ onSuccess: () => { toast.success("Habit archived."); refetch(); refetchLogs(); } });
 
   const completedHabitIds = new Set((todayLogs ?? []).map((l: any) => l.habitId));
   const completionRate = habits && habits.length > 0 ? Math.round((completedHabitIds.size / habits.length) * 100) : 0;
+  const dailyHabitCount = (habits ?? []).filter((h: any) => h.frequency === 'daily').length;
 
   if (isAuthenticated && moduleLoading) return <PageSkeleton rows={3} />;
   return (
@@ -65,6 +82,12 @@ export default function StandardsModule() {
                 {isAuthenticated && <Button size="sm" variant="outline" className="gap-1.5 text-xs" onClick={() => setShowAddHabit(!showAddHabit)}><Plus className="h-3.5 w-3.5" /> Add Habit</Button>}
               </div>
               {habits && habits.length > 0 && <div className="mb-4"><Progress value={completionRate} className="h-1.5" /><p className="text-xs text-muted-foreground mt-1">{completionRate}% complete</p></div>}
+              {dailyHabitCount >= 5 && (
+                <div className="mb-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-2">
+                  <span className="text-amber-500 text-sm flex-shrink-0">⚠</span>
+                  <p className="text-xs text-amber-700 dark:text-amber-300"><strong>Catch me before I overcommit.</strong> You have {dailyHabitCount} daily habits. Research suggests 3–5 is the sweet spot for sustainable consistency. Consider making some habits weekly, or setting a tiny version instead of adding more.</p>
+                </div>
+              )}
               {showAddHabit && (
                 <div className="mb-5 p-4 rounded-xl bg-secondary/50 space-y-3">
                   <Input placeholder="Habit name" value={habitName} onChange={e => setHabitName(e.target.value)} className="text-sm" />
@@ -76,9 +99,21 @@ export default function StandardsModule() {
                     <button onClick={() => setHabitFrequency("daily")} className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${habitFrequency === "daily" ? "border-standards bg-standards/10 text-standards" : "border-border text-muted-foreground"}`}>Daily</button>
                     <button onClick={() => setHabitFrequency("weekly")} className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${habitFrequency === "weekly" ? "border-standards bg-standards/10 text-standards" : "border-border text-muted-foreground"}`}>Weekly</button>
                   </div>
+                  <button type="button" onClick={() => setShowMVH(!showMVH)} className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors">
+                    {showMVH ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+                    {showMVH ? "Hide" : "Add"} minimum viable versions (optional)
+                  </button>
+                  {showMVH && (
+                    <div className="space-y-2 p-3 rounded-lg bg-secondary/30 border border-border">
+                      <p className="text-xs text-muted-foreground mb-2">Set three versions so you can always do <em>something</em>, even on hard days.</p>
+                      <Input placeholder="Full version (ideal day)" value={habitFull} onChange={e => setHabitFull(e.target.value)} className="text-xs" />
+                      <Input placeholder="Small version (5 min or less)" value={habitSmall} onChange={e => setHabitSmall(e.target.value)} className="text-xs" />
+                      <Input placeholder="Tiny version (1 minute or less)" value={habitTiny} onChange={e => setHabitTiny(e.target.value)} className="text-xs" />
+                    </div>
+                  )}
                   <div className="flex gap-2">
-                    <Button size="sm" onClick={() => createHabit.mutate({ name: habitName, identityStatement: habitIdentity || undefined, frequency: habitFrequency })} disabled={!habitName || createHabit.isPending} className="gap-1.5"><Plus className="h-3.5 w-3.5" /> Add to Stack</Button>
-                    <Button size="sm" variant="ghost" onClick={() => setShowAddHabit(false)}>Cancel</Button>
+                    <Button size="sm" onClick={handleCreateHabit} disabled={!habitName || createHabit.isPending} className="gap-1.5"><Plus className="h-3.5 w-3.5" /> Add to Stack</Button>
+                    <Button size="sm" variant="ghost" onClick={() => { setShowAddHabit(false); setShowMVH(false); setHabitFull(""); setHabitSmall(""); setHabitTiny(""); }}>Cancel</Button>
                   </div>
                 </div>
               )}
@@ -99,7 +134,12 @@ export default function StandardsModule() {
                         </div>
                         <div className="flex items-center gap-2 flex-shrink-0">
                           <Badge variant="secondary" className="text-xs capitalize hidden sm:flex">{habit.category}</Badge>
-                          <div className="flex items-center gap-1"><Flame className="h-3.5 w-3.5 text-orange-400" /><span className="text-xs font-mono text-muted-foreground">{habit.streak}</span></div>
+                          {habit.tinyVersion && !done && (
+                            <span className="text-xs text-muted-foreground hidden md:inline" title={`Tiny version: ${habit.tinyVersion}`}>tiny: {habit.tinyVersion.slice(0, 20)}{habit.tinyVersion.length > 20 ? '…' : ''}</span>
+                          )}
+                          {habit.streak > 0 && (
+                            <span className="text-xs font-mono text-muted-foreground" title={`${habit.streak} ${habit.streak === 1 ? 'day' : 'days'} in a row — you keep returning`}>{habit.streak}d</span>
+                          )}
                           <button onClick={() => archiveHabit.mutate({ id: habit.id })} className="opacity-0 group-hover:opacity-100 text-xs text-muted-foreground hover:text-destructive transition-all" aria-label={`Archive ${habit.name}`}>✕</button>
                         </div>
                       </div>
@@ -128,10 +168,10 @@ export default function StandardsModule() {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between"><span className="text-xs text-muted-foreground">Total habits</span><span className="text-sm font-mono font-medium text-foreground">{habits.length}</span></div>
                   <div className="flex items-center justify-between"><span className="text-xs text-muted-foreground">Completed today</span><span className="text-sm font-mono font-medium text-foreground">{completedHabitIds.size}</span></div>
-                  <div className="flex items-center justify-between"><span className="text-xs text-muted-foreground">Best streak</span><span className="text-sm font-mono font-medium text-foreground">{habits.reduce((max: number, h: any) => Math.max(max, h.streak), 0)} {habits.reduce((max: number, h: any) => Math.max(max, h.streak), 0) === 1 ? 'day' : 'days'}</span></div>
                 </div>
               </div>
             )}
+            {isAuthenticated && <BetterMirror compact />}
             <div className="p-5 rounded-2xl border border-border bg-card">
               <h2 className="font-serif text-base font-light text-foreground mb-4">Standards Pathways</h2>
               <div className="space-y-2">

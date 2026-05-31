@@ -87,15 +87,15 @@
 ## Adaptive Intelligence Layer — Wave 1
 
 ### Foundation
-- [ ] Create shared language constants file (adaptive-language.ts) with all re-entry, streak, and onboarding copy
-- [ ] Add DB columns for better mirror metrics: returnCount, lastReturnDate, resetSpeed, keptPromises, gentleConsistencyScore
-- [ ] Generate and apply DB migration for new columns
+- [x] Create shared language constants file (adaptive-language.ts) with all re-entry, streak, and onboarding copy — shared/adaptive-language.ts already exists with all copy
+- [x] Add DB columns for better mirror metrics: returnCount, lastReturnDate, resetSpeed, keptPromises, gentleConsistencyScore — already in users table schema
+- [x] Generate and apply DB migration for new columns — columns already in live DB
 
 ### Low Bandwidth Mode
-- [ ] Add lowBandwidthMode toggle to user preferences in DB schema
-- [ ] Build LowBandwidthDashboard component: one next step, one grounding prompt, one unfinished priority, one reset option
-- [ ] Add "Simplify my view" toggle button to Dashboard that activates Low Bandwidth Mode
-- [ ] Ensure Low Bandwidth Mode persists across sessions (stored in user profile)
+- [x] Add lowBandwidthMode toggle to user preferences in DB schema — column already existed
+- [x] Build LowBandwidthDashboard component: one next step, one grounding prompt, one unfinished priority, one reset option — already built
+- [x] Add "Simplify my view" toggle button to Dashboard that activates Low Bandwidth Mode — already built
+- [x] Ensure Low Bandwidth Mode persists across sessions (stored in user profile) — profile.setLowBandwidthMode tRPC procedure added; Dashboard hydrates from user.lowBandwidthMode on auth resolve
 
 ### Re-entry Button
 - [x] Add "Begin Again" / re-entry button to Dashboard — visible when user has been absent 2+ days — Reset card + ReentryFlow modal already implemented
@@ -109,12 +109,12 @@
 - [ ] Adapt Dashboard greeting and "Your Next Step" card based on selected patterns
 
 ### Flexible Streak Logic — Better Mirror
-- [ ] Replace streak-only display in StandardsModule with the Better Mirror panel
-- [ ] Build BetterMirror component showing: return rate %, reset speed (avg days to return), kept promises count, gentle consistency score
-- [ ] Add "You're the kind of person who returns" identity language to habit completion and re-entry flows
-- [ ] Add Minimum Viable Habits: let users set full / small / tiny versions of each habit
-- [ ] Remove any "broken streak" language from the entire codebase — replace with return-oriented language
-- [ ] Add "Catch me before I overcommit" warning when user adds more than 5 daily habits
+- [x] Replace streak-only display in StandardsModule with the Better Mirror panel — BetterMirror compact added to sidebar; Best streak stat removed
+- [x] Build BetterMirror component showing: return rate %, reset speed (avg days to return), kept promises count, gentle consistency score — already built
+- [x] Add "You're the kind of person who returns" identity language to habit completion and re-entry flows — BetterMirror has identity language
+- [x] Add Minimum Viable Habits: let users set full / small / tiny versions of each habit — habits.create extended with fullVersion/smallVersion/tinyVersion; MVH form section in StandardsModule
+- [x] Remove any "broken streak" language from the entire codebase — replaced in Store.tsx; habit completion toasts updated to return-oriented language
+- [x] Add "Catch me before I overcommit" warning when user adds more than 5 daily habits — amber banner shown in StandardsModule when dailyHabitCount >= 5
 
 ### Language System Documentation
 - [ ] Write Adaptive Intelligence Layer Language System document (all copy, naming conventions, tone guidelines)
