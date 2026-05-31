@@ -18,6 +18,7 @@ import Sources from "./pages/Sources";
 
 // Auth
 import AuthCallback from "./pages/AuthCallback";
+import AuthComplete from "./pages/AuthComplete";
 
 // Dashboard & core
 import Dashboard from "./pages/Dashboard";
@@ -105,6 +106,8 @@ function RouterSwitch() {
 
       {/* Auth */}
       <Route path="/auth/callback" component={AuthCallback} />
+      {/* Client-side fallback for cross-domain OAuth handoff (server handles first; this catches SPA-served cases) */}
+      <Route path="/api/auth/complete" component={AuthComplete} />
 
       {/* App */}
       <Route path="/dashboard" component={Dashboard} />

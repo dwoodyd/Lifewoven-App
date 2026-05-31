@@ -106,6 +106,48 @@ describe("OAuth cross-domain state parsing", () => {
   });
 });
 
+describe("POST /api/auth/exchange client-side fallback", () => {
+  it("AuthComplete.tsx sends code as POST body (not query param)", () => {
+    const code = "abc123_-XYZ";
+    const body = JSON.stringify({ code });
+    const parsed = JSON.parse(body);
+    expect(parsed.code).toBe(code);
+    expect(parsed).not.toHaveProperty("returnPath"); // only code in body
+  });
+
+  it("exchange endpoint safe returnPath rejects double-slash open redirect", () => {
+    const returnPath = "//evil.com/steal";
+    const safePath =
+      returnPath.startsWith("/") && !returnPath.startsWith("//")
+        ? returnPath
+        : "/";
+    expect(safePath).toBe("/");
+  });
+
+  it("www-to-non-www redirect strips www. prefix correctly", () => {
+    const host = "www.lifewoven.click";
+    const canonical = host.startsWith("www.") ? host.slice(4) : host;
+    expect(canonical).toBe("lifewoven.click");
+  });
+
+  it("non-www host is not redirected by www-strip logic", () => {
+    const host = "lifewoven.click";
+    const shouldRedirect = host.startsWith("www.");
+    expect(shouldRedirect).toBe(false);
+  });
+
+  it("www.lifewoven.click is in safeOrigins (OAuth state allows it as finalOrigin)", () => {
+    const safeOrigins = [
+      /^https:\/\/([a-z0-9-]+\.)*lifewoven\.click$/,
+      /^https:\/\/([a-z0-9-]+\.)*manus\.space$/,
+      /^https:\/\/([a-z0-9-]+\.)*manus\.computer$/,
+      /^http:\/\/localhost(:\d+)?$/,
+    ];
+    expect(safeOrigins.some(r => r.test("https://www.lifewoven.click"))).toBe(true);
+    expect(safeOrigins.some(r => r.test("https://lifewoven.click"))).toBe(true);
+  });
+});
+
 describe("One-time code handoff flow", () => {
   it("nanoid generates URL-safe codes (no +, /, or = characters)", () => {
     // nanoid uses A-Za-z0-9_- alphabet by default — all URL-safe

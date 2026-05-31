@@ -1,9 +1,9 @@
-import { COOKIE_NAME } from "@shared/const";
 import type { Express, Request, Response } from "express";
 import { nanoid } from "nanoid";
 import * as db from "../db";
 import { getSessionCookieOptions } from "./cookies";
 import { sdk } from "./sdk";
+import { COOKIE_NAME } from "../../shared/const";
 
 // H4: Session TTL capped at 30 days (was 1 year)
 const THIRTY_DAYS_MS = 1000 * 60 * 60 * 24 * 30;
@@ -122,6 +122,10 @@ export function registerOAuthRoutes(app: Express) {
   // Cross-domain auth complete: receives a one-time code from the manus.space callback,
   // looks up the user in the shared database, and creates a fresh JWT signed with THIS
   // instance's JWT_SECRET before setting the session cookie.
+  //
+  // This GET handler is the primary path (server-side redirect from manus.space).
+  // The POST /api/auth/exchange handler below is the client-side fallback used by
+  // AuthComplete.tsx when the SPA is served instead of this Express route.
   app.get("/api/auth/complete", async (req: Request, res: Response) => {
     const code = getQueryParam(req, "code");
 
@@ -155,6 +159,44 @@ export function registerOAuthRoutes(app: Express) {
     } catch (error) {
       console.error("[Auth] Complete failed", error);
       res.redirect(302, "/?login_error=complete_failed");
+    }
+  });
+
+  // POST /api/auth/exchange — client-side fallback for cross-domain OAuth handoff.
+  // Called by AuthComplete.tsx when the SPA is served for /api/auth/complete instead
+  // of this Express server (e.g. CDN/proxy serves index.html for all paths).
+  // Sets the session cookie and returns the return path as JSON.
+  app.post("/api/auth/exchange", async (req: Request, res: Response) => {
+    const code = req.body?.code;
+
+    if (!code || typeof code !== "string") {
+      res.status(400).json({ error: "missing_code" });
+      return;
+    }
+
+    try {
+      const handoff = await db.consumeHandoffCode(code);
+      if (!handoff) {
+        res.status(400).json({ error: "invalid_or_expired_code" });
+        return;
+      }
+
+      const safePath =
+        handoff.returnPath.startsWith("/") && !handoff.returnPath.startsWith("//")
+          ? handoff.returnPath
+          : "/";
+
+      const sessionToken = await sdk.createSessionToken(handoff.openId, {
+        name: handoff.name || "",
+        expiresInMs: THIRTY_DAYS_MS,
+      });
+
+      const cookieOptions = getSessionCookieOptions(req);
+      res.cookie(COOKIE_NAME, sessionToken, { ...cookieOptions, maxAge: THIRTY_DAYS_MS });
+      res.json({ ok: true, returnPath: safePath });
+    } catch (error) {
+      console.error("[Auth] Exchange failed", error);
+      res.status(500).json({ error: "exchange_failed" });
     }
   });
 }

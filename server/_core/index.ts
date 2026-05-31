@@ -65,6 +65,17 @@ async function startServer() {
     next();
   });
 
+  // ── Canonical domain: www.lifewoven.click → lifewoven.click (301 permanent)
+  // Ensures cookies set on the non-www domain are always valid after OAuth redirect.
+  app.use((req, res, next) => {
+    const host = req.headers.host;
+    if (host && host.startsWith("www.")) {
+      const canonical = host.slice(4); // strip leading "www."
+      return res.redirect(301, `https://${canonical}${req.url}`);
+    }
+    next();
+  });
+
   // ── Security: Explicit CORS whitelist — no wildcard
   const allowedOrigins = [
     /\.manus\.space$/,
@@ -142,6 +153,7 @@ async function startServer() {
     ...(redisStore ? { store: redisStore } : {}),
   });
   app.use("/api/oauth", authLimiter);
+  app.use("/api/auth", authLimiter); // also covers /api/auth/exchange and /api/auth/complete
 
   // ── Security: General API rate limit — 200 requests per minute per IP
   const apiLimiter = rateLimit({
