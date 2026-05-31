@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { BookOpen, Plus, Sparkles, Search, Tag, ArrowRight, Loader2, Pencil } from "lucide-react";
+import { BookOpen, Plus, Sparkles, Search, Tag, ArrowRight, Loader2, Pencil, Download } from "lucide-react";
 import { LuminAmbient } from "@/components/LuminAmbient";
 import VoiceRecorder from "@/components/VoiceRecorder";
 import { Streamdown } from "streamdown";
@@ -45,6 +45,70 @@ export default function Journal() {
   const [currentPrompt, setCurrentPrompt] = useState(urlPrompt);
   const [aiReflection, setAiReflection] = useState("");
   const [isGettingReflection, setIsGettingReflection] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+
+  const exportData = trpc.journal.exportData.useQuery(
+    { module: selectedModule || undefined, limit: 200 },
+    { enabled: false } // only fetch on demand
+  );
+
+  async function handleExportPdf() {
+    setIsExporting(true);
+    try {
+      const result = await exportData.refetch();
+      const data = result.data;
+      if (!data || data.entries.length === 0) {
+        toast.info("No entries to export.");
+        return;
+      }
+      const printWindow = window.open("", "_blank");
+      if (!printWindow) { toast.error("Pop-up blocked. Please allow pop-ups and try again."); return; }
+      const moduleLabel = selectedModule ? selectedModule.charAt(0).toUpperCase() + selectedModule.slice(1) : "All Modules";
+      const dateStr = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+      const entriesHtml = data.entries.map((e: any) => `
+        <div class="entry">
+          <div class="entry-meta">${new Date(e.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}${e.module ? ` · ${e.module}` : ""}</div>
+          <h2>${(e.title || "Untitled Entry").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</h2>
+          ${e.content.split("\n\n").map((p: string) => `<p>${p.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</p>`).join("")}
+          ${e.aiReflection ? `<blockquote class="reflection"><span class="reflection-label">Oracle Reflection</span>${e.aiReflection.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</blockquote>` : ""}
+        </div>
+      `).join("");
+      const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><title>The Weave — ${moduleLabel} — Lifewoven</title><style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap');
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',sans-serif;font-size:11pt;line-height:1.75;color:#1a1a1a;background:#fff;padding:0}
+        @page{margin:2.2cm 2.8cm;size:A4}
+        .cover{page-break-after:always;display:flex;flex-direction:column;justify-content:flex-end;min-height:100vh;padding-bottom:4cm}
+        .brand{font-family:'Inter',sans-serif;font-size:8pt;letter-spacing:.18em;text-transform:uppercase;color:#888;margin-bottom:3cm}
+        h1{font-family:'Cormorant Garamond',serif;font-size:34pt;font-weight:300;line-height:1.15;color:#111;margin-bottom:.6cm}
+        .subtitle{font-family:'Cormorant Garamond',serif;font-size:14pt;font-weight:300;font-style:italic;color:#555;margin-bottom:.4cm}
+        .meta{font-size:9pt;color:#888;letter-spacing:.06em}
+        .entry{margin-bottom:2cm;page-break-inside:avoid}
+        .entry-meta{font-size:8.5pt;color:#aaa;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.3cm}
+        h2{font-family:'Cormorant Garamond',serif;font-size:18pt;font-weight:400;color:#111;margin-bottom:.4cm}
+        p{margin-bottom:.45cm;orphans:3;widows:3}
+        blockquote.reflection{border-left:2px solid #c9a96e;padding-left:.7cm;margin:1cm 0;font-family:'Cormorant Garamond',serif;font-size:12pt;font-style:italic;color:#555;line-height:1.6}
+        .reflection-label{display:block;font-family:'Inter',sans-serif;font-size:7.5pt;letter-spacing:.12em;text-transform:uppercase;color:#c9a96e;margin-bottom:.25cm;font-style:normal}
+        .footer{position:fixed;bottom:1cm;left:2.8cm;right:2.8cm;display:flex;justify-content:space-between;font-size:8pt;color:#aaa;border-top:1px solid #eee;padding-top:.3cm}
+        hr{border:none;border-top:1px solid #eee;margin:1.5cm 0}
+      </style></head><body>
+      <div class="cover">
+        <div class="brand">Lifewoven · Personal Transformation Platform</div>
+        <h1>The Weave</h1>
+        <p class="subtitle">${moduleLabel} · ${data.entries.length} ${data.entries.length === 1 ? "entry" : "entries"}</p>
+        <p class="meta">Exported ${dateStr}${data.userName ? ` · ${data.userName}` : ""}</p>
+      </div>
+      <div class="footer"><span>Lifewoven — lifewoven.com</span><span>The Weave · ${moduleLabel}</span></div>
+      ${entriesHtml}
+      </body></html>`;
+      printWindow.document.write(html);
+      printWindow.document.close();
+      printWindow.focus();
+      setTimeout(() => { printWindow.print(); }, 600);
+    } finally {
+      setIsExporting(false);
+    }
+  }
 
   useEffect(() => { if (urlPrompt) { setCurrentPrompt(urlPrompt); setIsWriting(true); } }, [urlPrompt]);
 
@@ -97,7 +161,13 @@ export default function Journal() {
             </div>
           </div>
           {isAuthenticated && !isWriting && (
-            <Button onClick={() => setIsWriting(true)} size="sm" className="gap-1.5 flex-shrink-0"><Plus className="h-4 w-4" /><span className="hidden sm:inline">New Entry</span><span className="sm:hidden">New</span></Button>
+            <div className="flex gap-2 flex-shrink-0">
+              <Button variant="outline" size="sm" onClick={handleExportPdf} disabled={isExporting} className="gap-1.5">
+                {isExporting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
+                <span className="hidden sm:inline">Export PDF</span>
+              </Button>
+              <Button onClick={() => setIsWriting(true)} size="sm" className="gap-1.5"><Plus className="h-4 w-4" /><span className="hidden sm:inline">New Entry</span><span className="sm:hidden">New</span></Button>
+            </div>
           )}
         </div>
 

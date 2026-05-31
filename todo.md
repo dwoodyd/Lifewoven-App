@@ -53,10 +53,10 @@
 - [x] TypeScript zero errors
 
 ## Upcoming / Future Enhancements
-- [ ] Stripe payment integration for membership tiers
+- [x] Stripe payment integration for membership tiers — removed; using PayPal instead
 - [ ] Sonic design layer (completion sounds, timer tones)
 - [x] Mobile PWA manifest and service worker
-- [ ] Email notifications for Oracle insights
+- [ ] Email notifications for Oracle insights — future enhancement; Resend is integrated but no Oracle insight email template yet
 - [ ] Live workshop scheduling and community events
 - [ ] Course content delivery (video lessons, progress tracking)
 - [ ] Habit streak notifications
@@ -81,8 +81,8 @@
 - [x] Add Support/Contact page
 - [x] Add content rights system: label all library content as Public Domain / Licensed / Original LifeOS Content
 - [x] Footer: add links to legal pages, support, and social
-- [ ] Pathway pages: add a "Begin This Practice" interactive button that tracks progress (not just read-only content)
-- [ ] Reset After Setback: the steps should be interactive/expandable, not just static cards
+- [x] Pathway pages: add a "Begin This Practice" interactive button that tracks progress (not just read-only content) — PathwayPage has expandable steps with Mark Complete, progress bar, and backend persistence
+- [x] Reset After Setback: the steps should be interactive/expandable, not just static cards — all pathways use the same expandable step system (Reset is one of the 7 pathways)
 
 ## Adaptive Intelligence Layer — Wave 1
 
@@ -98,9 +98,9 @@
 - [ ] Ensure Low Bandwidth Mode persists across sessions (stored in user profile)
 
 ### Re-entry Button
-- [ ] Add "Begin Again" / re-entry button to Dashboard — visible when user has been absent 2+ days
-- [ ] Build ReentryFlow component: warm welcome back message, no guilt framing, one small win suggestion, what still matters, what can wait
-- [ ] Wire Oracle to detect absence and surface a re-entry message on next visit
+- [x] Add "Begin Again" / re-entry button to Dashboard — visible when user has been absent 2+ days — Reset card + ReentryFlow modal already implemented
+- [x] Build ReentryFlow component: warm welcome back message, no guilt framing, one small win suggestion, what still matters, what can wait — ReentryFlow.tsx with trigger-aware copy
+- [x] Wire Oracle to detect absence and surface a re-entry message on next visit — Oracle system prompt includes daysSinceLastActivity context
 
 ### Neurodivergent-Aware Onboarding
 - [ ] Add "How my mind works" step to Alignment Audit (after current questions, before results)

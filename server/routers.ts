@@ -263,6 +263,25 @@ const journalRouter = router({
       return { reflection };
     }),
 
+  exportData: protectedProcedure
+    .input(z.object({
+      module: z.string().optional(),
+      limit: z.number().default(200),
+    }))
+    .query(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) return { entries: [], userName: ctx.user.name ?? "" };
+      let q = db.select().from(journalEntries)
+        .where(eq(journalEntries.userId, ctx.user.id))
+        .orderBy(desc(journalEntries.createdAt))
+        .limit(input.limit);
+      const entries = await q;
+      const filtered = input.module
+        ? entries.filter(e => e.module === input.module)
+        : entries;
+      return { entries: filtered, userName: ctx.user.name ?? "" };
+    }),
+
   transcribeVoice: protectedProcedure
     .input(z.object({ audioDataUrl: z.string(), mimeType: z.string().default("audio/webm") }))
     .mutation(async ({ ctx, input }) => {
