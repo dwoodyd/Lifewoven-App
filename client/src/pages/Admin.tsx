@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Users, ShoppingBag, BookOpen, Activity, Shield, Loader2, Copy, Check, KeyRound, TrendingDown, TrendingUp, ClipboardList, CheckCircle, XCircle, RefreshCw, Package, CreditCard, Plus, Pencil, Trash2, X, Save } from "lucide-react";
+import { Users, ShoppingBag, BookOpen, Activity, Shield, Loader2, Copy, Check, KeyRound, TrendingDown, TrendingUp, ClipboardList, CheckCircle, XCircle, RefreshCw, Package, CreditCard, Plus, Pencil, Trash2, X, Save, ScrollText } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
@@ -325,6 +325,7 @@ function AdminDashboard() {
             <TabsTrigger value="beta">Beta Testers</TabsTrigger>
             <TabsTrigger value="recent">Recent Activity</TabsTrigger>
             <TabsTrigger value="funnel">Onboarding Funnel</TabsTrigger>
+            <TabsTrigger value="auditlog" className="gap-1.5"><ScrollText className="h-3.5 w-3.5" />Audit Log</TabsTrigger>
           </TabsList>
 
           {/* Applications Tab */}
@@ -492,9 +493,65 @@ function AdminDashboard() {
               </Card>
             </div>
           </TabsContent>
+
+          {/* Audit Log Tab */}
+          <TabsContent value="auditlog" className="mt-4">
+            <AuditLogPanel />
+          </TabsContent>
         </Tabs>
       </div>
     </div>
+  );
+}
+
+function AuditLogPanel() {
+  const { data: logs, isLoading } = trpc.admin.auditLog.useQuery();
+  return (
+    <Card className="border-border/50">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-base font-medium flex items-center gap-2">
+          <ScrollText className="h-4 w-4 text-amber-500" />
+          Admin Audit Log
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="p-0">
+        {isLoading ? (
+          <div className="flex items-center justify-center py-12"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>
+        ) : !logs?.length ? (
+          <p className="text-center text-muted-foreground py-12 text-sm">No admin actions recorded yet.</p>
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow className="border-border hover:bg-transparent">
+                <TableHead>When</TableHead>
+                <TableHead>Action</TableHead>
+                <TableHead>Target</TableHead>
+                <TableHead>Detail</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {logs.map((log) => (
+                <TableRow key={log.id} className="border-border text-sm">
+                  <TableCell className="text-muted-foreground whitespace-nowrap">
+                    {new Date(log.createdAt).toLocaleString()}
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="outline" className="font-mono text-xs">{log.action}</Badge>
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {log.targetType && <span className="text-xs text-muted-foreground/60 mr-1">{log.targetType}/</span>}
+                    {log.targetId ?? "-"}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground font-mono text-xs max-w-xs truncate">
+                    {log.detail ?? ""}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+      </CardContent>
+    </Card>
   );
 }
 

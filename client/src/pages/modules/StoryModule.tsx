@@ -198,7 +198,7 @@ export default function StoryModule() {
               <h2 className="font-serif text-base font-light text-foreground mb-3">From the Texts</h2>
               <blockquote className="border-l-2 border-story/40 pl-3 space-y-1">
                 <p className="font-serif text-sm font-light text-foreground italic leading-relaxed">"The mind, once stretched by a new idea, never returns to its original dimensions."</p>
-                <footer className="text-xs text-muted-foreground">— Lifewoven Framework</footer>
+                <footer className="text-xs text-muted-foreground">— Oliver Wendell Holmes Sr.</footer>
               </blockquote>
             </div>
           </div>

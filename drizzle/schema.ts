@@ -750,3 +750,17 @@ export const authHandoffCodes = mysqlTable("auth_handoff_codes", {
   createdAt:   timestamp("created_at").defaultNow().notNull(),
 });
 export type AuthHandoffCode = typeof authHandoffCodes.$inferSelect;
+
+// ─── Admin Audit Log ──────────────────────────────────────────────────────────
+// Records admin mutations: role changes, beta code mint/delete, plan edits, etc.
+export const adminAuditLogs = mysqlTable("admin_audit_logs", {
+  id:          int("id").autoincrement().primaryKey(),
+  adminId:     int("admin_id").notNull(),          // user.id of the admin who performed the action
+  action:      varchar("action", { length: 64 }).notNull(),  // e.g. "role_change", "code_mint", "code_delete", "plan_edit"
+  targetId:    varchar("target_id", { length: 64 }),         // affected entity ID (user ID, code, plan ID, etc.)
+  targetType:  varchar("target_type", { length: 32 }),       // "user", "beta_code", "plan", "product"
+  detail:      text("detail"),                               // JSON string with before/after or extra context
+  createdAt:   timestamp("created_at").defaultNow().notNull(),
+});
+export type AdminAuditLog = typeof adminAuditLogs.$inferSelect;
+export type InsertAdminAuditLog = typeof adminAuditLogs.$inferInsert;

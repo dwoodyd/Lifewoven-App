@@ -1,6 +1,6 @@
 import { adminProcedure, router } from "../_core/trpc";
 import { getDb } from "../db";
-import { users, orders, journalEntries, communityPosts, enrollments, habits, auditResults, products, subscriptionPlans } from "../../drizzle/schema";
+import { users, orders, journalEntries, communityPosts, enrollments, habits, auditResults, products, subscriptionPlans, adminAuditLogs } from "../../drizzle/schema";
 import { desc, count, sql, asc } from "drizzle-orm";
 import { z } from "zod";
 import { eq } from "drizzle-orm";
@@ -9,6 +9,26 @@ async function requireDb() {
   const db = await getDb();
   if (!db) throw new Error("Database unavailable");
   return db;
+}
+
+/** Write an admin audit log entry (fire-and-forget — never throws) */
+async function auditLog(db: Awaited<ReturnType<typeof getDb>>, entry: {
+  adminId: number;
+  action: string;
+  targetId?: string | number;
+  targetType?: string;
+  detail?: Record<string, unknown>;
+}) {
+  try {
+    if (!db) return;
+    await db.insert(adminAuditLogs).values({
+      adminId: entry.adminId,
+      action: entry.action,
+      targetId: entry.targetId != null ? String(entry.targetId) : null,
+      targetType: entry.targetType ?? null,
+      detail: entry.detail ? JSON.stringify(entry.detail) : null,
+    });
+  } catch { /* non-critical — never block the main mutation */ }
 }
 
 export const adminRouter = router({
@@ -57,9 +77,11 @@ export const adminRouter = router({
 
   setUserRole: adminProcedure
     .input(z.object({ userId: z.number(), role: z.enum(["user", "admin"]) }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ ctx, input }) => {
       const db = await requireDb();
+      const [before] = await db.select({ role: users.role }).from(users).where(eq(users.id, input.userId)).limit(1);
       await db.update(users).set({ role: input.role }).where(eq(users.id, input.userId));
+      await auditLog(db, { adminId: ctx.user.id, action: "role_change", targetId: input.userId, targetType: "user", detail: { from: before?.role, to: input.role } });
       return { success: true };
     }),
 
@@ -112,7 +134,7 @@ export const adminRouter = router({
       downloadUrl: z.string().url().optional().or(z.literal("")),
       isPublished: z.boolean().default(false),
     }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ ctx, input }) => {
       const db = await requireDb();
       await db.insert(products).values({
         slug: input.slug,
@@ -124,6 +146,7 @@ export const adminRouter = router({
         downloadUrl: input.downloadUrl || null,
         isPublished: input.isPublished,
       });
+      await auditLog(db, { adminId: ctx.user.id, action: "product_create", targetId: input.slug, targetType: "product", detail: { title: input.title } });
       return { success: true };
     }),
 
@@ -139,7 +162,7 @@ export const adminRouter = router({
       downloadUrl: z.string().url().optional().or(z.literal("")),
       isPublished: z.boolean().optional(),
     }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ ctx, input }) => {
       const db = await requireDb();
       const { id, ...rest } = input;
       const updates: Record<string, unknown> = {};
@@ -152,14 +175,16 @@ export const adminRouter = router({
       if (rest.downloadUrl !== undefined) updates.downloadUrl = rest.downloadUrl || null;
       if (rest.isPublished !== undefined) updates.isPublished = rest.isPublished;
       await db.update(products).set(updates).where(eq(products.id, id));
+      await auditLog(db, { adminId: ctx.user.id, action: "product_update", targetId: id, targetType: "product", detail: updates });
       return { success: true };
     }),
 
   deleteProduct: adminProcedure
     .input(z.object({ id: z.number() }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ ctx, input }) => {
       const db = await requireDb();
       await db.delete(products).where(eq(products.id, input.id));
+      await auditLog(db, { adminId: ctx.user.id, action: "product_delete", targetId: input.id, targetType: "product" });
       return { success: true };
     }),
 
@@ -182,7 +207,7 @@ export const adminRouter = router({
       features: z.array(z.string()).default([]),
       sortOrder: z.number().default(0),
     }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ ctx, input }) => {
       const db = await requireDb();
       await db.insert(subscriptionPlans).values({
         name: input.name,
@@ -196,6 +221,7 @@ export const adminRouter = router({
         features: input.features,
         sortOrder: input.sortOrder,
       });
+      await auditLog(db, { adminId: ctx.user.id, action: "plan_create", targetType: "plan", detail: { name: input.name, tier: input.tier, priceUsd: input.priceUsd } });
       return { success: true };
     }),
 
@@ -213,7 +239,7 @@ export const adminRouter = router({
       features: z.array(z.string()).optional(),
       sortOrder: z.number().optional(),
     }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ ctx, input }) => {
       const db = await requireDb();
       const { id, ...rest } = input;
       const updates: Record<string, unknown> = {};
@@ -228,14 +254,30 @@ export const adminRouter = router({
       if (rest.features !== undefined) updates.features = rest.features;
       if (rest.sortOrder !== undefined) updates.sortOrder = rest.sortOrder;
       await db.update(subscriptionPlans).set(updates).where(eq(subscriptionPlans.id, id));
+      await auditLog(db, { adminId: ctx.user.id, action: "plan_update", targetId: id, targetType: "plan", detail: updates });
       return { success: true };
     }),
 
   deletePlan: adminProcedure
     .input(z.object({ id: z.number() }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ ctx, input }) => {
       const db = await requireDb();
       await db.delete(subscriptionPlans).where(eq(subscriptionPlans.id, input.id));
+      await auditLog(db, { adminId: ctx.user.id, action: "plan_delete", targetId: input.id, targetType: "plan" });
       return { success: true };
     }),
+
+  // ── Admin Audit Log ──────────────────────────────────────────────────────────
+  auditLog: adminProcedure.query(async () => {
+    const db = await requireDb();
+    return db.select({
+      id: adminAuditLogs.id,
+      adminId: adminAuditLogs.adminId,
+      action: adminAuditLogs.action,
+      targetId: adminAuditLogs.targetId,
+      targetType: adminAuditLogs.targetType,
+      detail: adminAuditLogs.detail,
+      createdAt: adminAuditLogs.createdAt,
+    }).from(adminAuditLogs).orderBy(desc(adminAuditLogs.createdAt)).limit(200);
+  }),
 });

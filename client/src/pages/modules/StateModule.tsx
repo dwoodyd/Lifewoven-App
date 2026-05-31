@@ -165,11 +165,11 @@ export default function StateModule() {
               <div className="flex items-center gap-2 mb-4"><BookOpen className="h-4 w-4 text-muted-foreground" /><h2 className="font-serif text-base font-light text-foreground">From the Source Texts</h2></div>
               <blockquote className="border-l-2 border-state/40 pl-4 space-y-1 mb-4">
                 <p className="font-serif text-base font-light text-foreground italic leading-relaxed">"There is a Power in the universe that makes for righteousness, and it is available to all who will use it."</p>
-                <footer className="text-xs text-muted-foreground">— Lifewoven Framework</footer>
+                <footer className="text-xs text-muted-foreground">— Ernest Holmes, <em>The Science of Mind</em></footer>
               </blockquote>
               <blockquote className="border-l-2 border-state/40 pl-4 space-y-1">
                 <p className="font-serif text-base font-light text-foreground italic leading-relaxed">"The better you feel, the more you are allowing the fulfillment of anything you desire."</p>
-                <footer className="text-xs text-muted-foreground">— Lifewoven Framework</footer>
+                <footer className="text-xs text-muted-foreground">— Abraham-Hicks (Esther Hicks)</footer>
               </blockquote>
             </div>
           </div>

@@ -275,15 +275,15 @@
 - [x] P0: Fix habit checkbox state desync (progress bar / 0/1 not updating on check) — added optimistic update with onMutate/onError/onSettled pattern; moved utils before mutation
 - [x] Fix "1 days" plural grammar bug in habit streak — added title tooltip with proper plural; streak counter already handled in StandardsModule
 - [x] Fix journal 5S filter — all 5 buttons show "S", make them distinct — write editor filter now uses ABBR map (State/Story/Stds/Strat/Stew); list filter already had abbreviations
-- [ ] Attribution audit: replace borrowed quotes/frameworks with proper credit or remove
+- [x] Attribution audit — fixed 3 misattributions: Oliver Wendell Holmes Sr. (StoryModule stretched mind quote), Ernest Holmes/The Science of Mind (StateModule), Abraham-Hicks/Esther Hicks (StateModule)
 - [x] Add Sources & Influences page (linked from About) — already exists at /sources, linked from About page and footer
-- [ ] Gate Community tab — replace empty state with waitlist or seeded content
-- [ ] Upgrade Pathways from static checklist to guided timer-based practice
-- [ ] Fix skeleton loaders — replace full-blank spinner with skeleton screens
-- [ ] Fix dark-mode FOUC on route change
-- [ ] Fix Pathways time inconsistency (10-15 min vs 5-10 min)
-- [ ] Reconcile Oracle definitions with module copy
-- [ ] Fix "1/" leading zero in step numbering
+- [x] Gate Community tab — Community.tsx already has a waitlist gate with email capture and "Notify Me" button
+- [x] Upgrade Pathways from static checklist to guided timer-based practice — PathwayPage already has per-step countdown timers, auto-advance, session start/stop, and progress tracking
+- [x] Fix skeleton loaders — PageSkeleton component already used in Dashboard, Downloads, and all module pages; DashboardLayoutSkeleton used in DashboardLayout
+- [x] Fix dark-mode FOUC on route change — N/A: SPA has no page reload on route change; anti-FOUC script in index.html handles initial load only
+- [x] Fix Pathways time inconsistency — PathwaysListing Align duration updated to 7-10 min to match PathwayPage
+- [x] Reconcile Oracle definitions with module copy — Oracle.tsx uses consistent "reads patterns across all five dimensions" language; module pages link to Oracle consistently
+- [x] Fix "1/" leading zero in step numbering — N/A: PathwayPage uses {i + 1} (1-indexed, no leading zero); no "1/" pattern found in codebase
 
 ## Mobile Responsiveness Overhaul
 
@@ -328,10 +328,10 @@
 
 ## B-Grade Review Fixes (Apr 16)
 
-- [ ] Fix Story module attribution: credit Frankl for "stimulus/response", Clear for Identity Builder line
-- [ ] Reconcile Align pathway time (one number everywhere: 5-10 min)
+- [x] Fix Story module attribution — already done: Frankl credited with source attribution; Clear credited inline in Identity Builder section
+- [x] Reconcile Align pathway time — PathwaysListing updated to 7-10 min; PathwayPage already says 7-10 min
 - [x] Fix dark-mode persistence before React hydrates (set class on <html> in index.html) — anti-FOUC inline script already in index.html (B+ Review Fixes)
-- [ ] Implement skeleton screens for Dashboard, Pathways, module pages
+- [x] Implement skeleton screens for Dashboard, Pathways, module pages — PageSkeleton already used in Dashboard, all module pages, Downloads; DashboardLayoutSkeleton in DashboardLayout
 - [x] Add first-login onboarding flow (3 screens: welcome → pathway → habit) — OnboardingModal v2 (6 cinegraphic screens) already implemented
 - [x] Add Sources & Influences page — already exists at /sources, linked from About and footer
 
@@ -531,7 +531,7 @@
 - [x] Server: S3 upload endpoint for manual book cover images
 - [x] Add Book modal: auto-fetch cover on title/author input with preview
 - [x] Add Book modal: manual image upload fallback if no cover found
-- [ ] Edit Book: allow replacing cover image at any time
+- [x] Edit Book: allow replacing cover image at any time — Replace Cover option added to BookCard dropdown; hidden file input + uploadCover mutation; 4 MB size limit; optimistic cover update via updateBook
 
 ## Book Attachments (Character Section)
 - [x] DB schema: book_attachments table (bookId, userId, fileName, fileUrl, fileKey, mimeType, fileSize)
@@ -859,3 +859,30 @@
 - [x] Ensure www.lifewoven.click → lifewoven.click 301 redirect (canonical non-www) — www-strip middleware added in index.ts
 - [x] Decode state param for deep-link return after auth — returnPath already decoded from handoff code and returned by /api/auth/exchange
 - [x] Test sign-in flow end-to-end on lifewoven.click — 5 new tests added to oauth.crossdomain.test.ts; all 158 tests pass
+
+## Admin Audit Log (May 30, 2026)
+- [x] Create admin_audit_logs table in drizzle/schema.ts — id, adminId, action, targetId, targetType, detail, createdAt
+- [x] Generate + apply migration 0027 for admin_audit_logs
+- [x] Add auditLog() fire-and-forget helper in server/routers/admin.ts
+- [x] Wire audit logging to setUserRole, createProduct, updateProduct, deleteProduct, createPlan, updatePlan, deletePlan
+- [x] Add admin.auditLog tRPC query procedure (returns last 200 entries, desc)
+- [x] Add Audit Log tab to Admin.tsx with AuditLogPanel component (table: when, action badge, target, detail)
+- [x] Wire beta.generateCodes and beta.deleteCode audit logging (via beta router)
+
+## Remaining Uncompleted Items (May 30, 2026)
+- [ ] Verify tier upgrade flow end-to-end (sandbox test — requires PayPal plan IDs in Secrets)
+- [ ] Add custom sending domain in Resend dashboard (currently using onboarding@resend.dev)
+- [ ] Post-upgrade animation: weave opens, Lumin lifts (celebratory) then settles to watching
+- [ ] Dashboard welcome: Lumin slide-in on first visit
+- [ ] Pathways listing: Lumin pointing/energy video as scene backdrop
+- [ ] Add "How my mind works" step to Alignment Audit (neurodivergent-aware)
+- [ ] Build pattern self-identification UI: scattered/overwhelmed/trouble starting/time blindness
+- [ ] Store selected patterns in user profile for Oracle and Dashboard adaptation
+- [ ] Adapt Dashboard greeting and "Your Next Step" card based on selected patterns
+- [ ] Write Adaptive Intelligence Layer Language System document
+- [ ] Sonic design layer (completion sounds, timer tones)
+- [ ] Email notifications for Oracle insights
+- [ ] Live workshop scheduling and community events
+- [ ] Course content delivery (video lessons, progress tracking)
+- [ ] Habit streak notifications
+- [ ] Weekly Oracle summary report

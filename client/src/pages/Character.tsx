@@ -222,6 +222,8 @@ function BookCard({ book }: { book: { id: number; title: string; author?: string
   const [, navigate] = useLocation();
   const utils = trpc.useUtils();
   const StatusIcon = STATUS_CONFIG[book.status].icon;
+  const coverFileRef = useRef<HTMLInputElement>(null);
+  const [replacingCover, setReplacingCover] = useState(false);
 
   const updateBook = trpc.character.updateBook.useMutation({
     onSuccess: () => utils.character.listBooks.invalidate(),
@@ -232,6 +234,25 @@ function BookCard({ book }: { book: { id: number; title: string; author?: string
       toast.success("Book removed");
     },
   });
+  const uploadCover = trpc.character.uploadBookCover.useMutation({
+    onSuccess: ({ url }) => {
+      updateBook.mutate({ id: book.id, coverUrl: url });
+      toast.success("Cover updated");
+      setReplacingCover(false);
+    },
+    onError: () => { toast.error("Cover upload failed"); setReplacingCover(false); },
+  });
+
+  const handleReplaceCover = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 4 * 1024 * 1024) { toast.error("Image must be under 4 MB"); return; }
+    setReplacingCover(true);
+    const reader = new FileReader();
+    reader.onload = () => uploadCover.mutate({ imageDataUrl: reader.result as string, mimeType: file.type });
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  };
 
   return (
     <div
@@ -270,6 +291,10 @@ function BookCard({ book }: { book: { id: number; title: string; author?: string
                   Mark as {v.label}
                 </DropdownMenuItem>
               ))}
+              <DropdownMenuItem onClick={() => coverFileRef.current?.click()} disabled={replacingCover}>
+                <ImageIcon className="h-3.5 w-3.5 mr-1.5" />
+                {replacingCover ? "Uploading…" : "Replace cover"}
+              </DropdownMenuItem>
               <DropdownMenuItem
                 className="text-destructive focus:text-destructive"
                 onClick={() => { if (confirm("Remove this book and all its notes?")) deleteBook.mutate({ id: book.id }); }}
@@ -280,6 +305,9 @@ function BookCard({ book }: { book: { id: number; title: string; author?: string
           </DropdownMenu>
         </div>
       </div>
+
+      {/* Hidden cover file input */}
+      <input ref={coverFileRef} type="file" accept="image/*" className="hidden" onChange={handleReplaceCover} />
 
       {/* Info */}
       <div className="p-3">
