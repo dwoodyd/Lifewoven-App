@@ -4,20 +4,20 @@ import Nav from "@/components/Nav";
 import { ArrowRight, Clock, Wind, BookOpen } from "lucide-react";
 
 const QUICK_STATES = [
-  { label: "I feel scattered", href: "/btw/ground-check?state=scattered", icon: "◦" },
-  { label: "I feel burdened", href: "/btw/ground-check?state=burdened", icon: "◦" },
-  { label: "I feel ready to settle", href: "/btw/enter-the-ground", icon: "◦" },
+  { label: "I feel scattered", href: "/ground/ground-check?state=scattered", icon: "◦" },
+  { label: "I feel burdened", href: "/ground/ground-check?state=burdened", icon: "◦" },
+  { label: "I feel ready to settle", href: "/ground/enter-the-ground", icon: "◦" },
 ];
 
 const SECTIONS = [
-  { title: "Enter the Ground", desc: "A daily settling practice for morning, midday, and evening.", href: "/btw/enter-the-ground", time: "2–5 min" },
-  { title: "Return to the Ground", desc: "A five-step reset when you've drifted, braced, or scattered.", href: "/btw/return", time: "30 sec – 2 min" },
-  { title: "The State You Enter", desc: "Notice what you're carrying before you speak, decide, or pray.", href: "/btw/state", time: "3 min" },
-  { title: "Living as Heard", desc: "A prayer journal for moving from striving into trust.", href: "/btw/prayers", time: "5–10 min" },
-  { title: "Thanking From There", desc: "Gratitude grounded in posture, not performance.", href: "/btw/gratitude", time: "2 min" },
-  { title: "Words With Weight", desc: "Spoken prayer, scripture, and declarations from settled ground.", href: "/btw/words", time: "5 min" },
-  { title: "Closing the Gap", desc: "Your congruence insights — return rate, practices, patterns.", href: "/btw/insights", time: "Weekly" },
-  { title: "BTW Library", desc: "Teachings, reflections, and companion practices.", href: "/btw/library", time: "On demand" },
+  { title: "Enter the Ground", desc: "A daily settling practice for morning, midday, and evening.", href: "/ground/enter-the-ground", time: "2–5 min" },
+  { title: "Return to the Ground", desc: "A five-step reset when you've drifted, braced, or scattered.", href: "/ground/return", time: "30 sec – 2 min" },
+  { title: "The State You Enter", desc: "Notice what you're carrying before you speak, decide, or pray.", href: "/ground/state", time: "3 min" },
+  { title: "Living as Heard", desc: "A prayer journal for moving from striving into trust.", href: "/ground/prayers", time: "5–10 min" },
+  { title: "Thanking From There", desc: "Gratitude grounded in posture, not performance.", href: "/ground/gratitude", time: "2 min" },
+  { title: "Words With Weight", desc: "Spoken prayer, scripture, and declarations from settled ground.", href: "/ground/words", time: "5 min" },
+  { title: "Closing the Gap", desc: "Your congruence insights — return rate, practices, patterns.", href: "/ground/insights", time: "Weekly" },
+  { title: "The Ground Library", desc: "Teachings, reflections, and companion practices.", href: "/ground/library", time: "On demand" },
 ];
 
 export default function BTWLanding() {
@@ -36,7 +36,7 @@ export default function BTWLanding() {
         {/* Hero */}
         <div className="text-center mb-10">
           <h1 className="font-serif text-5xl md:text-6xl font-light text-foreground mb-5 leading-tight">
-            Before the Words
+            The Ground
           </h1>
           <p className="text-muted-foreground text-lg font-light max-w-xl mx-auto leading-relaxed">
             A contemplative practice for settling your inner posture before prayer, speech, and daily life.
@@ -58,17 +58,17 @@ export default function BTWLanding() {
         {/* Primary CTA */}
         <div className="flex flex-col sm:flex-row gap-3 justify-center mb-16">
           <Button asChild size="lg" className="gap-2">
-            <Link href="/btw/enter-the-ground">
+            <Link href="/ground/enter-the-ground">
               Begin Today's Practice <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
           <Button asChild variant="outline" size="lg" className="gap-2">
-            <Link href="/btw/ground-check">
+            <Link href="/ground/ground-check">
               <Wind className="h-4 w-4" /> Ground Check
             </Link>
           </Button>
           <Button asChild variant="ghost" size="sm" className="gap-2 text-muted-foreground">
-            <Link href="/btw/return?quick=true">
+            <Link href="/ground/return?quick=true">
               <Clock className="h-3 w-3" /> I only have 2 minutes
             </Link>
           </Button>
@@ -106,6 +106,23 @@ export default function BTWLanding() {
           <p className="text-sm text-muted-foreground font-light leading-relaxed max-w-lg mx-auto">
             <BookOpen className="h-3 w-3 inline mr-1.5 mb-0.5" />
             This pathway uses Christian contemplative language and prayer-centered reflection. It is offered as a formation practice, not a theological system. You are welcome to engage at whatever depth feels honest.
+          </p>
+        </div>
+
+        {/* THE DEEPER PRACTICE — companion book reference */}
+        <div className="mt-6 p-5 rounded-2xl border border-border bg-secondary/30 text-center">
+          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">The Deeper Practice</p>
+          <p className="text-sm text-muted-foreground font-light leading-relaxed max-w-lg mx-auto">
+            This pathway lives inside a larger philosophy.
+          </p>
+          <p className="text-sm text-muted-foreground font-light leading-relaxed max-w-lg mx-auto mt-2">
+            <em>Build a Life That Doesn&rsquo;t Break You</em> by DeWayne Woods brings the practice forth in its full form &mdash; the deeper framework that The Ground operationalizes, day by day.
+          </p>
+          <p className="text-sm text-muted-foreground font-light leading-relaxed max-w-lg mx-auto mt-2">
+            The pathway is the practice. The book is the philosophy. Both come from the same place.
+          </p>
+          <p className="text-xs text-muted-foreground/60 font-light mt-3 italic">
+            Coming soon. Founding members will receive a download the moment it releases.
           </p>
         </div>
       </div>

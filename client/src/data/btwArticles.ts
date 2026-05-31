@@ -3,11 +3,11 @@ import type { ArticleData } from "@/components/ArticleReader";
 export const BTW_ARTICLES: ArticleData[] = [
   {
     slug: "before-the-words-introduction",
-    title: "Before the Words — Introduction",
+    title: "The Ground — Introduction",
     category: "Grounded Prayer",
     type: "Reflection",
     author: "Original Content",
-    backHref: "/btw/library",
+    backHref: "/ground/library",
     backLabel: "Back to BTW Library",
     sections: [
       {
@@ -19,7 +19,7 @@ export const BTW_ARTICLES: ArticleData[] = [
       },
       {
         heading: "What This Pathway Offers",
-        body: `Before the Words is a contemplative formation pathway built around one central practice: returning to the ground before you speak, decide, or pray.\n\nThe ground is not a feeling you manufacture. It is a state you return to — because it was there before the noise arrived, and it remains there beneath the noise now.\n\nThe pathway is organized around eight sections, each addressing a different dimension of grounded prayer and presence:`,
+        body: `The Ground is a contemplative formation pathway built around one central practice: returning to the ground before you speak, decide, or pray.\n\nThe ground is not a feeling you manufacture. It is a state you return to — because it was there before the noise arrived, and it remains there beneath the noise now.\n\nThe pathway is organized around eight sections, each addressing a different dimension of grounded prayer and presence:`,
         list: [
           "**Enter the Ground** is the daily settling practice. Morning, midday, and evening — brief, repeatable, and designed to become the rhythm your nervous system begins to expect.",
           "**Return to the Ground** is the reset. When you have drifted, braced, or scattered — when the day has pulled you out of yourself — this five-step sequence brings you back.",
@@ -48,7 +48,7 @@ export const BTW_ARTICLES: ArticleData[] = [
     category: "Companion Practices",
     type: "Practice Guide",
     author: "Original Content",
-    backHref: "/btw/library",
+    backHref: "/ground/library",
     backLabel: "Back to BTW Library",
     sections: [
       {
@@ -85,7 +85,7 @@ export const BTW_ARTICLES: ArticleData[] = [
     category: "Grounded Prayer",
     type: "Reflection",
     author: "Original Content",
-    backHref: "/btw/library",
+    backHref: "/ground/library",
     backLabel: "Back to BTW Library",
     sections: [
       {
@@ -129,7 +129,7 @@ export const BTW_ARTICLES: ArticleData[] = [
     category: "For the Hard Seasons",
     type: "Reflection",
     author: "Original Content",
-    backHref: "/btw/library",
+    backHref: "/ground/library",
     backLabel: "Back to BTW Library",
     sections: [
       {
@@ -171,7 +171,7 @@ export const BTW_ARTICLES: ArticleData[] = [
     category: "Companion Practices",
     type: "Practice Guide",
     author: "Original Content",
-    backHref: "/btw/library",
+    backHref: "/ground/library",
     backLabel: "Back to BTW Library",
     sections: [
       {
@@ -214,7 +214,7 @@ export const BTW_ARTICLES: ArticleData[] = [
     category: "For the Hard Seasons",
     type: "Reflection",
     author: "Original Content",
-    backHref: "/btw/library",
+    backHref: "/ground/library",
     backLabel: "Back to BTW Library",
     sections: [
       {
@@ -251,7 +251,7 @@ export const BTW_ARTICLES: ArticleData[] = [
     category: "Companion Practices",
     type: "Practice Guide",
     author: "Original Content",
-    backHref: "/btw/library",
+    backHref: "/ground/library",
     backLabel: "Back to BTW Library",
     sections: [
       {
@@ -285,7 +285,7 @@ export const BTW_ARTICLES: ArticleData[] = [
     category: "Grounded Prayer",
     type: "Reflection",
     author: "Original Content",
-    backHref: "/btw/library",
+    backHref: "/ground/library",
     backLabel: "Back to BTW Library",
     sections: [
       {
@@ -329,7 +329,7 @@ export const BTW_ARTICLES: ArticleData[] = [
     category: "For the Hard Seasons",
     type: "Reflection",
     author: "Original Content",
-    backHref: "/btw/library",
+    backHref: "/ground/library",
     backLabel: "Back to BTW Library",
     sections: [
       {
@@ -364,7 +364,7 @@ export const BTW_ARTICLES: ArticleData[] = [
     title: "The Practice of the Presence of God",
     author: "Brother Lawrence",
     category: "btw",
-    backHref: "/btw/library",
+    backHref: "/ground/library",
     backLabel: "BTW Library",
     readTime: "45 min",
     summary: "A seventeenth-century lay brother's account of learning to live in continuous awareness of God — not through formal prayer alone, but through the ordinary moments of work, rest, and daily life.",
@@ -386,7 +386,7 @@ export const BTW_ARTICLES: ArticleData[] = [
     title: "The Interior Castle",
     author: "Teresa of Ávila",
     category: "btw",
-    backHref: "/btw/library",
+    backHref: "/ground/library",
     backLabel: "BTW Library",
     readTime: "3–4 hours",
     summary: "Teresa of Ávila's masterwork of contemplative theology — a map of the interior life as a castle of seven dwelling places, each representing a deeper stage of prayer and union with God.",
@@ -408,7 +408,7 @@ export const BTW_ARTICLES: ArticleData[] = [
     title: "Abandonment to Divine Providence",
     author: "Jean Pierre de Caussade",
     category: "btw",
-    backHref: "/btw/library",
+    backHref: "/ground/library",
     backLabel: "BTW Library",
     readTime: "2–3 hours",
     summary: "A French Jesuit's teaching on the sacrament of the present moment — the practice of receiving each moment, however ordinary or difficult, as the form in which God's will arrives.",

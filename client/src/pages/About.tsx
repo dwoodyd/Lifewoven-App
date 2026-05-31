@@ -24,7 +24,7 @@ const HOW_TO_STEPS = [
   { step: "02", icon: Heart, title: "Enter Your First Module", desc: "Based on your audit results, you'll be guided to the module where your energy is most blocked. Start there. Don't try to do everything at once.", cta: "View Your Dashboard", href: "/dashboard" },
   { step: "03", icon: Sparkles, title: "Work With the Oracle", desc: "The Oracle is your AI companion — it reads your journal entries, habit patterns, and check-ins to surface insights you haven't seen yet. Ask it anything.", cta: "Meet the Oracle", href: "/oracle" },
   { step: "04", icon: Zap, title: "Follow a Pathway", desc: "Pathways are guided practice sequences — 10 to 45 minutes — designed to move you through a specific shift. Align, Reset, Uplift, Flow, Rhythms, Purpose.", cta: "Explore Pathways", href: "/pathways" },
-  { step: "05", icon: Brain, title: "Build Your Before the Words Practice", desc: "The Before the Words section is the spiritual foundation of the system — grounding, intention, and deliberate entry into your day before the noise begins.", cta: "Enter Before the Words", href: "/btw" },
+  { step: "05", icon: Brain, title: "Build Your Ground Practice", desc: "The Ground is the spiritual foundation of the system — grounding, intention, and deliberate entry into your day before the noise begins.", cta: "Enter The Ground", href: "/ground" },
 ];
 
 export default function About() {

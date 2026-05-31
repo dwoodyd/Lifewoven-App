@@ -21,7 +21,7 @@ export const PLAN_DEFINITIONS = {
     description: "Full access including Ground Guide AI and weekly reflections.",
     features: [
       "All 5S Modules",
-      "Before the Words full suite",
+      "The Ground full suite",
       "Ground Guide AI reflection",
       "Weekly AI reflection (Closing the Gap)",
       "Unlimited journal entries",

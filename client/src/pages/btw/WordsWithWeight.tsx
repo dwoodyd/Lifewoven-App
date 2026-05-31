@@ -45,7 +45,7 @@ export default function WordsWithWeight() {
       <Nav />
       <div className="container pt-20 pb-24 max-w-2xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-10">
-          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Before the Words</p>
+          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">The Ground</p>
           <h1 className="font-serif text-4xl font-light text-foreground mb-3">Words With Weight</h1>
           <p className="text-muted-foreground font-light max-w-md mx-auto">
             Prayers, declarations, and scripture spoken from settled ground. Words that carry you, not words you perform.

@@ -834,3 +834,19 @@
 - [x] Add admin.plans.* tRPC procedures (list, create, update, delete)
 - [x] Add Products & Plans tabs to Admin panel UI
 - [x] All 149 tests passing after Stripe removal
+
+## The Ground Rename (Before the Words → The Ground)
+
+- [ ] Wave 1: Rename top nav "Before the Words" → "The Ground"
+- [ ] Wave 1: Add /btw and /btw/* → /ground and /ground/* 301 redirects in server
+- [ ] Wave 1: Rename /btw route to /ground in App.tsx (keep /btw as redirect)
+- [ ] Wave 1: Rename page hero title "Before the Words" → "The Ground" on /ground page
+- [ ] Wave 1: Rename "BTW Library" → "The Ground Library" in the pathway
+- [ ] Wave 1: Update page meta title to "The Ground — Lifewoven"
+- [ ] Wave 2: Update home page COMPANION PRACTICE section header → THE GROUND PATHWAY
+- [ ] Wave 2: Update home page section title "Before the Words" → "The Ground"
+- [ ] Wave 2: Update home page section body copy per spec
+- [ ] Wave 2: Update badge text "BTW" → "The Ground"
+- [ ] Wave 2: Add italic book reference line below home page section CTAs
+- [ ] Wave 3: Add THE DEEPER PRACTICE book section at bottom of /ground page
+- [ ] Wave 3: Update Ground Library description to mention forthcoming book

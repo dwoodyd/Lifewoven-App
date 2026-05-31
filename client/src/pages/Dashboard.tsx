@@ -504,7 +504,7 @@ export default function Dashboard() {
               <h2 className="text-xs font-mono tracking-[0.18em] text-muted-foreground uppercase mb-3">Quick Actions</h2>
               <div className="space-y-1">
                 {[
-                  { href: "/btw", icon: Leaf, label: "Before the Words" },
+                  { href: "/ground", icon: Leaf, label: "The Ground" },
                   { href: "/weave", icon: Brain, label: "Add to The Weave" },
                   { href: "/mood-rhythm", icon: Activity, label: "Mood Rhythm Chart" },
                   { href: "/oracle", icon: Sparkles, label: "Ask the Oracle" },

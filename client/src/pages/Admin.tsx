@@ -613,7 +613,7 @@ function OnboardingFunnel() {
     state:     "2 · State",
     framework: "3 · 5S Framework",
     oracle:    "4 · The Oracle",
-    btw:       "5 · Before the Words",
+    btw:       "5 · The Ground",
     reset:     "6 · The Reset",
     close:     "7 · Begin",
     complete:       "✓ Audit Started",
@@ -1194,7 +1194,7 @@ function PlansPanel() {
             </div>
             <div className="space-y-1">
               <Label>Features (one per line)</Label>
-              <Textarea value={featuresText} onChange={e => setFeaturesText(e.target.value)} rows={5} placeholder={"All 5S Modules\nBefore the Words full suite\nGround Guide AI reflection"} />
+              <Textarea value={featuresText} onChange={e => setFeaturesText(e.target.value)} rows={5} placeholder={"All 5S Modules\nThe Ground full suite\nGround Guide AI reflection"} />
             </div>
             <div className="space-y-1">
               <Label>Sort Order</Label>

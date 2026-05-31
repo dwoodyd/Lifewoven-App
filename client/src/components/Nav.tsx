@@ -24,7 +24,7 @@ import { trpc } from "@/lib/trpc";
 // Primary nav links — always visible on desktop
 const primaryLinks = [
   { label: "Pathways", href: "/#pathways" },
-  { label: "Before the Words", href: "/btw" },
+  { label: "The Ground", href: "/ground" },
   { label: "The Weave", href: "/weave" },
   { label: "Oracle", href: "/oracle" },
   { label: "Resources", href: "/library" },
@@ -126,8 +126,8 @@ export default function Nav() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/btw" className="flex items-center gap-2">
-                    <BookOpen className="h-3.5 w-3.5" />Before the Words
+                  <Link href="/ground" className="flex items-center gap-2">
+                    <BookOpen className="h-3.5 w-3.5" />The Ground
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
@@ -277,7 +277,7 @@ export default function Nav() {
                   <Link href="/audit" onClick={closeMobile}><ClipboardList className="h-4 w-4" />The Audit</Link>
                 </Button>
                 <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground justify-start">
-                  <Link href="/btw" onClick={closeMobile}><BookOpen className="h-4 w-4" />Before the Words</Link>
+                  <Link href="/ground" onClick={closeMobile}><BookOpen className="h-4 w-4" />The Ground</Link>
                 </Button>
                 <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground justify-start">
                   <Link href="/weave" onClick={closeMobile}><BookMarked className="h-4 w-4" />The Weave</Link>

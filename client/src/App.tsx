@@ -66,7 +66,7 @@ import CharacterBook from "./pages/CharacterBook";
 import MoodRhythmChart from "./pages/MoodRhythmChart";
 import { BetaExpiredModal } from "./components/BetaExpiredModal";
 
-// Before the Words (BTW)
+// The Ground (formerly Before the Words)
 import BTWLanding from "./pages/btw/BTWLanding";
 import GroundCheck from "./pages/btw/GroundCheck";
 import EnterTheGround from "./pages/btw/EnterTheGround";
@@ -158,18 +158,18 @@ function RouterSwitch() {
       <Route path="/invite/:code" component={InviteRedeem} />
       <Route path="/subscription/success" component={SubscriptionSuccess} />
 
-      {/* Before the Words */}
-      <Route path="/btw" component={BTWLanding} />
-      <Route path="/btw/ground-check" component={GroundCheck} />
-      <Route path="/btw/enter-the-ground" component={EnterTheGround} />
-      <Route path="/btw/return" component={ReturnToGround} />
-      <Route path="/btw/state" component={StateYouEnter} />
-      <Route path="/btw/prayers" component={LivingAsHeard} />
-      <Route path="/btw/gratitude" component={ThankingFromThere} />
-      <Route path="/btw/words" component={WordsWithWeight} />
-      <Route path="/btw/insights" component={ClosingTheGap} />
-      <Route path="/btw/library" component={BTWLibrary} />
-      <Route path="/btw/library/:slug" component={BTWArticlePage} />
+      {/* The Ground (formerly Before the Words) */}
+      <Route path="/ground" component={BTWLanding} />
+      <Route path="/ground/ground-check" component={GroundCheck} />
+      <Route path="/ground/enter-the-ground" component={EnterTheGround} />
+      <Route path="/ground/return" component={ReturnToGround} />
+      <Route path="/ground/state" component={StateYouEnter} />
+      <Route path="/ground/prayers" component={LivingAsHeard} />
+      <Route path="/ground/gratitude" component={ThankingFromThere} />
+      <Route path="/ground/words" component={WordsWithWeight} />
+      <Route path="/ground/insights" component={ClosingTheGap} />
+      <Route path="/ground/library" component={BTWLibrary} />
+      <Route path="/ground/library/:slug" component={BTWArticlePage} />
 
       {/* Legal & Support */}
       <Route path="/legal/terms" component={Terms} />

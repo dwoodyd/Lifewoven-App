@@ -111,7 +111,7 @@ export default function ReturnToGround() {
           <p className="text-xs text-muted-foreground mb-8">Every return is a practice. You just practiced.</p>
           <div className="flex flex-col gap-3">
             <Button asChild size="lg">
-              <a href="/btw">Return to Before the Words</a>
+              <a href="/ground">Return to The Ground</a>
             </Button>
             <Button variant="ghost" size="sm" onClick={() => { setActive(false); setDone(false); }}>
               Do another return
@@ -153,7 +153,7 @@ export default function ReturnToGround() {
       <Nav />
       <div className="container pt-20 pb-24 max-w-2xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-10">
-          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Before the Words</p>
+          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">The Ground</p>
           <h1 className="font-serif text-4xl font-light text-foreground mb-3">Return to the Ground</h1>
           <p className="text-muted-foreground font-light">Choose the return that meets where you are.</p>
         </div>

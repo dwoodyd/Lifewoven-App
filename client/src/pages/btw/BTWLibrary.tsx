@@ -14,7 +14,7 @@ const TEACHINGS = [
   {
     category: "Grounded Prayer",
     items: [
-      { title: "Before the Words — Introduction", author: "Original Content", type: "reflection", desc: "The foundational teaching behind this pathway. What it means to settle before you speak.", slug: "before-the-words-introduction", external: null },
+      { title: "The Ground — Introduction", author: "Original Content", type: "reflection", desc: "The foundational teaching behind this pathway. What it means to settle before you speak.", slug: "before-the-words-introduction", external: null },
       { title: "What Is Inner Posture?", author: "Original Content", type: "reflection", desc: "The difference between what you say and the state from which you say it.", slug: "what-is-inner-posture", external: null },
       { title: "The Five States of Entry", author: "Original Content", type: "reflection", desc: "Bracing, Striving, Drifting, Depleted, and Settled — and what each one needs.", slug: "the-five-states-of-entry", external: null },
     ],
@@ -50,7 +50,7 @@ export default function BTWLibrary() {
       <Nav />
       <div className="container pt-20 pb-24 max-w-2xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-10">
-          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Before the Words</p>
+          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">The Ground</p>
           <h1 className="font-serif text-4xl font-light text-foreground mb-3">The Library</h1>
           <p className="text-muted-foreground font-light max-w-md mx-auto text-base">
             Teachings, reflections, and companion practices for the contemplative formation journey.
@@ -101,7 +101,7 @@ export default function BTWLibrary() {
         <div className="mt-12 p-6 rounded-2xl border border-border bg-card text-center">
           <p className="font-serif text-lg font-light text-foreground mb-2">More coming with the book</p>
           <p className="text-base text-muted-foreground font-light leading-relaxed max-w-md mx-auto">
-            The full Before the Words library will expand alongside the book release, including companion teachings, audio reflections, and guided practices.
+            The full The Ground library will expand alongside the book release, including companion teachings, audio reflections, and guided practices.
           </p>
         </div>
       </div>

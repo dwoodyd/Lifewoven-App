@@ -62,7 +62,7 @@ export default function LivingAsHeard() {
       <Nav />
       <div className="container pt-20 pb-24 max-w-2xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-10">
-          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Before the Words</p>
+          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">The Ground</p>
           <h1 className="font-serif text-4xl font-light text-foreground mb-3">Living as Heard</h1>
           <p className="text-muted-foreground font-light max-w-md mx-auto">A prayer journal for moving from striving into trust. Write what's real. The Ground Guide will reflect it back.</p>
         </div>

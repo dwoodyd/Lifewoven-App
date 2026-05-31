@@ -49,7 +49,7 @@ export default function ThankingFromThere() {
       <Nav />
       <div className="container pt-20 pb-24 max-w-2xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-10">
-          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Before the Words</p>
+          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">The Ground</p>
           <h1 className="font-serif text-4xl font-light text-foreground mb-3">Thanking From There</h1>
           <p className="text-muted-foreground font-light max-w-md mx-auto">
             Gratitude grounded in posture, not performance. You don't have to feel it fully to name it honestly.

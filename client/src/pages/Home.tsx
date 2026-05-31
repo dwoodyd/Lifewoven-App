@@ -317,13 +317,16 @@ export default function Home() {
                 className="leading-[1.1] mb-5"
                 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(1.8rem, 3vw, 2.8rem)", fontWeight: 400, color: "oklch(0.93 0.02 60)" }}
               >
-                Before the Words
+                The Ground
               </h2>
+              <p className="text-[oklch(0.55_0.01_260)] font-light leading-relaxed mb-3 max-w-md">
+                A contemplative formation practice for people who know the right words — but want to be settled before they say them.
+              </p>
               <p className="text-[oklch(0.55_0.01_260)] font-light leading-relaxed mb-8 max-w-md">
-                A contemplative formation practice for people who know the right words — but want to be grounded before they say them. A companion to the book. A practice for the space before prayer, conversation, and decision.
+                A companion to <em>Build a Life That Doesn&rsquo;t Break You</em>. A practice for the space before prayer, conversation, and decision.
               </p>
               <div className="flex flex-wrap gap-3">
-                <Link href="/btw">
+                <Link href="/ground">
                   <button
                     className="flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all"
                     style={{
@@ -334,7 +337,7 @@ export default function Home() {
                     Enter the Practice <ArrowRight className="h-4 w-4" />
                   </button>
                 </Link>
-                <Link href="/btw/ground-check">
+                <Link href="/ground/ground-check">
                   <button className="flex items-center gap-2 px-6 py-3 rounded-full text-sm font-light border border-border text-[oklch(0.60_0.01_260)] hover:border-[oklch(0.72_0.12_55)/0.5] transition-all">
                     Take the Ground Check
                   </button>
@@ -346,7 +349,7 @@ export default function Home() {
                 className="w-28 h-28 rounded-2xl flex items-center justify-center mx-auto mb-3 border border-[oklch(0.72_0.12_55)/0.25]"
                 style={{ background: "oklch(0.72 0.12 55 / 0.08)" }}
               >
-                <span style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.5rem", color: "oklch(0.82 0.14 55)", fontWeight: 400 }}>BTW</span>
+                <span style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.6rem", color: "oklch(0.82 0.14 55)", fontWeight: 400, lineHeight: 1.2 }}>The<br/>Ground</span>
               </div>
               <p className="text-xs text-[oklch(0.40_0.01_260)]">Available now</p>
               <p className="text-xs text-[oklch(0.40_0.01_260)]">Free with Explorer</p>

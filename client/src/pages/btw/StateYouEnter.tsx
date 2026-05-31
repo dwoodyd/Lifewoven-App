@@ -68,10 +68,10 @@ export default function StateYouEnter() {
           )}
           <div className="flex flex-col gap-3">
             <Button asChild size="lg">
-              <a href="/btw/enter-the-ground">Enter the Ground <ArrowRight className="h-4 w-4 ml-1" /></a>
+              <a href="/ground/enter-the-ground">Enter the Ground <ArrowRight className="h-4 w-4 ml-1" /></a>
             </Button>
             <Button variant="ghost" size="sm" asChild>
-              <a href="/btw">Return to Before the Words</a>
+              <a href="/ground">Return to The Ground</a>
             </Button>
           </div>
         </div>
@@ -84,7 +84,7 @@ export default function StateYouEnter() {
       <Nav />
       <div className="container pt-20 pb-24 max-w-2xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-10">
-          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Before the Words</p>
+          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">The Ground</p>
           <h1 className="font-serif text-4xl font-light text-foreground mb-3">The State You Enter</h1>
           <p className="text-muted-foreground font-light max-w-md mx-auto">
             Notice what you're carrying before you speak, decide, or pray. You don't have to change it — just name it.

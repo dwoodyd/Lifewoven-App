@@ -176,6 +176,13 @@ async function startServer() {
     }
   });
 
+  // 301 redirects: /btw → /ground (permanent rename)
+  app.get("/btw", (_req, res) => res.redirect(301, "/ground"));
+  app.get("/btw/*", (req, res) => {
+    const sub = req.path.replace(/^\/btw/, "");
+    res.redirect(301, `/ground${sub}`);
+  });
+
   // Secure download endpoint — token-based, server-side redirect to S3
   app.get("/api/download/:token", downloadHandler);
 
