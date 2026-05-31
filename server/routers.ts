@@ -1030,6 +1030,8 @@ export const appRouter = router({
         foundingRateLocked: u.foundingRateLocked,
         needsIntro: u.needsIntro,
         luminEnabled: u.luminEnabled,
+        billingStatus: u.billingStatus,
+        betaEndDate: u.betaEndDate,
       };
     }),
     logout: publicProcedure.mutation(({ ctx }) => {

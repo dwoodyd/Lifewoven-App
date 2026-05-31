@@ -122,13 +122,18 @@ export default function Pricing() {
 
   async function handleTierCta(tierId: string) {
     if (tierId === "explorer") return;
-    const plan = tierId as "seeker" | "oracle";
+    const basePlan = tierId as "seeker" | "oracle";
     if (!user) {
       window.location.href = getLoginUrl(window.location.pathname + window.location.search);
       return;
     }
-    if (currentTier === plan) return;
-    setPendingPlan(plan);
+    if (currentTier === basePlan) return;
+    // Use founding plan keys for founding members, retail keys for everyone else
+    const isFoundingMember = !!(user as any).foundingMember;
+    const rateType = isFoundingMember ? "founding" : "retail";
+    const billingCycle = annual ? "annual" : "monthly";
+    const plan = `${basePlan}-${rateType}-${billingCycle}`;
+    setPendingPlan(basePlan);
     try {
       const origin = window.location.origin;
       const res = await fetch("/api/paypal/subscription/create", {
@@ -147,7 +152,7 @@ export default function Pricing() {
         toast.error(data.error ?? "Could not start checkout. Please try again.");
         return;
       }
-      toast.info("Redirecting to PayPal…");
+      toast.info("Redirecting to PayPal\u2026");
       window.open(data.approvalUrl, "_blank");
     } catch {
       toast.error("Checkout failed. Please try again.");

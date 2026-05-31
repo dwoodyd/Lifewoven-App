@@ -810,13 +810,13 @@
 - [x] Email Templates 3–8: Day-75 founder note, Day-91 transition, Day-0 welcome, Day-3 check-in, Day-7 recap, Day-30 milestone
 - [x] Admin queue at /admin/applications (list, approve with tier override, decline, re-send invite) — implemented as default tab in /admin
 - [x] PayPal subscription plans: 8 plans (Seeker/Oracle × Founding/Retail × Monthly/Annual)
-- [ ] PayPal billing flow: lock-in page (/founding), subscription creation, webhook handling
+- [x] PayPal billing flow: plan-key mismatch fixed — Pricing.tsx now sends founding vs retail plan keys based on user.foundingMember; subscription creation + webhook handling already existed
 - [x] Store page rewrite: 3 subscriber-state variants (standalone / discount / library)
 - [ ] Pricing page update: founding rates, retail strikethrough, Oracle Library inclusion
 - [x] Settings → Subscription page: 3 states (trialing_no_card / explorer_waiting / active)
-- [ ] Trial-state banner on dashboard (dismissable per session)
+- [x] Trial-state banner on dashboard (dismissable per session) — trialing_no_card (violet) + explorer_tier_founding_rate_waiting (amber) banners
 - [x] Day-75 + Day-91 scheduled jobs (full lifecycle cron: Day-3, Day-7, Day-30, Day-75, Day-91)
-- [ ] POST /apply public endpoint for marketing site form
+- [x] POST /apply public endpoint for marketing site form — POST /api/apply with validation, duplicate check, in-queue email, and owner notification
 - [x] Fix OAuth login 500 error on app.lifewoven.click — cross-domain token handoff via /api/auth/complete
 
 ## Stripe Removal & Admin Products/Plans

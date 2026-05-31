@@ -50,6 +50,9 @@ import FoundingWelcomeCard from "@/components/FoundingWelcomeCard";
 export default function Dashboard() {
   const { user, isAuthenticated } = useAuth();
   const [showCheckIn, setShowCheckIn] = useState(false);
+  const [trialBannerDismissed, setTrialBannerDismissed] = useState(
+    () => sessionStorage.getItem("lifeos_trial_banner_dismissed") === "true"
+  );
   const [emotionalScore, setEmotionalScore] = useState(14);
   const [energyLevel, setEnergyLevel] = useState(7);
   const [clarityLevel, setClarityLevel] = useState(7);
@@ -192,6 +195,52 @@ export default function Dashboard() {
             tier={user.foundingTier ?? null}
             onDismiss={() => {}}
           />
+        )}
+
+        {/* Trial-state banner — shown for founding members in trialing_no_card state */}
+        {!trialBannerDismissed && (user as any)?.billingStatus === "trialing_no_card" && (user as any)?.foundingMember && (
+          <div className="mb-4 flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-violet-500/30 bg-violet-500/8">
+            <div className="flex items-center gap-2 min-w-0">
+              <Sparkles className="h-4 w-4 text-violet-400 shrink-0" />
+              <span className="text-sm text-violet-300">
+                <strong>Founding Member beta access</strong> — your full library is unlocked at no charge during the beta period.
+                {(user as any)?.betaEndDate && (
+                  <> Access continues until <strong>{new Date((user as any).betaEndDate).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</strong>.</>
+                )}
+              </span>
+            </div>
+            <button
+              onClick={() => { sessionStorage.setItem("lifeos_trial_banner_dismissed", "true"); setTrialBannerDismissed(true); }}
+              className="text-violet-400/60 hover:text-violet-300 transition-colors shrink-0 ml-2"
+              aria-label="Dismiss banner"
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+          </div>
+        )}
+
+        {/* Explorer-waiting banner — founding member post-beta, dropped to Explorer */}
+        {!trialBannerDismissed && (user as any)?.billingStatus === "explorer_tier_founding_rate_waiting" && (
+          <div className="mb-4 flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-amber-500/30 bg-amber-500/8">
+            <div className="flex items-center gap-2 min-w-0">
+              <Sparkles className="h-4 w-4 text-amber-400 shrink-0" />
+              <span className="text-sm text-amber-300">
+                Your beta period has ended. You're on the <strong>Explorer</strong> tier. Upgrade to Seeker or Oracle at your <strong>locked founding rate</strong>.
+              </span>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <Link href="/pricing">
+                <button className="text-xs font-semibold text-amber-400 border border-amber-500/40 rounded-full px-3 py-1 hover:bg-amber-500/15 transition-colors">Upgrade</button>
+              </Link>
+              <button
+                onClick={() => { sessionStorage.setItem("lifeos_trial_banner_dismissed", "true"); setTrialBannerDismissed(true); }}
+                className="text-amber-400/60 hover:text-amber-300 transition-colors"
+                aria-label="Dismiss banner"
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+          </div>
         )}
 
         {/* 7-day expiry warning banner */}
