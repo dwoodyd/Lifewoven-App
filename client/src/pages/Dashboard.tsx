@@ -93,17 +93,29 @@ export default function Dashboard() {
   const isEvening = new Date().getHours() >= 17;
   const showMoodNudge = isEvening && !hasMoodToday;
 
+  const utils = trpc.useUtils();
   const createCheckIn = trpc.checkIn.create.useMutation({
     onSuccess: () => { toast.success("Check-in saved. The Oracle is listening."); setShowCheckIn(false); refetch(); },
   });
   const logHabit = trpc.habits.logCompletion.useMutation({
-    onSuccess: () => {
-      toast.success("Habit logged. 1% better.");
+    onMutate: async ({ habitId }) => {
+      await utils.habits.todayLogs.cancel();
+      const prev = utils.habits.todayLogs.getData();
+      utils.habits.todayLogs.setData(undefined, (old) => [
+        ...(old ?? []),
+        { habitId, userId: 0, id: -Date.now(), note: null, quality: null, completedAt: new Date() },
+      ]);
+      return { prev };
+    },
+    onError: (_err, _vars, ctx) => {
+      if (ctx?.prev !== undefined) utils.habits.todayLogs.setData(undefined, ctx.prev);
+    },
+    onSettled: () => {
       utils.habits.todayLogs.invalidate();
       refetch();
     },
+    onSuccess: () => { toast.success("Habit logged. 1% better."); },
   });
-  const utils = trpc.useUtils();
   const markInsightRead = trpc.oracle.markRead.useMutation({ onSuccess: () => refetch() });
 
   const completedHabitIds = new Set((todayLogs ?? []).map((l: any) => l.habitId));
@@ -423,7 +435,7 @@ export default function Dashboard() {
                           <p className={`text-sm sm:text-base font-medium truncate ${done ? "line-through text-muted-foreground" : "text-foreground"}`}>{habit.name}</p>
                           {habit.identityStatement && <p className="text-xs text-muted-foreground truncate">{habit.identityStatement}</p>}
                         </div>
-                        <div className="flex items-center gap-1 flex-shrink-0">
+                        <div className="flex items-center gap-1 flex-shrink-0" title={`${habit.streak} day${habit.streak !== 1 ? 's' : ''} streak`}>
                           <Flame className="h-3.5 w-3.5 text-orange-400" />
                           <span className="text-xs font-mono text-muted-foreground">{habit.streak}</span>
                         </div>

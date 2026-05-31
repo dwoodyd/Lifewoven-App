@@ -122,9 +122,12 @@ export default function Journal() {
               rows={8}
             />
             <div className="flex flex-wrap gap-2 mb-4">
-              {modules.map(m => (
-                <button key={m} onClick={() => setSelectedModule(selectedModule === m ? "" : m)} className={`text-xs px-2.5 py-1 rounded-full border transition-colors capitalize ${selectedModule === m ? `border-current bg-current/10 ${MODULE_COLORS[m]}` : "border-border text-muted-foreground"}`}>{m}</button>
-              ))}
+              {modules.map(m => {
+                const ABBR: Record<string,string> = { state: 'State', story: 'Story', standards: 'Stds', strategy: 'Strat', stewardship: 'Stew' };
+                return (
+                  <button key={m} title={m.charAt(0).toUpperCase()+m.slice(1)} onClick={() => setSelectedModule(selectedModule === m ? '' : m)} className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${selectedModule === m ? `border-current bg-current/10 ${MODULE_COLORS[m]}` : 'border-border text-muted-foreground'}`}>{ABBR[m] ?? m}</button>
+                );
+              })}
             </div>
             <Input placeholder="Tags (comma separated: gratitude, morning, insight...)" value={tags} onChange={e => setTags(e.target.value)} className="mb-4 text-sm" />
             {aiReflection && (

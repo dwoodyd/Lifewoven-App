@@ -586,6 +586,7 @@ export default function Home() {
                   { label: "Library", href: "/library" },
                   { label: "Community", href: "/community" },
                   { label: "Pricing", href: "/pricing" },
+                  { label: "Sources & Influences", href: "/sources" },
                 ].map((l) => (
                   <div key={l.label}>
                     <Link href={l.href} className="text-sm text-[oklch(0.40_0.01_260)] hover:text-[oklch(0.72_0.12_55)] transition-colors">

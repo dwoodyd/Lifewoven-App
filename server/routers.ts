@@ -177,9 +177,9 @@ const journalRouter = router({
 
   generatePrompt: protectedProcedure
     .input(z.object({
-      module: z.string(),
-      pathway: z.string().optional(),
-      recentEntries: z.array(z.string()).optional(),
+      module: z.string().max(50),
+      pathway: z.string().max(100).optional(),
+      recentEntries: z.array(z.string().max(500)).max(5).optional(),
     }))
     .mutation(async ({ input }) => {
       const systemPrompt = `You are the Lifewoven Journal Oracle — a wise, warm, and perceptive guide rooted in the Lifewoven framework of interior alignment, identity, meaning, and deliberate practice. Generate a single, powerful journaling prompt for the ${input.module} module${input.pathway ? ` (${input.pathway} pathway)` : ""}. The prompt should be introspective, specific, and invite genuine self-reflection. Return only the prompt text, nothing else.`;
@@ -193,7 +193,7 @@ const journalRouter = router({
     }),
 
   generateReflection: protectedProcedure
-    .input(z.object({ entryId: z.number(), content: z.string() }))
+    .input(z.object({ entryId: z.number(), content: z.string().max(20000) }))
     .mutation(async ({ ctx, input }) => {
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
@@ -327,7 +327,7 @@ const beliefsRouter = router({
     }),
 
   rewrite: protectedProcedure
-    .input(z.object({ id: z.number(), limitingBelief: z.string() }))
+    .input(z.object({ id: z.number(), limitingBelief: z.string().max(1000) }))
     .mutation(async ({ ctx, input }) => {
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
@@ -422,7 +422,7 @@ const decisionsRouter = router({
 const energyRouter = router({
   create: protectedProcedure
     .input(z.object({
-      date: z.string(),
+      date: z.string().max(20),
       sleepHours: z.number().optional(),
       movementMinutes: z.number().optional(),
       sunExposure: z.boolean().optional(),
@@ -739,7 +739,7 @@ const pathwaysRouter = router({
   }),
 
   saveSession: protectedProcedure
-    .input(z.object({ pathway: z.string(), stepsCompleted: z.number(), totalSteps: z.number() }))
+    .input(z.object({ pathway: z.string().max(100), stepsCompleted: z.number(), totalSteps: z.number() }))
     .mutation(async ({ ctx, input }) => {
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
@@ -827,7 +827,7 @@ const coursesRouter = router({
   }),
 
   get: publicProcedure
-    .input(z.object({ slug: z.string() }))
+    .input(z.object({ slug: z.string().max(100) }))
     .query(async ({ input }) => {
       const db = await getDb();
       if (!db) return null;
@@ -961,7 +961,7 @@ const profileRouter = router({
     }),
 
   saveMindPatterns: protectedProcedure
-    .input(z.object({ patterns: z.array(z.string()) }))
+    .input(z.object({       patterns: z.array(z.string().max(200)).max(20) }))
     .mutation(async ({ ctx, input }) => {
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");

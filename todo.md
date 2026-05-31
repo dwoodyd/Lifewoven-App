@@ -173,13 +173,13 @@
 - [ ] Oracle weekly reflection summary
 
 ### Phase 6: QA Pass
-- [ ] All routes load without 404
-- [ ] All buttons functional (no dead buttons)
-- [ ] All footer links work
-- [ ] Legal pages linked globally
-- [ ] Mobile responsiveness verified
-- [ ] No fake testimonials anywhere
-- [ ] No old pathway names anywhere
+- [x] All routes load without 404 — all App.tsx routes verified against page components
+- [x] All buttons functional (no dead buttons) — verified in QA sweep
+- [x] All footer links work — added Sources & Influences to footer; all other links verified
+- [x] Legal pages linked globally — Terms, Privacy, Refunds, Support in footer
+- [x] Mobile responsiveness verified — completed in previous sprint
+- [x] No fake testimonials anywhere — removed in previous sprint
+- [x] No old pathway names anywhere — confirmed in Phase 9 sweep
 - [ ] Consent settings page exists and works
 
 ## Brand Rename: LifeOS → Steadora (Full Visible Sweep)
@@ -272,7 +272,7 @@
 
 ## Feature Sprint (Apr 11, 2026 — Session 2)
 
-- [ ] Fix Begin Your Journey broken link (404)
+- [x] Fix Begin Your Journey broken link (404) — link uses getLoginUrl() which is correct; verified working
 - [ ] Voice-to-text journaling: mic button, browser audio recording, Whisper transcription, text populates journal field
 - [ ] Admin dashboard: owner-only access gate, user list, orders, content status, system health
 - [ ] Admin bypass: owner account has full unrestricted access to all gated pages
@@ -285,11 +285,11 @@
 - [ ] Rebuild About page as visual landing page with instructions
 
 ## UX Audit Fixes (April 15 2026)
-- [ ] P0: Fix habit checkbox state desync (progress bar / 0/1 not updating on check)
-- [ ] Fix "1 days" plural grammar bug in habit streak
-- [ ] Fix journal 5S filter — all 5 buttons show "S", make them distinct
+- [x] P0: Fix habit checkbox state desync (progress bar / 0/1 not updating on check) — added optimistic update with onMutate/onError/onSettled pattern; moved utils before mutation
+- [x] Fix "1 days" plural grammar bug in habit streak — added title tooltip with proper plural; streak counter already handled in StandardsModule
+- [x] Fix journal 5S filter — all 5 buttons show "S", make them distinct — write editor filter now uses ABBR map (State/Story/Stds/Strat/Stew); list filter already had abbreviations
 - [ ] Attribution audit: replace borrowed quotes/frameworks with proper credit or remove
-- [ ] Add Sources & Influences page (linked from About)
+- [x] Add Sources & Influences page (linked from About) — already exists at /sources, linked from About page and footer
 - [ ] Gate Community tab — replace empty state with waitlist or seeded content
 - [ ] Upgrade Pathways from static checklist to guided timer-based practice
 - [ ] Fix skeleton loaders — replace full-blank spinner with skeleton screens
@@ -414,7 +414,7 @@
 
 ### Low
 - [x] L1: habits.logCompletion — verify habitId ownership before insert
-- [ ] L2: Add .max() caps to all unbounded z.string() inputs
+- [x] L2: Add .max() caps to all unbounded z.string() inputs — added .max() to 9 inputs across routers.ts and btw.ts
 - [x] L4: referral.redeemTrialCode — insert betaCodeId: null instead of 0
 - [x] L5: Move cron starts inside startServer(); gate with ENABLE_CRONS env var
 - [x] L7: Remove evt_test_ passthrough from Stripe webhook (done as part of C1)

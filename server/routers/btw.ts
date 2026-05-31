@@ -182,7 +182,7 @@ export const btwRouter = router({
 
   // AI reflection on prayer (Oracle Ground Guide)
   reflectOnPrayer: protectedProcedure
-    .input(z.object({ prayerBody: z.string() }))
+    .input(z.object({ prayerBody: z.string().max(5000) }))
     .mutation(async ({ ctx, input }) => {
       // Tier gate: Seeker+ only
       const db = await requireDb();
