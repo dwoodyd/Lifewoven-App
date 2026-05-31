@@ -1,0 +1,59 @@
+/**
+ * View Transitions API — Lifewoven cross-fade + slide
+ * Applied globally. The ::view-transition-* pseudo-elements are
+ * only active during a transition, so this has zero runtime cost.
+ */
+
+/* Default cross-fade for the whole page */
+::view-transition-old(root) {
+  animation: 220ms cubic-bezier(0.4, 0, 0.2, 1) both vt-fade-out;
+}
+::view-transition-new(root) {
+  animation: 280ms cubic-bezier(0.4, 0, 0.2, 1) both vt-fade-in;
+}
+
+/* Named transition for sidebar navigation items */
+::view-transition-old(sidebar-active) {
+  animation: 180ms ease both vt-slide-out-left;
+}
+::view-transition-new(sidebar-active) {
+  animation: 220ms ease both vt-slide-in-right;
+}
+
+/* Named transition for module headers */
+::view-transition-old(module-header) {
+  animation: 200ms ease both vt-fade-out;
+}
+::view-transition-new(module-header) {
+  animation: 300ms ease both vt-fade-in;
+}
+
+/* Keyframes */
+@keyframes vt-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes vt-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+@keyframes vt-slide-in-right {
+  from { opacity: 0; transform: translateX(12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes vt-slide-out-left {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(-12px); }
+}
+
+/* Reduce motion — respect user preference */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root),
+  ::view-transition-old(sidebar-active),
+  ::view-transition-new(sidebar-active),
+  ::view-transition-old(module-header),
+  ::view-transition-new(module-header) {
+    animation: none;
+  }
+}

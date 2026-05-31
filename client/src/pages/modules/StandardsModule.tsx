@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "wouter";
+import { useLuminMoment } from "@/components/LuminMoment";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import Nav from "@/components/Nav";
@@ -46,7 +47,16 @@ export default function StandardsModule() {
     }
     createHabit.mutate({ name: habitName, identityStatement: habitIdentity || undefined, frequency: habitFrequency, fullVersion: habitFull || undefined, smallVersion: habitSmall || undefined, tinyVersion: habitTiny || undefined });
   };
-  const logHabit = trpc.habits.logCompletion.useMutation({ onSuccess: () => { toast.success("You showed up. That's who you are."); refetch(); refetchLogs(); } });
+  const { triggerMoment } = useLuminMoment();
+  const logHabit = trpc.habits.logCompletion.useMutation({
+    onSuccess: () => {
+      toast.success("You showed up. That's who you are.");
+      // Celebrate habit completion with a Lumin micro-animation
+      triggerMoment(Math.random() < 0.5 ? "bouncy_dance" : "spin_celebrate");
+      refetch();
+      refetchLogs();
+    }
+  });
   const archiveHabit = trpc.habits.delete.useMutation({ onSuccess: () => { toast.success("Habit archived."); refetch(); refetchLogs(); } });
 
   const completedHabitIds = new Set((todayLogs ?? []).map((l: any) => l.habitId));

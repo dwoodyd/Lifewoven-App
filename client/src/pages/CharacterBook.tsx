@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { trpc } from "@/lib/trpc";
@@ -262,15 +262,12 @@ function AddNoteModal({
   const TypeIcon = NOTE_TYPE_CONFIG[type].icon;
 
   return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-lg">
-        <DialogHeader>
-          <DialogTitle className="font-serif font-light text-xl flex items-center gap-2">
-            <TypeIcon className={`h-5 w-5 ${NOTE_TYPE_CONFIG[type].color}`} />
-            Add {NOTE_TYPE_CONFIG[type].label}
-          </DialogTitle>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4 pt-2">
+    <ResponsiveDialog
+      open={open}
+      onOpenChange={onClose}
+      title={`Add ${NOTE_TYPE_CONFIG[type].label}`}
+    >
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
             <Label>Type</Label>
             <div className="flex gap-2 flex-wrap">
@@ -317,15 +314,14 @@ function AddNoteModal({
               <Input id="page" value={pageRef} onChange={e => setPageRef(e.target.value)} placeholder="e.g. p. 47" />
             </div>
           </div>
-          <DialogFooter>
+          <div className="flex justify-end gap-2 pt-2">
             <Button type="button" variant="ghost" onClick={onClose}>Cancel</Button>
             <Button type="submit" disabled={addNote.isPending || !content.trim()}>
               {addNote.isPending ? "Saving…" : "Save"}
             </Button>
-          </DialogFooter>
+          </div>
         </form>
-      </DialogContent>
-    </Dialog>
+    </ResponsiveDialog>
   );
 }
 

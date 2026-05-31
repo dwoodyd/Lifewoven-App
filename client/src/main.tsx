@@ -7,8 +7,10 @@ import superjson from "superjson";
 import { toast } from "sonner";
 import App from "./App";
 import { AdminPreviewProvider } from "./contexts/AdminPreviewContext";
+import { LuminMomentProvider } from "./components/LuminMoment";
 import { getLoginUrl } from "./const";
 import "./index.css";
+import "./view-transitions.css";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -99,7 +101,9 @@ root.render(
   <trpc.Provider client={trpcClient} queryClient={queryClient}>
     <QueryClientProvider client={queryClient}>
       <AdminPreviewProvider>
-        <App />
+        <LuminMomentProvider>
+          <App />
+        </LuminMomentProvider>
       </AdminPreviewProvider>
     </QueryClientProvider>
   </trpc.Provider>

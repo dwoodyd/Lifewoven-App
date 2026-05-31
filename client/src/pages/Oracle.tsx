@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
+import { useLuminMoment } from "@/components/LuminMoment";
 import { LuminCorner } from "@/components/LuminCorner";
 import { LuminAmbient } from "@/components/LuminAmbient";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -64,6 +65,7 @@ export default function Oracle() {
   const [mode, setMode] = useState<OracleMode>("guide");
   const [luminPulse, setLoomPulse] = useState(false);
   const [lastUserMessage, setLastUserMessage] = useState("");
+  const { triggerMoment } = useLuminMoment();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const insights = trpc.oracle.insights.useQuery(undefined, { enabled: isAuthenticated && hasConsented });
@@ -82,6 +84,8 @@ export default function Oracle() {
       setIsLoading(false);
       setLoomPulse(true);
       setTimeout(() => setLoomPulse(false), 800);
+      // Oracle response arrived — Lumin nods gently
+      triggerMoment("nodding_gently");
     },
     onError: (err: any) => {
       const isTierGate = err?.data?.code === "FORBIDDEN" || err?.message?.includes("Oracle membership tier");
@@ -133,6 +137,8 @@ export default function Oracle() {
     setLastUserMessage(content);
     setInput("");
     setIsLoading(true);
+    // Lumin thinks while Oracle processes the question
+    triggerMoment("taps_chin");
     chat.mutate({ message: modePrefix + content });
   };
 

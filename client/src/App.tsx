@@ -66,6 +66,7 @@ import Character from "./pages/Character";
 import CharacterBook from "./pages/CharacterBook";
 import MoodRhythmChart from "./pages/MoodRhythmChart";
 import { BetaExpiredModal } from "./components/BetaExpiredModal";
+import { PWAInstallPrompt } from "./components/PWAInstallPrompt";
 
 // The Ground (formerly Before the Words)
 import BTWLanding from "./pages/btw/BTWLanding";
@@ -87,11 +88,11 @@ import Refunds from "./pages/legal/Refunds";
 import Support from "./pages/Support";
 import Admin from "./pages/Admin";
 
-// Subtle, near-instant opacity fade — imperceptible as "loading", just removes jitter
+// Spring-based page transitions — fade + subtle Y lift
 const pageVariants = {
-  initial: { opacity: 0 },
-  animate: { opacity: 1, transition: { duration: 0.15, ease: "easeOut" as const } },
-  exit:    { opacity: 0, transition: { duration: 0.10, ease: "easeIn"  as const } },
+  initial: { opacity: 0, y: 10 },
+  animate: { opacity: 1, y: 0 },
+  exit:    { opacity: 0, y: -6 },
 } as const;
 
 function RouterSwitch() {
@@ -196,9 +197,12 @@ function Router() {
     <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={location}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1, transition: { duration: 0.15, ease: "easeOut" } }}
-        exit={{ opacity: 0, transition: { duration: 0.10, ease: "easeIn" } }}
+        variants={pageVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        transition={{ type: "spring", stiffness: 260, damping: 30, mass: 1 }}
+        style={{ willChange: "opacity, transform" }}
       >
         <RouterSwitch />
       </motion.div>
@@ -216,6 +220,7 @@ function App() {
           <OnboardingModal userId={user?.id} />
           <BetaExpiredModal />
           <FeedbackWidget />
+          <PWAInstallPrompt />
           <Router />
         </TooltipProvider>
       </ThemeProvider>

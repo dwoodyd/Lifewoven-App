@@ -4,7 +4,7 @@ import Nav from "@/components/Nav";
 import { LuminCorner } from "@/components/LuminCorner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -108,11 +108,7 @@ function AddBookModal({ open, onClose }: { open: boolean; onClose: () => void })
   };
 
   return (
-    <Dialog open={open} onOpenChange={(o) => { if (!o) resetForm(); onClose(); }}>
-      <DialogContent className="max-w-lg">
-        <DialogHeader>
-          <DialogTitle className="font-serif font-light text-xl">Add a Book</DialogTitle>
-        </DialogHeader>
+    <ResponsiveDialog open={open} onOpenChange={(o) => { if (!o) resetForm(); onClose(); }} title="Add a Book">
         <form onSubmit={handleSubmit} className="space-y-4 pt-2">
           <div className="space-y-1.5">
             <Label htmlFor="title">Title *</Label>
@@ -204,15 +200,14 @@ function AddBookModal({ open, onClose }: { open: boolean; onClose: () => void })
             ) : null}
           </div>
 
-          <DialogFooter>
+          <div className="flex justify-end gap-2 pt-2">
             <Button type="button" variant="ghost" onClick={() => { resetForm(); onClose(); }}>Cancel</Button>
             <Button type="submit" disabled={addBook.isPending || !title.trim()}>
               {addBook.isPending ? "Adding…" : "Add Book"}
             </Button>
-          </DialogFooter>
+          </div>
         </form>
-      </DialogContent>
-    </Dialog>
+    </ResponsiveDialog>
   );
 }
 

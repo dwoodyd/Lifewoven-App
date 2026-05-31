@@ -870,3 +870,105 @@
 - [x] Wire beta.generateCodes and beta.deleteCode audit logging (via beta router)
 
 ## Remaining Uncompleted Items (May 30, 2026) — deduplicated above
+
+## Premium UI Upgrade Spec (May 30, 2026)
+
+### Phase 1 — Visible quality jump
+
+#### Upgrade 1 — Spring-based motion (framer-motion)
+- [ ] Install framer-motion
+- [ ] Define spring configs: defaultSpring, gentleSpring, snappySpring in client/src/lib/springs.ts
+- [ ] Wrap App.tsx route changes with AnimatePresence + fade+Y page transition
+- [ ] Animate modals/dialogs: spring scale (0.95→1) + opacity (0→1) on open/close
+- [ ] Animate primary buttons: spring scale (1→1.02 hover, 1→0.98 press)
+- [ ] Animate cards on hover: subtle spring lift
+- [ ] Animate Lumin appearances with slow gentle spring (damping 24, stiffness 90)
+
+#### Upgrade 4 — Skeleton loaders (replace all spinners)
+- [ ] Build Skeleton base component with pulsing animation
+- [ ] Build SkeletonCard, SkeletonText, SkeletonAvatar, SkeletonHero variants
+- [ ] Replace every PageSkeleton spinner with layout-matched skeleton screens
+- [ ] Oracle typing indicator: three-dot pulsing skeleton instead of spinner
+- [ ] Weave list skeleton: ghost entries with realistic line counts and date stubs
+- [ ] Skeleton-to-content crossfade via AnimatePresence
+
+#### Upgrade 3 — Custom form inputs
+- [ ] Build TextField component: floating label, brand gold focus ring, validation states
+- [ ] Build Textarea component: floating label, auto-growing
+- [ ] Build CustomSelect component: Radix Select with bespoke styling
+- [ ] Build CustomCheckbox component: hand-drawn checkmark, brand-colored
+- [ ] Build CustomSwitch component: spring physics on thumb
+- [ ] Replace all bare <input>, <textarea>, <select> elements in the app
+- [ ] Weave journal field: generous padding (32px+), no visible borders, subtle bg tone shift on focus
+
+#### Upgrade 7 — Bottom sheets on mobile
+- [ ] Install vaul
+- [ ] Build ResponsiveDialog component: bottom sheet on mobile, centered dialog on desktop
+- [ ] Bottom sheet: drag handle, snap to content height, drag-to-dismiss, backdrop blur
+- [ ] Replace all Dialog/AlertDialog instances with ResponsiveDialog
+- [ ] Alignment Audit on mobile: use bottom sheet pattern
+- [ ] Oracle mode selector: bottom sheet on mobile
+
+### Phase 2 — Brand depth
+
+#### Upgrade 5 — Typography hierarchy
+- [ ] Add custom type scale CSS vars to index.css (display-xl through label)
+- [ ] Enforce font pairing: Cormorant Garamond for display, Inter for body/UI, DM Mono for data
+- [ ] Add tabular-nums to all number/data contexts
+- [ ] Apply negative letter-spacing to all display headings
+- [ ] Apply positive letter-spacing to all small-cap labels
+
+#### Upgrade 6 — OKLCH color system depth
+- [ ] Define 11-stop tonal scale for brand gold in index.css
+- [ ] Define 11-stop tonal scale for warm-neutral (parchment cream)
+- [ ] Define 11-stop tonal scale for cool-neutral (text)
+- [ ] Define 5-level surface elevation tokens (surface-base through surface-modal)
+- [ ] Replace raw color values with token references throughout
+
+#### Upgrade 2 — View Transitions API
+- [ ] Wrap all wouter navigation calls with document.startViewTransition
+- [ ] Mark persistent elements with view-transition-name CSS (nav-bar, user-avatar, page-heading)
+- [ ] Add reduced-motion media query to disable transitions
+- [ ] Fallback: AnimatePresence for browsers without View Transitions API support
+
+#### Upgrade 8 — Custom illustrations and empty states
+- [ ] Build EmptyState component: illustration + heading + body + optional CTA
+- [ ] Create SVG illustrations for 8 empty states (Weave, Pathway list, Oracle history, no notifications, no library items, no search results, no community posts, no entries yet)
+- [ ] Create SVG illustrations for 4 onboarding moments (welcome, first-entry, first-pathway-complete, first-week-milestone)
+- [ ] Create SVG illustrations for 5S Framework symbols (State, Story, Standards, Strategy, Stewardship)
+- [ ] Replace all "No items yet" empty states with EmptyState component
+
+### Phase 3 — Native feel
+
+#### Upgrade 9 — Pull-to-refresh and swipe gestures
+- [ ] Install @use-gesture/react
+- [ ] Build PullToRefresh component with rubber-band physics
+- [ ] Build SwipeableCard component with snap-to-position and action reveal
+- [ ] Apply pull-to-refresh to all scrollable lists (Weave, Pathway list, Journal)
+- [ ] Apply swipe-left-to-archive, swipe-right-to-favorite on Weave entries
+- [ ] Apply swipe-left-to-skip on Pathway list items
+
+#### Upgrade 11 — Haptic feedback
+- [ ] Build useHaptics hook wrapping navigator.vibrate with light/medium/heavy/success/error patterns
+- [ ] Add haptics toggle to user settings (stored in profile)
+- [ ] Apply light haptic: checkbox toggle, state pill selection, list item selection
+- [ ] Apply medium haptic: primary CTA button press, form submit, modal open
+- [ ] Apply heavy haptic: pathway start, milestone reached
+- [ ] Apply success haptic: pathway complete, entry saved, audit complete
+- [ ] Apply error haptic: form validation fail, action denied
+
+#### Upgrade 12 — PWA platform polish
+- [ ] Generate iOS PWA splash screens for all device sizes
+- [ ] Update manifest.webmanifest: theme_color, background_color, maskable icons
+- [ ] Add CSS env(safe-area-inset-*) to app shell for notch/dynamic island
+- [ ] Add apple-mobile-web-app-status-bar-style meta tag
+- [ ] Build custom install prompt (bottom sheet, fires post-engagement not on first load)
+- [ ] iOS guide: one-time "Add to Home Screen" visual guide for Safari users
+
+### Phase 4 — Brand identity (MP4 approach, no Lottie)
+- [x] Build LuminMoment component: transient full-screen Lumin MP4 overlay (3-4s, mix-blend-mode:screen, fade-in/out) with useLuminMoment hook and LuminMomentProvider
+- [x] Wire LuminMoment to habit completion in StandardsModule (waves_sparkles or starburst_joy)
+- [x] Wire LuminMoment to pathway finish in PathwayPage (starburst_joy or transformation)
+- [x] Wire LuminMoment to Oracle thinking in Oracle.tsx (taps_chin on send)
+- [x] Wire LuminMoment to Oracle response in Oracle.tsx (nodding_gently on reply)
+- [x] Wire LuminMoment to journal save in Journal.tsx (waves_sparkles or nodding_gently)

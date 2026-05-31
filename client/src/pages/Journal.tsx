@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation, Link } from "wouter";
+import { useLuminMoment } from "@/components/LuminMoment";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import Nav from "@/components/Nav";
@@ -113,8 +114,14 @@ export default function Journal() {
   useEffect(() => { if (urlPrompt) { setCurrentPrompt(urlPrompt); setIsWriting(true); } }, [urlPrompt]);
 
   const { data: entries, refetch } = trpc.journal.list.useQuery({ module: selectedModule || undefined, search: searchQuery || undefined }, { enabled: isAuthenticated });
+  const { triggerMoment } = useLuminMoment();
   const createEntry = trpc.journal.create.useMutation({
-    onSuccess: () => { toast.success("Entry saved."); setContent(""); setTitle(""); setTags(""); setIsWriting(false); refetch(); },
+    onSuccess: () => {
+      toast.success("Entry saved.");
+      // Journal save — Lumin waves sparkles in appreciation
+      triggerMoment(Math.random() < 0.5 ? "waves_sparkles" : "nodding_gently");
+      setContent(""); setTitle(""); setTags(""); setIsWriting(false); refetch();
+    },
   });
   const [savedEntryId, setSavedEntryId] = useState<number | null>(null);
   const getReflection = trpc.journal.generateReflection.useMutation({
