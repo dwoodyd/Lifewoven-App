@@ -126,11 +126,30 @@ export default function Dashboard() {
 
   const hasHabits = habits && habits.length > 0;
   const hasJournal = dashData?.recentJournals && dashData.recentJournals.length > 0;
+  const primaryPathway = (user as any)?.primaryPathway as string | null | undefined;
+  const onboardingCompleted = (user as any)?.onboardingCompleted as boolean | undefined;
 
-  const nextStep = !hasHabits
+  // Pathway-to-route mapping for audit-based routing
+  const PATHWAY_ROUTES: Record<string, { href: string; label: string; sub: string; cta: string }> = {
+    align: { href: "/pathway/align", label: "Begin your Align practice", sub: "Your Alignment Audit recommends starting with Align — a daily grounding sequence.", cta: "Start Align" },
+    reset: { href: "/pathway/reset", label: "Begin your Reset practice", sub: "Your Alignment Audit recommends starting with Reset — a resilience protocol for re-entry.", cta: "Start Reset" },
+    uplift: { href: "/pathway/uplift", label: "Begin your Uplift practice", sub: "Your Alignment Audit recommends starting with Uplift — emotional set-point shifting.", cta: "Start Uplift" },
+    rhythms: { href: "/standards", label: "Build your Rhythms", sub: "Your Alignment Audit recommends starting with Rhythms — identity-based habit design.", cta: "Build My Rhythms" },
+    purpose: { href: "/pathway/purpose", label: "Begin your Purpose practice", sub: "Your Alignment Audit recommends starting with Purpose — meaning and direction work.", cta: "Start Purpose" },
+    strategy: { href: "/strategy", label: "Open your Strategy module", sub: "Your Alignment Audit recommends starting with Strategy — decision and direction clarity.", cta: "Open Strategy" },
+    stewardship: { href: "/stewardship", label: "Open your Stewardship module", sub: "Your Alignment Audit recommends starting with Stewardship — energy and rhythm repair.", cta: "Open Stewardship" },
+  };
+
+  const auditNextStep = primaryPathway ? PATHWAY_ROUTES[primaryPathway.toLowerCase()] : null;
+
+  const nextStep = auditNextStep && !hasHabits
+    ? auditNextStep
+    : !hasHabits
     ? { label: "Build your first habit", sub: "Your Rhythms are empty. Start with one small identity-based habit.", href: "/standards", cta: "Build My Rhythms" }
     : !hasJournal
     ? { label: "Add your first entry to The Weave", sub: "Reflection is where transformation begins. Take 5 minutes to write.", href: "/weave", cta: "Open The Weave" }
+    : auditNextStep
+    ? auditNextStep
     : { label: "Begin today's check-in", sub: "How you feel right now is data. Check in and let the Oracle listen.", href: null, cta: "Start Check-in", action: () => setShowCheckIn(true) };
 
   useEffect(() => {
@@ -350,7 +369,7 @@ export default function Dashboard() {
                   <Link href={nextStep.href}>{nextStep.cta} <ArrowRight className="h-3.5 w-3.5" /></Link>
                 </Button>
               ) : (
-                <Button size="sm" className="shrink-0 gap-1.5 self-start sm:self-center" onClick={nextStep.action}>
+                <Button size="sm" className="shrink-0 gap-1.5 self-start sm:self-center" onClick={(nextStep as any).action}>
                   {nextStep.cta} <ArrowRight className="h-3.5 w-3.5" />
                 </Button>
               )}
@@ -543,6 +562,22 @@ export default function Dashboard() {
                 </div>
               )}
             </div>
+
+            {/* Reset — persistent action, visible when re-entering or after absence */}
+            {(showReentry || daysSinceActive >= 2) && (
+              <div className="p-4 rounded-2xl border border-rose-500/20 bg-rose-500/5">
+                <div className="flex items-start gap-2.5">
+                  <Wind className="h-4 w-4 text-rose-400 mt-0.5 shrink-0" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-foreground mb-0.5">Need a reset?</p>
+                    <p className="text-xs text-muted-foreground font-light leading-relaxed mb-2">When re-entry feels heavy, the Reset pathway is designed for exactly this moment. No pressure. Just one honest step.</p>
+                    <Button asChild size="sm" variant="outline" className="text-xs h-7 border-rose-500/30 hover:border-rose-500/60">
+                      <Link href="/pathway/reset">Start Reset <ArrowRight className="h-3 w-3 ml-1" /></Link>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Evening mood nudge */}
             {showMoodNudge && (

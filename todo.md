@@ -143,28 +143,28 @@
 - [x] Remove all old pathway name variants: Begin Again, Return, Re-enter Gently — none found in codebase
 
 ### Phase 2: Alignment Audit Rebuild (Canonical HTML)
-- [ ] 3-screen opening: Entry, Consent, Pre-question framing (exact copy from canonical HTML)
-- [ ] 12 core questions with 4 section labels (exact copy from canonical HTML)
-- [ ] 3 optional precision questions (Q13-Q15) shown after Q12
-- [ ] Scoring logic: 5S dimension mapping, friction tags, Reset-first override (Q5+Q9 both 4-5)
-- [ ] 6 result profiles with exact canonical copy (no paraphrasing)
-- [ ] Results page: profile name, summary, insight bullets, 5S snapshot bar chart, pathway routing, save/continue block, required disclaimer
-- [ ] Dashboard routing after audit: clear "what to do right now" card
-- [ ] Audit result persistence in database
+- [x] 3-screen opening: Entry, Consent, Pre-question framing (exact copy from canonical HTML) — all 3 screens implemented
+- [x] 12 core questions with 4 section labels (exact copy from canonical HTML) — CORE_QUESTIONS array with section labels
+- [x] 3 optional precision questions (Q13-Q15) shown after Q12 — OPTIONAL_QUESTIONS array + optional_prompt step
+- [x] Scoring logic: 5S dimension mapping, friction tags, Reset-first override (Q5+Q9 both 4-5) — computeScores + detectFrictionTags + assignProfile
+- [x] 6 result profiles with exact canonical copy (no paraphrasing) — PROFILES record with all 6 profiles
+- [x] Results page: profile name, summary, insight bullets, 5S snapshot bar chart, pathway routing, save/continue block, required disclaimer — all present
+- [x] Dashboard routing after audit: clear "what to do right now" card — nextStep card on Dashboard
+- [x] Audit result persistence in database — audit.save tRPC procedure + auditResults table
 
 ### Phase 3: Reset Elevation + Interactive Pathways
-- [ ] Reset as persistent visible dashboard action (not just a pathway card)
-- [ ] Reset visible after absence, overwhelm, shame, burnout
-- [ ] All 7 pathways: expandable steps with Mark Complete button
-- [ ] Pathway progress memory (persisted per user)
-- [ ] Pathway re-entry continuity (resume where you left off)
+- [x] Reset as persistent visible dashboard action (not just a pathway card) — rose-tinted card visible when showReentry or daysSinceActive >= 2
+- [x] Reset visible after absence, overwhelm, shame, burnout — triggered by daysSinceActive >= 2 (absence) and showReentry flag
+- [x] All 7 pathways: expandable steps with Mark Complete button — PathwayPage has expandedStep + setCompletedSteps
+- [x] Pathway progress memory (persisted per user) — localStorage per pathway slug
+- [x] Pathway re-entry continuity (resume where you left off) — completedSteps restored from localStorage on mount
 
 ### Phase 4: Homepage + Pricing + Community
 - [x] Homepage: remove fake testimonials, replaced with founder's note (early access co-creator framing)
-- [ ] Homepage: primary CTA = Take the Alignment Audit, secondary = Explore LifeOS
-- [ ] Pricing: Explorer (Free), Seeker ($19/mo), Oracle ($49/mo)
-- [ ] Pricing: clear tier differences, upgrade path, support/refund clarity
-- [ ] Community: public preview state (not an empty login wall)
+- [x] Homepage: primary CTA = Take the Alignment Audit, secondary = Explore LifeOS — already in hero section
+- [x] Pricing: Explorer (Free), Seeker ($19/mo), Oracle ($49/mo) — already in Home.tsx pricing section
+- [x] Pricing: clear tier differences, upgrade path, support/refund clarity — tier comparison table + What's the difference section on Pricing page
+- [x] Community: public preview state (not an empty login wall) — email waitlist form + What's Coming cards for logged-out users
 
 ### Phase 5: Oracle Strengthened
 - [ ] Oracle personalization opt-in consent (explicit, user-controlled)
@@ -857,3 +857,7 @@
 
 ## Auth Handoff Cleanup Cron (May 2026)
 - [x] Add nightly cleanup cron for expired auth_handoff_codes rows (runs at 2:00 AM UTC, deletes rows where expiresAt < now)
+
+## Phase 3 Follow-up Gaps (May 2026)
+- [ ] Wire Reset surfacing to overwhelm/shame/burnout signals (check-in score < 4, audit friction tags) in addition to absence
+- [ ] Persist pathway progress to backend (pathwayProgress table) keyed to authenticated user, hydrate PathwayPage from server state

@@ -139,7 +139,7 @@ export default function Home() {
                 href="#system"
                 className="flex items-center gap-2 px-6 py-4 rounded-full text-sm font-light border border-border text-[oklch(0.65_0.01_260)] hover:border-[oklch(0.72_0.12_55)/0.5] hover:text-[oklch(0.82_0.14_55)] transition-all duration-300"
               >
-                Explore the system
+                Explore Lifewoven
               </a>
             </div>
 
