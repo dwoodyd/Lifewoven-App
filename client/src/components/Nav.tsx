@@ -65,7 +65,18 @@ export default function Nav() {
         {/* Desktop Primary Nav */}
         <nav className="hidden md:flex items-center gap-5 xl:gap-7" aria-label="Main navigation">
           {primaryLinks.map((link) => {
-            const isActive = location === link.href || (link.href !== "/" && location.startsWith(link.href.split("?")[0].split("#")[0]) && link.href !== "/");
+            const isActive = (() => {
+              // Hash anchor link (e.g. "/#pathways") — only active on root with matching hash
+              if (link.href.includes("#")) {
+                const [path, hash] = link.href.split("#");
+                return location === (path || "/") && typeof window !== "undefined" && window.location.hash === `#${hash}`;
+              }
+              // Root link — exact match only
+              if (link.href === "/") return location === "/";
+              // Regular path — exact match or sub-route
+              const basePath = link.href.split("?")[0];
+              return location === basePath || location.startsWith(basePath + "/");
+            })();
             return (
               <Link
                 key={link.href}
