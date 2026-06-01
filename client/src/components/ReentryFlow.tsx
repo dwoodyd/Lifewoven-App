@@ -146,7 +146,7 @@ export default function ReentryFlow({ daysSinceActive, onDismiss, trigger = "abs
               </button>
 
               <button
-                onClick={() => { navigate("/journal"); onDismiss(); }}
+                onClick={() => { navigate("/weave"); onDismiss(); }}
                 className="w-full text-left p-4 rounded-xl border border-border hover:border-primary/40 hover:bg-muted/50 transition-all group"
               >
                 <div className="flex items-center justify-between">

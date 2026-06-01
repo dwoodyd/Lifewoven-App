@@ -219,7 +219,7 @@ export default function StateModule() {
               <h2 className="font-serif text-base font-light text-foreground mb-3">State Journal</h2>
               <p className="text-xs text-muted-foreground mb-3">Capture your emotional landscape in writing.</p>
               <Button asChild size="sm" variant="outline" className="w-full gap-2">
-                <Link href="/journal?module=state"><ArrowRight className="h-3.5 w-3.5" /> Open State Journal</Link>
+                <Link href="/weave?module=state"><ArrowRight className="h-3.5 w-3.5" /> Open State Journal</Link>
               </Button>
             </div>
 

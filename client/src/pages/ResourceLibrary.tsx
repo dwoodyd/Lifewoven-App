@@ -294,7 +294,7 @@ export default function ResourceLibrary() {
                   </Button>
                 ) : resource.free ? (
                   <Button asChild size="sm" variant="outline" className="gap-1.5 text-xs">
-                    <Link href={`/journal?module=${resource.module}&prompt=Reflecting on: ${encodeURIComponent(resource.title)}`}>
+                    <Link href={`/weave?module=${resource.module}&prompt=Reflecting on: ${encodeURIComponent(resource.title)}`}>
                       <ArrowRight className="h-3 w-3" /> Explore & Journal
                     </Link>
                   </Button>

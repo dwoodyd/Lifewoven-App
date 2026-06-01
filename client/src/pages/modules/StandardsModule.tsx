@@ -196,7 +196,7 @@ export default function StandardsModule() {
             <div className="p-5 rounded-2xl border border-border bg-card">
               <h2 className="font-serif text-base font-light text-foreground mb-3">Standards Journal</h2>
               <p className="text-xs text-muted-foreground mb-3">Reflect on your systems and what's working.</p>
-              <Button asChild size="sm" variant="outline" className="w-full gap-2"><Link href="/journal?module=standards"><ArrowRight className="h-3.5 w-3.5" /> Open Standards Journal</Link></Button>
+              <Button asChild size="sm" variant="outline" className="w-full gap-2"><Link href="/weave?module=standards"><ArrowRight className="h-3.5 w-3.5" /> Open Standards Journal</Link></Button>
             </div>
           </div>
         </div>

@@ -106,7 +106,7 @@ export default function StrategyModule() {
               <p className="text-base text-muted-foreground mb-5">Find the highest-leverage questions to ask yourself right now.</p>
               <div className="space-y-2">
                 {LEVERAGE_QUESTIONS.map(q => (
-                  <Link key={q} href={`/journal?module=strategy&prompt=${encodeURIComponent(q)}`}>
+                  <Link key={q} href={`/weave?module=strategy&prompt=${encodeURIComponent(q)}`}>
                     <div className="p-3 rounded-lg border border-border hover:border-strategy/40 hover:bg-strategy/5 transition-all cursor-pointer flex items-center justify-between gap-2">
                       <p className="text-base text-foreground">{q}</p>
                       <ArrowRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
@@ -120,7 +120,7 @@ export default function StrategyModule() {
               <p className="text-base text-muted-foreground mb-4">Most people stop at first-order consequences. Great strategists think two and three steps ahead.</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 {SECOND_ORDER_PROMPTS.map(p => (
-                  <Link key={p} href={`/journal?module=strategy&prompt=${encodeURIComponent(p)}`}>
+                  <Link key={p} href={`/weave?module=strategy&prompt=${encodeURIComponent(p)}`}>
                     <div className="p-3 rounded-lg bg-secondary/50 hover:bg-strategy/5 transition-all cursor-pointer"><p className="text-sm text-foreground leading-relaxed">{p}</p></div>
                   </Link>
                 ))}
@@ -139,7 +139,7 @@ export default function StrategyModule() {
             <div className="p-5 rounded-2xl border border-border bg-card">
               <h2 className="font-serif text-base font-light text-foreground mb-3">Strategy Journal</h2>
               <p className="text-xs text-muted-foreground mb-3">Think on paper. Clarity comes through writing.</p>
-              <Button asChild size="sm" variant="outline" className="w-full gap-2"><Link href="/journal?module=strategy"><ArrowRight className="h-3.5 w-3.5" /> Open Strategy Journal</Link></Button>
+              <Button asChild size="sm" variant="outline" className="w-full gap-2"><Link href="/weave?module=strategy"><ArrowRight className="h-3.5 w-3.5" /> Open Strategy Journal</Link></Button>
             </div>
           </div>
         </div>

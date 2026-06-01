@@ -152,7 +152,7 @@ export default function StoryModule() {
                   </div>
                 ))}
               </div>
-              <Button asChild size="sm" variant="outline" className="gap-2"><Link href="/journal?module=story&prompt=identity"><Pencil className="h-3.5 w-3.5" /> Write Your Identity Statement</Link></Button>
+              <Button asChild size="sm" variant="outline" className="gap-2"><Link href="/weave?module=story&prompt=identity"><Pencil className="h-3.5 w-3.5" /> Write Your Identity Statement</Link></Button>
             </div>
 
             <div className="p-6 rounded-2xl border border-border bg-card">
@@ -165,7 +165,7 @@ export default function StoryModule() {
                   "What difficult experience has given you the most growth?",
                   "If you knew you couldn't fail, what would you create?",
                 ].map(prompt => (
-                  <Link key={prompt} href={`/journal?module=story&prompt=${encodeURIComponent(prompt)}`}>
+                  <Link key={prompt} href={`/weave?module=story&prompt=${encodeURIComponent(prompt)}`}>
                     <div className="p-3 rounded-lg border border-border hover:border-story/40 hover:bg-story/5 transition-all cursor-pointer flex items-center justify-between gap-2">
                       <p className="text-base text-foreground">{prompt}</p>
                       <ArrowRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />

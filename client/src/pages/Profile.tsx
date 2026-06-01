@@ -240,7 +240,7 @@ export default function Profile() {
           <div className="space-y-2">
             {[
               { href: "/dashboard", label: "Dashboard" },
-              { href: "/journal", label: "Journal" },
+              { href: "/weave", label: "The Weave" },
               { href: "/audit", label: "Alignment Audit" },
               { href: "/pricing", label: "Upgrade Plan" },
               { href: "/store", label: "Store" },

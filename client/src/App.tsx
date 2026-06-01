@@ -3,7 +3,7 @@ import OnboardingModal from "./components/OnboardingModal";
 import FeedbackWidget from "./components/FeedbackWidget";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
-import { Route, Switch, useLocation } from "wouter";
+import { Route, Switch, useLocation, Redirect } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { useAuth } from "./_core/hooks/useAuth";
@@ -126,11 +126,11 @@ function RouterSwitch() {
       <Route path="/pathways" component={PathwaysListing} />
       <Route path="/pathway/:slug" component={PathwayPage} />
 
-      {/* The Weave (journal) — /weave is canonical; /journal redirects via client-side navigation */}
+      {/* The Weave (journal) — /weave is canonical; /journal is legacy redirect only */}
       <Route path="/weave" component={Journal} />
       <Route path="/weave/:id" component={JournalEntry} />
-      <Route path="/journal">{() => { const [, nav] = useLocation(); nav("/weave", { replace: true }); return null; }}</Route>
-      <Route path="/journal/:id">{(params: { id: string }) => { const [, nav] = useLocation(); nav(`/weave/${params.id}`, { replace: true }); return null; }}</Route>
+      <Route path="/journal"><Redirect to="/weave" replace /></Route>
+      <Route path="/journal/:id">{(params: { id: string }) => <Redirect to={`/weave/${params.id}`} replace />}</Route>
 
       {/* Oracle */}
       <Route path="/oracle" component={Oracle} />
