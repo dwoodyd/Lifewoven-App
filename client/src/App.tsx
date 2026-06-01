@@ -88,12 +88,13 @@ import Refunds from "./pages/legal/Refunds";
 import Support from "./pages/Support";
 import Admin from "./pages/Admin";
 
-// Spring-based page transitions — fade + subtle Y lift
+// Page transitions — fast tween so exit never stalls the incoming page mount
 const pageVariants = {
-  initial: { opacity: 0, y: 10 },
+  initial: { opacity: 0, y: 8 },
   animate: { opacity: 1, y: 0 },
-  exit:    { opacity: 0, y: -6 },
+  exit:    { opacity: 0 },
 } as const;
+const pageTransition = { duration: 0.18, ease: "easeOut" } as const;
 
 function RouterSwitch() {
   return (
@@ -194,15 +195,14 @@ function RouterSwitch() {
 function Router() {
   const [location] = useLocation();
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <AnimatePresence mode="sync" initial={false}>
       <motion.div
         key={location}
         variants={pageVariants}
         initial="initial"
         animate="animate"
         exit="exit"
-        transition={{ type: "spring", stiffness: 260, damping: 30, mass: 1 }}
-        style={{ willChange: "opacity, transform" }}
+        transition={pageTransition}
       >
         <RouterSwitch />
       </motion.div>
