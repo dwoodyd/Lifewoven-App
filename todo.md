@@ -986,3 +986,17 @@
 - [x] Oracle chat bubbles: spring slide-up-fade entrance for all message types (crisis, error, normal)
 - [x] ResponsiveDialog: backdrop blur on mobile overlay
 - [x] LuminMoment: dramatic spring pop entrance (scale 0.5→1, rotate -8→0) + gold drop-shadow glow
+
+## Domain Migration Cleanup (lifewoven.click → app.lifewoven.click)
+
+- [x] OAuth redirect: `const.ts` already uses `window.location.origin` dynamically — no hardcoded URL, works correctly at any domain
+- [x] OAuth safeOrigins: `server/_core/oauth.ts` already matches `*.lifewoven.click` via regex — app.lifewoven.click is already whitelisted
+- [x] CORS whitelist: `server/_core/index.ts` already allows `*.lifewoven.click` — no change needed
+- [x] Fix Journal.tsx PDF footer: `lifewoven.com` → `lifewoven.click`
+- [x] Fix ArticleReader.tsx footer: `lifewoven.com` → `lifewoven.click`
+- [x] Fix main.tsx error toast support email: `hello@lifewoven.com` → `hello@lifewoven.click`
+- [x] Fix Downloads.tsx support email: `hello@lifewoven.com` → `hello@lifewoven.click`
+- [x] Fix SubscriptionSuccess.tsx support email: `hello@lifewoven.com` → `hello@lifewoven.click`
+- [x] Fix applications.test.ts test origin: `lifewoven.com` → `lifewoven.click`
+- [x] Fix Weave white-screen bug: replaced `window.location.replace()` hard-navigation redirects in App.tsx with wouter `useLocation` client-side navigation (`nav("/weave", { replace: true })`), eliminating the full-page reload race condition on first click
+- [x] TypeScript: 0 errors. All 158 tests pass.

@@ -164,7 +164,7 @@ export default function ArticleReader({ article }: Props) {
   <p class="meta">${[article.category, article.type, article.author].filter(Boolean).join(" · ")}</p>
 </div>
 <div class="footer">
-  <span>Lifewoven — lifewoven.com</span>
+  <span>Lifewoven — lifewoven.click</span>
   <span>${article.title}</span>
 </div>
 ${article.sections.map(s => `

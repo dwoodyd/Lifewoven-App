@@ -84,7 +84,7 @@ export default function SubscriptionSuccess() {
                 <Link href="/pricing">Back to Pricing</Link>
               </Button>
               <Button asChild className="flex-1">
-                <a href="mailto:hello@lifewoven.com">Contact Support</a>
+                <a href="mailto:hello@lifewoven.click">Contact Support</a>
               </Button>
             </div>
           </>

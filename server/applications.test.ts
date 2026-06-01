@@ -108,7 +108,7 @@ describe("applications.submit", () => {
       name: "Alice Tester",
       email: "alice@example.com",
       answer: "I have been deeply engaged in personal transformation work for many years and am ready to go deeper.",
-      origin: "https://lifewoven.com",
+      origin: "https://lifewoven.click",
     });
     expect(result.ok).toBe(true);
   });
@@ -120,7 +120,7 @@ describe("applications.submit", () => {
         name: "Bob",
         email: "bob@example.com",
         answer: "Too short",
-        origin: "https://lifewoven.com",
+        origin: "https://lifewoven.click",
       })
     ).rejects.toThrow();
   });

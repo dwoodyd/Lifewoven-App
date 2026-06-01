@@ -156,7 +156,7 @@ export default function Downloads() {
         <div className="mt-10 p-5 rounded-2xl border border-border bg-card/50 flex items-start gap-3">
           <CheckCircle2 className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
           <p className="text-sm text-muted-foreground font-light">
-            Download links expire after 72 hours as a security measure. You can generate a fresh link at any time — there is no limit on re-downloads for products you own. If you experience any issues, contact us at <a href="mailto:hello@lifewoven.com" className="underline underline-offset-2">hello@lifewoven.com</a>.
+            Download links expire after 72 hours as a security measure. You can generate a fresh link at any time — there is no limit on re-downloads for products you own. If you experience any issues, contact us at <a href="mailto:hello@lifewoven.click" className="underline underline-offset-2">hello@lifewoven.click</a>.
           </p>
         </div>
       </div>

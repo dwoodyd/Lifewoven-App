@@ -75,7 +75,7 @@ queryClient.getMutationCache().subscribe(event => {
     if (error instanceof TRPCClientError && error.message !== UNAUTHED_ERR_MSG) {
       const hasCustomHandler = event.mutation.options?.onError;
       if (!hasCustomHandler) {
-        toast.error("Something went wrong", { description: "Please try again. If the issue persists, contact hello@lifewoven.com" });
+        toast.error("Something went wrong", { description: "Please try again. If the issue persists, contact hello@lifewoven.click" });
       }
     }
   }

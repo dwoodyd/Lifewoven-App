@@ -103,7 +103,7 @@ export default function Journal() {
         <p class="subtitle">${moduleLabel} · ${data.entries.length} ${data.entries.length === 1 ? "entry" : "entries"}</p>
         <p class="meta">Exported ${dateStr}${data.userName ? ` · ${data.userName}` : ""}</p>
       </div>
-      <div class="footer"><span>Lifewoven — lifewoven.com</span><span>The Weave · ${moduleLabel}</span></div>
+      <div class="footer"><span>Lifewoven — lifewoven.click</span><span>The Weave · ${moduleLabel}</span></div>
       ${entriesHtml}
       </body></html>`;
       printWindow.document.write(html);
