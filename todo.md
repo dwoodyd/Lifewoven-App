@@ -1000,3 +1000,14 @@
 - [x] Fix applications.test.ts test origin: `lifewoven.com` → `lifewoven.click`
 - [x] Fix Weave white-screen bug: replaced `window.location.replace()` hard-navigation redirects in App.tsx with wouter `useLocation` client-side navigation (`nav("/weave", { replace: true })`), eliminating the full-page reload race condition on first click
 - [x] TypeScript: 0 errors. All 158 tests pass.
+
+## Launch Readiness — Section C (Audit Funnel) & Section B (Billing Cleanup)
+
+- [x] Section C: Alignment Audit completable without login (no auth gate on quiz — confirmed)
+- [x] Section C: Guest-aware CTA on results page — logged-out users see "Start free — save my results" with profile name in copy; logged-in users see "Save My Results"
+- [x] Section C: Shareable result URL — /audit#result=<profile-key> built on finalize, Share button uses navigator.share with clipboard fallback
+- [x] Section C: Funnel instrumentation — audit_started, audit_completed (with profile), audit_signup_click, audit_share_click via public trackAuditEvent procedure (no auth required)
+- [x] Section B: Confirmed billing is 100% PayPal — no Stripe npm package, no STRIPE_* env vars used, no Stripe webhook routes
+- [x] Section B: Renamed server/stripe.test.ts → server/paypal-tiers.test.ts (was a PayPal tier helper test, misnamed)
+- [x] Section B: Removed dead stripeEvents table from drizzle/schema.ts (table was defined but never read/written by any code)
+- [ ] Section B: Apply migration 0028_sad_hex.sql (DROP TABLE stripe_events) — DEFERRED: requires direct DB access; table is empty and harmless until then

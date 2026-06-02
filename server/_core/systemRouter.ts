@@ -45,6 +45,11 @@ export const systemRouter = router({
         "oracle_upgrade_click",
         "product_viewed",
         "product_purchased",
+        // Audit funnel
+        "audit_started",
+        "audit_completed",
+        "audit_signup_click",
+        "audit_share_click",
       ]),
       properties: z.record(z.string(), z.unknown()).optional(),
     }))
@@ -110,6 +115,25 @@ export const systemRouter = router({
     }).catch(() => {});
     return { notified: expiring.length };
   }),
+
+  // Public audit funnel tracking — no auth required (guest users completing the Audit)
+  trackAuditEvent: publicProcedure
+    .input(z.object({
+      event: z.enum(["audit_started", "audit_completed", "audit_signup_click", "audit_share_click"]),
+      properties: z.record(z.string(), z.unknown()).optional(),
+    }))
+    .mutation(async ({ input }) => {
+      const db = await getDb();
+      if (!db) return { ok: false };
+      // userId = 0 for anonymous events
+      await db.insert(events).values({
+        userId: 0,
+        event: input.event,
+        properties: input.properties ? JSON.stringify(input.properties) : null,
+        createdAt: Math.floor(Date.now() / 1000),
+      });
+      return { ok: true };
+    }),
 
   getConvertedUsers: adminProcedure.query(async () => {
     const db = await getDb();

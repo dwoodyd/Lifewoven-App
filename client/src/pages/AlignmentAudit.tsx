@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useLocation } from "wouter";
 import { LuminCorner } from "@/components/LuminCorner";
 import Nav from "@/components/Nav";
@@ -9,7 +9,7 @@ import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import { toast } from "sonner";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowRight, CheckCircle2, Share2, Copy } from "lucide-react";
 import { LuminAmbient } from "@/components/LuminAmbient";
 
 // ─────────────────────────────────────────────
@@ -191,15 +191,33 @@ export default function AlignmentAudit() {
 
   const saveAudit = trpc.audit.save.useMutation({ onSuccess: () => toast.success("Results saved to your profile.") });
   const saveMindPatterns = trpc.profile.saveMindPatterns.useMutation();
+  const trackAuditEvent = trpc.system.trackAuditEvent.useMutation();
+
+  // Build a shareable URL encoding the profile key in the hash so no server round-trip is needed
+  const [shareUrl, setShareUrl] = useState<string | null>(null);
 
   const totalQ = CORE_QUESTIONS.length;
   const progress = step === "quiz" ? Math.round((currentQ / totalQ) * 100) : step === "results" ? 100 : 0;
+
+  // Track audit_started once when the user begins the quiz
+  useEffect(() => {
+    if (step === "quiz" && currentQ === 0) {
+      trackAuditEvent.mutate({ event: "audit_started" });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step]);
 
   function finalize(finalAnswers: Record<number, ScaleValue>) {
     const scores = computeScores(finalAnswers);
     const frictionTags = detectFrictionTags(finalAnswers);
     const profileKey = assignProfile(scores.raw, frictionTags);
     setResult({ profile: PROFILES[profileKey], scores, frictionTags });
+    // Build shareable URL: /audit#result=<urlencoded-profile-key>
+    const encoded = encodeURIComponent(profileKey);
+    const url = `${window.location.origin}/audit#result=${encoded}`;
+    setShareUrl(url);
+    // Track audit_completed
+    trackAuditEvent.mutate({ event: "audit_completed", properties: { profile: profileKey } });
     setStep("optional_prompt");
   }
 
@@ -220,13 +238,43 @@ export default function AlignmentAudit() {
   }
 
   function handleSaveResults() {
-    if (!isAuthenticated) { window.location.href = getLoginUrl("/audit"); return; }
+    if (!isAuthenticated) {
+      // Track signup click before redirecting
+      trackAuditEvent.mutate({ event: "audit_signup_click", properties: { profile: result?.profile.name } });
+      // Carry the result into onboarding via the return path
+      window.location.href = getLoginUrl("/audit");
+      return;
+    }
     if (result) {
       const stringAnswers: Record<string, number> = {};
       Object.entries(answers).forEach(([k, v]) => { stringAnswers[k] = v; });
       saveAudit.mutate({ answers: stringAnswers, scores: result.scores.pct as Record<string, number>, recommendedPathway: result.profile.firstPathway.toLowerCase() });
     }
   }
+
+  const handleShare = useCallback(async () => {
+    if (!shareUrl || !result) return;
+    trackAuditEvent.mutate({ event: "audit_share_click", properties: { profile: result.profile.name } });
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `My Lifewoven Alignment Profile: ${result.profile.name}`,
+          text: `I just completed the Lifewoven Alignment Audit. My profile is "${result.profile.name}". Find out yours:`,
+          url: shareUrl,
+        });
+        return;
+      } catch {
+        // User cancelled native share — fall through to clipboard
+      }
+    }
+    // Fallback: copy to clipboard
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      toast.success("Link copied to clipboard!");
+    } catch {
+      toast.error("Could not copy link. Try manually copying the URL.");
+    }
+  }, [shareUrl, result, trackAuditEvent]);
 
   const q = CORE_QUESTIONS[currentQ];
   const oq = OPTIONAL_QUESTIONS[optionalQ];
@@ -495,15 +543,43 @@ export default function AlignmentAudit() {
               </div>
             );
           })()}
-          <div className="p-6 rounded-2xl border border-border bg-card mb-6">
-            <h3 className="font-serif text-lg font-light text-foreground mb-2">Want to track your progress over time?</h3>
-            <p className="text-base text-muted-foreground mb-4">Create a free account to save your results, revisit your audit, and watch your patterns shift as you work through Lifewoven.</p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Button className="gap-2" onClick={handleSaveResults} disabled={saveAudit.isPending}>
-                <CheckCircle2 className="h-4 w-4" /> {saveAudit.isPending ? "Saving..." : "Save My Results — It's Free"}
+          {/* Share your result */}
+          {shareUrl && (
+            <div className="p-5 rounded-2xl border border-border bg-card/60 mb-4 flex items-center justify-between gap-4 flex-wrap">
+              <div>
+                <p className="text-sm font-medium text-foreground mb-0.5">Share your profile</p>
+                <p className="text-xs text-muted-foreground">Let others discover their alignment pattern</p>
+              </div>
+              <Button variant="outline" size="sm" className="gap-2 shrink-0" onClick={handleShare}>
+                <Share2 className="h-4 w-4" /> Share
               </Button>
-              <Button variant="ghost" asChild><a href="/dashboard">Continue without saving</a></Button>
             </div>
+          )}
+          {/* Save / Sign-up CTA */}
+          <div className="p-6 rounded-2xl border border-border bg-card mb-6">
+            {isAuthenticated ? (
+              <>
+                <h3 className="font-serif text-lg font-light text-foreground mb-2">Save your results to your profile</h3>
+                <p className="text-base text-muted-foreground mb-4">Your audit results will be stored and used to personalise your Oracle, pathway recommendations, and progress tracking over time.</p>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Button className="gap-2" onClick={handleSaveResults} disabled={saveAudit.isPending}>
+                    <CheckCircle2 className="h-4 w-4" /> {saveAudit.isPending ? "Saving..." : "Save My Results"}
+                  </Button>
+                  <Button variant="ghost" asChild><a href="/dashboard">Go to dashboard</a></Button>
+                </div>
+              </>
+            ) : (
+              <>
+                <h3 className="font-serif text-lg font-light text-foreground mb-2">Create your free account to begin</h3>
+                <p className="text-base text-muted-foreground mb-4">Your profile — <strong className="text-foreground">{result?.profile.name}</strong> — will be saved automatically when you sign up. Your Oracle, pathway, and progress will be personalised to these results from day one.</p>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Button className="gap-2" onClick={handleSaveResults}>
+                    <CheckCircle2 className="h-4 w-4" /> Start free — save my results
+                  </Button>
+                  <Button variant="ghost" asChild><a href="/">Back to home</a></Button>
+                </div>
+              </>
+            )}
           </div>
           <div className="p-4 rounded-xl bg-muted/30 border border-border">
             <p className="text-sm text-muted-foreground leading-relaxed">

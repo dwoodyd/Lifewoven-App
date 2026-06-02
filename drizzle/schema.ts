@@ -561,15 +561,8 @@ export const referralCodes = mysqlTable("referral_codes", {
   createdAt:   int("created_at").notNull(),
 }, (t) => [index("idx_referral_codes_ownerId").on(t.ownerId)]);
 
-// ─── Stripe Events Idempotency Ledger ─────────────────────────────────────────
-// Tracks processed Stripe event IDs to prevent duplicate processing under load.
-// Before handling any webhook event, check this table; insert after processing.
-export const stripeEvents = mysqlTable("stripe_events", {
-  id:          int("id").autoincrement().primaryKey(),
-  eventId:     varchar("event_id", { length: 255 }).notNull().unique(), // Stripe evt_xxx
-  eventType:   varchar("event_type", { length: 128 }).notNull(),
-  processedAt: timestamp("processed_at").defaultNow().notNull(),
-});
+// NOTE: stripeEvents table removed — billing is 100% PayPal. No Stripe integration exists.
+// If Stripe is ever added in the future, re-add an idempotency ledger table here.
 
 // ─── Character & Growth ───────────────────────────────────────────────────────
 // Books the user is reading / has read — the personal growth library
