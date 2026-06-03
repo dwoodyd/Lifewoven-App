@@ -142,20 +142,31 @@ export default function Pricing() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           plan,
-          annual,
           returnUrl: `${origin}/subscription/success?plan=${plan}`,
           cancelUrl: `${origin}/pricing`,
         }),
       });
-      const data = await res.json() as { approvalUrl?: string; error?: string };
-      if (!data.approvalUrl) {
-        toast.error(data.error ?? "Could not start checkout. Please try again.");
+
+      let data: { approvalUrl?: string; error?: string } = {};
+      try {
+        data = await res.json() as { approvalUrl?: string; error?: string };
+      } catch {
+        toast.error("Checkout failed: unexpected server response. Please try again.");
         return;
       }
+
+      if (!res.ok || !data.approvalUrl) {
+        const msg = data.error ?? `Checkout failed (${res.status}). Please try again.`;
+        toast.error(msg);
+        console.error("[Pricing] PayPal create subscription error:", res.status, data);
+        return;
+      }
+
       toast.info("Redirecting to PayPal\u2026");
-      window.open(data.approvalUrl, "_blank");
-    } catch {
-      toast.error("Checkout failed. Please try again.");
+      window.location.href = data.approvalUrl;
+    } catch (err) {
+      console.error("[Pricing] PayPal checkout exception:", err);
+      toast.error("Checkout failed. Please check your connection and try again.");
     } finally {
       setPendingPlan(null);
     }

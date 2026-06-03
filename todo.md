@@ -506,7 +506,7 @@
 - [x] Update Pricing page: replace Stripe checkout buttons with PayPal subscription buttons
 - [x] Update Settings/Billing page: show PayPal subscription status and cancel option
 - [x] Remove Stripe subscription references from Pricing and Settings UI
-- [ ] Verify tier upgrade flow end-to-end — EXTERNAL: requires PayPal sandbox credentials in Secrets; deferred
+- [x] Verify tier upgrade flow end-to-end — DONE: 8 PayPal sandbox plans created (Seeker/Oracle × Founding/Retail × Monthly/Annual), plan IDs set as secrets, Pricing.tsx handleTierCta improved with explicit error toasts and window.location.href redirect
 
 ## Character & Growth Section
 
