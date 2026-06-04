@@ -1011,3 +1011,23 @@
 - [x] Section B: Renamed server/stripe.test.ts → server/paypal-tiers.test.ts (was a PayPal tier helper test, misnamed)
 - [x] Section B: Removed dead stripeEvents table from drizzle/schema.ts (table was defined but never read/written by any code)
 - [ ] Section B: Apply migration 0028_sad_hex.sql (DROP TABLE stripe_events) — DEFERRED: requires direct DB access; table is empty and harmless until then
+
+## Full Platform Completion — Audit Pass (Jun 2026)
+
+### Phase A — Email: Subscription Welcome
+- [x] Add sendRedemptionConfirmationEmail call to PayPal subscription /capture endpoint (after tier upgrade)
+- [x] Add sendDay0WelcomeEmail call to PayPal subscription /webhook BILLING.SUBSCRIPTION.ACTIVATED handler
+- [x] Fix sendBetaInviteEmail FROM_ADDRESS: changed from onboarding@resend.dev to lumin@mail.lifewoven.click; also added replyTo
+
+### Phase B — PayPal Live Mode (Dual Credentials)
+- [x] Refactor subscriptions.ts to use PAYPAL_LIVE_CLIENT_ID/PAYPAL_LIVE_CLIENT_SECRET when PAYPAL_ENV=live via getPlanIds() function
+- [ ] Add PAYPAL_LIVE_CLIENT_ID and PAYPAL_LIVE_CLIENT_SECRET secret slots — PENDING: user must provide live PayPal credentials
+- [ ] Add PAYPAL_LIVE_PLAN_SEEKER_FOUNDING_MONTHLY_ID and 7 other live plan ID secret slots — PENDING: user must create live PayPal plans
+- [ ] Add PAYPAL_LIVE_WEBHOOK_ID secret slot — PENDING: user must register live webhook
+- [ ] Add PAYPAL_ENV secret slot (user sets to "live" when ready) — PENDING: flip last after all live secrets are set
+- [x] Update subscriptions.ts PLAN_IDS to use live plan IDs when PAYPAL_ENV=live — done via getPlanIds() function
+- [ ] Register live webhook at https://app.lifewoven.click/api/paypal/subscription/webhook in PayPal live dashboard — PENDING: user must do this in PayPal live dashboard
+
+### Phase C — Go Live
+- [x] Create checkpoint and publish app to app.lifewoven.click
+- [x] Provide step-by-step PayPal live activation checklist for user

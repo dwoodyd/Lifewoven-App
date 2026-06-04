@@ -5,7 +5,7 @@
 import { Resend } from "resend";
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const FROM_ADDRESS = "Lifewoven <onboarding@resend.dev>";
+const FROM_ADDRESS = "Lifewoven <lumin@mail.lifewoven.click>";
 const LUMIN_FROM   = "Lumin <lumin@mail.lifewoven.click>";
 const REPLY_TO     = "dewayne@lifewoven.click";
 
@@ -84,6 +84,7 @@ export async function sendBetaInviteEmail({
 
   const result = await resend.emails.send({
     from: FROM_ADDRESS,
+    replyTo: REPLY_TO,
     to,
     subject: "Your Lifewoven Beta Access Code",
     html,

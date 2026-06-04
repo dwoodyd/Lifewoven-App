@@ -16,6 +16,7 @@ import { users } from "../../drizzle/schema";
 import { eq } from "drizzle-orm";
 import { sdk } from "../_core/sdk";
 import { notifyOwner } from "../_core/notification";
+import { sendRedemptionConfirmationEmail, sendDay0WelcomeEmail } from "../email";
 
 const PAYPAL_BASE =
   process.env.PAYPAL_ENV === "live"
@@ -25,21 +26,39 @@ const PAYPAL_BASE =
 // ── Plan IDs ──────────────────────────────────────────────────────────────────
 // Set these in Settings → Secrets after creating plans in PayPal dashboard.
 // Founding rates are locked for life; retail rates are standard public pricing.
-const PLAN_IDS: Record<string, string | undefined> = {
-  // Founding rates (locked for life)
-  "seeker-founding-monthly":  process.env.PAYPAL_PLAN_SEEKER_FOUNDING_MONTHLY_ID,
-  "seeker-founding-annual":   process.env.PAYPAL_PLAN_SEEKER_FOUNDING_ANNUAL_ID,
-  "oracle-founding-monthly":  process.env.PAYPAL_PLAN_ORACLE_FOUNDING_MONTHLY_ID,
-  "oracle-founding-annual":   process.env.PAYPAL_PLAN_ORACLE_FOUNDING_ANNUAL_ID,
-  // Retail rates
-  "seeker-retail-monthly":    process.env.PAYPAL_PLAN_SEEKER_RETAIL_MONTHLY_ID,
-  "seeker-retail-annual":     process.env.PAYPAL_PLAN_SEEKER_RETAIL_ANNUAL_ID,
-  "oracle-retail-monthly":    process.env.PAYPAL_PLAN_ORACLE_RETAIL_MONTHLY_ID,
-  "oracle-retail-annual":     process.env.PAYPAL_PLAN_ORACLE_RETAIL_ANNUAL_ID,
-  // Legacy keys (backwards compat with older frontend code)
-  seeker: process.env.PAYPAL_PLAN_SEEKER_FOUNDING_MONTHLY_ID ?? process.env.PAYPAL_PLAN_SEEKER_ID,
-  oracle: process.env.PAYPAL_PLAN_ORACLE_FOUNDING_MONTHLY_ID ?? process.env.PAYPAL_PLAN_ORACLE_ID,
-};
+/** Returns the correct plan ID map based on PAYPAL_ENV */
+function getPlanIds(): Record<string, string | undefined> {
+  const isLive = process.env.PAYPAL_ENV === "live";
+  if (isLive) {
+    return {
+      "seeker-founding-monthly":  process.env.PAYPAL_LIVE_PLAN_SEEKER_FOUNDING_MONTHLY_ID,
+      "seeker-founding-annual":   process.env.PAYPAL_LIVE_PLAN_SEEKER_FOUNDING_ANNUAL_ID,
+      "oracle-founding-monthly":  process.env.PAYPAL_LIVE_PLAN_ORACLE_FOUNDING_MONTHLY_ID,
+      "oracle-founding-annual":   process.env.PAYPAL_LIVE_PLAN_ORACLE_FOUNDING_ANNUAL_ID,
+      "seeker-retail-monthly":    process.env.PAYPAL_LIVE_PLAN_SEEKER_RETAIL_MONTHLY_ID,
+      "seeker-retail-annual":     process.env.PAYPAL_LIVE_PLAN_SEEKER_RETAIL_ANNUAL_ID,
+      "oracle-retail-monthly":    process.env.PAYPAL_LIVE_PLAN_ORACLE_RETAIL_MONTHLY_ID,
+      "oracle-retail-annual":     process.env.PAYPAL_LIVE_PLAN_ORACLE_RETAIL_ANNUAL_ID,
+      seeker: process.env.PAYPAL_LIVE_PLAN_SEEKER_FOUNDING_MONTHLY_ID,
+      oracle: process.env.PAYPAL_LIVE_PLAN_ORACLE_FOUNDING_MONTHLY_ID,
+    };
+  }
+  return {
+    // Sandbox — Founding rates (locked for life)
+    "seeker-founding-monthly":  process.env.PAYPAL_PLAN_SEEKER_FOUNDING_MONTHLY_ID,
+    "seeker-founding-annual":   process.env.PAYPAL_PLAN_SEEKER_FOUNDING_ANNUAL_ID,
+    "oracle-founding-monthly":  process.env.PAYPAL_PLAN_ORACLE_FOUNDING_MONTHLY_ID,
+    "oracle-founding-annual":   process.env.PAYPAL_PLAN_ORACLE_FOUNDING_ANNUAL_ID,
+    // Sandbox — Retail rates
+    "seeker-retail-monthly":    process.env.PAYPAL_PLAN_SEEKER_RETAIL_MONTHLY_ID,
+    "seeker-retail-annual":     process.env.PAYPAL_PLAN_SEEKER_RETAIL_ANNUAL_ID,
+    "oracle-retail-monthly":    process.env.PAYPAL_PLAN_ORACLE_RETAIL_MONTHLY_ID,
+    "oracle-retail-annual":     process.env.PAYPAL_PLAN_ORACLE_RETAIL_ANNUAL_ID,
+    // Legacy keys (backwards compat with older frontend code)
+    seeker: process.env.PAYPAL_PLAN_SEEKER_FOUNDING_MONTHLY_ID ?? process.env.PAYPAL_PLAN_SEEKER_ID,
+    oracle: process.env.PAYPAL_PLAN_ORACLE_FOUNDING_MONTHLY_ID ?? process.env.PAYPAL_PLAN_ORACLE_ID,
+  };
+}
 
 const TIER_LABELS: Record<string, string> = {
   seeker: "Seeker", oracle: "Oracle",
@@ -66,8 +85,13 @@ function tierToStoreAccess(tier: "seeker" | "oracle"): "discount" | "library" {
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 async function getAccessToken(): Promise<string> {
-  const clientId = process.env.PAYPAL_CLIENT_ID;
-  const secret = process.env.PAYPAL_CLIENT_SECRET;
+  const isLive = process.env.PAYPAL_ENV === "live";
+  const clientId = isLive
+    ? (process.env.PAYPAL_LIVE_CLIENT_ID ?? process.env.PAYPAL_CLIENT_ID)
+    : process.env.PAYPAL_CLIENT_ID;
+  const secret = isLive
+    ? (process.env.PAYPAL_LIVE_CLIENT_SECRET ?? process.env.PAYPAL_CLIENT_SECRET)
+    : process.env.PAYPAL_CLIENT_SECRET;
   if (!clientId || !secret) throw new Error("PayPal credentials not configured");
 
   const controller = new AbortController();
@@ -125,7 +149,7 @@ paypalSubscriptionRouter.post("/create", async (req: Request, res: Response) => 
     const user = await sdk.authenticateRequest(req);
     if (!user) return res.status(401).json({ error: "Unauthorized" });
 
-    const planId = PLAN_IDS[plan];
+    const planId = getPlanIds()[plan];
     if (!planId) {
       return res.status(400).json({
         error: `Unknown plan: ${plan}. Configure the matching PAYPAL_PLAN_*_ID secret in Settings → Secrets.`,
@@ -208,6 +232,15 @@ paypalSubscriptionRouter.post("/capture", async (req: Request, res: Response) =>
       title: `🎉 New ${TIER_LABELS[plan] ?? tier} Subscription`,
       content: `${user.name ?? user.email ?? "A user"} just subscribed to the ${TIER_LABELS[plan] ?? tier} plan.\nSubscription ID: ${subscriptionId}`,
     }).catch(() => {});
+
+    // Send welcome email (non-blocking)
+    if (user.email) {
+      sendRedemptionConfirmationEmail({
+        to: user.email,
+        name: user.name || user.email,
+        tier,
+      }).catch((err) => console.error("[PayPal Subscription] Welcome email failed:", err));
+    }
 
     return res.json({ ok: true, tier });
   } catch (err) {
@@ -343,6 +376,15 @@ paypalSubscriptionRouter.post("/webhook", async (req: Request, res: Response) =>
           })
           .where(eq(users.id, userId));
         console.log(`[PayPal Webhook] Upgraded user ${userId} to ${tier}`);
+        // Send Day-0 welcome email (non-blocking)
+        const [upgradedUser] = await db.select({ email: users.email, name: users.name })
+          .from(users).where(eq(users.id, userId));
+        if (upgradedUser?.email) {
+          sendDay0WelcomeEmail({
+            to: upgradedUser.email,
+            name: upgradedUser.name || upgradedUser.email,
+          }).catch((err) => console.error("[PayPal Webhook] Day-0 email failed:", err));
+        }
       }
     } else if (
       eventType === "BILLING.SUBSCRIPTION.CANCELLED" ||
