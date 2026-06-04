@@ -199,13 +199,13 @@ async function startServer() {
   // Secure download endpoint — token-based, server-side redirect to S3
   app.get("/api/download/:token", downloadHandler);
 
+  // ── Body parsing (must come before any route that reads req.body)
+  app.use(express.json({ limit: "1mb" }));
+  app.use(express.urlencoded({ limit: "1mb", extended: true }));
+
   // PayPal payment routes
   app.use(paypalRouter);
   app.use("/api/paypal/subscription", paypalSubscriptionRouter);
-
-  // ── Security: Reduced body limit (50mb was excessive and a DoS risk)
-  app.use(express.json({ limit: "1mb" }));
-  app.use(express.urlencoded({ limit: "1mb", extended: true }));
 
   // Storage proxy for /manus-storage/* assets (PWA icons, uploads)
   registerStorageProxy(app);

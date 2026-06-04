@@ -24,9 +24,10 @@ describe("PayPal plan IDs", () => {
     }
   });
 
-  it("PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET are set", () => {
+  it("PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, and PAYPAL_WEBHOOK_ID are set", () => {
     expect(process.env.PAYPAL_CLIENT_ID, "PAYPAL_CLIENT_ID must be set").toBeTruthy();
     expect(process.env.PAYPAL_CLIENT_SECRET, "PAYPAL_CLIENT_SECRET must be set").toBeTruthy();
+    expect(process.env.PAYPAL_WEBHOOK_ID, "PAYPAL_WEBHOOK_ID must be set").toBeTruthy();
   });
 
   it("plan IDs map covers all 8 subscription variants", () => {
