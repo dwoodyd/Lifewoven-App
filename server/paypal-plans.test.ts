@@ -74,24 +74,17 @@ describe("PayPal plan IDs", () => {
     }
   });
 
-  it("live mode: PAYPAL_LIVE_CLIENT_ID and PAYPAL_LIVE_CLIENT_SECRET are set when PAYPAL_ENV=live", () => {
-    if (!isLive) {
-      // In sandbox mode, live credentials are optional — skip
-      return;
-    }
-    expect(process.env.PAYPAL_LIVE_CLIENT_ID, "PAYPAL_LIVE_CLIENT_ID must be set in live mode").toBeTruthy();
-    expect(process.env.PAYPAL_LIVE_CLIENT_SECRET, "PAYPAL_LIVE_CLIENT_SECRET must be set in live mode").toBeTruthy();
-    expect(process.env.PAYPAL_LIVE_WEBHOOK_ID, "PAYPAL_LIVE_WEBHOOK_ID must be set in live mode").toBeTruthy();
+  it("live mode: PAYPAL_LIVE_CLIENT_ID, PAYPAL_LIVE_CLIENT_SECRET, and PAYPAL_LIVE_WEBHOOK_ID are set", () => {
+    // Now that PAYPAL_ENV=live, these are required
+    expect(process.env.PAYPAL_LIVE_CLIENT_ID, "PAYPAL_LIVE_CLIENT_ID must be set").toBeTruthy();
+    expect(process.env.PAYPAL_LIVE_CLIENT_SECRET, "PAYPAL_LIVE_CLIENT_SECRET must be set").toBeTruthy();
+    expect(process.env.PAYPAL_LIVE_WEBHOOK_ID, "PAYPAL_LIVE_WEBHOOK_ID must be set").toBeTruthy();
   });
 
-  it("live mode: all 8 live plan IDs are set when PAYPAL_ENV=live", () => {
-    if (!isLive) {
-      // In sandbox mode, live plan IDs are optional — skip
-      return;
-    }
+  it("live mode: all 8 live plan IDs are set and start with P-", () => {
     for (const key of LIVE_PLAN_KEYS) {
       const val = process.env[key];
-      expect(val, `${key} must be set in live mode`).toBeTruthy();
+      expect(val, `${key} must be set`).toBeTruthy();
       expect(val!.startsWith("P-"), `${key} must start with P-`).toBe(true);
     }
   });
