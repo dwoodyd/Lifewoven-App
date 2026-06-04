@@ -38,6 +38,7 @@ import PathwaysListing from "./pages/PathwaysListing";
 // Journal
 import Journal from "./pages/Journal";
 import JournalEntry from "./pages/JournalEntry";
+import Goals from "./pages/Goals";
 
 // Oracle
 import Oracle from "./pages/Oracle";
@@ -131,6 +132,9 @@ function RouterSwitch() {
       <Route path="/weave/:id" component={JournalEntry} />
       <Route path="/journal"><Redirect to="/weave" replace /></Route>
       <Route path="/journal/:id">{(params: { id: string }) => <Redirect to={`/weave/${params.id}`} replace />}</Route>
+
+      {/* Goals */}
+      <Route path="/goals" component={Goals} />
 
       {/* Oracle */}
       <Route path="/oracle" component={Oracle} />

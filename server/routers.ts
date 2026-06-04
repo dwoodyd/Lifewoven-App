@@ -17,7 +17,8 @@ import {
   auditResults, checkIns, journalEntries, habits, habitLogs,
   scorecards, beliefs, decisions, energyAudits, oracleInsights,
   oracleConversations, userPathways, pathwaySessions, resources, courses, enrollments,
-  products, communityPosts, communityComments, communityLikes, orders, users, moodLogs
+  products, communityPosts, communityComments, communityLikes, orders, users, moodLogs,
+  goals, goalMilestones
 } from "../drizzle/schema";
 import { eq, desc, and, like, sql, gte } from "drizzle-orm";
 import { invokeLLM } from "./_core/llm";
@@ -26,6 +27,156 @@ import { TRPCError } from "@trpc/server";
 import { transcribeAudio } from "./_core/voiceTranscription";
 import { storagePut } from "./storage";
 import { notifyOwner } from "./_core/notification";
+
+// ─── Goals Router ────────────────────────────────────────────────────────────
+const goalsRouter = router({
+  list: protectedProcedure
+    .input(z.object({ status: z.enum(["active", "completed", "paused", "abandoned", "all"]).default("active") }))
+    .query(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) return [];
+      const rows = await db.select().from(goals)
+        .where(input.status === "all"
+          ? eq(goals.userId, ctx.user.id)
+          : and(eq(goals.userId, ctx.user.id), eq(goals.status, input.status)))
+        .orderBy(goals.sortOrder, desc(goals.createdAt));
+      // Attach milestones for each goal
+      const goalIds = rows.map(g => g.id);
+      if (goalIds.length === 0) return rows.map(g => ({ ...g, milestones: [] }));
+      const ms = await db.select().from(goalMilestones)
+        .where(eq(goalMilestones.userId, ctx.user.id))
+        .orderBy(goalMilestones.sortOrder, goalMilestones.createdAt);
+      const msMap: Record<number, typeof ms> = {};
+      for (const m of ms) {
+        if (!msMap[m.goalId]) msMap[m.goalId] = [];
+        msMap[m.goalId].push(m);
+      }
+      return rows.map(g => ({ ...g, milestones: msMap[g.id] ?? [] }));
+    }),
+
+  get: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) return null;
+      const [goal] = await db.select().from(goals)
+        .where(and(eq(goals.id, input.id), eq(goals.userId, ctx.user.id)));
+      if (!goal) return null;
+      const ms = await db.select().from(goalMilestones)
+        .where(and(eq(goalMilestones.goalId, input.id), eq(goalMilestones.userId, ctx.user.id)))
+        .orderBy(goalMilestones.sortOrder, goalMilestones.createdAt);
+      return { ...goal, milestones: ms };
+    }),
+
+  create: protectedProcedure
+    .input(z.object({
+      title: z.string().min(1).max(255),
+      description: z.string().max(2000).optional(),
+      module: z.enum(["state", "story", "standards", "strategy", "stewardship", "free"]).default("free"),
+      targetDate: z.string().optional(), // ISO date string
+      milestones: z.array(z.string().min(1).max(255)).optional(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database unavailable");
+      const [result] = await db.insert(goals).values({
+        userId: ctx.user.id,
+        title: input.title,
+        description: input.description,
+        module: input.module,
+        targetDate: input.targetDate ? new Date(input.targetDate) : undefined,
+      });
+      const goalId = (result as any).insertId as number;
+      if (input.milestones && input.milestones.length > 0) {
+        await db.insert(goalMilestones).values(
+          input.milestones.map((title, i) => ({ goalId, userId: ctx.user.id, title, sortOrder: i }))
+        );
+      }
+      return { success: true, id: goalId };
+    }),
+
+  update: protectedProcedure
+    .input(z.object({
+      id: z.number(),
+      title: z.string().min(1).max(255).optional(),
+      description: z.string().max(2000).optional(),
+      module: z.enum(["state", "story", "standards", "strategy", "stewardship", "free"]).optional(),
+      status: z.enum(["active", "completed", "paused", "abandoned"]).optional(),
+      targetDate: z.string().nullable().optional(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database unavailable");
+      const { id, targetDate, ...rest } = input;
+      const updates: Record<string, unknown> = { ...rest };
+      if (targetDate !== undefined) updates.targetDate = targetDate ? new Date(targetDate) : null;
+      if (rest.status === "completed") updates.completedAt = new Date();
+      await db.update(goals).set(updates).where(and(eq(goals.id, id), eq(goals.userId, ctx.user.id)));
+      return { success: true };
+    }),
+
+  delete: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database unavailable");
+      await db.delete(goalMilestones).where(and(eq(goalMilestones.goalId, input.id), eq(goalMilestones.userId, ctx.user.id)));
+      await db.delete(goals).where(and(eq(goals.id, input.id), eq(goals.userId, ctx.user.id)));
+      return { success: true };
+    }),
+
+  addMilestone: protectedProcedure
+    .input(z.object({ goalId: z.number(), title: z.string().min(1).max(255) }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database unavailable");
+      // Verify goal ownership
+      const [goal] = await db.select({ id: goals.id }).from(goals)
+        .where(and(eq(goals.id, input.goalId), eq(goals.userId, ctx.user.id)));
+      if (!goal) throw new TRPCError({ code: "FORBIDDEN" });
+      await db.insert(goalMilestones).values({ goalId: input.goalId, userId: ctx.user.id, title: input.title });
+      return { success: true };
+    }),
+
+  toggleMilestone: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database unavailable");
+      const [ms] = await db.select().from(goalMilestones)
+        .where(and(eq(goalMilestones.id, input.id), eq(goalMilestones.userId, ctx.user.id)));
+      if (!ms) throw new TRPCError({ code: "FORBIDDEN" });
+      const nowCompleted = !ms.isCompleted;
+      await db.update(goalMilestones).set({
+        isCompleted: nowCompleted,
+        completedAt: nowCompleted ? new Date() : null,
+      }).where(eq(goalMilestones.id, input.id));
+      return { success: true, isCompleted: nowCompleted };
+    }),
+
+  deleteMilestone: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database unavailable");
+      await db.delete(goalMilestones)
+        .where(and(eq(goalMilestones.id, input.id), eq(goalMilestones.userId, ctx.user.id)));
+      return { success: true };
+    }),
+
+  stats: protectedProcedure.query(async ({ ctx }) => {
+    const db = await getDb();
+    if (!db) return { active: 0, completed: 0, totalMilestones: 0, completedMilestones: 0 };
+    const allGoals = await db.select({ status: goals.status }).from(goals).where(eq(goals.userId, ctx.user.id));
+    const allMs = await db.select({ isCompleted: goalMilestones.isCompleted }).from(goalMilestones).where(eq(goalMilestones.userId, ctx.user.id));
+    return {
+      active: allGoals.filter(g => g.status === "active").length,
+      completed: allGoals.filter(g => g.status === "completed").length,
+      totalMilestones: allMs.length,
+      completedMilestones: allMs.filter(m => m.isCompleted).length,
+    };
+  }),
+});
 
 // ─── Audit Router ─────────────────────────────────────────────────────────────
 const auditRouter = router({
@@ -1256,6 +1407,7 @@ export const appRouter = router({
   products: productsRouter,
   store: storeRouter,
   community: communityRouter,
+  goals: goalsRouter,
   profile: profileRouter,
   btw: btwRouter,
   paypalOrders: paypalOrdersRouter,

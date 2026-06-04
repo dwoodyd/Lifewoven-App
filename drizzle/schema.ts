@@ -757,3 +757,41 @@ export const adminAuditLogs = mysqlTable("admin_audit_logs", {
 });
 export type AdminAuditLog = typeof adminAuditLogs.$inferSelect;
 export type InsertAdminAuditLog = typeof adminAuditLogs.$inferInsert;
+
+// ─── Goals ────────────────────────────────────────────────────────────────────
+// User-defined goals tied to the 5S framework. Each goal can have milestones.
+export const goals = mysqlTable("goals", {
+  id:          int("id").autoincrement().primaryKey(),
+  userId:      int("userId").notNull(),
+  title:       varchar("title", { length: 255 }).notNull(),
+  description: text("description"),
+  module:      mysqlEnum("module", ["state", "story", "standards", "strategy", "stewardship", "free"]).default("free").notNull(),
+  status:      mysqlEnum("status", ["active", "completed", "paused", "abandoned"]).default("active").notNull(),
+  targetDate:  timestamp("targetDate"),
+  completedAt: timestamp("completedAt"),
+  sortOrder:   int("sortOrder").default(0).notNull(),
+  createdAt:   timestamp("createdAt").defaultNow().notNull(),
+  updatedAt:   timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (t) => [index("idx_goals_userId").on(t.userId)]);
+
+export type Goal = typeof goals.$inferSelect;
+export type InsertGoal = typeof goals.$inferInsert;
+
+// ─── Goal Milestones ──────────────────────────────────────────────────────────
+// Sub-tasks / checkpoints within a goal.
+export const goalMilestones = mysqlTable("goal_milestones", {
+  id:          int("id").autoincrement().primaryKey(),
+  goalId:      int("goalId").notNull(),
+  userId:      int("userId").notNull(),
+  title:       varchar("title", { length: 255 }).notNull(),
+  isCompleted: boolean("isCompleted").default(false).notNull(),
+  completedAt: timestamp("completedAt"),
+  sortOrder:   int("sortOrder").default(0).notNull(),
+  createdAt:   timestamp("createdAt").defaultNow().notNull(),
+}, (t) => [
+  index("idx_goal_milestones_goalId").on(t.goalId),
+  index("idx_goal_milestones_userId").on(t.userId),
+]);
+
+export type GoalMilestone = typeof goalMilestones.$inferSelect;
+export type InsertGoalMilestone = typeof goalMilestones.$inferInsert;

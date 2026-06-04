@@ -110,6 +110,7 @@ export default function Dashboard() {
   const { data: lastPracticed } = trpc.pathways.lastPracticed.useQuery(undefined, { enabled: isAuthenticated });
   const { data: streakData } = trpc.pathways.practiceStreak.useQuery(undefined, { enabled: isAuthenticated });
   const { data: todayMood } = trpc.moodLog.getTodayMood.useQuery(undefined, { enabled: isAuthenticated });
+  const { data: goalStats } = trpc.goals.stats.useQuery(undefined, { enabled: isAuthenticated });
   const hasMoodToday = !!(todayMood as any)?.score;
   // Evening nudge: show after 5pm local time when no mood logged today
   const isEvening = new Date().getHours() >= 17;
@@ -547,6 +548,47 @@ export default function Dashboard() {
                   <p className="font-serif text-base font-light text-foreground mb-1">Your Rhythms are waiting.</p>
                   <p className="text-sm text-muted-foreground mb-4">Habits are not about discipline — they are about identity. Who do you want to become? Start with one habit that reflects that person.</p>
                   <Button asChild size="sm"><Link href="/standards">Build My First Habit</Link></Button>
+                </div>
+              )}
+            </div>
+
+            {/* Goals Widget */}
+            <div className="p-4 rounded-2xl border border-border bg-card">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <Target className="h-4 w-4 text-amber-500" />
+                  <h2 className="font-serif text-base font-light text-foreground">Goals</h2>
+                </div>
+                <Link href="/goals"><Button variant="ghost" size="sm" className="gap-1 text-xs text-muted-foreground h-8 px-2">View all <ArrowRight className="h-3 w-3" /></Button></Link>
+              </div>
+              {goalStats && (goalStats.active > 0 || goalStats.completed > 0) ? (
+                <div className="space-y-3">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="p-3 rounded-xl bg-muted/50 text-center">
+                      <p className="text-2xl font-light text-foreground">{goalStats.active}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">Active</p>
+                    </div>
+                    <div className="p-3 rounded-xl bg-muted/50 text-center">
+                      <p className="text-2xl font-light text-foreground">{goalStats.completed}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">Completed</p>
+                    </div>
+                  </div>
+                  {(goalStats as any).totalMilestones > 0 && (
+                    <div>
+                      <div className="flex items-center justify-between text-xs text-muted-foreground mb-1.5">
+                        <span>Milestones</span>
+                        <span>{(goalStats as any).completedMilestones}/{(goalStats as any).totalMilestones}</span>
+                      </div>
+                      <Progress value={Math.round(((goalStats as any).completedMilestones / (goalStats as any).totalMilestones) * 100)} className="h-1.5" />
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="text-center py-2">
+                  <p className="text-xs text-muted-foreground mb-2">No goals yet. Set your first intention.</p>
+                  <Button asChild size="sm" variant="outline" className="text-xs h-7">
+                    <Link href="/goals">Set a Goal</Link>
+                  </Button>
                 </div>
               )}
             </div>

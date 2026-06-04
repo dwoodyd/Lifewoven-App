@@ -1037,3 +1037,16 @@
 - [x] Fix #1: Secondary hero CTA label — "Explore the system" text does not exist in codebase; only "Explore Lifewoven" is present. Likely a cached/stale deployment artifact. Hard refresh resolves it.
 - [x] Fix #2: "Meet the Oracle" button — removed nested <Link><button> anti-pattern; replaced with single styled <Link> for correct Wouter navigation
 - [x] Fix #3: Pathways nav item — changed href from "/#pathways" to "/pathways" in Nav.tsx primaryLinks; also cleaned up dead hash-active logic
+
+## Journal & Goal Tracking — Jun 4, 2026
+
+- [x] Add goals table and goal_milestones table to drizzle/schema.ts
+- [x] Generate migration SQL and apply via webdev_execute_sql
+- [x] Add goalsRouter with list, create, update, delete, toggleMilestone, stats procedures
+- [x] Register goalsRouter in the main appRouter
+- [x] Build /goals page with active goals list, create form, milestone checkboxes, progress bar, module filter, status management
+- [x] Add /goals route to App.tsx; Goals added to DashboardLayout sidebar nav (all sidebar nav items updated to proper Lifewoven routes)
+- [x] Add inline edit mode to JournalEntry detail page (/weave/:id) — Edit button toggles inline title+content editing with Save/Cancel
+- [x] Enhance Dashboard journal widget — Goals widget added above journal showing active/completed counts and milestone progress bar
+- [x] Add Goals dashboard widget showing active/completed counts and milestone progress bar; goals.stats query wired to Dashboard
+- [x] Write vitest tests for goals (goals.test.ts) — schema enum, stats calculation, milestone toggle; 169 tests total, all pass
