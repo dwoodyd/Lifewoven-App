@@ -1031,3 +1031,9 @@
 ### Phase C — Go Live
 - [x] Create checkpoint and publish app to app.lifewoven.click
 - [x] Provide step-by-step PayPal live activation checklist for user
+
+## Bug Report — Jun 4, 2026
+
+- [x] Fix #1: Secondary hero CTA label — "Explore the system" text does not exist in codebase; only "Explore Lifewoven" is present. Likely a cached/stale deployment artifact. Hard refresh resolves it.
+- [x] Fix #2: "Meet the Oracle" button — removed nested <Link><button> anti-pattern; replaced with single styled <Link> for correct Wouter navigation
+- [x] Fix #3: Pathways nav item — changed href from "/#pathways" to "/pathways" in Nav.tsx primaryLinks; also cleaned up dead hash-active logic

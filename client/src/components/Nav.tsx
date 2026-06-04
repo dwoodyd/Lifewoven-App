@@ -23,7 +23,7 @@ import { trpc } from "@/lib/trpc";
 
 // Primary nav links — always visible on desktop
 const primaryLinks = [
-  { label: "Pathways", href: "/#pathways" },
+  { label: "Pathways", href: "/pathways" },
   { label: "The Ground", href: "/ground" },
   { label: "The Weave", href: "/weave" },
   { label: "Oracle", href: "/oracle" },
@@ -66,11 +66,6 @@ export default function Nav() {
         <nav className="hidden md:flex items-center gap-5 xl:gap-7" aria-label="Main navigation">
           {primaryLinks.map((link) => {
             const isActive = (() => {
-              // Hash anchor link (e.g. "/#pathways") — only active on root with matching hash
-              if (link.href.includes("#")) {
-                const [path, hash] = link.href.split("#");
-                return location === (path || "/") && typeof window !== "undefined" && window.location.hash === `#${hash}`;
-              }
               // Root link — exact match only
               if (link.href === "/") return location === "/";
               // Regular path — exact match or sub-route

@@ -122,18 +122,17 @@ export default function Home() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link href="/audit">
-                <button
-                  className="group flex items-center gap-3 px-8 py-4 rounded-full text-base font-medium transition-all duration-300"
-                  style={{
-                    background: "linear-gradient(135deg, oklch(0.75 0.14 55), oklch(0.65 0.18 45))",
-                    color: "oklch(0.12 0.02 260)",
-                    boxShadow: "0 0 40px oklch(0.75 0.14 55 / 0.35)",
-                  }}
-                >
-                  Take the Alignment Audit
-                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </button>
+              <Link
+                href="/audit"
+                className="group inline-flex items-center gap-3 px-8 py-4 rounded-full text-base font-medium transition-all duration-300"
+                style={{
+                  background: "linear-gradient(135deg, oklch(0.75 0.14 55), oklch(0.65 0.18 45))",
+                  color: "oklch(0.12 0.02 260)",
+                  boxShadow: "0 0 40px oklch(0.75 0.14 55 / 0.35)",
+                }}
+              >
+                Take the Alignment Audit
+                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Link>
               <a
                 href="#system"
@@ -236,18 +235,17 @@ export default function Home() {
               <p className="text-[oklch(0.60_0.01_260)] text-lg font-light leading-relaxed mb-8">
                 As you journal, check in, and move through pathways, the Oracle recognizes patterns across all five dimensions and tells you exactly what to work on next. You are never alone in this.
               </p>
-              <Link href="/oracle">
-                <button
-                  className="group flex items-center gap-3 px-7 py-3.5 rounded-full text-sm font-medium transition-all duration-300"
-                  style={{
-                    background: "linear-gradient(135deg, oklch(0.75 0.14 55), oklch(0.65 0.18 45))",
-                    color: "oklch(0.12 0.02 260)",
-                    boxShadow: "0 0 30px oklch(0.75 0.14 55 / 0.25)",
-                  }}
-                >
-                  Meet the Oracle
-                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </button>
+              <Link
+                href="/oracle"
+                className="group inline-flex items-center gap-3 px-7 py-3.5 rounded-full text-sm font-medium transition-all duration-300"
+                style={{
+                  background: "linear-gradient(135deg, oklch(0.75 0.14 55), oklch(0.65 0.18 45))",
+                  color: "oklch(0.12 0.02 260)",
+                  boxShadow: "0 0 30px oklch(0.75 0.14 55 / 0.25)",
+                }}
+              >
+                Meet the Oracle
+                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
           </div>
@@ -561,18 +559,17 @@ export default function Home() {
           <p className="text-[oklch(0.55_0.01_260)] text-lg font-light mb-10 max-w-xl mx-auto">
             A 12-question diagnostic that identifies where you are across the 5S dimensions and recommends your starting pathway. Takes 5 minutes. Changes everything.
           </p>
-          <Link href="/audit">
-            <button
-              className="group flex items-center gap-3 px-10 py-5 rounded-full text-base font-medium transition-all duration-300 mx-auto"
-              style={{
-                background: "linear-gradient(135deg, oklch(0.75 0.14 55), oklch(0.65 0.18 45))",
-                color: "oklch(0.12 0.02 260)",
-                boxShadow: "0 0 60px oklch(0.75 0.14 55 / 0.40)",
-              }}
-            >
-              Begin the Audit
-              <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-            </button>
+          <Link
+            href="/audit"
+            className="group inline-flex items-center gap-3 px-10 py-5 rounded-full text-base font-medium transition-all duration-300 mx-auto"
+            style={{
+              background: "linear-gradient(135deg, oklch(0.75 0.14 55), oklch(0.65 0.18 45))",
+              color: "oklch(0.12 0.02 260)",
+              boxShadow: "0 0 60px oklch(0.75 0.14 55 / 0.40)",
+            }}
+          >
+            Begin the Audit
+            <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
       </section>
