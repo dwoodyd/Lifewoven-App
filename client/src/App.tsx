@@ -4,6 +4,7 @@ import FeedbackWidget from "./components/FeedbackWidget";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch, useLocation, Redirect } from "wouter";
+import { useEffect } from "react";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { useAuth } from "./_core/hooks/useAuth";
@@ -91,11 +92,12 @@ import Admin from "./pages/Admin";
 
 // Page transitions — fast tween so exit never stalls the incoming page mount
 const pageVariants = {
-  initial: { opacity: 0, y: 8 },
+  initial: { opacity: 0, y: 6 },
   animate: { opacity: 1, y: 0 },
-  exit:    { opacity: 0 },
+  exit:    { opacity: 0, y: -4 },
 } as const;
-const pageTransition = { duration: 0.18, ease: "easeOut" } as const;
+// exit must complete before next page mounts (mode="wait") — keep exit very short
+const pageTransition = { duration: 0.14, ease: "easeOut" } as const;
 
 function RouterSwitch() {
   return (
@@ -196,21 +198,33 @@ function RouterSwitch() {
   );
 }
 
+function ScrollToTop() {
+  const [location] = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  return null;
+}
+
 function Router() {
   const [location] = useLocation();
   return (
-    <AnimatePresence mode="sync" initial={false}>
-      <motion.div
-        key={location}
-        variants={pageVariants}
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        transition={pageTransition}
-      >
-        <RouterSwitch />
-      </motion.div>
-    </AnimatePresence>
+    <>
+      <ScrollToTop />
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={location}
+          variants={pageVariants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          transition={pageTransition}
+          style={{ position: "relative", minHeight: "100vh" }}
+        >
+          <RouterSwitch />
+        </motion.div>
+      </AnimatePresence>
+    </>
   );
 }
 
