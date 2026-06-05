@@ -1050,3 +1050,17 @@
 - [x] Enhance Dashboard journal widget — Goals widget added above journal showing active/completed counts and milestone progress bar
 - [x] Add Goals dashboard widget showing active/completed counts and milestone progress bar; goals.stats query wired to Dashboard
 - [x] Write vitest tests for goals (goals.test.ts) — schema enum, stats calculation, milestone toggle; 169 tests total, all pass
+
+## Full Debug Audit — Jun 5, 2026
+
+### Critical — Layout Inconsistency (Sidebar Disappears)
+- [ ] BUG-1: Goals page uses DashboardLayout (sidebar) but ALL other authenticated pages (Journal, Oracle, Habits/Standards, Dashboard, Settings, Profile, Character, etc.) use standalone Nav — sidebar disappears when navigating away from Goals
+- [ ] BUG-2: DashboardLayout sidebar nav items point to pages that render with a different layout — clicking any sidebar item other than Goals causes the sidebar to vanish
+
+### Medium — Navigation / Routing
+- [ ] FIX-3: Add /habits route alias in App.tsx pointing to StandardsModule (sidebar nav says /standards but DashboardLayout links to /habits)
+- [ ] FIX-4: Goals page — DashboardLayout wraps the entire page including the page-level header, but Goals.tsx also renders its own header — results in double header on Goals page
+
+### Low — Code Quality / Cosmetic
+- [ ] CLEANUP-5: About.tsx has .map() calls without key props on several list items (cosmetic warning, no crash)
+- [ ] CLEANUP-6: Admin.tsx has several .map() calls without key props (cosmetic warning, admin-only page)

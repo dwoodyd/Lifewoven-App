@@ -16,7 +16,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Moon, Sun, Menu, X, CheckSquare, ClipboardList, BookOpen,
   BookMarked, BarChart2, ShoppingBag, CreditCard, Info, Settings,
-  HelpCircle, LogOut, ExternalLink,
+  HelpCircle, LogOut, ExternalLink, Target,
 } from "lucide-react";
 import { replayOnboarding } from "@/components/OnboardingModal";
 import { trpc } from "@/lib/trpc";
@@ -153,6 +153,11 @@ export default function Nav() {
                 <DropdownMenuItem asChild>
                   <Link href="/mood-rhythm" className="flex items-center gap-2">
                     <BarChart2 className="h-3.5 w-3.5" />Mood Rhythm
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/goals" className="flex items-center gap-2">
+                    <Target className="h-3.5 w-3.5" />Goals
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -299,6 +304,9 @@ export default function Nav() {
                 </Button>
                 <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground justify-start">
                   <Link href="/mood-rhythm" onClick={closeMobile}><BarChart2 className="h-4 w-4" />Mood Rhythm</Link>
+                </Button>
+                <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground justify-start">
+                  <Link href="/goals" onClick={closeMobile}><Target className="h-4 w-4" />Goals</Link>
                 </Button>
 
                 <p className="text-xs text-muted-foreground px-2 pt-2 font-medium uppercase tracking-wide">More from Soul Engineer</p>

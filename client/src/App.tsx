@@ -122,6 +122,7 @@ function RouterSwitch() {
       <Route path="/state" component={StateModule} />
       <Route path="/story" component={StoryModule} />
       <Route path="/standards" component={StandardsModule} />
+      <Route path="/habits"><Redirect to="/standards" replace /></Route>
       <Route path="/strategy" component={StrategyModule} />
       <Route path="/stewardship" component={StewardshipModule} />
 

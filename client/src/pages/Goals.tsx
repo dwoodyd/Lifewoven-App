@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
-import DashboardLayout from "@/components/DashboardLayout";
+import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -173,8 +173,9 @@ export default function Goals() {
   const goals = goalsList as GoalWithMilestones[];
 
   return (
-    <DashboardLayout>
-      <div className="max-w-3xl mx-auto px-4 py-8">
+    <div className="min-h-screen bg-background">
+      <Nav />
+      <div className="max-w-3xl mx-auto px-4 py-8 pt-24">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -557,6 +558,6 @@ export default function Goals() {
           </DialogContent>
         </Dialog>
       )}
-    </DashboardLayout>
+    </div>
   );
 }
