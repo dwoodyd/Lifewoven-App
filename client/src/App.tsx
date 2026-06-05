@@ -8,7 +8,6 @@ import { useEffect } from "react";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { useAuth } from "./_core/hooks/useAuth";
-import { AnimatePresence, motion } from "framer-motion";
 
 // Public pages
 import Home from "./pages/Home";
@@ -89,15 +88,6 @@ import Privacy from "./pages/legal/Privacy";
 import Refunds from "./pages/legal/Refunds";
 import Support from "./pages/Support";
 import Admin from "./pages/Admin";
-
-// Page transitions — fast tween so exit never stalls the incoming page mount
-const pageVariants = {
-  initial: { opacity: 0, y: 6 },
-  animate: { opacity: 1, y: 0 },
-  exit:    { opacity: 0, y: -4 },
-} as const;
-// exit must complete before next page mounts (mode="wait") — keep exit very short
-const pageTransition = { duration: 0.14, ease: "easeOut" } as const;
 
 function RouterSwitch() {
   return (
@@ -208,23 +198,10 @@ function ScrollToTop() {
 }
 
 function Router() {
-  const [location] = useLocation();
   return (
     <>
       <ScrollToTop />
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={location}
-          variants={pageVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          transition={pageTransition}
-          style={{ position: "relative", minHeight: "100vh" }}
-        >
-          <RouterSwitch />
-        </motion.div>
-      </AnimatePresence>
+      <RouterSwitch />
     </>
   );
 }

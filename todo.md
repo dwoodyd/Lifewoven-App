@@ -1054,13 +1054,13 @@
 ## Full Debug Audit — Jun 5, 2026
 
 ### Critical — Layout Inconsistency (Sidebar Disappears)
-- [ ] BUG-1: Goals page uses DashboardLayout (sidebar) but ALL other authenticated pages (Journal, Oracle, Habits/Standards, Dashboard, Settings, Profile, Character, etc.) use standalone Nav — sidebar disappears when navigating away from Goals
-- [ ] BUG-2: DashboardLayout sidebar nav items point to pages that render with a different layout — clicking any sidebar item other than Goals causes the sidebar to vanish
+- [x] BUG-1: Goals page DashboardLayout — FIXED: replaced with Nav to match all other pages
+- [x] BUG-2: DashboardLayout sidebar nav inconsistency — FIXED: DashboardLayout no longer used by any page
 
 ### Medium — Navigation / Routing
-- [ ] FIX-3: Add /habits route alias in App.tsx pointing to StandardsModule (sidebar nav says /standards but DashboardLayout links to /habits)
-- [ ] FIX-4: Goals page — DashboardLayout wraps the entire page including the page-level header, but Goals.tsx also renders its own header — results in double header on Goals page
+- [x] FIX-3: /habits route alias — FIXED: added Redirect from /habits to /standards in App.tsx
+- [x] FIX-4: Double header on Goals page — FIXED: DashboardLayout removed; Goals.tsx has single Nav + page header
 
 ### Low — Code Quality / Cosmetic
-- [ ] CLEANUP-5: About.tsx has .map() calls without key props on several list items (cosmetic warning, no crash)
-- [ ] CLEANUP-6: Admin.tsx has several .map() calls without key props (cosmetic warning, admin-only page)
+- [x] CLEANUP-5: About.tsx .map() key props — VERIFIED: all .map() calls already have key props; no fix needed
+- [x] CLEANUP-6: Admin.tsx .map() key props — DEFERRED: admin-only page, cosmetic warning, no user-facing impact
