@@ -127,12 +127,17 @@ export const storeRouter = router({
       const basePrice = parseFloat(product.price as unknown as string);
       const effectivePrice = getEffectivePrice(basePrice, level);
 
-      // Create PayPal order
-      const clientId = process.env.PAYPAL_CLIENT_ID;
-      const secret = process.env.PAYPAL_CLIENT_SECRET;
+      // Create PayPal order — use live credentials when PAYPAL_ENV=live
+      const isLive = process.env.PAYPAL_ENV === "live";
+      const clientId = isLive
+        ? (process.env.PAYPAL_LIVE_CLIENT_ID ?? process.env.PAYPAL_CLIENT_ID)
+        : process.env.PAYPAL_CLIENT_ID;
+      const secret = isLive
+        ? (process.env.PAYPAL_LIVE_CLIENT_SECRET ?? process.env.PAYPAL_CLIENT_SECRET)
+        : process.env.PAYPAL_CLIENT_SECRET;
       if (!clientId || !secret) throw new Error("PayPal not configured");
 
-      const paypalBase = process.env.PAYPAL_ENV === "live"
+      const paypalBase = isLive
         ? "https://api-m.paypal.com"
         : "https://api-m.sandbox.paypal.com";
 
@@ -216,11 +221,17 @@ export const storeRouter = router({
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
 
-      const clientId = process.env.PAYPAL_CLIENT_ID;
-      const secret = process.env.PAYPAL_CLIENT_SECRET;
+      // Capture PayPal order — use live credentials when PAYPAL_ENV=live
+      const isLive = process.env.PAYPAL_ENV === "live";
+      const clientId = isLive
+        ? (process.env.PAYPAL_LIVE_CLIENT_ID ?? process.env.PAYPAL_CLIENT_ID)
+        : process.env.PAYPAL_CLIENT_ID;
+      const secret = isLive
+        ? (process.env.PAYPAL_LIVE_CLIENT_SECRET ?? process.env.PAYPAL_CLIENT_SECRET)
+        : process.env.PAYPAL_CLIENT_SECRET;
       if (!clientId || !secret) throw new Error("PayPal not configured");
 
-      const paypalBase = process.env.PAYPAL_ENV === "live"
+      const paypalBase = isLive
         ? "https://api-m.paypal.com"
         : "https://api-m.sandbox.paypal.com";
 

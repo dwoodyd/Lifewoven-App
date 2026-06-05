@@ -1417,6 +1417,20 @@ export const appRouter = router({
   character: characterRouter,
   moodLog: moodLogRouter,
   applications: applicationsRouter,
+  paypal: router({
+    /**
+     * Returns the PayPal client ID for the current environment (live or sandbox).
+     * The client ID is safe to expose to the frontend — it is not a secret.
+     * This avoids needing a VITE_PAYPAL_CLIENT_ID env var that could be misconfigured.
+     */
+    config: publicProcedure.query(() => {
+      const isLive = process.env.PAYPAL_ENV === "live";
+      const clientId = isLive
+        ? (process.env.PAYPAL_LIVE_CLIENT_ID ?? process.env.PAYPAL_CLIENT_ID ?? "")
+        : (process.env.PAYPAL_CLIENT_ID ?? "");
+      return { clientId, isLive };
+    }),
+  }),
   support: router({
     submit: publicProcedure
       .input(z.object({

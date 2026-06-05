@@ -7,9 +7,13 @@
  *  3. PayPal popup handles authentication & payment
  *  4. onApprove → POST /api/paypal/capture-order → returns downloadToken
  *  5. onSuccess(downloadToken) is called — parent opens /api/download/:token
+ *
+ * Security: The PayPal client ID is fetched from the server via tRPC so no
+ * sensitive credentials are ever bundled into the client build.
  */
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { trpc } from "@/lib/trpc";
 
 interface PayPalButtonProps {
   productSlug: string;
@@ -33,13 +37,13 @@ export function PayPalButton({ productSlug, priceUsd, onSuccess, onError }: PayP
   const [rendered, setRendered] = useState(false);
   const [creditSaving, setCreditSaving] = useState(0);
 
-  // Load PayPal JS SDK once
+  // Fetch PayPal client ID from server — never from a VITE_ env var
+  const { data: paypalConfig } = trpc.paypal.config.useQuery();
+
+  // Load PayPal JS SDK once we have the client ID from the server
   useEffect(() => {
-    const clientId = import.meta.env.VITE_PAYPAL_CLIENT_ID;
-    if (!clientId) {
-      onError?.("PayPal is not configured.");
-      return;
-    }
+    const clientId = paypalConfig?.clientId;
+    if (!clientId) return;
     if (window.paypal) { setSdkReady(true); return; }
 
     const script = document.createElement("script");
@@ -50,7 +54,7 @@ export function PayPalButton({ productSlug, priceUsd, onSuccess, onError }: PayP
     document.body.appendChild(script);
     return () => { /* leave script in DOM for reuse */ };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [paypalConfig?.clientId]);
 
   // Render buttons once SDK is ready
   useEffect(() => {

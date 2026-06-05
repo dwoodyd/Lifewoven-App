@@ -1064,3 +1064,11 @@
 ### Low — Code Quality / Cosmetic
 - [x] CLEANUP-5: About.tsx .map() key props — VERIFIED: all .map() calls already have key props; no fix needed
 - [x] CLEANUP-6: Admin.tsx .map() key props — DEFERRED: admin-only page, cosmetic warning, no user-facing impact
+
+## API Key Security Audit
+
+- [x] Fix VITE_PAYPAL_CLIENT_ID: currently set to sandbox CLIENT_SECRET (wrong value) — removed VITE_PAYPAL_CLIENT_ID entirely; client ID now served via trpc.paypal.config
+- [x] Fix store.ts createOrder/captureOrder: use PAYPAL_LIVE_CLIENT_ID/SECRET when PAYPAL_ENV=live (currently always uses sandbox keys)
+- [x] Remove PayPalButton.tsx VITE_PAYPAL_CLIENT_ID usage: now fetches client ID from trpc.paypal.config instead
+- [x] Create docs/environment-variables.md documenting all required environment variables (.env.example blocked by platform policy)
+- [x] Verify no sensitive secrets (CLIENT_SECRET, JWT_SECRET, RESEND_API_KEY, DATABASE_URL) are exposed via VITE_ prefix — confirmed clean
