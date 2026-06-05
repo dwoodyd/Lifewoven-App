@@ -168,7 +168,7 @@ export default function Nav() {
                 </DropdownMenuLabel>
                 <DropdownMenuItem asChild>
                   <a
-                    href="https://soulengineer.online/shop"
+                    href="https://www.soulengineer.online/books"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2"
@@ -311,7 +311,7 @@ export default function Nav() {
 
                 <p className="text-xs text-muted-foreground px-2 pt-2 font-medium uppercase tracking-wide">More from Soul Engineer</p>
                 <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground justify-start">
-                  <a href="https://soulengineer.online/shop" target="_blank" rel="noopener noreferrer" onClick={closeMobile}>
+                  <a href="https://www.soulengineer.online/books" target="_blank" rel="noopener noreferrer" onClick={closeMobile}>
                     <ShoppingBag className="h-4 w-4" />Books <ExternalLink className="h-3 w-3 ml-auto" />
                   </a>
                 </Button>
