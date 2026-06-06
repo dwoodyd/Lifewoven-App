@@ -1065,6 +1065,12 @@
 - [x] CLEANUP-5: About.tsx .map() key props — VERIFIED: all .map() calls already have key props; no fix needed
 - [x] CLEANUP-6: Admin.tsx .map() key props — DEFERRED: admin-only page, cosmetic warning, no user-facing impact
 
+## OG Image & Social Sharing
+
+- [x] Generate branded OG image (1200x630) matching Lifewoven aesthetic
+- [x] Wire up og:type, og:url, og:title, og:description, og:image, og:image:width/height/alt, og:site_name
+- [x] Wire up twitter:card (summary_large_image), twitter:title, twitter:description, twitter:image, twitter:image:alt
+
 ## API Key Security Audit
 
 - [x] Fix VITE_PAYPAL_CLIENT_ID: currently set to sandbox CLIENT_SECRET (wrong value) — removed VITE_PAYPAL_CLIENT_ID entirely; client ID now served via trpc.paypal.config
