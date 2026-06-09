@@ -1078,3 +1078,12 @@
 - [x] Remove PayPalButton.tsx VITE_PAYPAL_CLIENT_ID usage: now fetches client ID from trpc.paypal.config instead
 - [x] Create docs/environment-variables.md documenting all required environment variables (.env.example blocked by platform policy)
 - [x] Verify no sensitive secrets (CLIENT_SECRET, JWT_SECRET, RESEND_API_KEY, DATABASE_URL) are exposed via VITE_ prefix — confirmed clean
+
+## Earthy/Woven Palette Redesign (brief-lifewoven.html)
+
+- [x] Rewrite index.css: light theme tokens → parchment #EFE7D6, card #F7F1E3, muted #E4D9C2, ink #262019, gold #B0832F
+- [x] Rewrite index.css: dark theme tokens → bark #1A140E, card #241C13, raise #2E2417, gold #C79A3E, text #EDE3CF
+- [x] Rewrite index.css: 5S earth-jewel colours → State #2E6E6E, Story #6E4A6B, Standards #4F6157, Strategy #3A4A6B, Stewardship #B5653F
+- [x] Update tonal scales (gold, parchment, ink) to match new palette
+- [x] Update hardcoded dark colours in Apply.tsx and InviteRedeem.tsx to use semantic tokens
+- [x] Verify no navy (#0B0F1A, #0e0e0e, #111520) remains in light-mode components — Apply.tsx and InviteRedeem.tsx cleaned; all other pages use semantic tokens
