@@ -43,13 +43,13 @@
   </head>
 
   <body>
-    <!-- Anti-FOUC: apply saved theme before React mounts; default to dark -->
-    <script>(function(){try{var t=localStorage.getItem('theme');var isDark=(t==='dark')||(t===null);if(isDark)document.documentElement.classList.add('dark');}catch(e){document.documentElement.classList.add('dark');}})()</script>
+    <!-- Anti-FOUC: apply saved theme before React mounts; default to light -->
+    <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.classList.add('dark');}catch(e){}})()</script>
     <!-- Splash screen: spins favicon, fades out when React mounts -->
     <div id="splash" style="
       position:fixed;inset:0;z-index:9999;
       display:flex;align-items:center;justify-content:center;
-      background:var(--splash-bg,#1a1814);
+      background:var(--splash-bg,#f2ecdf);
       transition:opacity 0.8s ease, visibility 0.8s ease;
     ">
       <img
