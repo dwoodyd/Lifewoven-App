@@ -1,13 +1,15 @@
 import { Link } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
-import { Button } from "@/components/ui/button";
 import Nav from "@/components/Nav";
 import { ArrowRight, ChevronRight, Sparkles } from "lucide-react";
 import { LUMIN_VIDEOS } from "@/data/lumin";
 import { useRef, useEffect } from "react";
 import { toast } from "sonner";
 import { useLocation } from "wouter";
+import { trpc } from "@/lib/trpc";
+import ReturningHome from "@/components/ReturningHome";
+import NewMemberHome from "@/components/NewMemberHome";
 
 // Pick the floating/idle Lumin video for the hero
 const HERO_LUMIN = LUMIN_VIDEOS.find((v) => v.id === "floating_center") ?? LUMIN_VIDEOS[0];
@@ -57,6 +59,12 @@ export default function Home() {
   const { isAuthenticated } = useAuth();
   const [location] = useLocation();
 
+  // Fetch home context only when authenticated
+  const { data: homeCtx, isLoading: homeCtxLoading } = trpc.profile.homeContext.useQuery(
+    undefined,
+    { enabled: isAuthenticated }
+  );
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const loginError = params.get("login_error");
@@ -70,13 +78,39 @@ export default function Home() {
       };
       const msg = messages[loginError] ?? "Login failed. Please try again.";
       toast.error("Sign-in error", { description: msg });
-      // Remove the query param from the URL without a reload
       const clean = window.location.pathname;
       window.history.replaceState({}, "", clean);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
+  // ── Branch: authenticated users ──────────────────────────────────────────────
+  if (isAuthenticated) {
+    // Still loading context — show nothing (avoids flash)
+    if (homeCtxLoading || !homeCtx) {
+      return (
+        <div className="min-h-screen bg-background flex items-center justify-center">
+          <span className="text-muted-foreground text-sm font-light">Loading…</span>
+        </div>
+      );
+    }
+    // New member: signed in but no audit or journal yet
+    if (!homeCtx.hasActivity) {
+      return <NewMemberHome userName={homeCtx.userName} />;
+    }
+    // Returning member: has prior activity
+    return (
+      <ReturningHome
+        userName={homeCtx.userName}
+        lastPathway={homeCtx.lastPathway}
+        lastJournalId={homeCtx.lastJournalId}
+        lastJournalTitle={homeCtx.lastJournalTitle}
+        lastJournalPathway={homeCtx.lastJournalPathway}
+      />
+    );
+  }
+
+  // ── Branch: logged-out → full marketing landing ───────────────────────────────
   return (
     <div className="min-h-screen bg-[oklch(0.10_0.015_260)] text-[oklch(0.95_0.01_60)]">
       <Nav />

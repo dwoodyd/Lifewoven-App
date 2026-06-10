@@ -1340,6 +1340,40 @@ Write a single, personal, present-tense identity sentence (max 20 words) that re
     return { sentence };
   }),
 
+  /**
+   * Lightweight context for the returning-member home page.
+   * Returns only what the home needs — no heavy data.
+   */
+  homeContext: protectedProcedure.query(async ({ ctx }) => {
+    const db = await getDb();
+    if (!db) return null;
+    const [auditRow, lastJournalRow, lastPathwayRow] = await Promise.all([
+      db.select({ id: auditResults.id, recommendedPathway: auditResults.recommendedPathway })
+        .from(auditResults).where(eq(auditResults.userId, ctx.user.id))
+        .orderBy(desc(auditResults.createdAt)).limit(1),
+      db.select({ id: journalEntries.id, title: journalEntries.title, pathway: journalEntries.pathway, createdAt: journalEntries.createdAt })
+        .from(journalEntries).where(eq(journalEntries.userId, ctx.user.id))
+        .orderBy(desc(journalEntries.createdAt)).limit(1),
+      db.select({ pathway: userPathways.pathway, status: userPathways.status })
+        .from(userPathways).where(and(eq(userPathways.userId, ctx.user.id), eq(userPathways.status, "active")))
+        .orderBy(desc(userPathways.startedAt)).limit(1),
+    ]);
+    const hasAudit = auditRow.length > 0;
+    const lastJournal = lastJournalRow[0] ?? null;
+    const lastPathway = lastPathwayRow[0]?.pathway ?? auditRow[0]?.recommendedPathway ?? null;
+    const hasActivity = hasAudit || !!lastJournal;
+    return {
+      hasActivity,
+      hasAudit,
+      lastJournalId: lastJournal?.id ?? null,
+      lastJournalTitle: lastJournal?.title ?? null,
+      lastJournalPathway: lastJournal?.pathway ?? null,
+      lastPathway,
+      recommendedPathway: auditRow[0]?.recommendedPathway ?? null,
+      userName: ctx.user.name ?? "friend",
+    };
+  }),
+
   dashboard: protectedProcedure.query(async ({ ctx }) => {
     const db = await getDb();
     if (!db) return null;

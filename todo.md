@@ -1087,3 +1087,10 @@
 - [x] Update tonal scales (gold, parchment, ink) to match new palette
 - [x] Update hardcoded dark colours in Apply.tsx and InviteRedeem.tsx to use semantic tokens
 - [x] Verify no navy (#0B0F1A, #0e0e0e, #111520) remains in light-mode components — Apply.tsx and InviteRedeem.tsx cleaned; all other pages use semantic tokens
+
+## Returning-Member Home (spec: lifewoven-returning-member-home-spec.html)
+
+- [x] Add trpc.profile.homeContext protected procedure: returns { hasActivity, hasAudit, lastJournalId, lastJournalTitle, lastJournalPathway, lastPathway, recommendedPathway, userName }
+- [x] Build ReturningHome component: greeting with time-aware kicker, focal action card, continuity link, Ground+Oracle doorways, 5S spine
+- [x] Build NewMemberHome component: calm first-step page with single "Take the Alignment Audit" CTA
+- [x] Branch Home.tsx: logged-out → marketing landing (unchanged), new member → NewMemberHome, returning → ReturningHome
