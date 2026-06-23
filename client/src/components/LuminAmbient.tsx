@@ -78,91 +78,124 @@ export function LuminAmbient({
   if (mode === "edge-fade" || mode === "corner") {
     const o = opacity ?? 0.15;
     return (
-      <motion.div
-        aria-hidden="true"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 2.2, ease: "easeOut" }}
-        style={{
-          position: "fixed",
-          top: 0,
-          right: 0,
-          width: "min(52vw, 520px)",
-          height: "100vh",
-          zIndex,
-          pointerEvents: "none",
-          WebkitMaskImage:
-            "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.55) 40%, rgba(0,0,0,0.85) 100%)",
-          maskImage:
-            "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.55) 40%, rgba(0,0,0,0.85) 100%)",
-          opacity: o,
-          ...style,
-        }}
-      >
-        <video
-          ref={videoRef}
-          src={video.url}
-          autoPlay
-          muted
-          loop={loop}
-          playsInline
+      <>
+        {/* Background scrim: keeps the page background color visible on the right side
+            so text printed over that region remains legible regardless of video content */}
+        <div
+          aria-hidden="true"
           style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            objectPosition: "center center",
-            mixBlendMode: "normal",
-            display: "block",
+            position: "fixed",
+            top: 0,
+            right: 0,
+            width: "min(52vw, 520px)",
+            height: "100vh",
+            zIndex: zIndex - 1,
+            pointerEvents: "none",
+            background: "linear-gradient(to right, transparent 0%, var(--background) 55%)",
           }}
         />
-      </motion.div>
+        <motion.div
+          aria-hidden="true"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 2.2, ease: "easeOut" }}
+          style={{
+            position: "fixed",
+            top: 0,
+            right: 0,
+            width: "min(52vw, 520px)",
+            height: "100vh",
+            zIndex,
+            pointerEvents: "none",
+            WebkitMaskImage:
+              "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.7) 100%)",
+            maskImage:
+              "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.7) 100%)",
+            opacity: o,
+            ...style,
+          }}
+        >
+          <video
+            ref={videoRef}
+            src={video.url}
+            autoPlay
+            muted
+            loop={loop}
+            playsInline
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              objectPosition: "center center",
+              mixBlendMode: "normal",
+              display: "block",
+            }}
+          />
+        </motion.div>
+      </>
     );
   }
 
   // ── Floor-glow mode ────────────────────────────────────────────────────────
   // Lumin anchored to the bottom, only her lower third visible — like candlelight.
   if (mode === "floor-glow") {
-    const o = opacity ?? 0.20;
+    const o = opacity ?? 0.10;
     return (
-      <motion.div
-        aria-hidden="true"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 2.2, ease: "easeOut" }}
-        style={{
-          position: "fixed",
-          bottom: 0,
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: "min(70vw, 700px)",
-          height: "min(50vh, 500px)",
-          zIndex,
-          pointerEvents: "none",
-          WebkitMaskImage:
-            "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.9) 100%)",
-          maskImage:
-            "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.9) 100%)",
-          opacity: o,
-          ...style,
-        }}
-      >
-        <video
-          ref={videoRef}
-          src={video.url}
-          autoPlay
-          muted
-          loop={loop}
-          playsInline
+      <>
+        {/* Bottom scrim so content above the floor video stays on the page background */}
+        <div
+          aria-hidden="true"
           style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            objectPosition: "center bottom",
-            mixBlendMode: "normal",
-            display: "block",
+            position: "fixed",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: "min(50vh, 500px)",
+            zIndex: zIndex - 1,
+            pointerEvents: "none",
+            background: "linear-gradient(to bottom, var(--background) 0%, transparent 60%)",
           }}
         />
-      </motion.div>
+        <motion.div
+          aria-hidden="true"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 2.2, ease: "easeOut" }}
+          style={{
+            position: "fixed",
+            bottom: 0,
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "min(70vw, 700px)",
+            height: "min(50vh, 500px)",
+            zIndex,
+            pointerEvents: "none",
+            WebkitMaskImage:
+              "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 100%)",
+            maskImage:
+              "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 100%)",
+            opacity: o,
+            ...style,
+          }}
+        >
+          <video
+            ref={videoRef}
+            src={video.url}
+            autoPlay
+            muted
+            loop={loop}
+            playsInline
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              objectPosition: "center bottom",
+              mixBlendMode: "normal",
+              display: "block",
+            }}
+          />
+        </motion.div>
+      </>
     );
   }
 
