@@ -84,6 +84,7 @@ function SendToWeaveSheet({
   reflectionPrompt,
   sourceType,
   sourceId,
+  savingHighlight,
 }: {
   open: boolean;
   onClose: () => void;
@@ -94,6 +95,7 @@ function SendToWeaveSheet({
   reflectionPrompt?: string;
   sourceType: "highlight" | "message";
   sourceId: number;
+  savingHighlight?: boolean;
 }) {
   const [, navigate] = useLocation();
   const [userNote, setUserNote] = useState("");
@@ -173,7 +175,7 @@ function SendToWeaveSheet({
             <Button variant="outline" size="sm" onClick={onClose} disabled={sendToWeaveMutation.isPending}>
               Cancel
             </Button>
-            <Button size="sm" onClick={handleConfirm} disabled={sendToWeaveMutation.isPending} className="gap-1.5">
+            <Button size="sm" onClick={handleConfirm} disabled={sendToWeaveMutation.isPending || savingHighlight} className="gap-1.5">
               {sendToWeaveMutation.isPending ? (
                 <Loader2 className="h-3.5 w-3.5 animate-spin" />
               ) : (
@@ -604,8 +606,8 @@ export default function LibraryReader() {
     open: boolean;
     text: string;
     chunkIndex: number;
+    highlightId: number | null;
   } | null>(null);
-  const [highlightNote, setHighlightNote] = useState("");
 
   const resourceId = match ? parseInt(params!.id, 10) : null;
 
@@ -624,6 +626,14 @@ export default function LibraryReader() {
     onError: () => toast.error("Could not save highlight."),
   });
 
+  // Separate mutation for passage → Weave (saves highlight first, then opens sheet)
+  const addHighlightForWeaveMutation = trpc.library.addHighlight.useMutation({
+    onSuccess: (data) => {
+      setHighlightWeaveSheet(prev => prev ? { ...prev, highlightId: data.id } : null);
+    },
+    onError: () => toast.error("Could not save passage. Please try again."),
+  });
+
   const totalPages = chunks ? Math.ceil(chunks.length / CHUNKS_PER_PAGE) : 0;
   const pageChunks = chunks ? chunks.slice(page * CHUNKS_PER_PAGE, (page + 1) * CHUNKS_PER_PAGE) : [];
 
@@ -638,7 +648,10 @@ export default function LibraryReader() {
   };
 
   const handleSendToWeave = (text: string, chunkIndex: number) => {
-    setHighlightWeaveSheet({ open: true, text, chunkIndex });
+    if (!resourceId) return;
+    // Save the passage as a highlight first so we have a real DB ID for sendToWeave
+    setHighlightWeaveSheet({ open: true, text, chunkIndex, highlightId: null });
+    addHighlightForWeaveMutation.mutate({ resourceId, content: text, chunkIndex });
   };
 
   if (!isAuthenticated) {
@@ -823,7 +836,8 @@ export default function LibraryReader() {
           resourceTitle={resource.title}
           resourceAuthor={resource.author}
           sourceType="highlight"
-          sourceId={0}
+          sourceId={highlightWeaveSheet.highlightId ?? 0}
+          savingHighlight={highlightWeaveSheet.highlightId === null}
         />
       )}
     </div>
