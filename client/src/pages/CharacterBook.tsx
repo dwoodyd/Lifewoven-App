@@ -566,7 +566,7 @@ export default function CharacterBook() {
       <Nav />
       <LuminCorner />
 
-      <div className="max-w-4xl mx-auto px-4 pt-28 pb-20">
+      <div className="max-w-4xl mx-auto px-4 pt-28 pb-20 lumin-text">
         {/* Back */}
         <button onClick={() => navigate("/character")} className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground text-sm mb-6 transition-colors">
           <ArrowLeft className="h-4 w-4" />

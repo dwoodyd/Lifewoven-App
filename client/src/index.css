@@ -276,6 +276,15 @@
     transform: translateY(-1px);
     box-shadow: 0 6px 24px oklch(0.639 0.113 80 / 0.30);
   }
+  /* Text legibility over Lumin video backgrounds.
+     Apply .lumin-text to any wrapper whose content sits over a LuminAmbient video.
+     The shadow uses the page background color so it works in both light and dark themes. */
+  .lumin-text * {
+    text-shadow:
+      0 1px 8px var(--background),
+      0 0px 16px var(--background),
+      0 2px 4px var(--background);
+  }
   /* Thin gold divider line */
   .divider-gold {
     height: 1px;

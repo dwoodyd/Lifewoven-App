@@ -163,7 +163,7 @@ export default function Journal() {
         zIndex={0}
       />
       <Nav />
-      <div className="container pt-20 pb-24 max-w-5xl mx-auto px-4 sm:px-6">
+      <div className="container pt-20 pb-24 max-w-5xl mx-auto px-4 sm:px-6 lumin-text">
         <div className="flex items-start justify-between gap-3 mb-6">
           <div className="flex items-start gap-3">
             <div className="p-2.5 sm:p-3 rounded-xl bg-secondary flex-shrink-0"><BookOpen className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" /></div>

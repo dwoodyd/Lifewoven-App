@@ -104,7 +104,7 @@ export default function PathwaysListing() {
         zIndex={0}
       />
       <Nav />
-      <div className="container pt-20 pb-20 max-w-4xl mx-auto px-4 sm:px-6">
+      <div className="container pt-20 pb-20 max-w-4xl mx-auto px-4 sm:px-6 lumin-text">
 
         {/* Header */}
         <div className="mb-10">

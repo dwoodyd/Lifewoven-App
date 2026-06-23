@@ -188,7 +188,7 @@ export default function Oracle() {
         zIndex={0}
       />
       <Nav />
-      <div className="container pt-20 pb-6 max-w-3xl mx-auto flex flex-col flex-1 px-4 sm:px-6" style={{ position: "relative", zIndex: 1 }}>
+      <div className="container pt-20 pb-6 max-w-3xl mx-auto flex flex-col flex-1 px-4 sm:px-6 lumin-text" style={{ position: "relative", zIndex: 1 }}>
 
         {/* Header */}
         <div className="flex items-start gap-4 mb-5">

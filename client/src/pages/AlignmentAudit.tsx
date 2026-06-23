@@ -289,7 +289,7 @@ export default function AlignmentAudit() {
         zIndex={0}
       />
       <Nav />
-      <div className="container max-w-xl mx-auto pt-24 pb-20 text-center px-4 sm:px-6">
+      <div className="container max-w-xl mx-auto pt-24 pb-20 text-center px-4 sm:px-6 lumin-text">
         <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Lifewoven · Alignment Audit</p>
         <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-6 leading-tight">Find your clearest<br />place to begin.</h1>
         <p className="text-muted-foreground text-base leading-relaxed mb-6 max-w-md mx-auto">The Alignment Audit identifies where friction is highest in your life right now — and recommends the most honest place to start inside Lifewoven. There are four short sections. Answer as honestly as you can — this only works if you are real with it.</p>
@@ -356,7 +356,7 @@ export default function AlignmentAudit() {
   if (step === "optional_prompt") return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container max-w-xl mx-auto pt-24 pb-20 text-center px-4 sm:px-6">
+      <div className="container max-w-xl mx-auto pt-24 pb-20 text-center px-4 sm:px-6 lumin-text">
         <div className="p-5 sm:p-8 rounded-2xl border border-border bg-card">
           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Almost there</p>
           <h2 className="font-serif text-2xl font-light text-foreground mb-4">A few optional questions to sharpen your results.</h2>

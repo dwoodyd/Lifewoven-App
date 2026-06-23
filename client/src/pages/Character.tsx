@@ -374,7 +374,7 @@ export default function Character() {
       <Nav />
       <LuminCorner />
 
-      <div className="max-w-6xl mx-auto px-4 pt-28 pb-20">
+      <div className="max-w-6xl mx-auto px-4 pt-28 pb-20 lumin-text">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div>
