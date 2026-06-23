@@ -1,6 +1,6 @@
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Check, Sparkles, Loader2, Lock, Library, Percent } from "lucide-react";
 import { getLoginUrl } from "@/const";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -106,9 +106,17 @@ const LIBRARY_ROWS: [string, string | boolean, string | boolean, string | boolea
 
 export default function Pricing() {
   const { user } = useAuth();
+  const [, navigate] = useLocation();
   const [subStatus, setSubStatus] = useState<SubStatus | null>(null);
   const [pendingPlan, setPendingPlan] = useState<string | null>(null);
   const [annual, setAnnual] = useState(false);
+
+  // Admin/owner account bypasses pricing entirely
+  useEffect(() => {
+    if (user && (user as any).role === "admin") {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   useEffect(() => {
     if (!user) return;
@@ -219,7 +227,7 @@ export default function Pricing() {
         </div>
 
         {/* Tier cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-14">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-14 pt-5">
           {TIERS.map(tier => {
             const isCurrent = currentTier === tier.id;
             const displayPrice = annual && tier.annualPrice ? tier.annualPrice : tier.price;
@@ -230,7 +238,7 @@ export default function Pricing() {
             return (
               <div
                 key={tier.id}
-                className={`relative rounded-2xl border p-6 flex flex-col gap-5 transition-all ${
+                className={`relative overflow-visible rounded-2xl border p-6 flex flex-col gap-5 transition-all ${
                   tier.highlight
                     ? "border-amber-400/50 bg-amber-400/5 shadow-lg shadow-amber-400/10"
                     : tier.id === "oracle"
