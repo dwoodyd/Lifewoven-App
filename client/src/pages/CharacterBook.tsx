@@ -560,7 +560,7 @@ export default function CharacterBook() {
       <LuminAmbient
         videoId="turning_extending"
         mode="floor-glow"
-        opacity={0.18}
+        opacity={0.12}
         zIndex={0}
       />
       <Nav />

@@ -76,7 +76,7 @@ export function LuminAmbient({
   // ── Edge-fade mode (default for content pages) ─────────────────────────────
   // Lumin bleeds in from the right, masked so only a soft glow/silhouette shows.
   if (mode === "edge-fade" || mode === "corner") {
-    const o = opacity ?? 0.25;
+    const o = opacity ?? 0.15;
     return (
       <motion.div
         aria-hidden="true"
@@ -111,7 +111,7 @@ export function LuminAmbient({
             height: "100%",
             objectFit: "cover",
             objectPosition: "center center",
-            mixBlendMode: "screen",
+            mixBlendMode: "normal",
             display: "block",
           }}
         />
@@ -158,7 +158,7 @@ export function LuminAmbient({
             height: "100%",
             objectFit: "cover",
             objectPosition: "center bottom",
-            mixBlendMode: "screen",
+            mixBlendMode: "normal",
             display: "block",
           }}
         />

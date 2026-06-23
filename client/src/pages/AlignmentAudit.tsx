@@ -285,7 +285,7 @@ export default function AlignmentAudit() {
       <LuminAmbient
         videoId="pointing"
         mode="edge-fade"
-        opacity={0.22}
+        opacity={0.12}
         zIndex={0}
       />
       <Nav />

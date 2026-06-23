@@ -100,7 +100,7 @@ export default function PathwaysListing() {
       <LuminAmbient
         videoId="pointing_energy"
         mode="edge-fade"
-        opacity={0.25}
+        opacity={0.12}
         zIndex={0}
       />
       <Nav />

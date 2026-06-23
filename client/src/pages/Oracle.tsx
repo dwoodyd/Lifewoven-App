@@ -184,7 +184,7 @@ export default function Oracle() {
       <LuminAmbient
         videoId="core_unfurls"
         mode="edge-fade"
-        opacity={0.22}
+        opacity={0.12}
         zIndex={0}
       />
       <Nav />

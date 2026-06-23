@@ -14,7 +14,9 @@ import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
 import { toast } from "sonner";
 import { TrendingUp, TrendingDown, Minus, Activity, Calendar, Info } from "lucide-react";
-import { LuminAmbient } from "@/components/LuminAmbient";
+import Nav from "@/components/Nav";
+import { Link } from "wouter";
+import { ArrowLeft } from "lucide-react";
 
 // ─── Score label helpers ──────────────────────────────────────────────────────
 
@@ -203,15 +205,16 @@ export default function MoodRhythmChart() {
 
   return (
     <>
-    <LuminAmbient
-      videoId="peaceful_idle"
-      mode="floor-glow"
-      opacity={0.18}
-      zIndex={0}
-    />
+    <Nav />
     <div className="container max-w-3xl py-8 space-y-6">
-      {/* Header */}
+      {/* Back navigation */}
       <div>
+        <Link href="/">
+          <a className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-4">
+            <ArrowLeft className="w-4 h-4" />
+            Home
+          </a>
+        </Link>
         <h1 className="text-2xl font-semibold tracking-tight">Mood Rhythm Chart</h1>
         <p className="text-sm text-muted-foreground mt-1">
           Track your daily mood to reveal your personal emotional cycle — and predict your next high and low.

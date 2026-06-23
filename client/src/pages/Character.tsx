@@ -368,7 +368,7 @@ export default function Character() {
       <LuminAmbient
         videoId="bouncing_joyfully"
         mode="floor-glow"
-        opacity={0.18}
+        opacity={0.12}
         zIndex={0}
       />
       <Nav />
