@@ -32,7 +32,8 @@ export default function StewardshipModule() {
           <div className="p-3 rounded-xl bg-stewardship/10 flex-shrink-0"><Leaf className="h-6 w-6 text-stewardship" /></div>
           <div>
             <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-1">5S Framework — Module 5</p>
-            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-2">Stewardship</h1>
+            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-1">Stewardship</h1>
+            <p className="text-sm font-mono tracking-wide text-stewardship/80 italic mb-2">The life you tend — the dimension of resources, relationships, and legacy.</p>
             <p className="text-muted-foreground text-base font-light max-w-xl">You cannot pour from an empty vessel. Stewardship is the art of managing your most precious resources — your energy, your body, your time, and your wealth — with wisdom and intention.</p>
           </div>
         </div>

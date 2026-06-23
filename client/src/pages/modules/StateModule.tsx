@@ -90,7 +90,8 @@ export default function StateModule() {
           <div className="p-3 rounded-xl bg-state/10 flex-shrink-0"><Waves className="h-6 w-6 text-state" /></div>
           <div>
             <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-1">5S Framework — Module 1</p>
-            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-2">State</h1>
+            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-1">State</h1>
+            <p className="text-sm font-mono tracking-wide text-state/80 italic mb-2">Your emotional and energetic presence — the dimension of how you show up.</p>
             <p className="text-muted-foreground text-base font-light max-w-xl">Your emotional state is the foundation of everything. Before strategy, before habits, before action — you must be in alignment. This module is your daily practice of returning to alignment.</p>
           </div>
         </div>

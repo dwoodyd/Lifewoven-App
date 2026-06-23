@@ -75,7 +75,8 @@ export default function StandardsModule() {
           <div className="p-3 rounded-xl bg-standards/10 flex-shrink-0"><Target className="h-6 w-6 text-standards" /></div>
           <div>
             <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-1">5S Framework — Module 3</p>
-            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-2">Standards</h1>
+            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-1">Standards</h1>
+            <p className="text-sm font-mono tracking-wide text-standards/80 italic mb-2">The commitments you keep — the dimension of integrity and character.</p>
             <p className="text-muted-foreground text-base font-light max-w-xl">Your systems determine your outcomes. This module is your habit execution engine, daily scorecard, and deep work architecture.</p>
           </div>
         </div>

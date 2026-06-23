@@ -67,6 +67,9 @@ import Character from "./pages/Character";
 import CharacterBook from "./pages/CharacterBook";
 import MoodRhythmChart from "./pages/MoodRhythmChart";
 import { BetaExpiredModal } from "./components/BetaExpiredModal";
+import FirstHonestWeek from "./pages/FirstHonestWeek";
+import Dimensions from "./pages/Dimensions";
+import MyLibrary from "./pages/MyLibrary";
 import { PWAInstallPrompt } from "./components/PWAInstallPrompt";
 
 // The Ground (formerly Before the Words)
@@ -159,6 +162,15 @@ function RouterSwitch() {
       <Route path="/apply" component={Apply} />
       <Route path="/invite/:code" component={InviteRedeem} />
       <Route path="/subscription/success" component={SubscriptionSuccess} />
+
+      {/* First Honest Week */}
+      <Route path="/first-honest-week" component={FirstHonestWeek} />
+
+      {/* 6 Dimensions Life Map */}
+      <Route path="/dimensions" component={Dimensions} />
+
+      {/* Personal Library */}
+      <Route path="/my-library" component={MyLibrary} />
 
       {/* The Ground (formerly Before the Words) */}
       <Route path="/ground" component={BTWLanding} />

@@ -1,0 +1,1 @@
+ALTER TABLE `dimension_entries` MODIFY COLUMN `dimension` enum('emotional','physical','spiritual','creative','identity','purpose') NOT NULL;

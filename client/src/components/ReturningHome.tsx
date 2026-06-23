@@ -227,7 +227,39 @@ export default function ReturningHome({
           </Link>
         </div>
 
-        {/* 08 · THE 5S SPINE */}
+        {/* 08 · BOOK ENTRY CARD — "Just finished the book?" */}
+        <div
+          className="w-full rounded-2xl border border-border/60 bg-card/60 px-7 py-6 mb-8 text-left
+                     transition-all duration-300 ease-out
+                     hover:border-accent/40 hover:shadow-sm hover:-translate-y-0.5"
+        >
+          <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-muted-foreground mb-3">
+            Just finished the book?
+          </p>
+          <p
+            className="text-foreground mb-1"
+            style={{
+              fontFamily: "'Cormorant Garamond', Georgia, serif",
+              fontSize: "1.2rem",
+              fontWeight: 500,
+            }}
+          >
+            Start The First Honest Week
+          </p>
+          <p className="text-xs text-muted-foreground leading-snug mb-4">
+            Seven questions. Seven honest answers. The foundation the practice builds on.
+          </p>
+          <Link
+            href="/first-honest-week"
+            className="group inline-flex items-center gap-2 text-sm font-medium transition-colors duration-150"
+            style={{ color: "var(--color-accent, oklch(0.62 0.12 55))" }}
+          >
+            Begin the week
+            <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-1" />
+          </Link>
+        </div>
+
+        {/* 09 · THE 5S SPINE */}
         <div className="w-full border-t border-border pt-8">
           <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-5">
             Your five dimensions

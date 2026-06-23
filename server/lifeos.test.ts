@@ -193,3 +193,47 @@ describe("products.list", () => {
     expect(Array.isArray(result)).toBe(true);
   });
 });
+
+// ─── Dimensions Router Tests ──────────────────────────────────────────────────
+
+describe("dimensions.getAll", () => {
+  it("returns an object with 6 dimension keys for authenticated user (no DB in test env)", async () => {
+    const { ctx } = createAuthContext();
+    const caller = appRouter.createCaller(ctx);
+    const result = await caller.dimensions.getAll();
+    expect(result).toHaveProperty("emotional");
+    expect(result).toHaveProperty("physical");
+    expect(result).toHaveProperty("spiritual");
+    expect(result).toHaveProperty("creative");
+    expect(result).toHaveProperty("identity");
+    expect(result).toHaveProperty("purpose");
+  });
+});
+
+describe("dimensions.getAll (unauthenticated)", () => {
+  it("throws UNAUTHORIZED for unauthenticated user", async () => {
+    const { ctx } = createPublicContext();
+    const caller = appRouter.createCaller(ctx);
+    await expect(caller.dimensions.getAll()).rejects.toMatchObject({ code: "UNAUTHORIZED" });
+  });
+});
+
+// ─── Library Router Tests ─────────────────────────────────────────────────────
+
+describe("library.list", () => {
+  it("returns an array for authenticated user (no DB in test env)", async () => {
+    const { ctx } = createAuthContext();
+    const caller = appRouter.createCaller(ctx);
+    const result = await caller.library.list();
+    expect(Array.isArray(result)).toBe(true);
+  });
+});
+
+describe("library.list (unauthenticated)", () => {
+  it("throws UNAUTHORIZED for unauthenticated user", async () => {
+    const { ctx } = createPublicContext();
+    const caller = appRouter.createCaller(ctx);
+    // protectedProcedure throws UNAUTHORIZED when user is not authenticated
+    await expect(caller.library.list()).rejects.toThrow();
+  });
+});

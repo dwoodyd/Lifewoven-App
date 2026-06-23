@@ -1094,3 +1094,119 @@
 - [x] Build ReturningHome component: greeting with time-aware kicker, focal action card, continuity link, Ground+Oracle doorways, 5S spine
 - [x] Build NewMemberHome component: calm first-step page with single "Take the Alignment Audit" CTA
 - [x] Branch Home.tsx: logged-out → marketing landing (unchanged), new member → NewMemberHome, returning → ReturningHome
+
+## First Honest Week (Soul Engineer Brief — P2)
+
+- [ ] DB: add `first_honest_week_entries` table (id, userId, dayNumber, prompt, response, completedAt, createdAt)
+- [ ] tRPC: firstHonestWeek.getProgress — returns current day and all completed entries
+- [ ] tRPC: firstHonestWeek.submitDay — saves day response, marks day complete
+- [ ] tRPC: firstHonestWeek.reset — allows restarting the week
+- [ ] Run Drizzle migration for first_honest_week_entries table
+- [ ] Route: /first-honest-week — entry screen, 7-day flow, completion screen
+- [ ] Entry screen: heading, subhead, body copy, "Begin Day 1" CTA (verbatim from brief)
+- [ ] Day screens: prompt + sub-prompt, completion message per day (verbatim from brief)
+- [ ] Completion screen: "You did the work." heading, 3 most significant entries, dual CTA
+- [ ] Add /first-honest-week to App.tsx routes
+- [ ] Add First Honest Week nav item to sidebar (under The Weave)
+
+## Home Screen Book Entry Card & 5S Descriptions (P2)
+
+- [ ] Add "Just finished the book?" persistent card to ReturningHome and NewMemberHome
+- [ ] Card links to /first-honest-week with brief description
+- [ ] Add one-sentence dimension description to each 5S pillar on Dashboard and Pathways pages
+
+## 6 Dimensions Life Map (P3)
+
+- [ ] DB: add `dimension_entries` table (id, userId, dimension, content, becomingQuestion, createdAt)
+- [ ] tRPC: dimensions.getEntries — returns all entries per dimension for the user
+- [ ] tRPC: dimensions.saveEntry — saves a reflection entry for a dimension
+- [ ] Run Drizzle migration for dimension_entries table
+- [ ] Route: /dimensions — 6 expandable journal cards with Becoming Questions (verbatim from brief)
+- [ ] Lumin trigger: if user hasn't visited in 30 days, surface one Becoming Question in check-in
+- [ ] Footer link on dimensions page: "The 5S is how you work on these dimensions daily."
+- [ ] Add Dimensions nav item to sidebar
+
+## The Library — Backend (P2/P3)
+
+- [ ] Install pdfjs-dist and @mozilla/readability + node-fetch for content extraction
+- [ ] DB: library_resources table (id, userId, title, author, sourceType, fileKey, fileUrl, coverUrl, wordCount, chunkCount, pathwayTags JSON, status, createdAt, updatedAt)
+- [ ] DB: library_chunks table (id, resourceId, userId, chunkIndex, content, embedding MEDIUMTEXT, createdAt)
+- [ ] DB: library_highlights table (id, resourceId, userId, content, note, pathwayTag, chunkIndex, sentToWeave, weaveEntryId, createdAt)
+- [ ] DB: library_sessions table (id, resourceId, userId, activePathway, createdAt, updatedAt)
+- [ ] DB: library_messages table (id, sessionId, resourceId, userId, role, content, sourceChunkIds JSON, sentToWeave, weaveEntryId, createdAt)
+- [ ] Run Drizzle migration for all library tables
+- [ ] Server utility: text chunker (800-token chunks, 100-token overlap)
+- [ ] Server utility: embeddings via built-in LLM API
+- [ ] Server utility: cosine similarity search over stored JSON embeddings
+- [ ] Server utility: PDF text extraction via pdfjs-dist
+- [ ] Server utility: URL scraping via @mozilla/readability + node-fetch
+- [ ] tRPC: library.addResource — create resource record
+- [ ] tRPC: library.processResource — extract text, chunk, embed, store (async, returns status)
+- [ ] tRPC: library.getResources — list all user resources with metadata
+- [ ] tRPC: library.getResource — single resource with chunks and highlights
+- [ ] tRPC: library.deleteResource — cascade delete resource + chunks + highlights + messages
+- [ ] tRPC: library.chat — embed query, semantic search, pathway-aware LLM response, save messages
+- [ ] tRPC: library.addHighlight — save highlighted passage with optional note
+- [ ] tRPC: library.sendToWeave — create journal_entries row pre-populated from highlight or AI message
+- [ ] tRPC: library.getHighlights — list highlights for a resource
+- [ ] tRPC: library.getMessages — list chat messages for a session
+- [ ] Free tier gate: 2 resources max, 50 chat turns/month; paid tier: unlimited
+
+## The Library — Frontend (P2/P3)
+
+- [ ] Route: /weave/library — ResourceGrid page
+- [ ] Route: /weave/library/:id — ResourceReader + ChatSidebar
+- [ ] AddResourceModal: PDF upload tab, URL tab, paste-text tab
+- [ ] ResourceCard component: cover, title, author, progress indicator, pathway tags
+- [ ] ResourceGrid: list + grid view toggle, filter by pathway tag
+- [ ] ResourceReader: paginated text display with HighlightableText
+- [ ] Floating highlight toolbar: highlight, add note, send to Weave
+- [ ] ChatSidebar: desktop right column, mobile bottom sheet, message history, pathway context badge
+- [ ] SendToWeaveButton: confirmation sheet with module selector
+- [ ] HighlightList: collapsible panel showing all highlights for current resource
+- [ ] ProcessingStatus: skeleton + progress indicator while resource is being processed
+- [ ] Add Library nav item to DashboardLayout sidebar (under The Weave section)
+- [ ] Add /weave/library and /weave/library/:id routes to App.tsx
+
+## Soul Engineer Brief — New Features (Jun 23, 2026)
+
+### First Honest Week (P2)
+- [x] DB: first_honest_week_entries table (id, userId, dayNumber, prompt, response, completedAt, createdAt)
+- [x] tRPC: firstHonestWeek.getProgress, submitDay, reset procedures
+- [x] Drizzle migration applied
+- [x] Route: /first-honest-week — entry screen, 7-day flow, completion screen
+- [x] Entry screen: heading, subhead, body copy, "Begin Day 1" CTA
+- [x] Day screens: prompt + sub-prompt, completion message per day
+- [x] Completion screen: "You did the work." heading, dual CTA
+- [x] Added to App.tsx routes
+- [x] Nav link added (desktop dropdown + mobile menu)
+
+### Home Screen Book Entry Card (P2)
+- [x] "Just finished the book?" persistent card in ReturningHome — links to /first-honest-week
+
+### 5S Pillar Dimension Descriptions (P2)
+- [x] State module: "Shapes your Emotional and Spiritual dimensions."
+- [x] Story module: "Shapes your Identity and Creative dimensions."
+- [x] Standards module: "Shapes your Physical and Emotional dimensions."
+- [x] Strategy module: "Shapes your Purpose and Creative dimensions."
+- [x] Stewardship module: "Shapes your Physical and Purpose dimensions."
+
+### 6 Dimensions Life Map (P3)
+- [x] DB: dimension_entries table with updated enum (emotional, physical, spiritual, creative, identity, purpose)
+- [x] Drizzle migration applied
+- [x] tRPC: dimensions.getEntries, saveEntry procedures
+- [x] Route: /dimensions — 6 expandable journal cards with Becoming Questions
+- [x] Lumin trigger: if user hasn't visited in 30 days, surface one Becoming Question in check-in (placeholder — requires check-in integration)
+- [x] Footer link: "The 5S is how you work on these dimensions daily."
+- [x] Nav link added (desktop dropdown + mobile menu)
+
+### The Library — Personal Reading Companion (P2/P3)
+- [x] DB: library_resources, library_chunks, library_highlights, library_sessions, library_messages tables
+- [x] Drizzle migrations applied
+- [x] Server: text chunker (800-token chunks, 100-token overlap)
+- [x] Server: cosine similarity search over stored JSON embeddings
+- [x] tRPC: library.add, list, delete, getOrCreateSession, chat, sendToWeave procedures
+- [x] Route: /my-library — ResourceGrid with Add dialog, resource cards, chat panel
+- [x] AddResourceDialog: paste-text tab, URL tab, pathway tags
+- [x] ChatPanel: message history, pathway context selector, Send to Weave button
+- [x] Nav link added (desktop dropdown + mobile menu)

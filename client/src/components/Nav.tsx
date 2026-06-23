@@ -16,7 +16,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Moon, Sun, Menu, X, CheckSquare, ClipboardList, BookOpen,
   BookMarked, BarChart2, ShoppingBag, CreditCard, Info, Settings,
-  HelpCircle, LogOut, ExternalLink, Target,
+  HelpCircle, LogOut, ExternalLink, Target, Layers,
 } from "lucide-react";
 import { replayOnboarding } from "@/components/OnboardingModal";
 import { trpc } from "@/lib/trpc";
@@ -158,6 +158,16 @@ export default function Nav() {
                 <DropdownMenuItem asChild>
                   <Link href="/goals" className="flex items-center gap-2">
                     <Target className="h-3.5 w-3.5" />Goals
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/dimensions" className="flex items-center gap-2">
+                    <Layers className="h-3.5 w-3.5" />Life Map
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/my-library" className="flex items-center gap-2">
+                    <BookOpen className="h-3.5 w-3.5" />My Library
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -307,6 +317,12 @@ export default function Nav() {
                 </Button>
                 <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground justify-start">
                   <Link href="/goals" onClick={closeMobile}><Target className="h-4 w-4" />Goals</Link>
+                </Button>
+                <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground justify-start">
+                  <Link href="/dimensions" onClick={closeMobile}><Layers className="h-4 w-4" />Life Map</Link>
+                </Button>
+                <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground justify-start">
+                  <Link href="/my-library" onClick={closeMobile}><BookOpen className="h-4 w-4" />My Library</Link>
                 </Button>
 
                 <p className="text-xs text-muted-foreground px-2 pt-2 font-medium uppercase tracking-wide">More from Soul Engineer</p>

@@ -8,6 +8,9 @@ import { characterRouter } from "./routers/character";
 import { moodLogRouter } from "./routers/moodLog";
 import { storeRouter } from "./routers/store";
 import { applicationsRouter } from "./routers/applications";
+import { firstHonestWeekRouter } from "./routers/firstHonestWeek";
+import { dimensionsRouter } from "./routers/dimensions";
+import { libraryRouter } from "./routers/library";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
@@ -1451,6 +1454,9 @@ export const appRouter = router({
   character: characterRouter,
   moodLog: moodLogRouter,
   applications: applicationsRouter,
+  firstHonestWeek: firstHonestWeekRouter,
+  dimensions: dimensionsRouter,
+  library: libraryRouter,
   paypal: router({
     /**
      * Returns the PayPal client ID for the current environment (live or sandbox).

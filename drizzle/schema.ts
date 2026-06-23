@@ -795,3 +795,135 @@ export const goalMilestones = mysqlTable("goal_milestones", {
 
 export type GoalMilestone = typeof goalMilestones.$inferSelect;
 export type InsertGoalMilestone = typeof goalMilestones.$inferInsert;
+
+// ─── First Honest Week ────────────────────────────────────────────────────────
+// 7-day guided journal flow for book readers entering the practice.
+// One row per day per user. dayNumber 1-7.
+export const firstHonestWeekEntries = mysqlTable("first_honest_week_entries", {
+  id:          int("id").autoincrement().primaryKey(),
+  userId:      int("userId").notNull(),
+  dayNumber:   int("dayNumber").notNull(),          // 1-7
+  response:    text("response").notNull(),
+  completedAt: timestamp("completedAt").defaultNow().notNull(),
+  createdAt:   timestamp("createdAt").defaultNow().notNull(),
+}, (t) => [
+  index("idx_fhw_userId").on(t.userId),
+  index("idx_fhw_userId_day").on(t.userId, t.dayNumber),
+]);
+
+export type FirstHonestWeekEntry = typeof firstHonestWeekEntries.$inferSelect;
+export type InsertFirstHonestWeekEntry = typeof firstHonestWeekEntries.$inferInsert;
+
+// ─── 6 Dimensions Life Map ────────────────────────────────────────────────────
+// Reflections on the 6 Becoming Questions (one per dimension).
+export const dimensionEntries = mysqlTable("dimension_entries", {
+  id:               int("id").autoincrement().primaryKey(),
+  userId:           int("userId").notNull(),
+  dimension:        mysqlEnum("dimension", ["emotional", "physical", "spiritual", "creative", "identity", "purpose"]).notNull(),
+  content:          text("content").notNull(),
+  becomingQuestion: text("becomingQuestion"),       // the question that prompted this entry
+  createdAt:        timestamp("createdAt").defaultNow().notNull(),
+  updatedAt:        timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (t) => [
+  index("idx_dimension_entries_userId").on(t.userId),
+  index("idx_dimension_entries_userId_dim").on(t.userId, t.dimension),
+]);
+
+export type DimensionEntry = typeof dimensionEntries.$inferSelect;
+export type InsertDimensionEntry = typeof dimensionEntries.$inferInsert;
+
+// ─── Library Resources ────────────────────────────────────────────────────────
+// Books, PDFs, articles, and pasted texts the user has added to their library.
+export const libraryResources = mysqlTable("library_resources", {
+  id:          int("id").autoincrement().primaryKey(),
+  userId:      int("userId").notNull(),
+  title:       varchar("title", { length: 255 }).notNull(),
+  author:      varchar("author", { length: 255 }),
+  sourceType:  mysqlEnum("sourceType", ["pdf", "url", "text"]).notNull(),
+  fileKey:     varchar("fileKey", { length: 512 }),   // S3 key (PDFs only)
+  fileUrl:     text("fileUrl"),                        // S3 URL or original URL
+  coverUrl:    text("coverUrl"),
+  wordCount:   int("wordCount").default(0).notNull(),
+  chunkCount:  int("chunkCount").default(0).notNull(),
+  pathwayTags: json("pathwayTags").$type<string[]>().default([]),
+  status:      mysqlEnum("status", ["pending", "processing", "ready", "error"]).default("pending").notNull(),
+  errorMsg:    text("errorMsg"),
+  createdAt:   timestamp("createdAt").defaultNow().notNull(),
+  updatedAt:   timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (t) => [index("idx_library_resources_userId").on(t.userId)]);
+
+export type LibraryResource = typeof libraryResources.$inferSelect;
+export type InsertLibraryResource = typeof libraryResources.$inferInsert;
+
+// ─── Library Chunks ───────────────────────────────────────────────────────────
+// Text chunks with embeddings for semantic search.
+export const libraryChunks = mysqlTable("library_chunks", {
+  id:         int("id").autoincrement().primaryKey(),
+  resourceId: int("resourceId").notNull(),
+  userId:     int("userId").notNull(),
+  chunkIndex: int("chunkIndex").notNull(),
+  content:    text("content").notNull(),
+  embedding:  text("embedding"),                    // JSON array of floats (MEDIUMTEXT via migration)
+  createdAt:  timestamp("createdAt").defaultNow().notNull(),
+}, (t) => [
+  index("idx_library_chunks_resourceId").on(t.resourceId),
+  index("idx_library_chunks_userId").on(t.userId),
+]);
+
+export type LibraryChunk = typeof libraryChunks.$inferSelect;
+
+// ─── Library Highlights ───────────────────────────────────────────────────────
+// Passages the user has highlighted in a resource.
+export const libraryHighlights = mysqlTable("library_highlights", {
+  id:          int("id").autoincrement().primaryKey(),
+  resourceId:  int("resourceId").notNull(),
+  userId:      int("userId").notNull(),
+  content:     text("content").notNull(),
+  note:        text("note"),
+  pathwayTag:  varchar("pathwayTag", { length: 64 }),
+  chunkIndex:  int("chunkIndex"),
+  sentToWeave: boolean("sentToWeave").default(false).notNull(),
+  weaveEntryId: int("weaveEntryId"),                 // FK to journal_entries.id
+  createdAt:   timestamp("createdAt").defaultNow().notNull(),
+}, (t) => [
+  index("idx_library_highlights_resourceId").on(t.resourceId),
+  index("idx_library_highlights_userId").on(t.userId),
+]);
+
+export type LibraryHighlight = typeof libraryHighlights.$inferSelect;
+
+// ─── Library Chat Sessions ────────────────────────────────────────────────────
+// One session per user per resource (or per conversation thread).
+export const librarySessions = mysqlTable("library_sessions", {
+  id:            int("id").autoincrement().primaryKey(),
+  resourceId:    int("resourceId").notNull(),
+  userId:        int("userId").notNull(),
+  activePathway: varchar("activePathway", { length: 64 }),
+  createdAt:     timestamp("createdAt").defaultNow().notNull(),
+  updatedAt:     timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (t) => [
+  index("idx_library_sessions_resourceId").on(t.resourceId),
+  index("idx_library_sessions_userId").on(t.userId),
+]);
+
+export type LibrarySession = typeof librarySessions.$inferSelect;
+
+// ─── Library Chat Messages ────────────────────────────────────────────────────
+// Individual messages in a library chat session.
+export const libraryMessages = mysqlTable("library_messages", {
+  id:             int("id").autoincrement().primaryKey(),
+  sessionId:      int("sessionId").notNull(),
+  resourceId:     int("resourceId").notNull(),
+  userId:         int("userId").notNull(),
+  role:           mysqlEnum("role", ["user", "assistant"]).notNull(),
+  content:        text("content").notNull(),
+  sourceChunkIds: json("sourceChunkIds").$type<number[]>().default([]),
+  sentToWeave:    boolean("sentToWeave").default(false).notNull(),
+  weaveEntryId:   int("weaveEntryId"),
+  createdAt:      timestamp("createdAt").defaultNow().notNull(),
+}, (t) => [
+  index("idx_library_messages_sessionId").on(t.sessionId),
+  index("idx_library_messages_userId").on(t.userId),
+]);
+
+export type LibraryMessage = typeof libraryMessages.$inferSelect;
