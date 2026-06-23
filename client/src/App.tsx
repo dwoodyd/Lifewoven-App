@@ -70,6 +70,7 @@ import { BetaExpiredModal } from "./components/BetaExpiredModal";
 import FirstHonestWeek from "./pages/FirstHonestWeek";
 import Dimensions from "./pages/Dimensions";
 import MyLibrary from "./pages/MyLibrary";
+import LibraryReader from "./pages/LibraryReader";
 import { PWAInstallPrompt } from "./components/PWAInstallPrompt";
 
 // The Ground (formerly Before the Words)
@@ -171,6 +172,7 @@ function RouterSwitch() {
 
       {/* Personal Library */}
       <Route path="/my-library" component={MyLibrary} />
+      <Route path="/my-library/:id" component={LibraryReader} />
 
       {/* The Ground (formerly Before the Words) */}
       <Route path="/ground" component={BTWLanding} />

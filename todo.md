@@ -1210,3 +1210,15 @@
 - [x] AddResourceDialog: paste-text tab, URL tab, pathway tags
 - [x] ChatPanel: message history, pathway context selector, Send to Weave button
 - [x] Nav link added (desktop dropdown + mobile menu)
+
+## Library Spec Upgrade (Jun 23, 2026)
+
+- [x] Route: /my-library/:id — ResourceReader page (paginated text chunks, highlightable text)
+- [x] HighlightableText: text selection → floating toolbar (Highlight | Ask about this | Send to Weave)
+- [x] HighlightList: collapsible panel showing all saved highlights for current resource
+- [x] ChatSidebar: upgrade to full spec (persistent right column on desktop, bottom sheet on mobile)
+- [x] SendToWeaveButton: confirmation sheet with content preview, reflection question, user note field, Confirm → redirect to /weave editor with pre-populated content
+- [x] Fix sendToWeave backend: return Weave entry ID and redirect URL instead of silent insert
+- [x] Add /my-library/:id route to App.tsx
+- [x] Add Library nav item to DashboardLayout sidebar (under The Weave section)
+- [x] ProcessingStatus: skeleton + progress indicator while resource is being processed

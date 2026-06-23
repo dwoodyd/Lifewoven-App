@@ -8,7 +8,7 @@
  * Route: /my-library
  */
 import { useState } from "react";
-import { Link, useLocation } from "wouter";
+import { Link, useLocation, useRoute } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import Nav from "@/components/Nav";
@@ -502,27 +502,28 @@ export default function MyLibrary() {
                         ))}
                       </div>
 
-                      {/* Actions */}
-                      {resource.status === "ready" && (
-                        <div className="flex items-center gap-2 mt-3">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="gap-1.5 text-xs h-7"
-                            onClick={() => setChatResource({ id: resource.id, title: resource.title, author: resource.author })}
-                          >
-                            <MessageSquare className="h-3 w-3" />
-                            Ask the AI
-                          </Button>
-                          <Link
-                            href={`/weave?prompt=${encodeURIComponent(`Reflecting on: ${resource.title}`)}`}
-                            className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
-                          >
-                            <BookMarked className="h-3 w-3" />
-                            Journal about it
-                          </Link>
-                        </div>
-                      )}
+                          {/* Actions */}
+                          {resource.status === "ready" && (
+                            <div className="flex items-center gap-2 mt-3">
+                              <Link href={`/my-library/${resource.id}`}>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="gap-1.5 text-xs h-7"
+                                >
+                                  <BookOpen className="h-3 w-3" />
+                                  Read &amp; Chat
+                                </Button>
+                              </Link>
+                              <Link
+                                href={`/weave?prompt=${encodeURIComponent(`Reflecting on: ${resource.title}`)}`}
+                                className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+                              >
+                                <BookMarked className="h-3 w-3" />
+                                Journal about it
+                              </Link>
+                            </div>
+                          )}
                     </div>
                   </div>
                 </div>
