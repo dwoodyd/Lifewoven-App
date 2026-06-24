@@ -62,7 +62,9 @@ export default function Oracle() {
   const [isLoading, setIsLoading] = useState(false);
   const [showSources, setShowSources] = useState(false);
   const [hasConsented, setHasConsented] = useState(() => {
-    return localStorage.getItem("oracle_consent") === "true";
+    const stored = localStorage.getItem("oracle_consent");
+    // Default ON — only OFF if user has explicitly disabled it
+    return stored === null ? true : stored === "true";
   });
   const [mode, setMode] = useState<OracleMode>("guide");
   const [luminPulse, setLoomPulse] = useState(false);
@@ -671,7 +673,7 @@ export default function Oracle() {
             {/* Input */}
             <div className="flex gap-2 items-end">
               <Textarea
-                placeholder={mode === "unstuck" ? "Describe what is blocking you..." : "Ask the Oracle anything..."}
+                placeholder={mode === "unstuck" ? "Describe what is blocking you..." : "What are you carrying right now?"}
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(input); } }}

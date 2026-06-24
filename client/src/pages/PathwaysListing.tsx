@@ -95,7 +95,7 @@ const PATHWAYS = [
     bg: "bg-teal-50",
     border: "border-teal-100",
     tag: "Flagship Protocol",
-    dimension: "Strategy",
+    dimension: "State",
     featured: true,
   },
 ];

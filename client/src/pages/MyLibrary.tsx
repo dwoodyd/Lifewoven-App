@@ -96,7 +96,7 @@ function AddResourceDialog({
         <DialogHeader>
           <DialogTitle>Add to Your Library</DialogTitle>
           <DialogDescription>
-            Paste text from a book, article, or any source you want to explore with the AI.
+            Paste text from a book, article, or any source you want to explore with Oracle.
           </DialogDescription>
         </DialogHeader>
 
@@ -279,7 +279,7 @@ function ChatPanel({
           <div className="text-center py-8">
             <MessageSquare className="h-8 w-8 mx-auto mb-3 text-muted-foreground/40" />
             <p className="text-sm text-muted-foreground">Ask anything about this text.</p>
-            <p className="text-xs text-muted-foreground/60 mt-1">The AI will draw from the passages you added.</p>
+            <p className="text-xs text-muted-foreground/60 mt-1">Oracle will draw from the passages you added.</p>
           </div>
         )}
         {localMessages.map((msg, i) => (
@@ -365,7 +365,7 @@ export default function MyLibrary() {
             Your Library
           </h1>
           <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
-            Add books, articles, and passages. Explore them with the AI. Send insights to The Weave.
+            Add books, articles, and passages. Explore them with Oracle. Send insights to The Weave.
           </p>
           <Button asChild>
             <a href={getLoginUrl()}>Sign in to get started</a>
@@ -402,7 +402,7 @@ export default function MyLibrary() {
                   Your Library
                 </h1>
                 <p className="text-sm text-muted-foreground leading-relaxed max-w-[440px]">
-                  Add books, articles, and passages. Explore them with the AI. Send insights to The Weave.
+                  Add books, articles, and passages. Explore them with Oracle. Send insights to The Weave.
                 </p>
               </div>
               <Button onClick={() => setShowAdd(true)} className="gap-2 flex-shrink-0">

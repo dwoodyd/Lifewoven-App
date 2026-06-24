@@ -275,7 +275,7 @@ const CATEGORIES = [
 ];
 
 export default function ResourceLibrary() {
-  const [activeCategory, setActiveCategory] = useState("all");
+  const [activeCategory, setActiveCategory] = useState("soul-engineer");
   const [activeModule, setActiveModule] = useState("");
   const [activeRights, setActiveRights] = useState<RightsLabel | "">("");
   const [showRightsInfo, setShowRightsInfo] = useState(false);
@@ -286,6 +286,13 @@ export default function ResourceLibrary() {
     const modMatch = !activeModule || r.module === activeModule;
     const rightsMatch = !activeRights || r.rights === activeRights;
     return catMatch && modMatch && rightsMatch;
+  }).sort((a, b) => {
+    // Soul Engineer entries always appear first in the All view
+    if (activeCategory === "all") {
+      if (a.category === "soul-engineer" && b.category !== "soul-engineer") return -1;
+      if (a.category !== "soul-engineer" && b.category === "soul-engineer") return 1;
+    }
+    return 0;
   });
 
   return (

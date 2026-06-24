@@ -725,7 +725,6 @@ export default function Dashboard() {
                   { href: "/weave", icon: Brain, label: "Add to The Weave" },
                   { href: "/mood-rhythm", icon: Activity, label: "Mood Rhythm Chart" },
                   { href: "/oracle", icon: Sparkles, label: "Ask the Oracle" },
-                  { href: "/community", icon: MessageCircle, label: "Community" },
                   { href: "/library", icon: BookOpen, label: "Resource Library" },
                 ].map(({ href, icon: Icon, label }) => (
                   <Button key={href} asChild variant="ghost" size="sm" className="w-full justify-start gap-2 text-sm h-10">

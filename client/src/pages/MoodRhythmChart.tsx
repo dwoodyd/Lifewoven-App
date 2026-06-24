@@ -219,6 +219,9 @@ export default function MoodRhythmChart() {
         <p className="text-sm text-muted-foreground mt-1">
           Track your daily mood to reveal your personal emotional cycle — and predict your next high and low.
         </p>
+        <p className="text-sm text-muted-foreground/70 mt-2 italic">
+          Your emotional state is a signal. Tracking it over time reveals what your body knows before your mind catches up.
+        </p>
       </div>
 
       {/* Today's Log Card */}

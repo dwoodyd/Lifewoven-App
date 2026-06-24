@@ -220,7 +220,11 @@ function BillingSection() {
 export default function Settings() {
   const { isAuthenticated, user } = useAuth();
   const [oracleConsent, setOracleConsent] = useState(
-    () => localStorage.getItem("oracle_consent") === "true"
+    () => {
+      const stored = localStorage.getItem("oracle_consent");
+      // Default ON — only OFF if user has explicitly disabled it
+      return stored === null ? true : stored === "true";
+    }
   );
   const [lowBandwidth, setLowBandwidth] = useState(
     () => localStorage.getItem("lifeos_low_bandwidth") === "true"
