@@ -410,7 +410,7 @@ export async function sendDay91TransitionNotice({ to, name }: Day91TransitionPar
         <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:#ccc;">Your 90-day Lifewoven beta ended yesterday. Your account is now on the Explorer tier — and everything you've built is still here:</p>
         <ul style="margin:0 0 20px;padding-left:20px;color:#ccc;font-size:15px;line-height:2;">
           <li>Every entry in The Weave — preserved</li>
-          <li>Your Alignment Audit results — preserved</li>
+          <li>Your Capacity Audit results — preserved</li>
           <li>Your Pathway progress, mood log, journal entries — all preserved</li>
         </ul>
         <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:#ccc;">Some features pause on Explorer (unlimited journal entries, all 7 Pathways, full 5S module suite, Oracle AI, the complete Library). They pick right back up the moment you decide to lock in.</p>
@@ -496,7 +496,7 @@ export async function sendDay3CheckinEmail({ to, name }: Day3CheckinParams): Pro
         <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:#ccc;">Three days have passed. No audit yet, nothing in The Weave. That's okay. No judgment.</p>
         <p style="margin:0 0 16px;font-size:15px;line-height:1.8;color:#ccc;">Some thoughts on what might be holding things up:</p>
         <p style="margin:0 0 8px;font-size:15px;font-weight:600;color:#f5f0e8;">You don't know where to start.</p>
-        <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:#ccc;">Take the Alignment Audit. Five minutes, twelve questions. It picks the Pathway for you. No decision required.</p>
+        <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:#ccc;">Take the Capacity Audit. Five minutes, twelve questions. It picks the Pathway for you. No decision required.</p>
         <p style="margin:0 0 8px;font-size:15px;font-weight:600;color:#f5f0e8;">You don't know what to write.</p>
         <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:#ccc;">Skip the journal entirely. Open the audit — it's all multiple choice.</p>
         <p style="margin:0 0 8px;font-size:15px;font-weight:600;color:#f5f0e8;">The app feels heavy.</p>
@@ -514,7 +514,7 @@ export async function sendDay3CheckinEmail({ to, name }: Day3CheckinParams): Pro
     </table>
   </td></tr></table>
 </body></html>`;
-  const text = `Hi ${firstName},\n\nThree days have passed. No audit yet, nothing in The Weave. That's okay.\n\nSmallest step: take the Alignment Audit. Five minutes, twelve questions.\n\n${APP_URL}/audit\n\nReply if there's something in the way.\n— Lumin`;
+  const text = `Hi ${firstName},\n\nThree days have passed. No audit yet, nothing in The Weave. That's okay.\n\nSmallest step: take the Capacity Audit. Five minutes, twelve questions.\n\n${APP_URL}/audit\n\nReply if there's something in the way.\n— Lumin`;
   const result = await resend.emails.send({ from: LUMIN_FROM, replyTo: REPLY_TO, to, subject: "Three days in. Still here when you're ready.", html, text });
   if (result.error) throw new Error(result.error.message);
   return { id: result.data!.id };
@@ -594,7 +594,7 @@ export async function sendDay7RecapInactive({ to, name }: Day7RecapInactiveParam
         <h1 style="margin:0 0 32px;font-size:28px;font-weight:400;color:#f5f0e8;line-height:1.3;font-style:italic;">Still here. Whenever you're ready.</h1>
         <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:#ccc;">Hi ${firstName},</p>
         <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:#ccc;">A week in. I haven't seen you yet. That's okay — life moves.</p>
-        <p style="margin:0 0 24px;font-size:15px;line-height:1.8;color:#ccc;">Here's a way to start that takes 5 minutes: take the Alignment Audit. Twelve questions, multiple choice. It tells me where you are; it tells you which Pathway to begin with. That's the whole onboarding.</p>
+        <p style="margin:0 0 24px;font-size:15px;line-height:1.8;color:#ccc;">Here's a way to start that takes 5 minutes: take the Capacity Audit. Twelve questions, multiple choice. It tells me where you are; it tells you which Pathway to begin with. That's the whole onboarding.</p>
         <table cellpadding="0" cellspacing="0" style="margin:0 0 24px;"><tr><td style="background:#8b7355;border-radius:6px;padding:14px 28px;">
           <a href="${APP_URL}/audit" style="color:#fff;text-decoration:none;font-size:15px;font-weight:600;">Take the Audit →</a>
         </td></tr></table>
@@ -607,7 +607,7 @@ export async function sendDay7RecapInactive({ to, name }: Day7RecapInactiveParam
     </table>
   </td></tr></table>
 </body></html>`;
-  const text = `Hi ${firstName},\n\nA week in. I haven't seen you yet. That's okay — life moves.\n\nTake the Alignment Audit: ${APP_URL}/audit\n\nOr reply and tell me what would help.\n— Lumin`;
+  const text = `Hi ${firstName},\n\nA week in. I haven't seen you yet. That's okay — life moves.\n\nTake the Capacity Audit: ${APP_URL}/audit\n\nOr reply and tell me what would help.\n— Lumin`;
   const result = await resend.emails.send({ from: LUMIN_FROM, replyTo: REPLY_TO, to, subject: "Still here. Whenever you're ready.", html, text });
   if (result.error) throw new Error(result.error.message);
   return { id: result.data!.id };

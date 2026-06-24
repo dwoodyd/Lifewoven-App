@@ -121,9 +121,13 @@ export default function BTWLanding() {
           <p className="text-sm text-muted-foreground font-light leading-relaxed max-w-lg mx-auto mt-2">
             The pathway is the practice. The book is the philosophy. Both come from the same place.
           </p>
-          <p className="text-xs text-muted-foreground/60 font-light mt-3 italic">
-            Coming soon. Founding members will receive a download the moment it releases.
-          </p>
+          <div className="mt-4 flex flex-col items-center gap-2">
+            <p className="text-sm font-semibold text-foreground">Build a Life That Does Not Break You</p>
+            <p className="text-xs text-muted-foreground italic">The book behind this pathway. Available now.</p>
+            <a href="https://soulengineer.online" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs font-medium text-accent hover:underline mt-1">
+              Get the Book →
+            </a>
+          </div>
         </div>
       </div>
     </div>

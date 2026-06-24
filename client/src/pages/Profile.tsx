@@ -241,7 +241,7 @@ export default function Profile() {
             {[
               { href: "/dashboard", label: "Dashboard" },
               { href: "/weave", label: "The Weave" },
-              { href: "/audit", label: "Alignment Audit" },
+              { href: "/audit", label: "Capacity Audit" },
               { href: "/pricing", label: "Upgrade Plan" },
               { href: "/store", label: "Store" },
             ].map(({ href, label }) => (

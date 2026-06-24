@@ -24,14 +24,19 @@ const MODULE_COLORS: Record<string, string> = {
 };
 
 const DEFAULT_PROMPTS = [
-  "What am I most grateful for right now?",
-  "What is the most important thing I can focus on today?",
-  "What constraining belief showed up for me recently?",
-  "How am I feeling in my body right now?",
-  "What would the best version of me do today?",
-  "What meaning am I finding in my current challenges?",
-  "What habit is serving me well? What habit needs work?",
-  "What decision am I avoiding, and why?",
+  // Soul Engineer Method — 12 core prompts
+  "What am I carrying right now that I haven't named yet?",
+  "What is the load-bearing belief in this situation?",
+  "What would I do if I trusted the structure I've built?",
+  "What signal is my body sending that my mind is ignoring?",
+  "What is the story I keep telling about this — and is it true?",
+  "What would the version of me who has already solved this do first?",
+  "Where am I spending energy I haven't consciously allocated?",
+  "What am I tolerating that I've decided is permanent?",
+  "What does this moment require of me — not what do I want it to require?",
+  "What is the one thing that, if I did it, would make everything else easier?",
+  "What capacity am I not using that this situation is calling for?",
+  "What is the next honest step — not the perfect step, the honest one?",
 ];
 
 export default function Journal() {
@@ -197,7 +202,7 @@ export default function Journal() {
             )}
             <Input placeholder="Title (optional)" value={title} onChange={e => setTitle(e.target.value)} className="mb-3 text-sm" />
             <Textarea
-              placeholder={currentPrompt ? `Responding to: "${currentPrompt}"\n\nWrite freely...` : "Write freely..."}
+              placeholder={currentPrompt ? `Responding to: "${currentPrompt}"\n\nName what you're carrying. The building begins with honest seeing.` : "Name what you're carrying. The building begins with honest seeing."}
               value={content}
               onChange={e => setContent(e.target.value)}
               className="resize-none text-sm font-light leading-relaxed mb-3 min-h-[200px]"
@@ -205,13 +210,13 @@ export default function Journal() {
             />
             <div className="flex flex-wrap gap-2 mb-4">
               {modules.map(m => {
-                const ABBR: Record<string,string> = { state: 'State', story: 'Story', standards: 'Stds', strategy: 'Strat', stewardship: 'Stew' };
+                const ABBR: Record<string,string> = { state: 'State', story: 'Story', standards: 'Standards', strategy: 'Strategy', stewardship: 'Stewardship' };
                 return (
                   <button key={m} title={m.charAt(0).toUpperCase()+m.slice(1)} onClick={() => setSelectedModule(selectedModule === m ? '' : m)} className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${selectedModule === m ? `border-current bg-current/10 ${MODULE_COLORS[m]}` : 'border-border text-muted-foreground'}`}>{ABBR[m] ?? m}</button>
                 );
               })}
             </div>
-            <Input placeholder="Tags (comma separated: gratitude, morning, insight...)" value={tags} onChange={e => setTags(e.target.value)} className="mb-4 text-sm" />
+            <Input placeholder="Tags (comma separated: load-bearing, signals, capacity...)" value={tags} onChange={e => setTags(e.target.value)} className="mb-4 text-sm" />
             {aiReflection && (
               <div className="mb-4 p-4 rounded-xl bg-secondary/50">
                 <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-2">Oracle Reflection</p>
@@ -241,7 +246,7 @@ export default function Journal() {
                   </div>
                   <div className="flex gap-1 overflow-x-auto flex-shrink-0">
                     <button onClick={() => setSelectedModule("")} className={`text-xs px-2.5 py-1.5 rounded-lg border transition-colors ${!selectedModule ? "border-foreground bg-foreground text-background" : "border-border text-muted-foreground"}`}>All</button>
-                    {modules.map(m => { const abbr: Record<string,string> = { state:'State', story:'Story', standards:'Stds', strategy:'Strat', stewardship:'Stew' }; return <button key={m} title={m.charAt(0).toUpperCase()+m.slice(1)} onClick={() => setSelectedModule(selectedModule === m ? '' : m)} className={`text-xs px-2.5 py-1.5 rounded-lg border transition-colors ${selectedModule === m ? `border-current bg-current/10 ${MODULE_COLORS[m]}` : 'border-border text-muted-foreground'}`}>{abbr[m]}</button>; })}
+                    {modules.map(m => { const abbr: Record<string,string> = { state:'State', story:'Story', standards:'Standards', strategy:'Strategy', stewardship:'Stewardship' }; return <button key={m} title={m.charAt(0).toUpperCase()+m.slice(1)} onClick={() => setSelectedModule(selectedModule === m ? '' : m)} className={`text-xs px-2.5 py-1.5 rounded-lg border transition-colors ${selectedModule === m ? `border-current bg-current/10 ${MODULE_COLORS[m]}` : 'border-border text-muted-foreground'}`}>{abbr[m]}</button>; })}
                   </div>
                 </div>
                 {entries && entries.length > 0 ? (

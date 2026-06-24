@@ -17,6 +17,7 @@ const PATHWAYS = [
     bg: "bg-emerald-50",
     border: "border-emerald-100",
     tag: "Daily Practice",
+    dimension: "State",
   },
   {
     slug: "resonance",
@@ -29,6 +30,7 @@ const PATHWAYS = [
     bg: "bg-violet-50",
     border: "border-violet-100",
     tag: "Alignment Work",
+    dimension: "State",
   },
   {
     slug: "uplift",
@@ -41,6 +43,7 @@ const PATHWAYS = [
     bg: "bg-amber-50",
     border: "border-amber-100",
     tag: "Emotional Intelligence",
+    dimension: "State",
   },
   {
     slug: "flow",
@@ -53,6 +56,7 @@ const PATHWAYS = [
     bg: "bg-sky-50",
     border: "border-sky-100",
     tag: "Visualization",
+    dimension: "Story",
   },
   {
     slug: "rhythms",
@@ -65,6 +69,7 @@ const PATHWAYS = [
     bg: "bg-orange-50",
     border: "border-orange-100",
     tag: "Habit Design",
+    dimension: "Standards",
   },
   {
     slug: "purpose",
@@ -77,6 +82,7 @@ const PATHWAYS = [
     bg: "bg-rose-50",
     border: "border-rose-100",
     tag: "Meaning Work",
+    dimension: "Stewardship",
   },
   {
     slug: "reset",
@@ -89,6 +95,7 @@ const PATHWAYS = [
     bg: "bg-teal-50",
     border: "border-teal-100",
     tag: "Flagship Protocol",
+    dimension: "Strategy",
     featured: true,
   },
 ];
@@ -120,7 +127,8 @@ export default function PathwaysListing() {
           const Icon = pathway.icon;
           return (
             <div key={pathway.slug} className={`rounded-2xl border-2 border-teal-200/60 bg-teal-50/30 p-5 sm:p-7 mb-8 relative overflow-hidden`}>
-              <div className="absolute top-4 right-4">
+              <div className="absolute top-4 right-4 flex gap-2">
+                <Badge variant="outline" className="text-xs font-mono tracking-wider border-teal-300 text-teal-700">{pathway.dimension}</Badge>
                 <Badge className="bg-teal-600 text-white text-xs font-mono tracking-wider">Flagship</Badge>
               </div>
               <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-5">
@@ -159,9 +167,10 @@ export default function PathwaysListing() {
                       <Icon className={`h-5 w-5 ${pathway.color}`} />
                     </div>
                     <div>
-                      <div className="flex items-center gap-2 mb-0.5">
+                      <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                         <h3 className="font-serif text-xl font-light text-foreground">{pathway.name}</h3>
                         <Badge variant="outline" className="text-xs font-mono hidden sm:inline-flex">{pathway.tag}</Badge>
+                        <Badge variant="outline" className="text-xs font-mono hidden sm:inline-flex border-muted-foreground/30 text-muted-foreground">{pathway.dimension}</Badge>
                       </div>
                       <p className="text-base text-muted-foreground">{pathway.subtitle}</p>
                     </div>
@@ -184,7 +193,7 @@ export default function PathwaysListing() {
           <p className="text-base text-muted-foreground font-light">
             Not sure where to start?{" "}
             <Link href="/audit" className="text-accent hover:underline">
-              Take the Alignment Audit
+              Take the Capacity Audit
             </Link>{" "}
             and receive a personalized pathway recommendation.
           </p>

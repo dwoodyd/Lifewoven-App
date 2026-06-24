@@ -1222,3 +1222,38 @@
 - [x] Add /my-library/:id route to App.tsx
 - [x] Add Library nav item to DashboardLayout sidebar (under The Weave section)
 - [x] ProcessingStatus: skeleton + progress indicator while resource is being processed
+
+## Mega Builder Brief (Jun 24, 2026)
+
+### Part 1 — Immediate Copy Fixes
+- [ ] 1.1 Rename "Alignment Audit" → "Capacity Audit" in all locations (Home, Pathways footer, /audit header, /audit body, nav)
+- [ ] 1.2 Oracle subtitle: "four pillars" → "five movements of the Soul Engineer Method"
+- [ ] 1.3 Weave filter tabs: Stds→Standards, Strat→Strategy, Stew→Stewardship
+- [ ] 1.4 The Ground: replace book "Coming Soon" placeholder with published book info + link to soulengineer.online
+- [ ] 1.5 Settings: flip Oracle Preferences defaults — Personalized guidance ON, Pattern Mirror ON
+- [ ] 1.6 Oracle Guide tab: opening message → "What are you carrying right now? You don't have to have it figured out to begin."
+- [ ] 1.7 Weave entry form placeholders: tags → "load-bearing, signals, capacity"; textarea → "Name what you're carrying. The building begins with honest seeing."
+- [ ] 1.8 Community: remove from primary nav; add as footer link "Community (Coming Soon)"
+
+### Part 2 — Weave Prompts + Oracle Voice
+- [ ] 2.1 Replace all existing Weave prompts with 12 Soul Engineer prompts (tagged by 5S module)
+- [ ] 2.2 Update Oracle Reflect system prompt to Lumin Soul Engineer voice guide
+- [ ] 2.3 Prompt sidebar: show 4-5 at a time, filter by active 5S tab
+
+### Part 3 — Library Soul Engineer Content
+- [ ] 3.1 Add "Soul Engineer Method" content type and rights category to Resource Library
+- [ ] 3.2 Add 12 Soul Engineer Method entries (with chapter/page references) to library
+- [ ] 3.3 Soul Engineer Method entries appear first in default library view
+- [ ] 3.4 Relabel existing external content as "Wisdom Traditions"
+
+### Part 4 — Home Screen Returning-User Dashboard
+- [ ] 4.1 Daily Capacity Check-In component (1–10 slider + submit)
+- [ ] 4.2 Today's Lumin Prompt component (rotating from 12 SE prompts)
+- [ ] 4.3 First Honest Week Progress component (day counter + link)
+- [ ] 4.4 Recommended Pathway component (based on Capacity Audit result)
+- [ ] 4.5 Recent Weave Activity component (last 2–3 entries)
+
+### Part 5/6/7 — Pathways, Oracle Sources, Community
+- [ ] 5.1 Add 5S dimension tags to each pathway card on Pathways page
+- [ ] 6.1 Oracle "See Wisdom Sources": add "Build a Life That Does Not Break You" as first entry
+- [ ] 7.1 Remove Community from primary nav; add footer link "Community (Coming Soon)"

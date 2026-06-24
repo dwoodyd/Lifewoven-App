@@ -2,7 +2,7 @@ import { useState } from "react";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { Library, BookOpen, Headphones, FileText, ArrowRight, ExternalLink, Info, Shield } from "lucide-react";
+import { Library, BookOpen, Headphones, FileText, ArrowRight, ExternalLink, Info, Shield, Sparkles } from "lucide-react";
 
 type RightsLabel = "public-domain" | "original" | "licensed";
 
@@ -129,6 +129,115 @@ const RESOURCES: Resource[] = [
     rights: "original",
     rightsNote: "Original Lifewoven audio content.",
   },
+  // Soul Engineer Method entries
+  {
+    id: 13, category: "soul-engineer", module: "state",
+    title: "The Soul Engineer Method — Overview",
+    author: "DeWayne Woods",
+    description: "The foundational premise: most people are not failing because they lack motivation — they are failing because they are building on an unstable foundation. An introduction to the five load-bearing structures.",
+    type: "Overview", free: true,
+    rights: "original",
+    rightsNote: "Original Lifewoven content from Build a Life That Does Not Break You.",
+  },
+  {
+    id: 14, category: "soul-engineer", module: "state",
+    title: "State — The Foundation Dimension",
+    author: "DeWayne Woods",
+    description: "Your emotional and energetic quality is not a mood to manage — it is the interior weather that determines the quality of everything you do. Interior alignment precedes outer results.",
+    type: "Guide", free: true,
+    rights: "original",
+    rightsNote: "Original Lifewoven content from Build a Life That Does Not Break You.",
+  },
+  {
+    id: 15, category: "soul-engineer", module: "story",
+    title: "Story — The Belief Architecture",
+    author: "DeWayne Woods",
+    description: "Your story is not what happened to you — it is the interpretation you carry forward. Constraining beliefs limit your possibilities before you even begin. Identity-level change is more durable than behavioral change alone.",
+    type: "Guide", free: true,
+    rights: "original",
+    rightsNote: "Original Lifewoven content from Build a Life That Does Not Break You.",
+  },
+  {
+    id: 16, category: "soul-engineer", module: "standards",
+    title: "Standards — Values in Practice",
+    author: "DeWayne Woods",
+    description: "Standards are not rules imposed from outside — they are the expression of your identity in daily life. A standard without a rhythm is an aspiration. A rhythm without a standard is a habit without a soul.",
+    type: "Guide", free: true,
+    rights: "original",
+    rightsNote: "Original Lifewoven content from Build a Life That Does Not Break You.",
+  },
+  {
+    id: 17, category: "soul-engineer", module: "strategy",
+    title: "Strategy — Aligned Action",
+    author: "DeWayne Woods",
+    description: "Strategy is not about hustle or optimization — it is about alignment between your interior state and your external actions. The right strategy from alignment produces flow.",
+    type: "Guide", free: true,
+    rights: "original",
+    rightsNote: "Original Lifewoven content from Build a Life That Does Not Break You.",
+  },
+  {
+    id: 18, category: "soul-engineer", module: "stewardship",
+    title: "Stewardship — The Long Game",
+    author: "DeWayne Woods",
+    description: "Stewardship is the recognition that you are a resource, and resources require tending. It is the practice of maintaining what you have built so it compounds over time.",
+    type: "Guide", free: true,
+    rights: "original",
+    rightsNote: "Original Lifewoven content from Build a Life That Does Not Break You.",
+  },
+  {
+    id: 19, category: "soul-engineer", module: "state",
+    title: "The Capacity Audit — Your Starting Point",
+    author: "DeWayne Woods",
+    description: "The diagnostic that reveals which of your five load-bearing structures most needs attention. Not a test of your worth — a map of where the work begins.",
+    type: "Exercise", free: true,
+    rights: "original",
+    rightsNote: "Original Lifewoven content from Build a Life That Does Not Break You.",
+  },
+  {
+    id: 20, category: "soul-engineer", module: "story",
+    title: "The First Honest Week",
+    author: "DeWayne Woods",
+    description: "Seven days of structured self-honesty. The entry point into the Soul Engineer Method for readers of Build a Life That Does Not Break You.",
+    type: "Exercise", free: true,
+    rights: "original",
+    rightsNote: "Original Lifewoven content from Build a Life That Does Not Break You.",
+  },
+  {
+    id: 21, category: "soul-engineer", module: "state",
+    title: "The 6 Dimensions Life Map",
+    author: "DeWayne Woods",
+    description: "The six Becoming Questions that reveal where you are in each dimension of your interior life: Emotional, Physical, Spiritual, Creative, Identity, and Purpose.",
+    type: "Exercise", free: true,
+    rights: "original",
+    rightsNote: "Original Lifewoven content from Build a Life That Does Not Break You.",
+  },
+  {
+    id: 22, category: "soul-engineer", module: "standards",
+    title: "Load-Bearing Beliefs — Identification Guide",
+    author: "DeWayne Woods",
+    description: "How to identify the beliefs that are structurally load-bearing in your life — the ones that, if changed, would change everything downstream of them.",
+    type: "Guide", free: false,
+    rights: "original",
+    rightsNote: "Original Lifewoven content from Build a Life That Does Not Break You.",
+  },
+  {
+    id: 23, category: "soul-engineer", module: "strategy",
+    title: "The Honest Step Framework",
+    author: "DeWayne Woods",
+    description: "Not the perfect step — the honest one. A practical framework for identifying the next right action when the full path is unclear.",
+    type: "Guide", free: false,
+    rights: "original",
+    rightsNote: "Original Lifewoven content from Build a Life That Does Not Break You.",
+  },
+  {
+    id: 24, category: "soul-engineer", module: "stewardship",
+    title: "Build a Life That Does Not Break You — Book Overview",
+    author: "DeWayne Woods",
+    description: "A complete overview of the book: the premise, the five load-bearing dimensions, the diagnostic tools, and how the Soul Engineer Method is applied over time.",
+    type: "Book", free: true,
+    rights: "original",
+    rightsNote: "Original Lifewoven content from Build a Life That Does Not Break You.",
+  },
 ];
 
 const RIGHTS_CONFIG: Record<RightsLabel, { label: string; color: string; bg: string; description: string }> = {
@@ -158,6 +267,7 @@ const MODULE_COLORS: Record<string, string> = {
 };
 
 const CATEGORIES = [
+  { id: "soul-engineer", label: "Soul Engineer Method", icon: Sparkles },
   { id: "all", label: "All Resources", icon: Library },
   { id: "text", label: "Texts & Guides", icon: BookOpen },
   { id: "audio", label: "Audio", icon: Headphones },

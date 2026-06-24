@@ -705,7 +705,7 @@ export default function OnboardingModal({ userId }: Props) {
               onMouseEnter={e => { (e.target as HTMLElement).style.transform = "scale(1.04)"; }}
               onMouseLeave={e => { (e.target as HTMLElement).style.transform = "scale(1)"; }}
             >
-              Take the Alignment Audit →
+              Take the Capacity Audit →
             </button>
 
             <button

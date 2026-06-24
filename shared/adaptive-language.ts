@@ -159,7 +159,7 @@ export const LOW_BANDWIDTH = {
 
 // ─────────────────────────────────────────────
 // NEURODIVERGENT-AWARE ONBOARDING LANGUAGE
-// Used in the "How my mind works" step of the Alignment Audit.
+// Used in the "How my mind works" step of the Capacity Audit.
 // Principle: Non-clinical. No diagnosis. Just lived patterns.
 // ─────────────────────────────────────────────
 

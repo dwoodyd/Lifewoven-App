@@ -39,10 +39,10 @@ const UNSTUCK_STARTERS = [
 ];
 
 const WISDOM_SOURCES = [
+  { icon: BookOpen, label: "Build a Life That Does Not Break You", desc: "The Soul Engineer Method — identifying and repairing the load-bearing structures of your interior life" },
   { icon: Brain, label: "Mind Science", desc: "The creative power of thought and interior state — how consciousness shapes experience" },
-  { icon: Heart, label: "Interior Alignment", desc: "Lifewoven Framework — emotional guidance and the art of allowing" },
-  { icon: Sparkles, label: "Meaning-Centered Philosophy", desc: "Meaning as the root of resilience and purpose — the Lifewoven Why dimension" },
-  { icon: Zap, label: "Behavioral Science", desc: "Identity-based habit formation — systems over goals" },
+  { icon: Heart, label: "Interior Alignment", desc: "Emotional guidance and the art of allowing — State as the foundation of all other dimensions" },
+  { icon: Zap, label: "Behavioral Science", desc: "Identity-based habit formation — systems over goals, Standards and Strategy in practice" },
 ];
 
 // Crisis keywords — triggers a safety resource prompt instead of LLM call
@@ -198,7 +198,7 @@ export default function Oracle() {
           <div className="flex-1">
             <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-1" style={{fontFamily:'"Playfair Display",Georgia,serif'}}>The Oracle</h1>
             <p className="text-muted-foreground text-sm font-light">
-              Your personal AI guide, drawing from four pillars of transformational wisdom.
+              Your personal AI guide, drawing from the five movements of the Soul Engineer Method.
             </p>
           </div>
         </div>
@@ -480,7 +480,7 @@ export default function Oracle() {
             {messages.length === 0 && mode === "guide" && (
               <div className="rounded-xl border border-border bg-card p-5">
                 <p className="text-base font-light text-foreground leading-relaxed mb-4">
-                  The Oracle is not a search engine. It is a reflective guide — trained to meet you where you are, draw connections across your 5S dimensions, and offer wisdom that is both timeless and personally relevant to your situation.
+                  The Oracle is not a search engine. It is a reflective guide — trained in the Soul Engineer Method and the five load-bearing dimensions of a well-built life. It meets you where you are, draws connections across your 5S dimensions, and offers wisdom that is both timeless and personally relevant to your situation.
                 </p>
                 <p className="text-base font-light text-muted-foreground leading-relaxed mb-4">
                   You can ask anything: a question you are wrestling with, a feeling you cannot name, a decision you are avoiding, or simply "where do I begin?"

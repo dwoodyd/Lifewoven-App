@@ -21,9 +21,9 @@ import {
   scorecards, beliefs, decisions, energyAudits, oracleInsights,
   oracleConversations, userPathways, pathwaySessions, resources, courses, enrollments,
   products, communityPosts, communityComments, communityLikes, orders, users, moodLogs,
-  goals, goalMilestones
+  goals, goalMilestones, firstHonestWeekEntries
 } from "../drizzle/schema";
-import { eq, desc, and, like, sql, gte } from "drizzle-orm";
+import { eq, desc, and, like, sql, gte, lte } from "drizzle-orm";
 import { invokeLLM } from "./_core/llm";
 import { tierCanAccessOracle } from "./tierHelpers";
 import { TRPCError } from "@trpc/server";
@@ -222,7 +222,7 @@ const auditRouter = router({
           .join(", ");
         const lowestDim = Object.entries(input.scores)
           .sort(([, a], [, b]) => (a as number) - (b as number))[0]?.[0] ?? "";
-        const prompt = `You are writing a brief, warm, first-person journal entry for someone who just completed a personal alignment audit.
+        const prompt = `You are writing a brief, warm, first-person journal entry for someone who just completed a personal capacity audit.
 Audit results: pathway recommended = ${input.recommendedPathway}, 5S scores = ${scoreLines}.
 Lowest dimension: ${lowestDim}.
 Write 3-4 sentences as if the person is reflecting on their results. Use "I" voice. Be honest, compassionate, and forward-looking. No headers, no lists. Plain prose only.`;
@@ -238,7 +238,7 @@ Write 3-4 sentences as if the person is reflecting on their results. Use "I" voi
           const firstSentence = body.split(/[.!?]/)[0]?.trim() ?? "";
           const title = firstSentence.length > 80
             ? firstSentence.slice(0, 77) + "…"
-            : firstSentence || "My Alignment Audit Reflection";
+            : firstSentence || "My Capacity Audit Reflection";
           const db2 = await getDb();
           if (!db2) return;
           await db2.insert(journalEntries).values({
@@ -756,7 +756,9 @@ const oracleRouter = router({
         : "";
 
       // Build system prompt with user context
-      const systemPrompt = `You are the Lifewoven Oracle — a wise, warm, and deeply perceptive guide rooted in the Lifewoven 5S Framework. Use these canonical definitions consistently — they are the same definitions used throughout the Lifewoven platform:
+      const systemPrompt = `You are the Lifewoven Oracle — a wise, warm, and deeply perceptive guide rooted in the Soul Engineer Method, as taught in "Build a Life That Does Not Break You" by DeWayne Woods. The Soul Engineer Method is built on a single premise: most people are not failing because they lack motivation — they are failing because they are building on an unstable foundation. The method works by identifying and repairing the load-bearing structures of a person's interior life before optimizing performance.
+
+The five load-bearing dimensions of the Soul Engineer Method (the 5S Framework) are:
 
 State — Your emotional and energetic quality in this moment. State is not a mood to manage; it is the interior weather that determines the quality of everything you do. Interior alignment precedes outer results: you cannot think clearly, act consistently, or connect deeply from a dysregulated state. State work is the foundation.
 
@@ -770,7 +772,7 @@ Stewardship — The ongoing care of your whole self: body, energy, relationships
 
 These five dimensions are an integrated system. A shift in State changes what Stories become available. A clarified Story raises Standards. Elevated Standards inform Strategy. Disciplined Strategy, sustained through Stewardship, creates a life of meaning and momentum.
 
-You speak with warmth, precision, and wisdom. You ask powerful questions. You recognize patterns. You guide without preaching. You meet the user exactly where they are. Always use the canonical definitions above when referencing any of the five dimensions.
+You speak with warmth, precision, and wisdom. You ask powerful questions. You recognize patterns. You guide without preaching. You meet the user exactly where they are. When relevant, you may reference the Soul Engineer Method or the book "Build a Life That Does Not Break You" as the source of the framework. Always use the canonical definitions above when referencing any of the five dimensions.
 
 RESPONSE FORMAT: You MUST reply with valid JSON in exactly this shape — no markdown fences, no extra keys:
 {"reply": "<your full response text>", "tags": ["State"]}
@@ -1350,7 +1352,12 @@ Write a single, personal, present-tense identity sentence (max 20 words) that re
   homeContext: protectedProcedure.query(async ({ ctx }) => {
     const db = await getDb();
     if (!db) return null;
-    const [auditRow, lastJournalRow, lastPathwayRow] = await Promise.all([
+    // Today's date range for check-in detection
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999);
+    const [auditRow, lastJournalRow, lastPathwayRow, recentJournalsRow, todayCheckInRow, fhwRow] = await Promise.all([
       db.select({ id: auditResults.id, recommendedPathway: auditResults.recommendedPathway })
         .from(auditResults).where(eq(auditResults.userId, ctx.user.id))
         .orderBy(desc(auditResults.createdAt)).limit(1),
@@ -1360,6 +1367,17 @@ Write a single, personal, present-tense identity sentence (max 20 words) that re
       db.select({ pathway: userPathways.pathway, status: userPathways.status })
         .from(userPathways).where(and(eq(userPathways.userId, ctx.user.id), eq(userPathways.status, "active")))
         .orderBy(desc(userPathways.startedAt)).limit(1),
+      db.select({ id: journalEntries.id, title: journalEntries.title, pathway: journalEntries.pathway, createdAt: journalEntries.createdAt })
+        .from(journalEntries).where(eq(journalEntries.userId, ctx.user.id))
+        .orderBy(desc(journalEntries.createdAt)).limit(3),
+      db.select({ id: checkIns.id, emotionalScore: checkIns.emotionalScore, energyLevel: checkIns.energyLevel, clarityLevel: checkIns.clarityLevel, createdAt: checkIns.createdAt })
+        .from(checkIns).where(and(
+          eq(checkIns.userId, ctx.user.id),
+          gte(checkIns.createdAt, todayStart),
+          lte(checkIns.createdAt, todayEnd),
+        )).limit(1),
+      db.select({ id: firstHonestWeekEntries.id })
+        .from(firstHonestWeekEntries).where(eq(firstHonestWeekEntries.userId, ctx.user.id)),
     ]);
     const hasAudit = auditRow.length > 0;
     const lastJournal = lastJournalRow[0] ?? null;
@@ -1374,6 +1392,9 @@ Write a single, personal, present-tense identity sentence (max 20 words) that re
       lastPathway,
       recommendedPathway: auditRow[0]?.recommendedPathway ?? null,
       userName: ctx.user.name ?? "friend",
+      recentJournals: recentJournalsRow,
+      todayCheckIn: todayCheckInRow[0] ?? null,
+      fhwDaysCompleted: fhwRow.length,
     };
   }),
 

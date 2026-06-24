@@ -181,13 +181,13 @@ export default function Dashboard() {
 
   // Pathway-to-route mapping for audit-based routing
   const PATHWAY_ROUTES: Record<string, { href: string; label: string; sub: string; cta: string }> = {
-    align: { href: "/pathway/align", label: "Begin your Align practice", sub: "Your Alignment Audit recommends starting with Align — a daily grounding sequence.", cta: "Start Align" },
-    reset: { href: "/pathway/reset", label: "Begin your Reset practice", sub: "Your Alignment Audit recommends starting with Reset — a resilience protocol for re-entry.", cta: "Start Reset" },
-    uplift: { href: "/pathway/uplift", label: "Begin your Uplift practice", sub: "Your Alignment Audit recommends starting with Uplift — emotional set-point shifting.", cta: "Start Uplift" },
-    rhythms: { href: "/standards", label: "Build your Rhythms", sub: "Your Alignment Audit recommends starting with Rhythms — identity-based habit design.", cta: "Build My Rhythms" },
-    purpose: { href: "/pathway/purpose", label: "Begin your Purpose practice", sub: "Your Alignment Audit recommends starting with Purpose — meaning and direction work.", cta: "Start Purpose" },
-    strategy: { href: "/strategy", label: "Open your Strategy module", sub: "Your Alignment Audit recommends starting with Strategy — decision and direction clarity.", cta: "Open Strategy" },
-    stewardship: { href: "/stewardship", label: "Open your Stewardship module", sub: "Your Alignment Audit recommends starting with Stewardship — energy and rhythm repair.", cta: "Open Stewardship" },
+    align: { href: "/pathway/align", label: "Begin your Align practice", sub: "Your Capacity Audit recommends starting with Align — a daily grounding sequence.", cta: "Start Align" },
+    reset: { href: "/pathway/reset", label: "Begin your Reset practice", sub: "Your Capacity Audit recommends starting with Reset — a resilience protocol for re-entry.", cta: "Start Reset" },
+    uplift: { href: "/pathway/uplift", label: "Begin your Uplift practice", sub: "Your Capacity Audit recommends starting with Uplift — emotional set-point shifting.", cta: "Start Uplift" },
+    rhythms: { href: "/standards", label: "Build your Rhythms", sub: "Your Capacity Audit recommends starting with Rhythms — identity-based habit design.", cta: "Build My Rhythms" },
+    purpose: { href: "/pathway/purpose", label: "Begin your Purpose practice", sub: "Your Capacity Audit recommends starting with Purpose — meaning and direction work.", cta: "Start Purpose" },
+    strategy: { href: "/strategy", label: "Open your Strategy module", sub: "Your Capacity Audit recommends starting with Strategy — decision and direction clarity.", cta: "Open Strategy" },
+    stewardship: { href: "/stewardship", label: "Open your Stewardship module", sub: "Your Capacity Audit recommends starting with Stewardship — energy and rhythm repair.", cta: "Open Stewardship" },
   };
 
   const auditNextStep = primaryPathway ? PATHWAY_ROUTES[primaryPathway.toLowerCase()] : null;
@@ -679,7 +679,7 @@ export default function Dashboard() {
               ) : (
                 <div className="text-center py-2">
                   <p className="text-xs text-muted-foreground mb-3">No active pathways.</p>
-                  <Button asChild size="sm" variant="outline" className="text-xs"><Link href="/audit">Take Alignment Audit</Link></Button>
+                  <Button asChild size="sm" variant="outline" className="text-xs"><Link href="/audit">Take Capacity Audit</Link></Button>
                 </div>
               )}
             </div>

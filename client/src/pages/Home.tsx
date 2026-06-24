@@ -102,10 +102,14 @@ export default function Home() {
     return (
       <ReturningHome
         userName={homeCtx.userName}
-        lastPathway={homeCtx.lastPathway}
+        lastPathway={homeCtx.lastPathway ?? null}
         lastJournalId={homeCtx.lastJournalId}
         lastJournalTitle={homeCtx.lastJournalTitle}
         lastJournalPathway={homeCtx.lastJournalPathway}
+        recommendedPathway={homeCtx.recommendedPathway ?? null}
+        recentJournals={homeCtx.recentJournals ?? []}
+        todayCheckIn={homeCtx.todayCheckIn ?? null}
+        fhwDaysCompleted={homeCtx.fhwDaysCompleted ?? 0}
       />
     );
   }
@@ -165,7 +169,7 @@ export default function Home() {
                   boxShadow: "0 0 40px oklch(0.75 0.14 55 / 0.35)",
                 }}
               >
-                Take the Alignment Audit
+                Take the Capacity Audit
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Link>
               <a
@@ -358,7 +362,7 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
-              { step: "01", title: "Take the Alignment Audit", desc: "A 12-question diagnostic. 5 minutes. Tells you exactly where to begin.", cta: "Begin the Audit", href: "/audit" },
+              { step: "01", title: "Take the Capacity Audit", desc: "A 12-question diagnostic. 5 minutes. Tells you exactly where to begin.", cta: "Begin the Audit", href: "/audit" },
               { step: "02", title: "Enter Your First Pathway", desc: "Follow the guided protocol recommended for you. Step-by-step. No guesswork.", cta: "See All Pathways", href: "/pathways" },
               { step: "03", title: "Let the Oracle Guide You", desc: "As you journal and check in, the Oracle recognizes your patterns and tells you what to work on next.", cta: "Meet the Oracle", href: "/oracle" },
             ].map((item) => (
@@ -483,7 +487,7 @@ export default function Home() {
                 name: "Explorer",
                 price: "$0",
                 desc: "Lumin walks beside you. Begin your alignment journey.",
-                features: ["Alignment Audit diagnostic", "Daily emotional check-in", "The Weave (30 entries)", "Align & Uplift pathways", "5S Framework overview"],
+                features: ["Capacity Audit diagnostic", "Daily emotional check-in", "The Weave (30 entries)", "Align & Uplift pathways", "5S Framework overview"],
                 cta: "Start Free",
                 href: "/audit",
                 highlight: false,
@@ -588,7 +592,7 @@ export default function Home() {
             className="leading-[1.05] mb-6"
             style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2.5rem, 5vw, 4.5rem)", fontWeight: 400, color: "oklch(0.93 0.02 60)" }}
           >
-            Take the Alignment Audit.
+            Take the Capacity Audit.
           </h2>
           <p className="text-[oklch(0.55_0.01_260)] text-lg font-light mb-10 max-w-xl mx-auto">
             A 12-question diagnostic that identifies where you are across the 5S dimensions and recommends your starting pathway. Takes 5 minutes. Changes everything.
@@ -633,7 +637,7 @@ export default function Home() {
                 {[
                   { label: "Pathways", href: "/pathways" },
                   { label: "Library", href: "/library" },
-                  { label: "Community", href: "/community" },
+                  { label: "Community (Coming Soon)", href: "/community" },
                   { label: "Pricing", href: "/pricing" },
                   { label: "Sources & Influences", href: "/sources" },
                 ].map((l) => (

@@ -28,7 +28,6 @@ const primaryLinks = [
   { label: "The Weave", href: "/weave" },
   { label: "Oracle", href: "/oracle" },
   { label: "Resources", href: "/library" },
-  { label: "Community", href: "/community" },
 ];
 
 export default function Nav() {
@@ -364,7 +363,7 @@ export default function Nav() {
             ) : (
               <>
                 <Button size="default" asChild className="w-full">
-                  <Link href="/audit" onClick={closeMobile}>Take the Alignment Audit</Link>
+                  <Link href="/audit" onClick={closeMobile}>Take the Capacity Audit</Link>
                 </Button>
                 <Button variant="outline" size="default" asChild className="w-full bg-transparent">
                   <a href={getLoginUrl(window.location.pathname + window.location.search)} onClick={closeMobile}>Sign in</a>

@@ -39,7 +39,7 @@ export const PLAN_DEFINITIONS = {
       "Oracle AI (unlimited sessions)",
       "Priority support",
       "Early access to new features",
-      "Alignment Audit deep analysis",
+      "Capacity Audit deep analysis",
       "Full product library included",
     ],
   },

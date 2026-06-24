@@ -164,7 +164,7 @@ export default function Sources() {
         <div className="mt-12 p-6 rounded-2xl border border-accent/20 bg-accent/5">
           <h3 className="font-serif text-base font-light text-foreground mb-2">What is original to Lifewoven</h3>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            The 5S Framework (State, Story, Standards, Strategy, Stewardship) as an integrated system is original to Lifewoven. The Seven Pathways, the Alignment Audit, the Identity Stack methodology, the Belief Rewrite process, and the interactions between the five dimensions are the proprietary synthesis that makes Lifewoven distinct. We synthesize; we do not merely curate.
+            The 5S Framework (State, Story, Standards, Strategy, Stewardship) as an integrated system is original to Lifewoven. The Seven Pathways, the Capacity Audit, the Identity Stack methodology, the Belief Rewrite process, and the interactions between the five dimensions are the proprietary synthesis that makes Lifewoven distinct. We synthesize; we do not merely curate.
           </p>
         </div>
       </div>

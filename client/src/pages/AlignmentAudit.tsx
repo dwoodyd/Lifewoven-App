@@ -259,7 +259,7 @@ export default function AlignmentAudit() {
       try {
         await navigator.share({
           title: `My Lifewoven Alignment Profile: ${result.profile.name}`,
-          text: `I just completed the Lifewoven Alignment Audit. My profile is "${result.profile.name}". Find out yours:`,
+          text: `I just completed the Lifewoven Capacity Audit. My profile is "${result.profile.name}". Find out yours:`,
           url: shareUrl,
         });
         return;
@@ -290,9 +290,9 @@ export default function AlignmentAudit() {
       />
       <Nav />
       <div className="container max-w-xl mx-auto pt-24 pb-20 text-center px-4 sm:px-6 lumin-text">
-        <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Lifewoven · Alignment Audit</p>
+        <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Lifewoven · Capacity Audit</p>
         <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-6 leading-tight">Find your clearest<br />place to begin.</h1>
-        <p className="text-muted-foreground text-base leading-relaxed mb-6 max-w-md mx-auto">The Alignment Audit identifies where friction is highest in your life right now — and recommends the most honest place to start inside Lifewoven. There are four short sections. Answer as honestly as you can — this only works if you are real with it.</p>
+        <p className="text-muted-foreground text-base leading-relaxed mb-6 max-w-md mx-auto">The Capacity Audit identifies where friction is highest in your life right now — and recommends the most honest place to start inside Lifewoven. There are four short sections. Answer as honestly as you can — this only works if you are real with it.</p>
         <div className="flex items-center justify-center gap-3 mb-6 flex-wrap">
           {["12 questions", "3 to 5 minutes", "Free, no account required"].map(tag => (
             <span key={tag} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border text-xs text-muted-foreground">
@@ -583,7 +583,7 @@ export default function AlignmentAudit() {
           </div>
           <div className="p-4 rounded-xl bg-muted/30 border border-border">
             <p className="text-sm text-muted-foreground leading-relaxed">
-              <strong>Disclaimer:</strong> The Alignment Audit is a reflective tool, not a medical or psychological diagnosis. It is designed to identify current patterns and help guide your experience inside Lifewoven. If you are dealing with significant mental health concerns, please seek support from a qualified professional.
+              <strong>Disclaimer:</strong> The Capacity Audit is a reflective tool, not a medical or psychological diagnosis. It is designed to identify current patterns and help guide your experience inside Lifewoven. If you are dealing with significant mental health concerns, please seek support from a qualified professional.
             </p>
           </div>
         </div>
