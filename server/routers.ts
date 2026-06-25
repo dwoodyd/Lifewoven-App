@@ -793,16 +793,33 @@ User context:
           messages = (convs[0].messages as any[]) ?? [];
         }
       }
-
       messages.push({ role: "user", content: input.message });
-
       const response = await invokeLLM({
         messages: [
           { role: "system", content: systemPrompt },
           ...messages.map(m => ({ role: m.role as "user" | "assistant", content: m.content })),
         ],
+        response_format: {
+          type: "json_schema",
+          json_schema: {
+            name: "oracle_response",
+            strict: true,
+            schema: {
+              type: "object",
+              properties: {
+                reply: { type: "string", description: "The Oracle's full response to the user" },
+                tags: {
+                  type: "array",
+                  items: { type: "string", enum: ["State", "Story", "Standards", "Strategy", "Stewardship"] },
+                  description: "1-3 Soul Engineer dimensions most central to this response"
+                },
+              },
+              required: ["reply", "tags"],
+              additionalProperties: false,
+            },
+          },
+        },
       });
-
       const rawContent = response.choices[0]?.message?.content;
       // Parse structured JSON response; fall back gracefully if LLM returns plain text
       let reply = "I'm here with you. Tell me more.";
@@ -812,11 +829,13 @@ User context:
           // Strip possible markdown code fences the LLM may add
           const cleaned = rawContent.trim().replace(/^```json\s*/i, "").replace(/```\s*$/, "");
           const parsed = JSON.parse(cleaned);
-          if (parsed && typeof parsed.reply === "string") {
-            reply = parsed.reply;
+          // Handle double-encoded JSON (LLM sometimes wraps the object in a string)
+          const obj = typeof parsed === "string" ? JSON.parse(parsed) : parsed;
+          if (obj && typeof obj.reply === "string") {
+            reply = obj.reply;
             const validTags = ["State", "Story", "Standards", "Strategy", "Stewardship"];
-            tags = Array.isArray(parsed.tags)
-              ? (parsed.tags as unknown[]).filter((t): t is string => typeof t === "string" && validTags.includes(t))
+            tags = Array.isArray(obj.tags)
+              ? (obj.tags as unknown[]).filter((t): t is string => typeof t === "string" && validTags.includes(t))
               : [];
           } else {
             reply = rawContent;
