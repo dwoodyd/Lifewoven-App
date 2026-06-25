@@ -21,7 +21,7 @@ const MODULES = [
 ];
 
 const HOW_TO_STEPS = [
-  { step: "01", icon: Compass, title: "Take the Soul Engineer Assessment", desc: "A 12-question diagnostic that maps your current state across all 5 dimensions and recommends your first pathway. Takes 5 minutes. Starts everything.", cta: "Begin the Audit", href: "/audit", termKey: "Soul Engineer Assessment" },
+  { step: "01", icon: Compass, title: "Take the Soul Engineer Assessment", desc: "A 12-question diagnostic that maps your current state across all 5 dimensions and recommends your first pathway. Takes 5 minutes. Starts everything.", cta: "Begin the Assessment", href: "/audit", termKey: "Soul Engineer Assessment" },
   { step: "02", icon: Heart, title: "Enter Your First Module", desc: "Based on your audit results, you'll be guided to the module where your energy is most blocked. Start there. Don't try to do everything at once.", cta: "View Your Dashboard", href: "/dashboard" },
   { step: "03", icon: Sparkles, title: "Work With the Oracle", desc: "The Oracle is your AI companion — it reads your journal entries, habit patterns, and check-ins to surface insights you haven't seen yet. Ask it anything.", cta: "Meet the Oracle", href: "/oracle" },
   { step: "04", icon: Zap, title: "Follow a Pathway", desc: "Pathways are guided practice sequences — 10 to 45 minutes — designed to move you through a specific shift. Align, Reset, Uplift, Flow, Rhythms, Purpose.", cta: "Explore Pathways", href: "/pathways" },

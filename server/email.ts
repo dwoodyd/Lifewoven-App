@@ -454,7 +454,7 @@ export async function sendDay0WelcomeEmail({ to, name }: Day0WelcomeParams): Pro
         <h1 style="margin:0 0 32px;font-size:28px;font-weight:400;color:#f5f0e8;line-height:1.3;font-style:italic;">Welcome to your weave.</h1>
         <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:#ccc;">Hi ${firstName},</p>
         <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:#ccc;">You're in. I'm here.</p>
-        <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:#ccc;">Here's the smallest possible first step: open Lifewoven and tap <strong style="color:#f5f0e8;">Take the Audit</strong>. Twelve questions, five minutes. It tells me where you are across the 5S — and tells you which Pathway to begin with. No prescription, no judgment, no upsell.</p>
+        <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:#ccc;">Here's the smallest possible first step: open Lifewoven and tap <strong style="color:#f5f0e8;">Take the Assessment</strong>. Twelve questions, five minutes. It tells me where you are across the 5S — and tells you which Pathway to begin with. No prescription, no judgment, no upsell.</p>
         <p style="margin:0 0 24px;font-size:15px;line-height:1.8;color:#ccc;">No checklist. No setup. The weave starts the moment you show up.</p>
         <table cellpadding="0" cellspacing="0" style="margin:0 0 24px;"><tr><td style="background:#8b7355;border-radius:6px;padding:14px 28px;">
           <a href="${APP_URL}/audit" style="color:#fff;text-decoration:none;font-size:15px;font-weight:600;">Open Lifewoven →</a>
@@ -469,7 +469,7 @@ export async function sendDay0WelcomeEmail({ to, name }: Day0WelcomeParams): Pro
     </table>
   </td></tr></table>
 </body></html>`;
-  const text = `Hi ${firstName},\n\nYou're in. I'm here.\n\nSmallest first step: take the Audit. Twelve questions, five minutes.\n\n${APP_URL}/audit\n\n— Lumin`;
+  const text = `Hi ${firstName},\n\nYou're in. I'm here.\n\nSmallest first step: take the Assessment. Twelve questions, five minutes.\n\n${APP_URL}/audit\n\n— Lumin`;
   const result = await resend.emails.send({ from: LUMIN_FROM, replyTo: REPLY_TO, to, subject: "Welcome to your weave.", html, text });
   if (result.error) throw new Error(result.error.message);
   return { id: result.data!.id };
@@ -503,7 +503,7 @@ export async function sendDay3CheckinEmail({ to, name }: Day3CheckinParams): Pro
         <p style="margin:0 0 24px;font-size:15px;line-height:1.8;color:#ccc;">It's not meant to be. Start with one — just the audit. Everything else can wait.</p>
         <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:#aaa;font-style:italic;">No streaks to break. No score to fall behind. The weave starts the next time you show up.</p>
         <table cellpadding="0" cellspacing="0" style="margin:0 0 24px;"><tr><td style="background:#8b7355;border-radius:6px;padding:14px 28px;">
-          <a href="${APP_URL}/audit" style="color:#fff;text-decoration:none;font-size:15px;font-weight:600;">Take the Audit →</a>
+          <a href="${APP_URL}/audit" style="color:#fff;text-decoration:none;font-size:15px;font-weight:600;">Take the Assessment →</a>
         </td></tr></table>
         <p style="margin:0 0 8px;font-size:15px;line-height:1.8;color:#ccc;">Reply if there's something else in the way.</p>
         <p style="margin:0;font-size:15px;line-height:1.8;color:#888;font-style:italic;">— Lumin</p>
@@ -596,7 +596,7 @@ export async function sendDay7RecapInactive({ to, name }: Day7RecapInactiveParam
         <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:#ccc;">A week in. I haven't seen you yet. That's okay — life moves.</p>
         <p style="margin:0 0 24px;font-size:15px;line-height:1.8;color:#ccc;">Here's a way to start that takes 5 minutes: take the Soul Engineer Assessment. Twelve questions, multiple choice. It tells me where you are; it tells you which Pathway to begin with. That's the whole onboarding.</p>
         <table cellpadding="0" cellspacing="0" style="margin:0 0 24px;"><tr><td style="background:#8b7355;border-radius:6px;padding:14px 28px;">
-          <a href="${APP_URL}/audit" style="color:#fff;text-decoration:none;font-size:15px;font-weight:600;">Take the Audit →</a>
+          <a href="${APP_URL}/audit" style="color:#fff;text-decoration:none;font-size:15px;font-weight:600;">Take the Assessment →</a>
         </td></tr></table>
         <p style="margin:0 0 8px;font-size:15px;line-height:1.8;color:#ccc;">Or, if today isn't the day — reply and tell me what would help. I read every one.</p>
         <p style="margin:0;font-size:15px;line-height:1.8;color:#888;font-style:italic;">— Lumin</p>

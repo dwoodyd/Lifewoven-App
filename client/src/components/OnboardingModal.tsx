@@ -124,7 +124,7 @@ const SCENES: Scene[] = [
       { text: "Twelve questions. Three to five minutes.", startAt: 4.4, size: "md" },
       { text: "Free, no account required.", startAt: 5.6, size: "md" },
     ],
-    cta: "Take the Audit →",
+    cta: "Take the Assessment →",
     whisper: "I'll come back to it.",
   },
 ];

@@ -313,7 +313,7 @@ export default function AlignmentAudit() {
           <p className="text-sm text-muted-foreground leading-relaxed">Your responses can be used to personalize your recommendations inside Lifewoven. This audit is not a diagnosis. You can change this preference any time in settings.</p>
         </div>
         <div className="space-y-3 mb-4">
-          <Button size="lg" className="w-full gap-2" onClick={() => setStep("quiz")}><CheckCircle2 className="h-4 w-4" /> Begin the Audit <ArrowRight className="h-4 w-4" /></Button>
+          <Button size="lg" className="w-full gap-2" onClick={() => setStep("quiz")}><CheckCircle2 className="h-4 w-4" /> Begin the Assessment <ArrowRight className="h-4 w-4" /></Button>
         </div>
         <p className="text-xs text-muted-foreground">Your responses stay private and are used only to guide your experience.</p>
       </div>

@@ -240,7 +240,7 @@ export default function Nav() {
                 <a href={getLoginUrl(window.location.pathname + window.location.search)}>Sign in</a>
               </Button>
               <Button size="sm" asChild className="hidden sm:flex">
-                <Link href="/audit">Take the Audit</Link>
+                <Link href="/audit">Take the Assessment</Link>
               </Button>
             </>
           )}

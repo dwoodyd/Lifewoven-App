@@ -354,7 +354,7 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
-              { step: "01", title: "Take the Soul Engineer Assessment", desc: "A 12-question diagnostic. 5 minutes. Tells you exactly where to begin.", cta: "Begin the Audit", href: "/audit" },
+              { step: "01", title: "Take the Soul Engineer Assessment", desc: "A 12-question diagnostic. 5 minutes. Tells you exactly where to begin.", cta: "Begin the Assessment", href: "/audit" },
               { step: "02", title: "Enter Your First Pathway", desc: "Follow the guided protocol recommended for you. Step-by-step. No guesswork.", cta: "See All Pathways", href: "/pathways" },
               { step: "03", title: "Let the Oracle Guide You", desc: "As you journal and check in, the Oracle recognizes your patterns and tells you what to work on next.", cta: "Meet the Oracle", href: "/oracle" },
             ].map((item) => (
@@ -598,7 +598,7 @@ export default function Home() {
               boxShadow: "0 0 60px oklch(0.75 0.14 55 / 0.40)",
             }}
           >
-            Begin the Audit
+            Begin the Assessment
             <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
