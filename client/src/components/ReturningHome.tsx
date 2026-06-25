@@ -4,7 +4,7 @@
  * Layout (centered single column, ~600px max):
  *  Nav
  *  01 · TIME KICKER + greeting
- *  02 · Daily Capacity Check-In (inline sliders or today's scores)
+ *  02 · Daily Check-In (inline sliders or today's scores)
  *  03 · Today's Lumin Prompt (rotating, day-keyed from 12 SE prompts)
  *  04 · First Honest Week Progress (7-day progress bar)
  *  05 · Recommended Pathway card
@@ -92,7 +92,7 @@ function getDailyPrompt() {
   return SE_PROMPTS[dayOfYear % SE_PROMPTS.length];
 }
 
-// ─── Daily Capacity Check-In Card ─────────────────────────────────────────────
+// ─── Daily Check-In Card ─────────────────────────────────────────────────────
 function CheckInCard({ todayCheckIn }: { todayCheckIn: Props["todayCheckIn"] }) {
   const utils = trpc.useUtils();
   const [emotional, setEmotional] = useState(todayCheckIn?.emotionalScore ?? 11);
@@ -109,12 +109,13 @@ function CheckInCard({ todayCheckIn }: { todayCheckIn: Props["todayCheckIn"] }) 
     onError: () => toast.error("Could not save check-in."),
   });
 
+  // EGS: 1 = Joy/Appreciation (highest), 22 = Fear/Grief (lowest) — lower is better
   const emotionalLabel = (v: number) => {
-    if (v <= 4) return "Low";
-    if (v <= 8) return "Neutral";
-    if (v <= 14) return "Positive";
-    if (v <= 18) return "Elevated";
-    return "Peak";
+    if (v <= 4)  return "Joyful";
+    if (v <= 8)  return "Positive";
+    if (v <= 12) return "Neutral";
+    if (v <= 17) return "Heavy";
+    return "Low";
   };
 
   if (submitted) {
@@ -122,11 +123,11 @@ function CheckInCard({ todayCheckIn }: { todayCheckIn: Props["todayCheckIn"] }) 
     return (
       <div className="w-full rounded-2xl border border-border bg-card px-7 py-6 mb-5">
         <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-accent mb-3">
-          Daily Capacity Check-In · Today
+          Daily Check-In · Today
         </p>
         <div className="flex gap-6">
           <div className="text-center">
-            <p className="text-2xl font-semibold text-foreground" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>{scores.emotionalScore}</p>
+            <p className="text-2xl font-semibold text-foreground" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>{scores.emotionalScore}<span className="text-base font-normal text-muted-foreground">/22</span></p>
             <p className="text-[10px] text-muted-foreground uppercase tracking-wide mt-0.5">Emotional</p>
           </div>
           <div className="text-center">
@@ -148,13 +149,13 @@ function CheckInCard({ todayCheckIn }: { todayCheckIn: Props["todayCheckIn"] }) 
   return (
     <div className="w-full rounded-2xl border border-border bg-card px-7 py-6 mb-5">
       <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-accent mb-4">
-        Daily Capacity Check-In
+        Daily Check-In
       </p>
       <div className="space-y-4 mb-5">
         <div>
           <div className="flex justify-between mb-1.5">
             <span className="text-xs text-muted-foreground">Emotional</span>
-            <span className="text-xs text-foreground font-medium">{emotional} — {emotionalLabel(emotional)}</span>
+            <span className="text-xs text-foreground font-medium">{emotional}/22 — {emotionalLabel(emotional)}</span>
           </div>
           <input type="range" min={1} max={22} value={emotional}
             onChange={e => setEmotional(Number(e.target.value))}
@@ -380,7 +381,7 @@ export default function ReturningHome({
           Come back to the whole — the practice meets you where you are.
         </p>
 
-        {/* 03 · DAILY CAPACITY CHECK-IN */}
+        {/* 03 · DAILY CHECK-IN */}
         <div className="w-full text-left">
           <CheckInCard todayCheckIn={todayCheckIn} />
         </div>
