@@ -84,11 +84,11 @@ These five dimensions are not parallel tracks. They are a network — each in co
         },
         {
           id: "1.2",
-          title: "The Capacity Audit: Where Are You Now?",
+          title: "The Soul Engineer Assessment: Where Are You Now?",
           duration: "25 min",
-          teaching: `Before any system can be improved, it must be accurately assessed. The Capacity Audit is the honest look — the deliberate, specific examination of where each dimension currently stands, without the distortions of optimism, shame, or the tendency to conflate intention with reality.
+          teaching: `Before any system can be improved, it must be accurately assessed. The Soul Engineer Assessment is the honest look — the deliberate, specific examination of where each dimension currently stands, without the distortions of optimism, shame, or the tendency to conflate intention with reality.
 
-Most people, when asked to assess their lives, give the answer they wish were true rather than the answer that is true. This is not dishonesty in the conventional sense — it is the natural operation of a mind that has learned to protect itself from the discomfort of accurate self-knowledge. The Capacity Audit asks you to temporarily suspend that protection.
+Most people, when asked to assess their lives, give the answer they wish were true rather than the answer that is true. This is not dishonesty in the conventional sense — it is the natural operation of a mind that has learned to protect itself from the discomfort of accurate self-knowledge. The Soul Engineer Assessment asks you to temporarily suspend that protection.
 
 The audit uses a simple 1–10 scale for each dimension. The scale is not a judgment — it is a diagnostic tool. A 4 in the State dimension does not mean you are failing at emotional life. It means your current emotional baseline is in the lower half of the scale, and that information is useful for deciding where to direct your attention.
 

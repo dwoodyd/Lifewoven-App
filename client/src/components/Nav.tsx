@@ -363,7 +363,7 @@ export default function Nav() {
             ) : (
               <>
                 <Button size="default" asChild className="w-full">
-                  <Link href="/audit" onClick={closeMobile}>Take the Capacity Audit</Link>
+                  <Link href="/audit" onClick={closeMobile}>Take the Soul Engineer Assessment</Link>
                 </Button>
                 <Button variant="outline" size="default" asChild className="w-full bg-transparent">
                   <a href={getLoginUrl(window.location.pathname + window.location.search)} onClick={closeMobile}>Sign in</a>

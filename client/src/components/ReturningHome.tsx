@@ -1,5 +1,5 @@
 /**
- * ReturningHome — daily dashboard for logged-in members (post-Capacity Audit).
+ * ReturningHome — daily dashboard for logged-in members (post-Soul Engineer Assessment).
  *
  * Layout (centered single column, ~600px max):
  *  Nav

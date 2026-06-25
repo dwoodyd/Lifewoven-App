@@ -36,13 +36,13 @@ export default function NewMemberHome({ userName }: { userName: string }) {
             fontSize: "clamp(1.1rem, 2.8vw, 1.3rem)",
           }}
         >
-          The first step is to find out where you are. The Capacity Audit takes five minutes and tells you exactly where to begin.
+          The first step is to find out where you are. The Soul Engineer Assessment takes five minutes and tells you exactly where to begin.
         </p>
         <Link
           href="/audit"
           className="group inline-flex items-center gap-3 px-8 py-3.5 rounded-full text-sm font-medium bg-foreground text-background hover:opacity-85 transition-opacity"
         >
-          Take the Capacity Audit
+          Take the Soul Engineer Assessment
           <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
         </Link>
         <p className="mt-4 text-xs text-muted-foreground">

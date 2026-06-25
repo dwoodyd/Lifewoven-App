@@ -238,7 +238,7 @@ Write 3-4 sentences as if the person is reflecting on their results. Use "I" voi
           const firstSentence = body.split(/[.!?]/)[0]?.trim() ?? "";
           const title = firstSentence.length > 80
             ? firstSentence.slice(0, 77) + "…"
-            : firstSentence || "My Capacity Audit Reflection";
+            : firstSentence || "My Soul Engineer Assessment Reflection";
           const db2 = await getDb();
           if (!db2) return;
           await db2.insert(journalEntries).values({

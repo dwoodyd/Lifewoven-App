@@ -19,7 +19,7 @@ const GLOSSARY: Record<string, { definition: string; context?: string }> = {
     definition: "Your personal journal — a place to reflect, process, and track your inner life over time.",
     context: "Accessible from the navigation.",
   },
-  "Capacity Audit": {
+  "Soul Engineer Assessment": {
     definition: "A short self-assessment that maps where you are across the 5S dimensions and recommends your first pathway.",
     context: "Takes about 5 minutes.",
   },

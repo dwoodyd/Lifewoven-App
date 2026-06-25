@@ -21,7 +21,7 @@ const MODULES = [
 ];
 
 const HOW_TO_STEPS = [
-  { step: "01", icon: Compass, title: "Take the Capacity Audit", desc: "A 12-question diagnostic that maps your current state across all 5 dimensions and recommends your first pathway. Takes 5 minutes. Starts everything.", cta: "Begin the Audit", href: "/audit", termKey: "Capacity Audit" },
+  { step: "01", icon: Compass, title: "Take the Soul Engineer Assessment", desc: "A 12-question diagnostic that maps your current state across all 5 dimensions and recommends your first pathway. Takes 5 minutes. Starts everything.", cta: "Begin the Audit", href: "/audit", termKey: "Soul Engineer Assessment" },
   { step: "02", icon: Heart, title: "Enter Your First Module", desc: "Based on your audit results, you'll be guided to the module where your energy is most blocked. Start there. Don't try to do everything at once.", cta: "View Your Dashboard", href: "/dashboard" },
   { step: "03", icon: Sparkles, title: "Work With the Oracle", desc: "The Oracle is your AI companion — it reads your journal entries, habit patterns, and check-ins to surface insights you haven't seen yet. Ask it anything.", cta: "Meet the Oracle", href: "/oracle" },
   { step: "04", icon: Zap, title: "Follow a Pathway", desc: "Pathways are guided practice sequences — 10 to 45 minutes — designed to move you through a specific shift. Align, Reset, Uplift, Flow, Rhythms, Purpose.", cta: "Explore Pathways", href: "/pathways" },
@@ -50,7 +50,7 @@ export default function About() {
             </p>
             <div className="flex flex-wrap gap-3">
               <Link href="/audit">
-                <Button className="gap-2">Take the Capacity Audit <ArrowRight className="h-4 w-4" /></Button>
+                <Button className="gap-2">Take the Soul Engineer Assessment <ArrowRight className="h-4 w-4" /></Button>
               </Link>
               <Link href="/dashboard">
                 <Button variant="outline" className="gap-2 bg-background">Go to Dashboard</Button>
@@ -141,7 +141,7 @@ export default function About() {
                     <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                       <Icon className="h-4 w-4 text-muted-foreground" />
                       <h3 className="font-medium text-foreground text-sm sm:text-base">
-                      {step === "01" ? <TermTooltip term="Capacity Audit">{title}</TermTooltip>
+                      {step === "01" ? <TermTooltip term="Soul Engineer Assessment">{title}</TermTooltip>
                         : step === "03" ? <TermTooltip term="The Oracle">{title}</TermTooltip>
                         : step === "04" ? <TermTooltip term="Pathway">{title}</TermTooltip>
                         : title}
@@ -203,10 +203,10 @@ export default function About() {
       <section className="py-20 border-t border-border">
         <div className="container max-w-2xl mx-auto text-center">
           <h2 className="font-serif text-3xl md:text-4xl font-light text-foreground mb-4">Ready to begin?</h2>
-          <p className="text-muted-foreground font-light mb-8">The Capacity Audit takes 5 minutes and tells you exactly where to start.</p>
+          <p className="text-muted-foreground font-light mb-8">The Soul Engineer Assessment takes 5 minutes and tells you exactly where to start.</p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link href="/audit">
-              <Button size="lg" className="gap-2">Take the Capacity Audit <ArrowRight className="h-4 w-4" /></Button>
+              <Button size="lg" className="gap-2">Take the Soul Engineer Assessment <ArrowRight className="h-4 w-4" /></Button>
             </Link>
             <Link href="/pricing">
               <Button variant="outline" size="lg" className="bg-background">View Pricing</Button>

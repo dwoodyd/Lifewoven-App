@@ -186,7 +186,7 @@ const RESOURCES: Resource[] = [
   },
   {
     id: 19, category: "soul-engineer", module: "state",
-    title: "The Capacity Audit — Your Starting Point",
+    title: "The Soul Engineer Assessment — Your Starting Point",
     author: "DeWayne Woods",
     description: "The diagnostic that reveals which of your five load-bearing structures most needs attention. Not a test of your worth — a map of where the work begins.",
     type: "Exercise", free: true,

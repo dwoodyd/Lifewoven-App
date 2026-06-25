@@ -29,7 +29,7 @@ const TIERS = [
     highlight: false,
     libraryItems: null as string[] | null,
     features: [
-      "Capacity Audit diagnostic",
+      "Soul Engineer Assessment diagnostic",
       "Daily emotional check-in",
       "The Weave (up to 30 entries)",
       "Align & Uplift pathways",
@@ -181,7 +181,7 @@ export default function Pricing() {
   }
 
   const COMPARISON_ROWS: [string, string | boolean, string | boolean, string | boolean][] = [
-    ["Capacity Audit", true, true, true],
+    ["Soul Engineer Assessment", true, true, true],
     ["Daily check-in & The Weave", true, true, true],
     ["5S Framework tools", "Overview", "Full suite", "Full suite"],
     ["Habit tracker & scorecard", false, true, true],
@@ -355,7 +355,7 @@ export default function Pricing() {
                 <span className="text-xs text-muted-foreground/50">Free</span>
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                You get the core of Lifewoven — the Capacity Audit, The Weave journal (up to 30 entries), two foundational pathways, and the public resource library. It's a genuine starting point, not a teaser. You can build real clarity here.
+                You get the core of Lifewoven — the Soul Engineer Assessment, The Weave journal (up to 30 entries), two foundational pathways, and the public resource library. It's a genuine starting point, not a teaser. You can build real clarity here.
               </p>
               <p className="text-xs text-muted-foreground/60 mt-3 italic">Best for: exploring the framework before committing.</p>
             </div>
@@ -453,10 +453,10 @@ export default function Pricing() {
           <Sparkles className="h-8 w-8 text-amber-400 mx-auto mb-4" />
           <h2 className="font-serif text-2xl font-light text-foreground mb-3">Not sure where to start?</h2>
           <p className="text-muted-foreground text-base mb-6 max-w-md mx-auto">
-            Take the free Capacity Audit. In 5 minutes, you'll know exactly which pathway and tier is right for you.
+            Take the free Soul Engineer Assessment. In 5 minutes, you'll know exactly which pathway and tier is right for you.
           </p>
           <Button asChild variant="outline">
-            <Link href="/audit">Take the Capacity Audit</Link>
+            <Link href="/audit">Take the Soul Engineer Assessment</Link>
           </Button>
         </div>
 

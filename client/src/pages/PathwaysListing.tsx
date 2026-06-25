@@ -193,7 +193,7 @@ export default function PathwaysListing() {
           <p className="text-base text-muted-foreground font-light">
             Not sure where to start?{" "}
             <Link href="/audit" className="text-accent hover:underline">
-              Take the Capacity Audit
+              Take the Soul Engineer Assessment
             </Link>{" "}
             and receive a personalized pathway recommendation.
           </p>
