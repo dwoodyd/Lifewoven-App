@@ -1400,8 +1400,11 @@ Write a single, personal, present-tense identity sentence (max 20 words) that re
     ]);
     const hasAudit = auditRow.length > 0;
     const lastJournal = lastJournalRow[0] ?? null;
-    const lastPathway = lastPathwayRow[0]?.pathway ?? auditRow[0]?.recommendedPathway ?? null;
-    const hasActivity = hasAudit || !!lastJournal;
+    const lastPathway = lastPathwayRow[0]?.pathway ?? auditRow[0]?.recommendedPathway ?? ctx.user.primaryPathway ?? null;
+    // onboardingCompleted is the most reliable signal — it is set atomically when the audit is saved.
+    // Fall back to it so users whose audit_results row is missing (e.g. saved before a migration)
+    // are still treated as returning members rather than being shown the new-member screen forever.
+    const hasActivity = hasAudit || !!lastJournal || !!ctx.user.onboardingCompleted;
     return {
       hasActivity,
       hasAudit,
