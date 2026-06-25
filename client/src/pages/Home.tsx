@@ -62,7 +62,7 @@ export default function Home() {
   // Fetch home context only when authenticated
   const { data: homeCtx, isLoading: homeCtxLoading } = trpc.profile.homeContext.useQuery(
     undefined,
-    { enabled: isAuthenticated }
+    { enabled: isAuthenticated, refetchOnMount: "always" }
   );
 
   useEffect(() => {

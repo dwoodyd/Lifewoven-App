@@ -189,7 +189,15 @@ export default function AlignmentAudit() {
   const [mindPatterns, setMindPatterns] = useState<string[]>([]);
   const [luminPulse, setLoomPulse] = useState(false);
 
-  const saveAudit = trpc.audit.save.useMutation({ onSuccess: () => toast.success("Results saved to your profile.") });
+  const utils = trpc.useUtils();
+  const saveAudit = trpc.audit.save.useMutation({
+    onSuccess: () => {
+      toast.success("Results saved to your profile.");
+      // Invalidate homeContext so the home screen immediately reflects the completed audit
+      utils.profile.homeContext.invalidate();
+      utils.auth.me.invalidate();
+    },
+  });
   const saveMindPatterns = trpc.profile.saveMindPatterns.useMutation();
   const trackAuditEvent = trpc.system.trackAuditEvent.useMutation();
 
