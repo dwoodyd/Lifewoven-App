@@ -604,10 +604,10 @@ export default function Oracle() {
                           <Sparkles className="h-3.5 w-3.5 text-accent" />
                         </div>
                       )}
-                      <div className={`max-w-[80%] rounded-2xl text-sm leading-relaxed ${msg.role === "user" ? "bg-accent text-accent-foreground rounded-br-sm p-4 font-medium" : "bg-card border border-border rounded-bl-sm"}`}>
+                      <div className={`max-w-[80%] rounded-2xl text-sm leading-relaxed ${msg.role === "user" ? "bg-foreground text-background rounded-br-sm p-4 font-normal" : "bg-card/90 border border-border/60 shadow-sm text-card-foreground rounded-bl-sm"}`}>
                         {msg.role === "assistant" ? (
                           <>
-                            <div className="p-4">
+                            <div className="p-4 text-card-foreground">
                               <Streamdown>{msg.content}</Streamdown>
                             </div>
                             {msg.tags && msg.tags.length > 0 && (
