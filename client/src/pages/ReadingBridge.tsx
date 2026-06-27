@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { BookOpen, Check, ChevronRight } from "lucide-react";
+import { BookOpen, Check, ChevronRight, Plus, Trash2, StickyNote } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { useLocation } from "wouter";
 import DashboardLayout from "@/components/DashboardLayout";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 // ─── Static chapter list (mirrors server config) ─────────────────────────────
 const SECTIONS = [
@@ -67,15 +69,114 @@ const SECTION_PATHWAY: Record<string, string> = {
   STEWARDSHIP: "Purpose",
 };
 
+// ─── Quick Notes Panel ────────────────────────────────────────────────────────
+function NotesPanel({ chapterId, chapterTitle }: { chapterId: string; chapterTitle: string }) {
+  const [draft, setDraft] = useState("");
+  const utils = trpc.useUtils();
+
+  const { data: notes = [], isLoading } = trpc.readingBridge.getNotes.useQuery({ chapterId });
+
+  const addNote = trpc.readingBridge.addNote.useMutation({
+    onSuccess: () => {
+      utils.readingBridge.getNotes.invalidate({ chapterId });
+      utils.readingBridge.getNoteSummary.invalidate();
+      setDraft("");
+    },
+  });
+
+  const deleteNote = trpc.readingBridge.deleteNote.useMutation({
+    onSuccess: () => {
+      utils.readingBridge.getNotes.invalidate({ chapterId });
+      utils.readingBridge.getNoteSummary.invalidate();
+    },
+  });
+
+  const handleAdd = () => {
+    if (!draft.trim()) return;
+    addNote.mutate({ chapterId, content: draft.trim() });
+  };
+
+  return (
+    <div className="mt-3 ml-4 pl-4 border-l-2 border-amber-200 dark:border-amber-800/50">
+      <div className="flex items-center gap-1.5 mb-3">
+        <StickyNote className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+        <span className="text-xs font-medium text-amber-700 dark:text-amber-400">Notes for {chapterTitle.split(":")[0]}</span>
+      </div>
+
+      {/* Existing notes */}
+      {isLoading ? (
+        <div className="h-8 rounded bg-muted animate-pulse mb-2" />
+      ) : notes.length > 0 ? (
+        <div className="space-y-2 mb-3">
+          {notes.map((note) => (
+            <div key={note.id} className="group flex items-start gap-2 bg-amber-50/60 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-800/30 rounded-lg px-3 py-2.5">
+              <p className="flex-1 text-xs text-foreground leading-relaxed whitespace-pre-wrap">{note.content}</p>
+              <button
+                onClick={() => deleteNote.mutate({ noteId: note.id })}
+                disabled={deleteNote.isPending}
+                className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive"
+                aria-label="Delete note"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          ))}
+        </div>
+      ) : null}
+
+      {/* Add note */}
+      <div className="flex flex-col gap-2">
+        <Textarea
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          placeholder="What stood out? A question, a quote, a tension…"
+          className="text-xs min-h-[72px] resize-none bg-background border-border focus-visible:ring-amber-400/50"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handleAdd();
+          }}
+        />
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={handleAdd}
+          disabled={!draft.trim() || addNote.isPending}
+          className="self-end h-7 text-xs gap-1.5 border-amber-300 dark:border-amber-700 text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20"
+        >
+          <Plus className="w-3 h-3" />
+          Save note
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Progress Bar ─────────────────────────────────────────────────────────────
+function ProgressBar({ progress }: { progress: number }) {
+  return (
+    <div className="mt-5">
+      <div className="flex items-center justify-between mb-1.5">
+        <span className="text-xs text-muted-foreground">Reading progress</span>
+        <span className="text-xs font-medium text-amber-700 dark:text-amber-400">{progress}%</span>
+      </div>
+      <div className="h-1.5 w-full rounded-full bg-amber-100 dark:bg-amber-900/30 overflow-hidden">
+        <div
+          className="h-full rounded-full bg-amber-500 dark:bg-amber-400 transition-all duration-500"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+// ─── Main Page ────────────────────────────────────────────────────────────────
 export default function ReadingBridge() {
   const [, navigate] = useLocation();
   const { data: status, isLoading } = trpc.readingBridge.getStatus.useQuery();
+  const { data: noteSummary = {} } = trpc.readingBridge.getNoteSummary.useQuery();
   const utils = trpc.useUtils();
 
   const setChapter = trpc.readingBridge.setChapter.useMutation({
-    onSuccess: () => {
-      utils.readingBridge.getStatus.invalidate();
-    },
+    onSuccess: () => utils.readingBridge.getStatus.invalidate(),
   });
   const dismiss = trpc.readingBridge.dismiss.useMutation({
     onSuccess: () => {
@@ -85,15 +186,26 @@ export default function ReadingBridge() {
   });
 
   const [confirmed, setConfirmed] = useState<string | null>(null);
+  const [expandedNotes, setExpandedNotes] = useState<string | null>(null);
+
+  const currentChapter = status?.chapter ?? null;
+  const progress = status?.progress ?? 0;
 
   const handleSelect = async (chapterId: string) => {
     await setChapter.mutateAsync({ chapterId });
     setConfirmed(chapterId);
-    // Brief confirmation then clear
     setTimeout(() => setConfirmed(null), 2000);
   };
 
-  const currentChapter = status?.chapter ?? null;
+  const toggleNotes = (chapterId: string) => {
+    setExpandedNotes(prev => prev === chapterId ? null : chapterId);
+  };
+
+  // Find chapter title for notes panel
+  const allChapters = SECTIONS.flatMap(s => s.chapters);
+  const expandedTitle = expandedNotes
+    ? allChapters.find(c => c.id === expandedNotes)?.title ?? expandedNotes
+    : "";
 
   return (
     <DashboardLayout>
@@ -112,6 +224,8 @@ export default function ReadingBridge() {
             reference concepts you have already encountered, and your pathway
             practice will align to the section you are reading.
           </p>
+
+          {/* Status badge */}
           {status?.chapter && !status.isFinished && status.section && (
             <div className="mt-4 inline-flex items-center gap-2 text-xs text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-full px-3 py-1.5">
               <BookOpen className="w-3.5 h-3.5" />
@@ -127,6 +241,9 @@ export default function ReadingBridge() {
               You have finished the book — all sections are unlocked
             </div>
           )}
+
+          {/* Progress bar — shown once a chapter is set */}
+          {status?.chapter && <ProgressBar progress={progress} />}
         </div>
 
         {/* Confirmation toast */}
@@ -169,30 +286,60 @@ export default function ReadingBridge() {
                 <div className="space-y-1.5">
                   {section.chapters.map((ch) => {
                     const isSelected = currentChapter === ch.id;
+                    const noteCount = (noteSummary as Record<string, number>)[ch.id] ?? 0;
+                    const notesOpen = expandedNotes === ch.id;
                     return (
-                      <button
-                        key={ch.id}
-                        onClick={() => handleSelect(ch.id)}
-                        disabled={setChapter.isPending}
-                        className={[
-                          "w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg text-left transition-colors",
-                          isSelected
-                            ? "bg-amber-50 dark:bg-amber-900/25 border border-amber-300 dark:border-amber-700"
-                            : "bg-card border border-border hover:bg-muted/60",
-                        ].join(" ")}
-                      >
-                        <span className={[
-                          "text-sm leading-snug",
-                          isSelected ? "text-amber-800 dark:text-amber-200 font-medium" : "text-foreground",
-                        ].join(" ")}>
-                          {ch.title}
-                        </span>
-                        {isSelected ? (
-                          <Check className="w-4 h-4 shrink-0 text-amber-600 dark:text-amber-400" />
-                        ) : (
-                          <ChevronRight className="w-4 h-4 shrink-0 text-muted-foreground opacity-50" />
+                      <div key={ch.id}>
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => handleSelect(ch.id)}
+                            disabled={setChapter.isPending}
+                            className={[
+                              "flex-1 flex items-center justify-between gap-3 px-4 py-3 rounded-lg text-left transition-colors",
+                              isSelected
+                                ? "bg-amber-50 dark:bg-amber-900/25 border border-amber-300 dark:border-amber-700"
+                                : "bg-card border border-border hover:bg-muted/60",
+                            ].join(" ")}
+                          >
+                            <span className={[
+                              "text-sm leading-snug",
+                              isSelected ? "text-amber-800 dark:text-amber-200 font-medium" : "text-foreground",
+                            ].join(" ")}>
+                              {ch.title}
+                            </span>
+                            <div className="flex items-center gap-2 shrink-0">
+                              {noteCount > 0 && (
+                                <span className="text-xs text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-900/30 rounded-full px-1.5 py-0.5 leading-none">
+                                  {noteCount}
+                                </span>
+                              )}
+                              {isSelected ? (
+                                <Check className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                              ) : (
+                                <ChevronRight className="w-4 h-4 text-muted-foreground opacity-50" />
+                              )}
+                            </div>
+                          </button>
+                          {/* Notes toggle */}
+                          <button
+                            onClick={() => toggleNotes(ch.id)}
+                            title={notesOpen ? "Hide notes" : "Add / view notes"}
+                            className={[
+                              "p-2 rounded-lg border transition-colors shrink-0",
+                              notesOpen
+                                ? "bg-amber-50 dark:bg-amber-900/20 border-amber-300 dark:border-amber-700 text-amber-600 dark:text-amber-400"
+                                : "bg-card border-border text-muted-foreground hover:bg-muted/60 hover:text-foreground",
+                            ].join(" ")}
+                          >
+                            <StickyNote className="w-4 h-4" />
+                          </button>
+                        </div>
+
+                        {/* Inline notes panel */}
+                        {notesOpen && (
+                          <NotesPanel chapterId={ch.id} chapterTitle={ch.title} />
                         )}
-                      </button>
+                      </div>
                     );
                   })}
                 </div>

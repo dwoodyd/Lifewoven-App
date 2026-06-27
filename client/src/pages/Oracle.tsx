@@ -84,11 +84,21 @@ export default function Oracle() {
   const { data: rbStatusOracle } = trpc.readingBridge.getStatus.useQuery(undefined, { enabled: isAuthenticated });
   // Weekly reading check-in: show once per week when user has a chapter set and no messages yet
   const [readingPromptDismissed, setReadingPromptDismissed] = useState(() => {
+    // Dismissed for this week ("Not now")
     const stored = localStorage.getItem("oracle_reading_prompt_week");
     const weekStart = new Date();
     weekStart.setHours(0, 0, 0, 0);
     weekStart.setDate(weekStart.getDate() - weekStart.getDay());
-    return stored === weekStart.toISOString();
+    if (stored === weekStart.toISOString()) return true;
+    // Snoozed until tomorrow ("Remind me tomorrow")
+    const snoozed = localStorage.getItem("oracle_reading_prompt_snooze");
+    if (snoozed) {
+      const snoozeUntil = new Date(snoozed);
+      if (new Date() < snoozeUntil) return true;
+      // Snooze expired — clear it so the prompt reappears
+      localStorage.removeItem("oracle_reading_prompt_snooze");
+    }
+    return false;
   });
   const showReadingPrompt = !readingPromptDismissed && !!rbStatusOracle?.chapter && messages.length === 0;
   const dismissReadingPrompt = () => {
@@ -96,6 +106,14 @@ export default function Oracle() {
     weekStart.setHours(0, 0, 0, 0);
     weekStart.setDate(weekStart.getDate() - weekStart.getDay());
     localStorage.setItem("oracle_reading_prompt_week", weekStart.toISOString());
+    setReadingPromptDismissed(true);
+  };
+  const snoozeReadingPromptTomorrow = () => {
+    // Snooze until midnight tonight — prompt reappears tomorrow
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+    localStorage.setItem("oracle_reading_prompt_snooze", tomorrow.toISOString());
     setReadingPromptDismissed(true);
   };
 
@@ -702,10 +720,17 @@ export default function Oracle() {
                     </button>
                     <span className="text-amber-300 dark:text-amber-700">·</span>
                     <button
+                      onClick={snoozeReadingPromptTomorrow}
+                      className="text-xs text-amber-600/60 dark:text-amber-500/60 hover:text-amber-700 dark:hover:text-amber-400"
+                    >
+                      Remind me tomorrow
+                    </button>
+                    <span className="text-amber-300 dark:text-amber-700">·</span>
+                    <button
                       onClick={dismissReadingPrompt}
                       className="text-xs text-amber-600/60 dark:text-amber-500/60 hover:text-amber-700 dark:hover:text-amber-400"
                     >
-                      Not now
+                      Not this week
                     </button>
                   </div>
                 </div>

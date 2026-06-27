@@ -232,6 +232,13 @@
       "when": 1782524205901,
       "tag": "0032_outgoing_captain_midlands",
       "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "5",
+      "when": 1782525565551,
+      "tag": "0033_lethal_crystal",
+      "breakpoints": true
     }
   ]
 }

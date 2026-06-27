@@ -662,15 +662,24 @@ export default function Dashboard() {
               {/* Reading Bridge contextual line */}
               {rbStatus?.chapter && !rbStatus.dismissed && (
                 <Link href="/reading-bridge">
-                  <div className="mb-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 hover:border-amber-400 dark:hover:border-amber-600 transition-colors cursor-pointer">
-                    <BookOpen className="h-3.5 w-3.5 shrink-0 text-amber-600 dark:text-amber-400" />
-                    <p className="text-xs text-amber-800 dark:text-amber-300 leading-snug">
-                      {rbStatus.isFinished
-                        ? "Reading complete — all sections unlocked"
-                        : rbStatus.section
-                        ? <>Reading: <span className="font-medium">{rbStatus.section}</span> section</>
-                        : "Reading bridge active"}
-                    </p>
+                  <div className="mb-3 px-3 py-2.5 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 hover:border-amber-400 dark:hover:border-amber-600 transition-colors cursor-pointer">
+                    <div className="flex items-center gap-2 mb-2">
+                      <BookOpen className="h-3.5 w-3.5 shrink-0 text-amber-600 dark:text-amber-400" />
+                      <p className="text-xs text-amber-800 dark:text-amber-300 leading-snug flex-1">
+                        {rbStatus.isFinished
+                          ? "Reading complete — all sections unlocked"
+                          : rbStatus.section
+                          ? <>Reading: <span className="font-medium">{rbStatus.section}</span> section</>
+                          : "Reading bridge active"}
+                      </p>
+                      <span className="text-xs font-medium text-amber-700 dark:text-amber-400 shrink-0">{rbStatus.progress ?? 0}%</span>
+                    </div>
+                    <div className="h-1 w-full rounded-full bg-amber-200 dark:bg-amber-800/50 overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-amber-500 dark:bg-amber-400 transition-all duration-500"
+                        style={{ width: `${rbStatus.progress ?? 0}%` }}
+                      />
+                    </div>
                   </div>
                 </Link>
               )}

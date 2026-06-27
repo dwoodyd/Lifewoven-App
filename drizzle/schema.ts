@@ -930,3 +930,18 @@ export const libraryMessages = mysqlTable("library_messages", {
 ]);
 
 export type LibraryMessage = typeof libraryMessages.$inferSelect;
+
+// ─── Reading Bridge Notes ─────────────────────────────────────────────────────
+// Quick notes attached to a specific chapter in the Reading Bridge.
+export const readingBridgeNotes = mysqlTable("reading_bridge_notes", {
+  id:        int("id").autoincrement().primaryKey(),
+  userId:    int("userId").notNull(),
+  chapterId: varchar("chapterId", { length: 32 }).notNull(),
+  content:   text("content").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (t) => [
+  index("idx_rb_notes_userId").on(t.userId),
+  index("idx_rb_notes_chapterId").on(t.chapterId),
+]);
+export type ReadingBridgeNote = typeof readingBridgeNotes.$inferSelect;
