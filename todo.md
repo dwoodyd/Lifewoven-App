@@ -1257,3 +1257,15 @@
 - [ ] 5.1 Add 5S dimension tags to each pathway card on Pathways page
 - [ ] 6.1 Oracle "See Wisdom Sources": add "Build a Life That Does Not Break You" as first entry
 - [ ] 7.1 Remove Community from primary nav; add footer link "Community (Coming Soon)"
+
+## Reading Bridge Feature
+- [ ] Add readingChapter and readingBridgeDismissed columns to users table, generate migration, apply SQL
+- [ ] Add readingBridge tRPC procedures: getStatus, setChapter, dismiss
+- [ ] Build Reading Bridge page (chapter list grouped by 5S section, gold section headers, selected state, "Not reading it" / "Finished" options)
+- [ ] Add Reading Bridge route in App.tsx and sidebar nav entry (below Pathways, book icon, no badge)
+- [ ] Dashboard pathway card: add contextual line + book icon when reading chapter is set
+- [ ] First-time dismissible prompt after session 3 (not a modal, two options: Set my chapter / Not reading it)
+- [ ] Oracle system prompt: inject current reading section as optional context when set
+- [ ] Weekly check-in prompt: "One thing from your reading this week that's still with you?" (once per week, skippable)
+- [ ] homeContext procedure: return readingBridge status so dashboard and prompt can use it
+- [ ] Write vitest tests for Reading Bridge procedures

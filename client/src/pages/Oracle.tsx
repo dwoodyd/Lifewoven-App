@@ -81,6 +81,23 @@ export default function Oracle() {
   const weeklyData = weeklyReflection.data?.summaryJson as Record<string, string> | null ?? null;
   const cycleAnalysis = trpc.moodLog.getCycleAnalysis.useQuery(undefined, { enabled: isAuthenticated });
   const monthlyUsage = trpc.oracle.getMonthlyUsage.useQuery(undefined, { enabled: isAuthenticated && !hasOracleAccess });
+  const { data: rbStatusOracle } = trpc.readingBridge.getStatus.useQuery(undefined, { enabled: isAuthenticated });
+  // Weekly reading check-in: show once per week when user has a chapter set and no messages yet
+  const [readingPromptDismissed, setReadingPromptDismissed] = useState(() => {
+    const stored = localStorage.getItem("oracle_reading_prompt_week");
+    const weekStart = new Date();
+    weekStart.setHours(0, 0, 0, 0);
+    weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+    return stored === weekStart.toISOString();
+  });
+  const showReadingPrompt = !readingPromptDismissed && !!rbStatusOracle?.chapter && messages.length === 0;
+  const dismissReadingPrompt = () => {
+    const weekStart = new Date();
+    weekStart.setHours(0, 0, 0, 0);
+    weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+    localStorage.setItem("oracle_reading_prompt_week", weekStart.toISOString());
+    setReadingPromptDismissed(true);
+  };
 
   const chat = trpc.oracle.chat.useMutation({
     onSuccess: (data: any) => {
@@ -655,6 +672,45 @@ export default function Oracle() {
               )}
               <div ref={messagesEndRef} />
             </div>
+
+            {/* Weekly reading bridge prompt — shown once per week when chapter is set */}
+            {showReadingPrompt && (
+              <div className="mb-3 flex items-start gap-2.5 px-3 py-2.5 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800">
+                <BookOpen className="h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs text-amber-800 dark:text-amber-300 leading-snug mb-1.5">
+                    {rbStatusOracle?.isFinished
+                      ? "You've finished the book. How is what you read showing up in your life this week?"
+                      : rbStatusOracle?.section
+                      ? `You're reading the ${rbStatusOracle.section} section. What is landing for you — or what is resisting?`
+                      : "How is your reading connecting to what you're working on right now?"}
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => {
+                        const q = rbStatusOracle?.isFinished
+                          ? "I've finished Build a Life That Does Not Break You. How is what I read showing up in my life this week?"
+                          : rbStatusOracle?.section
+                          ? `I'm reading the ${rbStatusOracle.section} section of Build a Life That Does Not Break You. What is landing for me — or what is resisting?`
+                          : "How is my reading connecting to what I'm working on right now?";
+                        dismissReadingPrompt();
+                        sendMessage(q);
+                      }}
+                      className="text-xs font-medium text-amber-700 dark:text-amber-400 hover:underline"
+                    >
+                      Ask this now
+                    </button>
+                    <span className="text-amber-300 dark:text-amber-700">·</span>
+                    <button
+                      onClick={dismissReadingPrompt}
+                      className="text-xs text-amber-600/60 dark:text-amber-500/60 hover:text-amber-700 dark:hover:text-amber-400"
+                    >
+                      Not now
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Cycle phase badge — shown when mood data is available */}
             {currentPhase !== "unknown" && phaseConfig.label && (

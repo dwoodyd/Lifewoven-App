@@ -62,6 +62,9 @@ export const users = mysqlTable("users", {
   // Store access level — derived from tier, stored for fast reads
   // library_during_beta: founding member in beta (full library, no payment)
   storeAccess: mysqlEnum("storeAccess", ["standalone", "discount", "library", "library_during_beta"]).default("standalone").notNull(),
+  // Reading Bridge
+  readingChapter: varchar("readingChapter", { length: 64 }),        // e.g. "ch-3", "finished", null = not set
+  readingBridgeDismissed: boolean("readingBridgeDismissed").default(false).notNull(), // "Not reading it" tapped
   // UI preferences
   luminEnabled: boolean("luminEnabled").default(true).notNull(),
   // Identity Sentence — LLM-generated monthly from behavior data

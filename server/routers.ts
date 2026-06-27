@@ -11,6 +11,7 @@ import { applicationsRouter } from "./routers/applications";
 import { firstHonestWeekRouter } from "./routers/firstHonestWeek";
 import { dimensionsRouter } from "./routers/dimensions";
 import { libraryRouter } from "./routers/library";
+import { readingBridgeRouter } from "./routers/readingBridge";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
@@ -723,9 +724,41 @@ const oracleRouter = router({
         }
       }
 
-      // Fetch user mind patterns for Oracle adaptation
-      const userRow = await db.select({ mindPatterns: users.mindPatterns }).from(users).where(eq(users.id, ctx.user.id)).limit(1);
+      // Fetch user mind patterns and reading bridge status for Oracle adaptation
+      const userRow = await db.select({ mindPatterns: users.mindPatterns, readingChapter: users.readingChapter }).from(users).where(eq(users.id, ctx.user.id)).limit(1);
       const mindPats = (userRow[0]?.mindPatterns as string[] | null) ?? [];
+      const rbChapterForOracle = userRow[0]?.readingChapter ?? null;
+      const CHAPTER_SECTION_MAP: Record<string, string> = {
+        "ch-1": "State", "ch-2": "State", "ch-3": "Story", "ch-4": "Story",
+        "ch-5": "Standards", "ch-6": "Standards", "ch-7": "Strategy", "ch-8": "Strategy",
+        "ch-9": "Stewardship", "ch-10": "Stewardship", "ch-11": "Stewardship", "epilogue": "Stewardship",
+      };
+      const CHAPTER_TITLE_MAP: Record<string, string> = {
+        "start-here": "Start Here: If Life Feels Like It Is Caving In",
+        "intro": "Introduction: A Different Kind of Strength",
+        "ch-1": "Chapter 1: Strong But Not Okay",
+        "ch-2": "Chapter 2: The Performance Economy",
+        "ch-3": "Chapter 3: How We Learn to Ignore Ourselves",
+        "ch-4": "Chapter 4: Burnout Starts Before the Collapse",
+        "ch-5": "Chapter 5: The Body Has Been Speaking",
+        "ch-6": "Chapter 6: Capacity Is Not a Moral Virtue",
+        "ch-7": "Chapter 7: Being Needed Is Not Being Known",
+        "ch-8": "Chapter 8: The Courage to Fit",
+        "ch-9": "Chapter 9: Rest Is Not the Reward",
+        "ch-10": "Chapter 10: Building for Decades",
+        "ch-11": "Chapter 11: What You Are Becoming",
+        "epilogue": "Epilogue: What Rebuilding Made Possible",
+        "finished": "(finished the book)",
+      };
+      const rbSection = rbChapterForOracle && rbChapterForOracle !== "finished" ? CHAPTER_SECTION_MAP[rbChapterForOracle] ?? null : null;
+      const rbChapterTitle = rbChapterForOracle ? CHAPTER_TITLE_MAP[rbChapterForOracle] ?? null : null;
+      const readingContext = rbChapterForOracle
+        ? rbChapterForOracle === "finished"
+          ? `\n- Book reading: The user has finished reading "Build a Life That Does Not Break You". They have encountered all five dimensions. You may reference any section of the book freely.`
+          : rbSection && rbChapterTitle
+          ? `\n- Book reading: The user is currently reading the ${rbSection} section of "Build a Life That Does Not Break You" (${rbChapterTitle}). They have encountered the concepts in this section and any preceding sections. Reference these concepts naturally when relevant, but do not force it. Do not reference chapters or sections they have not yet reached.`
+          : ""
+        : "";
       const mindContext = mindPats.length > 0
         ? `\n- How this user's mind works: ${mindPats.join(", ")}. Adapt your tone, pacing, and suggestions accordingly — shorter steps for scattered minds, gentler framing for overwhelmed ones, concrete first actions for those who struggle to start.`
         : "";
@@ -782,7 +815,7 @@ RESPONSE FORMAT: You MUST reply with valid JSON in exactly this shape — no mar
 User context:
 - Primary pathway: ${input.context?.primaryPathway ?? "not set"}
 - Recent emotional scores: ${input.context?.recentCheckIns?.map((c: any) => c.emotionalScore).join(", ") ?? "none"}
-- Habit streak: ${input.context?.habitStreak ?? 0} days${mindContext}${cycleContext}`;
+- Habit streak: ${input.context?.habitStreak ?? 0} days${mindContext}${cycleContext}${readingContext}`;
 
       // Get or build conversation history
       let messages: { role: string; content: string }[] = [];
@@ -1376,6 +1409,14 @@ Write a single, personal, present-tense identity sentence (max 20 words) that re
     todayStart.setHours(0, 0, 0, 0);
     const todayEnd = new Date();
     todayEnd.setHours(23, 59, 59, 999);
+    // Fetch reading bridge status alongside other home context data
+    const readingBridgeRow = await db.select({ readingChapter: users.readingChapter, readingBridgeDismissed: users.readingBridgeDismissed })
+      .from(users).where(eq(users.id, ctx.user.id)).limit(1);
+    const rbChapter = readingBridgeRow[0]?.readingChapter ?? null;
+    const rbDismissed = readingBridgeRow[0]?.readingBridgeDismissed ?? false;
+    const rbSection = rbChapter && rbChapter !== "finished"
+      ? ({ "ch-1": "STATE", "ch-2": "STATE", "ch-3": "STORY", "ch-4": "STORY", "ch-5": "STANDARDS", "ch-6": "STANDARDS", "ch-7": "STRATEGY", "ch-8": "STRATEGY", "ch-9": "STEWARDSHIP", "ch-10": "STEWARDSHIP", "ch-11": "STEWARDSHIP", "epilogue": "STEWARDSHIP" } as Record<string, string>)[rbChapter] ?? null
+      : null;
     const [auditRow, lastJournalRow, lastPathwayRow, recentJournalsRow, todayCheckInRow, fhwRow] = await Promise.all([
       db.select({ id: auditResults.id, recommendedPathway: auditResults.recommendedPathway })
         .from(auditResults).where(eq(auditResults.userId, ctx.user.id))
@@ -1417,6 +1458,12 @@ Write a single, personal, present-tense identity sentence (max 20 words) that re
       recentJournals: recentJournalsRow,
       todayCheckIn: todayCheckInRow[0] ?? null,
       fhwDaysCompleted: fhwRow.length,
+      readingBridge: {
+        chapter: rbChapter,
+        section: rbSection,
+        isFinished: rbChapter === "finished",
+        dismissed: rbDismissed,
+      },
     };
   }),
 
@@ -1500,6 +1547,7 @@ export const appRouter = router({
   firstHonestWeek: firstHonestWeekRouter,
   dimensions: dimensionsRouter,
   library: libraryRouter,
+  readingBridge: readingBridgeRouter,
   paypal: router({
     /**
      * Returns the PayPal client ID for the current environment (live or sandbox).

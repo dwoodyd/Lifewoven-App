@@ -111,6 +111,7 @@ export default function Dashboard() {
   const { data: streakData } = trpc.pathways.practiceStreak.useQuery(undefined, { enabled: isAuthenticated });
   const { data: todayMood } = trpc.moodLog.getTodayMood.useQuery(undefined, { enabled: isAuthenticated });
   const { data: goalStats } = trpc.goals.stats.useQuery(undefined, { enabled: isAuthenticated });
+  const { data: rbStatus } = trpc.readingBridge.getStatus.useQuery(undefined, { enabled: isAuthenticated });
   const hasMoodToday = !!(todayMood as any)?.score;
   // Evening nudge: show after 5pm local time when no mood logged today
   const isEvening = new Date().getHours() >= 17;
@@ -658,6 +659,21 @@ export default function Dashboard() {
                 <div className="p-1.5 rounded-lg bg-secondary"><TrendingUp className="h-4 w-4 text-foreground" /></div>
                 <h2 className="font-serif text-base font-light text-foreground">Active Pathways</h2>
               </div>
+              {/* Reading Bridge contextual line */}
+              {rbStatus?.chapter && !rbStatus.dismissed && (
+                <Link href="/reading-bridge">
+                  <div className="mb-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 hover:border-amber-400 dark:hover:border-amber-600 transition-colors cursor-pointer">
+                    <BookOpen className="h-3.5 w-3.5 shrink-0 text-amber-600 dark:text-amber-400" />
+                    <p className="text-xs text-amber-800 dark:text-amber-300 leading-snug">
+                      {rbStatus.isFinished
+                        ? "Reading complete — all sections unlocked"
+                        : rbStatus.section
+                        ? <>Reading: <span className="font-medium">{rbStatus.section}</span> section</>
+                        : "Reading bridge active"}
+                    </p>
+                  </div>
+                </Link>
+              )}
               {lastPracticed && (
                 <div className="mb-3 px-3 py-2 rounded-lg bg-accent/5 border border-accent/20">
                   <p className="text-xs text-muted-foreground">Last practiced</p>

@@ -169,6 +169,11 @@ export default function Nav() {
                     <BookOpen className="h-3.5 w-3.5" />My Library
                   </Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/reading-bridge" className="flex items-center gap-2">
+                    <BookOpen className="h-3.5 w-3.5" />Reading Bridge
+                  </Link>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
 
                 {/* More from Soul Engineer */}
@@ -319,6 +324,9 @@ export default function Nav() {
                 </Button>
                 <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground justify-start">
                   <Link href="/dimensions" onClick={closeMobile}><Layers className="h-4 w-4" />Life Map</Link>
+                </Button>
+                <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground justify-start">
+                  <Link href="/reading-bridge" onClick={closeMobile}><BookOpen className="h-4 w-4" />Reading Bridge</Link>
                 </Button>
                 <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground justify-start">
                   <Link href="/my-library" onClick={closeMobile}><BookOpen className="h-4 w-4" />My Library</Link>
