@@ -8,7 +8,7 @@ export default function Privacy() {
       <div className="container pt-28 pb-20 max-w-3xl mx-auto">
         <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Legal</p>
         <h1 className="font-serif text-2xl sm:text-3xl font-light text-foreground mb-2">Privacy Policy</h1>
-        <p className="text-sm text-muted-foreground mb-10">Last updated: March 2026</p>
+        <p className="text-sm text-muted-foreground mb-10">Last updated: June 2026</p>
 
         <div className="space-y-8">
           <section>
@@ -34,6 +34,11 @@ export default function Privacy() {
           <section>
             <h2 className="font-serif text-xl font-light mb-3">Your Rights</h2>
             <p className="text-muted-foreground leading-relaxed text-sm">You have the right to access, correct, or delete your personal data at any time. You may export your journal entries and data from your account settings. To request data deletion, please contact us via our <Link href="/support" className="text-accent hover:underline">Support page</Link>.</p>
+          </section>
+
+          <section>
+            <h2 className="font-serif text-xl font-light mb-3">Analytics</h2>
+            <p className="text-muted-foreground leading-relaxed text-sm">Lifewoven uses a privacy-focused analytics service (Manus Analytics, operated by Manus) to collect aggregate usage data — pages visited, features used, and session duration. This data is used solely to understand how the platform is used and to improve the experience. No personally identifiable information is included in analytics events, and no data is sold or shared with advertisers. You can review Manus’s privacy practices at <a href="https://manus.im" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">manus.im</a>.</p>
           </section>
 
           <section>

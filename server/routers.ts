@@ -1477,7 +1477,16 @@ Write a single, personal, present-tense identity sentence (max 20 words) that re
       oracleInsightsList,
       activePathways,
     ] = await Promise.all([
-      db.select().from(checkIns).where(eq(checkIns.userId, ctx.user.id)).orderBy(desc(checkIns.createdAt)).limit(7),
+      // Exclude userId from check-in rows — client already knows whose session it is
+      db.select({
+        id: checkIns.id,
+        emotionalScore: checkIns.emotionalScore,
+        energyLevel: checkIns.energyLevel,
+        clarityLevel: checkIns.clarityLevel,
+        note: checkIns.note,
+        module: checkIns.module,
+        createdAt: checkIns.createdAt,
+      }).from(checkIns).where(eq(checkIns.userId, ctx.user.id)).orderBy(desc(checkIns.createdAt)).limit(7),
       db.select().from(habits).where(and(eq(habits.userId, ctx.user.id), eq(habits.isActive, true))).limit(5),
       db.select().from(journalEntries).where(eq(journalEntries.userId, ctx.user.id)).orderBy(desc(journalEntries.createdAt)).limit(3),
       db.select().from(oracleInsights).where(and(eq(oracleInsights.userId, ctx.user.id), eq(oracleInsights.isRead, false))).limit(3),
@@ -1491,7 +1500,9 @@ Write a single, personal, present-tense identity sentence (max 20 words) that re
 export const appRouter = router({
   system: systemRouter,
   auth: router({
-    // H3: Project minimal fields only — never expose role, paypalSubscriptionId, openId on the wire
+    // H3: Project minimal fields only — never expose paypalSubscriptionId, openId on the wire.
+    // role is only returned when the user IS an admin — regular users receive undefined,
+    // so the frontend admin gates fail closed without revealing that a role system exists.
     me: publicProcedure.query(opts => {
       const u = opts.ctx.user;
       if (!u) return null;
@@ -1502,7 +1513,8 @@ export const appRouter = router({
         primaryPathway: u.primaryPathway,
         onboardingCompleted: u.onboardingCompleted,
         membershipTier: u.membershipTier,
-        role: u.role,
+        // Only expose role to admin users — regular users receive undefined
+        ...(u.role === "admin" ? { role: "admin" as const } : {}),
         foundingMember: u.foundingMember,
         foundingTier: u.foundingTier,
         foundingRateLocked: u.foundingRateLocked,
