@@ -339,7 +339,28 @@ export const libraryRouter = router({
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const userId = ctx.user.id;
 
-      // Verify ownership
+      // ── Per-user daily rate limit (50 library chat messages / day) ──────────
+      const LIBRARY_DAILY_LIMIT = 50;
+      const dayStart = new Date();
+      dayStart.setHours(0, 0, 0, 0);
+      const [{ count: dailyCount }] = await db
+        .select({ count: sql<number>`COUNT(*)` })
+        .from(libraryMessages)
+        .where(
+          and(
+            eq(libraryMessages.userId, userId),
+            eq(libraryMessages.role, "user"),
+            sql`${libraryMessages.createdAt} >= ${dayStart}`
+          )
+        );
+      if (dailyCount >= LIBRARY_DAILY_LIMIT) {
+        throw new TRPCError({
+          code: "TOO_MANY_REQUESTS",
+          message: `You've reached the daily limit of ${LIBRARY_DAILY_LIMIT} Library chat messages. This resets at midnight.`,
+        });
+      }
+
+      // ── Verify resource ownership ─────────────────────────────────────────
       const [resource] = await db
         .select()
         .from(libraryResources)
@@ -424,11 +445,11 @@ ${context}`;
         sourceChunkIds: scored.map(c => c.id),
       });
 
-      // Update session timestamp
+      // Update session timestamp — scoped to this user to prevent cross-user session updates
       await db
         .update(librarySessions)
         .set({ activePathway: input.activePathway ?? null })
-        .where(eq(librarySessions.id, input.sessionId));
+        .where(and(eq(librarySessions.id, input.sessionId), eq(librarySessions.userId, userId)));
 
       return { messageId: msgId, content: assistantContent };
     }),

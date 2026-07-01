@@ -133,6 +133,67 @@ async function paypalFetch(path: string, options: RequestInit = {}): Promise<glo
   }
 }
 
+/**
+ * Verifies the PayPal webhook signature using PayPal's verify-webhook-signature API.
+ * This is a P0 security requirement — without it, any attacker can forge webhook events
+ * to upgrade users to paid tiers for free.
+ * Returns true if the signature is valid, false otherwise.
+ */
+async function verifyPayPalWebhookSignature(
+  headers: Record<string, string | string[] | undefined>,
+  rawBody: string
+): Promise<boolean> {
+  const webhookId =
+    process.env.PAYPAL_ENV === "live"
+      ? process.env.PAYPAL_LIVE_WEBHOOK_ID
+      : process.env.PAYPAL_WEBHOOK_ID;
+
+  if (!webhookId) {
+    console.error("[PayPal Webhook] PAYPAL_WEBHOOK_ID not set — cannot verify signature. Rejecting event.");
+    return false;
+  }
+
+  const transmissionId   = headers["paypal-transmission-id"] as string | undefined;
+  const transmissionTime = headers["paypal-transmission-time"] as string | undefined;
+  const certUrl          = headers["paypal-cert-url"] as string | undefined;
+  const transmissionSig  = headers["paypal-transmission-sig"] as string | undefined;
+  const authAlgo         = headers["paypal-auth-algo"] as string | undefined;
+
+  if (!transmissionId || !transmissionTime || !certUrl || !transmissionSig || !authAlgo) {
+    console.warn("[PayPal Webhook] Missing required PayPal signature headers — rejecting event.");
+    return false;
+  }
+
+  try {
+    const token = await getAccessToken();
+    const verifyRes = await fetch(`${PAYPAL_BASE}/v1/notifications/verify-webhook-signature`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        auth_algo: authAlgo,
+        cert_url: certUrl,
+        transmission_id: transmissionId,
+        transmission_sig: transmissionSig,
+        transmission_time: transmissionTime,
+        webhook_id: webhookId,
+        webhook_event: JSON.parse(rawBody),
+      }),
+    });
+    const result = await verifyRes.json() as { verification_status?: string };
+    const valid = result.verification_status === "SUCCESS";
+    if (!valid) {
+      console.warn(`[PayPal Webhook] Signature verification returned: ${result.verification_status}`);
+    }
+    return valid;
+  } catch (err) {
+    console.error("[PayPal Webhook] Signature verification error:", err);
+    return false;
+  }
+}
+
 // ── Router ───────────────────────────────────────────────────────────────────
 
 export const paypalSubscriptionRouter = Router();
@@ -336,85 +397,111 @@ paypalSubscriptionRouter.get("/status", async (req: Request, res: Response) => {
 
 // POST /api/paypal/subscription/webhook
 // Handles BILLING.SUBSCRIPTION.ACTIVATED, BILLING.SUBSCRIPTION.CANCELLED, PAYMENT.SALE.COMPLETED
-paypalSubscriptionRouter.post("/webhook", async (req: Request, res: Response) => {
-  try {
-    const event = req.body as {
-      event_type?: string;
-      resource?: {
-        id?: string;
-        custom_id?: string;
-        status?: string;
+// ⚠️  SECURITY: Signature is verified via PayPal's verify-webhook-signature API before processing.
+//     Any event that fails verification is rejected with 401.
+paypalSubscriptionRouter.post("/webhook",
+  // Capture raw body BEFORE express.json() parses it — needed for signature verification
+  (req: Request, _res: Response, next) => {
+    if (req.is("application/json") && !Buffer.isBuffer(req.body)) {
+      // Body already parsed by global express.json() middleware — stringify it back
+      // for signature verification. This is safe because we re-parse below.
+      (req as any)._rawBody = JSON.stringify(req.body);
+    } else if (Buffer.isBuffer(req.body)) {
+      (req as any)._rawBody = req.body.toString("utf8");
+    } else {
+      (req as any)._rawBody = typeof req.body === "string" ? req.body : JSON.stringify(req.body ?? {});
+    }
+    next();
+  },
+  async (req: Request, res: Response) => {
+    try {
+      const rawBody: string = (req as any)._rawBody ?? JSON.stringify(req.body ?? {});
+
+      // ── Verify PayPal webhook signature (P0 security requirement) ──────────
+      const isValid = await verifyPayPalWebhookSignature(req.headers as Record<string, string | undefined>, rawBody);
+      if (!isValid) {
+        console.warn("[PayPal Webhook] Signature verification FAILED — rejecting event");
+        return res.status(401).json({ error: "Invalid webhook signature" });
+      }
+
+      const event = JSON.parse(rawBody) as {
+        event_type?: string;
+        resource?: {
+          id?: string;
+          custom_id?: string;
+          status?: string;
+        };
       };
-    };
 
-    const eventType = event.event_type;
-    const resource = event.resource;
+      const eventType = event.event_type;
+      const resource = event.resource;
 
-    console.log(`[PayPal Webhook] ${eventType} — resource: ${resource?.id}`);
+      console.log(`[PayPal Webhook] ${eventType} — resource: ${resource?.id}`);
 
-    if (eventType === "BILLING.SUBSCRIPTION.ACTIVATED" || eventType === "PAYMENT.SALE.COMPLETED") {
-      // custom_id format: "userId:plan"
-      const customId = resource?.custom_id ?? "";
-      const [userIdStr, plan] = customId.split(":");
-      const userId = parseInt(userIdStr, 10);
+      if (eventType === "BILLING.SUBSCRIPTION.ACTIVATED" || eventType === "PAYMENT.SALE.COMPLETED") {
+        // custom_id format: "userId:plan"
+        const customId = resource?.custom_id ?? "";
+        const [userIdStr, plan] = customId.split(":");
+        const userId = parseInt(userIdStr, 10);
 
-      if (!userId || !plan) {
-        console.warn("[PayPal Webhook] Missing custom_id:", customId);
-        return res.json({ ok: true });
-      }
-
-      const tier = baseTier(plan);
-      const storeAccess = tierToStoreAccess(tier);
-      const db = await getDb();
-      if (db) {
-        await db.update(users)
-          .set({
-            membershipTier: tier,
-            paypalSubscriptionId: resource?.id ?? null,
-            billingStatus: "active",
-            storeAccess,
-          })
-          .where(eq(users.id, userId));
-        console.log(`[PayPal Webhook] Upgraded user ${userId} to ${tier}`);
-        // Send Day-0 welcome email (non-blocking)
-        const [upgradedUser] = await db.select({ email: users.email, name: users.name })
-          .from(users).where(eq(users.id, userId));
-        if (upgradedUser?.email) {
-          sendDay0WelcomeEmail({
-            to: upgradedUser.email,
-            name: upgradedUser.name || upgradedUser.email,
-          }).catch((err) => console.error("[PayPal Webhook] Day-0 email failed:", err));
+        if (!userId || !plan) {
+          console.warn("[PayPal Webhook] Missing custom_id:", customId);
+          return res.json({ ok: true });
         }
-      }
-    } else if (
-      eventType === "BILLING.SUBSCRIPTION.CANCELLED" ||
-      eventType === "BILLING.SUBSCRIPTION.EXPIRED" ||
-      eventType === "BILLING.SUBSCRIPTION.SUSPENDED"
-    ) {
-      const subId = resource?.id;
-      if (subId) {
+
+        const tier = baseTier(plan);
+        const storeAccess = tierToStoreAccess(tier);
         const db = await getDb();
         if (db) {
-          // Look up user to check founding status before downgrade
-          const [userRow] = await db.select({ id: users.id, foundingMember: users.foundingMember })
-            .from(users)
-            .where(eq(users.paypalSubscriptionId, subId));
           await db.update(users)
             .set({
-              membershipTier: "explorer",
-              paypalSubscriptionId: null,
-              billingStatus: userRow?.foundingMember ? "explorer_tier_founding_rate_waiting" : "explorer_tier",
-              storeAccess: "standalone",
+              membershipTier: tier,
+              paypalSubscriptionId: resource?.id ?? null,
+              billingStatus: "active",
+              storeAccess,
             })
-            .where(eq(users.paypalSubscriptionId, subId));
-          console.log(`[PayPal Webhook] Downgraded subscription ${subId} to explorer`);
+            .where(eq(users.id, userId));
+          console.log(`[PayPal Webhook] Upgraded user ${userId} to ${tier}`);
+          // Send Day-0 welcome email (non-blocking)
+          const [upgradedUser] = await db.select({ email: users.email, name: users.name })
+            .from(users).where(eq(users.id, userId));
+          if (upgradedUser?.email) {
+            sendDay0WelcomeEmail({
+              to: upgradedUser.email,
+              name: upgradedUser.name || upgradedUser.email,
+            }).catch((err) => console.error("[PayPal Webhook] Day-0 email failed:", err));
+          }
+        }
+      } else if (
+        eventType === "BILLING.SUBSCRIPTION.CANCELLED" ||
+        eventType === "BILLING.SUBSCRIPTION.EXPIRED" ||
+        eventType === "BILLING.SUBSCRIPTION.SUSPENDED"
+      ) {
+        const subId = resource?.id;
+        if (subId) {
+          const db = await getDb();
+          if (db) {
+            // Look up user to check founding status before downgrade
+            const [userRow] = await db.select({ id: users.id, foundingMember: users.foundingMember })
+              .from(users)
+              .where(eq(users.paypalSubscriptionId, subId));
+            await db.update(users)
+              .set({
+                membershipTier: "explorer",
+                paypalSubscriptionId: null,
+                billingStatus: userRow?.foundingMember ? "explorer_tier_founding_rate_waiting" : "explorer_tier",
+                storeAccess: "standalone",
+              })
+              .where(eq(users.paypalSubscriptionId, subId));
+            console.log(`[PayPal Webhook] Downgraded subscription ${subId} to explorer`);
+          }
         }
       }
-    }
 
-    return res.json({ ok: true });
-  } catch (err) {
-    console.error("[PayPal Webhook] Error:", err);
-    return res.status(500).json({ error: "Webhook processing failed" });
+      return res.json({ ok: true });
+    } catch (err) {
+      console.error("[PayPal Webhook] Error:", err);
+      return res.status(500).json({ error: "Webhook processing failed" });
+    }
   }
-});
+);

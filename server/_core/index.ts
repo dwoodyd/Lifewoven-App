@@ -216,10 +216,21 @@ async function startServer() {
   // Voice transcription upload endpoint
   app.use(transcribeRouter);
 
+  // ── Security: Tight rate limit for public application form (5 per hour per IP)
+  const applyLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 5,
+    standardHeaders: true,
+    legacyHeaders: false,
+    validate: { xForwardedForHeader: false },
+    message: { error: "Too many application submissions. Please try again later." },
+    ...(redisStore ? { store: redisStore } : {}),
+  });
+
   // ── Public POST /api/apply — for external marketing site form submissions
   // Mirrors the tRPC applications.submit procedure but as a plain REST endpoint
   // so a static marketing site can POST without needing tRPC.
-  app.post("/api/apply", async (req, res) => {
+  app.post("/api/apply", applyLimiter, async (req, res) => {
     try {
       const { name, email, answer, origin } = req.body ?? {};
       if (!name || typeof name !== "string" || name.trim().length < 2) {
@@ -240,7 +251,8 @@ async function startServer() {
       const existing = await db.select({ id: applications.id, status: applications.status })
         .from(applications).where(eq(applications.email, email.toLowerCase().trim())).limit(1);
       if (existing.length && existing[0].status !== "declined") {
-        return res.status(409).json({ error: "An application from this email is already in the queue." });
+        // Return generic success to prevent email enumeration — don't reveal whether this email has applied
+        return res.json({ ok: true });
       }
       const ip = (req.headers["x-forwarded-for"] as string | undefined)?.split(",")[0]?.trim() ?? req.socket?.remoteAddress ?? null;
       const ua = req.headers["user-agent"] ?? null;
