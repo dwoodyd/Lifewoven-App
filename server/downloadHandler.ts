@@ -2,8 +2,9 @@
  * Secure download endpoint: GET /api/download/:token
  *
  * Validates the token against the orders table, checks expiry,
- * and redirects to the S3 URL. The S3 URL is never exposed to the client
- * directly — only through this server-side redirect.
+ * and redirects to a short-lived presigned S3 URL. The presigned URL
+ * expires in 60 seconds — enough for the browser to initiate the download
+ * but not long enough to share or bookmark.
  */
 import type { Request, Response } from "express";
 import { getDb } from "./db";
@@ -11,6 +12,7 @@ import { orders } from "../drizzle/schema";
 import { eq } from "drizzle-orm";
 import { sdk } from "./_core/sdk";
 import { COOKIE_NAME } from "@shared/const";
+import { storageGet } from "./storage";
 
 export async function downloadHandler(req: Request, res: Response) {
   const { token } = req.params;
@@ -76,7 +78,31 @@ export async function downloadHandler(req: Request, res: Response) {
     });
   }
 
-  // Redirect to the S3/CDN URL — the browser will download the PDF
+  // Generate a short-lived presigned URL from Manus S3 storage.
+  // The downloadUrl stored on the order is either:
+  //   (a) a full CDN URL (legacy) — serve directly but log a warning
+  //   (b) a relative S3 key (new) — generate a presigned URL via storageGet
   console.log(`[Download] Token redeemed for order ${order.id} (${order.productSlug})`);
-  return res.redirect(302, order.downloadUrl);
+
+  const rawUrl = order.downloadUrl;
+  const isRelativeKey = !rawUrl.startsWith("http");
+  const isManusStorage = rawUrl.includes("cloudfront.net") || rawUrl.includes("manus");
+
+  if (isRelativeKey) {
+    // New path: generate a short-lived presigned URL
+    try {
+      const { url: presignedUrl } = await storageGet(rawUrl);
+      return res.redirect(302, presignedUrl);
+    } catch (err) {
+      console.error(`[Download] storageGet failed for key ${rawUrl}:`, err);
+      return res.status(500).json({ error: "Failed to generate download link. Please try again." });
+    }
+  }
+
+  if (!isManusStorage) {
+    console.warn(`[Download] Legacy non-Manus URL for order ${order.id}: ${rawUrl}`);
+  }
+
+  // Legacy path: redirect directly to the stored URL
+  return res.redirect(302, rawUrl);
 }

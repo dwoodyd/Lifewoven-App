@@ -75,7 +75,7 @@ export const paypalOrdersRouter = router({
       const newToken = crypto.randomBytes(32).toString("hex");
       const expiresAt = new Date(Date.now() + 72 * 60 * 60 * 1000);
       await db.update(orders)
-        .set({ downloadToken: newToken, downloadExpiresAt: expiresAt, downloadUrl: product.s3Url })
+        .set({ downloadToken: newToken, downloadExpiresAt: expiresAt, downloadUrl: product.s3Key })
         .where(eq(orders.id, order.id));
       return { token: newToken };
     }),

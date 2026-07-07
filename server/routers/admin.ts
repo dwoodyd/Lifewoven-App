@@ -4,6 +4,7 @@ import { users, orders, journalEntries, communityPosts, enrollments, habits, aud
 import { desc, count, sql, asc } from "drizzle-orm";
 import { z } from "zod";
 import { eq } from "drizzle-orm";
+import { storagePut } from "../storage";
 
 async function requireDb() {
   const db = await getDb();
@@ -131,7 +132,7 @@ export const adminRouter = router({
       type: z.enum(["course", "workbook", "card_deck", "audio_bundle", "planner", "guide"]),
       price: z.string().regex(/^\d+(\.\d{1,2})?$/),
       thumbnailUrl: z.string().url().optional().or(z.literal("")),
-      downloadUrl: z.string().url().optional().or(z.literal("")),
+      downloadUrl: z.string().optional().or(z.literal("")),
       isPublished: z.boolean().default(false),
     }))
     .mutation(async ({ ctx, input }) => {
@@ -159,7 +160,7 @@ export const adminRouter = router({
       type: z.enum(["course", "workbook", "card_deck", "audio_bundle", "planner", "guide"]).optional(),
       price: z.string().regex(/^\d+(\.\d{1,2})?$/).optional(),
       thumbnailUrl: z.string().url().optional().or(z.literal("")),
-      downloadUrl: z.string().url().optional().or(z.literal("")),
+      downloadUrl: z.string().optional().or(z.literal("")),
       isPublished: z.boolean().optional(),
     }))
     .mutation(async ({ ctx, input }) => {
@@ -265,6 +266,26 @@ export const adminRouter = router({
       await db.delete(subscriptionPlans).where(eq(subscriptionPlans.id, input.id));
       await auditLog(db, { adminId: ctx.user.id, action: "plan_delete", targetId: input.id, targetType: "plan" });
       return { success: true };
+    }),
+
+  // ── Product File Upload ─────────────────────────────────────────────────────
+  uploadProductFile: adminProcedure
+    .input(z.object({
+      productId: z.number(),
+      fileBase64: z.string(),
+      fileName: z.string().min(1).max(255),
+      mimeType: z.string().default("application/pdf"),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await requireDb();
+      const buffer = Buffer.from(input.fileBase64, "base64");
+      if (buffer.length > 50 * 1024 * 1024) throw new Error("File too large — maximum 50 MB");
+      const safeName = input.fileName.replace(/[^a-zA-Z0-9._-]/g, "-");
+      const s3Key = `private/products/${input.productId}/${Date.now()}-${safeName}`;
+      const { key } = await storagePut(s3Key, buffer, input.mimeType);
+      await db.update(products).set({ downloadUrl: key }).where(eq(products.id, input.productId));
+      await auditLog(db, { adminId: ctx.user.id, action: "product_file_upload", targetId: input.productId, targetType: "product", detail: { key, fileName: input.fileName } });
+      return { key };
     }),
 
   // ── Admin Audit Log ──────────────────────────────────────────────────────────

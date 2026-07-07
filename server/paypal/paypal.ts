@@ -141,7 +141,7 @@ paypalRouter.post("/api/paypal/capture-order", async (req: Request, res: Respons
 
     const isBundle = productSlug === "complete-bundle";
     const bundleProducts = isBundle
-      ? getAllProducts().filter(p => p.type !== "bundle" && p.s3Url)
+      ? getAllProducts().filter(p => p.type !== "bundle" && p.s3Key)
       : null;
 
     const token = await getAccessToken();
@@ -210,7 +210,7 @@ paypalRouter.post("/api/paypal/capture-order", async (req: Request, res: Respons
           status: "completed" as const,
           paypalCaptureId,
           productSlug: bp.slug,
-          downloadUrl: bp.s3Url,
+          downloadUrl: bp.s3Key,
           downloadToken: crypto.randomBytes(32).toString("hex"),
           downloadExpiresAt: new Date(Date.now() + 72 * 60 * 60 * 1000),
         }));
@@ -227,7 +227,7 @@ paypalRouter.post("/api/paypal/capture-order", async (req: Request, res: Respons
           status: "completed",
           paypalCaptureId,
           productSlug,
-          downloadUrl: product.s3Url,
+          downloadUrl: product.s3Key,
           downloadToken,
           downloadExpiresAt,
         });

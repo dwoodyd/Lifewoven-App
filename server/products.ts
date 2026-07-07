@@ -12,7 +12,7 @@ export interface LWProduct {
   priceUsd: number;       // display price
   priceCents: number;     // PayPal amount in cents
   description: string;
-  s3Url: string;          // permanent CDN URL — only revealed after purchase
+  s3Key: string;          // relative S3 key — used to generate a short-lived presigned download URL
   paypalProductId?: string; // PayPal product ID if needed
 }
 
@@ -25,7 +25,7 @@ export const LIFEWOVEN_PRODUCTS: LWProduct[] = [
     priceUsd: 97,
     priceCents: 9700,
     description: "A foundational course introducing the 5S Framework — State, Story, Standards, Strategy, and Stewardship — as an integrated system for personal transformation. Includes guided exercises, reflection prompts, and a complete framework overview.",
-    s3Url: "https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/PACKAGE-01-alignment-fundamentals_1e8ee5c4.pdf",
+    s3Key: "PACKAGE-01-alignment-fundamentals_1e8ee5c4.pdf",
   },
   {
     slug: "the-alignment-current",
@@ -35,7 +35,7 @@ export const LIFEWOVEN_PRODUCTS: LWProduct[] = [
     priceUsd: 147,
     priceCents: 14700,
     description: "A deeper dive into living in continuous alignment — moving beyond the fundamentals into daily practice, energy management, and the art of returning to center when life disrupts your flow.",
-    s3Url: "https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/PACKAGE-02-alignment-current.md_ba67b21a.pdf",
+    s3Key: "PACKAGE-02-alignment-current.md_ba67b21a.pdf",
   },
   {
     slug: "identity-in-motion",
@@ -45,7 +45,7 @@ export const LIFEWOVEN_PRODUCTS: LWProduct[] = [
     priceUsd: 127,
     priceCents: 12700,
     description: "A course on identity-level change — how to move from behavior modification to becoming the person who naturally produces the results you want. Grounded in the Story module and the science of identity-based habits.",
-    s3Url: "https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/PACKAGE-03-identity-in-motion.md_be5624b8.pdf",
+    s3Key: "PACKAGE-03-identity-in-motion.md_be5624b8.pdf",
   },
   {
     slug: "the-meaning-foundation",
@@ -55,7 +55,7 @@ export const LIFEWOVEN_PRODUCTS: LWProduct[] = [
     priceUsd: 97,
     priceCents: 9700,
     description: "A course on finding and building meaning — drawing on Frankl's logotherapy, the Stewardship module, and the Lifewoven approach to purpose-driven living. Includes the Meaning Audit and guided journaling sequences.",
-    s3Url: "https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/PACKAGE-04-meaning-foundation.md_d2c7c4a9.pdf",
+    s3Key: "PACKAGE-04-meaning-foundation.md_d2c7c4a9.pdf",
   },
   {
     slug: "belief-rewrite-workbook",
@@ -65,7 +65,7 @@ export const LIFEWOVEN_PRODUCTS: LWProduct[] = [
     priceUsd: 19,
     priceCents: 1900,
     description: "A printable and digital workbook for surfacing, examining, and rewriting limiting beliefs. Structured around the Story module's Belief Rewrite process — 30+ prompts, worksheets, and a step-by-step rewrite protocol.",
-    s3Url: "https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/PACKAGE-05-belief-rewrite-workbook.md_389690cf.pdf",
+    s3Key: "PACKAGE-05-belief-rewrite-workbook.md_389690cf.pdf",
   },
   {
     slug: "identity-stack-workbook",
@@ -75,7 +75,7 @@ export const LIFEWOVEN_PRODUCTS: LWProduct[] = [
     priceUsd: 22,
     priceCents: 2200,
     description: "A structured workbook for building a layered identity architecture — values, beliefs, standards, and identity statements — using the Lifewoven Identity Stack methodology. Designed for deep, one-time work that anchors everything else.",
-    s3Url: "https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/PACKAGE-06-identity-stack-workbook.md_ee555beb.pdf",
+    s3Key: "PACKAGE-06-identity-stack-workbook.md_ee555beb.pdf",
   },
   {
     slug: "morning-alignment-audio",
@@ -85,7 +85,7 @@ export const LIFEWOVEN_PRODUCTS: LWProduct[] = [
     priceUsd: 37,
     priceCents: 3700,
     description: "Seven guided morning alignment sessions — each approximately 15 minutes — designed to set your state, anchor your identity, and align your energy before the day begins. Scripts included for self-guided use.",
-    s3Url: "https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/PACKAGE-07-morning-alignment-series.md_f9ea66b4.pdf",
+    s3Key: "PACKAGE-07-morning-alignment-series.md_f9ea66b4.pdf",
   },
   {
     slug: "reset-protocol-audio",
@@ -95,7 +95,7 @@ export const LIFEWOVEN_PRODUCTS: LWProduct[] = [
     priceUsd: 27,
     priceCents: 2700,
     description: "A single 45-minute guided reset session for moments of overwhelm, disconnection, or emotional dysregulation. Draws on the Reset pathway and the Stewardship module's resilience protocol. Owner-voiced version in production — purchasers receive the update free.",
-    s3Url: "https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/PACKAGE-08-reset-audio.md_0d7a7b15.pdf",
+    s3Key: "PACKAGE-08-reset-audio.md_0d7a7b15.pdf",
   },
   {
     slug: "wisdom-card-deck",
@@ -105,7 +105,7 @@ export const LIFEWOVEN_PRODUCTS: LWProduct[] = [
     priceUsd: 34,
     priceCents: 3400,
     description: "A 52-card digital deck drawing from Mind Science, Vibrational Alignment, Meaning-Centered Philosophy, and Behavioral Science. One card per week for a year — each with a reflection prompt, a practice, and a quote from the Lifewoven lineage.",
-    s3Url: "https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/PACKAGE-09-wisdom-card-deck.md_941c4561.pdf",
+    s3Key: "PACKAGE-09-wisdom-card-deck.md_941c4561.pdf",
   },
   {
     slug: "complete-bundle",
@@ -115,7 +115,7 @@ export const LIFEWOVEN_PRODUCTS: LWProduct[] = [
     priceUsd: 297,
     priceCents: 29700,
     description: "Every Lifewoven product in one purchase: 4 courses, 2 workbooks, 2 audio programs, and the Wisdom Card Deck. Save 52% off individual prices.",
-    s3Url: "",
+    s3Key: "",
   },
 ];
 
