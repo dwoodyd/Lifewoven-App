@@ -6,33 +6,34 @@ import { describe, it, expect } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
 
-// ── 1. manifest.json shape ────────────────────────────────────────────────────
+// ── 1. PWA manifest definition (VitePWA generates manifest.webmanifest at build time) ──
+// The static manifest.json was removed; the manifest is now defined in vite.config.ts
+// and emitted as manifest.webmanifest by the VitePWA plugin during build.
 describe("PWA manifest", () => {
-  const manifestPath = path.resolve(__dirname, "../client/public/manifest.json");
+  const viteCfg = fs.readFileSync(
+    path.resolve(__dirname, "../vite.config.ts"),
+    "utf-8"
+  );
 
-  it("exists in client/public", () => {
-    expect(fs.existsSync(manifestPath)).toBe(true);
+  it("static manifest.json is removed (VitePWA owns manifest.webmanifest)", () => {
+    const manifestPath = path.resolve(__dirname, "../client/public/manifest.json");
+    expect(fs.existsSync(manifestPath)).toBe(false);
   });
 
-  it("has required PWA fields", () => {
-    const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf-8"));
-    expect(manifest.name).toBeTruthy();
-    expect(manifest.short_name).toBeTruthy();
-    expect(manifest.display).toBe("standalone");
-    expect(manifest.start_url).toBeTruthy();
-    expect(Array.isArray(manifest.icons)).toBe(true);
-    expect(manifest.icons.length).toBeGreaterThanOrEqual(2);
+  it("vite.config.ts manifest has required PWA fields", () => {
+    expect(viteCfg).toContain('name: "Lifewoven');
+    expect(viteCfg).toContain('short_name: "Lifewoven"');
+    expect(viteCfg).toContain('display: "standalone"');
+    expect(viteCfg).toContain('start_url:');
+    expect(viteCfg).toContain('icons:');
   });
 
-  it("has at least one 512x512 icon", () => {
-    const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf-8"));
-    const has512 = manifest.icons.some((i: { sizes: string }) => i.sizes === "512x512");
-    expect(has512).toBe(true);
+  it("vite.config.ts manifest has at least one 512x512 icon", () => {
+    expect(viteCfg).toContain('512x512');
   });
 
-  it("theme_color is set", () => {
-    const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf-8"));
-    expect(manifest.theme_color).toMatch(/^#/);
+  it("vite.config.ts manifest has theme_color set", () => {
+    expect(viteCfg).toContain('theme_color:');
   });
 });
 

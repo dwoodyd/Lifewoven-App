@@ -26,6 +26,7 @@ import {
 } from "../drizzle/schema";
 import { eq, desc, and, like, sql, gte, lte } from "drizzle-orm";
 import { invokeLLM } from "./_core/llm";
+import { checkLlmRateLimit } from "./_core/llmRateLimiter";
 import { tierCanAccessOracle } from "./tierHelpers";
 import { TRPCError } from "@trpc/server";
 import { transcribeAudio } from "./_core/voiceTranscription";
@@ -388,7 +389,10 @@ const journalRouter = router({
       pathway: z.string().max(100).optional(),
       recentEntries: z.array(z.string().max(500)).max(5).optional(),
     }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ ctx, input }) => {
+      if (!checkLlmRateLimit(ctx.user.id)) {
+        throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many AI requests. Please wait a moment." });
+      }
       const systemPrompt = `You are the Lifewoven Journal Oracle — a wise, warm, and perceptive guide rooted in the Lifewoven framework of interior alignment, identity, meaning, and deliberate practice. Generate a single, powerful journaling prompt for the ${input.module} module${input.pathway ? ` (${input.pathway} pathway)` : ""}. The prompt should be introspective, specific, and invite genuine self-reflection. Return only the prompt text, nothing else.`;
       const response = await invokeLLM({
         messages: [
@@ -402,6 +406,9 @@ const journalRouter = router({
   generateReflection: protectedProcedure
     .input(z.object({ entryId: z.number(), content: z.string().max(20000) }))
     .mutation(async ({ ctx, input }) => {
+      if (!checkLlmRateLimit(ctx.user.id)) {
+        throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many AI requests. Please wait a moment." });
+      }
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
       const response = await invokeLLM({

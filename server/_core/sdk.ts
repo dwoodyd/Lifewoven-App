@@ -159,6 +159,13 @@ class SDKServer {
 
   private getSessionSecret() {
     const secret = ENV.cookieSecret;
+    // SECURITY: fail closed. An empty/weak JWT secret means session cookies can be
+    // forged, granting takeover of any account. Never sign/verify with a bad key.
+    if (!secret || secret.length < 32) {
+      throw new Error(
+        "JWT_SECRET is missing or too short (need >= 32 chars). Refusing to sign/verify sessions."
+      );
+    }
     return new TextEncoder().encode(secret);
   }
 

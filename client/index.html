@@ -26,14 +26,13 @@
     <meta name="twitter:image:alt" content="Lifewoven — Your Personal Transformation Operating System" />
     <title>Lifewoven: The Personal Transformation Operating System</title>
     <meta name="description" content="Lifewoven is a personal transformation platform built on the 5S Framework. One intelligent operating system for your whole life." />
-    <!-- VitePWA injects manifest.webmanifest automatically during build -->
+    <!-- VitePWA injects manifest.webmanifest automatically during build; no static manifest.json needed -->
     <meta name="theme-color" content="#1a1714" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#f5f0eb" media="(prefers-color-scheme: light)" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Lifewoven" />
-    <link rel="manifest" href="/manifest.json" />
     <!-- Splash screen colors for iOS -->  
     <meta name="msapplication-TileColor" content="#1a1714" />
     <meta name="msapplication-TileImage" content="https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/app-icon_e26b6bab.png" />
@@ -90,10 +89,20 @@
     </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script
-      defer
-      src="%VITE_ANALYTICS_ENDPOINT%/umami"
-      data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"></script>
+    <!-- Analytics: only loaded when VITE_ANALYTICS_ENDPOINT and VITE_ANALYTICS_WEBSITE_ID are set -->
+    <script>
+      (function() {
+        var endpoint = "%VITE_ANALYTICS_ENDPOINT%";
+        var websiteId = "%VITE_ANALYTICS_WEBSITE_ID%";
+        // Vite replaces env vars at build time; if they start with '%' the var was not set
+        if (!endpoint || endpoint.charAt(0) === '%' || !websiteId || websiteId.charAt(0) === '%') return;
+        var s = document.createElement('script');
+        s.defer = true;
+        s.src = endpoint + '/umami';
+        s.setAttribute('data-website-id', websiteId);
+        document.head.appendChild(s);
+      })();
+    </script>
   </body>
 
 </html>

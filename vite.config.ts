@@ -208,7 +208,12 @@ const vitePWA = VitePWA({
   },
 });
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), vitePWA];
+// SECURITY/PERF: the Manus dev-runtime and JSX source-location plugins leak
+// source structure and bloat the production bundle. Load them only in dev.
+const isProd = process.env.NODE_ENV === "production";
+const plugins = isProd
+  ? [react(), tailwindcss(), vitePWA]
+  : [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), vitePWA];
 
 export default defineConfig({
   plugins,

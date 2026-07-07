@@ -31,10 +31,16 @@ const PUBLIC_PATHS = [
   "/pathways",
   "/oracle",
   "/community",
-  "/resources",
-  "/before-the-words",
   "/character",
   "/beta",
+  "/about",
+  "/sources",
+  "/apply",
+  "/invite",
+  "/library",
+  "/ground",
+  "/first-honest-week",
+  "/legal",
 ];
 
 const isPublicPage = () => {

@@ -15,7 +15,7 @@
 - [API Reference](#api-reference)
 - [Database Schema](#database-schema)
 - [Authentication](#authentication)
-- [Payments (Stripe)](#payments-stripe)
+- [Payments (PayPal)](#payments-paypal)
 - [Security](#security)
 - [Testing](#testing)
 - [Deployment](#deployment)
@@ -48,7 +48,7 @@ The platform is built for people who have already tried the books, the routines,
 | **API Layer** | tRPC 11 (end-to-end type safety, no REST boilerplate) |
 | **Database** | MySQL/TiDB via Drizzle ORM |
 | **Auth** | Manus OAuth 2.0 (session cookies, `httpOnly`, `secure`, `sameSite=lax`) |
-| **Payments** | Stripe (subscriptions, Customer Portal, webhooks) |
+| **Payments** | PayPal (subscriptions, webhooks) |
 | **AI** | Built-in LLM via `server/_core/llm.ts` |
 | **Serialization** | SuperJSON (Dates stay Dates through the wire) |
 | **Testing** | Vitest |
@@ -283,13 +283,13 @@ Lifewoven uses Manus OAuth 2.0. No passwords are stored.
 - Login redirects to the Manus OAuth portal
 - Callback at `/api/oauth/callback` exchanges the code for a JWT session cookie
 - Cookie flags: `httpOnly: true`, `secure: true` (production), `sameSite: "lax"`
-- Session expiry: 1 year (configurable in `server/_core/auth.ts`)
+- Session expiry: 30 days (set in `server/_core/oauth.ts` via `THIRTY_DAYS_MS`)
 - Protected procedures use `protectedProcedure` — unauthenticated calls return `UNAUTHORIZED`
 - Admin procedures use `adminProcedure` — non-admin calls return `FORBIDDEN`
 
 ---
 
-## Payments (Stripe)
+## Payments (PayPal)
 
 Three subscription tiers:
 
@@ -311,7 +311,7 @@ Handles: `checkout.session.completed`, `customer.subscription.updated`, `custome
 | Control | Implementation |
 |---|---|
 | Rate limiting | 5 req/15 min on OAuth; 200 req/min on tRPC API |
-| Session cookies | `httpOnly`, `secure`, `sameSite=lax` |
+| Session cookies | `httpOnly`, `secure` (conditional on HTTPS), `sameSite=lax` |
 | Error responses | Stack traces stripped in production via tRPC `errorFormatter` |
 | Body limit | 1 MB (prevents DoS via large payloads) |
 | SQL injection | All queries use Drizzle ORM parameterized queries — no raw string interpolation |

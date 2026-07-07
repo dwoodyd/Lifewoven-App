@@ -217,6 +217,18 @@ paypalSubscriptionRouter.post("/create", async (req: Request, res: Response) => 
       });
     }
 
+    // SECURITY: verify founding-member eligibility server-side.
+    // A client cannot self-promote to a founding rate by posting a founding plan name.
+    if (plan.includes("founding")) {
+      const db = await getDb();
+      if (!db) return res.status(500).json({ error: "Database unavailable" });
+      const [row] = await db.select({ foundingMember: users.foundingMember })
+        .from(users).where(eq(users.id, user.id)).limit(1);
+      if (!row?.foundingMember) {
+        return res.status(403).json({ error: "Founding rate is no longer available for this account." });
+      }
+    }
+
     const body = {
       plan_id: planId,
       subscriber: {
@@ -269,13 +281,24 @@ paypalSubscriptionRouter.post("/capture", async (req: Request, res: Response) =>
 
     // Verify subscription is ACTIVE with PayPal
     const ppRes = await paypalFetch(`/v1/billing/subscriptions/${subscriptionId}`);
-    const sub = await ppRes.json() as { status?: string; id?: string };
+    const sub = await ppRes.json() as { status?: string; id?: string; custom_id?: string; plan_id?: string };
 
     if (sub.status !== "ACTIVE" && sub.status !== "APPROVED") {
       return res.status(400).json({ error: `Subscription not active (status: ${sub.status})` });
     }
 
-    const tier = baseTier(plan);
+    // SECURITY: never trust the client-supplied `plan`. Derive the plan AND the
+    // owner from PayPal's custom_id (set to `${userId}:${plan}` at creation, and
+    // used by the webhook as the source of truth). This blocks tier-escalation
+    // (subscribe cheap, capture as an expensive tier) and cross-user activation.
+    const [ownerIdStr, verifiedPlan] = (sub.custom_id ?? "").split(":");
+    if (parseInt(ownerIdStr ?? "") !== user.id) {
+      return res.status(403).json({ error: "Subscription does not belong to this user" });
+    }
+    if (!verifiedPlan) {
+      return res.status(400).json({ error: "Subscription is missing plan metadata" });
+    }
+    const tier = baseTier(verifiedPlan);
     const storeAccess = tierToStoreAccess(tier);
     const db = await getDb();
     if (!db) return res.status(500).json({ error: "Database unavailable" });
@@ -290,8 +313,8 @@ paypalSubscriptionRouter.post("/capture", async (req: Request, res: Response) =>
       .where(eq(users.id, user.id));
 
     await notifyOwner({
-      title: `🎉 New ${TIER_LABELS[plan] ?? tier} Subscription`,
-      content: `${user.name ?? user.email ?? "A user"} just subscribed to the ${TIER_LABELS[plan] ?? tier} plan.\nSubscription ID: ${subscriptionId}`,
+      title: `🎉 New ${TIER_LABELS[verifiedPlan] ?? tier} Subscription`,
+      content: `${user.name ?? user.email ?? "A user"} just subscribed to the ${TIER_LABELS[verifiedPlan] ?? tier} plan.\nSubscription ID: ${subscriptionId}`,
     }).catch(() => {});
 
     // Send welcome email (non-blocking)

@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+
+# Disallow private/authenticated areas
+Disallow: /dashboard
+Disallow: /profile
+Disallow: /settings
+Disallow: /weave
+Disallow: /goals
+Disallow: /state
+Disallow: /story
+Disallow: /standards
+Disallow: /strategy
+Disallow: /stewardship
+Disallow: /mood-rhythm
+Disallow: /downloads
+Disallow: /referrals
+Disallow: /reading-bridge
+Disallow: /admin
+Disallow: /api/
+
+Sitemap: https://app.lifewoven.click/sitemap.xml
