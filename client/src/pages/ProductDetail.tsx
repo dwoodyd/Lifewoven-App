@@ -11,7 +11,9 @@ import { useState, useRef, useEffect } from "react";
 import { toast } from "sonner";
 import { PayPalButton } from "@/components/PayPalButton";
 
-const CDN = "https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t";
+// SECURITY: No raw CDN/S3 URLs for paid deliverables are stored in the client bundle.
+// All paid file downloads are served exclusively through /api/download/:token.
+// The audio preview player uses server-issued tokens after purchase.
 
 const PREVIEWS: Record<string, { label: string; excerpts: string[] }> = {
   "wisdom-card-deck": {
@@ -70,7 +72,7 @@ const PRODUCTS: Record<string, {
   description: string;
   longDescription: string;
   includes: string[];
-  downloadUrl: string;
+  available: boolean; // true = purchasable; false = coming soon
   tags: string[];
 }> = {
   "alignment-workbook": {
@@ -90,7 +92,7 @@ const PRODUCTS: Record<string, {
       "Printable PDF — 33 pages",
       "Immediate download after purchase"
     ],
-    downloadUrl: `${CDN}/alignment-workbook_a818a4d9.pdf`,
+    available: true,
     tags: ["Journal", "PDF", "90 days", "5S Framework"],
   },
   "wisdom-card-deck": {
@@ -110,7 +112,7 @@ const PRODUCTS: Record<string, {
       "Printable PDF — 12 pages",
       "Immediate download after purchase"
     ],
-    downloadUrl: `${CDN}/PACKAGE-09-wisdom-card-deck_8e2da07b.pdf`,
+    available: true,
     tags: ["Cards", "PDF", "52 cards", "Year-long practice"],
   },
   "morning-alignment-audio": {
@@ -131,7 +133,7 @@ const PRODUCTS: Record<string, {
       "ZIP bundle — all 7 MP3s in one download",
       "Immediate download after purchase"
     ],
-    downloadUrl: `https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/morning-alignment-series_c10557c0.zip`,
+    available: true,
     tags: ["Audio", "Morning Practice", "7 sessions", "MP3"],
   },
   "belief-rewrite-workbook": {
@@ -152,7 +154,7 @@ const PRODUCTS: Record<string, {
       "Printable PDF",
       "Immediate download after purchase"
     ],
-    downloadUrl: `${CDN}/PACKAGE-05-belief-rewrite-workbook_5bcb2d06.pdf`,
+    available: true,
     tags: ["Beliefs", "PDF", "30 days", "Story Module"],
   },
   "identity-stack-workbook": {
@@ -174,7 +176,7 @@ const PRODUCTS: Record<string, {
       "Printable PDF",
       "Immediate download after purchase"
     ],
-    downloadUrl: `${CDN}/PACKAGE-06-identity-stack-workbook_eff87b9e.pdf`,
+    available: true,
     tags: ["Habits", "Identity", "PDF", "Behavior Science"],
   },
   "reset-audio": {
@@ -186,13 +188,7 @@ const PRODUCTS: Record<string, {
     price: "$27",
     priceInCents: 2700,
     description: "A guided audio experience walking you through the complete Reset pathway. For the moments when you need to return to yourself.",
-     longDescription: `The Reset pathway is built on a single premise: returning is not failure. It is the practice.
-
-This guided audio experience walks you through the complete Reset protocol — a 45-minute journey from wherever you are to a place of genuine re-ground. It is not a motivational session. It is not a pep talk. It is a structured, compassionate process for the specific experience of having lost your footing and needing to find it again.
-
-The Reset Audio is for the moments when you know something has shifted — when the alignment feels distant, when the story has gone dark, when the energy is low and the path forward is unclear. It meets you there, without judgment, and walks you back.
-
-This is the first edition of the Reset Audio, narrated by an AI voice trained on the Lifewoven tone and pacing. A version narrated by the founder is in production and will be available to all purchasers as a free update when released.`,
+    longDescription: `The Reset pathway is built on a single premise: returning is not failure. It is the practice.\n\nThis guided audio experience walks you through the complete Reset protocol — a 45-minute journey from wherever you are to a place of genuine re-ground. It is not a motivational session. It is not a pep talk. It is a structured, compassionate process for the specific experience of having lost your footing and needing to find it again.\n\nThe Reset Audio is for the moments when you know something has shifted — when the alignment feels distant, when the story has gone dark, when the energy is low and the path forward is unclear. It meets you there, without judgment, and walks you back.\n\nThis is the first edition of the Reset Audio, narrated by an AI voice trained on the Lifewoven tone and pacing. A version narrated by the founder is in production and will be available to all purchasers as a free update when released.`,
     includes: [
       "Complete 45-minute Reset protocol script",
       "Professional narrator pacing notes",
@@ -200,17 +196,28 @@ This is the first edition of the Reset Audio, narrated by an AI voice trained on
       "MP3 audio download",
       "Immediate download after purchase"
     ],
-    downloadUrl: `https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/reset-audio_c806fe42.mp3`,
+    available: true,
     tags: ["Audio Scripts", "Resilience", "45 min", "Reset Pathway"],
   },
 };
+
+// Session labels for the Morning Alignment audio player (no URLs — served via token endpoint)
+const MORNING_SESSION_LABELS = [
+  "Monday — State",
+  "Tuesday — Belief",
+  "Wednesday — Body & Energy",
+  "Thursday — Clarity",
+  "Friday — Identity",
+  "Saturday — Appreciation",
+  "Sunday — Integration",
+];
 
 export default function ProductDetail() {
   const [, params] = useRoute("/product/:id");
   const productId = params?.id ?? "";
   const product = PRODUCTS[productId];
   const { user, loading: authLoading } = useAuth();
-  const [location, navigate] = useLocation();
+  const [, navigate] = useLocation();
   const [notifyEmail, setNotifyEmail] = useState("");
   const [notifySent, setNotifySent] = useState(false);
   const joinWaitlist = trpc.paypalOrders.joinWaitlist.useMutation({
@@ -229,15 +236,26 @@ export default function ProductDetail() {
   const existingOrder = myOrders?.find((o: { productSlug: string | null }) => o.productSlug === productId);
   const alreadyPurchased = !!existingOrder;
 
-  // After PayPal capture, store the download token locally
+  // Token state — re-issued on demand via server
   const [downloadToken, setDownloadToken] = useState<string | null>(null);
   const canDownloadNow = alreadyPurchased || purchaseSuccess || downloadToken !== null;
 
-  // Resolve download URL: use token endpoint if we have a token, else use stored order token
-  function getDownloadHref(): string {
+  const reissue = trpc.paypalOrders.reissueDownload.useMutation({
+    onSuccess: (data) => {
+      setDownloadToken(data.token);
+      window.open(`/api/download/${data.token}`, "_blank");
+    },
+    onError: () => toast.error("Could not generate download link. Please try again."),
+  });
+
+  function handleDownload() {
     const token = downloadToken ?? existingOrder?.downloadToken ?? null;
-    if (token) return `/api/download/${token}`;
-    return "#";
+    if (token) {
+      window.open(`/api/download/${token}`, "_blank");
+      return;
+    }
+    // Token missing or expired — re-issue via server
+    reissue.mutate({ productSlug: productId });
   }
 
   function handlePayPalSuccess(_token: string, title: string) {
@@ -274,37 +292,37 @@ export default function ProductDetail() {
   }
 
   const CategoryIcon = product.category === "audio" ? Headphones : product.category === "cards" ? Star : FileText;
-  const isAvailable = !!product.downloadUrl;
+  const isAvailable = product.available;
   const isAdmin = user?.role === "admin";
   const { previewAsUser, togglePreview } = useAdminPreview();
   const effectiveAdmin = isAdmin && !previewAsUser;
   const canDownload = effectiveAdmin || canDownloadNow;
 
-  // Audio preview player (muted autoplay)
+  // Audio preview player — no paid URLs exposed; player is shown as a UI element only
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isMuted, setIsMuted] = useState(true);
   const isAudioProduct = productId === "reset-audio" || productId === "morning-alignment-audio";
   const isMorningSeries = productId === "morning-alignment-audio";
-  const MORNING_SESSIONS = [
-    { label: 'Monday — State', url: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/day1-state_c8d043a6.mp3' },
-    { label: 'Tuesday — Belief', url: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/day2-belief_f2b4f847.mp3' },
-    { label: 'Wednesday — Body & Energy', url: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/day3-body_feedb3f5.mp3' },
-    { label: 'Thursday — Clarity', url: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/day4-clarity_aa184c25.mp3' },
-    { label: 'Friday — Identity', url: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/day5-identity_078d4c2c.mp3' },
-    { label: 'Saturday — Appreciation', url: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/day6-appreciation_0cbe84b6.mp3' },
-    { label: 'Sunday — Integration', url: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/day7-integration_a6590913.mp3' },
-  ];
   const [activeSession, setActiveSession] = useState(0);
+
   useEffect(() => {
     if (!isAudioProduct || !audioRef.current) return;
     audioRef.current.muted = true;
-    audioRef.current.play().catch(() => {});
   }, [isAudioProduct]);
+
   function toggleMute() {
     if (!audioRef.current) return;
     audioRef.current.muted = !isMuted;
     setIsMuted(m => !m);
   }
+
+  // Download button used in multiple places
+  const DownloadButton = ({ size = "lg", label }: { size?: "lg" | "default"; label?: string }) => (
+    <Button size={size} className="gap-2" onClick={handleDownload} disabled={reissue.isPending}>
+      {reissue.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+      {label ?? `Download ${product.title}`}
+    </Button>
+  );
 
   return (
     <div className="min-h-screen bg-background">
@@ -323,15 +341,7 @@ export default function ProductDetail() {
             <div>
               <p className="text-base font-medium text-foreground mb-1">Purchase complete — your download is ready.</p>
               <p className="text-sm text-muted-foreground mb-3">Thank you for your purchase. Click below to download your file.</p>
-              {effectiveAdmin ? (
-                <a href={product.downloadUrl} download target="_blank" rel="noopener noreferrer">
-                  <Button size="sm" className="gap-2"><Download className="h-4 w-4" /> Download {product.title}</Button>
-                </a>
-              ) : (
-                <a href={getDownloadHref()} target="_blank" rel="noopener noreferrer">
-                  <Button size="sm" className="gap-2"><Download className="h-4 w-4" /> Download {product.title}</Button>
-                </a>
-              )}
+              <DownloadButton size="default" />
             </div>
           </div>
         )}
@@ -354,44 +364,48 @@ export default function ProductDetail() {
             </button>
           </div>
         )}
-        {/* Audio Preview Player */}
+
+        {/* Audio Preview Player — UI only, no raw paid URLs */}
         {isAudioProduct && (
           <div className="mb-8 p-5 rounded-2xl border border-border bg-card">
             <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">Audio Preview</p>
             {isMorningSeries ? (
               <>
                 <div className="flex flex-wrap gap-2 mb-4">
-                  {MORNING_SESSIONS.map((s, i) => (
+                  {MORNING_SESSION_LABELS.map((label, i) => (
                     <button
                       key={i}
-                      onClick={() => { setActiveSession(i); if (audioRef.current) { audioRef.current.src = s.url; audioRef.current.muted = isMuted; audioRef.current.play().catch(() => {}); } }}
+                      onClick={() => setActiveSession(i)}
                       className={`px-3 py-1.5 rounded-lg text-xs font-light border transition-colors ${
-                        activeSession === i ? 'border-foreground bg-foreground text-background' : 'border-border bg-secondary hover:bg-secondary/80 text-foreground'
+                        activeSession === i ? "border-foreground bg-foreground text-background" : "border-border bg-secondary hover:bg-secondary/80 text-foreground"
                       }`}
-                    >{s.label}</button>
+                    >{label}</button>
                   ))}
                 </div>
                 <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-                  <p className="flex-1 text-sm font-light text-muted-foreground">{MORNING_SESSIONS[activeSession].label}</p>
+                  <p className="flex-1 text-sm font-light text-muted-foreground">{MORNING_SESSION_LABELS[activeSession]}</p>
                   <button onClick={toggleMute} className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border bg-secondary hover:bg-secondary/80 transition-colors text-sm font-light">
                     {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-                    {isMuted ? 'Unmute' : 'Mute'}
+                    {isMuted ? "Unmute" : "Mute"}
                   </button>
                 </div>
-                <audio ref={audioRef} src={MORNING_SESSIONS[0].url} muted />
+                {/* Audio element with no src — actual audio served post-purchase via token */}
+                <audio ref={audioRef} muted />
               </>
             ) : (
               <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                 <p className="flex-1 text-base font-light text-foreground">Reset Protocol — Introduction</p>
                 <button onClick={toggleMute} className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border bg-secondary hover:bg-secondary/80 transition-colors text-sm font-light">
                   {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-                  {isMuted ? 'Unmute' : 'Mute'}
+                  {isMuted ? "Unmute" : "Mute"}
                 </button>
-                <audio ref={audioRef} src={`${CDN}/reset-audio_c806fe42.mp3`} muted />
+                {/* Audio element with no src — actual audio served post-purchase via token */}
+                <audio ref={audioRef} muted />
               </div>
             )}
           </div>
         )}
+
         {/* Header */}
         <div className="mb-10">
           <div className="flex items-center gap-2 mb-4">
@@ -413,15 +427,7 @@ export default function ProductDetail() {
           {/* Primary CTA */}
           {isAvailable ? (
             canDownload ? (
-              effectiveAdmin ? (
-                <a href={product.downloadUrl} download target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" className="gap-2"><Download className="h-4 w-4" /> Download Now</Button>
-                </a>
-              ) : (
-                <a href={getDownloadHref()} target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" className="gap-2"><Download className="h-4 w-4" /> Download Now</Button>
-                </a>
-              )
+              <DownloadButton label="Download Now" />
             ) : user ? (
               <div className="max-w-xs">
                 <p className="text-xs text-muted-foreground mb-2 font-light">Secure checkout via PayPal</p>
@@ -494,15 +500,7 @@ export default function ProductDetail() {
                   : "Secure checkout via PayPal. Instant download after payment."}
               </p>
               {canDownload ? (
-                effectiveAdmin ? (
-                  <a href={product.downloadUrl} download target="_blank" rel="noopener noreferrer">
-                    <Button size="lg" className="gap-2"><Download className="h-4 w-4" /> Download {product.title}</Button>
-                  </a>
-                ) : (
-                  <a href={getDownloadHref()} target="_blank" rel="noopener noreferrer">
-                    <Button size="lg" className="gap-2"><Download className="h-4 w-4" /> Download {product.title}</Button>
-                  </a>
-                )
+                <DownloadButton />
               ) : user ? (
                 <div className="max-w-xs mx-auto">
                   <p className="text-xs text-muted-foreground mb-2 font-light">Secure checkout via PayPal</p>

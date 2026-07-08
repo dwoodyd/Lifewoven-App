@@ -81,10 +81,11 @@ lifeos/
 │   ├── _core/                  # Framework plumbing (OAuth, context, tRPC init, LLM, maps)
 │   ├── routers/
 │   │   ├── btw.ts              # Before the Words procedures
-│   │   └── stripe.ts           # Stripe subscription procedures
-│   ├── stripe/
-│   │   ├── products.ts         # Stripe product/price ID definitions
-│   │   └── webhook.ts          # Stripe webhook handler
+│   │   └── paypalOrders.ts     # PayPal one-time product purchase procedures
+│   ├── paypal/
+│   │   ├── paypal.ts           # PayPal create-order / capture-order handlers
+│   │   ├── subscriptions.ts    # PayPal subscription handlers
+│   │   └── webhook.ts          # PayPal webhook handler
 │   ├── db.ts                   # Query helpers
 │   ├── routers.ts              # Main appRouter (all sub-routers merged)
 │   └── storage.ts              # S3 file storage helpers
@@ -148,9 +149,10 @@ All secrets are injected by the Manus platform. Do not commit `.env` files. The 
 | `BUILT_IN_FORGE_API_KEY` | Bearer token for built-in APIs (server) |
 | `VITE_FRONTEND_FORGE_API_KEY` | Bearer token for built-in APIs (frontend) |
 | `VITE_FRONTEND_FORGE_API_URL` | Built-in API URL (frontend) |
-| `STRIPE_SECRET_KEY` | Stripe secret key |
-| `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret |
-| `VITE_STRIPE_PUBLISHABLE_KEY` | Stripe publishable key (frontend) |
+| `PAYPAL_CLIENT_ID` | PayPal app client ID |
+| `PAYPAL_CLIENT_SECRET` | PayPal app client secret |
+| `PAYPAL_WEBHOOK_ID` | PayPal webhook ID for signature verification |
+| `VITE_PAYPAL_CLIENT_ID` | PayPal client ID (frontend) |
 
 ---
 
@@ -239,13 +241,13 @@ All API calls use tRPC. The base URL is `/api/trpc`. Procedures are called as `t
 | `btw.getStats` | Query | Protected | Get BTW usage statistics |
 | `btw.generateWeeklyReflection` | Mutation | **Seeker+** | AI weekly reflection (Closing the Gap) |
 
-### Stripe Router (`trpc.stripe.*`)
+### PayPal Orders Router (`trpc.paypalOrders.*`)
 
 | Procedure | Type | Auth | Description |
 |---|---|---|---|
-| `stripe.createCheckout` | Mutation | Protected | Create Stripe Checkout session |
-| `stripe.createPortal` | Mutation | Protected | Create Stripe Customer Portal session |
-| `stripe.status` | Query | Protected | Get current subscription tier and status |
+| `paypalOrders.getMyOrders` | Query | Protected | Get completed product orders for current user |
+| `paypalOrders.reissueDownload` | Mutation | Protected | Re-issue a 72-hour download token for a purchased product |
+| `paypalOrders.getMembershipStatus` | Query | Protected | Get current subscription tier and status |
 
 ---
 
@@ -255,7 +257,7 @@ The database uses 21+ tables managed via Drizzle ORM. Key tables:
 
 | Table | Purpose |
 |---|---|
-| `users` | User accounts with `tier` (explorer/seeker/oracle), `stripeCustomerId`, `stripeSubscriptionId` |
+| `users` | User accounts with `membershipTier` (explorer/seeker/oracle), `paypalSubscriptionId` |
 | `habits` | User habit definitions |
 | `habit_logs` | Daily habit completion records |
 | `journal_entries` | Journal entries with module/pathway tags |
@@ -299,10 +301,10 @@ Three subscription tiers:
 | **Seeker** | $19/month | + Ground Guide AI, weekly AI reflection, Oracle full access |
 | **Oracle** | $49/month | + All Seeker features, priority AI, advanced analytics |
 
-**Webhook endpoint:** `POST /api/stripe/webhook`
-Handles: `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`
+**Webhook endpoint:** `POST /api/paypal/webhook`
+Handles: `BILLING.SUBSCRIPTION.ACTIVATED`, `BILLING.SUBSCRIPTION.CANCELLED`, `PAYMENT.SALE.COMPLETED`
 
-**Test card:** `4242 4242 4242 4242` (any future expiry, any CVC)
+**Test payments:** Use PayPal sandbox accounts (buyer/seller) from the [PayPal Developer Dashboard](https://developer.paypal.com).
 
 ---
 
@@ -343,7 +345,7 @@ Lifewoven is deployed via the Manus platform. To publish:
 
 **Custom domain:** Configure in Settings → Domains in the Management UI.
 
-**Stripe webhook:** Register `https://<your-domain>/api/stripe/webhook` in Stripe → Developers → Webhooks, subscribing to `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`.
+**PayPal webhook:** Register `https://<your-domain>/api/paypal/webhook` in the [PayPal Developer Dashboard](https://developer.paypal.com) → Apps & Credentials → Webhooks, subscribing to `BILLING.SUBSCRIPTION.ACTIVATED`, `BILLING.SUBSCRIPTION.CANCELLED`, and `PAYMENT.SALE.COMPLETED`. Set `PAYPAL_WEBHOOK_ID` to the generated webhook ID.
 
 ---
 

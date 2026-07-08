@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useAdminPreview } from "@/contexts/AdminPreviewContext";
 import { getLoginUrl } from "@/const";
+import { useState } from "react";
 import { alignmentFundamentals, meaningFoundation, alignmentCurrent, identityInMotion, type CourseData } from "@/data/courseData";
 
 const COURSES: Record<string, CourseData> = {
@@ -18,14 +19,14 @@ const COURSES: Record<string, CourseData> = {
   "identity-in-motion": identityInMotion,
 };
 
-const CDN = "https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t";
-
-const COURSE_PDFS: Record<string, string> = {
-  "alignment-fundamentals": `${CDN}/PACKAGE-01-alignment-fundamentals_c895ad25.pdf`,
-  "alignment-current": `${CDN}/PACKAGE-02-alignment-current_52e9777d.pdf`,
-  "identity-in-motion": `${CDN}/PACKAGE-03-identity-in-motion_5aff167f.pdf`,
-  "meaning-foundation": `${CDN}/PACKAGE-04-meaning-foundation_5715c90e.pdf`,
-};
+// Course PDFs are served exclusively through the server token endpoint.
+// No raw CDN/S3 URLs are exposed in the client bundle.
+const COURSE_PDF_SLUGS = new Set([
+  "alignment-fundamentals",
+  "alignment-current",
+  "identity-in-motion",
+  "meaning-foundation",
+]);
 
 const COURSE_PREVIEWS: Record<string, { label: string; excerpts: string[] }> = {
   "alignment-fundamentals": {
@@ -72,10 +73,35 @@ export default function CourseDetail() {
   const course = COURSES[courseId];
   const { user } = useAuth();
   const { data: memberStatus } = trpc.paypalOrders.getMembershipStatus.useQuery(undefined, { enabled: !!user });
+  const { data: myOrders } = trpc.paypalOrders.getMyOrders.useQuery(undefined, { enabled: !!user });
 
   const isAdmin = user?.role === "admin";
   const { previewAsUser, togglePreview } = useAdminPreview();
   const effectiveAdmin = isAdmin && !previewAsUser;
+
+  // Token-gated download state
+  const [downloadToken, setDownloadToken] = useState<string | null>(null);
+  const existingOrder = myOrders?.find(o => o.productSlug === courseId);
+  const activeToken = downloadToken ?? existingOrder?.downloadToken ?? null;
+  const hasPurchasedCourse = !!existingOrder || effectiveAdmin;
+
+  const reissue = trpc.paypalOrders.reissueDownload.useMutation({
+    onSuccess: (data) => {
+      setDownloadToken(data.token);
+      // Open immediately after token is set
+      window.open(`/api/download/${data.token}`, "_blank");
+    },
+    onError: () => toast.error("Could not generate download link. Please try again."),
+  });
+
+  function handleDownloadCourse() {
+    if (activeToken) {
+      window.open(`/api/download/${activeToken}`, "_blank");
+      return;
+    }
+    // Token missing or expired — re-issue via server
+    reissue.mutate({ productSlug: courseId });
+  }
 
   const handleEnroll = () => {
     if (!user) {
@@ -117,6 +143,15 @@ export default function CourseDetail() {
     </Button>
   );
 
+  const DownloadButton = ({ size = "lg" as "lg" | "default" }) => (
+    hasPurchasedCourse && COURSE_PDF_SLUGS.has(courseId) ? (
+      <Button size={size} variant="outline" className="gap-2" onClick={handleDownloadCourse} disabled={reissue.isPending}>
+        {reissue.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+        Download Course PDF
+      </Button>
+    ) : null
+  );
+
   return (
     <div className="min-h-screen bg-background">
       <Nav />
@@ -155,11 +190,7 @@ export default function CourseDetail() {
           </div>
           <div className="flex flex-wrap gap-3">
             <EnrollButton />
-            {COURSE_PDFS[courseId] && (
-              <a href={COURSE_PDFS[courseId]} download target="_blank" rel="noopener noreferrer">
-                <Button size="lg" variant="outline" className="gap-2"><Download className="h-4 w-4" /> Download Course PDF</Button>
-              </a>
-            )}
+            <DownloadButton />
           </div>
         </div>
         {/* Overview */}
@@ -258,11 +289,7 @@ export default function CourseDetail() {
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <EnrollButton />
-            {COURSE_PDFS[courseId] && (
-              <a href={COURSE_PDFS[courseId]} download target="_blank" rel="noopener noreferrer">
-                <Button size="lg" variant="outline" className="gap-2"><Download className="h-4 w-4" /> Download Course PDF</Button>
-              </a>
-            )}
+            <DownloadButton />
           </div>
         </div>
       </div>
