@@ -43,7 +43,7 @@ export const paypalOrdersRouter = router({
       const ALL_PRODUCT_SLUGS = [
         "alignment-fundamentals", "the-alignment-current", "identity-in-motion",
         "the-meaning-foundation", "belief-rewrite-workbook", "identity-stack-workbook",
-        "morning-alignment-audio", "reset-protocol-audio", "wisdom-card-deck",
+        "morning-alignment-audio", "reset-audio", "wisdom-card-deck",
       ];
       return ALL_PRODUCT_SLUGS.map(slug => ({
         id: 0, userId: ctx.user.id, productSlug: slug, status: "completed",

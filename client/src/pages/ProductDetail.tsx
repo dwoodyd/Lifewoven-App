@@ -43,7 +43,7 @@ const PREVIEWS: Record<string, { label: string; excerpts: string[] }> = {
       "The Minimum Viable Habit is the floor — the smallest version of the habit that still qualifies. The version you can do on your worst day, when your motivation is zero and your energy is spent.",
     ],
   },
-  "reset-protocol-audio": {
+  "reset-audio": {
     label: "From the Reset Protocol",
     excerpts: [
       "You came back. Whatever brought you here — whatever happened, however long you were away — you came back. That matters more than you currently believe it does.",
@@ -177,8 +177,8 @@ const PRODUCTS: Record<string, {
     downloadUrl: `${CDN}/PACKAGE-06-identity-stack-workbook_eff87b9e.pdf`,
     tags: ["Habits", "Identity", "PDF", "Behavior Science"],
   },
-  "reset-protocol-audio": {
-    id: "reset-protocol-audio",
+  "reset-audio": {
+    id: "reset-audio",
     icon: "🔄",
     category: "audio",
     title: "Reset Audio",
@@ -210,7 +210,7 @@ export default function ProductDetail() {
   const productId = params?.id ?? "";
   const product = PRODUCTS[productId];
   const { user, loading: authLoading } = useAuth();
-  const [location] = useLocation();
+  const [location, navigate] = useLocation();
   const [notifyEmail, setNotifyEmail] = useState("");
   const [notifySent, setNotifySent] = useState(false);
   const joinWaitlist = trpc.paypalOrders.joinWaitlist.useMutation({
@@ -240,14 +240,15 @@ export default function ProductDetail() {
     return "#";
   }
 
-  function handlePayPalSuccess(token: string, title: string) {
-    setDownloadToken(token);
+  function handlePayPalSuccess(_token: string, title: string) {
+    // Server does not return the download token in the capture response (security C4).
+    // Redirect to /downloads where getMyOrders fetches the token from the database.
     refetchOrders();
-    toast.success(`Purchase complete — ${title} is ready to download!`, {
-      description: "Your secure download link is active for 72 hours.",
-      duration: 8000,
+    toast.success(`Purchase complete — ${title} is ready!`, {
+      description: "Redirecting to your downloads…",
+      duration: 3000,
     });
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    setTimeout(() => navigate("/downloads"), 1500);
   }
 
   function handlePayPalError(msg: string) {
@@ -282,7 +283,7 @@ export default function ProductDetail() {
   // Audio preview player (muted autoplay)
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isMuted, setIsMuted] = useState(true);
-  const isAudioProduct = productId === "reset-protocol-audio" || productId === "morning-alignment-audio";
+  const isAudioProduct = productId === "reset-audio" || productId === "morning-alignment-audio";
   const isMorningSeries = productId === "morning-alignment-audio";
   const MORNING_SESSIONS = [
     { label: 'Monday — State', url: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/day1-state_c8d043a6.mp3' },

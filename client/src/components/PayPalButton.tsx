@@ -5,8 +5,10 @@
  *  1. User clicks PayPal button
  *  2. createOrder → POST /api/paypal/create-order → returns orderId
  *  3. PayPal popup handles authentication & payment
- *  4. onApprove → POST /api/paypal/capture-order → returns downloadToken
- *  5. onSuccess(downloadToken) is called — parent opens /api/download/:token
+ *  4. onApprove → POST /api/paypal/capture-order → returns COMPLETED status
+ *  5. onSuccess("", productTitle) is called — parent redirects to /downloads
+ *     (Server intentionally omits downloadToken from response for security.
+ *      Token is fetched via authenticated getMyOrders on the Downloads page.)
  *
  * Security: The PayPal client ID is fetched from the server via tRPC so no
  * sensitive credentials are ever bundled into the client build.
@@ -30,7 +32,9 @@ declare global {
 }
 
 export function PayPalButton({ productSlug, priceUsd, onSuccess, onError }: PayPalButtonProps) {
-  const handleSuccess = onSuccess ?? ((token: string) => { window.location.href = `/api/download/${token}`; });
+  // Default: redirect to /downloads so the user can fetch their token via getMyOrders.
+  // Server does not return the token in the capture response (security measure C4).
+  const handleSuccess = onSuccess ?? ((_token: string) => { window.location.href = "/downloads"; });
   const { user } = useAuth();
   const containerRef = useRef<HTMLDivElement>(null);
   const [sdkReady, setSdkReady] = useState(false);
@@ -101,8 +105,10 @@ export function PayPalButton({ productSlug, priceUsd, onSuccess, onError }: PayP
           productTitle?: string;
           error?: string;
         };
-        if (result.status === "COMPLETED" && result.downloadToken) {
-          handleSuccess(result.downloadToken, result.productTitle ?? productSlug);
+        if (result.status === "COMPLETED") {
+          // Token is not returned in the response (server security design C4).
+          // Parent should redirect to /downloads to fetch the token via getMyOrders.
+          handleSuccess(result.downloadToken ?? "", result.productTitle ?? productSlug);
         } else {
           onError?.(result.error ?? "Payment capture failed.");
         }

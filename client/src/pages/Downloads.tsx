@@ -17,7 +17,7 @@ const PRODUCT_TITLES: Record<string, string> = {
   "belief-rewrite-workbook": "Belief Rewrite Workbook",
   "identity-stack-workbook": "The Identity Stack Workbook",
   "morning-alignment-audio": "Morning Alignment Series",
-  "reset-protocol-audio": "Reset Audio",
+  "reset-audio": "Reset Audio",
   "wisdom-card-deck": "Wisdom Card Deck",
 };
 
@@ -29,7 +29,7 @@ const PRODUCT_ICONS: Record<string, string> = {
   "belief-rewrite-workbook": "✍️",
   "identity-stack-workbook": "🧱",
   "morning-alignment-audio": "🎧",
-  "reset-protocol-audio": "🔄",
+  "reset-audio": "🔄",
   "wisdom-card-deck": "🃏",
 };
 
