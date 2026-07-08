@@ -19,6 +19,17 @@ function extractOwnerIdFromKey(key: string): number | null {
   return null; // public key — no ownership restriction
 }
 
+/** Fetch with a hard timeout. Throws AbortError on timeout. */
+async function fetchWithTimeout(url: URL | string, init: RequestInit, timeoutMs = 8_000): Promise<Response> {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(id);
+  }
+}
+
 export function registerStorageProxy(app: Express) {
   // Express 4 wildcard: use "/*" and read req.params[0]
   app.get("/manus-storage/*", async (req, res) => {
@@ -28,6 +39,7 @@ export function registerStorageProxy(app: Express) {
       return;
     }
     if (!ENV.forgeApiUrl || !ENV.forgeApiKey) {
+      console.error("[StorageProxy] forge credentials not configured");
       res.status(500).send("Storage proxy not configured");
       return;
     }
@@ -48,30 +60,42 @@ export function registerStorageProxy(app: Express) {
     }
 
     try {
+      // Use downloadUrl (same endpoint as storage.ts) — returns a permanent CDN URL
+      // that works reliably in production. presign/get returned short-TTL signed URLs
+      // from a different CloudFront distribution and was causing 503s in production.
       const forgeUrl = new URL(
-        "v1/storage/presign/get",
+        "v1/storage/downloadUrl",
         ENV.forgeApiUrl.replace(/\/+$/, "") + "/",
       );
       forgeUrl.searchParams.set("path", key);
-      const forgeResp = await fetch(forgeUrl, {
+
+      const forgeResp = await fetchWithTimeout(forgeUrl, {
         headers: { Authorization: `Bearer ${ENV.forgeApiKey}` },
-      });
+      }, 8_000);
+
       if (!forgeResp.ok) {
         const body = await forgeResp.text().catch(() => "");
-        console.error(`[StorageProxy] forge error: ${forgeResp.status} ${body}`);
+        console.error(`[StorageProxy] forge error ${forgeResp.status} for key "${key}": ${body}`);
         res.status(502).send("Storage backend error");
         return;
       }
       const { url } = (await forgeResp.json()) as { url: string };
       if (!url) {
-        res.status(502).send("Empty signed URL from backend");
+        console.error(`[StorageProxy] empty URL from forge for key "${key}"`);
+        res.status(502).send("Empty URL from storage backend");
         return;
       }
-      res.set("Cache-Control", "no-store");
+      // Public assets can be cached by the browser; private assets must not be cached.
+      if (ownerId === null) {
+        res.set("Cache-Control", "public, max-age=3600, stale-while-revalidate=86400");
+      } else {
+        res.set("Cache-Control", "no-store");
+      }
       res.redirect(307, url);
     } catch (err) {
-      console.error("[StorageProxy] failed:", err);
-      res.status(502).send("Storage proxy error");
+      const isTimeout = err instanceof Error && err.name === "AbortError";
+      console.error(`[StorageProxy] ${isTimeout ? "timeout" : "error"} for key "${key}":`, err);
+      res.status(502).send(isTimeout ? "Storage backend timed out" : "Storage proxy error");
     }
   });
 }
