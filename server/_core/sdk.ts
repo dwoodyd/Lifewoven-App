@@ -2,6 +2,7 @@ import { AXIOS_TIMEOUT_MS, COOKIE_NAME, ONE_YEAR_MS } from "@shared/const";
 import { ForbiddenError } from "@shared/_core/errors";
 import axios, { type AxiosInstance } from "axios";
 import { parse as parseCookieHeader } from "cookie";
+import { createHash } from "node:crypto";
 import type { Request } from "express";
 import { SignJWT, jwtVerify } from "jose";
 import type { User } from "../../drizzle/schema";
@@ -27,6 +28,30 @@ export type SessionPayload = {
 const EXCHANGE_TOKEN_PATH = `/webdev.v1.WebDevAuthPublicService/ExchangeToken`;
 const GET_USER_INFO_PATH = `/webdev.v1.WebDevAuthPublicService/GetUserInfo`;
 const GET_USER_INFO_WITH_JWT_PATH = `/webdev.v1.WebDevAuthPublicService/GetUserInfoWithJwt`;
+
+/**
+ * Returns a stable key for HS256 session signing.
+ *
+ * Manus may provide a compact, high-entropy URL-safe secret (22 characters).
+ * It is sufficient key material, but shorter than the raw 32-character guard
+ * previously imposed here. For compact secrets, derive a 32-byte key using
+ * SHA-256 and domain separation; established 32+ character secrets retain
+ * their existing raw-key behavior so valid sessions do not break on upgrade.
+ */
+export function deriveSessionKey(secret: string): Uint8Array {
+  if (secret.length >= 32) {
+    return new TextEncoder().encode(secret);
+  }
+  if (secret.length < 16) {
+    throw new Error(
+      "JWT_SECRET is missing or too short (need at least 16 characters). Refusing to sign/verify sessions."
+    );
+  }
+  return createHash("sha256")
+    .update("lifewoven/session-signing/v1\0", "utf8")
+    .update(secret, "utf8")
+    .digest();
+}
 
 class OAuthService {
   constructor(private client: ReturnType<typeof axios.create>) {
@@ -161,12 +186,12 @@ class SDKServer {
     const secret = ENV.cookieSecret;
     // SECURITY: fail closed. An empty/weak JWT secret means session cookies can be
     // forged, granting takeover of any account. Never sign/verify with a bad key.
-    if (!secret || secret.length < 32) {
+    if (!secret) {
       throw new Error(
-        "JWT_SECRET is missing or too short (need >= 32 chars). Refusing to sign/verify sessions."
+        "JWT_SECRET is missing. Refusing to sign/verify sessions."
       );
     }
-    return new TextEncoder().encode(secret);
+    return deriveSessionKey(secret);
   }
 
   /**

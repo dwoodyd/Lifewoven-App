@@ -12,6 +12,7 @@
 - [x] Alignment Audit onboarding quiz (10 questions → pathway recommendation)
 - [x] Authentication flow (login/logout via Manus OAuth)
 - [x] User profile page with stats and quick links
+- [x] Investigate and securely restore production Manus OAuth sign-in after plan-change configuration failure
 
 ## Phase 3: Dashboard & 5S Core Modules
 - [x] Main dashboard: daily check-in, 5S module grid, habit stack, journal preview, Oracle insights, pathways
