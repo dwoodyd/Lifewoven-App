@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { hasWeeklySummaryData } from "./routers/btw";
 
 // ─── Ground Check Scoring ─────────────────────────────────────────────────────
 // Mirrors the logic in server/routers/btw.ts
@@ -108,5 +109,17 @@ describe("BTW Session Types", () => {
     expect(VALID_SESSION_TYPES).toContain("midday");
     expect(VALID_SESSION_TYPES).toContain("evening");
     expect(VALID_SESSION_TYPES).toHaveLength(5);
+  });
+});
+
+describe("Weekly Summary data gate", () => {
+  it("blocks sparse accounts with fewer than three check-ins and no Weave entry", () => {
+    expect(hasWeeklySummaryData(0, 0)).toBe(false);
+    expect(hasWeeklySummaryData(2, 0)).toBe(false);
+  });
+
+  it("permits three check-ins or one Weave entry in the current week", () => {
+    expect(hasWeeklySummaryData(3, 0)).toBe(true);
+    expect(hasWeeklySummaryData(0, 1)).toBe(true);
   });
 });

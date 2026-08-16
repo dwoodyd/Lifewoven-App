@@ -1,8 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
 import { useLuminMoment } from "@/components/LuminMoment";
-import { LuminCorner } from "@/components/LuminCorner";
-import { LuminAmbient } from "@/components/LuminAmbient";
 import { useAuth } from "@/_core/hooks/useAuth";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
@@ -74,6 +72,7 @@ export default function Oracle() {
 
   const insights = trpc.oracle.insights.useQuery(undefined, { enabled: isAuthenticated && hasConsented });
   const weeklyReflection = trpc.btw.getLatestWeeklyReflection.useQuery(undefined, { enabled: isAuthenticated && hasSeekerAccess });
+  const weeklyEligibility = trpc.btw.getWeeklyReflectionEligibility.useQuery(undefined, { enabled: isAuthenticated && hasSeekerAccess });
   const generateWeekly = trpc.btw.generateWeeklyReflection.useMutation({
     onSuccess: () => weeklyReflection.refetch(),
     onError: () => { /* error shown inline in weekly tab */ },
@@ -217,13 +216,6 @@ export default function Oracle() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col" style={{ position: "relative" }}>
-      {/* Lumin breathes in from the right edge — a quiet presence, not a face */}
-      <LuminAmbient
-        videoId="core_unfurls"
-        mode="edge-fade"
-        opacity={0.12}
-        zIndex={0}
-      />
       <Nav />
       <div className="container pt-20 pb-6 max-w-3xl mx-auto flex flex-col flex-1 px-4 sm:px-6 lumin-text" style={{ position: "relative", zIndex: 1 }}>
 
@@ -437,7 +429,7 @@ export default function Oracle() {
                   The Oracle's synthesis of your week — where you drifted, how you returned, and what to carry forward.
                 </p>
               </div>
-              {hasSeekerAccess && (
+              {hasSeekerAccess && weeklyEligibility.data?.hasSufficientData && (
                 <Button variant="ghost" size="sm" className="gap-1.5 text-xs" onClick={() => generateWeekly.mutate()} disabled={generateWeekly.isPending}>
                   {generateWeekly.isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <RefreshCw className="h-3 w-3" />}
                   Generate
@@ -451,7 +443,7 @@ export default function Oracle() {
                 <p className="text-sm text-muted-foreground mb-4">Available on the Seeker plan and above.</p>
                 <Button size="sm" asChild><Link href="/pricing">Upgrade to Seeker</Link></Button>
               </div>
-            ) : weeklyReflection.isLoading ? (
+            ) : weeklyEligibility.isLoading || weeklyReflection.isLoading ? (
               <div className="flex items-center gap-2 text-muted-foreground py-8">
                 <Loader2 className="h-4 w-4 animate-spin" />
                 <span className="text-sm">Loading your weekly reflection...</span>
@@ -460,6 +452,13 @@ export default function Oracle() {
               <div className="p-6 rounded-xl border border-destructive/20 bg-destructive/5 text-center">
                 <p className="text-sm text-destructive mb-3">Could not load your weekly reflection.</p>
                 <Button variant="outline" size="sm" onClick={() => weeklyReflection.refetch()}>Try again</Button>
+              </div>
+            ) : !weeklyEligibility.data?.hasSufficientData ? (
+              <div className="p-8 rounded-2xl border border-border bg-card text-center">
+                <Calendar className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" />
+                <p className="text-base font-light text-foreground mb-2">Your week needs a little more texture first.</p>
+                <p className="text-sm text-muted-foreground mb-4">Add three Daily Check-Ins or one entry in The Weave this week, then return for a grounded reflection.</p>
+                <Button asChild><Link href="/weave">Open The Weave</Link></Button>
               </div>
             ) : weeklyData ? (
               <div className="space-y-4">
@@ -779,7 +778,6 @@ export default function Oracle() {
           </div>
         )}
       </div>
-      <LuminCorner size={52} pulse={luminPulse} tooltip="Lumin listens" />
     </div>
   );
 }

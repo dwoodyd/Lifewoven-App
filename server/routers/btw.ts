@@ -6,9 +6,28 @@ import { tierCanAccessGroundGuide, tierCanAccessWeeklyReflection } from "../tier
 import {
   users, btwProfiles, btwGroundChecks, btwDailySessions, btwReturns,
   btwPrayers, btwGratitudeEntries, btwAudioItems, btwWeeklyReflections,
+  checkIns, journalEntries,
 } from "../../drizzle/schema";
 import { eq, desc, and, gte } from "drizzle-orm";
 import { invokeLLM } from "../_core/llm";
+
+export function hasWeeklySummaryData(checkInCount: number, weaveEntryCount: number): boolean {
+  return checkInCount >= 3 || weaveEntryCount >= 1;
+}
+
+async function getWeeklyReflectionEligibility(db: Awaited<ReturnType<typeof getDb>>, userId: number) {
+  if (!db) return { hasSufficientData: false, checkInCount: 0, weaveEntryCount: 0 };
+  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+  const [recentCheckIns, recentWeaveEntries] = await Promise.all([
+    db.select({ id: checkIns.id }).from(checkIns).where(and(eq(checkIns.userId, userId), gte(checkIns.createdAt, weekAgo))),
+    db.select({ id: journalEntries.id }).from(journalEntries).where(and(eq(journalEntries.userId, userId), gte(journalEntries.createdAt, weekAgo))),
+  ]);
+  return {
+    hasSufficientData: hasWeeklySummaryData(recentCheckIns.length, recentWeaveEntries.length),
+    checkInCount: recentCheckIns.length,
+    weaveEntryCount: recentWeaveEntries.length,
+  };
+}
 
 // ─── Ground Check scoring ─────────────────────────────────────────────────────
 
@@ -276,6 +295,11 @@ You are a reflective companion, not a spiritual authority.`,
     }),
 
   // Weekly reflection (AI-generated)
+  getWeeklyReflectionEligibility: protectedProcedure.query(async ({ ctx }) => {
+    const db = await requireDb();
+    return getWeeklyReflectionEligibility(db, ctx.user.id);
+  }),
+
   generateWeeklyReflection: protectedProcedure.mutation(async ({ ctx }) => {
       const db = await requireDb();
       // Tier gate: Seeker+ only
@@ -283,6 +307,10 @@ You are a reflective companion, not a spiritual authority.`,
       if (!tierCanAccessWeeklyReflection(user?.membershipTier as any)) {
         throw new TRPCError({ code: "FORBIDDEN", message: "UPGRADE_REQUIRED:seeker" });
       }
+    const eligibility = await getWeeklyReflectionEligibility(db, ctx.user.id);
+    if (!eligibility.hasSufficientData) {
+      throw new TRPCError({ code: "PRECONDITION_FAILED", message: "WEEKLY_SUMMARY_NEEDS_MORE_DATA" });
+    }
     const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     const [sessions, returns, prayers, gratitude] = await Promise.all([
       db.select().from(btwDailySessions).where(and(eq(btwDailySessions.userId, ctx.user.id), gte(btwDailySessions.startedAt, weekAgo))),

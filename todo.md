@@ -1270,3 +1270,8 @@
 - [ ] Weekly check-in prompt: "One thing from your reading this week that's still with you?" (once per week, skippable)
 - [ ] homeContext procedure: return readingBridge status so dashboard and prompt can use it
 - [ ] Write vitest tests for Reading Bridge procedures
+
+## Oracle Regression Fixes (Reported After Deployment)
+
+- [x] Remove the knitted-sun character background from every Oracle tab at the actual render source
+- [x] Enforce the Weekly Summary sparse-data gate on the server and render the prescribed empty state instead of generating a reflection
