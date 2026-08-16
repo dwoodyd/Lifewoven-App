@@ -35,6 +35,18 @@ export function hasSufficientWeeklyReflectionData(input: {
   return input.checkInCount >= 3 || input.journalEntryCount >= 1;
 }
 
+async function getWeeklyReflectionEligibility(db: Awaited<ReturnType<typeof getDb>>, userId: number) {
+  if (!db) return { hasSufficientData: false, checkInCount: 0, journalEntryCount: 0 };
+  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+  const [recentCheckIns, recentJournalEntries] = await Promise.all([
+    db.select({ id: checkIns.id }).from(checkIns).where(and(eq(checkIns.userId, userId), gte(checkIns.createdAt, weekAgo))).limit(3),
+    db.select({ id: journalEntries.id }).from(journalEntries).where(and(eq(journalEntries.userId, userId), gte(journalEntries.createdAt, weekAgo))).limit(1),
+  ]);
+  const checkInCount = recentCheckIns.length;
+  const journalEntryCount = recentJournalEntries.length;
+  return { checkInCount, journalEntryCount, hasSufficientData: hasSufficientWeeklyReflectionData({ checkInCount, journalEntryCount }) };
+}
+
 // ─── Router ───────────────────────────────────────────────────────────────────
 
 async function requireDb() {
@@ -408,7 +420,11 @@ Keep each value to 1-2 sentences. Never use shame language. Always affirm return
   }),
 
   getLatestWeeklyReflection: protectedProcedure.query(async ({ ctx }) => {
-      const db = await requireDb();
+    const db = await requireDb();
+    // Never surface a previously generated reflection when current-week data
+    // does not meet the same threshold that protects generation.
+    const eligibility = await getWeeklyReflectionEligibility(db, ctx.user.id);
+    if (!eligibility.hasSufficientData) return null;
     const [r] = await db.select().from(btwWeeklyReflections)
       .where(eq(btwWeeklyReflections.userId, ctx.user.id))
       .orderBy(desc(btwWeeklyReflections.createdAt))

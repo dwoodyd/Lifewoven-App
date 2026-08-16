@@ -1271,6 +1271,11 @@
 - [ ] homeContext procedure: return readingBridge status so dashboard and prompt can use it
 - [ ] Write vitest tests for Reading Bridge procedures
 
+## Oracle Regression Fixes (Verified)
+
+- [x] Remove the knitted-sun character background from every Oracle tab at the actual render source
+- [x] Enforce the Weekly Summary sparse-data gate on the server and render the prescribed empty state instead of generating a reflection
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA

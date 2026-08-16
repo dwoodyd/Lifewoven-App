@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
 import { useLuminMoment } from "@/components/LuminMoment";
-import { LuminCorner } from "@/components/LuminCorner";
 import { useAuth } from "@/_core/hooks/useAuth";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
@@ -807,7 +806,6 @@ export default function Oracle() {
           </div>
         )}
       </div>
-      <LuminCorner size={52} pulse={luminPulse} tooltip="Lumin listens" />
     </div>
   );
 }
