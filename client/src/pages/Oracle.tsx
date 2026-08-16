@@ -59,6 +59,9 @@ export default function Oracle() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isOnline, setIsOnline] = useState(() => navigator.onLine);
+  const [cachedInsights, setCachedInsights] = useState<any[]>(() => {
+    try { return JSON.parse(localStorage.getItem("lifewoven_oracle_insights") ?? "[]"); } catch { return []; }
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [showSources, setShowSources] = useState(false);
   const [hasConsented, setHasConsented] = useState(() => {
@@ -81,6 +84,13 @@ export default function Oracle() {
   }, []);
 
   const insights = trpc.oracle.insights.useQuery(undefined, { enabled: isAuthenticated && hasConsented });
+  useEffect(() => {
+    if (insights.data?.length) {
+      localStorage.setItem("lifewoven_oracle_insights", JSON.stringify(insights.data));
+      setCachedInsights(insights.data);
+    }
+  }, [insights.data]);
+  const visibleInsights = insights.data?.length ? insights.data : (!isOnline ? cachedInsights : []);
   const weeklyReflection = trpc.btw.getLatestWeeklyReflection.useQuery(undefined, { enabled: isAuthenticated && hasSeekerAccess });
   const weeklyEligibility = trpc.btw.getWeeklyReflectionEligibility.useQuery(undefined, { enabled: isAuthenticated && hasSeekerAccess });
   const dailyIntention = trpc.btw.getTodayDailyIntention.useQuery(undefined, { enabled: isAuthenticated });
@@ -370,9 +380,10 @@ export default function Oracle() {
                 <Loader2 className="h-4 w-4 animate-spin" />
                 <span className="text-sm">Scanning your patterns...</span>
               </div>
-            ) : insights.data && insights.data.length > 0 ? (
+            ) : visibleInsights.length > 0 ? (
               <div className="space-y-4">
-                {insights.data.map((insight: any) => (
+                {!isOnline && <p className="text-xs text-muted-foreground">Showing your last saved Pattern Mirror insights while offline.</p>}
+                {visibleInsights.map((insight: any) => (
                     <div key={insight.id} className="p-5 rounded-xl border border-border bg-card">
                     <div className="flex items-start gap-3">
                       <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center shrink-0 mt-0.5">
