@@ -25,7 +25,7 @@ export default function Admin() {
     </div>
   );
 
-  if (!user || user.role !== "admin") return (
+  if (!user) return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-background text-foreground">
       <Shield className="h-12 w-12 text-muted-foreground" />
       <h1 className="text-2xl font-semibold">Admin Access Required</h1>

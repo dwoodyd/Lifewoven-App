@@ -241,6 +241,15 @@ export default function Settings() {
   const setLuminEnabledMutation = trpc.profile.setLuminEnabled.useMutation();
   const { theme, toggleTheme } = useTheme();
   const [hapticsOn, setHapticsOn] = useState(() => getHapticsEnabled());
+  const [reminderTime, setReminderTime] = useState("08:00");
+  const reminderSettings = trpc.reminders.getSettings.useQuery();
+  const reminderPublicKey = trpc.reminders.publicKey.useQuery();
+  const saveReminder = trpc.reminders.saveSubscription.useMutation();
+  const disableReminder = trpc.reminders.disable.useMutation();
+
+  useEffect(() => {
+    if (reminderSettings.data?.reminderTime) setReminderTime(reminderSettings.data.reminderTime);
+  }, [reminderSettings.data?.reminderTime]);
 
   // ── Post-upgrade Oracle animation ──────────────────────────────────────────
   const [showUpgradeAnim, setShowUpgradeAnim] = useState(false);
@@ -311,6 +320,18 @@ export default function Settings() {
     toast.success(value ? "Haptic feedback enabled." : "Haptic feedback disabled.");
   };
 
+  const handleDailyReminder = async () => {
+    if (!("serviceWorker" in navigator) || !("PushManager" in window) || !reminderPublicKey.data?.publicKey) { toast.error("Browser reminders are not supported on this device."); return; }
+    if (await Notification.requestPermission() !== "granted") { toast.error("Notification permission was not granted."); return; }
+    const key = reminderPublicKey.data.publicKey.replace(/-/g, "+").replace(/_/g, "/");
+    const applicationServerKey = Uint8Array.from(atob(key), c => c.charCodeAt(0));
+    const subscription = await (await navigator.serviceWorker.ready).pushManager.subscribe({ userVisibleOnly: true, applicationServerKey });
+    const json = subscription.toJSON();
+    await saveReminder.mutateAsync({ endpoint: subscription.endpoint, p256dh: json.keys?.p256dh ?? "", auth: json.keys?.auth ?? "", reminderTime, timezone: Intl.DateTimeFormat().resolvedOptions().timeZone });
+    await reminderSettings.refetch();
+    toast.success(`Daily reminder set for ${reminderTime}.`);
+  };
+
   const handleScreenshotMode = (value: boolean) => {
     localStorage.setItem("lifeos_screenshot_mode", value ? "true" : "false");
     // Dispatch a storage event so LuminAmbient and LuminCorner can react immediately
@@ -376,6 +397,16 @@ export default function Settings() {
 
           {/* Billing */}
           <BillingSection />
+
+          <div className="rounded-xl border border-border bg-card p-6 mb-5">
+            <div className="flex items-center gap-2 mb-1"><Bell className="h-4 w-4 text-accent" /><h2 className="font-medium text-sm text-foreground">Daily Reminder</h2></div>
+            <p className="text-xs text-muted-foreground mb-4">A gentle prompt to begin The Ground. Default: 8:00 AM in your local time zone.</p>
+            <div className="flex flex-wrap items-center gap-3">
+              <input aria-label="Daily reminder time" type="time" value={reminderTime} onChange={e => setReminderTime(e.target.value)} className="h-9 rounded-md border border-border bg-background px-3 text-sm" />
+              <Button size="sm" onClick={handleDailyReminder} disabled={saveReminder.isPending}>{saveReminder.isPending ? "Saving…" : reminderSettings.data?.enabled ? "Update reminder" : "Enable reminder"}</Button>
+              {reminderSettings.data?.enabled && <Button size="sm" variant="outline" onClick={() => disableReminder.mutate(undefined, { onSuccess: () => reminderSettings.refetch() })}>Turn off</Button>}
+            </div>
+          </div>
 
           {/* Oracle Preferences */}
           <div className="rounded-xl border border-border bg-card p-6 mb-5">

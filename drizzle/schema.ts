@@ -471,6 +471,30 @@ export const btwDailySessions = mysqlTable("btw_daily_sessions", {
   stateAfterId: varchar("stateAfterId", { length: 32 }),
 }, (t) => [index("idx_btw_daily_sessions_userId").on(t.userId)]);
 
+// A user's stated posture for the day, captured from Step 6 of Morning Settling.
+// Multiple records are retained rather than overwritten so the Oracle can use the
+// current entry while preserving the user's historical practice.
+export const btwDailyIntentions = mysqlTable("btw_daily_intentions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  intention: text("intention").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (t) => [index("idx_btw_daily_intentions_userId").on(t.userId)]);
+
+export const pushSubscriptions = mysqlTable("push_subscriptions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  endpoint: text("endpoint").notNull(),
+  p256dh: varchar("p256dh", { length: 255 }).notNull(),
+  auth: varchar("auth", { length: 255 }).notNull(),
+  reminderTime: varchar("reminderTime", { length: 5 }).notNull(),
+  timezone: varchar("timezone", { length: 64 }).notNull(),
+  scheduleCronTaskUid: varchar("scheduleCronTaskUid", { length: 65 }),
+  enabled: boolean("enabled").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (t) => [index("idx_push_subscriptions_userId").on(t.userId)]);
+
 export const btwReturns = mysqlTable("btw_returns", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull(),

@@ -38,7 +38,7 @@ export default function Privacy() {
 
           <section>
             <h2 className="font-serif text-xl font-light mb-3">Analytics</h2>
-            <p className="text-muted-foreground leading-relaxed text-sm">Lifewoven uses a privacy-focused analytics service (Manus Analytics, operated by Manus) to collect aggregate usage data — pages visited, features used, and session duration. This data is used solely to understand how the platform is used and to improve the experience. No personally identifiable information is included in analytics events, and no data is sold or shared with advertisers. You can review Manus’s privacy practices at <a href="https://manus.im" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">manus.im</a>.</p>
+            <p className="text-muted-foreground leading-relaxed text-sm">Lifewoven uses Manus Analytics, a service operated by Manus and delivered through <a href="https://manus-analytics.com" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">manus-analytics.com</a>. It collects aggregate usage information such as pages visited, features used, and session duration. We use this information to understand how the platform is used and to improve the experience. Journal content and other personal writing are not sent as analytics events, and we do not sell analytics data or share it with advertisers. You can review Manus’s privacy practices at <a href="https://manus.im" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">manus.im</a>.</p>
           </section>
 
           <section>

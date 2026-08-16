@@ -111,13 +111,6 @@ export default function Pricing() {
   const [pendingPlan, setPendingPlan] = useState<string | null>(null);
   const [annual, setAnnual] = useState(false);
 
-  // Admin/owner account bypasses pricing entirely
-  useEffect(() => {
-    if (user && (user as any).role === "admin") {
-      navigate("/");
-    }
-  }, [user, navigate]);
-
   useEffect(() => {
     if (!user) return;
     fetch("/api/paypal/subscription/status", { credentials: "include" })

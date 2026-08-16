@@ -16,6 +16,7 @@ import { startWeeklyDigestCron } from "../cron/weeklyDigest";
 import { startBetaExpiryCheckCron } from "../cron/betaExpiryCheck";
 import { startFoundingLifecycleCron } from "../cron/foundingLifecycle";
 import { startHandoffCleanupCron } from "../cron/handoffCleanup";
+import { startDailyReminderCron } from "../cron/dailyReminder";
 import { transcribeRouter } from "../transcribeRoute";
 import rateLimit from "express-rate-limit";
 import cors from "cors";
@@ -109,9 +110,12 @@ async function startServer() {
         connectSrc: ["'self'", "https://www.paypal.com", "https://www.sandbox.paypal.com", "https://manus-analytics.com", "https://*.cloudfront.net"],
         frameSrc: ["https://www.paypal.com", "https://www.sandbox.paypal.com"],
         objectSrc: ["'none'"],
+        frameAncestors: ["'none'"],
         upgradeInsecureRequests: [],
       },
     },
+    frameguard: { action: "deny" },
+    hsts: { maxAge: 63072000, includeSubDomains: true, preload: true },
     crossOriginEmbedderPolicy: false,
   }));
 
@@ -310,7 +314,8 @@ async function startServer() {
     startBetaExpiryCheckCron();
     startFoundingLifecycleCron();
     startHandoffCleanupCron();
-    console.log("[Cron] Weekly digest, beta expiry, founding lifecycle, and handoff cleanup crons started");
+    startDailyReminderCron();
+    console.log("[Cron] Weekly digest, beta expiry, founding lifecycle, handoff cleanup, and daily reminder crons started");
   }
 
   // ── Graceful shutdown: drain in-flight requests before exiting

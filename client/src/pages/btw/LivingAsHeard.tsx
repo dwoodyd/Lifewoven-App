@@ -39,7 +39,7 @@ export default function LivingAsHeard() {
 
   const { user } = useAuth();
   const { data: memberStatus } = trpc.paypalOrders.getMembershipStatus.useQuery(undefined, { enabled: !!user });
-  const canUseGroundGuide = user?.role === "admin" || memberStatus?.tier === "seeker" || memberStatus?.tier === "oracle";
+  const canUseGroundGuide = memberStatus?.tier === "seeker" || memberStatus?.tier === "oracle";
 
   const { data: prayers, refetch } = trpc.btw.getPrayers.useQuery();
   const saveMutation = trpc.btw.savePrayer.useMutation({ onSuccess: () => { refetch(); setWriting(false); setBody(""); setTitle(""); setReflection(null); } });

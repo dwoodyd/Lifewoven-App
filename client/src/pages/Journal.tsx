@@ -13,7 +13,6 @@ import { BookOpen, Plus, Sparkles, Search, Tag, ArrowRight, Loader2, Pencil, Dow
 import { PullToRefresh } from "@/components/PullToRefresh";
 import { SwipeableCard } from "@/components/SwipeableCard";
 import { EmptyState } from "@/components/EmptyState";
-import { LuminAmbient } from "@/components/LuminAmbient";
 import VoiceRecorder from "@/components/VoiceRecorder";
 import { Streamdown } from "streamdown";
 import { motion } from "framer-motion";
@@ -133,6 +132,28 @@ export default function Journal() {
       setContent(""); setTitle(""); setTags(""); setIsWriting(false); refetch();
     },
   });
+  useEffect(() => {
+    const syncPending = async () => {
+      const pending = localStorage.getItem("lifewoven_pending_weave_entry");
+      if (!pending || !navigator.onLine) return;
+      try { await createEntry.mutateAsync(JSON.parse(pending)); localStorage.removeItem("lifewoven_pending_weave_entry"); }
+      catch { /* retain until the next connection */ }
+    };
+    void syncPending();
+    window.addEventListener("online", syncPending);
+    return () => window.removeEventListener("online", syncPending);
+  }, [createEntry]);
+
+  const saveWeaveEntry = () => {
+    const payload = { title: title.trim() || autoTitle(content), content, module: selectedModule as any || undefined, tags: tags ? tags.split(",").map(t => t.trim()).filter(Boolean) : undefined };
+    if (!navigator.onLine) {
+      localStorage.setItem("lifewoven_pending_weave_entry", JSON.stringify(payload));
+      toast.success("Your Weave entry is saved on this device and will sync when you reconnect.");
+      setIsWriting(false);
+      return;
+    }
+    createEntry.mutate(payload, { onError: () => localStorage.setItem("lifewoven_pending_weave_entry", JSON.stringify(payload)) });
+  };
   const [savedEntryId, setSavedEntryId] = useState<number | null>(null);
   const getReflection = trpc.journal.generateReflection.useMutation({
     onSuccess: (data: any) => { setAiReflection(data.reflection); setIsGettingReflection(false); },
@@ -160,15 +181,8 @@ export default function Journal() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Lumin breathes in from the right edge — felt, not watched */}
-      <LuminAmbient
-        videoId="peaceful_idle"
-        mode="edge-fade"
-        opacity={0.12}
-        zIndex={0}
-      />
       <Nav />
-      <div className="container pt-20 pb-24 max-w-5xl mx-auto px-4 sm:px-6 lumin-text">
+      <div className="container pt-20 pb-24 max-w-5xl mx-auto px-4 sm:px-6">
         <div className="flex items-start justify-between gap-3 mb-6">
           <div className="flex items-start gap-3">
             <div className="p-2.5 sm:p-3 rounded-xl bg-secondary flex-shrink-0"><BookOpen className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" /></div>
@@ -205,7 +219,7 @@ export default function Journal() {
               placeholder={currentPrompt ? `Responding to: "${currentPrompt}"\n\nName what you're carrying. The building begins with honest seeing.` : "Name what you're carrying. The building begins with honest seeing."}
               value={content}
               onChange={e => setContent(e.target.value)}
-              className="resize-none text-sm font-light leading-relaxed mb-3 min-h-[200px]"
+              className="resize-y text-sm font-light leading-relaxed mb-3 min-h-[200px] scroll-mb-[45vh]"
               rows={8}
             />
             <div className="flex flex-wrap gap-2 mb-4">
@@ -225,7 +239,7 @@ export default function Journal() {
             )}
             <div className="flex gap-2 flex-wrap">
               <VoiceRecorder onTranscription={(text) => setContent(prev => prev ? prev + "\n\n" + text : text)} />
-              <Button onClick={() => createEntry.mutate({ title: title.trim() || autoTitle(content), content, module: selectedModule as any || undefined, tags: tags ? tags.split(",").map(t => t.trim()).filter(Boolean) : undefined })} disabled={!content.trim() || createEntry.isPending} className="gap-2">
+              <Button onClick={saveWeaveEntry} disabled={!content.trim() || createEntry.isPending} className="gap-2">
                 {createEntry.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Pencil className="h-4 w-4" />} Save Entry
               </Button>
               <Button variant="outline" onClick={handleGetReflection} disabled={!content.trim() || isGettingReflection} className="gap-2">

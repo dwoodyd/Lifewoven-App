@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { hasWeeklySummaryData } from "./routers/btw";
+
+import { hasSufficientWeeklyReflectionData } from "./routers/btw";
 
 // ─── Ground Check Scoring ─────────────────────────────────────────────────────
 // Mirrors the logic in server/routers/btw.ts
@@ -112,14 +113,17 @@ describe("BTW Session Types", () => {
   });
 });
 
-describe("Weekly Summary data gate", () => {
-  it("blocks sparse accounts with fewer than three check-ins and no Weave entry", () => {
-    expect(hasWeeklySummaryData(0, 0)).toBe(false);
-    expect(hasWeeklySummaryData(2, 0)).toBe(false);
+describe("Weekly Reflection data sufficiency", () => {
+  it("requires at least three recent check-ins when no recent Weave entry exists", () => {
+    expect(hasSufficientWeeklyReflectionData({ checkInCount: 2, journalEntryCount: 0 })).toBe(false);
+    expect(hasSufficientWeeklyReflectionData({ checkInCount: 3, journalEntryCount: 0 })).toBe(true);
   });
 
-  it("permits three check-ins or one Weave entry in the current week", () => {
-    expect(hasWeeklySummaryData(3, 0)).toBe(true);
-    expect(hasWeeklySummaryData(0, 1)).toBe(true);
+  it("allows a real recent Weave entry to satisfy the threshold", () => {
+    expect(hasSufficientWeeklyReflectionData({ checkInCount: 0, journalEntryCount: 1 })).toBe(true);
+  });
+
+  it("rejects generation when the user has no meaningful recent data", () => {
+    expect(hasSufficientWeeklyReflectionData({ checkInCount: 0, journalEntryCount: 0 })).toBe(false);
   });
 });

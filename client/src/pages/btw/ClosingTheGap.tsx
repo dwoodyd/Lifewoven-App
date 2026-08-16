@@ -10,7 +10,7 @@ export default function ClosingTheGap() {
   const { data: stats, isLoading: statsLoading } = trpc.btw.getStats.useQuery();
   const { data: weeklyReflection, refetch: refetchWeekly } = trpc.btw.getLatestWeeklyReflection.useQuery();
   const { data: memberStatus } = trpc.paypalOrders.getMembershipStatus.useQuery(undefined, { enabled: !!user });
-  const canUseWeeklyReflection = user?.role === "admin" || memberStatus?.tier === "seeker" || memberStatus?.tier === "oracle";
+  const canUseWeeklyReflection = memberStatus?.tier === "seeker" || memberStatus?.tier === "oracle";
   const generateMutation = trpc.btw.generateWeeklyReflection.useMutation({ onSuccess: () => refetchWeekly() });
 
   const METRIC_CARDS = stats ? [

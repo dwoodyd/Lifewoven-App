@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import Nav from "@/components/Nav";
 import { trpc } from "@/lib/trpc";
 import { useLocation } from "wouter";
@@ -52,12 +53,14 @@ export default function EnterTheGround() {
   const [stepIndex, setStepIndex] = useState(0);
   const [done, setDone] = useState(false);
   const [sessionId, setSessionId] = useState<number | null>(null);
+  const [dailyIntention, setDailyIntention] = useState("");
   const startTime = useRef<number>(0);
 
   const startMutation = trpc.btw.startSession.useMutation({
     onSuccess: (data) => setSessionId(data?.id ?? null),
   });
   const completeMutation = trpc.btw.completeSession.useMutation();
+  const saveDailyIntention = trpc.btw.saveDailyIntention.useMutation();
 
   const practice = PRACTICES[mode];
 
@@ -69,10 +72,19 @@ export default function EnterTheGround() {
     setDone(false);
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (stepIndex < practice.steps.length - 1) {
       setStepIndex(i => i + 1);
     } else {
+      if (mode === "morning") {
+        const intention = dailyIntention.trim();
+        if (!intention) return;
+        try {
+          await saveDailyIntention.mutateAsync({ intention });
+        } catch {
+          localStorage.setItem("lifewoven_pending_daily_intention", JSON.stringify({ intention, savedAt: Date.now() }));
+        }
+      }
       const dur = Math.round((Date.now() - startTime.current) / 1000);
       if (sessionId) completeMutation.mutate({ sessionId, durationSeconds: dur });
       setDone(true);
@@ -87,6 +99,22 @@ export default function EnterTheGround() {
     else setMode("evening");
   }, []);
 
+  useEffect(() => {
+    const syncPendingIntention = async () => {
+      const pending = localStorage.getItem("lifewoven_pending_daily_intention");
+      if (!pending || !navigator.onLine) return;
+      try {
+        const parsed = JSON.parse(pending) as { intention?: string };
+        if (!parsed.intention) return;
+        await saveDailyIntention.mutateAsync({ intention: parsed.intention });
+        localStorage.removeItem("lifewoven_pending_daily_intention");
+      } catch { /* retain the draft until a later reconnection */ }
+    };
+    void syncPendingIntention();
+    window.addEventListener("online", syncPendingIntention);
+    return () => window.removeEventListener("online", syncPendingIntention);
+  }, [saveDailyIntention]);
+
   if (done) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -94,6 +122,11 @@ export default function EnterTheGround() {
           <CheckCircle2 className="h-10 w-10 text-accent mx-auto mb-6" />
           <h2 className="font-serif text-2xl sm:text-3xl font-light text-foreground mb-4">You settled.</h2>
           <p className="text-muted-foreground font-light mb-8">That is the practice. Not perfection — presence.</p>
+          {dailyIntention.trim() && (
+            <p className="rounded-xl border border-accent/20 bg-accent/5 px-4 py-3 text-sm italic text-muted-foreground mb-6">
+              Today&apos;s intention: &ldquo;{dailyIntention.trim()}&rdquo;
+            </p>
+          )}
           <div className="flex flex-col gap-3">
             <Button asChild size="lg">
               <a href="/ground">Return to The Ground</a>
@@ -109,8 +142,8 @@ export default function EnterTheGround() {
 
   if (active) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="max-w-lg w-full px-6">
+      <div className="min-h-[100dvh] bg-background flex items-start sm:items-center justify-center overflow-y-auto py-6 sm:py-0">
+        <div className="max-w-lg w-full px-4 sm:px-6">
           {/* Progress */}
           <div className="flex gap-1 mb-10">
             {practice.steps.map((_, i) => (
@@ -122,14 +155,29 @@ export default function EnterTheGround() {
             {practice.label} · Step {stepIndex + 1} of {practice.steps.length}
           </p>
 
-          <div className="p-10 rounded-2xl border border-border bg-card mb-8 text-center min-h-48 flex items-center justify-center">
+          <div className="p-6 sm:p-10 rounded-2xl border border-border bg-card mb-6 sm:mb-8 text-center min-h-48 flex flex-col items-center justify-center gap-6">
             <p className="font-serif text-xl font-light text-foreground leading-relaxed">
               {practice.steps[stepIndex]}
             </p>
+            {mode === "morning" && stepIndex === practice.steps.length - 1 && (
+              <Textarea
+                value={dailyIntention}
+                onChange={(event) => setDailyIntention(event.target.value)}
+                placeholder="Write your intention for today..."
+                aria-label="Daily intention"
+                className="min-h-32 resize-y bg-background text-left scroll-mb-[45vh]"
+                maxLength={1000}
+              />
+            )}
           </div>
 
-          <Button className="w-full gap-2" size="lg" onClick={handleNext}>
-            {stepIndex < practice.steps.length - 1 ? "Continue" : "Complete"}
+          <Button
+            className="w-full gap-2"
+            size="lg"
+            onClick={handleNext}
+            disabled={saveDailyIntention.isPending || (mode === "morning" && stepIndex === practice.steps.length - 1 && !dailyIntention.trim())}
+          >
+            {saveDailyIntention.isPending ? "Saving intention..." : stepIndex < practice.steps.length - 1 ? "Continue" : mode === "morning" ? "Save Intention & Complete" : "Complete"}
             <ArrowRight className="h-4 w-4" />
           </Button>
         </div>

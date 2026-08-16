@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
 import { useLuminMoment } from "@/components/LuminMoment";
+import { LuminCorner } from "@/components/LuminCorner";
 import { useAuth } from "@/_core/hooks/useAuth";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
@@ -53,10 +54,14 @@ export default function Oracle() {
   const { isAuthenticated, user } = useAuth();
   // Tier detection: oracle tier = full access; seeker = partial; explorer/null = threshold view
   const membershipTier = (user as any)?.membershipTier as string | null | undefined;
-  const hasOracleAccess = membershipTier === "oracle" || (user as any)?.role === "admin";
+  const hasOracleAccess = membershipTier === "oracle";
   const hasSeekerAccess = membershipTier === "seeker" || hasOracleAccess;
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
+  const [isOnline, setIsOnline] = useState(() => navigator.onLine);
+  const [cachedInsights, setCachedInsights] = useState<any[]>(() => {
+    try { return JSON.parse(localStorage.getItem("lifewoven_oracle_insights") ?? "[]"); } catch { return []; }
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [showSources, setShowSources] = useState(false);
   const [hasConsented, setHasConsented] = useState(() => {
@@ -70,14 +75,31 @@ export default function Oracle() {
   const { triggerMoment } = useLuminMoment();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    const goOnline = () => setIsOnline(true);
+    const goOffline = () => setIsOnline(false);
+    window.addEventListener("online", goOnline);
+    window.addEventListener("offline", goOffline);
+    return () => { window.removeEventListener("online", goOnline); window.removeEventListener("offline", goOffline); };
+  }, []);
+
   const insights = trpc.oracle.insights.useQuery(undefined, { enabled: isAuthenticated && hasConsented });
+  useEffect(() => {
+    if (insights.data?.length) {
+      localStorage.setItem("lifewoven_oracle_insights", JSON.stringify(insights.data));
+      setCachedInsights(insights.data);
+    }
+  }, [insights.data]);
+  const visibleInsights = insights.data?.length ? insights.data : (!isOnline ? cachedInsights : []);
   const weeklyReflection = trpc.btw.getLatestWeeklyReflection.useQuery(undefined, { enabled: isAuthenticated && hasSeekerAccess });
   const weeklyEligibility = trpc.btw.getWeeklyReflectionEligibility.useQuery(undefined, { enabled: isAuthenticated && hasSeekerAccess });
+  const dailyIntention = trpc.btw.getTodayDailyIntention.useQuery(undefined, { enabled: isAuthenticated });
   const generateWeekly = trpc.btw.generateWeeklyReflection.useMutation({
     onSuccess: () => weeklyReflection.refetch(),
     onError: () => { /* error shown inline in weekly tab */ },
   });
   const weeklyData = weeklyReflection.data?.summaryJson as Record<string, string> | null ?? null;
+  const hasWeeklyData = weeklyEligibility.data?.hasSufficientData ?? false;
   const cycleAnalysis = trpc.moodLog.getCycleAnalysis.useQuery(undefined, { enabled: isAuthenticated });
   const monthlyUsage = trpc.oracle.getMonthlyUsage.useQuery(undefined, { enabled: isAuthenticated && !hasOracleAccess });
   const { data: rbStatusOracle } = trpc.readingBridge.getStatus.useQuery(undefined, { enabled: isAuthenticated });
@@ -149,6 +171,7 @@ export default function Oracle() {
   };
 
   const sendMessage = (content: string) => {
+    if (!isOnline) return;
     if (!content.trim() || isLoading) return;
 
     // Crisis safety check — route to human resources, do not call LLM
@@ -215,9 +238,9 @@ export default function Oracle() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col" style={{ position: "relative" }}>
+    <div className="min-h-screen bg-background flex flex-col">
       <Nav />
-      <div className="container pt-20 pb-6 max-w-3xl mx-auto flex flex-col flex-1 px-4 sm:px-6 lumin-text" style={{ position: "relative", zIndex: 1 }}>
+      <div className="container pt-20 pb-6 max-w-3xl mx-auto flex flex-col flex-1 px-4 sm:px-6">
 
         {/* Header */}
         <div className="flex items-start gap-4 mb-5">
@@ -266,24 +289,6 @@ export default function Oracle() {
               background: "radial-gradient(ellipse at 70% 40%, rgba(216,184,120,0.08) 0%, transparent 70%)",
               pointerEvents: "none",
             }} />
-
-            {/* Lumin watching from the right edge — dimmed, present, waiting */}
-            <div style={{
-              position: "absolute", right: "-2%", bottom: 0,
-              width: "min(28vw, 220px)",
-              opacity: 0.35,
-              pointerEvents: "none",
-              zIndex: 0,
-            }}>
-              <video
-                src={(() => {
-                  const { LUMIN_VIDEOS } = require("@/data/lumin") as any;
-                  return LUMIN_VIDEOS?.find((v: any) => v.id === "self_soothing")?.url ?? "";
-                })()}
-                autoPlay muted playsInline loop
-                style={{ width: "100%", mixBlendMode: "screen" }}
-              />
-            </div>
 
             <div style={{ position: "relative", zIndex: 1 }}>
               <p style={{
@@ -367,7 +372,7 @@ export default function Oracle() {
             <div className="mb-5">
               <p className="text-xs font-mono text-muted-foreground uppercase tracking-wider mb-1">Pattern Mirror</p>
               <p className="text-sm text-muted-foreground font-light">
-                The Oracle has been watching. Here is what it has noticed across your journal entries, check-ins, and habits.
+                The Oracle has been watching. Here is what it has noticed across your journal entries and check-ins.
               </p>
             </div>
             {insights.isLoading ? (
@@ -375,9 +380,10 @@ export default function Oracle() {
                 <Loader2 className="h-4 w-4 animate-spin" />
                 <span className="text-sm">Scanning your patterns...</span>
               </div>
-            ) : insights.data && insights.data.length > 0 ? (
+            ) : visibleInsights.length > 0 ? (
               <div className="space-y-4">
-                {insights.data.map((insight: any) => (
+                {!isOnline && <p className="text-xs text-muted-foreground">Showing your last saved Pattern Mirror insights while offline.</p>}
+                {visibleInsights.map((insight: any) => (
                     <div key={insight.id} className="p-5 rounded-xl border border-border bg-card">
                     <div className="flex items-start gap-3">
                       <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center shrink-0 mt-0.5">
@@ -429,7 +435,7 @@ export default function Oracle() {
                   The Oracle's synthesis of your week — where you drifted, how you returned, and what to carry forward.
                 </p>
               </div>
-              {hasSeekerAccess && weeklyEligibility.data?.hasSufficientData && (
+              {hasSeekerAccess && hasWeeklyData && (
                 <Button variant="ghost" size="sm" className="gap-1.5 text-xs" onClick={() => generateWeekly.mutate()} disabled={generateWeekly.isPending}>
                   {generateWeekly.isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <RefreshCw className="h-3 w-3" />}
                   Generate
@@ -443,7 +449,7 @@ export default function Oracle() {
                 <p className="text-sm text-muted-foreground mb-4">Available on the Seeker plan and above.</p>
                 <Button size="sm" asChild><Link href="/pricing">Upgrade to Seeker</Link></Button>
               </div>
-            ) : weeklyEligibility.isLoading || weeklyReflection.isLoading ? (
+            ) : weeklyReflection.isLoading ? (
               <div className="flex items-center gap-2 text-muted-foreground py-8">
                 <Loader2 className="h-4 w-4 animate-spin" />
                 <span className="text-sm">Loading your weekly reflection...</span>
@@ -453,12 +459,21 @@ export default function Oracle() {
                 <p className="text-sm text-destructive mb-3">Could not load your weekly reflection.</p>
                 <Button variant="outline" size="sm" onClick={() => weeklyReflection.refetch()}>Try again</Button>
               </div>
-            ) : !weeklyEligibility.data?.hasSufficientData ? (
+            ) : weeklyEligibility.isLoading ? (
+              <div className="flex items-center gap-2 text-muted-foreground py-8">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span className="text-sm">Checking this week&apos;s reflections...</span>
+              </div>
+            ) : !hasWeeklyData ? (
               <div className="p-8 rounded-2xl border border-border bg-card text-center">
                 <Calendar className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" />
-                <p className="text-base font-light text-foreground mb-2">Your week needs a little more texture first.</p>
-                <p className="text-sm text-muted-foreground mb-4">Add three Daily Check-Ins or one entry in The Weave this week, then return for a grounded reflection.</p>
-                <Button asChild><Link href="/weave">Open The Weave</Link></Button>
+                <p className="font-serif text-lg font-light text-foreground mb-2">No reflection yet</p>
+                <p className="text-base text-muted-foreground max-w-md mx-auto">
+                  The Oracle builds your weekly synthesis from your check-ins and journal entries. Complete a few this week and come back on Sunday — there will be something real here.
+                </p>
+                <Button variant="outline" size="sm" className="mt-5" asChild>
+                  <Link href="/weave">Open The Weave</Link>
+                </Button>
               </div>
             ) : weeklyData ? (
               <div className="space-y-4">
@@ -496,6 +511,20 @@ export default function Oracle() {
         {/* Chat Area (Guide + Unstuck modes) */}
         {mode !== "patterns" && mode !== "weekly" && (
           <div className="flex flex-col flex-1 min-h-0 gap-4">
+
+            {!isOnline && (
+              <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-foreground">
+                You&apos;re offline. Your draft will stay here until you reconnect; Oracle guidance and live insights need a connection.
+              </div>
+            )}
+
+            {mode === "guide" && dailyIntention.data?.intention && (
+              <div className="rounded-xl border border-accent/20 bg-accent/5 px-4 py-3 text-sm text-muted-foreground leading-relaxed">
+                <span className="font-medium text-foreground">This morning you wrote:</span>{" "}
+                <span className="italic">&ldquo;{dailyIntention.data.intention}&rdquo;</span>{" "}
+                I&apos;ll keep that in mind.
+              </div>
+            )}
 
             {/* Unstuck mode banner */}
             {mode === "unstuck" && (
@@ -751,17 +780,17 @@ export default function Oracle() {
             )}
 
             {/* Input */}
-            <div className="flex gap-2 items-end">
+            <div className="sticky bottom-0 z-10 flex gap-2 items-end bg-background/95 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-sm">
               <Textarea
                 placeholder={mode === "unstuck" ? "Describe what is blocking you..." : "What are you carrying right now?"}
                 value={input}
                 onChange={e => setInput(e.target.value)}
-                onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(input); } }}
-                className="resize-none text-sm min-h-[52px] max-h-[120px]"
+                onKeyDown={e => { if (isOnline && e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(input); } }}
+                className="resize-none text-sm min-h-[52px] max-h-[120px] scroll-mb-[45vh]"
                 rows={2}
               />
               <div className="flex flex-col gap-2">
-                <Button onClick={() => sendMessage(input)} disabled={!input.trim() || isLoading} size="icon" className="h-[52px] w-[52px] flex-shrink-0" aria-label="Send message">
+                <Button onClick={() => sendMessage(input)} disabled={!input.trim() || isLoading || !isOnline} size="icon" className="h-[52px] w-[52px] flex-shrink-0" aria-label="Send message">
                   {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                 </Button>
                 {messages.length > 0 && (
@@ -778,6 +807,7 @@ export default function Oracle() {
           </div>
         )}
       </div>
+      <LuminCorner size={52} pulse={luminPulse} tooltip="Lumin listens" />
     </div>
   );
 }

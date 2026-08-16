@@ -5,29 +5,11 @@ import { getDb } from "../db";
 import { tierCanAccessGroundGuide, tierCanAccessWeeklyReflection } from "../tierHelpers";
 import {
   users, btwProfiles, btwGroundChecks, btwDailySessions, btwReturns,
-  btwPrayers, btwGratitudeEntries, btwAudioItems, btwWeeklyReflections,
+  btwPrayers, btwGratitudeEntries, btwAudioItems, btwWeeklyReflections, btwDailyIntentions,
   checkIns, journalEntries,
 } from "../../drizzle/schema";
 import { eq, desc, and, gte } from "drizzle-orm";
 import { invokeLLM } from "../_core/llm";
-
-export function hasWeeklySummaryData(checkInCount: number, weaveEntryCount: number): boolean {
-  return checkInCount >= 3 || weaveEntryCount >= 1;
-}
-
-async function getWeeklyReflectionEligibility(db: Awaited<ReturnType<typeof getDb>>, userId: number) {
-  if (!db) return { hasSufficientData: false, checkInCount: 0, weaveEntryCount: 0 };
-  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-  const [recentCheckIns, recentWeaveEntries] = await Promise.all([
-    db.select({ id: checkIns.id }).from(checkIns).where(and(eq(checkIns.userId, userId), gte(checkIns.createdAt, weekAgo))),
-    db.select({ id: journalEntries.id }).from(journalEntries).where(and(eq(journalEntries.userId, userId), gte(journalEntries.createdAt, weekAgo))),
-  ]);
-  return {
-    hasSufficientData: hasWeeklySummaryData(recentCheckIns.length, recentWeaveEntries.length),
-    checkInCount: recentCheckIns.length,
-    weaveEntryCount: recentWeaveEntries.length,
-  };
-}
 
 // ─── Ground Check scoring ─────────────────────────────────────────────────────
 
@@ -44,6 +26,13 @@ function scoreGroundCheck(answers: number[]): { state: string; practice: string 
   if (hasHighStriving) return { state: "striving", practice: "living_as_heard" };
   if (hasDrift) return { state: "drifting", practice: "midday_return" };
   return { state: "settled", practice: "thanking_from_there" };
+}
+
+export function hasSufficientWeeklyReflectionData(input: {
+  checkInCount: number;
+  journalEntryCount: number;
+}): boolean {
+  return input.checkInCount >= 3 || input.journalEntryCount >= 1;
 }
 
 // ─── Router ───────────────────────────────────────────────────────────────────
@@ -137,6 +126,32 @@ export const btwRouter = router({
       }).where(and(eq(btwDailySessions.id, input.sessionId), eq(btwDailySessions.userId, ctx.user.id)));
       return { ok: true };
     }),
+
+  saveDailyIntention: protectedProcedure
+    .input(z.object({ intention: z.string().trim().min(1).max(1000) }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await requireDb();
+      const [saved] = await db.insert(btwDailyIntentions).values({
+        userId: ctx.user.id,
+        intention: input.intention,
+      }).$returningId();
+      return { id: saved.id, intention: input.intention, createdAt: new Date() };
+    }),
+
+  getTodayDailyIntention: protectedProcedure.query(async ({ ctx }) => {
+    const db = await requireDb();
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    const [intention] = await db.select({
+      id: btwDailyIntentions.id,
+      intention: btwDailyIntentions.intention,
+      createdAt: btwDailyIntentions.createdAt,
+    }).from(btwDailyIntentions)
+      .where(and(eq(btwDailyIntentions.userId, ctx.user.id), gte(btwDailyIntentions.createdAt, todayStart)))
+      .orderBy(desc(btwDailyIntentions.createdAt))
+      .limit(1);
+    return intention ?? null;
+  }),
 
   getTodaySessions: protectedProcedure.query(async ({ ctx }) => {
       const db = await requireDb();
@@ -295,11 +310,6 @@ You are a reflective companion, not a spiritual authority.`,
     }),
 
   // Weekly reflection (AI-generated)
-  getWeeklyReflectionEligibility: protectedProcedure.query(async ({ ctx }) => {
-    const db = await requireDb();
-    return getWeeklyReflectionEligibility(db, ctx.user.id);
-  }),
-
   generateWeeklyReflection: protectedProcedure.mutation(async ({ ctx }) => {
       const db = await requireDb();
       // Tier gate: Seeker+ only
@@ -307,17 +317,27 @@ You are a reflective companion, not a spiritual authority.`,
       if (!tierCanAccessWeeklyReflection(user?.membershipTier as any)) {
         throw new TRPCError({ code: "FORBIDDEN", message: "UPGRADE_REQUIRED:seeker" });
       }
-    const eligibility = await getWeeklyReflectionEligibility(db, ctx.user.id);
-    if (!eligibility.hasSufficientData) {
-      throw new TRPCError({ code: "PRECONDITION_FAILED", message: "WEEKLY_SUMMARY_NEEDS_MORE_DATA" });
-    }
     const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-    const [sessions, returns, prayers, gratitude] = await Promise.all([
+    const [sessions, returns, prayers, gratitude, recentCheckIns, recentJournalEntries] = await Promise.all([
       db.select().from(btwDailySessions).where(and(eq(btwDailySessions.userId, ctx.user.id), gte(btwDailySessions.startedAt, weekAgo))),
       db.select().from(btwReturns).where(and(eq(btwReturns.userId, ctx.user.id), gte(btwReturns.createdAt, weekAgo))),
       db.select().from(btwPrayers).where(and(eq(btwPrayers.userId, ctx.user.id), gte(btwPrayers.createdAt, weekAgo))),
       db.select().from(btwGratitudeEntries).where(and(eq(btwGratitudeEntries.userId, ctx.user.id), gte(btwGratitudeEntries.createdAt, weekAgo))),
+      db.select({ id: checkIns.id }).from(checkIns)
+        .where(and(eq(checkIns.userId, ctx.user.id), gte(checkIns.createdAt, weekAgo))).limit(3),
+      db.select({ id: journalEntries.id }).from(journalEntries)
+        .where(and(eq(journalEntries.userId, ctx.user.id), gte(journalEntries.createdAt, weekAgo))).limit(1),
     ]);
+
+    if (!hasSufficientWeeklyReflectionData({
+      checkInCount: recentCheckIns.length,
+      journalEntryCount: recentJournalEntries.length,
+    })) {
+      throw new TRPCError({
+        code: "PRECONDITION_FAILED",
+        message: "WEEKLY_DATA_REQUIRED",
+      });
+    }
 
     const summary = {
       sessionsCompleted: sessions.filter((s: typeof sessions[0]) => s.completed).length,
@@ -366,6 +386,25 @@ Keep each value to 1-2 sentences. Never use shame language. Always affirm return
       focusSuggestion: reflectionData.focusNextWeek,
     }).$returningId();
     return { id: r.id, ...reflectionData };
+  }),
+
+  getWeeklyReflectionEligibility: protectedProcedure.query(async ({ ctx }) => {
+    const db = await requireDb();
+    const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const [recentCheckIns, recentJournalEntries] = await Promise.all([
+      db.select({ id: checkIns.id }).from(checkIns)
+        .where(and(eq(checkIns.userId, ctx.user.id), gte(checkIns.createdAt, weekAgo))).limit(3),
+      db.select({ id: journalEntries.id }).from(journalEntries)
+        .where(and(eq(journalEntries.userId, ctx.user.id), gte(journalEntries.createdAt, weekAgo))).limit(1),
+    ]);
+
+    const checkInCount = recentCheckIns.length;
+    const journalEntryCount = recentJournalEntries.length;
+    return {
+      checkInCount,
+      journalEntryCount,
+      hasSufficientData: hasSufficientWeeklyReflectionData({ checkInCount, journalEntryCount }),
+    };
   }),
 
   getLatestWeeklyReflection: protectedProcedure.query(async ({ ctx }) => {

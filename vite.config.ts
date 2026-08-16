@@ -161,6 +161,8 @@ const vitePWA = VitePWA({
     maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
     // Only precache small assets; large JS chunks are served from network
     globPatterns: ["**/*.{css,html,ico,png,svg,woff2}"],
+    navigateFallback: "/index.html",
+    navigateFallbackDenylist: [/^\/api\//],
     runtimeCaching: [
       {
         // Cache JS chunks at runtime with StaleWhileRevalidate for fast loads
