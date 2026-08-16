@@ -109,9 +109,12 @@ async function startServer() {
         connectSrc: ["'self'", "https://www.paypal.com", "https://www.sandbox.paypal.com", "https://manus-analytics.com", "https://*.cloudfront.net"],
         frameSrc: ["https://www.paypal.com", "https://www.sandbox.paypal.com"],
         objectSrc: ["'none'"],
+        frameAncestors: ["'none'"],
         upgradeInsecureRequests: [],
       },
     },
+    frameguard: { action: "deny" },
+    hsts: { maxAge: 63072000, includeSubDomains: true, preload: true },
     crossOriginEmbedderPolicy: false,
   }));
 

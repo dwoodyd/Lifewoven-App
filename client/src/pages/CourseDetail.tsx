@@ -75,7 +75,7 @@ export default function CourseDetail() {
   const { data: memberStatus } = trpc.paypalOrders.getMembershipStatus.useQuery(undefined, { enabled: !!user });
   const { data: myOrders } = trpc.paypalOrders.getMyOrders.useQuery(undefined, { enabled: !!user });
 
-  const isAdmin = user?.role === "admin";
+  const isAdmin = false;
   const { previewAsUser, togglePreview } = useAdminPreview();
   const effectiveAdmin = isAdmin && !previewAsUser;
 

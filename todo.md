@@ -1270,3 +1270,17 @@
 - [ ] Weekly check-in prompt: "One thing from your reading this week that's still with you?" (once per week, skippable)
 - [ ] homeContext procedure: return readingBridge status so dashboard and prompt can use it
 - [ ] Write vitest tests for Reading Bridge procedures
+
+## Lifewoven Enhancement Brief (Current Scope)
+
+- [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA
+- [x] Remove the knitted-sun background from The Weave and all Oracle tabs; preserve a clean cream/linen base background
+- [x] The Ground Step 6: add a daily-intention textarea with the specified placeholder and persist the response with a timestamp
+- [x] Feed the same-day Ground daily intention to Oracle Guide and Unstuck as contextual personalization
+- [x] Remove unnecessary role data from auth.me client responses and userId fields from check-in client responses without weakening server-side authorization
+- [x] Verify and, if needed, enforce CSP, HSTS, X-Frame-Options, and X-Content-Type-Options production headers
+- [x] Add manus-analytics.com disclosure, data description, and use description to the Privacy Policy
+- [x] Update Pattern Mirror copy to reference journal entries and check-ins only
+- [x] Audit The Ground flow, Weave editor, Oracle input, and installation experience at a 390px mobile viewport; resolve documented usability gaps
+- [ ] Add configurable daily PWA reminder settings, defaulting to 8:00 AM in the user’s device time zone, plus push-subscription persistence, permission handling, and scheduled delivery for The Ground
+- [ ] Add offline-first saving and sync feedback for The Ground, The Weave, and Daily Check-In; add graceful offline states and cached insight fallbacks for Oracle

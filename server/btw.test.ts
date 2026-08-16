@@ -1,5 +1,7 @@
 import { describe, it, expect } from "vitest";
 
+import { hasSufficientWeeklyReflectionData } from "./routers/btw";
+
 // ─── Ground Check Scoring ─────────────────────────────────────────────────────
 // Mirrors the logic in server/routers/btw.ts
 
@@ -108,5 +110,20 @@ describe("BTW Session Types", () => {
     expect(VALID_SESSION_TYPES).toContain("midday");
     expect(VALID_SESSION_TYPES).toContain("evening");
     expect(VALID_SESSION_TYPES).toHaveLength(5);
+  });
+});
+
+describe("Weekly Reflection data sufficiency", () => {
+  it("requires at least three recent check-ins when no recent Weave entry exists", () => {
+    expect(hasSufficientWeeklyReflectionData({ checkInCount: 2, journalEntryCount: 0 })).toBe(false);
+    expect(hasSufficientWeeklyReflectionData({ checkInCount: 3, journalEntryCount: 0 })).toBe(true);
+  });
+
+  it("allows a real recent Weave entry to satisfy the threshold", () => {
+    expect(hasSufficientWeeklyReflectionData({ checkInCount: 0, journalEntryCount: 1 })).toBe(true);
+  });
+
+  it("rejects generation when the user has no meaningful recent data", () => {
+    expect(hasSufficientWeeklyReflectionData({ checkInCount: 0, journalEntryCount: 0 })).toBe(false);
   });
 });

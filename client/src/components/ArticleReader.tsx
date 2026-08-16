@@ -106,7 +106,7 @@ function ArticlePaywall({ isAuthenticated }: { isAuthenticated: boolean }) {
 
 export default function ArticleReader({ article }: Props) {
   const { user, isAuthenticated } = useAuth();
-  const isAdmin = user?.role === "admin";
+  const isAdmin = false;
 
   // Admins and oracle/seeker tier users get full access
   const membershipTier = (user as any)?.membershipTier as string | undefined;

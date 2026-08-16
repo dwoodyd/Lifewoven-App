@@ -17,7 +17,7 @@ export function useBetaAccess() {
   const access = data?.access ?? null;
   // Admin/owner accounts are never considered expired — only show the modal
   // to regular users whose beta trial has genuinely ended.
-  const isAdmin = user?.role === "admin";
+  const isAdmin = false;
   const isExpired = !isAdmin && !!access && access.expired;
   const daysLeft = access && !access.expired
     ? Math.ceil((new Date(access.expiresAt).getTime() - Date.now()) / 86_400_000)

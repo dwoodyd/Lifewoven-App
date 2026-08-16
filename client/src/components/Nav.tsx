@@ -218,17 +218,6 @@ export default function Nav() {
                   </Link>
                 </DropdownMenuItem>
 
-                {user?.role === "admin" && (
-                  <>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link href="/admin" className="flex items-center gap-2">
-                        <Settings className="h-3.5 w-3.5" />Admin Panel
-                      </Link>
-                    </DropdownMenuItem>
-                  </>
-                )}
-
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="flex items-center gap-2 text-destructive focus:text-destructive cursor-pointer"
@@ -352,12 +341,6 @@ export default function Nav() {
                 <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground justify-start">
                   <Link href="/support" onClick={closeMobile}><HelpCircle className="h-4 w-4" />Help</Link>
                 </Button>
-
-                {user?.role === "admin" && (
-                  <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground justify-start">
-                    <Link href="/admin" onClick={closeMobile}><Settings className="h-4 w-4" />Admin Panel</Link>
-                  </Button>
-                )}
 
                 <Button
                   variant="ghost"

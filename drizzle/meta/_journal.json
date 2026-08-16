@@ -239,6 +239,20 @@
       "when": 1782525565551,
       "tag": "0033_lethal_crystal",
       "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "5",
+      "when": 1786903329575,
+      "tag": "0034_cloudy_bill_hollister",
+      "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "5",
+      "when": 1786904246645,
+      "tag": "0035_handy_mac_gargan",
+      "breakpoints": true
     }
   ]
 }

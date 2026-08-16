@@ -293,7 +293,7 @@ export default function ProductDetail() {
 
   const CategoryIcon = product.category === "audio" ? Headphones : product.category === "cards" ? Star : FileText;
   const isAvailable = product.available;
-  const isAdmin = user?.role === "admin";
+  const isAdmin = false;
   const { previewAsUser, togglePreview } = useAdminPreview();
   const effectiveAdmin = isAdmin && !previewAsUser;
   const canDownload = effectiveAdmin || canDownloadNow;
