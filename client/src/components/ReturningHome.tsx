@@ -12,7 +12,7 @@
  *  07 · The Ground + Ask the Oracle (2-up)
  *  08 · Your Five Dimensions spine
  */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { ArrowRight, CheckCircle2, Circle, BookOpen, Flame } from "lucide-react";
 import Nav from "@/components/Nav";
@@ -109,6 +109,31 @@ function CheckInCard({ todayCheckIn }: { todayCheckIn: Props["todayCheckIn"] }) 
     onError: () => toast.error("Could not save check-in."),
   });
 
+  useEffect(() => {
+    const syncPending = async () => {
+      const pending = localStorage.getItem("lifewoven_pending_checkin");
+      if (!pending || !navigator.onLine) return;
+      try {
+        await createCheckIn.mutateAsync(JSON.parse(pending));
+        localStorage.removeItem("lifewoven_pending_checkin");
+      } catch { /* retain until a later reconnection */ }
+    };
+    void syncPending();
+    window.addEventListener("online", syncPending);
+    return () => window.removeEventListener("online", syncPending);
+  }, [createCheckIn]);
+
+  const recordCheckIn = () => {
+    const payload = { emotionalScore: emotional, energyLevel: energy, clarityLevel: clarity };
+    if (!navigator.onLine) {
+      localStorage.setItem("lifewoven_pending_checkin", JSON.stringify(payload));
+      setSubmitted(true);
+      toast.success("Check-in saved on this device and will sync when you reconnect.");
+      return;
+    }
+    createCheckIn.mutate(payload, { onError: () => localStorage.setItem("lifewoven_pending_checkin", JSON.stringify(payload)) });
+  };
+
   // EGS: 1 = Joy/Appreciation (highest), 22 = Fear/Grief (lowest) — lower is better
   const emotionalLabel = (v: number) => {
     if (v <= 4)  return "Joyful";
@@ -181,7 +206,7 @@ function CheckInCard({ todayCheckIn }: { todayCheckIn: Props["todayCheckIn"] }) 
         </div>
       </div>
       <button
-        onClick={() => createCheckIn.mutate({ emotionalScore: emotional, energyLevel: energy, clarityLevel: clarity })}
+        onClick={recordCheckIn}
         disabled={createCheckIn.isPending}
         className="group inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-medium
                    bg-foreground text-background transition-all duration-200 hover:opacity-85 active:scale-[0.97]

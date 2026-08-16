@@ -132,6 +132,28 @@ export default function Journal() {
       setContent(""); setTitle(""); setTags(""); setIsWriting(false); refetch();
     },
   });
+  useEffect(() => {
+    const syncPending = async () => {
+      const pending = localStorage.getItem("lifewoven_pending_weave_entry");
+      if (!pending || !navigator.onLine) return;
+      try { await createEntry.mutateAsync(JSON.parse(pending)); localStorage.removeItem("lifewoven_pending_weave_entry"); }
+      catch { /* retain until the next connection */ }
+    };
+    void syncPending();
+    window.addEventListener("online", syncPending);
+    return () => window.removeEventListener("online", syncPending);
+  }, [createEntry]);
+
+  const saveWeaveEntry = () => {
+    const payload = { title: title.trim() || autoTitle(content), content, module: selectedModule as any || undefined, tags: tags ? tags.split(",").map(t => t.trim()).filter(Boolean) : undefined };
+    if (!navigator.onLine) {
+      localStorage.setItem("lifewoven_pending_weave_entry", JSON.stringify(payload));
+      toast.success("Your Weave entry is saved on this device and will sync when you reconnect.");
+      setIsWriting(false);
+      return;
+    }
+    createEntry.mutate(payload, { onError: () => localStorage.setItem("lifewoven_pending_weave_entry", JSON.stringify(payload)) });
+  };
   const [savedEntryId, setSavedEntryId] = useState<number | null>(null);
   const getReflection = trpc.journal.generateReflection.useMutation({
     onSuccess: (data: any) => { setAiReflection(data.reflection); setIsGettingReflection(false); },
@@ -217,7 +239,7 @@ export default function Journal() {
             )}
             <div className="flex gap-2 flex-wrap">
               <VoiceRecorder onTranscription={(text) => setContent(prev => prev ? prev + "\n\n" + text : text)} />
-              <Button onClick={() => createEntry.mutate({ title: title.trim() || autoTitle(content), content, module: selectedModule as any || undefined, tags: tags ? tags.split(",").map(t => t.trim()).filter(Boolean) : undefined })} disabled={!content.trim() || createEntry.isPending} className="gap-2">
+              <Button onClick={saveWeaveEntry} disabled={!content.trim() || createEntry.isPending} className="gap-2">
                 {createEntry.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Pencil className="h-4 w-4" />} Save Entry
               </Button>
               <Button variant="outline" onClick={handleGetReflection} disabled={!content.trim() || isGettingReflection} className="gap-2">

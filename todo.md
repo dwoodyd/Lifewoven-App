@@ -1282,5 +1282,5 @@
 - [x] Add manus-analytics.com disclosure, data description, and use description to the Privacy Policy
 - [x] Update Pattern Mirror copy to reference journal entries and check-ins only
 - [x] Audit The Ground flow, Weave editor, Oracle input, and installation experience at a 390px mobile viewport; resolve documented usability gaps
-- [ ] Add configurable daily PWA reminder settings, defaulting to 8:00 AM in the user’s device time zone, plus push-subscription persistence, permission handling, and scheduled delivery for The Ground
-- [ ] Add offline-first saving and sync feedback for The Ground, The Weave, and Daily Check-In; add graceful offline states and cached insight fallbacks for Oracle
+- [x] Add configurable daily PWA reminder settings, defaulting to 8:00 AM in the user’s device time zone, plus push-subscription persistence, permission handling, and scheduled delivery for The Ground
+- [x] Add offline-first saving and sync feedback for The Ground, The Weave, and Daily Check-In; add graceful offline states and cached insight fallbacks for Oracle
