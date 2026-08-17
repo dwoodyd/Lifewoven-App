@@ -170,16 +170,17 @@ function WordReveal({
         ? `0 0 40px ${T.threadGlow}, 0 2px 8px rgba(0,0,0,0.95), 0 1px 3px rgba(0,0,0,0.95)`
         : "0 2px 16px rgba(0,0,0,0.98), 0 1px 4px rgba(0,0,0,0.98)",
     }}>
+      <span aria-label={text}>
       {words.map((w, i) => (
-        <span key={i} style={{
+        <span key={i} aria-hidden="true" style={{
           display: "inline-block",
           opacity: revealed ? 1 : 0,
           transform: revealed ? "translateY(0) scale(1)" : "translateY(20px) scale(0.95)",
           transition: `opacity 0.6s cubic-bezier(0.22,1,0.36,1) ${i * 0.07}s,
                        transform 0.6s cubic-bezier(0.22,1,0.36,1) ${i * 0.07}s`,
-          marginRight: "0.3em",
-        }}>{w}</span>
+        }}>{w}{i < words.length - 1 ? " " : ""}</span>
       ))}
+      </span>
     </span>
   );
 }
@@ -278,7 +279,7 @@ function SceneText({
 interface Props { userId?: number | null; }
 
 export default function OnboardingModal({ userId }: Props) {
-  const [, navigate] = useLocation();
+  const [location, navigate] = useLocation();
   const [open, setOpen]         = useState(false);
   const [sceneIdx, setSceneIdx] = useState(0);
   const [finished, setFinished] = useState(false);
@@ -339,8 +340,9 @@ export default function OnboardingModal({ userId }: Props) {
 
   /* ── Open / replay ─────────────────────────────────────────────── */
   useEffect(() => {
-    if (!localStorage.getItem(DEVICE_KEY)) setOpen(true);
-  }, []);
+    // Printed deep links must open the intended tool instead of a cinematic overlay.
+    if (location === "/" && !localStorage.getItem(DEVICE_KEY)) setOpen(true);
+  }, [location]);
 
   useEffect(() => {
     const handler = () => {

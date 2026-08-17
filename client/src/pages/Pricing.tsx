@@ -176,6 +176,7 @@ export default function Pricing() {
   const COMPARISON_ROWS: [string, string | boolean, string | boolean, string | boolean][] = [
     ["Soul Engineer Assessment", true, true, true],
     ["Daily check-in & The Weave", true, true, true],
+    ["Export your words anytime", true, true, true],
     ["5S Framework tools", "Overview", "Full suite", "Full suite"],
     ["Habit tracker & scorecard", false, true, true],
     ["Belief rewrite system", false, true, true],

@@ -44,8 +44,6 @@ const MODULE_CONFIG = [
   { key: "stewardship", label: "Stewardship", icon: Leaf, color: "text-stewardship", bg: "bg-stewardship/10", borderBase: "border-stewardship/20", borderHover: "hover:border-stewardship/50", href: "/stewardship" },
 ];
 
-import { LuminCorner } from "@/components/LuminCorner";
-import { LuminScene } from "@/components/LuminScene";
 import FoundingWelcomeCard from "@/components/FoundingWelcomeCard";
 
 export default function Dashboard() {
@@ -65,22 +63,6 @@ export default function Dashboard() {
   const [showReentry, setShowReentry] = useState(false);
   const [daysSinceActive, setDaysSinceActive] = useState(0);
   const [reentryTrigger, setReentryTrigger] = useState<"absence" | "overwhelm" | "shame" | "burnout">("absence");
-  const [showLuminWelcome, setShowLuminWelcome] = useState(false);
-
-  // First-visit Lumin slide-in: show once per session when user has never visited before
-  useEffect(() => {
-    if (!isAuthenticated) return;
-    const hasSeenWelcome = localStorage.getItem("lifeos_lumin_welcome_seen");
-    if (!hasSeenWelcome) {
-      const timer = setTimeout(() => {
-        setShowLuminWelcome(true);
-        localStorage.setItem("lifeos_lumin_welcome_seen", "1");
-        // Auto-dismiss after 4 seconds
-        setTimeout(() => setShowLuminWelcome(false), 4000);
-      }, 1200);
-      return () => clearTimeout(timer);
-    }
-  }, [isAuthenticated]);
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -219,6 +201,18 @@ export default function Dashboard() {
     return { ...base, sub: adaptNextStepSub(base.sub) };
   })();
 
+  const latestScores = ((dashData as any)?.latestSurvey?.scores ?? {}) as Record<string, number>;
+  const priorScores = (((dashData as any)?.surveyHistory?.[1]?.scores ?? {}) as Record<string, number>);
+  const structuralReadings = MODULE_CONFIG.map((dimension) => {
+    const raw = Number(latestScores[dimension.key]);
+    const value = Number.isFinite(raw) ? Math.max(0, Math.min(100, Math.round(raw))) : null;
+    const state = value === null ? "UNMEASURED" : value >= 70 ? "WITHIN TOLERANCE" : value >= 45 ? "LOADED" : "OVER CAPACITY";
+    const color = value === null ? "#8FA3B8" : value >= 70 ? "#4FD1C5" : value >= 45 ? "#E4A11B" : "#E2564A";
+    const prior = Number(priorScores[dimension.key]);
+    const delta = value !== null && Number.isFinite(prior) ? value - prior : null;
+    return { ...dimension, value, state, color, delta };
+  });
+
   const setLowBandwidthModeMutation = trpc.profile.setLowBandwidthMode.useMutation();
 
   // Hydrate from user profile when auth resolves
@@ -249,7 +243,7 @@ export default function Dashboard() {
 
   return (
     <>
-    <div className="min-h-screen bg-background">
+    <div className="structural-shell min-h-screen bg-background">
       {showReentry && (
         <ReentryFlow
           daysSinceActive={daysSinceActive}
@@ -362,6 +356,40 @@ export default function Dashboard() {
             </Link>
           </div>
         )}
+
+        {/* Structural Survey — the instrument panel opens the application. */}
+        <section className="instrument-panel mb-6 sm:mb-8 p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-5">
+            <div>
+              <p className="instrument-label mb-2">Structural Survey / Live Readings</p>
+              <h1 className="font-sans text-xl sm:text-2xl font-semibold tracking-tight text-foreground">Load-bearing dimensions</h1>
+            </div>
+            <div className="dimension-rule w-full sm:w-64">Survey reading · {((dashData as any)?.latestSurvey?.createdAt ? new Date((dashData as any).latestSurvey.createdAt).toLocaleDateString() : "Run survey")}</div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-px bg-border border border-border">
+            {structuralReadings.map((reading) => (
+              <Link key={reading.key} href={reading.href} className="bg-card p-4 min-h-40 transition-colors hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-ring">
+                <div className="flex items-center justify-between gap-2 mb-5">
+                  <span className="instrument-label">{reading.label}</span>
+                  <reading.icon className="h-4 w-4" style={{ color: reading.color }} />
+                </div>
+                <div className="flex items-end justify-between gap-2">
+                  <span className="font-mono text-3xl tabular-nums text-foreground">{reading.value === null ? "—" : reading.value}</span>
+                  <span className="font-mono text-[10px]" style={{ color: reading.color }}>{reading.value === null ? "NO DATA" : "/100"}</span>
+                </div>
+                <div className="load-track mt-4 h-1 w-full overflow-hidden">
+                  <div className="h-full transition-all duration-700" style={{ width: `${reading.value ?? 0}%`, backgroundColor: reading.color }} />
+                </div>
+                <p className="mt-3 font-mono text-[10px] tracking-[0.1em]" style={{ color: reading.color }}>{reading.state}</p>
+                {reading.delta !== null && <p className="mt-1 font-mono text-[10px] text-muted-foreground">{reading.delta >= 0 ? "+" : ""}{reading.delta} since prior survey</p>}
+              </Link>
+            ))}
+          </div>
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+            <p className="text-sm text-muted-foreground">Readings reveal where your structure is carrying load — and where to reinforce it.</p>
+            <Button variant="outline" size="sm" asChild><Link href="/audit">Run load-bearing survey</Link></Button>
+          </div>
+        </section>
 
         {/* Greeting + check-in */}
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-6">
@@ -762,19 +790,6 @@ export default function Dashboard() {
         </div>
       </div>
     </div>
-    <LuminCorner size={52} tooltip="Lumin is with you" />
-    {/* First-visit Lumin slide-in — appears once, auto-dismisses after 4s */}
-    {showLuminWelcome && (
-      <div
-        className="fixed bottom-20 right-4 sm:right-8 z-50 flex flex-col items-end gap-2 animate-in slide-in-from-bottom-4 fade-in duration-700"
-        style={{ pointerEvents: "none" }}
-      >
-        <div className="bg-card/90 backdrop-blur-sm border border-border rounded-2xl px-4 py-2.5 shadow-lg max-w-[220px] text-right">
-          <p className="text-sm font-light text-foreground leading-snug">Welcome. I'm here whenever you need me.</p>
-        </div>
-        <LuminScene videoId="peaceful_idle" ambientSize="80px" className="opacity-90" />
-      </div>
-    )}
     </>
   );
 }

@@ -230,7 +230,7 @@ export default function Nav() {
           ) : (
             /* ── Unauthenticated ── */
             <>
-              <Button variant="ghost" size="sm" asChild className="hidden md:flex">
+              <Button variant="outline" size="sm" asChild className="hidden md:flex min-h-11 border-foreground/40 text-foreground hover:bg-foreground hover:text-background">
                 <a href={getLoginUrl(window.location.pathname + window.location.search)}>Sign in</a>
               </Button>
               <Button size="sm" asChild className="hidden sm:flex">

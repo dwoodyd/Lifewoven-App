@@ -1276,6 +1276,25 @@
 - [x] Remove the knitted-sun character background from every Oracle tab at the actual render source
 - [x] Enforce the Weekly Summary sparse-data gate on the server and render the prescribed empty state instead of generating a reflection
 
+## Structural Survey Redesign
+
+- [ ] Review and follow the supplied Structural Survey build instructions
+- [ ] Establish the Structural Survey design system: blueprint-cyan dark ground, hairline grids, dimension arrows, IBM Plex typography, and semantic load colors
+- [ ] Redesign the primary dashboard to open on five live structural readings rather than a headline
+- [ ] Apply engineering language and drawing/gauge conventions across relevant in-app surfaces
+- [ ] Remove knitted-sun character media from app surfaces and preserve it only for marketing and book identity
+- [ ] Add tests, visually verify responsive behavior, and checkpoint the Structural Survey redesign
+
+## Structural Survey Audit Corrections and Shared Standards
+
+- [x] Make the first reader exercise available without an account, save locally, and request an account only when persistence has value
+- [x] State that export is free at every tier on the pricing page
+- [x] Enforce the shared baseline: 12px minimum text, 4.5:1 body contrast, and 44×44 minimum tap targets
+- [ ] Fix deep-link routing so the intro gate does not block `/pathways` or other printed deep links after first arrival
+- [ ] Fix hero word-reveal semantics so spaces remain in the DOM, assistive technologies have an aria-label, and animated word spans are aria-hidden
+- [ ] Correct Sign in header contrast in every theme and lift the shared muted text ramp above the contrast floor
+- [ ] Build load-bearing assessment language and re-runnable 30/90/180-day comparison readings
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA

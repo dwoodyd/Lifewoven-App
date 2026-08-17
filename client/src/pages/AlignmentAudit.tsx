@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import { useLocation } from "wouter";
-import { LuminCorner } from "@/components/LuminCorner";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -10,7 +9,6 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import { toast } from "sonner";
 import { ArrowRight, CheckCircle2, Share2, Copy } from "lucide-react";
-import { LuminAmbient } from "@/components/LuminAmbient";
 
 // ─────────────────────────────────────────────
 // CANONICAL QUESTIONS — source: lifeos-audit-copy-system.html
@@ -290,17 +288,11 @@ export default function AlignmentAudit() {
   if (step === "entry" || step === "consent" || step === "preframe") return (
     <div className="min-h-screen bg-background">
       {/* Lumin points the way — energetic, guiding through the audit */}
-      <LuminAmbient
-        videoId="pointing"
-        mode="edge-fade"
-        opacity={0.12}
-        zIndex={0}
-      />
       <Nav />
       <div className="container max-w-xl mx-auto pt-24 pb-20 text-center px-4 sm:px-6 lumin-text">
-        <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Lifewoven · Soul Engineer Assessment</p>
+        <p className="instrument-label mb-4">Lifewoven · Load-Bearing Survey</p>
         <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-6 leading-tight">Find your clearest<br />place to begin.</h1>
-        <p className="text-muted-foreground text-base leading-relaxed mb-6 max-w-md mx-auto">The Soul Engineer Assessment identifies where friction is highest in your life right now — and recommends the most honest place to start inside Lifewoven. There are four short sections. Answer as honestly as you can — this only works if you are real with it.</p>
+        <p className="text-muted-foreground text-base leading-relaxed mb-6 max-w-md mx-auto">The Load-Bearing Survey reads which dimensions are carrying weight, where tolerance is thin, and what needs reinforcement first. There are four short sections. Answer from the structure you are actually living in.</p>
         <div className="flex items-center justify-center gap-3 mb-6 flex-wrap">
           {["12 questions", "3 to 5 minutes", "Free, no account required"].map(tag => (
             <span key={tag} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border text-xs text-muted-foreground">
@@ -313,7 +305,7 @@ export default function AlignmentAudit() {
           <p className="text-sm text-muted-foreground leading-relaxed">Your responses can be used to personalize your recommendations inside Lifewoven. This audit is not a diagnosis. You can change this preference any time in settings.</p>
         </div>
         <div className="space-y-3 mb-4">
-          <Button size="lg" className="w-full gap-2" onClick={() => setStep("quiz")}><CheckCircle2 className="h-4 w-4" /> Begin the Assessment <ArrowRight className="h-4 w-4" /></Button>
+          <Button size="lg" className="w-full gap-2" onClick={() => setStep("quiz")}><CheckCircle2 className="h-4 w-4" /> Start the Survey <ArrowRight className="h-4 w-4" /></Button>
         </div>
         <p className="text-xs text-muted-foreground">Your responses stay private and are used only to guide your experience.</p>
       </div>
@@ -488,7 +480,7 @@ export default function AlignmentAudit() {
             </ul>
           </div>
           <div className="p-6 rounded-2xl border border-accent/20 bg-accent/3 mb-4">
-            <h3 className="font-serif text-lg font-light text-foreground mb-1">Your 5S Snapshot</h3>
+            <h3 className="font-sans text-lg font-semibold text-foreground mb-1">Five structural readings</h3>
             <p className="text-xs text-muted-foreground mb-4">Where your energy is going right now, based on your responses.</p>
             <div className="space-y-3">
               {(["State", "Story", "Standards", "Strategy", "Stewardship"] as const).map(dim => (
@@ -598,5 +590,5 @@ export default function AlignmentAudit() {
        </div>
     );
   }
-  return <LuminCorner pulse={luminPulse} />;
+  return null;
 }

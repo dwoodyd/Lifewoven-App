@@ -228,7 +228,7 @@ function App() {
   const { user } = useAuth();
   return (
     <ErrorBoundary>
-      <ThemeProvider defaultTheme="light" switchable>
+      <ThemeProvider defaultTheme="dark" switchable>
         <TooltipProvider>
           <Toaster />
           <OnboardingModal userId={user?.id} />
