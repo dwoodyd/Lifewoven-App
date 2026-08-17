@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from "react";
 import { useRoute, Link } from "wouter";
 import { useLuminMoment } from "@/components/LuminMoment";
 import { useHaptics } from "@/hooks/useHaptics";
-import { LuminCorner } from "@/components/LuminCorner";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -480,7 +479,6 @@ export default function PathwayPage() {
           </div>
         </div>
       </div>
-      <LuminCorner pulse={luminCelebrate} />
     </div>
   );
 }

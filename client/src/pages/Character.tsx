@@ -1,7 +1,6 @@
 import { useState, useRef } from "react";
 import { useLocation } from "wouter";
 import Nav from "@/components/Nav";
-import { LuminCorner } from "@/components/LuminCorner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
@@ -14,7 +13,6 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import { toast } from "sonner";
 import { BookOpen, Plus, MoreVertical, Star, BookMarked, CheckCircle2, Pause, BookHeart, Sparkles, Search, Upload, X, Check, ImageIcon } from "lucide-react";
-import { LuminAmbient } from "@/components/LuminAmbient";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -363,18 +361,10 @@ export default function Character() {
   const completedCount = books.filter(b => b.status === "completed").length;
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Lumin glows warmly from the floor — candlelight, not spotlight */}
-      <LuminAmbient
-        videoId="bouncing_joyfully"
-        mode="floor-glow"
-        opacity={0.12}
-        zIndex={0}
-      />
+    <div className="structural-shell min-h-screen bg-background">
       <Nav />
-      <LuminCorner />
 
-      <div className="max-w-6xl mx-auto px-4 pt-28 pb-20 lumin-text">
+      <div className="max-w-6xl mx-auto px-4 pt-28 pb-20">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div>

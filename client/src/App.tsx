@@ -1,5 +1,4 @@
 import { Toaster } from "@/components/ui/sonner";
-import OnboardingModal from "./components/OnboardingModal";
 import FeedbackWidget from "./components/FeedbackWidget";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
@@ -231,7 +230,6 @@ function App() {
       <ThemeProvider defaultTheme="dark" switchable>
         <TooltipProvider>
           <Toaster />
-          <OnboardingModal userId={user?.id} />
           <BetaExpiredModal />
           <FeedbackWidget />
           <PWAInstallPrompt />

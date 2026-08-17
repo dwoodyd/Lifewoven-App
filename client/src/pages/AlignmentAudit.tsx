@@ -286,10 +286,9 @@ export default function AlignmentAudit() {
   const oq = OPTIONAL_QUESTIONS[optionalQ];
 
   if (step === "entry" || step === "consent" || step === "preframe") return (
-    <div className="min-h-screen bg-background">
-      {/* Lumin points the way — energetic, guiding through the audit */}
+    <div className="structural-shell min-h-screen bg-background">
       <Nav />
-      <div className="container max-w-xl mx-auto pt-24 pb-20 text-center px-4 sm:px-6 lumin-text">
+      <div className="container max-w-xl mx-auto pt-24 pb-20 text-center px-4 sm:px-6">
         <p className="instrument-label mb-4">Lifewoven · Load-Bearing Survey</p>
         <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-6 leading-tight">Find your clearest<br />place to begin.</h1>
         <p className="text-muted-foreground text-base leading-relaxed mb-6 max-w-md mx-auto">The Load-Bearing Survey reads which dimensions are carrying weight, where tolerance is thin, and what needs reinforcement first. There are four short sections. Answer from the structure you are actually living in.</p>

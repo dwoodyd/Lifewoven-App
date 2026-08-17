@@ -1523,7 +1523,7 @@ Write a single, personal, present-tense identity sentence (max 20 words) that re
       db.select().from(oracleInsights).where(and(eq(oracleInsights.userId, ctx.user.id), eq(oracleInsights.isRead, false))).limit(3),
       db.select().from(userPathways).where(and(eq(userPathways.userId, ctx.user.id), eq(userPathways.status, "active"))).limit(3),
       db.select({ scores: auditResults.scores, createdAt: auditResults.createdAt }).from(auditResults)
-        .where(eq(auditResults.userId, ctx.user.id)).orderBy(desc(auditResults.createdAt)).limit(4),
+        .where(eq(auditResults.userId, ctx.user.id)).orderBy(desc(auditResults.createdAt)).limit(50),
     ]);
     return { recentCheckIns, activeHabits, recentJournals, oracleInsightsList, activePathways, latestSurvey: surveyHistory[0] ?? null, surveyHistory };
   }),

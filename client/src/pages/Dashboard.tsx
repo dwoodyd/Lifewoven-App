@@ -63,6 +63,7 @@ export default function Dashboard() {
   const [showReentry, setShowReentry] = useState(false);
   const [daysSinceActive, setDaysSinceActive] = useState(0);
   const [reentryTrigger, setReentryTrigger] = useState<"absence" | "overwhelm" | "shame" | "burnout">("absence");
+  const [comparisonWindow, setComparisonWindow] = useState<30 | 90 | 180>(30);
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -202,7 +203,10 @@ export default function Dashboard() {
   })();
 
   const latestScores = ((dashData as any)?.latestSurvey?.scores ?? {}) as Record<string, number>;
-  const priorScores = (((dashData as any)?.surveyHistory?.[1]?.scores ?? {}) as Record<string, number>);
+  const surveyHistory = ((dashData as any)?.surveyHistory ?? []) as Array<{ scores: Record<string, number>; createdAt: Date | string }>;
+  const baselineCutoff = Date.now() - comparisonWindow * 24 * 60 * 60 * 1000;
+  const comparisonSurvey = surveyHistory.find((survey, index) => index > 0 && new Date(survey.createdAt).getTime() <= baselineCutoff) ?? surveyHistory[1];
+  const priorScores = (comparisonSurvey?.scores ?? {}) as Record<string, number>;
   const structuralReadings = MODULE_CONFIG.map((dimension) => {
     const raw = Number(latestScores[dimension.key]);
     const value = Number.isFinite(raw) ? Math.max(0, Math.min(100, Math.round(raw))) : null;
@@ -387,7 +391,12 @@ export default function Dashboard() {
           </div>
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
             <p className="text-sm text-muted-foreground">Readings reveal where your structure is carrying load — and where to reinforce it.</p>
-            <Button variant="outline" size="sm" asChild><Link href="/audit">Run load-bearing survey</Link></Button>
+            <div className="flex items-center gap-2">
+              <div className="flex border border-border" aria-label="Comparison window">
+                {([30, 90, 180] as const).map((days) => <button key={days} onClick={() => setComparisonWindow(days)} className={`min-h-11 px-3 font-mono text-xs ${comparisonWindow === days ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-secondary"}`}>{days}D</button>)}
+              </div>
+              <Button variant="outline" size="sm" asChild><Link href="/audit">Run survey</Link></Button>
+            </div>
           </div>
         </section>
 
