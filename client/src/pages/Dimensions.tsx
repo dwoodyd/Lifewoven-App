@@ -44,7 +44,7 @@ const DIMENSIONS: DimensionDef[] = [
     definition: "Your ability to feel, process, and be present to your interior life without suppressing it or being overwhelmed by it.",
     becomingQuestion: "What have I been feeling that I have not allowed myself to feel? What would it mean to let that feeling be real?",
     icon: Heart,
-    color: "oklch(0.48 0.12 195)",   // State teal
+    color: "#D2A44A",                // Shared warm yarn accent
     glyph: "◉",
   },
   {
@@ -54,7 +54,7 @@ const DIMENSIONS: DimensionDef[] = [
     definition: "The quality of your relationship with your body — receiving its signals, honoring its requirements, sustaining rather than depleting.",
     becomingQuestion: "What is my body asking me for right now, honestly? What one thing could I do this week to honor that ask?",
     icon: Zap,
-    color: "oklch(0.48 0.12 195)",   // State teal
+    color: "#D2A44A",                // Shared warm yarn accent
     glyph: "◎",
   },
   {

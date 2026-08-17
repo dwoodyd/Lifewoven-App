@@ -8,6 +8,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { gentleSpring } from "@/lib/springs";
+import { LuminScene } from "@/components/LuminScene";
 
 // ─── SVG Illustrations ────────────────────────────────────────────────────────
 
@@ -119,6 +120,15 @@ const ILLUSTRATIONS: Record<string, React.FC> = {
   generic: GenericIllustration,
 };
 
+const LUMEN_EMPTY_VIDEOS: Record<string, string> = {
+  habits: "taps_chin",
+  journal: "tilting_listening",
+  books: "peaceful_idle",
+  oracle: "core_unfurls",
+  pathways: "floating_center",
+  generic: "nodding_gently",
+};
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 interface EmptyStateProps {
@@ -141,6 +151,7 @@ export function EmptyState({
   className = "",
 }: EmptyStateProps) {
   const Illustration = ILLUSTRATIONS[variant] ?? GenericIllustration;
+  const lumenVideo = LUMEN_EMPTY_VIDEOS[variant] ?? LUMEN_EMPTY_VIDEOS.generic;
 
   return (
     <motion.div
@@ -149,8 +160,9 @@ export function EmptyState({
       transition={gentleSpring}
       className={`flex flex-col items-center justify-center gap-4 py-16 px-6 text-center ${className}`}
     >
-      <div className="text-muted-foreground/60">
-        <Illustration />
+      <div className="relative h-24 w-24 text-muted-foreground/60" aria-hidden="true">
+        <LuminScene videoId={lumenVideo} ambient loop ambientSize="96px" ambientPosition={{ position: "relative" }} className="opacity-100" />
+        <span className="sr-only"><Illustration /></span>
       </div>
       <div className="space-y-1.5 max-w-xs">
         <p className="font-serif text-lg font-light text-foreground/80">{title}</p>

@@ -15,6 +15,7 @@ import { useBetaAccess } from "@/hooks/useBetaAccess";
 import ReentryFlow from "@/components/ReentryFlow";
 import BetterMirror from "@/components/BetterMirror";
 import PageSkeleton from "@/components/PageSkeleton";
+import { LuminScene } from "@/components/LuminScene";
 import { REENTRY, LOW_BANDWIDTH } from "../../../shared/adaptive-language";
 import {
   Waves, BookOpen, Target, Compass, Leaf, Sparkles,
@@ -45,6 +46,19 @@ const MODULE_CONFIG = [
 ];
 
 import FoundingWelcomeCard from "@/components/FoundingWelcomeCard";
+
+function LumenEmpty({ title, body, href, cta, videoId = "peaceful_idle" }: { title: string; body: string; href: string; cta: string; videoId?: string }) {
+  return (
+    <div className="instrument-panel grid grid-cols-[60px_1fr] items-center gap-3 p-4 text-left">
+      <LuminScene videoId={videoId} ambient loop ambientSize="60px" ambientPosition={{ position: "relative" }} className="opacity-100" />
+      <div>
+        <p className="text-sm font-medium text-foreground">{title}</p>
+        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{body}</p>
+        <Button asChild size="sm" variant="outline" className="mt-3 min-h-9 text-xs"><Link href={href}>{cta}</Link></Button>
+      </div>
+    </div>
+  );
+}
 
 export default function Dashboard() {
   const { user, isAuthenticated } = useAuth();
@@ -189,8 +203,13 @@ export default function Dashboard() {
     return sub;
   };
 
+  const latestScores = ((dashData as any)?.latestSurvey?.scores ?? {}) as Record<string, number>;
+  const hasSurveyReading = Object.keys(latestScores).length > 0;
+
   const nextStep = (() => {
-    const base = auditNextStep && !hasHabits
+    const base = !hasSurveyReading
+      ? { label: "Let’s take your first reading", sub: "Start with a short structural survey. It gives the app something real to support instead of asking you to interpret an empty dashboard.", href: "/audit", cta: "Take first reading" }
+      : auditNextStep && !hasHabits
       ? auditNextStep
       : !hasHabits
       ? { label: "Build your first habit", sub: "Your Rhythms are empty. Start with one small identity-based habit.", href: "/standards", cta: "Build My Rhythms" }
@@ -202,7 +221,6 @@ export default function Dashboard() {
     return { ...base, sub: adaptNextStepSub(base.sub) };
   })();
 
-  const latestScores = ((dashData as any)?.latestSurvey?.scores ?? {}) as Record<string, number>;
   const surveyHistory = ((dashData as any)?.surveyHistory ?? []) as Array<{ scores: Record<string, number>; createdAt: Date | string }>;
   const baselineCutoff = Date.now() - comparisonWindow * 24 * 60 * 60 * 1000;
   const comparisonSurvey = surveyHistory.find((survey, index) => index > 0 && new Date(survey.createdAt).getTime() <= baselineCutoff) ?? surveyHistory[1];
@@ -211,7 +229,7 @@ export default function Dashboard() {
     const raw = Number(latestScores[dimension.key]);
     const value = Number.isFinite(raw) ? Math.max(0, Math.min(100, Math.round(raw))) : null;
     const state = value === null ? "UNMEASURED" : value >= 70 ? "WITHIN TOLERANCE" : value >= 45 ? "LOADED" : "OVER CAPACITY";
-    const color = value === null ? "#8FA3B8" : value >= 70 ? "#4FD1C5" : value >= 45 ? "#E4A11B" : "#E2564A";
+    const color = value === null ? "#8FA3B8" : value >= 70 ? "#73C99B" : value >= 45 ? "#D2A44A" : "#E2564A";
     const prior = Number(priorScores[dimension.key]);
     const delta = value !== null && Number.isFinite(prior) ? value - prior : null;
     return { ...dimension, value, state, color, delta };
@@ -256,7 +274,7 @@ export default function Dashboard() {
         />
       )}
       <Nav />
-      <div className="container pt-20 pb-24 max-w-5xl mx-auto px-3 sm:px-6 font-sans">
+      <div className="container flex flex-col pt-20 pb-24 max-w-5xl mx-auto px-3 sm:px-6 font-sans">
         {/* Adaptive top bar */}
         <div className="flex items-center justify-end mb-3">
           <button
@@ -361,8 +379,8 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* Structural Survey — the instrument panel opens the application. */}
-        <section className="instrument-panel mb-6 sm:mb-8 p-4 sm:p-6">
+        {/* Structural Survey follows the warm working modules and only appears once a reading exists. */}
+        {hasSurveyReading && <section className="instrument-panel order-40 mb-6 sm:mb-8 p-4 sm:p-6">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-5">
             <div>
               <p className="instrument-label mb-2">Structural Survey / Live Readings</p>
@@ -398,17 +416,20 @@ export default function Dashboard() {
               <Button variant="outline" size="sm" asChild><Link href="/audit">Run survey</Link></Button>
             </div>
           </div>
-        </section>
+        </section>}
 
         {/* Greeting + check-in */}
-        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-6">
-          <div className="min-w-0">
+        <div className="order-10 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-6">
+          <div className="flex min-w-0 items-center gap-4">
+            <LuminScene videoId="nodding_gently" ambient loop ambientSize="68px" ambientPosition={{ position: "relative" }} className="hidden sm:block opacity-100" />
+            <div>
             <p className="text-xs font-mono tracking-[0.18em] text-[oklch(0.65_0.08_60)] uppercase mb-1">
               {hasShameSpiralPattern ? "You came back. That's the whole practice." : "Welcome back to your Lifewoven"}
             </p>
-            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-[oklch(0.93_0.04_60)] leading-tight" style={{fontFamily:'"Playfair Display",Georgia,serif'}}>
+            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-foreground leading-tight">
               {greeting()}, {user?.name?.split(" ")[0] ?? "friend"}.
             </h1>
+            </div>
           </div>
           <div className="flex flex-wrap items-center gap-2 shrink-0 self-start">
             {hasAccess && daysLeft !== null && daysLeft <= 45 && (
@@ -470,7 +491,7 @@ export default function Dashboard() {
 
         {/* Next Step Hero Card */}
         {!showCheckIn && (
-          <div className="p-4 sm:p-5 rounded-2xl border border-accent/30 bg-accent/5 mb-6 sm:mb-8">
+          <div className="order-20 p-4 sm:p-5 rounded-2xl border border-accent/30 bg-accent/5 mb-6 sm:mb-8">
             <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
               <div className="flex items-start gap-3 flex-1 min-w-0">
                 <div className="w-9 h-9 rounded-full bg-accent/10 flex items-center justify-center shrink-0 mt-0.5">
@@ -530,7 +551,7 @@ export default function Dashboard() {
         )}
 
         {/* Main content grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="order-30 grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left column: 5S, habits, journal */}
           <div className="lg:col-span-2 space-y-6">
             {/* 5S Grid */}
@@ -581,12 +602,7 @@ export default function Dashboard() {
                   })}
                 </div>
               ) : (
-                <div className="p-5 rounded-2xl border border-dashed border-accent/20 bg-accent/3 text-center">
-                  <Target className="h-7 w-7 text-accent/40 mx-auto mb-3" />
-                  <p className="font-serif text-base font-light text-foreground mb-1">Your Rhythms are waiting.</p>
-                  <p className="text-sm text-muted-foreground mb-4">Habits are not about discipline — they are about identity. Who do you want to become? Start with one habit that reflects that person.</p>
-                  <Button asChild size="sm"><Link href="/standards">Build My First Habit</Link></Button>
-                </div>
+                <LumenEmpty title="Your Rhythms are waiting." body="Start with one habit that reflects the person you are becoming." href="/standards" cta="Build my first habit" videoId="taps_chin" />
               )}
             </div>
 
@@ -622,12 +638,7 @@ export default function Dashboard() {
                   )}
                 </div>
               ) : (
-                <div className="text-center py-2">
-                  <p className="text-xs text-muted-foreground mb-2">No goals yet. Set your first intention.</p>
-                  <Button asChild size="sm" variant="outline" className="text-xs h-7">
-                    <Link href="/goals">Set a Goal</Link>
-                  </Button>
-                </div>
+                <LumenEmpty title="No goals yet." body="Choose one intention worth carrying into the week." href="/goals" cta="Set an intention" videoId="nodding_gently" />
               )}
             </div>
 
@@ -652,12 +663,7 @@ export default function Dashboard() {
                   ))}
                 </div>
               ) : (
-                <div className="p-5 rounded-2xl border border-dashed border-story/30 bg-story/3 text-center">
-                  <Brain className="h-7 w-7 text-story/40 mx-auto mb-3" />
-                  <p className="font-serif text-base font-light text-foreground mb-1">The Weave is waiting for your first entry.</p>
-                  <p className="text-sm text-muted-foreground mb-4">Five minutes of honest writing can reveal more than five hours of thinking. What is alive in you right now?</p>
-                  <Button asChild size="sm"><Link href="/weave">Begin Writing</Link></Button>
-                </div>
+                <LumenEmpty title="The Weave is waiting for your first entry." body="Five minutes of honest writing can reveal more than hours of thinking." href="/weave" cta="Begin writing" videoId="tilting_listening" />
               )}
             </div>
           </div>
@@ -681,12 +687,7 @@ export default function Dashboard() {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-3">
-                  <p className="text-sm text-muted-foreground mb-3">Complete check-ins and journal entries to receive Oracle insights.</p>
-                  <Button asChild size="sm" variant="outline" className="gap-2 text-xs">
-                    <Link href="/oracle"><MessageCircle className="h-3 w-3" /> Talk to Oracle</Link>
-                  </Button>
-                </div>
+                <LumenEmpty title="Oracle is gathering signal." body="A check-in or a few honest lines give the Oracle something real to reflect." href="/oracle" cta="Talk to Oracle" videoId="core_unfurls" />
               )}
             </div>
 
@@ -739,10 +740,7 @@ export default function Dashboard() {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-2">
-                  <p className="text-xs text-muted-foreground mb-3">No active pathways.</p>
-                  <Button asChild size="sm" variant="outline" className="text-xs"><Link href="/audit">Take Soul Engineer Assessment</Link></Button>
-                </div>
+                <LumenEmpty title="No active pathways." body="Choose one practice that matches the load you are carrying today." href="/pathways" cta="Choose a pathway" videoId="floating_center" />
               )}
             </div>
 
@@ -764,18 +762,7 @@ export default function Dashboard() {
 
             {/* Evening mood nudge */}
             {showMoodNudge && (
-              <div className="p-4 rounded-2xl border border-amber-500/20 bg-amber-500/5">
-                <div className="flex items-start gap-2.5">
-                  <Activity className="h-4 w-4 text-amber-400 mt-0.5 shrink-0" />
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-foreground mb-0.5">How are you feeling tonight?</p>
-                    <p className="text-xs text-muted-foreground font-light leading-relaxed mb-2">You haven't logged your mood today. A moment of reflection helps the Oracle know where you are.</p>
-                    <Button asChild size="sm" variant="outline" className="text-xs h-7 border-amber-500/30 hover:border-amber-500/60">
-                      <Link href="/mood-rhythm">Log today's mood</Link>
-                    </Button>
-                  </div>
-                </div>
-              </div>
+              <LumenEmpty title="You haven’t logged your mood today." body="A brief reading helps you notice the load before the day closes." href="/mood-rhythm" cta="Log today’s mood" videoId="self_soothing" />
             )}
 
             {/* Quick Actions */}

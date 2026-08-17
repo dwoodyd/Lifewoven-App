@@ -634,10 +634,10 @@
   color: #8FA3B8;
 }
 .dimension-rule::before, .dimension-rule::after { content: ""; height: 1px; flex: 1; background: #345065; }
-.load-within { color: #4FD1C5; }
+.load-within { color: #73C99B; }
 .load-loaded { color: #E4A11B; }
 .load-over { color: #E2564A; }
 .load-track { background: #263646; }
-.load-fill-within { background: #4FD1C5; }
+.load-fill-within { background: #73C99B; }
 .load-fill-loaded { background: #E4A11B; }
 .load-fill-over { background: #E2564A; }

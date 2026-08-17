@@ -1303,7 +1303,16 @@
 - [x] Replace teal and pathway-specific accents with one warm yarn accent and five meaningful tension states
 - [x] Differentiate Pathway cards, Ground state chips, and the flagship Reset surface by hierarchy and form
 - [x] Fix the near-invisible non-Flagship Pathways badge
-- [ ] Test and visually verify the Structural Survey refinements before checkpointing
+- [x] Test and visually verify the Structural Survey refinements before checkpointing
+
+## Welcoming Dashboard and Lumen Empty-State Pass
+
+- [x] Audit dashboard ordering, survey placement, remaining teal use, and user-facing empty states
+- [x] Reorder dashboard as greeting plus Lumen, one next action, warm modules, then conditional survey access
+- [x] Replace the empty diagnostic with an invitation to take the first reading when no assessment exists
+- [x] Add contextual Lumen empty states for goals, active pathways, daily mood/check-in, and other empty modules
+- [x] Remove remaining teal from primary interactive palette and pathway accent use
+- [ ] Test, visually verify, and checkpoint the welcoming reordering pass
 
 ## Lifewoven Enhancement Brief (Current Scope)
 
