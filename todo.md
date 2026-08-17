@@ -1278,12 +1278,12 @@
 
 ## Structural Survey Redesign
 
-- [ ] Review and follow the supplied Structural Survey build instructions
+- [x] Review and follow the supplied Structural Survey build instructions
 - [x] Establish the Structural Survey design system: blueprint-cyan dark ground, hairline grids, dimension arrows, IBM Plex typography, and semantic load colors
 - [x] Redesign the primary dashboard to open on five live structural readings rather than a headline
 - [x] Apply engineering language and drawing/gauge conventions across relevant in-app surfaces
 - [x] Remove knitted-sun character media from app surfaces and preserve it only for marketing and book identity
-- [ ] Add tests, visually verify responsive behavior, and checkpoint the Structural Survey redesign
+- [x] Add tests, visually verify responsive behavior, and checkpoint the Structural Survey redesign
 
 ## Structural Survey Audit Corrections and Shared Standards
 
@@ -1294,6 +1294,16 @@
 - [x] Fix hero word-reveal semantics so spaces remain in the DOM, assistive technologies have an aria-label, and animated word spans are aria-hidden
 - [x] Correct Sign in header contrast in every theme and lift the shared muted text ramp above the contrast floor
 - [x] Build load-bearing assessment language and re-runnable 30/90/180-day comparison readings
+
+## Structural Survey Refinements
+
+- [x] Review the updated supplied build instructions and audit Ground, Pathways, completion, palette, and badge implementations
+- [x] Add contextual Lumen behavior for Ground state selection, Pathways rest/start, and completed pathway moments
+- [x] Use Mascot_Lumen_bouncing_joyfully for pathway completion, including Reset completion
+- [x] Replace teal and pathway-specific accents with one warm yarn accent and five meaningful tension states
+- [x] Differentiate Pathway cards, Ground state chips, and the flagship Reset surface by hierarchy and form
+- [x] Fix the near-invisible non-Flagship Pathways badge
+- [ ] Test and visually verify the Structural Survey refinements before checkpointing
 
 ## Lifewoven Enhancement Brief (Current Scope)
 

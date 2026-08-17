@@ -1,12 +1,14 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import Nav from "@/components/Nav";
+import { LuminScene } from "@/components/LuminScene";
 import { ArrowRight, Clock, Wind, BookOpen } from "lucide-react";
+import { useState } from "react";
 
 const QUICK_STATES = [
-  { label: "I feel scattered", href: "/ground/ground-check?state=scattered", icon: "◦" },
-  { label: "I feel burdened", href: "/ground/ground-check?state=burdened", icon: "◦" },
-  { label: "I feel ready to settle", href: "/ground/enter-the-ground", icon: "◦" },
+  { label: "I feel scattered", href: "/ground/ground-check?state=scattered", videoId: "crosses_face", response: "Let’s reduce the inputs first. You do not need to solve the whole day at once." },
+  { label: "I feel burdened", href: "/ground/ground-check?state=burdened", videoId: "self_soothing", response: "You can put some of that weight down here. Start with one breath." },
+  { label: "I feel ready to settle", href: "/ground/enter-the-ground", videoId: "floating_center", response: "Good. Lumen will stay with you while you settle into the practice." },
 ];
 
 const SECTIONS = [
@@ -21,8 +23,9 @@ const SECTIONS = [
 ];
 
 export default function BTWLanding() {
+  const [selectedState, setSelectedState] = useState<(typeof QUICK_STATES)[number] | null>(null);
   return (
-    <div className="min-h-screen bg-background">
+    <div className="structural-shell min-h-screen bg-background">
       <Nav />
       <div className="container pt-20 pb-24 max-w-3xl mx-auto px-4 sm:px-6">
 
@@ -44,16 +47,28 @@ export default function BTWLanding() {
         </div>
 
         {/* Quick state routing */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-3 border border-border mb-4">
           {QUICK_STATES.map(s => (
-            <Link key={s.label} href={s.href}>
-              <button className="w-full text-left p-4 rounded-2xl border border-border bg-card hover:bg-secondary/60 transition-colors group">
-                <span className="text-accent text-lg mr-2">◦</span>
-                <span className="text-sm font-light text-foreground">{s.label}</span>
-              </button>
-            </Link>
+            <button
+              key={s.label}
+              onClick={() => setSelectedState(s)}
+              className={`min-h-14 border-b sm:border-b-0 sm:border-r last:border-0 border-border px-4 text-left transition-colors ${selectedState?.label === s.label ? "bg-primary text-primary-foreground" : "bg-card hover:bg-secondary"}`}
+            >
+              <span className="font-mono text-xs tracking-wide">{s.label}</span>
+            </button>
           ))}
         </div>
+
+        {selectedState && (
+          <section className="instrument-panel mb-10 grid grid-cols-[88px_1fr] items-center gap-5 p-5" aria-live="polite">
+            <LuminScene videoId={selectedState.videoId} ambient loop ambientSize="88px" ambientPosition={{ position: "relative" }} className="opacity-100" />
+            <div>
+              <p className="font-mono text-xs uppercase tracking-[0.16em] text-primary mb-2">Lumen sees the reading</p>
+              <p className="text-sm leading-relaxed text-foreground">{selectedState.response}</p>
+              <Button asChild size="sm" className="mt-4 gap-2"><Link href={selectedState.href}>Begin from here <ArrowRight className="h-4 w-4" /></Link></Button>
+            </div>
+          </section>
+        )}
 
         {/* Primary CTA */}
         <div className="flex flex-col sm:flex-row gap-3 justify-center mb-16">

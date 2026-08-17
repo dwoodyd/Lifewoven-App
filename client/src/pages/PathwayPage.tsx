@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useRoute, Link } from "wouter";
 import { useLuminMoment } from "@/components/LuminMoment";
+import { LuminScene } from "@/components/LuminScene";
 import { useHaptics } from "@/hooks/useHaptics";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
@@ -151,6 +152,7 @@ export default function PathwayPage() {
     try { return localStorage.getItem(`${storageKey}_started`) === "1"; } catch { return false; }
   });
   const [sessionComplete, setSessionComplete] = useState(false);
+  const [lumenMode, setLumenMode] = useState<"floating_center" | "core_unfurls" | "bouncing_joyfully">("floating_center");
   const [luminCelebrate, setLoomCelebrate] = useState(false);
   const [backendHydrated, setBackendHydrated] = useState(false);
   const { triggerMoment } = useLuminMoment();
@@ -264,9 +266,9 @@ export default function PathwayPage() {
         }
         if (next.size === totalSteps) {
           setSessionComplete(true);
+          setLumenMode("bouncing_joyfully");
           haptics.heavy();
-          // Pathway finish — Lumin celebrates with a starburst or transformation
-          triggerMoment(Math.random() < 0.5 ? "starburst_joy" : "transformation");
+          triggerMoment("starburst_joy");
         } else {
           haptics.success();
         }
@@ -280,6 +282,7 @@ export default function PathwayPage() {
 
   function handleStartSession() {
     setSessionStarted(true);
+    setLumenMode("core_unfurls");
     setExpandedStep(0);
     window.scrollTo({ top: 300, behavior: "smooth" });
   }
@@ -297,6 +300,7 @@ export default function PathwayPage() {
     setCompletedSteps(new Set());
     setSessionStarted(false);
     setSessionComplete(false);
+    setLumenMode("floating_center");
     setExpandedStep(0);
     try {
       localStorage.removeItem(storageKey);
@@ -309,7 +313,7 @@ export default function PathwayPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="structural-shell min-h-screen bg-background">
       <Nav />
 
       {id !== "reset" && (
@@ -323,6 +327,10 @@ export default function PathwayPage() {
       )}
 
       <div className="container pt-20 pb-32 max-w-3xl mx-auto px-4 sm:px-6">
+        <div className="instrument-panel mb-6 flex items-center gap-4 p-4" aria-label={sessionComplete ? "Lumen celebrates your completed practice" : sessionStarted ? "Lumen unfurls as the practice begins" : "Lumen rests beside the pathway"}>
+          <LuminScene videoId={lumenMode} ambient loop ambientSize="72px" ambientPosition={{ position: "relative" }} className="opacity-100" />
+          <p className="font-mono text-xs leading-relaxed text-muted-foreground">{sessionComplete ? "Practice complete. The load has shifted." : sessionStarted ? "The pathway is open. Move one step at a time." : "Choose a pathway when you are ready to begin."}</p>
+        </div>
         <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-2">Pathway</p>
         <div className="flex items-start justify-between gap-4 mb-2">
           <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground">{pathway.name}</h1>

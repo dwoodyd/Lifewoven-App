@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "wouter";
 import { ArrowRight, Zap, Waves, TrendingUp, Eye, Layers, Compass, RefreshCw } from "lucide-react";
+import { LuminScene } from "@/components/LuminScene";
 
 const PATHWAYS = [
   {
@@ -106,28 +107,34 @@ export default function PathwaysListing() {
       <div className="container pt-20 pb-20 max-w-4xl mx-auto px-4 sm:px-6">
 
         {/* Header */}
-        <div className="mb-10">
-          <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest mb-3">Guided Experiences</p>
-          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-4">Pathways</h1>
-          <p className="text-muted-foreground font-light text-lg max-w-xl leading-relaxed">
-            Seven guided practice experiences, each designed for a specific moment in your life. Choose the one that meets you where you are.
-          </p>
+        <div className="mb-10 flex items-end justify-between gap-5">
+          <div>
+            <p className="instrument-label mb-3">Practice selection / current load</p>
+            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-4">Pathways</h1>
+            <p className="text-muted-foreground font-light text-lg max-w-xl leading-relaxed">
+              Seven guided practice experiences, each designed for a specific moment in your life. Choose the one that meets you where you are.
+            </p>
+          </div>
+          <div className="hidden sm:block border border-border bg-card p-2" aria-label="Lumen at rest beside pathway selection">
+            <LuminScene videoId="floating_center" ambient loop ambientSize="84px" ambientPosition={{ position: "relative" }} className="opacity-100" />
+          </div>
         </div>
 
         {/* Featured: Reset */}
         {PATHWAYS.filter(p => p.featured).map(pathway => {
           const Icon = pathway.icon;
           return (
-            <div key={pathway.slug} className={`rounded-2xl border-2 border-teal-200/60 bg-teal-50/30 p-5 sm:p-7 mb-8 relative overflow-hidden`}>
+            <div key={pathway.slug} className="relative mb-10 overflow-hidden border border-primary/60 bg-card shadow-[inset_4px_0_0_hsl(var(--primary))]">
               <div className="absolute top-4 right-4 flex gap-2">
-                <Badge variant="outline" className="text-xs font-mono tracking-wider border-teal-300 text-teal-700">{pathway.dimension}</Badge>
-                <Badge className="bg-teal-600 text-white text-xs font-mono tracking-wider">Flagship</Badge>
+                <Badge variant="outline" className="border-border bg-background/90 text-foreground text-xs font-mono tracking-wider">{pathway.dimension}</Badge>
+                <Badge className="bg-primary text-primary-foreground text-xs font-mono tracking-wider">Flagship · Reset Protocol</Badge>
               </div>
-              <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-5">
-                <div className={`p-4 rounded-xl ${pathway.bg} flex-shrink-0`}>
-                  <Icon className={`h-7 w-7 ${pathway.color}`} />
+              <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-5 p-5 sm:p-8">
+                <div className="border border-primary/50 bg-primary/10 p-4 flex-shrink-0">
+                  <Icon className="h-7 w-7 text-primary" />
                 </div>
                 <div className="flex-1">
+                  <p className="instrument-label mb-3">Load interruption / recovery sequence</p>
                   <div className="flex flex-wrap items-center gap-2 mb-1">
                     <h2 className="font-serif text-xl sm:text-2xl font-light text-foreground">{pathway.name}</h2>
                     <span className="text-sm text-muted-foreground">{pathway.subtitle}</span>
@@ -153,16 +160,17 @@ export default function PathwaysListing() {
             const Icon = pathway.icon;
             return (
               <Link key={pathway.slug} href={`/pathway/${pathway.slug}`}>
-                <div className={`group rounded-xl border ${pathway.border} bg-card hover:shadow-md transition-all duration-200 p-4 sm:p-6 cursor-pointer h-full`}>
+                <div className="group h-full border border-border bg-card transition-all duration-200 hover:border-primary/70 hover:bg-secondary/30">
+                  <div className="border-l-2 border-transparent p-4 sm:p-6 transition-colors group-hover:border-primary">
                   <div className="flex items-start gap-4 mb-4">
-                    <div className={`p-3 rounded-lg ${pathway.bg} flex-shrink-0`}>
-                      <Icon className={`h-5 w-5 ${pathway.color}`} />
+                    <div className="border border-primary/30 bg-primary/10 p-3 flex-shrink-0">
+                      <Icon className="h-5 w-5 text-primary" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                         <h3 className="font-serif text-xl font-light text-foreground">{pathway.name}</h3>
-                        <Badge variant="outline" className="text-xs font-mono hidden sm:inline-flex">{pathway.tag}</Badge>
-                        <Badge variant="outline" className="text-xs font-mono hidden sm:inline-flex border-muted-foreground/30 text-muted-foreground">{pathway.dimension}</Badge>
+                        <span className="hidden sm:inline-flex font-mono text-[10px] tracking-[0.12em] text-primary">{pathway.tag}</span>
+                        <span className="hidden sm:inline-flex font-mono text-[10px] tracking-[0.12em] text-muted-foreground">/{pathway.dimension}</span>
                       </div>
                       <p className="text-base text-muted-foreground">{pathway.subtitle}</p>
                     </div>
@@ -170,9 +178,10 @@ export default function PathwaysListing() {
                   <p className="text-base text-muted-foreground font-light leading-relaxed mb-4">{pathway.description}</p>
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-muted-foreground font-mono">{pathway.duration}</span>
-                    <span className={`text-xs font-medium ${pathway.color} flex items-center gap-1 group-hover:gap-2 transition-all`}>
+                    <span className="flex items-center gap-1 text-xs font-medium text-primary transition-all group-hover:gap-2">
                       Begin <ArrowRight className="h-3 w-3" />
                     </span>
+                  </div>
                   </div>
                 </div>
               </Link>

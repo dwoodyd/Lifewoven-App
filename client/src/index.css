@@ -26,21 +26,24 @@
   --font-sans: "IBM Plex Sans", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", monospace;
 
-  /* 5S Module Colors — earth-jewel set */
-  --color-state:              oklch(0.497 0.065 195);  /* #2E6E6E deep teal */
-  --color-story:              oklch(0.461 0.069 330);  /* #6E4A6B plum */
-  --color-standards:          oklch(0.474 0.027 161);  /* #4F6157 forest */
-  --color-strategy:           oklch(0.410 0.059 264);  /* #3A4A6B slate-navy */
-  --color-stewardship:        oklch(0.591 0.116 45);   /* #B5653F clay */
-
-  /* Pathway Colors — earth-jewel aligned */
-  --color-align:              oklch(0.55 0.065 195);
-  --color-resonance:          oklch(0.50 0.069 330);
-  --color-uplift:             oklch(0.639 0.113 80);
-  --color-flow:               oklch(0.52 0.027 161);
-  --color-rhythms:            oklch(0.52 0.027 161);
-  --color-purpose:            oklch(0.45 0.059 264);
-  --color-reset:              oklch(0.591 0.116 45);
+  /* One warm yarn accent. Pathways differentiate by name, icon, and purpose—not decorative color. */
+  --color-state: #D2A44A;
+  --color-story: #D2A44A;
+  --color-standards: #D2A44A;
+  --color-strategy: #D2A44A;
+  --color-stewardship: #D2A44A;
+  --color-align: #D2A44A;
+  --color-resonance: #D2A44A;
+  --color-uplift: #D2A44A;
+  --color-flow: #D2A44A;
+  --color-rhythms: #D2A44A;
+  --color-purpose: #D2A44A;
+  --color-reset: #D2A44A;
+  --load-unmeasured: #8FA3B8;
+  --load-within-tolerance: #73C99B;
+  --load-monitored: #D2A44A;
+  --load-elevated: #E7894B;
+  --load-over-capacity: #E2564A;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -89,27 +92,27 @@
   --card-foreground: #F2F7FA;
   --popover: #16202C;
   --popover-foreground: #F2F7FA;
-  --primary: #4FD1C5;
+  --primary: #D2A44A;
   --primary-foreground: #0E1620;
   --secondary: #1D2A38;
   --secondary-foreground: #F2F7FA;
   --muted: #1D2A38;
   --muted-foreground: #B8C6D2;
-  --accent: #4FD1C5;
+  --accent: #D2A44A;
   --accent-foreground: #0E1620;
   --destructive: #E2564A;
   --destructive-foreground: #0E1620;
   --border: #345065;
   --input: #345065;
-  --ring: #4FD1C5;
+  --ring: #D2A44A;
   --sidebar: #0E1620;
   --sidebar-foreground: #F2F7FA;
-  --sidebar-primary: #4FD1C5;
+  --sidebar-primary: #D2A44A;
   --sidebar-primary-foreground: #0E1620;
   --sidebar-accent: #1D2A38;
   --sidebar-accent-foreground: #F2F7FA;
   --sidebar-border: #345065;
-  --sidebar-ring: #4FD1C5;
+  --sidebar-ring: #D2A44A;
   --chart-1: oklch(0.497 0.065 195);
   --chart-2: oklch(0.461 0.069 330);
   --chart-3: oklch(0.474 0.027 161);
@@ -125,27 +128,27 @@
   --card-foreground: #F2F7FA;
   --popover: #16202C;
   --popover-foreground: #F2F7FA;
-  --primary: #4FD1C5;
+  --primary: #D2A44A;
   --primary-foreground: #0E1620;
   --secondary: #1D2A38;
   --secondary-foreground: #F2F7FA;
   --muted: #1D2A38;
   --muted-foreground: #B8C6D2;
-  --accent: #4FD1C5;
+  --accent: #D2A44A;
   --accent-foreground: #0E1620;
   --destructive: #E2564A;
   --destructive-foreground: #0E1620;
   --border: #345065;
   --input: #345065;
-  --ring: #4FD1C5;
+  --ring: #D2A44A;
   --sidebar: #0E1620;
   --sidebar-foreground: #F2F7FA;
-  --sidebar-primary: #4FD1C5;
+  --sidebar-primary: #D2A44A;
   --sidebar-primary-foreground: #0E1620;
   --sidebar-accent: #1D2A38;
   --sidebar-accent-foreground: #F2F7FA;
   --sidebar-border: #345065;
-  --sidebar-ring: #4FD1C5;
+  --sidebar-ring: #D2A44A;
   --chart-1: oklch(0.60 0.065 195);
   --chart-2: oklch(0.56 0.069 330);
   --chart-3: oklch(0.58 0.027 161);
