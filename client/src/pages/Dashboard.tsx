@@ -16,6 +16,7 @@ import ReentryFlow from "@/components/ReentryFlow";
 import BetterMirror from "@/components/BetterMirror";
 import PageSkeleton from "@/components/PageSkeleton";
 import { LuminScene } from "@/components/LuminScene";
+import { LumenLoadDiagnostic } from "@/components/LumenLoadDiagnostic";
 import { REENTRY, LOW_BANDWIDTH } from "../../../shared/adaptive-language";
 import {
   Waves, BookOpen, Target, Compass, Leaf, Sparkles,
@@ -380,7 +381,10 @@ export default function Dashboard() {
         )}
 
         {/* Structural Survey follows the warm working modules and only appears once a reading exists. */}
-        {hasSurveyReading && <section className="instrument-panel order-40 mb-6 sm:mb-8 p-4 sm:p-6">
+        <div className="order-40 mb-6 sm:mb-8">
+          <LumenLoadDiagnostic readings={structuralReadings} hasReading={hasSurveyReading} />
+        </div>
+        {false && hasSurveyReading && <section className="instrument-panel order-40 mb-6 sm:mb-8 p-4 sm:p-6">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-5">
             <div>
               <p className="instrument-label mb-2">Structural Survey / Live Readings</p>

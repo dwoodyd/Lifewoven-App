@@ -1314,6 +1314,16 @@
 - [x] Remove remaining teal from primary interactive palette and pathway accent use
 - [ ] Test, visually verify, and checkpoint the welcoming reordering pass
 
+## Lumen Load-Bearing Diagnostic
+
+- [x] Replace the five-column dashboard instrument panel with an interactive Lumen diagnostic
+- [x] Map State, Story, Standards, Strategy, and Stewardship readings to five Lumen threads and overall coherence to core brightness
+- [x] Create the curled, dim Lumen no-reading invitation state and run-survey unfurl transition
+- [x] Make each Lumen thread accessible and tappable to open its corresponding dimension
+- [x] Apply Hero, Present, Celebration, Peripheral, and Absent Lumen scale rules across app contexts
+- [x] Ensure dashboard copy and controls occupy Lumen’s negative space rather than overlaying the character
+- [ ] Test and visually verify Lumen diagnostic reading and no-reading states before checkpointing
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA

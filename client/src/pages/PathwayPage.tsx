@@ -316,6 +316,16 @@ export default function PathwayPage() {
     <div className="structural-shell min-h-screen bg-background">
       <Nav />
 
+      {sessionComplete && (
+        <LuminScene
+          videoId="bouncing_joyfully"
+          headline="Practice complete."
+          words={[{ word: "You", t: 1.0 }, { word: "showed", t: 1.5 }, { word: "up.", t: 2.0 }]}
+          showSkip
+          onComplete={() => undefined}
+        />
+      )}
+
       {id !== "reset" && (
         <div className="fixed bottom-6 right-6 z-40">
           <Link href="/pathway/reset">
