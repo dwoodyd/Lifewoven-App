@@ -1330,6 +1330,13 @@
 - [x] Rebuild the dashboard so Lumen herself is the primary diagnostic, with five threads mapped directly to the five load-bearing dimensions
 - [x] Limit this pass to Fix 1 and verify reading and no-reading Lumen states before checkpointing
 
+## Replacement Brief — Fix 1 Fidelity
+
+- [x] Refine the Lumen dashboard to a 50–60% desktop hero and a 45% mobile top scene, with copy in negative space and no contained mascot tile
+- [x] Render the five dimension controls as thread labels connected to Lumen, with core brightness/coherence as the single overall reading
+- [x] Use curled, dim Lumen as the no-reading state and the survey unfurl as the transition into measured state
+- [x] Keep the implementation strictly limited to the replacement brief’s Fix 1
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA
