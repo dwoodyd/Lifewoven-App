@@ -337,9 +337,11 @@ export default function PathwayPage() {
       )}
 
       <div className="container pt-20 pb-32 max-w-3xl mx-auto px-4 sm:px-6">
-        <div className="instrument-panel mb-6 flex items-center gap-4 p-4" aria-label={sessionComplete ? "Lumen celebrates your completed practice" : sessionStarted ? "Lumen unfurls as the practice begins" : "Lumen rests beside the pathway"}>
-          <LuminScene videoId={lumenMode} ambient loop ambientSize="72px" ambientPosition={{ position: "relative" }} className="opacity-100" />
-          <p className="font-mono text-xs leading-relaxed text-muted-foreground">{sessionComplete ? "Practice complete. The load has shifted." : sessionStarted ? "The pathway is open. Move one step at a time." : "Choose a pathway when you are ready to begin."}</p>
+        <div className="relative mb-6 min-h-[220px] overflow-hidden border-b border-primary/20" aria-label={sessionComplete ? "Lumen celebrates your completed practice" : sessionStarted ? "Lumen unfurls as the practice begins" : "Lumen rests beside the pathway"}>
+          <div className="pointer-events-none absolute right-[-6%] top-1/2 h-full w-[46%] -translate-y-1/2" aria-hidden="true">
+            <LuminScene videoId={lumenMode} ambient loop ambientSize="min(42vw, 330px)" ambientPosition={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }} className="opacity-100" />
+          </div>
+          <p className="relative z-10 max-w-[55%] pt-8 font-mono text-xs leading-relaxed text-muted-foreground">{sessionComplete ? "Practice complete. The load has shifted." : sessionStarted ? "The pathway is open. Move one step at a time." : "Choose a pathway when you are ready to begin."}</p>
         </div>
         <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-2">Pathway</p>
         <div className="flex items-start justify-between gap-4 mb-2">

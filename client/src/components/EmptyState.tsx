@@ -158,13 +158,14 @@ export function EmptyState({
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={gentleSpring}
-      className={`flex flex-col items-center justify-center gap-4 py-16 px-6 text-center ${className}`}
+      className={`relative flex min-h-[360px] flex-col items-center justify-end gap-4 overflow-hidden px-6 py-10 text-center ${className}`}
     >
-      <div className="relative h-24 w-24 text-muted-foreground/60" aria-hidden="true">
-        <LuminScene videoId={lumenVideo} ambient loop ambientSize="96px" ambientPosition={{ position: "relative" }} className="opacity-100" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[68%]" aria-hidden="true">
+        <LuminScene videoId={lumenVideo} ambient loop ambientSize="min(42vw, 300px)" ambientPosition={{ position: "absolute", left: "50%", top: "45%", transform: "translate(-50%, -50%)" }} className="opacity-100" />
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-[linear-gradient(180deg,transparent,var(--background))]" />
         <span className="sr-only"><Illustration /></span>
       </div>
-      <div className="space-y-1.5 max-w-xs">
+      <div className="relative z-10 space-y-1.5 max-w-xs">
         <p className="font-serif text-lg font-light text-foreground/80">{title}</p>
         {description && (
           <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
@@ -175,7 +176,7 @@ export function EmptyState({
           variant="outline"
           size="sm"
           onClick={action.onClick}
-          className="mt-2 gap-2"
+          className="relative z-10 mt-2 gap-2"
         >
           {action.icon}
           {action.label}

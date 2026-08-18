@@ -50,9 +50,12 @@ import FoundingWelcomeCard from "@/components/FoundingWelcomeCard";
 
 function LumenEmpty({ title, body, href, cta, videoId = "peaceful_idle" }: { title: string; body: string; href: string; cta: string; videoId?: string }) {
   return (
-    <div className="instrument-panel grid grid-cols-[60px_1fr] items-center gap-3 p-4 text-left">
-      <LuminScene videoId={videoId} ambient loop ambientSize="60px" ambientPosition={{ position: "relative" }} className="opacity-100" />
-      <div>
+    <div className="relative min-h-[330px] overflow-hidden border border-primary/20 bg-card px-5 pb-6 pt-44 text-left sm:pt-48">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[68%]" aria-hidden="true">
+        <LuminScene videoId={videoId} ambient loop ambientSize="min(42vw, 290px)" ambientPosition={{ position: "absolute", left: "50%", top: "48%", transform: "translate(-50%, -50%)" }} className="opacity-100" />
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-[linear-gradient(180deg,transparent,var(--card))]" />
+      </div>
+      <div className="relative z-10 max-w-sm">
         <p className="text-sm font-medium text-foreground">{title}</p>
         <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{body}</p>
         <Button asChild size="sm" variant="outline" className="mt-3 min-h-9 text-xs"><Link href={href}>{cta}</Link></Button>

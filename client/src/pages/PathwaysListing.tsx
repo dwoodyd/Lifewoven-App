@@ -13,9 +13,7 @@ const PATHWAYS = [
     description: "Begin each day anchored in your values and intentions. A short, repeatable morning practice that sets the tone for everything that follows.",
     duration: "7–10 min",
     icon: Compass,
-    color: "text-emerald-600",
-    bg: "bg-emerald-50",
-    border: "border-emerald-100",
+    scene: "settling",
     tag: "Daily Practice",
     dimension: "State",
   },
@@ -26,9 +24,7 @@ const PATHWAYS = [
     description: "A deeper practice for emotional and energetic alignment. Work with the Emotional Compass, guided visualization, and intentional state-setting.",
     duration: "20–30 min",
     icon: Waves,
-    color: "text-violet-600",
-    bg: "bg-violet-50",
-    border: "border-violet-100",
+    scene: "waves_sparkles",
     tag: "Alignment Work",
     dimension: "State",
   },
@@ -39,9 +35,7 @@ const PATHWAYS = [
     description: "Identify where you are on the Emotional Compass and use targeted practices to move deliberately toward higher-feeling states.",
     duration: "15–20 min",
     icon: TrendingUp,
-    color: "text-amber-600",
-    bg: "bg-amber-50",
-    border: "border-amber-100",
+    scene: "starburst_pose",
     tag: "Emotional Intelligence",
     dimension: "State",
   },
@@ -52,9 +46,7 @@ const PATHWAYS = [
     description: "Use the power of mental rehearsal and emotional futures to clarify what you want and begin living it from the inside out.",
     duration: "20–25 min",
     icon: Eye,
-    color: "text-sky-600",
-    bg: "bg-sky-50",
-    border: "border-sky-100",
+    scene: "pointing_energy",
     tag: "Visualization",
     dimension: "Story",
   },
@@ -65,9 +57,7 @@ const PATHWAYS = [
     description: "Build the behavioral architecture of the person you are becoming. Minimum viable habits, identity anchors, and the art of consistent return.",
     duration: "15–20 min",
     icon: Layers,
-    color: "text-orange-600",
-    bg: "bg-orange-50",
-    border: "border-orange-100",
+    scene: "turning_dial",
     tag: "Habit Design",
     dimension: "Standards",
   },
@@ -78,9 +68,7 @@ const PATHWAYS = [
     description: "Reconnect with your deepest why. Explore the sources of meaning in your life and build the resilience that comes from knowing what you are living for.",
     duration: "25–30 min",
     icon: Zap,
-    color: "text-rose-600",
-    bg: "bg-rose-50",
-    border: "border-rose-100",
+    scene: "self_hug",
     tag: "Meaning Work",
     dimension: "Stewardship",
   },
@@ -91,9 +79,7 @@ const PATHWAYS = [
     description: "The flagship resilience protocol. When life interrupts — when you fall, stop, or lose your footing — this pathway guides you back without shame.",
     duration: "20–30 min",
     icon: RefreshCw,
-    color: "text-primary",
-    bg: "bg-primary/10",
-    border: "border-primary/30",
+    scene: "burst_joy",
     tag: "Flagship Protocol",
     dimension: "State",
     featured: true,
@@ -115,25 +101,21 @@ export default function PathwaysListing() {
               Seven guided practice experiences, each designed for a specific moment in your life. Choose the one that meets you where you are.
             </p>
           </div>
-          <div className="hidden sm:block border border-border bg-card p-2" aria-label="Lumen at rest beside pathway selection">
-            <LuminScene videoId="floating_center" ambient loop ambientSize="84px" ambientPosition={{ position: "relative" }} className="opacity-100" />
-          </div>
         </div>
 
         {/* Featured: Reset */}
         {PATHWAYS.filter(p => p.featured).map(pathway => {
           const Icon = pathway.icon;
           return (
-            <div key={pathway.slug} className="relative mb-10 overflow-hidden border border-primary/60 bg-card shadow-[inset_4px_0_0_hsl(var(--primary))]">
-              <div className="absolute top-4 right-4 flex gap-2">
-                <Badge variant="outline" className="border-border bg-background/90 text-foreground text-xs font-mono tracking-wider">{pathway.dimension}</Badge>
+            <div key={pathway.slug} className="relative mb-10 min-h-[430px] overflow-hidden border border-primary/60 bg-card">
+              <LuminScene videoId={pathway.scene} ambient loop ambientSize="min(72vw, 760px)" ambientPosition={{ position: "absolute", right: "-3%", top: "50%", transform: "translateY(-50%)" }} className="opacity-100" />
+              <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--card)_0%,color-mix(in_oklch,var(--card)_87%,transparent)_44%,transparent_76%)]" aria-hidden="true" />
+              <div className="absolute top-4 right-4 z-20 flex gap-2">
+                <Badge variant="outline" className="border-primary/55 bg-background/90 text-foreground text-xs font-mono tracking-wider">{pathway.dimension}</Badge>
                 <Badge className="bg-primary text-primary-foreground text-xs font-mono tracking-wider">Flagship · Reset Protocol</Badge>
               </div>
-              <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-5 p-5 sm:p-8">
-                <div className="border border-primary/50 bg-primary/10 p-4 flex-shrink-0">
-                  <Icon className="h-7 w-7 text-primary" />
-                </div>
-                <div className="flex-1">
+              <div className="relative z-10 flex min-h-[430px] max-w-lg flex-col justify-end p-5 sm:p-8">
+                <div>
                   <p className="instrument-label mb-3">Load interruption / recovery sequence</p>
                   <div className="flex flex-wrap items-center gap-2 mb-1">
                     <h2 className="font-serif text-xl sm:text-2xl font-light text-foreground">{pathway.name}</h2>
@@ -160,28 +142,22 @@ export default function PathwaysListing() {
             const Icon = pathway.icon;
             return (
               <Link key={pathway.slug} href={`/pathway/${pathway.slug}`}>
-                <div className="group h-full border border-border bg-card transition-all duration-200 hover:border-primary/70 hover:bg-secondary/30">
-                  <div className="border-l-2 border-transparent p-4 sm:p-6 transition-colors group-hover:border-primary">
-                  <div className="flex items-start gap-4 mb-4">
-                    <div className="border border-primary/30 bg-primary/10 p-3 flex-shrink-0">
-                      <Icon className="h-5 w-5 text-primary" />
+                <div className="group relative min-h-[350px] overflow-hidden border border-border bg-card transition-all duration-200 hover:border-primary/70">
+                  <LuminScene videoId={pathway.scene} ambient loop ambientSize="min(63vw, 420px)" ambientPosition={{ position: "absolute", left: "50%", top: "42%", transform: "translate(-50%, -50%)" }} className="opacity-100" />
+                  <div className="absolute inset-x-0 bottom-0 h-[54%] bg-[linear-gradient(180deg,transparent_0%,color-mix(in_oklch,var(--card)_82%,transparent)_28%,var(--card)_84%)]" aria-hidden="true" />
+                  <div className="absolute inset-x-0 bottom-0 z-10 p-4 sm:p-6">
+                    <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+                      <h3 className="font-sans text-xl font-semibold text-foreground">{pathway.name}</h3>
+                      <span className="font-mono text-xs tracking-[0.12em] text-primary">{pathway.tag}</span>
                     </div>
-                    <div>
-                      <div className="flex items-center gap-2 mb-0.5 flex-wrap">
-                        <h3 className="font-serif text-xl font-light text-foreground">{pathway.name}</h3>
-                        <span className="hidden sm:inline-flex font-mono text-[10px] tracking-[0.12em] text-primary">{pathway.tag}</span>
-                        <span className="hidden sm:inline-flex font-mono text-[10px] tracking-[0.12em] text-muted-foreground">/{pathway.dimension}</span>
-                      </div>
-                      <p className="text-base text-muted-foreground">{pathway.subtitle}</p>
+                    <p className="text-sm text-muted-foreground mb-2">{pathway.subtitle}</p>
+                    <p className="text-sm text-muted-foreground font-light leading-relaxed mb-4">{pathway.description}</p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground font-mono">{pathway.duration} / {pathway.dimension}</span>
+                      <span className="flex items-center gap-1 text-xs font-medium text-primary transition-all group-hover:gap-2">
+                        Begin <ArrowRight className="h-3 w-3" />
+                      </span>
                     </div>
-                  </div>
-                  <p className="text-base text-muted-foreground font-light leading-relaxed mb-4">{pathway.description}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground font-mono">{pathway.duration}</span>
-                    <span className="flex items-center gap-1 text-xs font-medium text-primary transition-all group-hover:gap-2">
-                      Begin <ArrowRight className="h-3 w-3" />
-                    </span>
-                  </div>
                   </div>
                 </div>
               </Link>

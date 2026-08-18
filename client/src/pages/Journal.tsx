@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, Link } from "wouter";
 import { useLuminMoment } from "@/components/LuminMoment";
+import { LuminScene } from "@/components/LuminScene";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import Nav from "@/components/Nav";
@@ -183,7 +184,11 @@ export default function Journal() {
     <div className="min-h-screen bg-background">
       <Nav />
       <div className="container pt-20 pb-24 max-w-5xl mx-auto px-4 sm:px-6">
-        <div className="flex items-start justify-between gap-3 mb-6">
+        <div className="relative mb-6 min-h-[230px] overflow-hidden border-b border-primary/20 sm:min-h-[250px]">
+          <div className="pointer-events-none absolute right-[-6%] top-1/2 hidden h-full w-[42%] -translate-y-1/2 sm:block" aria-hidden="true">
+            <LuminScene videoId="tilting_listening" ambient loop ambientSize="min(38vw, 360px)" ambientPosition={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }} className="opacity-100" />
+          </div>
+          <div className="relative z-10 flex items-start justify-between gap-3 pt-5 sm:max-w-[68%]">
           <div className="flex items-start gap-3">
             <div className="p-2.5 sm:p-3 rounded-xl bg-secondary flex-shrink-0"><BookOpen className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" /></div>
             <div>
@@ -200,6 +205,7 @@ export default function Journal() {
               <Button onClick={() => setIsWriting(true)} size="sm" className="gap-1.5"><Plus className="h-4 w-4" /><span className="hidden sm:inline">New Entry</span><span className="sm:hidden">New</span></Button>
             </div>
           )}
+        </div>
         </div>
 
         {isWriting && (

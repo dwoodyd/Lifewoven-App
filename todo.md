@@ -1337,6 +1337,17 @@
 - [x] Use curled, dim Lumen as the no-reading state and the survey unfurl as the transition into measured state
 - [x] Keep the implementation strictly limited to the replacement brief’s Fix 1
 
+## Replacement Brief — Fixes 2 Through 8
+
+- [x] Lay out the home screen around Lumen’s silhouette, with greeting, next step, and controls in her negative space
+- [x] Build Lumen-led portrait pathway and dimension cards rather than image-in-card grid tiles
+- [x] Restore Lumen as an immersive Oracle surface
+- [x] Apply Hero, Present, Peripheral, and Celebration Lumen scale rules across app contexts, excluding settings and billing
+- [x] Extend contextual Lumen treatment to the remaining empty states
+- [x] Replace remaining blueprint/teal palette values with night ground and Lumen yarn tensions
+- [x] Sweep Pathways and other pill variants for contrast failures, including the low-visibility pre-Flagship pill
+- [x] Test and visually verify Fixes 2 through 8 before checkpointing
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA

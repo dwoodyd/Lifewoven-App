@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
 import { useLuminMoment } from "@/components/LuminMoment";
+import { LuminScene } from "@/components/LuminScene";
 import { useAuth } from "@/_core/hooks/useAuth";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
@@ -241,18 +242,25 @@ export default function Oracle() {
       <Nav />
       <div className="container pt-20 pb-6 max-w-3xl mx-auto flex flex-col flex-1 px-4 sm:px-6">
 
-        {/* Header */}
-        <div className="flex items-start gap-4 mb-5">
-          <div className="p-3 rounded-xl bg-accent/10 flex-shrink-0">
-            <Sparkles className="h-6 w-6 text-accent" />
-          </div>
-          <div className="flex-1">
-            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-1" style={{fontFamily:'"Playfair Display",Georgia,serif'}}>The Oracle</h1>
-            <p className="text-muted-foreground text-sm font-light">
-              Your personal AI guide, drawing from the five movements of the Soul Engineer Method.
+        {/* Oracle is one of Lumen's immersive surfaces: she is who the member addresses. */}
+        <section className="blueprint-grid relative -mx-4 mb-6 min-h-[46svh] overflow-hidden border-y border-primary/20 sm:mx-0 sm:min-h-[430px]" aria-labelledby="oracle-title">
+          <LuminScene
+            videoId={luminPulse ? "core_unfurls" : "nodding_gently"}
+            ambient
+            loop
+            ambientSize="min(59vw, 690px)"
+            ambientPosition={{ position: "absolute", right: "-4%", top: "50%", transform: "translateY(-50%)" }}
+            className="opacity-100"
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--background)_4%,color-mix(in_oklch,var(--background)_78%,transparent)_48%,transparent_75%)]" aria-hidden="true" />
+          <div className="relative z-20 flex min-h-[46svh] max-w-sm flex-col justify-center px-5 py-10 sm:min-h-[430px] sm:px-9">
+            <p className="instrument-label mb-3">The Oracle / live guidance</p>
+            <h1 id="oracle-title" className="font-sans text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">Ask, and she will read.</h1>
+            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+              Lumen holds the shape of your five dimensions while the Oracle helps you find the next honest move.
             </p>
           </div>
-        </div>
+        </section>
 
         {/* Oracle Sampler Counter — shown to Explorer/Seeker users with remaining questions */}
         {!hasOracleAccess && monthlyUsage.data && !monthlyUsage.data.hasFullAccess && (

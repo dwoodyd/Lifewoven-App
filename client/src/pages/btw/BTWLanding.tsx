@@ -60,9 +60,12 @@ export default function BTWLanding() {
         </div>
 
         {selectedState && (
-          <section className="instrument-panel mb-10 grid grid-cols-[88px_1fr] items-center gap-5 p-5" aria-live="polite">
-            <LuminScene videoId={selectedState.videoId} ambient loop ambientSize="88px" ambientPosition={{ position: "relative" }} className="opacity-100" />
-            <div>
+          <section className="relative mb-10 min-h-[300px] overflow-hidden border border-primary/25 bg-card px-5 pb-6 pt-44" aria-live="polite">
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-[70%]" aria-hidden="true">
+              <LuminScene videoId={selectedState.videoId} ambient loop ambientSize="min(46vw, 320px)" ambientPosition={{ position: "absolute", left: "50%", top: "45%", transform: "translate(-50%, -50%)" }} className="opacity-100" />
+              <div className="absolute inset-x-0 bottom-0 h-1/2 bg-[linear-gradient(180deg,transparent,var(--card))]" />
+            </div>
+            <div className="relative z-10 max-w-lg">
               <p className="font-mono text-xs uppercase tracking-[0.16em] text-primary mb-2">Lumen sees the reading</p>
               <p className="text-sm leading-relaxed text-foreground">{selectedState.response}</p>
               <Button asChild size="sm" className="mt-4 gap-2"><Link href={selectedState.href}>Begin from here <ArrowRight className="h-4 w-4" /></Link></Button>

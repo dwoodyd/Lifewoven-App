@@ -22,6 +22,7 @@ export function ThemeProvider({
   switchable = false,
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(() => {
+    if (!switchable) return defaultTheme;
     // Always read from localStorage first so the in-memory state matches
     // the class already applied by the anti-FOUC script in index.html
     const stored = localStorage.getItem("theme");
