@@ -381,7 +381,7 @@ export default function Dashboard() {
         )}
 
         {/* Structural Survey follows the warm working modules and only appears once a reading exists. */}
-        <div className="order-40 mb-6 sm:mb-8">
+        <div className="order-40 -mx-4 mb-8 sm:mx-0 sm:mb-10">
           <LumenLoadDiagnostic readings={structuralReadings} hasReading={hasSurveyReading} />
         </div>
         {false && hasSurveyReading && <section className="instrument-panel order-40 mb-6 sm:mb-8 p-4 sm:p-6">

@@ -1324,6 +1324,12 @@
 - [x] Ensure dashboard copy and controls occupy Lumen’s negative space rather than overlaying the character
 - [ ] Test and visually verify Lumen diagnostic reading and no-reading states before checkpointing
 
+## Revised Structural Survey — Ground Rule / Fix 1
+
+- [ ] Review the replacement Ground rule and Fix 1 instructions from the updated artifact
+- [x] Rebuild the dashboard so Lumen herself is the primary diagnostic, with five threads mapped directly to the five load-bearing dimensions
+- [x] Limit this pass to Fix 1 and verify reading and no-reading Lumen states before checkpointing
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA
