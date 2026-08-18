@@ -16,7 +16,7 @@ const THREAD_PLACEMENT = [
   "right-1 top-[27%] sm:right-[2%]",
   "right-1 top-[48%] sm:right-[7%]",
   "right-1 top-[69%] sm:right-[13%]",
-  "left-1 top-[39%] sm:left-[7%]",
+  "right-1 top-[86%] sm:right-[22%]",
 ];
 
 /**
@@ -39,7 +39,7 @@ export function LumenLoadDiagnostic({ readings, hasReading }: { readings: LumenD
         <LuminScene
           videoId={hasReading ? "core_unfurls" : "gentle_open"}
           ambient
-          loop={hasReading}
+          loop
           ambientSize="min(60vw, 780px)"
           ambientPosition={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}
           className={hasReading ? "opacity-100" : "opacity-40 saturate-50"}
@@ -52,6 +52,7 @@ export function LumenLoadDiagnostic({ readings, hasReading }: { readings: LumenD
           aria-hidden="true"
         />
 
+        {hasReading && (
         <div className="absolute inset-0 z-30" aria-label="Open a structural dimension">
           {readings.map((reading, index) => {
             const measured = reading.value !== null;
@@ -62,7 +63,7 @@ export function LumenLoadDiagnostic({ readings, hasReading }: { readings: LumenD
                 className={`group absolute min-h-11 max-w-[156px] px-2 py-1.5 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${THREAD_PLACEMENT[index]}`}
                 aria-label={`${reading.label}: ${measured ? `${reading.value} out of 100, ${reading.state}. Open ${reading.label}.` : `waiting for a reading. Open ${reading.label}.`}`}
               >
-                <span className="absolute top-1/2 -z-10 h-px w-12 bg-primary/45 transition-all group-hover:w-20 group-focus-visible:w-20 sm:w-20" style={index === 4 ? { left: "100%" } : { right: "100%" }} aria-hidden="true" />
+                <span className="absolute top-1/2 -z-10 h-px w-12 bg-primary/45 transition-all group-hover:w-20 group-focus-visible:w-20 sm:w-20" style={{ right: "100%" }} aria-hidden="true" />
                 <span className="block font-mono text-xs tracking-[0.14em] text-muted-foreground">THREAD {index + 1}</span>
                 <span className="block text-xs font-semibold uppercase tracking-[0.08em] text-foreground">{reading.label}</span>
                 <span className="block font-mono text-xs" style={{ color: measured ? reading.color : "var(--muted-foreground)" }}>
@@ -72,10 +73,11 @@ export function LumenLoadDiagnostic({ readings, hasReading }: { readings: LumenD
             );
           })}
         </div>
+        )}
       </div>
 
       {/* Copy lives in the negative space, beneath Lumen on mobile and left of her on desktop. */}
-      <header className="relative z-30 max-w-sm px-5 pb-8 pt-4 sm:px-8 lg:absolute lg:left-[6%] lg:top-[19%] lg:pb-0 lg:pt-0">
+      <header className="relative z-30 max-w-sm px-5 pb-8 pt-4 sm:px-8 lg:absolute lg:left-[6%] lg:top-[19%] lg:max-w-[26%] lg:pb-0 lg:pt-0">
         <p className="instrument-label mb-3">Live structural reading</p>
         <h2 id="lumen-diagnostic-title" className="font-sans text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
           {hasReading ? "Lumen is carrying your reading." : "Let’s take your first reading."}
