@@ -1348,6 +1348,10 @@
 - [x] Sweep Pathways and other pill variants for contrast failures, including the low-visibility pre-Flagship pill
 - [x] Test and visually verify Fixes 2 through 8 before checkpointing
 
+## First-Reading Lumen Video Correction
+
+- [x] Replace the broken first-reading dashboard Lumen clip with a warmer verified video and confirm it renders
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA
