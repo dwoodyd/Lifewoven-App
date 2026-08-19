@@ -19,7 +19,7 @@ const GLOSSARY: Record<string, { definition: string; context?: string }> = {
     definition: "Your personal journal — a place to reflect, process, and track your inner life over time.",
     context: "Accessible from the navigation.",
   },
-  "Soul Engineer Assessment": {
+  "Load-Bearing Survey": {
     definition: "A short self-assessment that maps where you are across the 5S dimensions and recommends your first pathway.",
     context: "Takes about 5 minutes.",
   },
@@ -27,7 +27,7 @@ const GLOSSARY: Record<string, { definition: string; context?: string }> = {
     definition: "A guided, timer-based practice experience designed for a specific moment in your life.",
     context: "Seven pathways available, from Align to Reset.",
   },
-  "Lumin": {
+  "Lumen": {
     definition: "The Lifewoven guide — a visual presence that accompanies you through practices and transitions.",
     context: "Not an assistant. A witness.",
   },

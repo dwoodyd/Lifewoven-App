@@ -127,14 +127,7 @@ describe("avgCycleLength", () => {
   });
 });
 
-describe("Hersey cycle reference", () => {
-  it("average human cycle of 35 days falls within 30-42 day range", () => {
-    // The Hersey research states ~5 weeks (35 days)
-    const hersheyAvg = 35;
-    expect(hersheyAvg).toBeGreaterThanOrEqual(30);
-    expect(hersheyAvg).toBeLessThanOrEqual(42);
-  });
-
+describe("reflective chart data", () => {
   it("a simulated 35-day cycle produces correct cycle length", () => {
     // Simulate 90 days of mood data with a 35-day cycle
     const scores: number[] = [];

@@ -67,7 +67,7 @@ const SCENES: Scene[] = [
       { text: "It's the first signal.", startAt: 2.0, size: "xl", accent: true, italic: true },
       { text: "Most days you push through it.", startAt: 3.6, size: "md" },
       { text: "We'll start by asking — once, honestly — where you actually are.", startAt: 5.0, size: "md" },
-      { text: "Lumin will be here.", startAt: 6.8, size: "lg", accent: true },
+      { text: "Lumen will be here.", startAt: 6.8, size: "lg", accent: true },
     ],
     cta: "And the story I tell myself? →",
   },
@@ -690,7 +690,7 @@ export default function OnboardingModal({ userId }: Props) {
             marginBottom: "0.4rem",
           }}>
             Open your dashboard whenever you're ready.<br />
-            Lumin is already waiting inside.
+            Lumen is already waiting inside.
           </p>
 
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.75rem", marginTop: "0.4rem" }}>
@@ -707,20 +707,20 @@ export default function OnboardingModal({ userId }: Props) {
               onMouseEnter={e => { (e.target as HTMLElement).style.transform = "scale(1.04)"; }}
               onMouseLeave={e => { (e.target as HTMLElement).style.transform = "scale(1)"; }}
             >
-              Take the Soul Engineer Assessment →
+              Take the Load-Bearing Survey →
             </button>
 
             <button
               onClick={() => goTo("/pricing")}
               style={{
-                background: "rgba(111,143,196,0.12)", color: "#6f8fc4",
-                border: "1px solid rgba(111,143,196,0.35)",
+                background: "rgba(216,184,120,0.12)", color: "#d8b878",
+                border: "1px solid rgba(216,184,120,0.35)",
                 padding: "0.75rem 2rem", borderRadius: 999,
                 fontSize: "0.88rem", fontWeight: 500, cursor: "pointer", fontFamily: "inherit",
                 transition: "background 0.2s ease",
               }}
-              onMouseEnter={e => { (e.target as HTMLElement).style.background = "rgba(111,143,196,0.22)"; }}
-              onMouseLeave={e => { (e.target as HTMLElement).style.background = "rgba(111,143,196,0.12)"; }}
+              onMouseEnter={e => { (e.target as HTMLElement).style.background = "rgba(216,184,120,0.22)"; }}
+              onMouseLeave={e => { (e.target as HTMLElement).style.background = "rgba(216,184,120,0.12)"; }}
             >
               Unlock the Oracle — $49/mo
             </button>

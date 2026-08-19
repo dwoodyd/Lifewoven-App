@@ -16,6 +16,7 @@ const DIM_COLORS: Record<string, string> = {
   state: "bg-state", story: "bg-story", standards: "bg-standards",
   strategy: "bg-strategy", stewardship: "bg-stewardship",
 };
+const CANONICAL_DIMENSIONS = ["state", "story", "standards", "strategy", "stewardship"] as const;
 const TIER_LABELS: Record<string, string> = {
   explorer: "Explorer", seeker: "Seeker", oracle: "Oracle",
 };
@@ -194,9 +195,11 @@ export default function Profile() {
               <Link href="/audit"><span className="text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer">Retake audit →</span></Link>
             </div>
             <div className="space-y-3">
-              {Object.entries(scores)
-                .sort(([, a], [, b]) => (b as number) - (a as number))
-                .map(([dim, pct]) => (
+              {CANONICAL_DIMENSIONS
+                .filter((dim) => typeof scores[dim] === "number")
+                .map((dim) => {
+                  const pct = scores[dim];
+                  return (
                   <div key={dim}>
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-sm text-foreground capitalize">{DIM_LABELS[dim] ?? dim}</span>
@@ -209,7 +212,8 @@ export default function Profile() {
                       />
                     </div>
                   </div>
-                ))}
+                  );
+                })}
             </div>
           </div>
         )}
@@ -241,7 +245,7 @@ export default function Profile() {
             {[
               { href: "/dashboard", label: "Dashboard" },
               { href: "/weave", label: "The Weave" },
-              { href: "/audit", label: "Soul Engineer Assessment" },
+              { href: "/audit", label: "Load-Bearing Survey" },
               { href: "/pricing", label: "Upgrade Plan" },
               { href: "/store", label: "Store" },
             ].map(({ href, label }) => (

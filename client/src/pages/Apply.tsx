@@ -42,7 +42,7 @@ export default function Apply() {
             I received your application. Check your inbox — I've sent a confirmation.
             I review every application personally and will be in touch soon.
           </p>
-          <p className="text-muted-foreground/60 text-sm italic">— Lumin, on behalf of Lifewoven</p>
+          <p className="text-muted-foreground/60 text-sm italic">— Lumen, on behalf of Lifewoven</p>
           <Link href="/">
             <Button variant="outline">
               Return Home

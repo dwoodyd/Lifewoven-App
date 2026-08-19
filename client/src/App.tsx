@@ -233,7 +233,7 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider defaultTheme="dark" switchable>
         <TooltipProvider>
-          <Toaster />
+          <Toaster duration={3000} />
           <BetaExpiredModal />
           <FeedbackWidget />
           <PWAInstallPrompt />

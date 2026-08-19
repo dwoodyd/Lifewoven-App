@@ -668,9 +668,8 @@ export const bookAttachments = mysqlTable("book_attachments", {
 export type BookAttachment = typeof bookAttachments.$inferSelect;
 export type InsertBookAttachment = typeof bookAttachments.$inferInsert;
 
-// ─── Mood Rhythm / Emotional Cycle Tracker ───────────────────────────────────
-// One entry per day — a simple 1-10 mood score logged each evening.
-// Used to detect the user's personal emotional cycle length (Hersey/Dewey research).
+// ─── Legacy Mood Logs ─────────────────────────────────────────────────────────
+// Retained for backwards compatibility. Member-facing rhythm views use Daily Check-ins.
 export const moodLogs = mysqlTable("mood_logs", {
   id:        int("id").autoincrement().primaryKey(),
   userId:    int("user_id").notNull(),

@@ -18,6 +18,7 @@ import { Link } from "wouter";
 import { getLoginUrl } from "@/const";
 import { AnimatePresence, motion } from "framer-motion";
 import { formatLifewovenDate, formatLifewovenToday } from "@/lib/datetime";
+import { buildOracleChatRequest } from "../../../shared/oracleConversation";
 
 const ORACLE_STARTERS = [
   "I feel stuck and don't know where to start.",
@@ -73,6 +74,7 @@ export default function Oracle() {
   const [mode, setMode] = useState<OracleMode>("guide");
   const [luminPulse, setLoomPulse] = useState(false);
   const [lastUserMessage, setLastUserMessage] = useState("");
+  const [conversationId, setConversationId] = useState<number | null>(null);
   const { triggerMoment } = useLuminMoment();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -101,7 +103,6 @@ export default function Oracle() {
   });
   const weeklyData = weeklyReflection.data?.summaryJson as Record<string, string> | null ?? null;
   const hasWeeklyData = weeklyEligibility.data?.hasSufficientData ?? false;
-  const cycleAnalysis = trpc.moodLog.getCycleAnalysis.useQuery(undefined, { enabled: isAuthenticated });
   const monthlyUsage = trpc.oracle.getMonthlyUsage.useQuery(undefined, { enabled: isAuthenticated && !hasOracleAccess });
   const { data: rbStatusOracle } = trpc.readingBridge.getStatus.useQuery(undefined, { enabled: isAuthenticated });
   // Weekly reading check-in: show once per week when user has a chapter set and no messages yet
@@ -142,6 +143,7 @@ export default function Oracle() {
   const chat = trpc.oracle.chat.useMutation({
     onSuccess: (data: any) => {
       setMessages(prev => [...prev.filter(m => !m.error), { role: "assistant", content: data.reply, tags: data.tags ?? [] }]);
+      setConversationId(typeof data.conversationId === "number" ? data.conversationId : null);
       setIsLoading(false);
       setLoomPulse(true);
       setTimeout(() => setLoomPulse(false), 800);
@@ -201,7 +203,7 @@ export default function Oracle() {
     setIsLoading(true);
     // Lumin thinks while Oracle processes the question
     triggerMoment("taps_chin");
-    chat.mutate({ message: modePrefix + content });
+    chat.mutate(buildOracleChatRequest(modePrefix + content, conversationId));
   };
 
   const retryLastMessage = () => {
@@ -211,18 +213,9 @@ export default function Oracle() {
     const modePrefix = mode === "unstuck"
       ? "[UNSTUCK MODE] The user is feeling stuck. Respond with compassionate, practical guidance that helps them identify what is blocking them and one small next step. Do not lecture. Do not overwhelm. "
       : "";
-    chat.mutate({ message: modePrefix + lastUserMessage });
+    chat.mutate(buildOracleChatRequest(modePrefix + lastUserMessage, conversationId));
   };
 
-  const PHASE_CONFIG: Record<string, { label: string; color: string; desc: string }> = {
-    rising:  { label: "Rising",  color: "text-emerald-400 border-emerald-400/30 bg-emerald-400/10", desc: "Your energy is building" },
-    peak:    { label: "Peak",    color: "text-amber-400 border-amber-400/30 bg-amber-400/10",   desc: "You are at your high point" },
-    falling: { label: "Falling", color: "text-blue-400 border-blue-400/30 bg-blue-400/10",     desc: "Energy is transitioning" },
-    trough:  { label: "Trough",  color: "text-violet-400 border-violet-400/30 bg-violet-400/10", desc: "A natural low — rest and reset" },
-    unknown: { label: "",        color: "",                                                       desc: "" },
-  };
-  const currentPhase = cycleAnalysis.data?.currentPhase ?? "unknown";
-  const phaseConfig = PHASE_CONFIG[currentPhase];
 
   if (!isAuthenticated) {
     return (
@@ -256,7 +249,7 @@ export default function Oracle() {
           <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--background)_4%,color-mix(in_oklch,var(--background)_78%,transparent)_48%,transparent_75%)]" aria-hidden="true" />
           <div className="relative z-20 flex min-h-[46svh] max-w-sm flex-col justify-center px-5 py-10 sm:min-h-[430px] sm:px-9">
             <p className="instrument-label mb-3">The Oracle / live guidance</p>
-            <h1 id="oracle-title" className="font-sans text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">Ask, and she will read.</h1>
+            <h1 id="oracle-title" className="font-sans text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">Ask, and we will read.</h1>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
               Lumen holds the shape of your five dimensions while the Oracle helps you find the next honest move.
             </p>
@@ -351,7 +344,7 @@ export default function Oracle() {
         )}
 
         {/* Mode Tabs */}
-        <div className="flex gap-1.5 sm:gap-2 mb-5 border-b border-border pb-4 overflow-x-auto">
+        <div className="sticky top-14 z-20 -mx-4 mb-5 flex gap-1.5 overflow-x-auto border-b border-border bg-background/95 px-4 pb-4 pt-2 backdrop-blur-sm sm:static sm:mx-0 sm:bg-transparent sm:px-0 sm:pt-0">
           {[
             { id: "guide" as OracleMode, label: "Guide", icon: MessageSquare, desc: "Open conversation" },
             { id: "unstuck" as OracleMode, label: "Unstuck", icon: AlertCircle, desc: "When you're blocked" },
@@ -361,7 +354,7 @@ export default function Oracle() {
             <button
               key={id}
               onClick={() => setMode(id)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all ${
+              className={`min-h-11 shrink-0 whitespace-nowrap flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all ${
                 mode === id
                   ? "bg-accent/10 text-accent border border-accent/20"
                   : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
@@ -773,22 +766,8 @@ export default function Oracle() {
               </div>
             )}
 
-            {/* Cycle phase badge — shown when mood data is available */}
-            {currentPhase !== "unknown" && phaseConfig.label && (
-              <div className="flex items-center gap-2 mb-1">
-                <span
-                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono border ${phaseConfig.color}`}
-                  title={phaseConfig.desc}
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-current opacity-80" />
-                  {phaseConfig.label} phase
-                </span>
-                <span className="text-xs text-muted-foreground/60 font-light">{phaseConfig.desc}</span>
-              </div>
-            )}
-
             {/* Input */}
-            <div className="sticky bottom-0 z-10 flex gap-2 items-end bg-background/95 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-sm">
+            <div className="sticky bottom-0 z-10 grid grid-cols-[minmax(0,1fr)_52px] gap-2 bg-background/95 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-sm">
               <Textarea
                 placeholder={mode === "unstuck" ? "Describe what is blocking you..." : "What are you carrying right now?"}
                 value={input}
@@ -797,15 +776,15 @@ export default function Oracle() {
                 className="resize-none text-sm min-h-[52px] max-h-[120px] scroll-mb-[45vh]"
                 rows={2}
               />
-              <div className="flex flex-col gap-2">
-                <Button onClick={() => sendMessage(input)} disabled={!input.trim() || isLoading || !isOnline} size="icon" className="h-[52px] w-[52px] flex-shrink-0" aria-label="Send message">
-                  {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-                </Button>
+              <div className="flex flex-col justify-end gap-2">
                 {messages.length > 0 && (
-                  <Button variant="outline" size="icon" className="h-9 w-9 flex-shrink-0" onClick={() => { setMessages([]); setLastUserMessage(""); }} aria-label="New conversation" title="New conversation">
+                  <Button variant="outline" size="icon" className="h-9 w-9 flex-shrink-0" onClick={() => { setMessages([]); setLastUserMessage(""); setConversationId(null); }} aria-label="New conversation" title="New conversation">
                     <RefreshCw className="h-3.5 w-3.5" />
                   </Button>
                 )}
+                <Button onClick={() => sendMessage(input)} disabled={!input.trim() || isLoading || !isOnline} size="icon" className="h-[52px] w-[52px] flex-shrink-0" aria-label="Send message">
+                  {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                </Button>
               </div>
             </div>
             <p className="text-xs text-muted-foreground text-center">

@@ -1378,9 +1378,9 @@
 ## August 19 Audit — Next Priority
 
 - [x] Persist started pathway progress to the dashboard active-pathways read model
-- [ ] Standardize the survey name across routes, dashboard, assessment, Pathways, and disclaimer copy
+- [x] Standardize the survey name across routes, dashboard, assessment, Pathways, and disclaimer copy
 - [x] Prevent survey interpretation claims when dimension scores are tied and render equal scores without false visual differentiation
-- [ ] Enforce canonical 5S order: State, Story, Standards, Strategy, Stewardship across all surfaces
+- [x] Enforce canonical 5S order: State, Story, Standards, Strategy, Stewardship across all surfaces
 - [x] Consolidate Daily Check-in and Mood Rhythm into one connected source of truth
 - [x] Eliminate full-screen splash remounts on route navigation
 - [ ] Make the avatar open its intended menu
@@ -1388,12 +1388,13 @@
 ## August 19 Audit — Polish
 
 - [x] Brand the 404 page and repair dead `/resources` navigation
-- [ ] Standardize Lumen spelling and Oracle pronouns, restore Oracle conversational memory, and make toasts dismissible
-- [ ] Fix Mood Rhythm layout overlap, off-palette controls, and unsupported fringe-research framing
-- [ ] Correct Reset duration, Oracle tab/input sticky behavior, and beta cancel control
+- [x] Route the Dashboard "Log today’s mood" action to the shared Daily Check-in rather than the legacy Mood Rhythm view
+- [x] Standardize Lumen spelling and Oracle pronouns, restore Oracle conversational memory, and make toasts dismissible
+- [x] Fix Mood Rhythm layout overlap, off-palette controls, and unsupported fringe-research framing
+- [x] Correct Reset duration, Oracle tab/input sticky behavior, and beta cancel control
 - [x] Separate The Weave composer module tags from archive filters and correct its prompt direction
 - [x] Remove desktop-only pull-to-refresh text
-- [ ] Reduce oversized empty-state whitespace
+- [x] Reduce oversized empty-state whitespace
 - [x] Clean up only the audit test data identified in the attachment after verifying ownership and exact identifiers
 
 ## Lifewoven Enhancement Brief (Current Scope)

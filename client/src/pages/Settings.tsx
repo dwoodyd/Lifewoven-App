@@ -15,7 +15,7 @@ import { setHapticsEnabled, getHapticsEnabled } from "@/hooks/useHaptics";
 const TIER_LABELS: Record<string, { label: string; color: string; desc: string }> = {
   explorer: { label: "Explorer", color: "bg-secondary text-foreground", desc: "Free tier — core tools included." },
   seeker:   { label: "Seeker",   color: "bg-accent/20 text-accent",     desc: "Full access — every tool unlocked." },
-  oracle:   { label: "Oracle",   color: "bg-primary/20 text-primary",   desc: "Lumin and the Oracle work continuously on your behalf." },
+  oracle:   { label: "Oracle",   color: "bg-primary/20 text-primary",   desc: "Lumen and the Oracle work continuously on your behalf." },
 };
 
 // ── Post-upgrade Oracle animation overlay ─────────────────────────────────────
@@ -43,7 +43,7 @@ function OracleUpgradeAnimation({ onDone }: { onDone: () => void }) {
     >
       <style>{`@keyframes fadeOut { to { opacity: 0; pointer-events: none; } }`}</style>
 
-      {/* Lumin — celebrating then settling */}
+      {/* Lumen — celebrating then settling */}
       <div style={{ width: "min(52vw, 380px)", marginBottom: "1.5rem" }}>
         <video
           key={phase}
@@ -70,7 +70,7 @@ function OracleUpgradeAnimation({ onDone }: { onDone: () => void }) {
         fontStyle: "italic",
         textAlign: "center",
       }}>
-        Lumin and the Oracle are with you now.
+        Lumen and the Oracle are with you now.
       </p>
     </div>
   );
@@ -129,7 +129,10 @@ function BillingSection() {
 
   const tier = sub?.tier ?? "explorer";
   const tierInfo = TIER_LABELS[tier] ?? TIER_LABELS.explorer;
-  const isBetaMember = sub?.foundingMember && sub?.billingStatus === "beta";
+  const isBetaMember = Boolean(
+    sub?.foundingMember &&
+    (sub?.billingStatus === "trialing_no_card" || sub?.billingStatus === "beta")
+  );
   const betaEndDate = sub?.betaEndDate;
 
   return (
@@ -311,7 +314,7 @@ export default function Settings() {
     window.dispatchEvent(new StorageEvent("storage", { key: "lifeos_lumin_enabled", newValue: value ? "true" : "false" }));
     setLuminEnabled(value);
     setLuminEnabledMutation.mutate({ enabled: value });
-    toast.success(value ? "Lumin restored." : "Lumin hidden across all pages.");
+    toast.success(value ? "Lumen restored." : "Lumen hidden across all pages.");
   };
 
   const handleHaptics = (value: boolean) => {
@@ -337,7 +340,7 @@ export default function Settings() {
     // Dispatch a storage event so LuminAmbient and LuminCorner can react immediately
     window.dispatchEvent(new StorageEvent("storage", { key: "lifeos_screenshot_mode", newValue: value ? "true" : "false" }));
     setScreenshotMode(value);
-    toast.success(value ? "Screenshot mode on — Lumin hidden." : "Screenshot mode off — Lumin restored.");
+    toast.success(value ? "Screenshot mode on — Lumen hidden." : "Screenshot mode off — Lumen restored.");
   };
 
   return (
@@ -379,7 +382,7 @@ export default function Settings() {
                 <div>
                   <p className="text-sm font-medium text-foreground mb-0.5">Replay the intro</p>
                   <p className="text-xs text-muted-foreground font-light leading-relaxed max-w-sm">
-                    Re-experience the Lifewoven introduction — Lumin's first appearance, the 5S Framework, and the Reset pathway.
+                    Re-experience the Lifewoven introduction — Lumen's first appearance, the 5S Framework, and the Reset pathway.
                   </p>
                 </div>
                 <Button
@@ -503,17 +506,17 @@ export default function Settings() {
               </button>
             </div>
 
-            {/* Lumin Toggle */}
+            {/* Lumen Toggle */}
             <div className="flex items-start justify-between gap-3 py-4 border-b border-border/50">
               <div>
-                <p className="text-sm font-medium text-foreground mb-0.5">Show Lumin</p>
+                <p className="text-sm font-medium text-foreground mb-0.5">Show Lumen</p>
                 <p className="text-xs text-muted-foreground font-light leading-relaxed max-w-sm">
-                  Show Lumin's ambient video presence across the app. Disable if you prefer a cleaner, distraction-free interface.
+                  Show Lumen's ambient video presence across the app. Disable if you prefer a cleaner, distraction-free interface.
                 </p>
               </div>
               <button
                 onClick={() => handleLuminEnabled(!luminEnabled)}
-                aria-label={luminEnabled ? "Hide Lumin" : "Show Lumin"}
+                aria-label={luminEnabled ? "Hide Lumen" : "Show Lumen"}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 mt-0.5 ${luminEnabled ? "bg-accent" : "bg-muted"}`}
               >
                 <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${luminEnabled ? "translate-x-6" : "translate-x-1"}`} />
@@ -542,7 +545,7 @@ export default function Settings() {
               <div>
                 <p className="text-sm font-medium text-foreground mb-0.5">Screenshot mode</p>
                 <p className="text-xs text-muted-foreground font-light leading-relaxed max-w-sm">
-                  Hide Lumin's video backgrounds across all pages so you can take clean UI screenshots for marketing or sharing.
+                  Hide Lumen's video backgrounds across all pages so you can take clean UI screenshots for marketing or sharing.
                 </p>
               </div>
               <button

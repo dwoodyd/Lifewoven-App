@@ -1,9 +1,6 @@
 /**
- * Mood Rhythm / Emotional Cycle Tracker
- *
- * Based on the Hersey/Dewey research: the average human emotional cycle is ~5 weeks
- * (peak elation → worry → back to elation). This router lets users log a daily
- * 1-10 mood score and detects their personal cycle length over time.
+ * Legacy mood-log compatibility router. New member-facing rhythm views are based
+ * on Daily Check-ins and do not claim to predict emotional cycles.
  */
 
 import { z } from "zod";

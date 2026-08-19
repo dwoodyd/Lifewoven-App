@@ -17,6 +17,7 @@ import BetterMirror from "@/components/BetterMirror";
 import PageSkeleton from "@/components/PageSkeleton";
 import { LuminScene } from "@/components/LuminScene";
 import { LumenLoadDiagnostic } from "@/components/LumenLoadDiagnostic";
+import { formatLifewovenDate, formatLifewovenToday } from "@/lib/datetime";
 import { REENTRY, LOW_BANDWIDTH } from "../../../shared/adaptive-language";
 import {
   Waves, BookOpen, Target, Compass, Leaf, Sparkles,
@@ -48,17 +49,21 @@ const MODULE_CONFIG = [
 
 import FoundingWelcomeCard from "@/components/FoundingWelcomeCard";
 
-function LumenEmpty({ title, body, href, cta, videoId = "peaceful_idle" }: { title: string; body: string; href: string; cta: string; videoId?: string }) {
+function LumenEmpty({ title, body, href, onAction, cta, videoId = "peaceful_idle" }: { title: string; body: string; href?: string; onAction?: () => void; cta: string; videoId?: string }) {
   return (
-    <div className="relative min-h-[330px] overflow-hidden border border-primary/20 bg-card px-5 pb-6 pt-44 text-left sm:pt-48">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[68%]" aria-hidden="true">
-        <LuminScene videoId={videoId} ambient loop ambientSize="min(42vw, 290px)" ambientPosition={{ position: "absolute", left: "50%", top: "48%", transform: "translate(-50%, -50%)" }} className="opacity-100" />
+    <div className="relative min-h-[240px] overflow-hidden border border-primary/20 bg-card px-5 pb-6 pt-32 text-left sm:pt-36">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[60%]" aria-hidden="true">
+        <LuminScene videoId={videoId} ambient loop ambientSize="min(36vw, 220px)" ambientPosition={{ position: "absolute", left: "50%", top: "48%", transform: "translate(-50%, -50%)" }} className="opacity-100" />
         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-[linear-gradient(180deg,transparent,var(--card))]" />
       </div>
       <div className="relative z-10 max-w-sm">
         <p className="text-sm font-medium text-foreground">{title}</p>
         <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{body}</p>
-        <Button asChild size="sm" variant="outline" className="mt-3 min-h-9 text-xs"><Link href={href}>{cta}</Link></Button>
+        {href ? (
+          <Button asChild size="sm" variant="outline" className="mt-3 min-h-9 text-xs"><Link href={href}>{cta}</Link></Button>
+        ) : (
+          <Button size="sm" variant="outline" className="mt-3 min-h-9 text-xs" onClick={onAction}>{cta}</Button>
+        )}
       </div>
     </div>
   );
@@ -110,15 +115,17 @@ export default function Dashboard() {
   const { data: oracleInsights } = trpc.oracle.insights.useQuery(undefined, { enabled: isAuthenticated });
   const { data: lastPracticed } = trpc.pathways.lastPracticed.useQuery(undefined, { enabled: isAuthenticated });
   const { data: streakData } = trpc.pathways.practiceStreak.useQuery(undefined, { enabled: isAuthenticated });
-  const { data: todayMood } = trpc.moodLog.getTodayMood.useQuery(undefined, { enabled: isAuthenticated });
   const { data: goalStats } = trpc.goals.stats.useQuery(undefined, { enabled: isAuthenticated });
   const { data: rbStatus } = trpc.readingBridge.getStatus.useQuery(undefined, { enabled: isAuthenticated });
   const recentCheckIns = (dashData as any)?.recentCheckIns ?? [];
   const hasRecordedCheckIns = recentCheckIns.length > 0;
-  const hasMoodToday = !!(todayMood as any)?.score;
-  // Evening nudge: show after 5pm local time when no mood logged today
+  const dateKeyOptions = { year: "numeric", month: "2-digit", day: "2-digit" } as const;
+  const hasDailyCheckInToday = recentCheckIns.some((checkIn: any) =>
+    formatLifewovenDate(checkIn.createdAt, dateKeyOptions) === formatLifewovenToday(dateKeyOptions)
+  );
+  // Evening nudge: show after 5pm local time when no Daily Check-in is recorded today.
   const isEvening = new Date().getHours() >= 17;
-  const showMoodNudge = isEvening && !hasMoodToday;
+  const showMoodNudge = isEvening && !hasDailyCheckInToday;
 
   // Wire Reset surfacing to check-in score < 4 and audit friction tags
   useEffect(() => {
@@ -184,13 +191,13 @@ export default function Dashboard() {
 
   // Pathway-to-route mapping for audit-based routing
   const PATHWAY_ROUTES: Record<string, { href: string; label: string; sub: string; cta: string }> = {
-    align: { href: "/pathway/align", label: "Begin your Align practice", sub: "Your Soul Engineer Assessment recommends starting with Align — a daily grounding sequence.", cta: "Start Align" },
-    reset: { href: "/pathway/reset", label: "Begin your Reset practice", sub: "Your Soul Engineer Assessment recommends starting with Reset — a resilience protocol for re-entry.", cta: "Start Reset" },
-    uplift: { href: "/pathway/uplift", label: "Begin your Uplift practice", sub: "Your Soul Engineer Assessment recommends starting with Uplift — emotional set-point shifting.", cta: "Start Uplift" },
-    rhythms: { href: "/standards", label: "Build your Rhythms", sub: "Your Soul Engineer Assessment recommends starting with Rhythms — identity-based habit design.", cta: "Build My Rhythms" },
-    purpose: { href: "/pathway/purpose", label: "Begin your Purpose practice", sub: "Your Soul Engineer Assessment recommends starting with Purpose — meaning and direction work.", cta: "Start Purpose" },
-    strategy: { href: "/strategy", label: "Open your Strategy module", sub: "Your Soul Engineer Assessment recommends starting with Strategy — decision and direction clarity.", cta: "Open Strategy" },
-    stewardship: { href: "/stewardship", label: "Open your Stewardship module", sub: "Your Soul Engineer Assessment recommends starting with Stewardship — energy and rhythm repair.", cta: "Open Stewardship" },
+    align: { href: "/pathway/align", label: "Begin your Align practice", sub: "Your Load-Bearing Survey recommends starting with Align — a daily grounding sequence.", cta: "Start Align" },
+    reset: { href: "/pathway/reset", label: "Begin your Reset practice", sub: "Your Load-Bearing Survey recommends starting with Reset — a resilience protocol for re-entry.", cta: "Start Reset" },
+    uplift: { href: "/pathway/uplift", label: "Begin your Uplift practice", sub: "Your Load-Bearing Survey recommends starting with Uplift — emotional set-point shifting.", cta: "Start Uplift" },
+    rhythms: { href: "/standards", label: "Build your Rhythms", sub: "Your Load-Bearing Survey recommends starting with Rhythms — identity-based habit design.", cta: "Build My Rhythms" },
+    purpose: { href: "/pathway/purpose", label: "Begin your Purpose practice", sub: "Your Load-Bearing Survey recommends starting with Purpose — meaning and direction work.", cta: "Start Purpose" },
+    strategy: { href: "/strategy", label: "Open your Strategy module", sub: "Your Load-Bearing Survey recommends starting with Strategy — decision and direction clarity.", cta: "Open Strategy" },
+    stewardship: { href: "/stewardship", label: "Open your Stewardship module", sub: "Your Load-Bearing Survey recommends starting with Stewardship — energy and rhythm repair.", cta: "Open Stewardship" },
   };
 
   const auditNextStep = primaryPathway ? PATHWAY_ROUTES[primaryPathway.toLowerCase()] : null;
@@ -384,14 +391,14 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* Structural Survey follows the warm working modules and only appears once a reading exists. */}
+        {/* The Load-Bearing Survey follows the warm working modules and only appears once a reading exists. */}
         <div className="order-40 -mx-4 mb-8 sm:mx-0 sm:mb-10">
           <LumenLoadDiagnostic readings={structuralReadings} hasReading={hasSurveyReading} />
         </div>
         {false && hasSurveyReading && <section className="instrument-panel order-40 mb-6 sm:mb-8 p-4 sm:p-6">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-5">
             <div>
-              <p className="instrument-label mb-2">Structural Survey / Live Readings</p>
+              <p className="instrument-label mb-2">Load-Bearing Survey / Live Readings</p>
               <h1 className="font-sans text-xl sm:text-2xl font-semibold tracking-tight text-foreground">Load-bearing dimensions</h1>
             </div>
             <div className="dimension-rule w-full sm:w-64">Survey reading · {((dashData as any)?.latestSurvey?.createdAt ? new Date((dashData as any).latestSurvey.createdAt).toLocaleDateString() : "Run survey")}</div>
@@ -778,7 +785,16 @@ export default function Dashboard() {
 
             {/* Evening mood nudge */}
             {showMoodNudge && (
-              <LumenEmpty title="You haven’t logged your mood today." body="A brief reading helps you notice the load before the day closes." href="/mood-rhythm" cta="Log today’s mood" videoId="self_soothing" />
+              <LumenEmpty
+                title="You haven’t completed a Daily Check-in today."
+                body="A brief reading helps you notice the load before the day closes."
+                cta="Complete Daily Check-in"
+                onAction={() => {
+                  setShowCheckIn(true);
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                videoId="self_soothing"
+              />
             )}
 
             {/* Quick Actions */}

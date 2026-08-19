@@ -84,7 +84,7 @@ export default function InviteRedeem() {
           <h1 className="text-3xl font-serif text-foreground">Welcome to the weave.</h1>
           <p className="text-muted-foreground text-lg leading-relaxed">
             Your founding access is active. Your rate is locked for life.
-            Lumin is ready when you are.
+            Lumen is ready when you are.
           </p>
           <Button
             className="h-12 px-8 text-base font-semibold bg-accent text-accent-foreground hover:bg-accent/90"

@@ -264,8 +264,8 @@ export default function AlignmentAudit() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `My Lifewoven Alignment Profile: ${result.profile.name}`,
-          text: `I just completed the Lifewoven Soul Engineer Assessment. My profile is "${result.profile.name}". Find out yours:`,
+          title: `My Lifewoven Load-Bearing Survey profile: ${result.profile.name}`,
+          text: `I just completed the Lifewoven Load-Bearing Survey. My profile is "${result.profile.name}". Find out yours:`,
           url: shareUrl,
         });
         return;
@@ -293,7 +293,7 @@ export default function AlignmentAudit() {
         <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-6 leading-tight">Find your clearest<br />place to begin.</h1>
         <p className="text-muted-foreground text-base leading-relaxed mb-6 max-w-md mx-auto">The Load-Bearing Survey reads which dimensions are carrying weight, where tolerance is thin, and what needs reinforcement first. There are four short sections. Answer from the structure you are actually living in.</p>
         <div className="flex items-center justify-center gap-3 mb-6 flex-wrap">
-          {["12 questions", "3 to 5 minutes", "Free, no account required"].map(tag => (
+          {["12 questions", "3 to 5 minutes", ...(!isAuthenticated ? ["Free, no account required"] : [])].map(tag => (
             <span key={tag} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border text-xs text-muted-foreground">
               <span className="w-1.5 h-1.5 rounded-full bg-accent inline-block" /> {tag}
             </span>
@@ -479,7 +479,7 @@ export default function AlignmentAudit() {
             </ul>
           </div>
           <div className="p-6 rounded-2xl border border-accent/20 bg-accent/3 mb-4">
-            <h3 className="font-sans text-lg font-semibold text-foreground mb-1">Five structural readings</h3>
+            <h3 className="font-sans text-lg font-semibold text-foreground mb-1">Five load-bearing readings</h3>
             <p className="text-xs text-muted-foreground mb-4">Where your energy is going right now, based on your responses.</p>
             <div className="space-y-3">
               {(() => {
@@ -515,17 +515,14 @@ export default function AlignmentAudit() {
               Stewardship: "your energy, body, and stewardship rhythms",
             };
             return (
-              <div className="p-6 rounded-2xl border mb-4" style={{
-                background: "linear-gradient(135deg, rgba(111,143,196,0.08), rgba(216,184,120,0.05))",
-                borderColor: "rgba(111,143,196,0.28)",
-              }}>
+              <div className="p-6 rounded-2xl border border-accent/25 bg-accent/5 mb-4">
                 <div className="flex items-start gap-4">
-                  <div className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-xl" style={{ background: "rgba(111,143,196,0.15)", color: "#6f8fc4" }}>◎</div>
+                  <div className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-xl bg-accent/15 text-accent">◎</div>
                   <div className="flex-1">
-                    <p className="text-xs font-mono tracking-widest uppercase mb-1" style={{ color: "#6f8fc4" }}>Your Oracle is ready</p>
+                    <p className="text-xs font-mono tracking-widest uppercase mb-1 text-accent">Your Oracle is ready</p>
                     <h3 className="font-serif text-lg font-light text-foreground mb-2">
                       {hasDistinctLowestDimension
-                        ? <>Your <span style={{ color: "#6f8fc4" }}>{lowestDim}</span> dimension is asking for attention right now.</>
+                        ? <>Your <span className="text-accent">{lowestDim}</span> dimension is asking for attention right now.</>
                         : <>Your readings are carrying a shared load right now.</>}
                     </h3>
                     <p className="text-sm text-muted-foreground leading-relaxed mb-4">
@@ -535,11 +532,11 @@ export default function AlignmentAudit() {
                     </p>
                     <div className="flex flex-col sm:flex-row gap-2">
                       {isAuthenticated ? (
-                        <Button size="sm" asChild style={{ background: "linear-gradient(135deg, #6f8fc4, #8ba8d4)", color: "white", border: "none" }}>
-                          <a href="/oracle">{hasDistinctLowestDimension ? `Ask about my ${lowestDim}` : "Explore my readings"} →</a>
+                        <Button size="sm" asChild>
+                          <a href="/oracle">{hasDistinctLowestDimension ? `Ask the Oracle about my ${lowestDim}` : "Explore my readings"} →</a>
                         </Button>
                       ) : (
-                        <Button size="sm" asChild style={{ background: "linear-gradient(135deg, #6f8fc4, #8ba8d4)", color: "white", border: "none" }}>
+                        <Button size="sm" asChild>
                           <a href={getLoginUrl("/audit")}>Unlock the Oracle →</a>
                         </Button>
                       )}
@@ -592,7 +589,7 @@ export default function AlignmentAudit() {
           </div>
           <div className="p-4 rounded-xl bg-muted/30 border border-border">
             <p className="text-sm text-muted-foreground leading-relaxed">
-              <strong>Disclaimer:</strong> The Structural Survey is a reflective tool, not a medical or psychological diagnosis. It is designed to identify current patterns and help guide your experience inside Lifewoven. If you are dealing with significant mental health concerns, please seek support from a qualified professional.
+              <strong>Disclaimer:</strong> The Load-Bearing Survey is a reflective tool, not a medical or psychological diagnosis. It is designed to identify current patterns and help guide your experience inside Lifewoven. If you are dealing with significant mental health concerns, please seek support from a qualified professional.
             </p>
           </div>
         </div>

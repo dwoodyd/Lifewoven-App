@@ -67,7 +67,7 @@ export default function LowBandwidthDashboard({ onExit }: LowBandwidthDashboardP
                 )}
               </div>
             ) : (
-              <p className="text-foreground">Take the Soul Engineer Assessment to find your starting point.</p>
+              <p className="text-foreground">Take the Load-Bearing Survey to find your starting point.</p>
             )}
           </CardContent>
         </Card>

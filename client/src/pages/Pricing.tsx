@@ -24,12 +24,12 @@ const TIERS = [
     annualPrice: null as string | null,
     annualRetail: null as string | null,
     annualSavings: null as string | null,
-    description: "Lumin walks with you through the core tools. Begin the weave — no commitment required.",
+    description: "Lumen walks with you through the core tools. Begin the weave — no commitment required.",
     cta: "Start Free",
     highlight: false,
     libraryItems: null as string[] | null,
     features: [
-      "Soul Engineer Assessment diagnostic",
+      "Load-Bearing Survey diagnostic",
       "Daily emotional check-in",
       "The Weave (up to 30 entries)",
       "Align & Uplift pathways",
@@ -47,7 +47,7 @@ const TIERS = [
     annualPrice: "$89" as string | null,
     annualRetail: "$189/yr retail" as string | null,
     annualSavings: "save 53%" as string | null,
-    description: "Lumin opens the full system to you. Every tool, every pathway, every module — fully unlocked.",
+    description: "Lumen opens the full system to you. Every tool, every pathway, every module — fully unlocked.",
     cta: "Lock in Seeker",
     highlight: true,
     libraryItems: null as string[] | null,
@@ -75,7 +75,7 @@ const TIERS = [
     annualPrice: "$249" as string | null,
     annualRetail: "$479/yr retail" as string | null,
     annualSavings: "save 48%" as string | null,
-    description: "Lumin and the Oracle work continuously on your behalf — reading your patterns, naming what you cannot yet see. Plus the complete Lifewoven library.",
+    description: "Lumen and the Oracle work continuously on your behalf — reading your patterns, naming what you cannot yet see. Plus the complete Lifewoven library.",
     cta: "Lock in Oracle",
     highlight: false,
     libraryItems: [
@@ -174,7 +174,7 @@ export default function Pricing() {
   }
 
   const COMPARISON_ROWS: [string, string | boolean, string | boolean, string | boolean][] = [
-    ["Soul Engineer Assessment", true, true, true],
+    ["Load-Bearing Survey", true, true, true],
     ["Daily check-in & The Weave", true, true, true],
     ["Export your words anytime", true, true, true],
     ["5S Framework tools", "Overview", "Full suite", "Full suite"],
@@ -349,7 +349,7 @@ export default function Pricing() {
                 <span className="text-xs text-muted-foreground/50">Free</span>
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                You get the core of Lifewoven — the Soul Engineer Assessment, The Weave journal (up to 30 entries), two foundational pathways, and the public resource library. It's a genuine starting point, not a teaser. You can build real clarity here.
+                You get the core of Lifewoven — the Load-Bearing Survey, The Weave journal (up to 30 entries), two foundational pathways, and the public resource library. It's a genuine starting point, not a teaser. You can build real clarity here.
               </p>
               <p className="text-xs text-muted-foreground/60 mt-3 italic">Best for: exploring the framework before committing.</p>
             </div>
@@ -447,10 +447,10 @@ export default function Pricing() {
           <Sparkles className="h-8 w-8 text-amber-400 mx-auto mb-4" />
           <h2 className="font-serif text-2xl font-light text-foreground mb-3">Not sure where to start?</h2>
           <p className="text-muted-foreground text-base mb-6 max-w-md mx-auto">
-            Take the free Soul Engineer Assessment. In 5 minutes, you'll know exactly which pathway and tier is right for you.
+            Take the free Load-Bearing Survey. In 5 minutes, you'll know exactly which pathway and tier is right for you.
           </p>
           <Button asChild variant="outline">
-            <Link href="/audit">Take the Soul Engineer Assessment</Link>
+            <Link href="/audit">Take the Load-Bearing Survey</Link>
           </Button>
         </div>
 

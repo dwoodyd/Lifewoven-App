@@ -136,7 +136,7 @@ export default function Nav() {
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/audit" className="flex items-center gap-2">
-                    <ClipboardList className="h-3.5 w-3.5" />Structural Survey
+                    <ClipboardList className="h-3.5 w-3.5" />Load-Bearing Survey
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
@@ -297,7 +297,7 @@ export default function Nav() {
                   <Link href="/dashboard" onClick={closeMobile}><CheckSquare className="h-4 w-4" />Today's Check-in</Link>
                 </Button>
                 <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground justify-start">
-                  <Link href="/audit" onClick={closeMobile}><ClipboardList className="h-4 w-4" />The Audit</Link>
+                  <Link href="/audit" onClick={closeMobile}><ClipboardList className="h-4 w-4" />Load-Bearing Survey</Link>
                 </Button>
                 <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground justify-start">
                   <Link href="/ground" onClick={closeMobile}><BookOpen className="h-4 w-4" />The Ground</Link>
@@ -354,7 +354,7 @@ export default function Nav() {
             ) : (
               <>
                 <Button size="default" asChild className="w-full">
-                  <Link href="/audit" onClick={closeMobile}>Take the Soul Engineer Assessment</Link>
+                  <Link href="/audit" onClick={closeMobile}>Take the Load-Bearing Survey</Link>
                 </Button>
                 <Button variant="outline" size="default" asChild className="w-full bg-transparent">
                   <a href={getLoginUrl(window.location.pathname + window.location.search)} onClick={closeMobile}>Sign in</a>

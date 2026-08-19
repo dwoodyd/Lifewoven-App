@@ -55,7 +55,7 @@ const PATHWAY_META: Record<string, { label: string; tagline: string; duration: s
   flow:      { label: "Flow",      tagline: "Future-self activation",            duration: "20–30 min", dimension: "Story" },
   rhythms:   { label: "Rhythms",   tagline: "Habit execution and identity",      duration: "15–20 min", dimension: "Standards" },
   purpose:   { label: "Purpose",   tagline: "Meaning and resilience",            duration: "20–30 min", dimension: "Stewardship" },
-  reset:     { label: "Reset",     tagline: "Resilience after setback",          duration: "15–30 min", dimension: "Strategy" },
+  reset:     { label: "Reset",     tagline: "Resilience after setback",          duration: "30–45 min", dimension: "Strategy" },
 };
 
 const FIVE_S = [
@@ -226,7 +226,7 @@ function LuminPromptCard() {
   return (
     <div className="w-full rounded-2xl border border-border bg-card px-7 py-6 mb-5">
       <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-accent mb-3">
-        Today's Lumin Prompt · {daily.dimension}
+          Today's Lumen Prompt · {daily.dimension}
       </p>
       <p
         className="text-foreground leading-relaxed mb-5"

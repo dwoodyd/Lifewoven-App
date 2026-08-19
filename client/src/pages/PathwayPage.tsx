@@ -96,7 +96,7 @@ const PATHWAYS: Record<string, any> = {
   reset: {
     name: "Reset", tagline: "Flagship Resilience Protocol", color: "stewardship", badge: "Start Here When Overwhelmed",
     description: "Reset is not a failure protocol. It is a return protocol. When life interrupts — and it will — Reset is how you come back without shame, without drama, without losing ground. This is the most important pathway in Lifewoven.",
-    duration: "15-30 minutes", frequency: "Whenever you need to return", source: "Lifewoven Original Practice",
+    duration: "30-45 minutes", frequency: "Whenever you need to return", source: "Lifewoven Original Practice",
     steps: [
       { title: "The Honest Inventory (5 min)", desc: "Name what happened. Not a story — just the facts. I stopped. I got overwhelmed. I lost momentum. No shame in the naming. Clarity is the first act of return." },
       { title: "The Compassion Pause (3 min)", desc: "Before you plan, before you fix — pause. Place your hand on your chest. Say: I am human. Interruption is part of the process. I am allowed to begin again. Say it until you mean it." },
