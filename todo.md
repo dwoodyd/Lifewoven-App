@@ -1386,7 +1386,7 @@
 
 ## August 19 Audit — Polish
 
-- [ ] Brand the 404 page and repair dead `/resources` navigation
+- [x] Brand the 404 page and repair dead `/resources` navigation
 - [ ] Standardize Lumen spelling and Oracle pronouns, restore Oracle conversational memory, and make toasts dismissible
 - [ ] Fix Mood Rhythm layout overlap, off-palette controls, and unsupported fringe-research framing
 - [ ] Correct Reset duration, Weave composer/filter coupling, prompt direction, Oracle tab/input sticky behavior, and beta cancel control
