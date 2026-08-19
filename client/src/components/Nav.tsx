@@ -136,7 +136,7 @@ export default function Nav() {
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/audit" className="flex items-center gap-2">
-                    <ClipboardList className="h-3.5 w-3.5" />The Audit
+                    <ClipboardList className="h-3.5 w-3.5" />Structural Survey
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
@@ -234,7 +234,7 @@ export default function Nav() {
                 <a href={getLoginUrl(window.location.pathname + window.location.search)}>Sign in</a>
               </Button>
               <Button size="sm" asChild className="hidden sm:flex">
-                <Link href="/audit">Take the Assessment</Link>
+                <Link href="/audit">Take the Survey</Link>
               </Button>
             </>
           )}

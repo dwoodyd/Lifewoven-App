@@ -1381,7 +1381,7 @@
 - [ ] Standardize the survey name across routes, dashboard, assessment, Pathways, and disclaimer copy
 - [x] Prevent survey interpretation claims when dimension scores are tied and render equal scores without false visual differentiation
 - [ ] Enforce canonical 5S order: State, Story, Standards, Strategy, Stewardship across all surfaces
-- [ ] Consolidate Daily Check-in and Mood Rhythm into one connected source of truth
+- [x] Consolidate Daily Check-in and Mood Rhythm into one connected source of truth
 - [ ] Eliminate full-screen splash remounts on route navigation and make the avatar open its intended menu
 
 ## August 19 Audit — Polish

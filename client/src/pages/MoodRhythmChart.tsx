@@ -1,8 +1,7 @@
 /**
  * Mood Rhythm Chart — Emotional Cycle Tracker
  *
- * Based on the Hersey/Dewey research: the average human emotional cycle is ~5 weeks.
- * Users log a daily 1-10 mood score; the chart reveals their personal rhythm over time.
+ * Visualizes the member's existing Daily Check-ins over time.
  */
 
 import { useState, useMemo, useRef } from "react";
@@ -160,6 +159,7 @@ export default function MoodRhythmChart() {
   const [showNote, setShowNote] = useState(false);
 
   const { data: history = [], refetch: refetchHistory } = trpc.moodLog.getMoodHistory.useQuery({ days: 90 });
+  const { data: checkIns = [] } = trpc.checkIn.recent.useQuery({ limit: 90 });
   const { data: todayMood, refetch: refetchToday } = trpc.moodLog.getTodayMood.useQuery();
   const { data: analysis } = trpc.moodLog.getCycleAnalysis.useQuery();
 
@@ -184,8 +184,12 @@ export default function MoodRhythmChart() {
   }
 
   const chartPoints = useMemo(() =>
-    history.map(h => ({ date: h.date, score: h.score })),
-    [history]
+    [...checkIns].reverse().map((checkIn: any) => ({
+      date: new Date(checkIn.createdAt).toISOString().slice(0, 10),
+      // EGS is 1 = Joy through 22 = Fear; normalize it to the chart's 1–10 visual range.
+      score: Math.max(1, Math.min(10, Math.round(10 - ((Number(checkIn.emotionalScore) - 1) / 21) * 9))),
+    })),
+    [checkIns]
   );
 
   const confidenceColor = {
@@ -229,73 +233,26 @@ export default function MoodRhythmChart() {
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
             <Calendar className="w-4 h-4 text-amber-400" />
-            Today's Mood — {today}
-            {todayMood && (
-              <Badge variant="secondary" className="ml-auto text-xs">
-                Logged: {todayMood.score}/10
-              </Badge>
-            )}
+            Daily Check-in Rhythm
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {/* Score slider */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">How was your day overall?</span>
-              <span className="text-lg font-semibold" style={{ color: scoreColor(score) }}>
-                {score} — {SCORE_LABELS[score]}
-              </span>
-            </div>
-            <Slider
-              min={1} max={10} step={1}
-              value={[score]}
-              onValueChange={([v]) => setScore(v)}
-              className="w-full"
-            />
-            <div className="flex justify-between text-xs text-muted-foreground">
-              <span>1 · Very low</span>
-              <span>5 · Neutral</span>
-              <span>10 · Elated</span>
-            </div>
-          </div>
-
-          {/* Optional note */}
-          {showNote ? (
-            <Textarea
-              placeholder="What shaped today's mood? (optional)"
-              value={note}
-              onChange={e => setNote(e.target.value)}
-              rows={2}
-              className="text-sm resize-none"
-            />
-          ) : (
-            <button
-              onClick={() => setShowNote(true)}
-              className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-2 transition-colors"
-            >
-              + Add a note
-            </button>
-          )}
-
-          <Button
-            onClick={() => logMood.mutate({ date: today, score, note: note || undefined })}
-            disabled={logMood.isPending}
-            className="w-full"
-          >
-            {logMood.isPending ? "Saving…" : todayMood ? "Update Today's Mood" : "Log Today's Mood"}
-          </Button>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            This chart reads your Daily Check-ins. One check-in gives the app a grounded record of your state, energy, and clarity without asking you to log the same feeling twice.
+          </p>
+          <Button asChild className="w-full"><Link href="/dashboard">Complete Daily Check-in</Link></Button>
         </CardContent>
       </Card>
 
       {/* Chart Card */}
-      {history.length > 0 && (
+      {chartPoints.length > 0 && (
         <Card className="border-border/50 bg-card/60 backdrop-blur">
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
               <Activity className="w-4 h-4 text-violet-400" />
               Your Rhythm — Last 90 Days
               <span className="ml-auto text-xs text-muted-foreground font-normal">
-                {history.length} entries
+                {chartPoints.length} check-ins
               </span>
             </CardTitle>
           </CardHeader>
@@ -377,21 +334,21 @@ export default function MoodRhythmChart() {
               </div>
             )}
 
-            {/* Research note */}
+            {/* Method note */}
             <div className="rounded-lg bg-muted/20 border border-border/40 p-3 text-xs text-muted-foreground leading-relaxed">
-              <strong className="text-foreground/70">About this chart:</strong> Based on research by Professor Rex Hersey (University of Pennsylvania) and Professor Edward R. Dewey (Foundation for the Study of Cycles). The average human emotional cycle is approximately 5 weeks — but yours may be longer or shorter. With enough data, this chart will reveal your personal rhythm so you can plan around your highs and prepare for your lows.
+              <strong className="text-foreground/70">About this chart:</strong> It is a reflective view of your recorded Daily Check-ins, not a medical measure or a prediction engine. Look for patterns with curiosity, then decide what support you need.
             </div>
           </CardContent>
         </Card>
       )}
 
       {/* Empty state */}
-      {history.length === 0 && (
+      {chartPoints.length === 0 && (
         <Card className="border-border/50 bg-card/60 backdrop-blur">
           <CardContent className="py-10 text-center">
             <Activity className="w-10 h-10 text-muted-foreground mx-auto mb-3 opacity-40" />
             <p className="text-sm text-muted-foreground">
-              Log your mood each evening for 14 days and your emotional rhythm will begin to emerge.
+              Complete your first Daily Check-in and this chart will begin to reflect your recorded rhythm.
             </p>
           </CardContent>
         </Card>
