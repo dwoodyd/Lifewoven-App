@@ -1382,7 +1382,8 @@
 - [x] Prevent survey interpretation claims when dimension scores are tied and render equal scores without false visual differentiation
 - [ ] Enforce canonical 5S order: State, Story, Standards, Strategy, Stewardship across all surfaces
 - [x] Consolidate Daily Check-in and Mood Rhythm into one connected source of truth
-- [ ] Eliminate full-screen splash remounts on route navigation and make the avatar open its intended menu
+- [x] Eliminate full-screen splash remounts on route navigation
+- [ ] Make the avatar open its intended menu
 
 ## August 19 Audit — Polish
 
@@ -1391,8 +1392,9 @@
 - [ ] Fix Mood Rhythm layout overlap, off-palette controls, and unsupported fringe-research framing
 - [ ] Correct Reset duration, Oracle tab/input sticky behavior, and beta cancel control
 - [x] Separate The Weave composer module tags from archive filters and correct its prompt direction
-- [ ] Remove desktop-only pull-to-refresh text and reduce oversized empty-state whitespace
-- [ ] Clean up only the audit test data identified in the attachment after verifying ownership and exact identifiers
+- [x] Remove desktop-only pull-to-refresh text
+- [ ] Reduce oversized empty-state whitespace
+- [x] Clean up only the audit test data identified in the attachment after verifying ownership and exact identifiers
 
 ## Lifewoven Enhancement Brief (Current Scope)
 
