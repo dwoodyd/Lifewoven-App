@@ -1358,6 +1358,10 @@
 - [x] Use a warm Lumen scene that loops continuously in the first-reading state
 - [x] Visually verify the first-reading diagnostic at desktop and mobile widths before checkpointing
 
+## First-Reading Watermark Removal
+
+- [x] Replace the watermarked first-reading Lumen clip with a clean warm looping asset and verify there is no visible logo
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA
