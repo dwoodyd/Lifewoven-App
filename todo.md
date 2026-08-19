@@ -1366,6 +1366,33 @@
 
 - [x] Diagnose and repair the production Lumen video request so the first-reading dashboard scene visibly renders
 
+## Release-Blocking Audit Fixes — August 19
+
+- [x] Restore a working logged-out entry route and update canonical and Open Graph metadata away from `/login`
+- [x] Repair check-in read paths across Dashboard, The Weave, and Oracle
+- [x] Ensure Oracle claims only verified user-context facts and never denies access it actually has
+- [x] Centralize date rendering and correct the one-day timezone offset across Weave and Oracle
+- [x] Restore working light and dark theme switching at the application root and Settings
+- [x] Prevent silent app-authored journal entries; require explicit save or clearly label generated content
+
+## August 19 Audit — Next Priority
+
+- [x] Persist started pathway progress to the dashboard active-pathways read model
+- [ ] Standardize the survey name across routes, dashboard, assessment, Pathways, and disclaimer copy
+- [x] Prevent survey interpretation claims when dimension scores are tied and render equal scores without false visual differentiation
+- [ ] Enforce canonical 5S order: State, Story, Standards, Strategy, Stewardship across all surfaces
+- [ ] Consolidate Daily Check-in and Mood Rhythm into one connected source of truth
+- [ ] Eliminate full-screen splash remounts on route navigation and make the avatar open its intended menu
+
+## August 19 Audit — Polish
+
+- [ ] Brand the 404 page and repair dead `/resources` navigation
+- [ ] Standardize Lumen spelling and Oracle pronouns, restore Oracle conversational memory, and make toasts dismissible
+- [ ] Fix Mood Rhythm layout overlap, off-palette controls, and unsupported fringe-research framing
+- [ ] Correct Reset duration, Weave composer/filter coupling, prompt direction, Oracle tab/input sticky behavior, and beta cancel control
+- [ ] Remove desktop-only pull-to-refresh text and reduce oversized empty-state whitespace
+- [ ] Clean up only the audit test data identified in the attachment after verifying ownership and exact identifiers
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA

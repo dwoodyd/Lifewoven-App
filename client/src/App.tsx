@@ -18,6 +18,7 @@ import Sources from "./pages/Sources";
 // Auth
 import AuthCallback from "./pages/AuthCallback";
 import AuthComplete from "./pages/AuthComplete";
+import Login from "./pages/Login";
 
 // Dashboard & core
 import Dashboard from "./pages/Dashboard";
@@ -104,6 +105,9 @@ function RouterSwitch() {
       <Route path="/sources" component={Sources} />
 
       {/* Auth */}
+      <Route path="/login" component={Login} />
+      <Route path="/signup" component={Login} />
+      <Route path="/auth" component={Login} />
       <Route path="/auth/callback" component={AuthCallback} />
       {/* Client-side fallback for cross-domain OAuth handoff (server handles first; this catches SPA-served cases) */}
       <Route path="/api/auth/complete" component={AuthComplete} />
@@ -227,7 +231,7 @@ function App() {
   const { user } = useAuth();
   return (
     <ErrorBoundary>
-      <ThemeProvider defaultTheme="dark">
+      <ThemeProvider defaultTheme="dark" switchable>
         <TooltipProvider>
           <Toaster />
           <BetaExpiredModal />

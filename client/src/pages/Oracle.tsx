@@ -17,6 +17,7 @@ import { Streamdown } from "streamdown";
 import { Link } from "wouter";
 import { getLoginUrl } from "@/const";
 import { AnimatePresence, motion } from "framer-motion";
+import { formatLifewovenDate, formatLifewovenToday } from "@/lib/datetime";
 
 const ORACLE_STARTERS = [
   "I feel stuck and don't know where to start.",
@@ -402,7 +403,7 @@ export default function Oracle() {
                             {insight.insightType?.replace(/_/g, " ") || "Pattern"}
                           </Badge>
                           <span className="text-xs text-muted-foreground">
-                            {new Date(insight.createdAt).toLocaleDateString()}
+                            {formatLifewovenDate(insight.createdAt)}
                           </span>
                         </div>
                         <p className="text-base text-foreground font-light leading-relaxed">{insight.content}</p>
@@ -701,7 +702,7 @@ export default function Oracle() {
                             {/* Oracle response footer */}
                             <div className="px-4 pb-3 pt-0 flex items-center gap-1.5">
                               <span className="text-[10px] text-muted-foreground/50 font-mono tracking-wider italic">
-                                From the Oracle · {new Date().toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+                                From the Oracle · {formatLifewovenToday({ year: undefined, month: "short", day: "numeric" })}
                               </span>
                             </div>
                           </>

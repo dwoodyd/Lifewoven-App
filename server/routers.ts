@@ -200,11 +200,6 @@ const auditRouter = router({
     .mutation(async ({ ctx, input }) => {
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
-      // Check if this is the user's first audit (for auto-draft journal)
-      const existingAudits = await db.select({ id: auditResults.id })
-        .from(auditResults).where(eq(auditResults.userId, ctx.user.id)).limit(1);
-      const isFirstAudit = existingAudits.length === 0;
-
       await db.transaction(async (tx) => {
         await tx.insert(auditResults).values({
           userId: ctx.user.id,
@@ -217,47 +212,6 @@ const auditRouter = router({
           .set({ onboardingCompleted: true, primaryPathway: input.recommendedPathway })
           .where(eq(users.id, ctx.user.id));
       });
-
-      // Auto-draft first journal entry from audit responses (fire-and-forget, non-blocking)
-      if (isFirstAudit) {
-        const dimNames: Record<string, string> = {
-          state: "State", story: "Story", standards: "Standards",
-          strategy: "Strategy", stewardship: "Stewardship",
-        };
-        const scoreLines = Object.entries(input.scores)
-          .sort(([, a], [, b]) => (b as number) - (a as number))
-          .map(([dim, pct]) => `${dimNames[dim] ?? dim}: ${Math.round(pct as number)}%`)
-          .join(", ");
-        const lowestDim = Object.entries(input.scores)
-          .sort(([, a], [, b]) => (a as number) - (b as number))[0]?.[0] ?? "";
-        const prompt = `You are writing a brief, warm, first-person journal entry for someone who just completed a personal capacity audit.
-Audit results: pathway recommended = ${input.recommendedPathway}, 5S scores = ${scoreLines}.
-Lowest dimension: ${lowestDim}.
-Write 3-4 sentences as if the person is reflecting on their results. Use "I" voice. Be honest, compassionate, and forward-looking. No headers, no lists. Plain prose only.`;
-        invokeLLM({
-          messages: [
-            { role: "system", content: "You write warm, honest personal journal entries. Respond with only the journal text." },
-            { role: "user", content: prompt },
-          ],
-        }).then(async (llmRes) => {
-          const rawContent = llmRes.choices?.[0]?.message?.content ?? "";
-          const body = typeof rawContent === "string" ? rawContent.trim() : "";
-          if (!body) return;
-          const firstSentence = body.split(/[.!?]/)[0]?.trim() ?? "";
-          const title = firstSentence.length > 80
-            ? firstSentence.slice(0, 77) + "…"
-            : firstSentence || "My Soul Engineer Assessment Reflection";
-          const db2 = await getDb();
-          if (!db2) return;
-          await db2.insert(journalEntries).values({
-            userId: ctx.user.id,
-            title,
-            content: body,
-            module: "state",
-            isPrivate: true,
-          });
-        }).catch(() => { /* non-blocking — ignore errors */ });
-      }
 
       return { success: true };
     }),
@@ -818,6 +772,18 @@ const oracleRouter = router({
         .limit(1);
       const dailyIntentionContext = buildDailyIntentionContext(todayIntention?.intention);
 
+      // Ground every response in data fetched from the authenticated server context.
+      // Never rely on a client-provided snapshot when describing what the user has recorded.
+      const [verifiedCheckIns, verifiedJournals] = await Promise.all([
+        db.select({ emotionalScore: checkIns.emotionalScore, energyLevel: checkIns.energyLevel, clarityLevel: checkIns.clarityLevel, note: checkIns.note, createdAt: checkIns.createdAt })
+          .from(checkIns).where(eq(checkIns.userId, ctx.user.id)).orderBy(desc(checkIns.createdAt)).limit(7),
+        db.select({ title: journalEntries.title, content: journalEntries.content, createdAt: journalEntries.createdAt })
+          .from(journalEntries).where(eq(journalEntries.userId, ctx.user.id)).orderBy(desc(journalEntries.createdAt)).limit(5),
+      ]);
+      const verifiedDataContext = `
+- Server-verified check-ins available: ${verifiedCheckIns.length}. Recent emotional scores: ${verifiedCheckIns.map(c => c.emotionalScore).join(", ") || "none"}.
+- Server-verified Weave entries available: ${verifiedJournals.length}.`;
+
       // Build system prompt with user context
       const systemPrompt = `You are the Lifewoven Oracle — a wise, warm, and deeply perceptive guide rooted in the Soul Engineer Method, as taught in "Build a Life That Does Not Break You" by DeWayne Woods. The Soul Engineer Method is built on a single premise: most people are not failing because they lack motivation — they are failing because they are building on an unstable foundation. The method works by identifying and repairing the load-bearing structures of a person's interior life before optimizing performance.
 
@@ -835,7 +801,9 @@ Stewardship — The ongoing care of your whole self: body, energy, relationships
 
 These five dimensions are an integrated system. A shift in State changes what Stories become available. A clarified Story raises Standards. Elevated Standards inform Strategy. Disciplined Strategy, sustained through Stewardship, creates a life of meaning and momentum.
 
-You speak with warmth, precision, and wisdom. You ask powerful questions. You recognize patterns. You guide without preaching. You meet the user exactly where they are. When relevant, you may reference the Soul Engineer Method or the book "Build a Life That Does Not Break You" as the source of the framework. Always use the canonical definitions above when referencing any of the five dimensions.
+	You speak with warmth, precision, and wisdom. You ask powerful questions. You recognize patterns. You guide without preaching. You meet the user exactly where they are. When relevant, you may reference the Soul Engineer Method or the book "Build a Life That Does Not Break You" as the source of the framework. Always use the canonical definitions above when referencing any of the five dimensions.
+
+	DATA INTEGRITY: You have the server-verified context below. You may reference only facts present in it. Do not say the user has not logged a check-in, mood, journal entry, or other record unless the verified context explicitly supports that statement. Do not claim that you cannot see private app records: your role receives the verified summary below. If context is insufficient, say what is not available without inventing a user-state claim.
 
 RESPONSE FORMAT: You MUST reply with valid JSON in exactly this shape — no markdown fences, no extra keys:
 {"reply": "<your full response text>", "tags": ["State"]}
@@ -843,9 +811,8 @@ RESPONSE FORMAT: You MUST reply with valid JSON in exactly this shape — no mar
 - "tags": array of 1–3 of the 5S dimension names most central to your response. Valid values: "State", "Story", "Standards", "Strategy", "Stewardship". Choose only dimensions genuinely present — do not force all five.
 
 User context:
-- Primary pathway: ${input.context?.primaryPathway ?? "not set"}
-- Recent emotional scores: ${input.context?.recentCheckIns?.map((c: any) => c.emotionalScore).join(", ") ?? "none"}
-- Habit streak: ${input.context?.habitStreak ?? 0} days${mindContext}${cycleContext}${readingContext}${dailyIntentionContext}`;
+	- Primary pathway: ${input.context?.primaryPathway ?? "not set"}
+	- Habit streak: ${input.context?.habitStreak ?? 0} days${verifiedDataContext}${mindContext}${cycleContext}${readingContext}${dailyIntentionContext}`;
 
       // Get or build conversation history
       let messages: { role: string; content: string }[] = [];
@@ -1150,7 +1117,7 @@ const pathwaysRouter = router({
     }),
 
   saveProgress: protectedProcedure
-    .input(z.object({ pathway: z.string().max(100), completedSteps: z.array(z.number()), sessionStarted: z.boolean().optional() }))
+    .input(z.object({ pathway: z.string().max(100), completedSteps: z.array(z.number()), totalSteps: z.number().int().positive(), sessionStarted: z.boolean().optional() }))
     .mutation(async ({ ctx, input }) => {
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
@@ -1168,6 +1135,25 @@ const pathwaysRouter = router({
             sessionStarted: input.sessionStarted ?? false,
           },
         });
+      const currentStep = input.completedSteps.length;
+      const status = currentStep >= input.totalSteps ? "completed" : "active";
+      const existingPathway = await db.select({ id: userPathways.id })
+        .from(userPathways)
+        .where(and(eq(userPathways.userId, ctx.user.id), eq(userPathways.pathway, input.pathway)))
+        .limit(1);
+      if (existingPathway[0]) {
+        await db.update(userPathways)
+          .set({ currentStep, totalSteps: input.totalSteps, status })
+          .where(eq(userPathways.id, existingPathway[0].id));
+      } else {
+        await db.insert(userPathways).values({
+          userId: ctx.user.id,
+          pathway: input.pathway,
+          currentStep,
+          totalSteps: input.totalSteps,
+          status,
+        });
+      }
       return { success: true };
     }),
 });

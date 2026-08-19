@@ -17,6 +17,7 @@ import { EmptyState } from "@/components/EmptyState";
 import VoiceRecorder from "@/components/VoiceRecorder";
 import { Streamdown } from "streamdown";
 import { motion } from "framer-motion";
+import { formatLifewovenDate, formatLifewovenToday } from "@/lib/datetime";
 
 const MODULE_COLORS: Record<string, string> = {
   state: "text-state", story: "text-story", standards: "text-standards",
@@ -74,10 +75,10 @@ export default function Journal() {
       const printWindow = window.open("", "_blank");
       if (!printWindow) { toast.error("Pop-up blocked. Please allow pop-ups and try again."); return; }
       const moduleLabel = selectedModule ? selectedModule.charAt(0).toUpperCase() + selectedModule.slice(1) : "All Modules";
-      const dateStr = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+      const dateStr = formatLifewovenToday({ month: "long" });
       const entriesHtml = data.entries.map((e: any) => `
         <div class="entry">
-          <div class="entry-meta">${new Date(e.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}${e.module ? ` · ${e.module}` : ""}</div>
+          <div class="entry-meta">${formatLifewovenDate(e.createdAt, { month: "long" })}${e.module ? ` · ${e.module}` : ""}</div>
           <h2>${(e.title || "Untitled Entry").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</h2>
           ${e.content.split("\n\n").map((p: string) => `<p>${p.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</p>`).join("")}
           ${e.aiReflection ? `<blockquote class="reflection"><span class="reflection-label">Oracle Reflection</span>${e.aiReflection.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</blockquote>` : ""}
@@ -123,6 +124,7 @@ export default function Journal() {
   useEffect(() => { if (urlPrompt) { setCurrentPrompt(urlPrompt); setIsWriting(true); } }, [urlPrompt]);
 
   const { data: entries, refetch } = trpc.journal.list.useQuery({ module: selectedModule || undefined, search: searchQuery || undefined }, { enabled: isAuthenticated });
+  const { data: recentCheckIns = [] } = trpc.checkIn.recent.useQuery({ limit: 7 }, { enabled: isAuthenticated });
   const { triggerMoment } = useLuminMoment();
   const deleteMutation = trpc.journal.delete.useMutation({ onSuccess: () => { toast.success("Entry deleted."); refetch(); } });
   const createEntry = trpc.journal.create.useMutation({
@@ -269,6 +271,23 @@ export default function Journal() {
                     {modules.map(m => { const abbr: Record<string,string> = { state:'State', story:'Story', standards:'Standards', strategy:'Strategy', stewardship:'Stewardship' }; return <button key={m} title={m.charAt(0).toUpperCase()+m.slice(1)} onClick={() => setSelectedModule(selectedModule === m ? '' : m)} className={`text-xs px-2.5 py-1.5 rounded-lg border transition-colors ${selectedModule === m ? `border-current bg-current/10 ${MODULE_COLORS[m]}` : 'border-border text-muted-foreground'}`}>{abbr[m]}</button>; })}
                   </div>
                 </div>
+                {recentCheckIns.length > 0 && !searchQuery && !selectedModule && (
+                  <section aria-label="Recent Daily Check-ins" className="border border-border bg-card/70 p-4 space-y-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <h3 className="text-xs font-mono tracking-[0.16em] uppercase text-muted-foreground">Recent Daily Check-ins</h3>
+                      <span className="text-xs text-muted-foreground">{recentCheckIns.length} recorded</span>
+                    </div>
+                    <div className="grid gap-2 sm:grid-cols-2">
+                      {recentCheckIns.slice(0, 4).map((checkIn: any) => (
+                        <div key={checkIn.id} className="border-l-2 border-accent/60 pl-3 py-1">
+                          <p className="text-sm text-foreground">State {checkIn.emotionalScore}/22 · Energy {checkIn.energyLevel}/10 · Clarity {checkIn.clarityLevel}/10</p>
+                          {checkIn.note && <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{checkIn.note}</p>}
+                          <p className="mt-1 text-xs text-muted-foreground">{formatLifewovenDate(checkIn.createdAt)}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                )}
                 {entries && entries.length > 0 ? (
                   <PullToRefresh onRefresh={async () => { await refetch(); }}>
                   <div className="space-y-3">
@@ -295,7 +314,7 @@ export default function Journal() {
                           <div className="p-4 border border-border bg-card hover:border-accent/30 hover:bg-accent/3 transition-all duration-150 cursor-pointer group">
                             <div className="flex items-start justify-between gap-2 mb-2">
                               <h3 className="font-medium text-foreground text-base">{entry.title || "Untitled Entry"}</h3>
-                              <span className="text-xs text-muted-foreground flex-shrink-0">{new Date(entry.createdAt).toLocaleDateString()}</span>
+                              <span className="text-xs text-muted-foreground flex-shrink-0">{formatLifewovenDate(entry.createdAt)}</span>
                             </div>
                             <p className="text-sm text-muted-foreground line-clamp-2 mb-2">{entry.content}</p>
                             <div className="flex items-center gap-2">

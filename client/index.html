@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
 
   <head>
     <meta charset="UTF-8" />
@@ -7,6 +7,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=5, viewport-fit=cover" />
     <link rel="icon" type="image/png" href="https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/app-icon_e26b6bab.png" />
+    <link rel="canonical" href="https://app.lifewoven.click/" />
     <link rel="apple-touch-icon" href="/manus-storage/apple-touch-icon_6ad5dd2f.png" sizes="180x180" />
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -42,8 +43,8 @@
   </head>
 
   <body>
-    <!-- Anti-FOUC: apply saved theme before React mounts; default to light -->
-    <script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.classList.add('dark');}catch(e){}})()</script>
+    <!-- Anti-FOUC: Lifewoven defaults to night; honor a stored light preference before React mounts. -->
+    <script>(function(){try{var t=localStorage.getItem('theme');if(t==='light')document.documentElement.classList.remove('dark');else document.documentElement.classList.add('dark');}catch(e){}})()</script>
     <!-- Splash screen: spins favicon, fades out when React mounts -->
     <div id="splash" style="
       position:fixed;inset:0;z-index:9999;

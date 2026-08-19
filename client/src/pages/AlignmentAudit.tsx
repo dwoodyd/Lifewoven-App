@@ -482,25 +482,31 @@ export default function AlignmentAudit() {
             <h3 className="font-sans text-lg font-semibold text-foreground mb-1">Five structural readings</h3>
             <p className="text-xs text-muted-foreground mb-4">Where your energy is going right now, based on your responses.</p>
             <div className="space-y-3">
-              {(["State", "Story", "Standards", "Strategy", "Stewardship"] as const).map(dim => (
+              {(() => {
+                const hasUniformScores = new Set(Object.values(scores.pct)).size === 1;
+                return (["State", "Story", "Standards", "Strategy", "Stewardship"] as const).map(dim => (
                 <div key={dim} className="flex items-center gap-3">
                   <span className="w-24 text-xs text-muted-foreground shrink-0">{dim}</span>
                   <div className="flex-1 h-2 bg-border rounded-full overflow-hidden">
-                    <div className={`h-full rounded-full transition-all duration-700 ${DIM_COLORS[dim] ?? "bg-accent"}`} style={{ width: `${scores.pct[dim]}%` }} />
+                    <div className={`h-full rounded-full transition-all duration-700 ${hasUniformScores ? "bg-accent" : (DIM_COLORS[dim] ?? "bg-accent")}`} style={{ width: `${scores.pct[dim]}%` }} />
                   </div>
                   <span className="text-xs text-muted-foreground w-8 text-right">{scores.pct[dim]}%</span>
                 </div>
-              ))}
+                ));
+              })()}
             </div>
           </div>
           <div className="p-5 rounded-2xl border border-accent/20 bg-accent/5 mb-4 text-center">
             <p className="font-serif text-base font-light text-foreground italic">"{profile.truth}"</p>
           </div>
 
-          {/* Oracle nudge — connects lowest 5S dimension to upgrade */}
+          {/* Oracle nudge — only name a dimension when the reading is genuinely distinct. */}
           {(() => {
-            const lowestDim = (Object.entries(scores.pct) as [string, number][])
-              .sort(([, a], [, b]) => a - b)[0]?.[0] ?? "State";
+            const dimensionScores = Object.entries(scores.pct) as [string, number][];
+            const lowestScore = Math.min(...dimensionScores.map(([, score]) => score));
+            const lowestDimensions = dimensionScores.filter(([, score]) => score === lowestScore).map(([dimension]) => dimension);
+            const hasDistinctLowestDimension = lowestDimensions.length === 1;
+            const lowestDim = lowestDimensions[0] ?? "State";
             const dimDescriptions: Record<string, string> = {
               State: "your emotional regulation and inner state",
               Story: "the beliefs and identity narratives shaping you",
@@ -518,15 +524,19 @@ export default function AlignmentAudit() {
                   <div className="flex-1">
                     <p className="text-xs font-mono tracking-widest uppercase mb-1" style={{ color: "#6f8fc4" }}>Your Oracle is ready</p>
                     <h3 className="font-serif text-lg font-light text-foreground mb-2">
-                      Your <span style={{ color: "#6f8fc4" }}>{lowestDim}</span> dimension needs the most attention right now.
+                      {hasDistinctLowestDimension
+                        ? <>Your <span style={{ color: "#6f8fc4" }}>{lowestDim}</span> dimension is asking for attention right now.</>
+                        : <>Your readings are carrying a shared load right now.</>}
                     </h3>
                     <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                      The Oracle works directly on {dimDescriptions[lowestDim] ?? "your growth areas"} — drawing from your audit results, your journal, and your patterns to give you guidance that is specific to <em>you</em>, not generic advice.
+                      {hasDistinctLowestDimension
+                        ? <>The Oracle can help you explore {dimDescriptions[lowestDim] ?? "your growth areas"} using the records you choose to bring into the conversation.</>
+                        : <>The Oracle can help you explore how these dimensions interact, without pretending one is more important than the others.</>}
                     </p>
                     <div className="flex flex-col sm:flex-row gap-2">
                       {isAuthenticated ? (
                         <Button size="sm" asChild style={{ background: "linear-gradient(135deg, #6f8fc4, #8ba8d4)", color: "white", border: "none" }}>
-                          <a href="/oracle">Ask the Oracle about my {lowestDim} →</a>
+                          <a href="/oracle">{hasDistinctLowestDimension ? `Ask about my ${lowestDim}` : "Explore my readings"} →</a>
                         </Button>
                       ) : (
                         <Button size="sm" asChild style={{ background: "linear-gradient(135deg, #6f8fc4, #8ba8d4)", color: "white", border: "none" }}>
@@ -582,7 +592,7 @@ export default function AlignmentAudit() {
           </div>
           <div className="p-4 rounded-xl bg-muted/30 border border-border">
             <p className="text-sm text-muted-foreground leading-relaxed">
-              <strong>Disclaimer:</strong> The Soul Engineer Assessment is a reflective tool, not a medical or psychological diagnosis. It is designed to identify current patterns and help guide your experience inside Lifewoven. If you are dealing with significant mental health concerns, please seek support from a qualified professional.
+              <strong>Disclaimer:</strong> The Structural Survey is a reflective tool, not a medical or psychological diagnosis. It is designed to identify current patterns and help guide your experience inside Lifewoven. If you are dealing with significant mental health concerns, please seek support from a qualified professional.
             </p>
           </div>
         </div>

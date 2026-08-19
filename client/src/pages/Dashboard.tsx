@@ -113,6 +113,8 @@ export default function Dashboard() {
   const { data: todayMood } = trpc.moodLog.getTodayMood.useQuery(undefined, { enabled: isAuthenticated });
   const { data: goalStats } = trpc.goals.stats.useQuery(undefined, { enabled: isAuthenticated });
   const { data: rbStatus } = trpc.readingBridge.getStatus.useQuery(undefined, { enabled: isAuthenticated });
+  const recentCheckIns = (dashData as any)?.recentCheckIns ?? [];
+  const hasRecordedCheckIns = recentCheckIns.length > 0;
   const hasMoodToday = !!(todayMood as any)?.score;
   // Evening nudge: show after 5pm local time when no mood logged today
   const isEvening = new Date().getHours() >= 17;
@@ -121,7 +123,6 @@ export default function Dashboard() {
   // Wire Reset surfacing to check-in score < 4 and audit friction tags
   useEffect(() => {
     if (!dashData || showReentry) return; // don't override absence trigger
-    const recentCheckIns = (dashData as any).recentCheckIns ?? [];
     const latestCheckIn = recentCheckIns[0];
     if (latestCheckIn) {
       const score = latestCheckIn.emotionalScore ?? latestCheckIn.score ?? 10;
@@ -694,7 +695,15 @@ export default function Dashboard() {
                   ))}
                 </div>
               ) : (
-                <LumenEmpty title="Oracle is gathering signal." body="A check-in or a few honest lines give the Oracle something real to reflect." href="/oracle" cta="Talk to Oracle" videoId="core_unfurls" />
+                <LumenEmpty
+                  title={hasRecordedCheckIns ? "Your check-ins are ready for reflection." : "Oracle is gathering signal."}
+                  body={hasRecordedCheckIns
+                    ? `${recentCheckIns.length} recent check-in${recentCheckIns.length === 1 ? " is" : "s are"} available. Bring one into the Oracle when you want a grounded reflection.`
+                    : "A check-in or a few honest lines give the Oracle something real to reflect."}
+                  href="/oracle"
+                  cta="Talk to Oracle"
+                  videoId="core_unfurls"
+                />
               )}
             </div>
 

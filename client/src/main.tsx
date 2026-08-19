@@ -115,9 +115,9 @@ root.render(
   </trpc.Provider>
 );
 
-// Dismiss splash after a minimum display time + React first paint
+// Dismiss splash on the first rendered frame; route changes must never feel like a reboot.
 const splashStart = Date.now();
-const MIN_SPLASH_MS = 2200; // minimum time the splash stays visible
+const MIN_SPLASH_MS = 0;
 requestAnimationFrame(() => {
   requestAnimationFrame(() => {
     const elapsed = Date.now() - splashStart;

@@ -192,6 +192,7 @@ export default function PathwayPage() {
       saveProgressMutation.mutate({
         pathway: id,
         completedSteps: Array.from(completedSteps),
+        totalSteps,
         sessionStarted,
       });
     }, 500);
@@ -307,7 +308,7 @@ export default function PathwayPage() {
       localStorage.removeItem(`${storageKey}_started`);
     } catch {}
     if (isAuthenticated) {
-      saveProgressMutation.mutate({ pathway: id, completedSteps: [], sessionStarted: false });
+      saveProgressMutation.mutate({ pathway: id, completedSteps: [], totalSteps, sessionStarted: false });
     }
     toast("Progress cleared. Ready to begin again.");
   }
