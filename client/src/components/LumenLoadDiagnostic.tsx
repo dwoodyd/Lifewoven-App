@@ -37,7 +37,7 @@ export function LumenLoadDiagnostic({ readings, hasReading }: { readings: LumenD
       {/* Mobile opens on Lumen (~45% viewport); desktop makes her 50–60% of the daily opening. */}
       <div className="relative z-10 h-[45svh] min-h-[360px] lg:absolute lg:inset-y-0 lg:left-[24%] lg:right-0 lg:h-auto" aria-label={hasReading ? `Lumen represents a ${coherence} percent structural coherence reading` : "Lumen is curled and dim, waiting for a first structural reading"}>
         <LuminScene
-          videoId={hasReading ? "core_unfurls" : "smiles_sweeping"}
+          videoId={hasReading ? "core_unfurls" : "nodding_gently"}
           ambient
           loop
           ambientSize="min(60vw, 780px)"

@@ -1362,6 +1362,10 @@
 
 - [x] Replace the watermarked first-reading Lumen clip with a clean warm looping asset and verify there is no visible logo
 
+## First-Reading Lumen Production Load Failure
+
+- [x] Diagnose and repair the production Lumen video request so the first-reading dashboard scene visibly renders
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA
