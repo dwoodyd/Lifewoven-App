@@ -117,7 +117,7 @@ export function PullToRefresh({ onRefresh, children, className = "" }: PullToRef
           >
             <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`} />
           </motion.div>
-          {refreshing ? "Refreshing…" : triggered ? "Release to refresh" : "Pull to refresh"}
+          <span className="sm:hidden">{refreshing ? "Refreshing…" : triggered ? "Release to refresh" : "Pull to refresh"}</span>
         </motion.div>
       </motion.div>
 

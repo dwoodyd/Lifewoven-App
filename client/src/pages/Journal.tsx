@@ -50,7 +50,8 @@ export default function Journal() {
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState("");
-  const [selectedModule, setSelectedModule] = useState(urlModule);
+  const [selectedModule, setSelectedModule] = useState("");
+  const [composerModule, setComposerModule] = useState(urlModule);
   const [searchQuery, setSearchQuery] = useState("");
   const [isWriting, setIsWriting] = useState(!!urlPrompt);
   const [currentPrompt, setCurrentPrompt] = useState(urlPrompt);
@@ -148,7 +149,7 @@ export default function Journal() {
   }, [createEntry]);
 
   const saveWeaveEntry = () => {
-    const payload = { title: title.trim() || autoTitle(content), content, module: selectedModule as any || undefined, tags: tags ? tags.split(",").map(t => t.trim()).filter(Boolean) : undefined };
+    const payload = { title: title.trim() || autoTitle(content), content, module: composerModule as any || undefined, tags: tags ? tags.split(",").map(t => t.trim()).filter(Boolean) : undefined };
     if (!navigator.onLine) {
       localStorage.setItem("lifewoven_pending_weave_entry", JSON.stringify(payload));
       toast.success("Your Weave entry is saved on this device and will sync when you reconnect.");
@@ -175,7 +176,7 @@ export default function Journal() {
     const resolvedTitle = title.trim() || autoTitle(content);
     // First save the entry, then reflect on it
     createEntry.mutate(
-      { title: resolvedTitle, content, module: selectedModule as any || undefined, tags: tags ? tags.split(",").map(t => t.trim()).filter(Boolean) : undefined },
+      { title: resolvedTitle, content, module: composerModule as any || undefined, tags: tags ? tags.split(",").map(t => t.trim()).filter(Boolean) : undefined },
       { onSuccess: () => { getReflection.mutate({ entryId: 0, content }); } }
     );
   };
@@ -234,7 +235,7 @@ export default function Journal() {
               {modules.map(m => {
                 const ABBR: Record<string,string> = { state: 'State', story: 'Story', standards: 'Standards', strategy: 'Strategy', stewardship: 'Stewardship' };
                 return (
-                  <button key={m} title={m.charAt(0).toUpperCase()+m.slice(1)} onClick={() => setSelectedModule(selectedModule === m ? '' : m)} className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${selectedModule === m ? `border-current bg-current/10 ${MODULE_COLORS[m]}` : 'border-border text-muted-foreground'}`}>{ABBR[m] ?? m}</button>
+                  <button key={m} title={m.charAt(0).toUpperCase()+m.slice(1)} onClick={() => setComposerModule(composerModule === m ? '' : m)} className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${composerModule === m ? `border-current bg-current/10 ${MODULE_COLORS[m]}` : 'border-border text-muted-foreground'}`}>{ABBR[m] ?? m}</button>
                 );
               })}
             </div>
@@ -332,7 +333,7 @@ export default function Journal() {
                   <EmptyState
                     variant="journal"
                     title="The Weave is waiting for your first entry."
-                    description="Begin with a prompt below, or write freely."
+                    description="Choose a prompt from the Prompts panel, or write freely."
                     action={{ label: "First Entry", onClick: () => setIsWriting(true) }}
                   />
                 )}

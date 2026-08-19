@@ -1389,7 +1389,8 @@
 - [x] Brand the 404 page and repair dead `/resources` navigation
 - [ ] Standardize Lumen spelling and Oracle pronouns, restore Oracle conversational memory, and make toasts dismissible
 - [ ] Fix Mood Rhythm layout overlap, off-palette controls, and unsupported fringe-research framing
-- [ ] Correct Reset duration, Weave composer/filter coupling, prompt direction, Oracle tab/input sticky behavior, and beta cancel control
+- [ ] Correct Reset duration, Oracle tab/input sticky behavior, and beta cancel control
+- [x] Separate The Weave composer module tags from archive filters and correct its prompt direction
 - [ ] Remove desktop-only pull-to-refresh text and reduce oversized empty-state whitespace
 - [ ] Clean up only the audit test data identified in the attachment after verifying ownership and exact identifiers
 
