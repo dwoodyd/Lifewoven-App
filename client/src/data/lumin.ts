@@ -16,6 +16,30 @@ export interface LuminVideo {
 }
 
 export const LUMIN_VIDEOS: LuminVideo[] = [
+  // ── Clean Pathways-specific variants ──────────────────────────────────────
+  // These retain the original commissioned sources while providing compact,
+  // full-figure, watermark-free variants selected for the Pathways surfaces.
+  {
+    id: "pathway_reset_clean",
+    url: "/manus-storage/bouncing_joyfully-pathways_d5a682c5.mp4",
+    action: "Full-figure joyful bounce — clean Reset pathway scene",
+    role: "landscape",
+    duration: 8,
+  },
+  {
+    id: "pathway_align_clean",
+    url: "/manus-storage/starburst_joy-pathways_8554f7b2.mp4",
+    action: "Full-figure warm starburst — clean Align pathway scene",
+    role: "landscape",
+    duration: 8,
+  },
+  {
+    id: "pathway_resonance_clean",
+    url: "/manus-storage/core_unfurls-pathways_6c184c48.mp4",
+    action: "Full-figure core unfurling — clean Resonance pathway scene",
+    role: "landscape",
+    duration: 8,
+  },
   // ── Onboarding screen 1 hero ─────────────────────────────────────────────
   {
     id: "screen1_hero",
@@ -41,7 +65,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "pointing_energy",
-    url: "/manus-storage/Lumen_pointing_with_energetic_smile_202605082000_7f9cfe4f.mp4",
+    url: "/manus-storage/pointing_energy-landscape_457bde02.mp4",
     action: "Points forward with energetic smile",
     role: "onboarding",
     duration: 8,
@@ -90,7 +114,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "starburst_pose",
-    url: "/manus-storage/Mascot_in_dynamic_starburst_pose_202605081833_70151f12.mp4",
+    url: "/manus-storage/starburst_pose-landscape_471c971f.mp4",
     action: "Dynamic starburst pose — high energy",
     role: "reaction",
     duration: 8,
@@ -132,7 +156,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "turning_dial",
-    url: "/manus-storage/Mascot_turning_holographic_UI_dial_202605081825_e6f69148.mp4",
+    url: "/manus-storage/turning_dial-landscape_ccd1fb89.mp4",
     action: "Turns holographic UI dial",
     role: "ambient",
     duration: 8,
@@ -169,7 +193,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   // ── Untitled videos (analyzed) ────────────────────────────────────────────
   {
     id: "waves_sparkles",
-    url: "/manus-storage/Untitledvideo(31)_f3caad09.mp4",
+    url: "/manus-storage/waves_sparkles-clean-landscape_f081fab7.mp4",
     action: "Waves arms with magical sparkles — peaceful happy",
     role: "ambient",
     duration: 8,
@@ -267,7 +291,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "self_hug",
-    url: "/manus-storage/self_hug_cropped_5c99c7fe.mp4",
+    url: "/manus-storage/self_hug-landscape_320e0025.mp4",
     action: "Wraps rays around glowing face — self-soothing hug",
     role: "ambient",
     duration: 8,
@@ -281,14 +305,14 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "settling",
-    url: "/manus-storage/Untitledvideo(69)_589a6792.mp4",
+    url: "/manus-storage/settling-clean-landscape_65ee5cc6.mp4",
     action: "Gently lowers arms — settling/calm",
     role: "ambient",
     duration: 8,
   },
   {
     id: "burst_joy",
-    url: "/manus-storage/burst_joy_cropped_21bc11b5.mp4",
+    url: "/manus-storage/burst_joy-landscape_94d73beb.mp4",
     action: "Claps, glows, jumps, explodes into yarn puff — burst of joy",
     role: "reaction",
     duration: 8,

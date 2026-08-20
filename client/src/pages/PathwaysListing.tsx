@@ -13,7 +13,8 @@ const PATHWAYS = [
     description: "Begin each day anchored in your values and intentions. A short, repeatable morning practice that sets the tone for everything that follows.",
     duration: "7–10 min",
     icon: Compass,
-    scene: "settling",
+    scene: "pathway_align_clean",
+    mediaAspect: "16 / 9",
     tag: "Daily Practice",
     dimension: "State",
   },
@@ -24,7 +25,8 @@ const PATHWAYS = [
     description: "A deeper practice for emotional and energetic alignment. Work with the Emotional Compass, guided visualization, and intentional state-setting.",
     duration: "20–30 min",
     icon: Waves,
-    scene: "waves_sparkles",
+    scene: "pathway_resonance_clean",
+    mediaAspect: "16 / 9",
     tag: "Alignment Work",
     dimension: "State",
   },
@@ -36,6 +38,7 @@ const PATHWAYS = [
     duration: "15–20 min",
     icon: TrendingUp,
     scene: "starburst_pose",
+    mediaAspect: "16 / 9",
     tag: "Emotional Intelligence",
     dimension: "State",
   },
@@ -47,6 +50,7 @@ const PATHWAYS = [
     duration: "20–25 min",
     icon: Eye,
     scene: "pointing_energy",
+    mediaAspect: "16 / 9",
     tag: "Visualization",
     dimension: "Story",
   },
@@ -58,6 +62,7 @@ const PATHWAYS = [
     duration: "15–20 min",
     icon: Layers,
     scene: "turning_dial",
+    mediaAspect: "16 / 9",
     tag: "Habit Design",
     dimension: "Standards",
   },
@@ -69,6 +74,7 @@ const PATHWAYS = [
     duration: "25–30 min",
     icon: Zap,
     scene: "self_hug",
+    mediaAspect: "16 / 9",
     tag: "Meaning Work",
     dimension: "Stewardship",
   },
@@ -79,7 +85,8 @@ const PATHWAYS = [
     description: "The flagship resilience protocol. When life interrupts — when you fall, stop, or lose your footing — this pathway guides you back without shame.",
     duration: "20–30 min",
     icon: RefreshCw,
-    scene: "burst_joy",
+    scene: "pathway_reset_clean",
+    mediaAspect: "16 / 9",
     tag: "Flagship Protocol",
     dimension: "State",
     featured: true,
@@ -107,7 +114,7 @@ export default function PathwaysListing() {
         {PATHWAYS.filter(p => p.featured).map(pathway => {
           const Icon = pathway.icon;
           return (
-            <div key={pathway.slug} className="mb-10 overflow-hidden border border-primary/60 bg-card lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(420px,520px)] lg:items-center">
+            <div key={pathway.slug} className="mb-10 overflow-hidden border border-primary/60 bg-card lg:grid lg:grid-cols-[minmax(0,1fr)_520px] lg:items-center">
               <div className="order-2 relative flex min-h-[410px] flex-col justify-end p-5 sm:p-8 lg:order-1">
                 <div className="mb-auto flex flex-wrap gap-2">
                   <Badge variant="outline" className="border-primary/55 bg-background text-foreground text-xs font-mono tracking-wider">{pathway.dimension}</Badge>
@@ -130,8 +137,8 @@ export default function PathwaysListing() {
                   </div>
                 </div>
               </div>
-              <div className="order-1 relative aspect-video overflow-hidden bg-[oklch(0.12_0.015_260)] lg:order-2">
-                <LuminScene videoId={pathway.scene} ambient loop ambientSize="100%" ambientPosition={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }} ambientFit="contain" ambientAspectRatio="16 / 9" ambientBlendMode="normal" className="opacity-100" />
+              <div className="order-1 relative overflow-hidden bg-[oklch(0.12_0.015_260)] lg:order-2" style={{ aspectRatio: pathway.mediaAspect }}>
+                <LuminScene videoId={pathway.scene} ambient loop ambientSize="100%" ambientPosition={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }} ambientFit="cover" ambientAspectRatio={pathway.mediaAspect} ambientBlendMode="normal" className="opacity-100" />
               </div>
             </div>
           );
@@ -144,8 +151,8 @@ export default function PathwaysListing() {
             return (
               <Link key={pathway.slug} href={`/pathway/${pathway.slug}`}>
                 <div className="group overflow-hidden border border-border bg-card transition-all duration-200 hover:border-primary/70">
-                  <div className="relative aspect-video overflow-hidden bg-[oklch(0.12_0.015_260)]">
-                    <LuminScene videoId={pathway.scene} ambient loop ambientSize="100%" ambientPosition={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }} ambientFit="contain" ambientAspectRatio="16 / 9" ambientBlendMode="normal" className="opacity-100" />
+                  <div className="relative overflow-hidden bg-[oklch(0.12_0.015_260)]" style={{ aspectRatio: pathway.mediaAspect }}>
+                    <LuminScene videoId={pathway.scene} ambient loop ambientSize="100%" ambientPosition={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }} ambientFit="cover" ambientAspectRatio={pathway.mediaAspect} ambientBlendMode="normal" className="opacity-100" />
                   </div>
                   <div className="relative z-10 p-4 sm:p-6">
                     <div className="flex items-center gap-2 mb-0.5 flex-wrap">

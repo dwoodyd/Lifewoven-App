@@ -70,3 +70,29 @@ The Weave empty-state poster is now an independent portrait scene above the empt
 ## Mobile-viewport limitation
 
 The active review browser is fixed at 1280×1100 and does not honor window resize requests, so a true 390px consumer render cannot be claimed from this session. The desktop responsive breakpoints are implemented and the mobile audit remains explicitly open for a device-width browser session rather than being marked complete without visual evidence.
+
+## Canonical Pathways full-figure framing
+
+The Reset and Align commissioned frames both place Lumen’s full figure and tendrils across the landscape width. The full composition cannot survive a portrait `object-fit: cover` crop. Pathways therefore needs a landscape full-bleed frame with the video scaled to fill width and the original background retained as its edge-to-edge field; this preserves the entire character without adding synthetic borders or substituting new art.
+
+## Pathways watermark audit — first samples
+
+The sampled Reset (`burst_joy`) frames are clean. The sampled Align (`settling`) frames visibly carry the `Veo` watermark in the lower-right corner throughout the contact sheet and must not remain an active Pathways asset without an existing clean commissioned replacement or a safe, source-preserving remediation.
+
+The sampled Resonance (`waves_sparkles`) frames also carry a lower-right `Veo` watermark. The sampled Uplift (`starburst_pose`) frames are clean across the inspected contact sheet.
+
+The sampled Flow (`pointing_energy`) and Rhythms (`turning_dial`) frames are clean across the inspected playback samples.
+
+The sampled Purpose (`self_hug`) frames are clean. The audit identifies only `settling` and `waves_sparkles` as watermark-affected among the seven active Pathways clips; both require a clean, source-preserving derivative before use.
+
+The cleaned full-figure derivatives for `settling` and `waves_sparkles` were visually sampled across playback. Neither contact sheet shows a visible VEO mark, and Lumen’s complete figure remains inside the original-image field.
+
+## Clean canonical Pathways swap candidates
+
+`bouncing_joyfully` is clean and presents Lumen at full figure within a balanced landscape field, making it a stronger Reset candidate than the matted `burst_joy` source. `nodding_gently` is clean but is a close, intentionally cropped listening scene; it is not suitable where the requirement is a complete figure with all tendrils visible.
+
+`core_unfurls` is clean and contains a full-figure unfurl sequence inside an even landscape field; it is a strong replacement for the watermarked Resonance scene. `floating_center` is clean but is cropped at the lower body in several frames and is not appropriate for the full-figure Pathways requirement.
+
+`self_soothing` is clean but transitions into a close self-hug composition and is not a dependable full-figure Pathways scene. `starburst_joy` is clean and holds Lumen full figure against a broad, bright source field. The selected clean swaps are therefore `bouncing_joyfully` for Reset, `starburst_joy` for Align, and `core_unfurls` for Resonance; their current edited source assets remain available as fallbacks.
+
+The rendered Pathways recheck confirms the three clean swaps are each playing with `readyState: 4`, are not paused, have no duplicate image siblings, and use their own extracted poster frames. Reset now fills its surface with a full-figure, clean canonical composition. Align and Resonance use the selected clean source treatments without watermark exposure.

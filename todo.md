@@ -1434,6 +1434,28 @@
 - [x] Recompose Pathways frames around the canonical landscape footage instead of excessive portrait cover cropping
 - [x] Add playback regression coverage, visually verify Pathways, and checkpoint the repair
 
+## Pathways Full-Figure Lumen Framing
+
+- [x] Measure canonical Pathways clips and identify a full-figure safe area for arms and tendrils
+- [x] Create source-aware full-figure video derivatives or frame treatments where the existing source cannot fill the surface safely
+- [x] Render the affected Pathways media full bleed without visual borders, duplicate layers, or cropped limbs
+- [x] Replace matted source scenes with clean full-field canonical swaps rather than feathering altered source frames
+- [x] Visually verify full-figure playback and run regression, TypeScript, and production-build checks before checkpointing
+
+## Pathways Canonical Watermark Audit
+
+- [x] Sample every active Pathways Lumen clip across playback and identify any visible VEO watermark frame
+- [x] Create clean full-figure canonical derivatives only for watermark-affected clips
+- [x] Use only verified watermark-free media and poster frames in active Pathways scenes
+- [x] Visually recheck all selected Pathways media and run regression, TypeScript, and production-build verification before checkpointing
+
+## Pathways Clean Canonical Clip Swap
+
+- [x] Screen clean commissioned Lumen clips for edge-to-edge full-figure composition that avoids the affected source mattes
+- [x] Prepare compact matching-poster replacements while retaining the existing edited assets as fallbacks
+- [x] Apply only visually approved clean canonical swaps to the affected Pathways cards
+- [x] Compare the swapped scenes in the rendered page and run regression, TypeScript, and production-build verification before checkpointing
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA
