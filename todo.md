@@ -1514,6 +1514,11 @@
 - [x] Correct all primary Resources navigation hrefs to /library
 - [x] Add focused regression coverage and visually verify the critical P0 flows before checkpointing
 
+## Legacy Resources URL Compatibility
+
+- [x] Preserve `/resources` as a redirect to `/library` for bookmarks, shared links, and legacy metadata
+- [x] Add regression coverage and verify direct navigation to the legacy URL before checkpointing
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA

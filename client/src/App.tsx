@@ -158,6 +158,7 @@ function RouterSwitch() {
       {/* Resources */}
       <Route path="/library" component={ResourceLibrary} />
       <Route path="/library/:slug" component={LibraryArticlePage} />
+      <Route path="/resources"><Redirect to="/library" replace /></Route>
 
       {/* Settings */}
       <Route path="/settings" component={Settings} />
