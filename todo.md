@@ -1519,6 +1519,12 @@
 - [x] Preserve `/resources` as a redirect to `/library` for bookmarks, shared links, and legacy metadata
 - [x] Add regression coverage and verify direct navigation to the legacy URL before checkpointing
 
+## Legacy Path Coverage and Cache-Update Repair
+
+- [x] Preserve /today → /dashboard, /assessment → /audit, /survey → /audit, and /ground-check → /ground/ground-check
+- [x] Ensure an existing PWA client detects and activates an updated app bundle without retaining stale route behavior
+- [x] Add redirect and update-behavior regression coverage, verify bare and cache-busted paths, and checkpoint the repair
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA

@@ -160,6 +160,12 @@ function RouterSwitch() {
       <Route path="/library/:slug" component={LibraryArticlePage} />
       <Route path="/resources"><Redirect to="/library" replace /></Route>
 
+      {/* Legacy reader and app vocabulary */}
+      <Route path="/today"><Redirect to="/dashboard" replace /></Route>
+      <Route path="/assessment"><Redirect to="/audit" replace /></Route>
+      <Route path="/survey"><Redirect to="/audit" replace /></Route>
+      <Route path="/ground-check"><Redirect to="/ground/ground-check" replace /></Route>
+
       {/* Settings */}
       <Route path="/settings" component={Settings} />
       <Route path="/downloads" component={Downloads} />

@@ -150,3 +150,9 @@ After removal of the June smoke-test check-ins and QA sweep entry, the authentic
 ## P0 Pattern Mirror and Ground Check recheck
 
 Pattern Mirror now returns the same recent-evidence explanation as Weekly Summary, including the cleaned account’s actual count of one record and the three-record threshold. The scattered Ground Check entry now begins with unselected answers rather than silently submitting midpoint defaults, and the server regression verifies scattered and burdened declared states cannot be returned as settled.
+
+## Legacy route recheck
+
+Direct cache-busted navigation to `/today` resolves to `/dashboard`, and `/assessment` resolves to `/audit` rather than either legacy path reaching the branded 404 screen. Both canonical destinations loaded at document position zero with their intended page content.
+
+The companion reader vocabulary paths are also resolved: `/survey` reaches `/audit`, and `/ground-check` reaches the seven-question route at `/ground/ground-check`. Neither path reaches the 404 screen.

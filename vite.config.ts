@@ -157,6 +157,11 @@ const vitePWA = VitePWA({
   devOptions: { enabled: false },
   // Workbox config: cache app shell + assets
   workbox: {
+    // Activate an updated app shell for existing PWA sessions instead of waiting
+    // for every previously opened tab to close.
+    clientsClaim: true,
+    skipWaiting: true,
+    cleanupOutdatedCaches: true,
     // Raise the precache size limit to 4 MiB to accommodate the main bundle
     maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
     // Only precache small assets; large JS chunks are served from network
@@ -165,10 +170,16 @@ const vitePWA = VitePWA({
     navigateFallbackDenylist: [/^\/api\//],
     runtimeCaching: [
       {
-        // Cache JS chunks at runtime with StaleWhileRevalidate for fast loads
+        // Prefer the network for JavaScript so online clients do not keep a
+        // week-old router bundle after a route compatibility release. Hashed
+        // chunks remain cached as a fallback while offline.
         urlPattern: /\/assets\/.*\.js$/,
-        handler: "StaleWhileRevalidate",
-        options: { cacheName: "js-chunks", expiration: { maxEntries: 80, maxAgeSeconds: 60 * 60 * 24 * 7 } },
+        handler: "NetworkFirst",
+        options: {
+          cacheName: "js-chunks",
+          networkTimeoutSeconds: 3,
+          expiration: { maxEntries: 80, maxAgeSeconds: 60 * 60 * 24 },
+        },
       },
       {
         urlPattern: /^\/manus-storage\//,
