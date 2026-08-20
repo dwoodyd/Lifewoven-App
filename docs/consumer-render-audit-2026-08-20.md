@@ -122,3 +122,7 @@ The Oracle header now uses a single, source-matched 16:9 canonical scene on the 
 ## Weave route-entry recheck
 
 Direct navigation to `/weave` now opens at document position zero with the navigation and Weave header visible. Browser scroll restoration is set to manual and route changes schedule an explicit top-of-page reset on the next animation frame.
+
+## Landing-hero scale recheck
+
+The deployed public hero now presents Lumen as the largest media treatment on the landing page, using one native video and its matching first-frame poster. The hero occupies the broad right-hand field while the marketing copy remains protected on the left; other page media placements were not reduced.

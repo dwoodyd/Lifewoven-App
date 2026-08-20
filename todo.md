@@ -1479,9 +1479,10 @@
 
 ## Landing Hero Scale and Weave Entry Repair
 
-- [ ] Make the public landing Lumen hero the largest media treatment on its page without reducing any other video
+- [x] Make the public landing Lumen hero the largest media treatment on its page without reducing any other video
+- [x] Ensure the enlarged public landing hero renders its native poster and canonical video on first paint rather than appearing blank
 - [x] Ensure navigating directly to /weave consistently starts at the top of the page
-- [ ] Visually verify the new landing-hero hierarchy and Weave route entry, then run regression, TypeScript, and production-build validation before checkpointing
+- [x] Visually verify the new landing-hero hierarchy and Weave route entry, then run regression, TypeScript, and production-build validation before checkpointing
 
 ## Lifewoven Enhancement Brief (Current Scope)
 
