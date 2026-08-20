@@ -84,40 +84,40 @@
 }
 
 :root {
-  /* Lifewoven — one night field, lit by Lumen's own yarn. */
+  /* Lifewoven light field — warm paper, ink, and woven-gold contrast. */
   --radius: 0.5rem;
-  --background: #0B1020;
-  --foreground: #E8DCC4;
-  --card: #12192B;
-  --card-foreground: #E8DCC4;
-  --popover: #12192B;
-  --popover-foreground: #E8DCC4;
-  --primary: #C79A63;
-  --primary-foreground: #0B1020;
-  --secondary: #19223A;
-  --secondary-foreground: #E8DCC4;
-  --muted: #19223A;
-  --muted-foreground: #C2B8A6;
-  --accent: #B4674A;
-  --accent-foreground: #0B1020;
-  --destructive: #B4674A;
-  --destructive-foreground: #0B1020;
-  --border: #33456C;
-  --input: #33456C;
-  --ring: #C79A63;
-  --sidebar: #0B1020;
-  --sidebar-foreground: #E8DCC4;
-  --sidebar-primary: #C79A63;
-  --sidebar-primary-foreground: #0B1020;
-  --sidebar-accent: #19223A;
-  --sidebar-accent-foreground: #E8DCC4;
-  --sidebar-border: #33456C;
-  --sidebar-ring: #C79A63;
-  --chart-1: oklch(0.497 0.065 195);
-  --chart-2: oklch(0.461 0.069 330);
-  --chart-3: oklch(0.474 0.027 161);
-  --chart-4: oklch(0.410 0.059 264);
-  --chart-5: oklch(0.591 0.116 45);
+  --background: #F7F2E9;
+  --foreground: #1D2636;
+  --card: #FFFDF8;
+  --card-foreground: #1D2636;
+  --popover: #FFFDF8;
+  --popover-foreground: #1D2636;
+  --primary: #9A6733;
+  --primary-foreground: #FFFDF8;
+  --secondary: #ECE4D7;
+  --secondary-foreground: #273244;
+  --muted: #EEE8DE;
+  --muted-foreground: #5A6472;
+  --accent: #A86443;
+  --accent-foreground: #FFFDF8;
+  --destructive: #A33E36;
+  --destructive-foreground: #FFFDF8;
+  --border: #D9CFBF;
+  --input: #CFC3B2;
+  --ring: #9A6733;
+  --sidebar: #F1E9DC;
+  --sidebar-foreground: #1D2636;
+  --sidebar-primary: #9A6733;
+  --sidebar-primary-foreground: #FFFDF8;
+  --sidebar-accent: #E8DED0;
+  --sidebar-accent-foreground: #273244;
+  --sidebar-border: #D9CFBF;
+  --sidebar-ring: #9A6733;
+  --chart-1: oklch(0.49 0.07 220);
+  --chart-2: oklch(0.52 0.08 25);
+  --chart-3: oklch(0.51 0.06 155);
+  --chart-4: oklch(0.47 0.07 285);
+  --chart-5: oklch(0.58 0.11 65);
 }
 
 .dark {

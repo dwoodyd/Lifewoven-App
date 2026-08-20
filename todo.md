@@ -1497,6 +1497,13 @@
 - [x] Ensure direct navigation to /oracle consistently begins at the page top
 - [x] Visually verify hero blending and Oracle entry, then run regression, TypeScript, and production-build validation before checkpointing
 
+## Complete Light-Mode Interface Repair
+
+- [x] Inspect theme provider, navigation toggle, settings control, and current light-mode token resolution
+- [x] Implement a coherent readable light-mode surface, typography, border, and control palette
+- [x] Confirm the theme controls visibly activate light and dark modes across the rendered app
+- [x] Run regression, TypeScript, and production-build validation before checkpointing
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA

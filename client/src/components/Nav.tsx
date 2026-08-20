@@ -99,7 +99,8 @@ export default function Nav() {
             size="icon"
             onClick={toggleTheme}
             className="text-muted-foreground hover:text-foreground w-9 h-9 transition-colors duration-150 hover:bg-accent/10 group"
-            aria-label="Toggle theme"
+            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
           >
             {theme === "dark"
               ? <Sun className="h-4 w-4 transition-transform duration-300 group-hover:rotate-45 group-hover:scale-110" />

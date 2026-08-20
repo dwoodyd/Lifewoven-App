@@ -138,3 +138,7 @@ Direct navigation to `/oracle` now begins at document position zero. The initial
 ## Weave dissolve recheck
 
 The Weave header now applies the same left-edge ambient mask to its compact Lumen scene. The character and her warm scene soften into the page field before the title and entry controls, removing the visible panel seam while preserving full text contrast.
+
+## Light-mode recheck
+
+The navigation control now clearly changes action from “Switch to light mode” to “Switch to dark mode.” In light mode, The Weave renders as a warm-paper interface with dark ink copy, white card surfaces, visible borders, and the same Lumen media treatment. The restored semantic tokens preserve legibility across navigation, buttons, prompts, entries, and supporting metadata.
