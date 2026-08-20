@@ -154,6 +154,7 @@ function RouterSwitch() {
 
       {/* Mood Rhythm */}
       <Route path="/mood-rhythm" component={MoodRhythmChart} />
+      <Route path="/mood"><Redirect to="/mood-rhythm" replace /></Route>
 
       {/* Resources */}
       <Route path="/library" component={ResourceLibrary} />
@@ -165,6 +166,7 @@ function RouterSwitch() {
       <Route path="/assessment"><Redirect to="/audit" replace /></Route>
       <Route path="/survey"><Redirect to="/audit" replace /></Route>
       <Route path="/ground-check"><Redirect to="/ground/ground-check" replace /></Route>
+      <Route path="/check-in"><Redirect to="/dashboard" replace /></Route>
 
       {/* Settings */}
       <Route path="/settings" component={Settings} />

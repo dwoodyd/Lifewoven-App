@@ -1525,6 +1525,11 @@
 - [x] Ensure an existing PWA client detects and activates an updated app bundle without retaining stale route behavior
 - [x] Add redirect and update-behavior regression coverage, verify bare and cache-busted paths, and checkpoint the repair
 
+## Check-in and Mood Legacy URL Compatibility
+
+- [x] Preserve `/check-in` as a redirect to `/dashboard` and `/mood` as a redirect to `/mood-rhythm`
+- [x] Add regression coverage and verify both aliases through direct browser navigation before checkpointing
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA

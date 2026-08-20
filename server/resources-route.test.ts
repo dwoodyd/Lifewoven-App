@@ -10,5 +10,7 @@ describe("legacy Resources route", () => {
     expect(appSource).toContain('<Route path="/assessment"><Redirect to="/audit" replace /></Route>');
     expect(appSource).toContain('<Route path="/survey"><Redirect to="/audit" replace /></Route>');
     expect(appSource).toContain('<Route path="/ground-check"><Redirect to="/ground/ground-check" replace /></Route>');
+    expect(appSource).toContain('<Route path="/check-in"><Redirect to="/dashboard" replace /></Route>');
+    expect(appSource).toContain('<Route path="/mood"><Redirect to="/mood-rhythm" replace /></Route>');
   });
 });

@@ -156,3 +156,5 @@ Pattern Mirror now returns the same recent-evidence explanation as Weekly Summar
 Direct cache-busted navigation to `/today` resolves to `/dashboard`, and `/assessment` resolves to `/audit` rather than either legacy path reaching the branded 404 screen. Both canonical destinations loaded at document position zero with their intended page content.
 
 The companion reader vocabulary paths are also resolved: `/survey` reaches `/audit`, and `/ground-check` reaches the seven-question route at `/ground/ground-check`. Neither path reaches the 404 screen.
+
+The remaining action vocabulary aliases also resolve directly: `/check-in` reaches `/dashboard`, and `/mood` reaches `/mood-rhythm`. Both destinations loaded at the top of their intended page without passing through the 404 screen.
