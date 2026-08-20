@@ -108,7 +108,7 @@ export default function PathwaysListing() {
           const Icon = pathway.icon;
           return (
             <div key={pathway.slug} className="relative mb-10 min-h-[430px] overflow-hidden border border-primary/60 bg-card">
-              <LuminScene videoId={pathway.scene} ambient loop ambientSize="min(72vw, 760px)" ambientPosition={{ position: "absolute", right: "-3%", top: "50%", transform: "translateY(-50%)" }} className="opacity-100" />
+              <LuminScene videoId={pathway.scene} ambient loop ambientSize="min(86vw, 520px)" ambientPosition={{ position: "absolute", right: "-3%", top: "50%", transform: "translateY(-50%)" }} className="opacity-100" />
               <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--card)_0%,color-mix(in_oklch,var(--card)_87%,transparent)_44%,transparent_76%)]" aria-hidden="true" />
               <div className="absolute top-4 right-4 z-20 flex gap-2">
                 <Badge variant="outline" className="border-primary/55 bg-background/90 text-foreground text-xs font-mono tracking-wider">{pathway.dimension}</Badge>
@@ -143,7 +143,7 @@ export default function PathwaysListing() {
             return (
               <Link key={pathway.slug} href={`/pathway/${pathway.slug}`}>
                 <div className="group relative min-h-[350px] overflow-hidden border border-border bg-card transition-all duration-200 hover:border-primary/70">
-                  <LuminScene videoId={pathway.scene} ambient loop ambientSize="min(63vw, 420px)" ambientPosition={{ position: "absolute", left: "50%", top: "42%", transform: "translate(-50%, -50%)" }} className="opacity-100" />
+                  <LuminScene videoId={pathway.scene} ambient loop ambientSize="min(82vw, 420px)" ambientPosition={{ position: "absolute", left: "50%", top: "42%", transform: "translate(-50%, -50%)" }} className="opacity-100" />
                   <div className="absolute inset-x-0 bottom-0 h-[54%] bg-[linear-gradient(180deg,transparent_0%,color-mix(in_oklch,var(--card)_82%,transparent)_28%,var(--card)_84%)]" aria-hidden="true" />
                   <div className="absolute inset-x-0 bottom-0 z-10 p-4 sm:p-6">
                     <div className="flex items-center gap-2 mb-0.5 flex-wrap">

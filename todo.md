@@ -1406,6 +1406,14 @@
 - [x] Reframe Lumen as a portrait treatment and move the primary scene into the first viewport
 - [x] Add regression coverage and verify the media repair in production before checkpointing
 
+## Canonical Lumen Poster Correction
+
+- [x] Remove all generated Lumen artwork references and retain only commissioned mascot-video appearances
+- [x] Extract poster frames from the matching canonical commissioned MP4s and upload them as managed web assets
+- [x] Map each Lumen video to its own extracted frame using the HTML video poster attribute
+- [x] Preserve the existing Pathways video placements and portrait sizes while restoring canonical video media
+- [x] Re-run media, TypeScript, and production-build verification before checkpointing the correction
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA

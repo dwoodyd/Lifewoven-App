@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { LUMIN_VIDEOS } from "@/data/lumin";
+import { getLumenPoster } from "@shared/lumenMedia";
 
 /* ─── Storage keys ───────────────────────────────────────────────── */
 const STORAGE_KEY = "lifewoven_onboarded_v9";
@@ -287,8 +288,8 @@ export default function OnboardingModal({ userId }: Props) {
   const [dissolving, setDissolving] = useState(false);
 
   // ── A/B video cross-fade ──────────────────────────────────────────
-  const [slotA, setSlotA] = useState({ url: "", visible: false, ready: false });
-  const [slotB, setSlotB] = useState({ url: "", visible: false, ready: false });
+  const [slotA, setSlotA] = useState({ videoId: "", url: "", visible: false, ready: false });
+  const [slotB, setSlotB] = useState({ videoId: "", url: "", visible: false, ready: false });
   const [activeSlot, setActiveSlot] = useState<"a" | "b">("a");
   const activeSceneLoop = finished ? true : (SCENES[sceneIdx]?.loop ?? true);
   const videoARef = useRef<HTMLVideoElement>(null);
@@ -307,11 +308,12 @@ export default function OnboardingModal({ userId }: Props) {
   const trackEvent       = trpc.system.trackEvent.useMutation({ onError: () => {} });
 
   /* ── Preload next video into the inactive slot ─────────────────── */
-  const preloadIntoInactiveSlot = useCallback((url: string) => {
+  const preloadIntoInactiveSlot = useCallback((videoId: string) => {
+    const url = getVideoUrl(videoId);
     if (activeSlot === "a") {
-      setSlotB(s => ({ ...s, url, ready: false, visible: false }));
+      setSlotB(s => ({ ...s, videoId, url, ready: false, visible: false }));
     } else {
-      setSlotA(s => ({ ...s, url, ready: false, visible: false }));
+      setSlotA(s => ({ ...s, videoId, url, ready: false, visible: false }));
     }
   }, [activeSlot]);
 
@@ -366,8 +368,8 @@ export default function OnboardingModal({ userId }: Props) {
     if (!open) return;
     const scene0 = SCENES[0];
     const url0 = getVideoUrl(scene0.videoId);
-    setSlotA({ url: url0, visible: false, ready: false });
-    setSlotB({ url: "", visible: false, ready: false });
+    setSlotA({ videoId: scene0.videoId, url: url0, visible: false, ready: false });
+    setSlotB({ videoId: "", url: "", visible: false, ready: false });
     setActiveSlot("a");
     setSceneIdx(0);
     setFinished(false);
@@ -401,9 +403,9 @@ export default function OnboardingModal({ userId }: Props) {
     if (!open || finished) return;
     const nextIdx = sceneIdx + 1;
     if (nextIdx < SCENES.length) {
-      preloadIntoInactiveSlot(getVideoUrl(SCENES[nextIdx].videoId));
+      preloadIntoInactiveSlot(SCENES[nextIdx].videoId);
     } else {
-      preloadIntoInactiveSlot(getVideoUrl("starburst_joy"));
+      preloadIntoInactiveSlot("starburst_joy");
     }
   }, [sceneIdx, open, finished]);
 
@@ -542,6 +544,8 @@ export default function OnboardingModal({ userId }: Props) {
       <video
         ref={videoARef}
         {...(slotA.url ? { src: slotA.url } : {})}
+        poster={getLumenPoster(slotA.videoId)}
+        preload="none"
         muted playsInline
         loop={activeSlot === "a" ? activeSceneLoop : false}
         autoPlay={activeSlot === "a"}
@@ -563,6 +567,8 @@ export default function OnboardingModal({ userId }: Props) {
       <video
         ref={videoBRef}
         {...(slotB.url ? { src: slotB.url } : {})}
+        poster={getLumenPoster(slotB.videoId)}
+        preload="none"
         muted playsInline
         loop={activeSlot === "b" ? activeSceneLoop : false}
         autoPlay={activeSlot === "b"}

@@ -4,7 +4,8 @@ import { getLoginUrl } from "@/const";
 import Nav from "@/components/Nav";
 import { ArrowRight, ChevronRight, Sparkles } from "lucide-react";
 import { LUMIN_VIDEOS } from "@/data/lumin";
-import { useRef, useEffect } from "react";
+import { getLumenPoster } from "@shared/lumenMedia";
+import { useRef, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
@@ -17,22 +18,50 @@ const BOUNCY_LUMIN = LUMIN_VIDEOS.find((v) => v.id === "bouncing_joyfully") ?? L
 
 function LuminVideo({ video, className }: { video: typeof LUMIN_VIDEOS[0]; className?: string }) {
   const ref = useRef<HTMLVideoElement>(null);
+  const hostRef = useRef<HTMLDivElement>(null);
+  const [shouldLoad, setShouldLoad] = useState(false);
+  const poster = getLumenPoster(video.id);
+
   useEffect(() => {
-    if (ref.current) {
+    const target = hostRef.current;
+    if (!target) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setShouldLoad(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "240px 0px" },
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (shouldLoad && ref.current) {
       ref.current.play().catch(() => {});
     }
-  }, []);
+  }, [shouldLoad]);
+
   return (
-    <video
-      ref={ref}
-      src={video.url}
-      autoPlay
-      loop
-      muted
-      playsInline
-      className={className}
-      style={{ mixBlendMode: "screen" }}
-    />
+    <div ref={hostRef} className={className}>
+      {poster && <img src={poster} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-contain" />}
+      {shouldLoad && (
+        <video
+          ref={ref}
+          src={video.url}
+          poster={poster}
+          preload="none"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 h-full w-full object-contain"
+          style={{ mixBlendMode: "screen" }}
+        />
+      )}
+    </div>
   );
 }
 

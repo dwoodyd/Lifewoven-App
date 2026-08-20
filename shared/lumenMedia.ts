@@ -1,63 +1,33 @@
+/**
+ * Poster frames are extracted directly from their matching commissioned Lumen
+ * MP4. Generated or substitute artwork is deliberately never used here.
+ */
 export const LUMEN_POSTERS = {
-  welcome: "/manus-storage/lumen-poster-welcome_2be68ba1.png",
-  calm: "/manus-storage/lumen-poster-calm_a2c70198.png",
-  listening: "/manus-storage/lumen-poster-listening_06494cf0.png",
-  focus: "/manus-storage/lumen-poster-focus_973db378.png",
-  celebrate: "/manus-storage/lumen-poster-celebrate_a6251e9d.png",
+  taps_chin: "/manus-storage/taps_chin_74ab7efd.jpg",
+  nodding_gently: "/manus-storage/nodding_gently_832a863e.jpg",
+  tilting_listening: "/manus-storage/tilting_listening_44a221af.jpg",
+  core_unfurls: "/manus-storage/core_unfurls_e0e1badd.jpg",
+  floating_center: "/manus-storage/floating_center_25c8d7bc.jpg",
+  self_soothing: "/manus-storage/self_soothing_15851a30.jpg",
+  settling: "/manus-storage/settling_6bf42ccf.jpg",
+  waves_sparkles: "/manus-storage/waves_sparkles_8b2067bb.jpg",
+  starburst_pose: "/manus-storage/starburst_pose_486f25e1.jpg",
+  pointing_energy: "/manus-storage/pointing_energy_fa9f1389.jpg",
+  turning_dial: "/manus-storage/turning_dial_d68d92b9.jpg",
+  self_hug: "/manus-storage/self_hug_f4025afd.jpg",
+  burst_joy: "/manus-storage/burst_joy_ecefdb2d.jpg",
+  bouncing_joyfully: "/manus-storage/bouncing_joyfully_9584aadb.jpg",
+  screen1_hero: "/manus-storage/screen1_hero_39a3cc5e.jpg",
+  holographic_panel: "/manus-storage/holographic_panel_3764ec26.jpg",
+  transformation: "/manus-storage/transformation_e580e170.jpg",
+  starburst_joy: "/manus-storage/starburst_joy_a27b2e7f.jpg",
 } as const;
 
-const CELEBRATION_VIDEO_IDS = new Set([
-  "bouncy_dance",
-  "bouncing_joyfully",
-  "starburst_pose",
-  "twirls_sparkles",
-  "burst_arms",
-  "spin_celebrate",
-  "starburst_joy",
-  "dancing",
-  "burst_joy",
-  "transformation",
-  "pure_joy",
-  "spinning",
-]);
-
-const FOCUS_VIDEO_IDS = new Set([
-  "analyzing",
-  "pushing_table",
-  "taps_chin",
-  "turning_dial",
-  "magnifying",
-  "holographic_panel",
-]);
-
-const LISTENING_VIDEO_IDS = new Set([
-  "tilting_listening",
-  "nodding_gently",
-  "taps_camera",
-  "peek_a_boo_sparkles",
-]);
-
-const WELCOME_VIDEO_IDS = new Set([
-  "screen1_hero",
-  "pointing_energy",
-  "sliding_in",
-  "smiles_sweeping",
-  "turning_extending",
-  "gentle_open",
-  "awakening",
-  "peekaboo_reveal",
-  "pointing_down",
-]);
-
 /**
- * Every Lumen clip receives a visible poster immediately. The mappings are
- * intentionally role-based so a failed or deferred video still communicates
- * the appropriate emotional state without introducing a blank media strip.
+ * Returns a matching canonical-video frame when one has been prepared. A clip
+ * without an extracted frame is allowed to remain video-only rather than being
+ * represented by newly drawn mascot artwork.
  */
-export function getLumenPoster(videoId: string): string {
-  if (CELEBRATION_VIDEO_IDS.has(videoId)) return LUMEN_POSTERS.celebrate;
-  if (FOCUS_VIDEO_IDS.has(videoId)) return LUMEN_POSTERS.focus;
-  if (LISTENING_VIDEO_IDS.has(videoId)) return LUMEN_POSTERS.listening;
-  if (WELCOME_VIDEO_IDS.has(videoId)) return LUMEN_POSTERS.welcome;
-  return LUMEN_POSTERS.calm;
+export function getLumenPoster(videoId: string): string | undefined {
+  return LUMEN_POSTERS[videoId as keyof typeof LUMEN_POSTERS];
 }

@@ -151,19 +151,21 @@ export function LuminScene({
           opacity: entered ? 1 : 0,
         }}
       >
-        <img
-          src={poster}
-          alt=""
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            display: "block",
-          }}
-        />
+        {poster && (
+          <img
+            src={poster}
+            alt=""
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+            }}
+          />
+        )}
         {shouldLoadVideo && (
           <video
             ref={videoRef}
@@ -216,19 +218,21 @@ export function LuminScene({
         transform: dissolving ? "scale(1.04)" : "scale(1)",
       }}
     >
-      <img
-        src={poster}
-        alt=""
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          zIndex: 0,
-        }}
-      />
+      {poster && (
+        <img
+          src={poster}
+          alt=""
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            zIndex: 0,
+          }}
+        />
+      )}
       {/* ── Full-bleed video ── */}
       {shouldLoadVideo && (
         <video
