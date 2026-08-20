@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { getLumenPoster, LUMEN_POSTERS } from "../shared/lumenMedia";
 
@@ -18,5 +20,11 @@ describe("Lumen media fallbacks", () => {
       expect(posterUrl).toMatch(/\.jpg$/);
       expect(posterUrl).not.toContain("lumen-poster-");
     }
+  });
+
+  it("uses the native video poster without an overlapping image sibling", () => {
+    const sceneSource = readFileSync(resolve(process.cwd(), "client/src/components/LuminScene.tsx"), "utf8");
+    expect(sceneSource).toContain("poster={poster}");
+    expect(sceneSource).not.toContain("<img");
   });
 });

@@ -46,6 +46,8 @@ export interface LuminSceneProps {
   ambientPosition?: React.CSSProperties;
   /** Ambient mode: media fit inside its portrait footprint. */
   ambientFit?: "cover" | "contain";
+  /** Ambient mode: source-aware frame ratio. Defaults to the standard Lumen portrait scene. */
+  ambientAspectRatio?: string;
   /** Ambient mode: preserve black matte rather than screen-blending video when the scene is a dedicated panel. */
   ambientBlendMode?: "screen" | "normal";
   /** Extra className on the root element */
@@ -73,6 +75,7 @@ export function LuminScene({
   ambientSize = "40vw",
   ambientPosition,
   ambientFit = "cover",
+  ambientAspectRatio = "4 / 5",
   ambientBlendMode = "screen",
   className = "",
 }: LuminSceneProps) {
@@ -151,55 +154,36 @@ export function LuminScene({
           width: ambientSize,
           minWidth: ambientSize === "68px" ? undefined : "min(30vw, 380px)",
           maxWidth: "min(86vw, 520px)",
-          aspectRatio: "4/5",
+          aspectRatio: ambientAspectRatio,
           overflow: "hidden",
           transition: "opacity 1.2s ease",
           opacity: entered ? 1 : 0,
         }}
       >
-        {poster && (
-          <img
-            src={poster}
-            alt=""
-            aria-hidden="true"
-            style={{
-              position: "absolute",
-              inset: 0,
-              width: "100%",
-              height: "100%",
-              objectFit: ambientFit,
-              background: "var(--card)",
-              display: "block",
-            }}
-          />
-        )}
-        {shouldLoadVideo && (
-          <video
-            ref={videoRef}
-            src={url}
-            poster={poster}
-            preload="none"
-            autoPlay
-            muted
-            loop={loop}
-            playsInline
-            onCanPlay={() => setVideoReady(true)}
-            onError={() => setVideoReady(false)}
-            onTimeUpdate={handleTimeUpdate}
-            onEnded={handleVideoEnd}
-            style={{
-              position: "absolute",
-              inset: 0,
-              width: "100%",
-              height: "100%",
-              objectFit: ambientFit,
-              mixBlendMode: ambientBlendMode,
-              display: "block",
-              opacity: videoReady ? 1 : 0,
-              transition: "opacity 180ms ease-out",
-            }}
-          />
-        )}
+        <video
+          ref={videoRef}
+          src={shouldLoadVideo ? url : undefined}
+          poster={poster}
+          preload="none"
+          autoPlay={shouldLoadVideo}
+          muted
+          loop={loop}
+          playsInline
+          onCanPlay={() => setVideoReady(true)}
+          onError={() => setVideoReady(false)}
+          onTimeUpdate={handleTimeUpdate}
+          onEnded={handleVideoEnd}
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: ambientFit,
+            mixBlendMode: ambientBlendMode,
+            background: "var(--card)",
+            display: "block",
+          }}
+        />
       </div>
     );
   }
@@ -225,49 +209,31 @@ export function LuminScene({
         transform: dissolving ? "scale(1.04)" : "scale(1)",
       }}
     >
-      {poster && (
-        <img
-          src={poster}
-          alt=""
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            zIndex: 0,
-          }}
-        />
-      )}
       {/* ── Full-bleed video ── */}
-      {shouldLoadVideo && (
-        <video
-          ref={videoRef}
-          src={url}
-          poster={poster}
-          preload="none"
-          autoPlay
-          muted
-          loop={loop}
-          playsInline
-          onCanPlay={() => setVideoReady(true)}
-          onError={() => setVideoReady(false)}
-          onTimeUpdate={handleTimeUpdate}
-          onEnded={handleVideoEnd}
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            mixBlendMode: "screen",
-            zIndex: 1,
-            opacity: videoReady ? 1 : 0,
-            transition: "opacity 180ms ease-out",
-          }}
-        />
-      )}
+      <video
+        ref={videoRef}
+        src={shouldLoadVideo ? url : undefined}
+        poster={poster}
+        preload="none"
+        autoPlay={shouldLoadVideo}
+        muted
+        loop={loop}
+        playsInline
+        onCanPlay={() => setVideoReady(true)}
+        onError={() => setVideoReady(false)}
+        onTimeUpdate={handleTimeUpdate}
+        onEnded={handleVideoEnd}
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          mixBlendMode: "screen",
+          background: "#000",
+          zIndex: 1,
+        }}
+      />
 
       {/* ── Dark overlay so text is readable ── */}
       <div

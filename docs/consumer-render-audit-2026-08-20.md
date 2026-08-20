@@ -66,3 +66,7 @@ The Oracle opening is structurally improved: Lumen occupies a dedicated portrait
 ## Authenticated Weave recheck
 
 The Weave empty-state poster is now an independent portrait scene above the empty-state title, description, and call to action. Its journal invitation is fully readable, and the commissioned frame remains present without competing with text.
+
+## Mobile-viewport limitation
+
+The active review browser is fixed at 1280×1100 and does not honor window resize requests, so a true 390px consumer render cannot be claimed from this session. The desktop responsive breakpoints are implemented and the mobile audit remains explicitly open for a device-width browser session rather than being marked complete without visual evidence.

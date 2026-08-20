@@ -1427,6 +1427,13 @@
 - [x] Correct the confirmed live visual defects while keeping commissioned videos canonical and accessible
 - [x] Revisit corrected pages visually and rerun regression and production-build verification before checkpointing
 
+## Pathways Canonical Media Playback Repair
+
+- [x] Remove duplicate absolutely positioned Lumen poster-image siblings from Pathways video scenes
+- [x] Retain native HTML video poster behavior without a second frozen image layer during playback
+- [x] Recompose Pathways frames around the canonical landscape footage instead of excessive portrait cover cropping
+- [x] Add playback regression coverage, visually verify Pathways, and checkpoint the repair
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA
