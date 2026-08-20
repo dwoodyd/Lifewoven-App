@@ -102,3 +102,19 @@ The rendered Pathways recheck confirms the three clean swaps are each playing wi
 The first-reading diagnostic now uses a source-matched 16:9 scene with `contain` rather than the inherited portrait `cover` crop. Lumen’s full arms and tendrils are visible in the opening, and the structural-reading copy occupies a distinct left-hand field rather than covering the character. The greeting scene also retains the complete commissioned figure at its smaller scale.
 
 All visible dashboard empty states now use a dedicated 16:9 source-matched media field above a separate copy field. The recheck covered Rhythms, Goals, The Weave, Oracle Insights, and Active Pathways. Each scene keeps Lumen’s full figure visible, and every title, supporting sentence, and call to action now sits on the card surface below rather than over the commissioned media.
+
+## Sign-in flow inspection
+
+The Lifewoven `/login` route contains no mascot media. It immediately redirects to the Manus OAuth account-selection portal, which also contains no Lumen video or poster layer. The reported sign-in artifact therefore belongs to a different in-app surface that needs a page or screenshot identifier before it can be safely repaired.
+
+## Public landing recheck
+
+The public landing hero is the screen previously described as sign-in. It now mounts a single native video element with its matching `poster` attribute; the separate absolutely positioned poster image is removed. The full figure remains in a source-matched 16:9 scene, while the marketing copy remains in the dark protected field on the left.
+
+## The Weave header recheck
+
+The Weave header now uses a dedicated 16:9 source-matched Lumen field. Lumen’s full limbs are visible in the right-hand panel, and the title, description, and entry controls remain isolated in the left reading field without crossing the commissioned media.
+
+## Oracle header recheck
+
+The Oracle header now uses a single, source-matched 16:9 canonical scene on the right rather than the inherited portrait cover crop. Lumen’s complete arms and tendrils are visible, while the Oracle title and explanatory text occupy an independent left reading field.

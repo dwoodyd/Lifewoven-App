@@ -1463,6 +1463,20 @@
 - [x] Use source-matched media frames and protected copy fields so dashboard text never overlays Lumen’s face or limbs
 - [x] Visually verify the complete dashboard media set and run regression, TypeScript, and production-build validation before checkpointing
 
+## Sign-In Canonical Lumen Media Repair
+
+- [x] Inspect the sign-in screen for duplicate poster-image layers and inherited crop behavior
+- [x] Remove any redundant still layer and use a single full-figure canonical video with its native matching poster
+- [x] Visually verify the sign-in screen and run regression, TypeScript, and production-build validation before checkpointing
+
+## Public Home, Weave, and Oracle Full-Figure Repair
+
+- [x] Inspect the public landing hero, The Weave header, and Oracle header for duplicate layers and portrait-cover crop behavior
+- [x] Remove the public landing hero’s separate poster-image sibling so it relies only on the native video poster
+- [x] Select clean full-figure commissioned clips and matching native posters for the three reported surfaces
+- [x] Use a single source-matched video scene with protected copy fields on Home, The Weave, and Oracle
+- [x] Visually verify all three surfaces and run regression, TypeScript, and production-build validation before checkpointing
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA

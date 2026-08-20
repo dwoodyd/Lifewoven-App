@@ -242,8 +242,11 @@ export default function Oracle() {
             videoId={luminPulse ? "core_unfurls" : "nodding_gently"}
             ambient
             loop
-            ambientSize="min(59vw, 690px)"
+            ambientSize="min(52vw, 560px)"
             ambientPosition={{ position: "absolute", right: "-4%", top: "50%", transform: "translateY(-50%)" }}
+            ambientAspectRatio="16 / 9"
+            ambientFit="contain"
+            ambientBlendMode="normal"
             className="opacity-100"
           />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--background)_4%,color-mix(in_oklch,var(--background)_78%,transparent)_48%,transparent_75%)]" aria-hidden="true" />

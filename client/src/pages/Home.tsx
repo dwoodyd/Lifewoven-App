@@ -46,21 +46,18 @@ function LuminVideo({ video, className }: { video: typeof LUMIN_VIDEOS[0]; class
 
   return (
     <div ref={hostRef} className={className}>
-      {poster && <img src={poster} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-contain" />}
-      {shouldLoad && (
-        <video
-          ref={ref}
-          src={video.url}
-          poster={poster}
-          preload="none"
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 h-full w-full object-contain"
-          style={{ mixBlendMode: "screen" }}
-        />
-      )}
+      <video
+        ref={ref}
+        {...(shouldLoad ? { src: video.url } : {})}
+        poster={poster}
+        preload="none"
+        autoPlay={shouldLoad}
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 h-full w-full object-contain"
+        style={{ mixBlendMode: "normal" }}
+      />
     </div>
   );
 }
@@ -149,7 +146,7 @@ export default function Home() {
         <div className="pointer-events-none absolute inset-y-0 right-0 flex w-full items-center justify-center sm:w-[70%] sm:justify-end">
           <LuminVideo
             video={HERO_LUMIN}
-            className="h-[min(86vw,82svh)] w-[min(86vw,82svh)] object-contain opacity-75 sm:h-[min(68vw,82svh)] sm:w-[min(68vw,82svh)]"
+            className="relative aspect-video w-[min(96vw,920px)] opacity-85 sm:w-[min(62vw,920px)]"
           />
         </div>
 
