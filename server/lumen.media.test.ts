@@ -11,4 +11,12 @@ describe("Lumen media fallbacks", () => {
     expect(getLumenPoster("transformation")).toBe(LUMEN_POSTERS.transformation);
     expect(getLumenPoster("unknown-video-id")).toBeUndefined();
   });
+
+  it("never reintroduces generated Lumen artwork as a poster fallback", () => {
+    for (const posterUrl of Object.values(LUMEN_POSTERS)) {
+      expect(posterUrl).toMatch(/^\/manus-storage\//);
+      expect(posterUrl).toMatch(/\.jpg$/);
+      expect(posterUrl).not.toContain("lumen-poster-");
+    }
+  });
 });

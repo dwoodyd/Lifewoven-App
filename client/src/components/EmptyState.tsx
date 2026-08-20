@@ -158,14 +158,13 @@ export function EmptyState({
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={gentleSpring}
-      className={`relative flex min-h-[360px] flex-col items-center justify-end gap-4 overflow-hidden px-6 py-10 text-center ${className}`}
+      className={`flex flex-col items-center gap-5 overflow-hidden px-6 py-8 text-center ${className}`}
     >
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[68%]" aria-hidden="true">
-        <LuminScene videoId={lumenVideo} ambient loop ambientSize="min(42vw, 300px)" ambientPosition={{ position: "absolute", left: "50%", top: "45%", transform: "translate(-50%, -50%)" }} className="opacity-100" />
-        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-[linear-gradient(180deg,transparent,var(--background))]" />
+      <div className="pointer-events-none relative h-[min(58vw,250px)] w-full max-w-[360px] overflow-hidden" aria-hidden="true">
+        <LuminScene videoId={lumenVideo} ambient loop ambientSize="min(58vw,250px)" ambientPosition={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }} ambientFit="cover" className="opacity-100" />
         <span className="sr-only"><Illustration /></span>
       </div>
-      <div className="relative z-10 space-y-1.5 max-w-xs">
+      <div className="max-w-xs space-y-1.5">
         <p className="font-serif text-lg font-light text-foreground/80">{title}</p>
         {description && (
           <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
@@ -176,7 +175,7 @@ export function EmptyState({
           variant="outline"
           size="sm"
           onClick={action.onClick}
-          className="relative z-10 mt-2 gap-2"
+          className="mt-1 gap-2"
         >
           {action.icon}
           {action.label}

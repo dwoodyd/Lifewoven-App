@@ -42,7 +42,9 @@ export function LumenLoadDiagnostic({ readings, hasReading }: { readings: LumenD
           loop
           ambientSize="min(60vw, 780px)"
           ambientPosition={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}
-          className={hasReading ? "opacity-100" : "opacity-40 saturate-50"}
+          ambientFit="cover"
+          ambientBlendMode="normal"
+          className={hasReading ? "opacity-100" : "opacity-80 saturate-75"}
         />
 
         {/* The core is a light state, not a number printed over her body. */}

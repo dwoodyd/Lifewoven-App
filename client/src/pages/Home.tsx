@@ -141,33 +141,35 @@ export default function Home() {
       <Nav />
 
       {/* ─── HERO ─── */}
-      <section className="relative min-h-screen flex items-center overflow-hidden">
+      <section className="relative min-h-[max(680px,100svh)] overflow-hidden">
         {/* Deep navy gradient backdrop */}
         <div className="absolute inset-0 bg-gradient-to-br from-[oklch(0.08_0.02_260)] via-[oklch(0.10_0.015_260)] to-[oklch(0.12_0.025_280)]" />
 
-        {/* Lumin — centered, dominant, full-bleed */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        {/* Lumen stays in the open right field; copy never crosses her face or tendrils. */}
+        <div className="pointer-events-none absolute inset-y-0 right-0 flex w-full items-center justify-center sm:w-[70%] sm:justify-end">
           <LuminVideo
             video={HERO_LUMIN}
-            className="w-[min(90vw,90vh)] h-[min(90vw,90vh)] object-contain opacity-60"
+            className="h-[min(86vw,82svh)] w-[min(86vw,82svh)] object-contain opacity-75 sm:h-[min(68vw,82svh)] sm:w-[min(68vw,82svh)]"
           />
         </div>
 
-        {/* Radial vignette so text is readable */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_70%_at_50%_50%,transparent_0%,oklch(0.10_0.015_260)_70%)] pointer-events-none" />
+        {/* A shaped copy field protects readable typography without obscuring Lumen. */}
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,oklch(0.08_0.02_260)_0%,oklch(0.08_0.02_260/0.96)_42%,oklch(0.08_0.02_260/0.52)_63%,transparent_84%)]" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-[linear-gradient(0deg,oklch(0.08_0.02_260)_0%,transparent_100%)]" />
 
         {/* Content */}
         <div className="relative z-10 w-full">
-          <div className="max-w-4xl mx-auto px-6 text-center pt-28 pb-20">
+          <div className="flex min-h-[max(680px,100svh)] max-w-7xl items-center px-6 pb-20 pt-28 sm:px-10">
+            <div className="max-w-xl text-left">
             {/* Eyebrow */}
-            <p className="font-mono text-[10px] tracking-[0.3em] text-[oklch(0.72_0.12_55)] uppercase mb-8">
+            <p className="mb-8 font-mono text-xs uppercase tracking-[0.24em] text-[oklch(0.78_0.12_55)]">
               The 5S Personal Transformation System
             </p>
 
             {/* Headline */}
             <h1
-              className="leading-[1.05] tracking-tight mb-8"
-              style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2.8rem, 7vw, 6rem)", fontWeight: 400 }}
+              className="mb-8 leading-[1.03] tracking-tight"
+              style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2.8rem, 5.5vw, 5.6rem)", fontWeight: 400 }}
             >
               One intelligent
               <br />
@@ -176,11 +178,11 @@ export default function Home() {
               for your whole life.
             </h1>
 
-            <p className="text-[oklch(0.70_0.01_260)] text-lg sm:text-xl font-light leading-relaxed mb-10 max-w-2xl mx-auto">
+            <p className="mb-10 max-w-xl text-lg font-light leading-relaxed text-[oklch(0.84_0.01_75)] sm:text-xl">
               Lifewoven brings together emotional alignment, belief work, habit execution, strategic clarity, and holistic stewardship — in one guided, intelligent platform.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
               <Link
                 href="/audit"
                 className="group inline-flex items-center gap-3 px-8 py-4 rounded-full text-base font-medium transition-all duration-300"
@@ -195,18 +197,19 @@ export default function Home() {
               </Link>
               <a
                 href="#system"
-                className="flex items-center gap-2 px-6 py-4 rounded-full text-sm font-light border border-border text-[oklch(0.65_0.01_260)] hover:border-[oklch(0.72_0.12_55)/0.5] hover:text-[oklch(0.82_0.14_55)] transition-all duration-300"
+                className="flex items-center gap-2 rounded-full border border-[oklch(0.82_0.01_75/0.5)] px-6 py-4 text-sm font-light text-[oklch(0.9_0.01_75)] transition-all duration-300 hover:border-[oklch(0.72_0.12_55)/0.5] hover:text-[oklch(0.82_0.14_55)]"
               >
                 Explore Lifewoven
               </a>
             </div>
 
-            <p className="mt-6 text-xs text-[oklch(0.45_0.01_260)]">
+            <p className="mt-6 text-xs text-[oklch(0.78_0.01_75)]">
               Free to start · No credit card required ·{" "}
               <Link href="/beta" className="text-[oklch(0.72_0.12_55)] hover:underline">
                 Have a beta code?
               </Link>
             </p>
+            </div>
           </div>
         </div>
 

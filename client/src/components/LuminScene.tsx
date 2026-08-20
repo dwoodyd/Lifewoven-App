@@ -44,6 +44,10 @@ export interface LuminSceneProps {
   ambientSize?: string;
   /** Ambient mode: CSS position for the container */
   ambientPosition?: React.CSSProperties;
+  /** Ambient mode: media fit inside its portrait footprint. */
+  ambientFit?: "cover" | "contain";
+  /** Ambient mode: preserve black matte rather than screen-blending video when the scene is a dedicated panel. */
+  ambientBlendMode?: "screen" | "normal";
   /** Extra className on the root element */
   className?: string;
 }
@@ -68,6 +72,8 @@ export function LuminScene({
   ambient = false,
   ambientSize = "40vw",
   ambientPosition,
+  ambientFit = "cover",
+  ambientBlendMode = "screen",
   className = "",
 }: LuminSceneProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -161,7 +167,8 @@ export function LuminScene({
               inset: 0,
               width: "100%",
               height: "100%",
-              objectFit: "cover",
+              objectFit: ambientFit,
+              background: "var(--card)",
               display: "block",
             }}
           />
@@ -185,8 +192,8 @@ export function LuminScene({
               inset: 0,
               width: "100%",
               height: "100%",
-              objectFit: "cover",
-              mixBlendMode: "screen",
+              objectFit: ambientFit,
+              mixBlendMode: ambientBlendMode,
               display: "block",
               opacity: videoReady ? 1 : 0,
               transition: "opacity 180ms ease-out",

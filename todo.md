@@ -1414,6 +1414,19 @@
 - [x] Preserve the existing Pathways video placements and portrait sizes while restoring canonical video media
 - [x] Re-run media, TypeScript, and production-build verification before checkpointing the correction
 
+## Consumer-View Rendered-Page Audit
+
+- [x] Review the live desktop build as a consumer across Home, Dashboard, Pathways, Oracle, The Weave, The Ground, and Load-Bearing Survey
+- [ ] Review the same primary consumer flows at mobile width when a mobile browser viewport is available
+- [x] Record and prioritize observed media playback, crop, contrast, and typography-over-media defects
+- [x] Restore the primary Dashboard Lumen poster so its real canonical frame is visibly present before video readiness
+- [x] Fill the dashboard diagnostic’s portrait scene with a face-safe canonical crop rather than leaving a letterboxed media strip
+- [x] Separate Home hero typography from Lumen’s face and tendrils with protected negative space and a readable copy field
+- [x] Recompose Pathways so 520×650 and 420×525 portrait Lumen scenes do not sit behind headings or body copy
+- [x] Separate the authenticated Weave empty-state copy from its Lumen poster so all journal prompts remain readable
+- [x] Correct the confirmed live visual defects while keeping commissioned videos canonical and accessible
+- [x] Revisit corrected pages visually and rerun regression and production-build verification before checkpointing
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA

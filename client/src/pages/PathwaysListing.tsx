@@ -107,14 +107,12 @@ export default function PathwaysListing() {
         {PATHWAYS.filter(p => p.featured).map(pathway => {
           const Icon = pathway.icon;
           return (
-            <div key={pathway.slug} className="relative mb-10 min-h-[430px] overflow-hidden border border-primary/60 bg-card">
-              <LuminScene videoId={pathway.scene} ambient loop ambientSize="min(86vw, 520px)" ambientPosition={{ position: "absolute", right: "-3%", top: "50%", transform: "translateY(-50%)" }} className="opacity-100" />
-              <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--card)_0%,color-mix(in_oklch,var(--card)_87%,transparent)_44%,transparent_76%)]" aria-hidden="true" />
-              <div className="absolute top-4 right-4 z-20 flex gap-2">
-                <Badge variant="outline" className="border-primary/55 bg-background/90 text-foreground text-xs font-mono tracking-wider">{pathway.dimension}</Badge>
-                <Badge className="bg-primary text-primary-foreground text-xs font-mono tracking-wider">Flagship · Reset Protocol</Badge>
-              </div>
-              <div className="relative z-10 flex min-h-[430px] max-w-lg flex-col justify-end p-5 sm:p-8">
+            <div key={pathway.slug} className="mb-10 overflow-hidden border border-primary/60 bg-card lg:grid lg:grid-cols-[minmax(0,1fr)_520px]">
+              <div className="order-2 relative flex min-h-[410px] flex-col justify-end p-5 sm:p-8 lg:order-1 lg:min-h-[650px]">
+                <div className="mb-auto flex flex-wrap gap-2">
+                  <Badge variant="outline" className="border-primary/55 bg-background text-foreground text-xs font-mono tracking-wider">{pathway.dimension}</Badge>
+                  <Badge className="bg-primary text-primary-foreground text-xs font-mono tracking-wider">Flagship · Reset Protocol</Badge>
+                </div>
                 <div>
                   <p className="instrument-label mb-3">Load interruption / recovery sequence</p>
                   <div className="flex flex-wrap items-center gap-2 mb-1">
@@ -132,6 +130,9 @@ export default function PathwaysListing() {
                   </div>
                 </div>
               </div>
+              <div className="order-1 relative min-h-[480px] overflow-hidden bg-[oklch(0.12_0.015_260)] lg:order-2 lg:min-h-[650px]">
+                <LuminScene videoId={pathway.scene} ambient loop ambientSize="min(100%, 520px)" ambientPosition={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }} ambientFit="cover" className="opacity-100" />
+              </div>
             </div>
           );
         })}
@@ -142,10 +143,11 @@ export default function PathwaysListing() {
             const Icon = pathway.icon;
             return (
               <Link key={pathway.slug} href={`/pathway/${pathway.slug}`}>
-                <div className="group relative min-h-[350px] overflow-hidden border border-border bg-card transition-all duration-200 hover:border-primary/70">
-                  <LuminScene videoId={pathway.scene} ambient loop ambientSize="min(82vw, 420px)" ambientPosition={{ position: "absolute", left: "50%", top: "42%", transform: "translate(-50%, -50%)" }} className="opacity-100" />
-                  <div className="absolute inset-x-0 bottom-0 h-[54%] bg-[linear-gradient(180deg,transparent_0%,color-mix(in_oklch,var(--card)_82%,transparent)_28%,var(--card)_84%)]" aria-hidden="true" />
-                  <div className="absolute inset-x-0 bottom-0 z-10 p-4 sm:p-6">
+                <div className="group overflow-hidden border border-border bg-card transition-all duration-200 hover:border-primary/70">
+                  <div className="relative min-h-[420px] overflow-hidden bg-[oklch(0.12_0.015_260)] sm:min-h-[525px]">
+                    <LuminScene videoId={pathway.scene} ambient loop ambientSize="min(100%, 420px)" ambientPosition={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }} ambientFit="cover" className="opacity-100" />
+                  </div>
+                  <div className="relative z-10 p-4 sm:p-6">
                     <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                       <h3 className="font-sans text-xl font-semibold text-foreground">{pathway.name}</h3>
                       <span className="font-mono text-xs tracking-[0.12em] text-primary">{pathway.tag}</span>
