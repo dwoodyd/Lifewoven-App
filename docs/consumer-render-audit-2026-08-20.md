@@ -96,3 +96,9 @@ The cleaned full-figure derivatives for `settling` and `waves_sparkles` were vis
 `self_soothing` is clean but transitions into a close self-hug composition and is not a dependable full-figure Pathways scene. `starburst_joy` is clean and holds Lumen full figure against a broad, bright source field. The selected clean swaps are therefore `bouncing_joyfully` for Reset, `starburst_joy` for Align, and `core_unfurls` for Resonance; their current edited source assets remain available as fallbacks.
 
 The rendered Pathways recheck confirms the three clean swaps are each playing with `readyState: 4`, are not paused, have no duplicate image siblings, and use their own extracted poster frames. Reset now fills its surface with a full-figure, clean canonical composition. Align and Resonance use the selected clean source treatments without watermark exposure.
+
+## Dashboard full-figure recheck
+
+The first-reading diagnostic now uses a source-matched 16:9 scene with `contain` rather than the inherited portrait `cover` crop. Lumen’s full arms and tendrils are visible in the opening, and the structural-reading copy occupies a distinct left-hand field rather than covering the character. The greeting scene also retains the complete commissioned figure at its smaller scale.
+
+All visible dashboard empty states now use a dedicated 16:9 source-matched media field above a separate copy field. The recheck covered Rhythms, Goals, The Weave, Oracle Insights, and Active Pathways. Each scene keeps Lumen’s full figure visible, and every title, supporting sentence, and call to action now sits on the card surface below rather than over the commissioned media.

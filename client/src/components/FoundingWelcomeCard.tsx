@@ -148,7 +148,7 @@ export default function FoundingWelcomeCard({ tier, onDismiss }: Props) {
         {
           <div
             className="relative w-full shrink-0 overflow-hidden sm:w-[min(36vw,360px)]"
-            style={{ minHeight: "260px" }}
+            style={{ aspectRatio: "16 / 9" }}
           >
             {/* Gradient fade on left edge to blend with copy panel */}
             <div
@@ -163,6 +163,9 @@ export default function FoundingWelcomeCard({ tier, onDismiss }: Props) {
               loop
               ambientSize="100%"
               ambientPosition={{ position: "absolute", inset: 0 }}
+              ambientAspectRatio="16 / 9"
+              ambientFit="contain"
+              ambientBlendMode="normal"
               className="opacity-100"
             />
             {/* Subtle violet glow behind Lumin */}

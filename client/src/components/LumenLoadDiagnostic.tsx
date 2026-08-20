@@ -42,7 +42,8 @@ export function LumenLoadDiagnostic({ readings, hasReading }: { readings: LumenD
           loop
           ambientSize="min(60vw, 780px)"
           ambientPosition={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}
-          ambientFit="cover"
+          ambientAspectRatio="16 / 9"
+          ambientFit="contain"
           ambientBlendMode="normal"
           className={hasReading ? "opacity-100" : "opacity-80 saturate-75"}
         />

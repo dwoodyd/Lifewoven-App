@@ -1456,6 +1456,13 @@
 - [x] Apply only visually approved clean canonical swaps to the affected Pathways cards
 - [x] Compare the swapped scenes in the rendered page and run regression, TypeScript, and production-build verification before checkpointing
 
+## Dashboard Full-Figure Lumen Repair
+
+- [x] Inventory the first-reading diagnostic and all dashboard empty-state Lumen renderers that crop arms or tendrils
+- [x] Select clean full-figure commissioned clips and matching posters appropriate to each dashboard media panel
+- [x] Use source-matched media frames and protected copy fields so dashboard text never overlays Lumen’s face or limbs
+- [x] Visually verify the complete dashboard media set and run regression, TypeScript, and production-build validation before checkpointing
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA

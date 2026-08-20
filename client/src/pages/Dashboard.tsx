@@ -51,12 +51,11 @@ import FoundingWelcomeCard from "@/components/FoundingWelcomeCard";
 
 function LumenEmpty({ title, body, href, onAction, cta, videoId = "peaceful_idle" }: { title: string; body: string; href?: string; onAction?: () => void; cta: string; videoId?: string }) {
   return (
-    <div className="relative min-h-[240px] overflow-hidden border border-primary/20 bg-card px-5 pb-6 pt-32 text-left sm:pt-36">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[60%]" aria-hidden="true">
-        <LuminScene videoId={videoId} ambient loop ambientSize="min(36vw, 220px)" ambientPosition={{ position: "absolute", left: "50%", top: "48%", transform: "translate(-50%, -50%)" }} className="opacity-100" />
-        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-[linear-gradient(180deg,transparent,var(--card))]" />
+    <div className="overflow-hidden border border-primary/20 bg-card text-left">
+      <div className="relative h-44 overflow-hidden border-b border-primary/15 bg-background sm:h-48" aria-hidden="true">
+        <LuminScene videoId={videoId} ambient loop ambientSize="min(100%, 340px)" ambientPosition={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }} ambientAspectRatio="16 / 9" ambientFit="contain" ambientBlendMode="normal" className="opacity-100" />
       </div>
-      <div className="relative z-10 max-w-sm">
+      <div className="max-w-sm px-5 py-5">
         <p className="text-sm font-medium text-foreground">{title}</p>
         <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{body}</p>
         {href ? (
@@ -436,7 +435,7 @@ export default function Dashboard() {
         {/* Greeting + check-in */}
         <div className="order-10 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-6">
           <div className="flex min-w-0 items-center gap-4">
-            <LuminScene videoId="nodding_gently" ambient loop ambientSize="68px" ambientPosition={{ position: "relative" }} className="hidden sm:block opacity-100" />
+            <LuminScene videoId="nodding_gently" ambient loop ambientSize="68px" ambientPosition={{ position: "relative" }} ambientAspectRatio="16 / 9" ambientFit="contain" ambientBlendMode="normal" className="hidden sm:block opacity-100" />
             <div>
             <p className="text-xs font-mono tracking-[0.18em] text-[oklch(0.65_0.08_60)] uppercase mb-1">
               {hasShameSpiralPattern ? "You came back. That's the whole practice." : "Welcome back to your Lifewoven"}
