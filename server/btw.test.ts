@@ -1,25 +1,8 @@
 import { describe, it, expect } from "vitest";
 
-import { hasSufficientWeeklyReflectionData } from "./routers/btw";
+import { hasSufficientWeeklyReflectionData, scoreGroundCheck } from "./routers/btw";
 
 // ─── Ground Check Scoring ─────────────────────────────────────────────────────
-// Mirrors the logic in server/routers/btw.ts
-
-function scoreGroundCheck(answers: number[]): { state: string; practice: string } {
-  const avg = answers.reduce((a, b) => a + b, 0) / answers.length;
-  const hasHighFear = answers[1] >= 4 || answers[3] >= 4;
-  const hasHighStriving = answers[2] >= 4 || answers[5] >= 4;
-  const hasDepletion = answers[6] >= 4;
-  const hasDrift = answers[4] >= 4;
-
-  if (avg <= 1.5) return { state: "settled", practice: "enter_the_ground" };
-  if (hasDepletion) return { state: "depleted", practice: "gentle_reset" };
-  if (hasHighFear) return { state: "bracing", practice: "return_to_ground" };
-  if (hasHighStriving) return { state: "striving", practice: "living_as_heard" };
-  if (hasDrift) return { state: "drifting", practice: "midday_return" };
-  return { state: "settled", practice: "thanking_from_there" };
-}
-
 describe("BTW Ground Check Scoring", () => {
   it("returns settled when all answers are low", () => {
     const result = scoreGroundCheck([0, 0, 0, 0, 0, 0, 0]);
@@ -56,9 +39,16 @@ describe("BTW Ground Check Scoring", () => {
     expect(result.state).toBe("depleted");
   });
 
-  it("returns settled when avg is at threshold", () => {
-    const result = scoreGroundCheck([1, 1, 1, 1, 1, 1, 1]);
-    expect(result.state).toBe("settled");
+  it("does not call a midpoint reading settled", () => {
+    expect(scoreGroundCheck([2, 2, 2, 2, 2, 2, 2]).state).toBe("drifting");
+  });
+
+  it("honors scattered as a floor even when answers are otherwise calm", () => {
+    expect(scoreGroundCheck([5, 0, 0, 0, 0, 0, 0], "scattered").state).toBe("drifting");
+  });
+
+  it("weights declared burden and carried load against a settled result", () => {
+    expect(scoreGroundCheck([4, 1, 1, 2, 1, 1, 1], "burdened").state).toBe("bracing");
   });
 });
 
@@ -119,8 +109,9 @@ describe("Weekly Reflection data sufficiency", () => {
     expect(hasSufficientWeeklyReflectionData({ checkInCount: 3, journalEntryCount: 0 })).toBe(true);
   });
 
-  it("allows a real recent Weave entry to satisfy the threshold", () => {
-    expect(hasSufficientWeeklyReflectionData({ checkInCount: 0, journalEntryCount: 1 })).toBe(true);
+  it("requires three recent Weave entries when check-ins do not meet the threshold", () => {
+    expect(hasSufficientWeeklyReflectionData({ checkInCount: 0, journalEntryCount: 2 })).toBe(false);
+    expect(hasSufficientWeeklyReflectionData({ checkInCount: 0, journalEntryCount: 3 })).toBe(true);
   });
 
   it("rejects generation when the user has no meaningful recent data", () => {

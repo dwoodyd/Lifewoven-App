@@ -142,3 +142,11 @@ The Weave header now applies the same left-edge ambient mask to its compact Lume
 ## Light-mode recheck
 
 The navigation control now clearly changes action from “Switch to light mode” to “Switch to dark mode.” In light mode, The Weave renders as a warm-paper interface with dark ink copy, white card surfaces, visible borders, and the same Lumen media treatment. The restored semantic tokens preserve legibility across navigation, buttons, prompts, entries, and supporting metadata.
+
+## P0 Oracle Weekly Summary recheck
+
+After removal of the June smoke-test check-ins and QA sweep entry, the authenticated Weekly Summary tab returns the required “No reflection yet” state. It exposes no generated narrative and offers the honest route back to The Weave. The server and UI now require three recent check-ins or three recent Weave entries in the last seven days before a weekly synthesis can be generated or shown.
+
+## P0 Pattern Mirror and Ground Check recheck
+
+Pattern Mirror now returns the same recent-evidence explanation as Weekly Summary, including the cleaned account’s actual count of one record and the three-record threshold. The scattered Ground Check entry now begins with unselected answers rather than silently submitting midpoint defaults, and the server regression verifies scattered and burdened declared states cannot be returned as settled.

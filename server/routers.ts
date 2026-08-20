@@ -33,6 +33,7 @@ import { TRPCError } from "@trpc/server";
 import { transcribeAudio } from "./_core/voiceTranscription";
 import { storagePut } from "./storage";
 import { notifyOwner } from "./_core/notification";
+import { buildOracleReadiness } from "./oracleReadiness";
 
 export function buildDailyIntentionContext(intention: string | null | undefined): string {
   if (!intention) return "";
@@ -900,6 +901,19 @@ User context:
       .where(and(eq(oracleInsights.userId, ctx.user.id), eq(oracleInsights.isRead, false)))
       .orderBy(desc(oracleInsights.createdAt))
       .limit(5);
+  }),
+
+  dataReadiness: protectedProcedure.query(async ({ ctx }) => {
+    const db = await getDb();
+    if (!db) return buildOracleReadiness({ checkInCount: 0, journalEntryCount: 0 });
+    const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const [recentCheckIns, recentJournalEntries] = await Promise.all([
+      db.select({ id: checkIns.id }).from(checkIns)
+        .where(and(eq(checkIns.userId, ctx.user.id), gte(checkIns.createdAt, weekAgo))).limit(3),
+      db.select({ id: journalEntries.id }).from(journalEntries)
+        .where(and(eq(journalEntries.userId, ctx.user.id), gte(journalEntries.createdAt, weekAgo))).limit(3),
+    ]);
+    return buildOracleReadiness({ checkInCount: recentCheckIns.length, journalEntryCount: recentJournalEntries.length });
   }),
 
   markRead: protectedProcedure

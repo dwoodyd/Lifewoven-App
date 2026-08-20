@@ -1504,6 +1504,16 @@
 - [x] Confirm the theme controls visibly activate light and dark modes across the rendered app
 - [x] Run regression, TypeScript, and production-build validation before checkpointing
 
+## August 19 P0 Data Integrity and Routing Repair
+
+- [x] Reinstate a server-enforced Weekly Summary gate that never pre-populates or fabricates a trailing-week narrative
+- [x] Remove only the identified June 3 smoke-test check-ins and the listed August 19 audit records from production data
+- [x] Centralize Oracle’s server-verified counts and thresholds so Guide, Pattern Mirror, and Weekly Summary agree
+- [x] Weight Ground Check anxiety and load responses and apply the declared URL state as an outcome floor
+- [x] Fix ahead-of-day timestamps by persisting UTC and rendering through one Pacific-timezone path
+- [x] Correct all primary Resources navigation hrefs to /library
+- [x] Add focused regression coverage and visually verify the critical P0 flows before checkpointing
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA

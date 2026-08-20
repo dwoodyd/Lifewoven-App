@@ -24,10 +24,14 @@ const STATE_LABELS: Record<string, { label: string; desc: string; route: string;
 };
 
 export default function GroundCheck() {
-  const [, navigate] = useLocation();
+  const [location, navigate] = useLocation();
   const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<number[]>(Array(7).fill(2));
+  const [answers, setAnswers] = useState<Array<number | null>>(Array(7).fill(null));
   const [result, setResult] = useState<{ state: string; practice: string } | null>(null);
+  const declaredState = new URLSearchParams(location.split("?")[1] ?? "").get("state");
+  const validDeclaredState = declaredState === "scattered" || declaredState === "burdened" || declaredState === "settled"
+    ? declaredState
+    : undefined;
 
   const submitMutation = trpc.btw.submitGroundCheck.useMutation({
     onSuccess: (data) => setResult(data),
@@ -41,7 +45,9 @@ export default function GroundCheck() {
 
   const handleNext = () => {
     if (step < QUESTIONS.length - 1) setStep(s => s + 1);
-    else submitMutation.mutate({ answers });
+    else if (answers.every((answer): answer is number => answer !== null)) {
+      submitMutation.mutate({ answers, declaredState: validDeclaredState });
+    }
   };
 
   const q = QUESTIONS[step];
@@ -126,7 +132,7 @@ export default function GroundCheck() {
               <ArrowLeft className="h-4 w-4" />
             </Button>
           )}
-          <Button className="flex-1 gap-2" onClick={handleNext} disabled={submitMutation.isPending}>
+          <Button className="flex-1 gap-2" onClick={handleNext} disabled={submitMutation.isPending || answers[step] === null}>
             {step < QUESTIONS.length - 1 ? "Next" : submitMutation.isPending ? "Reading…" : "See My Ground"}
             <ArrowRight className="h-4 w-4" />
           </Button>

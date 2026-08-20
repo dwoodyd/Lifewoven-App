@@ -10,29 +10,43 @@ import {
 } from "../../drizzle/schema";
 import { eq, desc, and, gte } from "drizzle-orm";
 import { invokeLLM } from "../_core/llm";
+import { hasSufficientOracleEvidence } from "../oracleReadiness";
 
 // ─── Ground Check scoring ─────────────────────────────────────────────────────
 
-function scoreGroundCheck(answers: number[]): { state: string; practice: string } {
-  const avg = answers.reduce((a, b) => a + b, 0) / answers.length;
-  const hasHighFear = answers[1] >= 4 || answers[3] >= 4;
-  const hasHighStriving = answers[2] >= 4 || answers[5] >= 4;
-  const hasDepletion = answers[6] >= 4;
-  const hasDrift = answers[4] >= 4;
+export type GroundEntryState = "scattered" | "burdened" | "settled";
 
-  if (avg <= 1.5) return { state: "settled", practice: "enter_the_ground" };
-  if (hasDepletion) return { state: "depleted", practice: "gentle_reset" };
-  if (hasHighFear) return { state: "bracing", practice: "return_to_ground" };
-  if (hasHighStriving) return { state: "striving", practice: "living_as_heard" };
-  if (hasDrift) return { state: "drifting", practice: "midday_return" };
-  return { state: "settled", practice: "thanking_from_there" };
+const GROUND_RESULTS = {
+  settled: { state: "settled", practice: "enter_the_ground" },
+  drifting: { state: "drifting", practice: "midday_return" },
+  bracing: { state: "bracing", practice: "return_to_ground" },
+  striving: { state: "striving", practice: "living_as_heard" },
+  depleted: { state: "depleted", practice: "gentle_reset" },
+} as const;
+
+type GroundResult = (typeof GROUND_RESULTS)[keyof typeof GROUND_RESULTS];
+
+export function scoreGroundCheck(answers: number[], declaredState?: GroundEntryState): GroundResult {
+  const bodyUnsettledness = 5 - answers[0];
+  const weightedStrain = (
+    bodyUnsettledness + answers[1] * 1.4 + answers[2] + answers[3] * 1.4 +
+    answers[4] + answers[5] + answers[6]
+  ) / 8.8;
+  let result: GroundResult = GROUND_RESULTS.settled;
+  if (answers[6] >= 4 || weightedStrain >= 3.5) result = GROUND_RESULTS.depleted;
+  else if (answers[1] >= 3 || answers[3] >= 3) result = GROUND_RESULTS.bracing;
+  else if (answers[2] >= 4 || answers[5] >= 4) result = GROUND_RESULTS.striving;
+  else if (answers[4] >= 3 || weightedStrain > 1.1) result = GROUND_RESULTS.drifting;
+  if (declaredState === "scattered" && result.state === "settled") result = GROUND_RESULTS.drifting;
+  if (declaredState === "burdened" && ["settled", "drifting"].includes(result.state)) result = GROUND_RESULTS.bracing;
+  return result;
 }
 
 export function hasSufficientWeeklyReflectionData(input: {
   checkInCount: number;
   journalEntryCount: number;
 }): boolean {
-  return input.checkInCount >= 3 || input.journalEntryCount >= 1;
+  return hasSufficientOracleEvidence(input);
 }
 
 async function getWeeklyReflectionEligibility(db: Awaited<ReturnType<typeof getDb>>, userId: number) {
@@ -84,10 +98,13 @@ export const btwRouter = router({
 
   // Ground Check
   submitGroundCheck: protectedProcedure
-    .input(z.object({ answers: z.array(z.number().min(0).max(5)).length(7) }))
+    .input(z.object({
+      answers: z.array(z.number().min(0).max(5)).length(7),
+      declaredState: z.enum(["scattered", "burdened", "settled"]).optional(),
+    }))
     .mutation(async ({ ctx, input }) => {
       const db = await requireDb();
-      const { state, practice } = scoreGroundCheck(input.answers);
+      const { state, practice } = scoreGroundCheck(input.answers, input.declaredState);
       await db.insert(btwGroundChecks).values({
         userId: ctx.user.id,
         stateResult: state as any,
@@ -329,17 +346,17 @@ You are a reflective companion, not a spiritual authority.`,
       if (!tierCanAccessWeeklyReflection(user?.membershipTier as any)) {
         throw new TRPCError({ code: "FORBIDDEN", message: "UPGRADE_REQUIRED:seeker" });
       }
-    const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-    const [sessions, returns, prayers, gratitude, recentCheckIns, recentJournalEntries] = await Promise.all([
-      db.select().from(btwDailySessions).where(and(eq(btwDailySessions.userId, ctx.user.id), gte(btwDailySessions.startedAt, weekAgo))),
-      db.select().from(btwReturns).where(and(eq(btwReturns.userId, ctx.user.id), gte(btwReturns.createdAt, weekAgo))),
-      db.select().from(btwPrayers).where(and(eq(btwPrayers.userId, ctx.user.id), gte(btwPrayers.createdAt, weekAgo))),
-      db.select().from(btwGratitudeEntries).where(and(eq(btwGratitudeEntries.userId, ctx.user.id), gte(btwGratitudeEntries.createdAt, weekAgo))),
-      db.select({ id: checkIns.id }).from(checkIns)
-        .where(and(eq(checkIns.userId, ctx.user.id), gte(checkIns.createdAt, weekAgo))).limit(3),
-      db.select({ id: journalEntries.id }).from(journalEntries)
-        .where(and(eq(journalEntries.userId, ctx.user.id), gte(journalEntries.createdAt, weekAgo))).limit(1),
-    ]);
+   const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+   const [sessions, returns, prayers, gratitude, recentCheckIns, recentJournalEntries] = await Promise.all([
+     db.select().from(btwDailySessions).where(and(eq(btwDailySessions.userId, ctx.user.id), gte(btwDailySessions.startedAt, weekAgo))),
+     db.select().from(btwReturns).where(and(eq(btwReturns.userId, ctx.user.id), gte(btwReturns.createdAt, weekAgo))),
+     db.select().from(btwPrayers).where(and(eq(btwPrayers.userId, ctx.user.id), gte(btwPrayers.createdAt, weekAgo))),
+     db.select().from(btwGratitudeEntries).where(and(eq(btwGratitudeEntries.userId, ctx.user.id), gte(btwGratitudeEntries.createdAt, weekAgo))),
+     db.select({ id: checkIns.id }).from(checkIns)
+       .where(and(eq(checkIns.userId, ctx.user.id), gte(checkIns.createdAt, weekAgo))).limit(3),
+     db.select({ id: journalEntries.id }).from(journalEntries)
+        .where(and(eq(journalEntries.userId, ctx.user.id), gte(journalEntries.createdAt, weekAgo))).limit(3),
+   ]);
 
     if (!hasSufficientWeeklyReflectionData({
       checkInCount: recentCheckIns.length,
@@ -401,14 +418,14 @@ Keep each value to 1-2 sentences. Never use shame language. Always affirm return
   }),
 
   getWeeklyReflectionEligibility: protectedProcedure.query(async ({ ctx }) => {
-    const db = await requireDb();
-    const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-    const [recentCheckIns, recentJournalEntries] = await Promise.all([
-      db.select({ id: checkIns.id }).from(checkIns)
-        .where(and(eq(checkIns.userId, ctx.user.id), gte(checkIns.createdAt, weekAgo))).limit(3),
-      db.select({ id: journalEntries.id }).from(journalEntries)
-        .where(and(eq(journalEntries.userId, ctx.user.id), gte(journalEntries.createdAt, weekAgo))).limit(1),
-    ]);
+   const db = await requireDb();
+   const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+   const [recentCheckIns, recentJournalEntries] = await Promise.all([
+     db.select({ id: checkIns.id }).from(checkIns)
+       .where(and(eq(checkIns.userId, ctx.user.id), gte(checkIns.createdAt, weekAgo))).limit(3),
+     db.select({ id: journalEntries.id }).from(journalEntries)
+        .where(and(eq(journalEntries.userId, ctx.user.id), gte(journalEntries.createdAt, weekAgo))).limit(3),
+   ]);
 
     const checkInCount = recentCheckIns.length;
     const journalEntryCount = recentJournalEntries.length;

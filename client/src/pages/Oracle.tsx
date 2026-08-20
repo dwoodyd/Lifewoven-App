@@ -93,6 +93,7 @@ export default function Oracle() {
   }, []);
 
   const insights = trpc.oracle.insights.useQuery(undefined, { enabled: isAuthenticated && hasConsented });
+  const oracleReadiness = trpc.oracle.dataReadiness.useQuery(undefined, { enabled: isAuthenticated && hasConsented });
   useEffect(() => {
     if (insights.data?.length) {
       localStorage.setItem("lifewoven_oracle_insights", JSON.stringify(insights.data));
@@ -385,7 +386,9 @@ export default function Oracle() {
             <div className="mb-5">
               <p className="text-xs font-mono text-muted-foreground uppercase tracking-wider mb-1">Pattern Mirror</p>
               <p className="text-sm text-muted-foreground font-light">
-                The Oracle has been watching. Here is what it has noticed across your journal entries and check-ins.
+                {oracleReadiness.data?.hasSufficientData
+                  ? "Here is what the Oracle can responsibly reflect from your recent journal entries and check-ins."
+                  : "Pattern Mirror uses the same recent-evidence threshold as Weekly Summary before it names a pattern."}
               </p>
             </div>
             {insights.isLoading ? (
@@ -428,7 +431,7 @@ export default function Oracle() {
                 <TrendingUp className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" />
                 <p className="font-serif text-lg font-light text-foreground mb-2">No patterns yet</p>
                 <p className="text-base text-muted-foreground max-w-xs mx-auto">
-                  The Oracle needs a few journal entries and check-ins before it can recognize patterns. Start there.
+                  You have {oracleReadiness.data?.totalRecords ?? 0} recent record{oracleReadiness.data?.totalRecords === 1 ? "" : "s"}. Pattern Mirror and Weekly Summary both begin after {oracleReadiness.data?.minimumRecords ?? 3} recent check-ins or Weave entries in the last seven days.
                 </p>
                 <Button variant="outline" size="sm" className="mt-4" asChild>
                   <Link href="/weave">Open The Weave</Link>
