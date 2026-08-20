@@ -118,3 +118,7 @@ The Weave header now uses a dedicated 16:9 source-matched Lumen field. Lumen’s
 ## Oracle header recheck
 
 The Oracle header now uses a single, source-matched 16:9 canonical scene on the right rather than the inherited portrait cover crop. Lumen’s complete arms and tendrils are visible, while the Oracle title and explanatory text occupy an independent left reading field.
+
+## Weave route-entry recheck
+
+Direct navigation to `/weave` now opens at document position zero with the navigation and Weave header visible. Browser scroll restoration is set to manual and route changes schedule an explicit top-of-page reset on the next animation frame.

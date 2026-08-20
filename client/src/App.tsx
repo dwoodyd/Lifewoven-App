@@ -212,8 +212,16 @@ function RouterSwitch() {
 
 function ScrollToTop() {
   const [location] = useLocation();
+
   useEffect(() => {
-    window.scrollTo(0, 0);
+    const priorRestoration = window.history.scrollRestoration;
+    window.history.scrollRestoration = "manual";
+    return () => { window.history.scrollRestoration = priorRestoration; };
+  }, []);
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: "auto" }));
+    return () => window.cancelAnimationFrame(frame);
   }, [location]);
   return null;
 }

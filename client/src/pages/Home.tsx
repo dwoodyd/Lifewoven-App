@@ -146,7 +146,7 @@ export default function Home() {
         <div className="pointer-events-none absolute inset-y-0 right-0 flex w-full items-center justify-center sm:w-[70%] sm:justify-end">
           <LuminVideo
             video={HERO_LUMIN}
-            className="relative aspect-video w-[min(96vw,920px)] opacity-85 sm:w-[min(62vw,920px)]"
+            className="relative aspect-video w-[min(98vw,1160px)] opacity-90 sm:w-[min(76vw,1160px)]"
           />
         </div>
 

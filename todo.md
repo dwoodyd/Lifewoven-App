@@ -1477,6 +1477,12 @@
 - [x] Use a single source-matched video scene with protected copy fields on Home, The Weave, and Oracle
 - [x] Visually verify all three surfaces and run regression, TypeScript, and production-build validation before checkpointing
 
+## Landing Hero Scale and Weave Entry Repair
+
+- [ ] Make the public landing Lumen hero the largest media treatment on its page without reducing any other video
+- [x] Ensure navigating directly to /weave consistently starts at the top of the page
+- [ ] Visually verify the new landing-hero hierarchy and Weave route entry, then run regression, TypeScript, and production-build validation before checkpointing
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA
