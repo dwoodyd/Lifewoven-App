@@ -1397,6 +1397,15 @@
 - [x] Reduce oversized empty-state whitespace
 - [x] Clean up only the audit test data identified in the attachment after verifying ownership and exact identifiers
 
+## Lumen Rendering and Media Performance Repair
+
+- [x] Inventory all active Lumen video placements, media sizes, and loading behavior
+- [x] Create and upload compact poster stills for every active Lumen video placement
+- [x] Create and upload sub-500 KB, fast-start Lumen video derivatives where source assets permit
+- [x] Use poster-first media, preload="none", and intersection-gated video loading across Lumen placements
+- [x] Reframe Lumen as a portrait treatment and move the primary scene into the first viewport
+- [x] Add regression coverage and verify the media repair in production before checkpointing
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA

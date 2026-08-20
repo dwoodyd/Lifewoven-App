@@ -76,7 +76,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "core_unfurls",
-    url: "/manus-storage/Mascot_core_lights_up_unfurls_202605081910_09362c4a.mp4",
+    url: "/manus-storage/core_unfurls_0cb2efa5.mp4",
     action: "Core lights up and unfurls — Oracle mode",
     role: "onboarding",
     duration: 8,
@@ -104,7 +104,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "self_soothing",
-    url: "/manus-storage/Mascot_self-soothing_hug_glowing_202605081857_f43381f6.mp4",
+    url: "/manus-storage/self_soothing_8fc40df4.mp4",
     action: "Self-soothing hug with glow",
     role: "ambient",
     duration: 8,
@@ -118,14 +118,14 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "taps_chin",
-    url: "/manus-storage/Mascot_taps_chin_pulsing_light_202605081534_ea0a6928.mp4",
+    url: "/manus-storage/taps_chin_b455c537.mp4",
     action: "Taps chin with pulsing light — thinking",
     role: "ambient",
     duration: 8,
   },
   {
     id: "tilting_listening",
-    url: "/manus-storage/Mascot_tilting_core_listening_202605081754_00589b96.mp4",
+    url: "/manus-storage/tilting_listening_f4d923b8.mp4",
     action: "Tilts core while listening — attentive",
     role: "ambient",
     duration: 8,
@@ -153,14 +153,14 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "floating_center",
-    url: "/manus-storage/Woven_mascot_floating_center_202605081537_eb205f5f.mp4",
+    url: "/manus-storage/floating_center_0d813889.mp4",
     action: "Floating centered — calm ambient",
     role: "ambient",
     duration: 8,
   },
   {
     id: "nodding_gently",
-    url: "/manus-storage/nodding_gently_cropped_d8a18bac.mp4",
+    url: "/manus-storage/nodding_gently_e60b644d.mp4",
     action: "Nodding gently — affirming",
     role: "ambient",
     duration: 8,

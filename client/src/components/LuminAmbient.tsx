@@ -12,9 +12,10 @@
  * Legacy props (position, size, offset) are accepted but ignored — they were only
  * used by the removed "corner" mode. Callers can be updated lazily.
  */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { LUMIN_VIDEOS } from "@/data/lumin";
+import { LuminScene } from "@/components/LuminScene";
 
 
 
@@ -47,7 +48,6 @@ export function LuminAmbient({
   style,
   zIndex = 0,
 }: LuminAmbientProps) {
-  const videoRef = useRef<HTMLVideoElement>(null);
   const video = LUMIN_VIDEOS.find(v => v.id === videoId);
 
   const [screenshotMode, setScreenshotMode] = useState(
@@ -65,12 +65,6 @@ export function LuminAmbient({
     return () => window.removeEventListener("storage", handler);
   }, []);
 
-  useEffect(() => {
-    const el = videoRef.current;
-    if (!el) return;
-    el.play().catch(() => {});
-  }, [videoId]);
-
   if (!video?.url || screenshotMode || !luminEnabled) return null;
 
   // ── Edge-fade mode (default for content pages) ─────────────────────────────
@@ -87,7 +81,7 @@ export function LuminAmbient({
             position: "fixed",
             top: 0,
             right: 0,
-            width: "min(52vw, 520px)",
+            width: "min(42vw, 420px)",
             height: "100vh",
             zIndex: zIndex - 1,
             pointerEvents: "none",
@@ -103,7 +97,7 @@ export function LuminAmbient({
             position: "fixed",
             top: 0,
             right: 0,
-            width: "min(52vw, 520px)",
+            width: "min(42vw, 420px)",
             height: "100vh",
             zIndex,
             pointerEvents: "none",
@@ -115,21 +109,12 @@ export function LuminAmbient({
             ...style,
           }}
         >
-          <video
-            ref={videoRef}
-            src={video.url}
-            autoPlay
-            muted
+          <LuminScene
+            videoId={videoId}
+            ambient
             loop={loop}
-            playsInline
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              objectPosition: "center center",
-              mixBlendMode: "normal",
-              display: "block",
-            }}
+            ambientSize="100%"
+            ambientPosition={{ position: "absolute", inset: 0 }}
           />
         </motion.div>
       </>
@@ -166,7 +151,7 @@ export function LuminAmbient({
             bottom: 0,
             left: "50%",
             transform: "translateX(-50%)",
-            width: "min(70vw, 700px)",
+            width: "min(56vw, 460px)",
             height: "min(50vh, 500px)",
             zIndex,
             pointerEvents: "none",
@@ -178,21 +163,12 @@ export function LuminAmbient({
             ...style,
           }}
         >
-          <video
-            ref={videoRef}
-            src={video.url}
-            autoPlay
-            muted
+          <LuminScene
+            videoId={videoId}
+            ambient
             loop={loop}
-            playsInline
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              objectPosition: "center bottom",
-              mixBlendMode: "normal",
-              display: "block",
-            }}
+            ambientSize="100%"
+            ambientPosition={{ position: "absolute", inset: 0 }}
           />
         </motion.div>
       </>
@@ -212,28 +188,20 @@ export function LuminAmbient({
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
-        width: "min(88vw, 860px)",
-        aspectRatio: "16/9",
+        width: "min(62vw, 540px)",
+        aspectRatio: "4/5",
         zIndex,
         pointerEvents: "none",
         opacity: o,
         ...style,
       }}
     >
-      <video
-        ref={videoRef}
-        src={video.url}
-        autoPlay
-        muted
+      <LuminScene
+        videoId={videoId}
+        ambient
         loop={loop}
-        playsInline
-        style={{
-          width: "100%",
-          height: "100%",
-          objectFit: "contain",
-          mixBlendMode: "screen",
-          display: "block",
-        }}
+        ambientSize="100%"
+        ambientPosition={{ position: "absolute", inset: 0 }}
       />
     </motion.div>
   );

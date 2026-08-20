@@ -12,6 +12,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { LUMIN_VIDEOS } from "@/data/lumin";
+import { getLumenPoster } from "@shared/lumenMedia";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -70,17 +71,44 @@ export function LuminScene({
   className = "",
 }: LuminSceneProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const sceneRef = useRef<HTMLDivElement>(null);
   const [visibleWords, setVisibleWords] = useState<string[]>([]);
   const [dissolving, setDissolving] = useState(false);
   const [entered, setEntered] = useState(false);
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(!ambient);
+  const [videoReady, setVideoReady] = useState(false);
 
   const url = getVideoUrl(videoId);
+  const poster = getLumenPoster(videoId);
 
   // Entrance animation
   useEffect(() => {
     const t = setTimeout(() => setEntered(true), 50);
     return () => clearTimeout(t);
   }, []);
+
+  // Ambient clips are decorative. Give the browser a small intersection window
+  // before loading one, while a portrait poster is visible immediately.
+  useEffect(() => {
+    setVideoReady(false);
+    setShouldLoadVideo(!ambient);
+  }, [ambient, videoId]);
+
+  useEffect(() => {
+    if (!ambient || shouldLoadVideo || !sceneRef.current) return;
+    const target = sceneRef.current;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setShouldLoadVideo(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "240px 0px" },
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [ambient, shouldLoadVideo]);
 
   // Word-sync via timeupdate
   const handleTimeUpdate = useCallback(() => {
@@ -107,6 +135,7 @@ export function LuminScene({
   if (ambient) {
     return (
       <div
+        ref={sceneRef}
         className={className}
         style={{
           position: "absolute",
@@ -114,28 +143,54 @@ export function LuminScene({
           zIndex: 10,
           ...ambientPosition,
           width: ambientSize,
-          aspectRatio: "16/9",
+          minWidth: ambientSize === "68px" ? undefined : "min(30vw, 380px)",
+          maxWidth: "min(86vw, 520px)",
+          aspectRatio: "4/5",
+          overflow: "hidden",
           transition: "opacity 1.2s ease",
           opacity: entered ? 1 : 0,
         }}
       >
-        <video
-          ref={videoRef}
-          src={url}
-          autoPlay
-          muted
-          loop={loop}
-          playsInline
-          onTimeUpdate={handleTimeUpdate}
-          onEnded={handleVideoEnd}
+        <img
+          src={poster}
+          alt=""
+          aria-hidden="true"
           style={{
+            position: "absolute",
+            inset: 0,
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            mixBlendMode: "screen",
             display: "block",
           }}
         />
+        {shouldLoadVideo && (
+          <video
+            ref={videoRef}
+            src={url}
+            poster={poster}
+            preload="none"
+            autoPlay
+            muted
+            loop={loop}
+            playsInline
+            onCanPlay={() => setVideoReady(true)}
+            onError={() => setVideoReady(false)}
+            onTimeUpdate={handleTimeUpdate}
+            onEnded={handleVideoEnd}
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              mixBlendMode: "screen",
+              display: "block",
+              opacity: videoReady ? 1 : 0,
+              transition: "opacity 180ms ease-out",
+            }}
+          />
+        )}
       </div>
     );
   }
@@ -143,6 +198,7 @@ export function LuminScene({
   // ── Full-screen takeover mode ───────────────────────────────────────────
   return (
     <div
+      ref={sceneRef}
       className={className}
       style={{
         position: "fixed",
@@ -160,27 +216,47 @@ export function LuminScene({
         transform: dissolving ? "scale(1.04)" : "scale(1)",
       }}
     >
-      {/* ── Full-bleed video ── */}
-      <video
-        ref={videoRef}
-        src={url}
-        autoPlay
-        muted
-        loop={loop}
-        playsInline
-        onTimeUpdate={handleTimeUpdate}
-        onEnded={handleVideoEnd}
+      <img
+        src={poster}
+        alt=""
+        aria-hidden="true"
         style={{
           position: "absolute",
           inset: 0,
           width: "100%",
           height: "100%",
           objectFit: "cover",
-          // mix-blend-mode:screen strips black → Lumin floats over the dark bg
-          mixBlendMode: "screen",
-          zIndex: 1,
+          zIndex: 0,
         }}
       />
+      {/* ── Full-bleed video ── */}
+      {shouldLoadVideo && (
+        <video
+          ref={videoRef}
+          src={url}
+          poster={poster}
+          preload="none"
+          autoPlay
+          muted
+          loop={loop}
+          playsInline
+          onCanPlay={() => setVideoReady(true)}
+          onError={() => setVideoReady(false)}
+          onTimeUpdate={handleTimeUpdate}
+          onEnded={handleVideoEnd}
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            mixBlendMode: "screen",
+            zIndex: 1,
+            opacity: videoReady ? 1 : 0,
+            transition: "opacity 180ms ease-out",
+          }}
+        />
+      )}
 
       {/* ── Dark overlay so text is readable ── */}
       <div

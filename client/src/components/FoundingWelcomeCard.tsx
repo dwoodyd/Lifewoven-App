@@ -13,7 +13,7 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
-import { LUMIN_VIDEOS } from "@/data/lumin";
+import { LuminScene } from "@/components/LuminScene";
 import { Library, Sparkles, X } from "lucide-react";
 
 const TIER_LABELS: Record<string, string> = {
@@ -55,7 +55,6 @@ export default function FoundingWelcomeCard({ tier, onDismiss }: Props) {
 
   // Pick the Lumin video: transformation for Oracle, bouncing_joyfully for others
   const videoId = tier === "oracle" ? "transformation" : "bouncing_joyfully";
-  const video = LUMIN_VIDEOS.find(v => v.id === videoId);
   const tierLabel = TIER_LABELS[tier ?? ""] ?? "Oracle";
 
   return (
@@ -146,10 +145,10 @@ export default function FoundingWelcomeCard({ tier, onDismiss }: Props) {
         </div>
 
         {/* Right: Lumin video panel */}
-        {video?.url && (
+        {
           <div
-            className="relative w-full sm:w-52 shrink-0 overflow-hidden"
-            style={{ minHeight: "180px" }}
+            className="relative w-full shrink-0 overflow-hidden sm:w-[min(36vw,360px)]"
+            style={{ minHeight: "260px" }}
           >
             {/* Gradient fade on left edge to blend with copy panel */}
             <div
@@ -158,17 +157,13 @@ export default function FoundingWelcomeCard({ tier, onDismiss }: Props) {
                 background: "linear-gradient(to right, oklch(0.14 0.025 260), transparent)",
               }}
             />
-            <video
-              src={video.url}
-              autoPlay
+            <LuminScene
+              videoId={videoId}
+              ambient
               loop
-              muted
-              playsInline
-              className="absolute inset-0 w-full h-full object-cover object-center"
-              style={{
-                mixBlendMode: "screen",
-                opacity: 0.85,
-              }}
+              ambientSize="100%"
+              ambientPosition={{ position: "absolute", inset: 0 }}
+              className="opacity-100"
             />
             {/* Subtle violet glow behind Lumin */}
             <div
@@ -178,7 +173,7 @@ export default function FoundingWelcomeCard({ tier, onDismiss }: Props) {
               }}
             />
           </div>
-        )}
+        }
       </div>
     </div>
   );

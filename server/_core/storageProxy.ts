@@ -60,11 +60,12 @@ export function registerStorageProxy(app: Express) {
     }
 
     try {
-      // Use downloadUrl (same endpoint as storage.ts) — returns a permanent CDN URL
-      // that works reliably in production. presign/get returned short-TTL signed URLs
-      // from a different CloudFront distribution and was causing 503s in production.
+      // The permanent downloadUrl route currently produces unsigned CDN URLs for
+      // managed media. Those URLs are denied by the CDN, leaving <video> elements
+      // at HAVE_NOTHING. A short-lived presigned redirect authorizes only the
+      // browser request that needs the asset without exposing the storage key.
       const forgeUrl = new URL(
-        "v1/storage/downloadUrl",
+        "v1/storage/presign/get",
         ENV.forgeApiUrl.replace(/\/+$/, "") + "/",
       );
       forgeUrl.searchParams.set("path", key);
@@ -85,12 +86,9 @@ export function registerStorageProxy(app: Express) {
         res.status(502).send("Empty URL from storage backend");
         return;
       }
-      // Public assets can be cached by the browser; private assets must not be cached.
-      if (ownerId === null) {
-        res.set("Cache-Control", "public, max-age=3600, stale-while-revalidate=86400");
-      } else {
-        res.set("Cache-Control", "no-store");
-      }
+      // Do not cache the redirect itself: each target URL has a short signature
+      // lifetime. The signed CDN target remains cacheable by the browser.
+      res.set("Cache-Control", "no-store");
       res.redirect(307, url);
     } catch (err) {
       const isTimeout = err instanceof Error && err.name === "AbortError";
