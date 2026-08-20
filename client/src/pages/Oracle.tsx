@@ -86,6 +86,12 @@ export default function Oracle() {
     return () => { window.removeEventListener("online", goOnline); window.removeEventListener("offline", goOffline); };
   }, []);
 
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: "auto" }));
+    const settle = window.setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: "auto" }), 120);
+    return () => { window.cancelAnimationFrame(frame); window.clearTimeout(settle); };
+  }, []);
+
   const insights = trpc.oracle.insights.useQuery(undefined, { enabled: isAuthenticated && hasConsented });
   useEffect(() => {
     if (insights.data?.length) {
@@ -166,7 +172,9 @@ export default function Oracle() {
     },
   });
 
-  useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
+  useEffect(() => {
+    if (messages.length > 0) messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const handleConsent = () => {
     localStorage.setItem("oracle_consent", "true");
@@ -247,6 +255,7 @@ export default function Oracle() {
             ambientAspectRatio="16 / 9"
             ambientFit="contain"
             ambientBlendMode="normal"
+            ambientMaskImage="linear-gradient(to right, transparent 0%, rgba(0,0,0,0.68) 20%, #000 44%, #000 100%)"
             className="opacity-100"
           />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--background)_4%,color-mix(in_oklch,var(--background)_78%,transparent)_48%,transparent_75%)]" aria-hidden="true" />

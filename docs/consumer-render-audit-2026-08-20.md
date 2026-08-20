@@ -130,3 +130,11 @@ The deployed public hero now presents Lumen as the largest media treatment on th
 ## Dashboard first-reading hierarchy recheck
 
 The “Let’s take your first reading” scene now uses a diagnostic-only width allowance rather than the shared 520px ambient cap. It is the dominant Lumen media treatment on the dashboard, preserves the complete commissioned figure, and keeps the reading explanation and call to action in a protected left-side field. Other dashboard media sizes remain unchanged.
+
+## Oracle entry and dissolve recheck
+
+Direct navigation to `/oracle` now begins at document position zero. The initial empty conversation no longer scrolls to the input area. Its hero scene uses a subtle left-edge media mask so Lumen’s image dissolves into the adjacent reading field rather than ending at a hard rectangular boundary.
+
+## Weave dissolve recheck
+
+The Weave header now applies the same left-edge ambient mask to its compact Lumen scene. The character and her warm scene soften into the page field before the title and entry controls, removing the visible panel seam while preserving full text contrast.

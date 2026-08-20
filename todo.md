@@ -1490,6 +1490,13 @@
 - [x] Preserve the diagnostic’s full-figure, source-matched media treatment and protected reading copy
 - [x] Visually verify the revised dashboard hierarchy and run regression, TypeScript, and production-build validation before checkpointing
 
+## Lumen Hero Composition Fade and Oracle Entry Repair
+
+- [x] Inventory all Lumen hero scenes that meet adjacent copy and identify their directional blend edge
+- [x] Apply a subtle source-aware fade from Lumen media into its adjacent copy field without obscuring the character or reducing text contrast
+- [x] Ensure direct navigation to /oracle consistently begins at the page top
+- [x] Visually verify hero blending and Oracle entry, then run regression, TypeScript, and production-build validation before checkpointing
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA

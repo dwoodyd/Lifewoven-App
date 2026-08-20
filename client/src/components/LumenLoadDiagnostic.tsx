@@ -42,6 +42,7 @@ export function LumenLoadDiagnostic({ readings, hasReading }: { readings: LumenD
           loop
           ambientSize="min(74vw, 980px)"
           ambientMaxWidth="min(86vw, 980px)"
+          ambientMaskImage="linear-gradient(to right, transparent 0%, rgba(0,0,0,0.7) 18%, #000 42%, #000 100%)"
           ambientPosition={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}
           ambientAspectRatio="16 / 9"
           ambientFit="contain"

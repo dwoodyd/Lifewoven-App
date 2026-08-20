@@ -148,6 +148,7 @@ export default function Home() {
             video={HERO_LUMIN}
             className="relative aspect-video w-[min(98vw,1160px)] opacity-90 sm:w-[min(76vw,1160px)]"
           />
+          <div className="absolute inset-y-0 left-0 w-[38%] bg-gradient-to-r from-[oklch(0.08_0.02_260/0.92)] via-[oklch(0.08_0.02_260/0.42)] to-transparent" aria-hidden="true" />
         </div>
 
         {/* A shaped copy field protects readable typography without obscuring Lumen. */}

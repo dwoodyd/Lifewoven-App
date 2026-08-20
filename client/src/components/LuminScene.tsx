@@ -52,6 +52,8 @@ export interface LuminSceneProps {
   ambientBlendMode?: "screen" | "normal";
   /** Optional max width for a specific ambient scene; defaults preserve existing secondary media sizes. */
   ambientMaxWidth?: string;
+  /** Optional CSS mask for softly dissolving an ambient scene into its surrounding composition. */
+  ambientMaskImage?: string;
   /** Extra className on the root element */
   className?: string;
 }
@@ -80,6 +82,7 @@ export function LuminScene({
   ambientAspectRatio = "4 / 5",
   ambientBlendMode = "screen",
   ambientMaxWidth = "min(86vw, 520px)",
+  ambientMaskImage,
   className = "",
 }: LuminSceneProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -159,6 +162,8 @@ export function LuminScene({
           maxWidth: ambientMaxWidth,
           aspectRatio: ambientAspectRatio,
           overflow: "hidden",
+          WebkitMaskImage: ambientMaskImage,
+          maskImage: ambientMaskImage,
           transition: "opacity 1.2s ease",
           opacity: entered ? 1 : 0,
         }}

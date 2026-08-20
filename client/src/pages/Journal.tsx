@@ -189,7 +189,7 @@ export default function Journal() {
       <div className="container pt-20 pb-24 max-w-5xl mx-auto px-4 sm:px-6">
         <div className="relative mb-6 min-h-[230px] overflow-hidden border-b border-primary/20 sm:min-h-[250px]">
           <div className="pointer-events-none absolute right-[-6%] top-1/2 hidden h-full w-[42%] -translate-y-1/2 sm:block" aria-hidden="true">
-            <LuminScene videoId="tilting_listening" ambient loop ambientSize="100%" ambientPosition={{ position: "absolute", inset: 0 }} ambientAspectRatio="16 / 9" ambientFit="contain" ambientBlendMode="normal" className="opacity-100" />
+            <LuminScene videoId="tilting_listening" ambient loop ambientSize="100%" ambientPosition={{ position: "absolute", inset: 0 }} ambientAspectRatio="16 / 9" ambientFit="contain" ambientBlendMode="normal" ambientMaskImage="linear-gradient(to right, transparent 0%, rgba(0,0,0,0.7) 24%, #000 56%, #000 100%)" className="opacity-100" />
           </div>
           <div className="relative z-10 flex items-start justify-between gap-3 pt-5 sm:max-w-[68%]">
           <div className="flex items-start gap-3">
