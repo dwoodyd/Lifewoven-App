@@ -31,16 +31,17 @@ export function LumenLoadDiagnostic({ readings, hasReading }: { readings: LumenD
   const coreOpacity = coherence === null ? 0.1 : Math.min(0.8, Math.max(0.2, coherence / 125));
 
   return (
-    <section className="blueprint-grid relative isolate overflow-hidden border-y border-primary/20 bg-background lg:min-h-[650px]" aria-labelledby="lumen-diagnostic-title">
+    <section className="blueprint-grid relative isolate overflow-hidden border-y border-primary/20 bg-background lg:min-h-[760px]" aria-labelledby="lumen-diagnostic-title">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_60%_48%,color-mix(in_oklch,var(--primary)_11%,transparent),transparent_42%)]" aria-hidden="true" />
 
       {/* Mobile opens on Lumen (~45% viewport); desktop makes her 50–60% of the daily opening. */}
-      <div className="relative z-10 h-[45svh] min-h-[360px] lg:absolute lg:inset-y-0 lg:left-[24%] lg:right-0 lg:h-auto" aria-label={hasReading ? `Lumen represents a ${coherence} percent structural coherence reading` : "Lumen is curled and dim, waiting for a first structural reading"}>
+      <div className="relative z-10 h-[52svh] min-h-[420px] lg:absolute lg:inset-y-0 lg:left-[27%] lg:right-0 lg:h-auto" aria-label={hasReading ? `Lumen represents a ${coherence} percent structural coherence reading` : "Lumen is curled and dim, waiting for a first structural reading"}>
         <LuminScene
           videoId={hasReading ? "core_unfurls" : "nodding_gently"}
           ambient
           loop
-          ambientSize="min(60vw, 780px)"
+          ambientSize="min(74vw, 980px)"
+          ambientMaxWidth="min(86vw, 980px)"
           ambientPosition={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}
           ambientAspectRatio="16 / 9"
           ambientFit="contain"
@@ -80,7 +81,7 @@ export function LumenLoadDiagnostic({ readings, hasReading }: { readings: LumenD
       </div>
 
       {/* Copy lives in the negative space, beneath Lumen on mobile and left of her on desktop. */}
-      <header className="relative z-30 max-w-sm px-5 pb-8 pt-4 sm:px-8 lg:absolute lg:left-[6%] lg:top-[19%] lg:max-w-[26%] lg:pb-0 lg:pt-0">
+      <header className="relative z-30 max-w-sm px-5 pb-8 pt-4 sm:px-8 lg:absolute lg:left-[6%] lg:top-[19%] lg:max-w-[24%] lg:pb-0 lg:pt-0">
         <p className="instrument-label mb-3">Live structural reading</p>
         <h2 id="lumen-diagnostic-title" className="font-sans text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
           {hasReading ? "Lumen is carrying your reading." : "Let’s take your first reading."}

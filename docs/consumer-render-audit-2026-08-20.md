@@ -126,3 +126,7 @@ Direct navigation to `/weave` now opens at document position zero with the navig
 ## Landing-hero scale recheck
 
 The deployed public hero now presents Lumen as the largest media treatment on the landing page, using one native video and its matching first-frame poster. The hero occupies the broad right-hand field while the marketing copy remains protected on the left; other page media placements were not reduced.
+
+## Dashboard first-reading hierarchy recheck
+
+The “Let’s take your first reading” scene now uses a diagnostic-only width allowance rather than the shared 520px ambient cap. It is the dominant Lumen media treatment on the dashboard, preserves the complete commissioned figure, and keeps the reading explanation and call to action in a protected left-side field. Other dashboard media sizes remain unchanged.

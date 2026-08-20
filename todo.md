@@ -1484,6 +1484,12 @@
 - [x] Ensure navigating directly to /weave consistently starts at the top of the page
 - [x] Visually verify the new landing-hero hierarchy and Weave route entry, then run regression, TypeScript, and production-build validation before checkpointing
 
+## Dashboard First-Reading Hero Scale
+
+- [x] Make the “Let’s take your first reading” diagnostic the largest Lumen video treatment on the dashboard without reducing any other dashboard video
+- [x] Preserve the diagnostic’s full-figure, source-matched media treatment and protected reading copy
+- [x] Visually verify the revised dashboard hierarchy and run regression, TypeScript, and production-build validation before checkpointing
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA

@@ -50,6 +50,8 @@ export interface LuminSceneProps {
   ambientAspectRatio?: string;
   /** Ambient mode: preserve black matte rather than screen-blending video when the scene is a dedicated panel. */
   ambientBlendMode?: "screen" | "normal";
+  /** Optional max width for a specific ambient scene; defaults preserve existing secondary media sizes. */
+  ambientMaxWidth?: string;
   /** Extra className on the root element */
   className?: string;
 }
@@ -77,6 +79,7 @@ export function LuminScene({
   ambientFit = "cover",
   ambientAspectRatio = "4 / 5",
   ambientBlendMode = "screen",
+  ambientMaxWidth = "min(86vw, 520px)",
   className = "",
 }: LuminSceneProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -153,7 +156,7 @@ export function LuminScene({
           ...ambientPosition,
           width: ambientSize,
           minWidth: ambientSize === "68px" ? undefined : "min(30vw, 380px)",
-          maxWidth: "min(86vw, 520px)",
+          maxWidth: ambientMaxWidth,
           aspectRatio: ambientAspectRatio,
           overflow: "hidden",
           transition: "opacity 1.2s ease",
