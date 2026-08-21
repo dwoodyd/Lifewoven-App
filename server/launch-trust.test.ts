@@ -31,18 +31,23 @@ describe("launch trust safeguards", () => {
     expect(audit).toContain("Start free — save my results");
   });
 
-  it("lets authenticated returning members bypass the survey entry and continue into the app", () => {
+  it("gives logged-out visitors a visible survey bypass that begins account setup", () => {
     const audit = source("client/src/pages/AlignmentAudit.tsx");
-    expect(audit).toContain("isAuthenticated && (");
-    expect(audit).toContain('href="/dashboard">Take me into the app</a>');
+    expect(audit).toContain("!isAuthenticated && (");
+    expect(audit).toContain("Take me into the app");
+    expect(audit).toContain('window.location.href = getLoginUrl("/dashboard")');
+    expect(audit).not.toContain('href="/dashboard">Take me into the app</a>');
   });
 
-  it("preserves anonymous survey progress and attaches a completed result after OAuth", () => {
+  it("persists anonymous results under a claim key and attaches them after OAuth", () => {
     const audit = source("client/src/pages/AlignmentAudit.tsx");
     expect(audit).toContain('const AUDIT_DRAFT_STORAGE_KEY = "lifewoven.audit-draft.v1"');
-    expect(audit).toContain('const PENDING_AUDIT_STORAGE_KEY = "lifewoven.pending-audit-result.v1"');
-    expect(audit).toContain('getLoginUrl("/audit?pending_result=1")');
-    expect(audit).toContain('window.sessionStorage.removeItem(PENDING_AUDIT_STORAGE_KEY)');
+    expect(audit).toContain('const PENDING_AUDIT_STORAGE_PREFIX = "lifewoven.pending-audit-result.v2."');
+    expect(audit).toContain("createPendingAuditClaimId()");
+    expect(audit).toContain("window.localStorage.setItem(storageKey, JSON.stringify(pendingAudit))");
+    expect(audit).toContain("getLoginUrl(`/audit?audit_claim=${encodeURIComponent(claimId)}`)");
+    expect(audit).toContain("readPendingAudit(pendingAuditClaimId)");
+    expect(audit).toContain("removePendingAudit(pendingAudit.key)");
     expect(audit).toContain('navigate("/dashboard")');
   });
 
@@ -56,7 +61,7 @@ describe("launch trust safeguards", () => {
     expect(audit).toContain("isAuthenticated && (() =>");
     expect(audit).toContain("isAuthenticated && shareUrl &&");
     expect(audit).toContain('href="/pathway/reset">Start Reset</a>');
-    expect(audit).toContain("Create your account first");
+    expect(audit).toContain("Take me into the app");
     expect(audit).toContain('window.location.href = getLoginUrl("/dashboard")');
     expect(audit).toContain('{isAuthenticated && (\n            <div className="p-5 rounded-2xl border border-border bg-card mb-4">');
   });

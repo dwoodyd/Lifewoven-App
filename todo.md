@@ -1609,6 +1609,18 @@
 - [x] Add a failsafe splash dismissal so a loading overlay cannot trap visitors on the survey route
 - [x] Add regressions, complete a manual logged-out survey pass, run full validation, and checkpoint the repair
 
+## Marketing Survey Funnel Alignment — August 21, 2026
+
+- [x] Audit public survey calls to action and account-entry language against the repaired app funnel
+- [x] Apply and push any necessary marketing-source updates, with validation, for the next marketing checkpoint
+
+## LW-01 Anonymous Result Persistence Repair — August 21, 2026
+
+- [x] Persist the completed anonymous survey result in durable browser storage before the OAuth redirect
+- [x] Claim the stored result after authentication, save it to the account, and route to the personalized dashboard
+- [x] Render the survey bypass for logged-out visitors rather than only returning authenticated members
+- [x] Add end-to-end regression coverage, reproduce the OAuth return path, run full validation, and checkpoint the repair
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA
