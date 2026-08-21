@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { replayOnboarding } from "@/components/OnboardingModal";
 import { trpc } from "@/lib/trpc";
+import { toast } from "sonner";
 
 // Primary nav links — always visible on desktop
 const primaryLinks = [
@@ -36,7 +37,11 @@ export default function Nav() {
   const { theme, toggleTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   const logoutMutation = trpc.auth.logout.useMutation({
-    onSuccess: () => { logout(); window.location.href = "/"; },
+    onSuccess: () => {
+      logout();
+      window.location.replace("/?signed_out=1");
+    },
+    onError: () => toast.error("We could not sign you out. Please try again."),
   });
 
   const initials = user?.name
@@ -62,7 +67,7 @@ export default function Nav() {
         </Link>
 
         {/* Desktop Primary Nav */}
-        <nav className="hidden md:flex items-center gap-5 xl:gap-7" aria-label="Main navigation">
+        <nav className="hidden md:flex min-w-0 items-center gap-3 lg:gap-4 xl:gap-6" aria-label="Main navigation">
           {primaryLinks.map((link) => {
             const isActive = (() => {
               // Root link — exact match only
@@ -75,7 +80,7 @@ export default function Nav() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm font-sans whitespace-nowrap relative group transition-colors duration-150 ${
+                className={`text-xs lg:text-sm font-sans whitespace-nowrap relative group transition-colors duration-150 ${
                   isActive ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"
                 }`}
               >

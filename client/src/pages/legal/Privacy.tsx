@@ -8,12 +8,12 @@ export default function Privacy() {
       <div className="container pt-28 pb-20 max-w-3xl mx-auto">
         <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Legal</p>
         <h1 className="font-serif text-2xl sm:text-3xl font-light text-foreground mb-2">Privacy Policy</h1>
-        <p className="text-sm text-muted-foreground mb-10">Last updated: June 2026</p>
+        <p className="text-sm text-muted-foreground mb-10">Last updated: August 2026</p>
 
         <div className="space-y-8">
           <section>
             <h2 className="font-serif text-xl font-light mb-3">What We Collect</h2>
-            <p className="text-muted-foreground leading-relaxed text-sm">We collect information you provide directly: account details (name, email), journal entries, check-in responses, habit data, audit results, and any content you create within the platform. We also collect usage data (pages visited, features used, session duration) to improve the platform experience.</p>
+            <p className="text-muted-foreground leading-relaxed text-sm">We collect information you provide directly: account details (name, email), journal entries, check-in responses, habit data, audit results, and any content you create within the platform. Optional survey responses about attention, overwhelm, time perception, reading load, or energy patterns may be used only to tailor your Lifewoven recommendations; they are optional, may be skipped, and are not used to diagnose a condition. We also collect usage data (pages visited, features used, session duration) to improve the platform experience.</p>
           </section>
 
           <section>
@@ -44,6 +44,11 @@ export default function Privacy() {
           <section>
             <h2 className="font-serif text-xl font-light mb-3">Cookies</h2>
             <p className="text-muted-foreground leading-relaxed text-sm">We use essential cookies for authentication and session management. We do not use third-party advertising cookies.</p>
+          </section>
+
+          <section>
+            <h2 className="font-serif text-xl font-light mb-3">Age Requirement</h2>
+            <p className="text-muted-foreground leading-relaxed text-sm">Lifewoven is intended for adults aged 18 and over. It is not directed to children, and we do not knowingly collect personal information from anyone under 18.</p>
           </section>
 
           <section>

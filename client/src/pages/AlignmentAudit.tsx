@@ -359,7 +359,7 @@ export default function AlignmentAudit() {
         <div className="p-5 sm:p-8 rounded-2xl border border-border bg-card">
           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Almost there</p>
           <h2 className="font-serif text-2xl font-light text-foreground mb-4">A few optional questions to sharpen your results.</h2>
-          <p className="text-muted-foreground mb-8 text-sm leading-relaxed">These take about 60 seconds and can be skipped.</p>
+          <p className="text-muted-foreground mb-8 text-sm leading-relaxed">These four optional prompts take about 90 seconds and can be skipped. They help tailor recommendations; they are not a diagnosis.</p>
           <div className="space-y-3">
             <Button className="w-full gap-2" onClick={() => setStep("optional")}>Answer optional questions <ArrowRight className="h-4 w-4" /></Button>
             <Button variant="outline" className="w-full" onClick={() => setStep("results")}>Skip to my results</Button>
@@ -407,9 +407,9 @@ export default function AlignmentAudit() {
       <Nav />
       <div className="container max-w-xl mx-auto pt-24 pb-20 px-4 sm:px-6">
         <div className="p-5 sm:p-8 rounded-2xl border border-border bg-card animate-in fade-in slide-in-from-bottom-2 duration-300">
-          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">One last thing</p>
+          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">Optional 4 of 4</p>
           <h2 className="font-serif text-2xl font-light text-foreground mb-2">How does your mind work?</h2>
-          <p className="text-sm text-muted-foreground mb-6 leading-relaxed">Select anything that feels true. This helps Lifewoven adapt to how you actually think — not how you think you should.</p>
+          <p className="text-sm text-muted-foreground mb-6 leading-relaxed">Select anything that feels true. These optional personalization signals help Lifewoven adapt to how you actually think — not how you think you should. They are not diagnostic and you can skip them.</p>
           <div className="space-y-2 mb-6">
             {MIND_PATTERNS.map(p => (
               <button key={p.id} onClick={() => setMindPatterns(prev => prev.includes(p.id) ? prev.filter(x => x !== p.id) : [...prev, p.id])}
@@ -480,7 +480,7 @@ export default function AlignmentAudit() {
           </div>
           <div className="p-6 rounded-2xl border border-accent/20 bg-accent/3 mb-4">
             <h3 className="font-sans text-lg font-semibold text-foreground mb-1">Five load-bearing readings</h3>
-            <p className="text-xs text-muted-foreground mb-4">Where your energy is going right now, based on your responses.</p>
+            <p className="text-xs text-muted-foreground mb-4">Current load across each dimension. Higher bars mean more present strain or support needed — not greater strength.</p>
             <div className="space-y-3">
               {(() => {
                 const hasUniformScores = new Set(Object.values(scores.pct)).size === 1;
@@ -490,7 +490,7 @@ export default function AlignmentAudit() {
                   <div className="flex-1 h-2 bg-border rounded-full overflow-hidden">
                     <div className={`h-full rounded-full transition-all duration-700 ${hasUniformScores ? "bg-accent" : (DIM_COLORS[dim] ?? "bg-accent")}`} style={{ width: `${scores.pct[dim]}%` }} />
                   </div>
-                  <span className="text-xs text-muted-foreground w-8 text-right">{scores.pct[dim]}%</span>
+                  <span className="text-xs text-muted-foreground w-14 text-right">{scores.pct[dim]}% load</span>
                 </div>
                 ));
               })()}
@@ -503,10 +503,10 @@ export default function AlignmentAudit() {
           {/* Oracle nudge — only name a dimension when the reading is genuinely distinct. */}
           {(() => {
             const dimensionScores = Object.entries(scores.pct) as [string, number][];
-            const lowestScore = Math.min(...dimensionScores.map(([, score]) => score));
-            const lowestDimensions = dimensionScores.filter(([, score]) => score === lowestScore).map(([dimension]) => dimension);
-            const hasDistinctLowestDimension = lowestDimensions.length === 1;
-            const lowestDim = lowestDimensions[0] ?? "State";
+            const highestScore = Math.max(...dimensionScores.map(([, score]) => score));
+            const highestDimensions = dimensionScores.filter(([, score]) => score === highestScore).map(([dimension]) => dimension);
+            const hasDistinctHighestDimension = highestDimensions.length === 1;
+            const highestDim = highestDimensions[0] ?? "State";
             const dimDescriptions: Record<string, string> = {
               State: "your emotional regulation and inner state",
               Story: "the beliefs and identity narratives shaping you",
@@ -521,27 +521,27 @@ export default function AlignmentAudit() {
                   <div className="flex-1">
                     <p className="text-xs font-mono tracking-widest uppercase mb-1 text-accent">Your Oracle is ready</p>
                     <h3 className="font-serif text-lg font-light text-foreground mb-2">
-                      {hasDistinctLowestDimension
-                        ? <>Your <span className="text-accent">{lowestDim}</span> dimension is asking for attention right now.</>
+                      {hasDistinctHighestDimension
+                        ? <>Your <span className="text-accent">{highestDim}</span> dimension is carrying the most load right now.</>
                         : <>Your readings are carrying a shared load right now.</>}
                     </h3>
                     <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                      {hasDistinctLowestDimension
-                        ? <>The Oracle can help you explore {dimDescriptions[lowestDim] ?? "your growth areas"} using the records you choose to bring into the conversation.</>
+                      {hasDistinctHighestDimension
+                        ? <>The Oracle can help you explore {dimDescriptions[highestDim] ?? "your growth areas"} using the records you choose to bring into the conversation.</>
                         : <>The Oracle can help you explore how these dimensions interact, without pretending one is more important than the others.</>}
                     </p>
                     <div className="flex flex-col sm:flex-row gap-2">
                       {isAuthenticated ? (
                         <Button size="sm" asChild>
-                          <a href="/oracle">{hasDistinctLowestDimension ? `Ask the Oracle about my ${lowestDim}` : "Explore my readings"} →</a>
+                          <a href="/oracle">{hasDistinctHighestDimension ? `Ask the Oracle about my ${highestDim} load` : "Explore my readings"} →</a>
                         </Button>
                       ) : (
                         <Button size="sm" asChild>
-                          <a href={getLoginUrl("/audit")}>Unlock the Oracle →</a>
+                          <a href={getLoginUrl("/audit")}>Start free — save my results →</a>
                         </Button>
                       )}
                       <Button size="sm" variant="ghost" asChild>
-                        <a href="/pricing">See Oracle plans</a>
+                        <a href="/pricing">Learn about Oracle plans</a>
                       </Button>
                     </div>
                   </div>
@@ -584,6 +584,7 @@ export default function AlignmentAudit() {
                   </Button>
                   <Button variant="ghost" asChild><a href="/">Back to home</a></Button>
                 </div>
+                <p className="mt-4 text-xs text-muted-foreground leading-relaxed">By continuing, you agree to Lifewoven’s <a className="text-accent hover:underline" href="/legal/terms">Terms of Service</a> and acknowledge the <a className="text-accent hover:underline" href="/legal/privacy">Privacy Policy</a>.</p>
               </>
             )}
           </div>

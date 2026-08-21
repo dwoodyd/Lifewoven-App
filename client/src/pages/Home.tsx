@@ -93,6 +93,12 @@ export default function Home() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const loginError = params.get("login_error");
+    const signedOut = params.get("signed_out");
+    if (signedOut) {
+      toast.success("Signed out", { description: "You have been safely signed out of Lifewoven." });
+      window.history.replaceState({}, "", window.location.pathname);
+      return;
+    }
     if (loginError) {
       const messages: Record<string, string> = {
         invalid_token: "Login failed — the session token was invalid. Please try again.",
@@ -520,7 +526,7 @@ export default function Home() {
                 period: "/mo",
                 desc: "Lumen opens the full system. Every tool, every pathway — fully unlocked.",
                 features: ["Everything in Explorer", "Unlimited Weave entries", "All 7 pathways", "Full 5S module suite", "Habit tracker & scorecard", "Decision journal", "Energy audit & trends"],
-                cta: "Begin Transformation",
+                cta: "Start free, then choose Seeker",
                 href: getLoginUrl(),
                 highlight: true,
               },
@@ -530,7 +536,7 @@ export default function Home() {
                 period: "/mo",
                 desc: "Lumen and the Oracle work continuously. The AI layer that reads your patterns.",
                 features: ["Everything in Seeker", "Unlimited Oracle AI chat", "AI Weave reflections", "Cross-module pattern insights", "Monthly Oracle deep-dive report", "1-on-1 onboarding call"],
-                cta: "Unlock the Oracle",
+                cta: "Start free, then choose Oracle",
                 href: getLoginUrl(),
                 highlight: false,
               },

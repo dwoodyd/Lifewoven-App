@@ -1530,6 +1530,25 @@
 - [x] Preserve `/check-in` as a redirect to `/dashboard` and `/mood` as a redirect to `/mood-rhythm`
 - [x] Add regression coverage and verify both aliases through direct browser navigation before checkpointing
 
+## Assessment, Account Feedback, and Signup Funnel Integrity
+
+- [x] Make successful sign-out visibly confirm, redirect, and clear stale identity UI
+- [x] Label assessment score direction as load, audit the capped Stewardship calculation, and align narrative recommendations with the same dimension semantics
+- [x] Present Lifewoven Terms and Privacy links with account-creation consent before or at OAuth handoff
+- [x] Correct the optional-question flow count and disclose neurodivergence-adjacent personalization responses in the Privacy Policy
+- [x] Place Start free ahead of logged-out Oracle plan upsell CTAs
+- [x] Add regression coverage and verify logged-out and authenticated assessment flows before checkpointing
+
+## Launch Trust, Pricing, Policy, and Homepage Integrity
+
+- [ ] Reconcile Seeker founding pricing to one authoritative monthly and annual price across marketing and app pages
+- [ ] Reconcile refund policy, minimum age, content-processing language, and Manus Analytics disclosure across all public and app policies
+- [ ] Remove or revise unsupported locked-for-life, annual-savings, community-access, and AI-training claims
+- [ ] Standardize Lumen, Load-Bearing Survey, and Alignment Fundamentals naming across marketing and app funnel copy
+- [ ] Repair homepage logo rendering, desktop navigation wrap/CTA overlap, and visible founding-form honeypot field
+- [ ] Trace and prevent recurring disappearance of persisted check-in counts without modifying legitimate user data
+- [ ] Add regression coverage and visually verify policies, pricing, homepage, and check-in persistence before checkpointing
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA

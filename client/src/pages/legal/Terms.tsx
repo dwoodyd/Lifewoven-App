@@ -8,7 +8,7 @@ export default function Terms() {
       <div className="container pt-28 pb-20 max-w-3xl mx-auto">
         <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Legal</p>
         <h1 className="font-serif text-2xl sm:text-3xl font-light text-foreground mb-2">Terms of Service</h1>
-        <p className="text-sm text-muted-foreground mb-10">Last updated: March 2026</p>
+        <p className="text-sm text-muted-foreground mb-10">Last updated: August 2026</p>
 
         <div className="prose prose-sm max-w-none text-foreground space-y-8">
           <section>
@@ -23,7 +23,7 @@ export default function Terms() {
 
           <section>
             <h2 className="font-serif text-xl font-light mb-3">3. Membership and Billing</h2>
-            <p className="text-muted-foreground leading-relaxed">Lifewoven offers free and paid membership tiers. Paid subscriptions are billed on a monthly basis. You may cancel your subscription at any time; cancellation takes effect at the end of the current billing period. We reserve the right to change pricing with 30 days notice to active subscribers.</p>
+            <p className="text-muted-foreground leading-relaxed">Lifewoven offers free and paid membership tiers with monthly and annual billing options. You may cancel at any time; cancellation takes effect at the end of the current billing period. New subscriptions may be offered at different prices over time. A founding rate applies while its associated subscription remains active without interruption; it may not be available after cancellation or lapse. New subscription refunds are governed by our <Link href="/legal/refunds" className="text-accent hover:underline">Refund Policy</Link>.</p>
           </section>
 
           <section>
@@ -33,7 +33,7 @@ export default function Terms() {
 
           <section>
             <h2 className="font-serif text-xl font-light mb-3">5. User Content</h2>
-            <p className="text-muted-foreground leading-relaxed">Journal entries, check-ins, and other content you create on Lifewoven belong to you. We do not sell your personal content to third parties. By using the Platform, you grant Lifewoven a limited license to process your content for the purpose of providing AI-powered features such as the Oracle and pattern recognition.</p>
+            <p className="text-muted-foreground leading-relaxed">Journal entries, check-ins, and other content you create on Lifewoven belong to you. We do not sell your personal content to third parties. You grant Lifewoven only the limited permission needed to store, display, and process content for the features you choose to use, including the Oracle and pattern recognition. We do not use personal content to train general AI models without your explicit consent.</p>
           </section>
 
           <section>

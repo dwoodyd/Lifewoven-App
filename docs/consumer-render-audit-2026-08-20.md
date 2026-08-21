@@ -158,3 +158,13 @@ Direct cache-busted navigation to `/today` resolves to `/dashboard`, and `/asses
 The companion reader vocabulary paths are also resolved: `/survey` reaches `/audit`, and `/ground-check` reaches the seven-question route at `/ground/ground-check`. Neither path reaches the 404 screen.
 
 The remaining action vocabulary aliases also resolve directly: `/check-in` reaches `/dashboard`, and `/mood` reaches `/mood-rhythm`. Both destinations loaded at the top of their intended page without passing through the 404 screen.
+
+## Launch policy contradiction inventory
+
+The marketing Terms (June 2, 2026) require age 16, make payments non-refundable except where law requires otherwise, and define founding rates as the signup rate while an uninterrupted subscription remains active. The app Terms (March 2026) require age 18 and reserve a right to change pricing with 30 days’ notice, while the app’s separate Refunds page reportedly offers a seven-day no-questions refund. These policies must be reconciled into one customer-visible standard before paid acquisition continues.
+
+The marketing Privacy policy does not identify Manus Analytics or manus-analytics.com and has no specific disclosure for optional attention, overwhelm, time-perception, or energy-pattern answers used for personalization. The app Privacy policy names Manus Analytics, explains its aggregate usage collection, and states that personal content is not used to train general AI models without explicit consent. The public policy needs the same clear disclosure rather than a materially thinner version.
+
+## Check-in persistence investigation
+
+A read-only database query for the owner account currently returns zero `check_ins` rows. This is not merely a dashboard display filter at the moment of inspection. The application’s normal check-in creation procedure inserts append-only rows and the scoped server-source search found no ordinary in-app update or deletion operation for `checkIns`; the next repair must therefore add persistence regression coverage and trace any administrative or cleanup workflow separately rather than recreate data.

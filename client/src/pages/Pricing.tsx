@@ -46,7 +46,7 @@ const TIERS = [
     retailPrice: "$19/mo retail" as string | null,
     annualPrice: "$89" as string | null,
     annualRetail: "$189/yr retail" as string | null,
-    annualSavings: "save 53%" as string | null,
+    annualSavings: "save 18% vs monthly" as string | null,
     description: "Lumen opens the full system to you. Every tool, every pathway, every module — fully unlocked.",
     cta: "Lock in Seeker",
     highlight: true,
@@ -74,7 +74,7 @@ const TIERS = [
     retailPrice: "$49/mo retail" as string | null,
     annualPrice: "$249" as string | null,
     annualRetail: "$479/yr retail" as string | null,
-    annualSavings: "save 48%" as string | null,
+    annualSavings: "save 17% vs monthly" as string | null,
     description: "Lumen and the Oracle work continuously on your behalf — reading your patterns, naming what you cannot yet see. Plus the complete Lifewoven library.",
     cta: "Lock in Oracle",
     highlight: false,
@@ -183,7 +183,6 @@ export default function Pricing() {
     ["Decision journal", false, true, true],
     ["Energy audit", false, true, true],
     ["All 7 pathways", false, true, true],
-    ["Community access", "Read only", "Full", "Full"],
     ["Oracle AI chat", false, false, "Unlimited"],
     ["AI Weave reflections", false, false, true],
     ["AI decision analysis", false, false, true],
@@ -201,7 +200,7 @@ export default function Pricing() {
           <p className="text-xs tracking-[0.2em] uppercase text-amber-400/80 mb-4 font-light">Investment</p>
           <h1 className="font-serif text-4xl sm:text-5xl font-light text-foreground mb-5">Choose Your Path</h1>
           <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-            Founding rates available now. Lifewoven is in closed beta. Founding members lock in at the rates below — for life, even as retail rises.
+            Founding rates are available during the closed beta. The founding rate remains available while an uninterrupted founding subscription stays active.
           </p>
         </div>
 
@@ -216,7 +215,7 @@ export default function Pricing() {
             <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${annual ? "translate-x-6" : "translate-x-1"}`} />
           </button>
           <span className={`text-sm font-light transition-colors ${annual ? "text-foreground" : "text-muted-foreground"}`}>
-            Annual <span className="text-amber-400 text-xs ml-1">save up to 48%</span>
+            Annual <span className="text-amber-400 text-xs ml-1">save 17–18% vs monthly</span>
           </span>
         </div>
 
@@ -266,7 +265,7 @@ export default function Pricing() {
                   )}
                   {tier.retailPrice && !annual && (
                     <p className="text-xs text-amber-400/70 mt-1 flex items-center gap-1">
-                      <Lock className="h-3 w-3" /> Locked at founding rate for life
+                      <Lock className="h-3 w-3" /> Founding rate while your subscription remains active
                     </p>
                   )}
                 </div>
@@ -326,8 +325,7 @@ export default function Pricing() {
                 {tier.id === "oracle" && !isCurrent && (
                   <div className="rounded-xl border border-violet-400/25 bg-violet-500/8 p-4 text-center">
                     <p className="text-xs text-violet-300/80 leading-relaxed mb-3">
-                      Founding Members lock Oracle at{" "}
-                      <strong className="text-violet-300">$25/mo</strong> — rate held for life.
+                      Founding Members receive the current founding rate while their subscription remains active.
                     </p>
                     <Button asChild size="sm" variant="outline" className="w-full border-violet-400/40 text-violet-300 hover:bg-violet-400/10">
                       <Link href="/apply">Apply for Founding Access</Link>
@@ -379,9 +377,9 @@ export default function Pricing() {
         {/* Locked-for-life callout */}
         <div className="mb-14 rounded-2xl border border-amber-400/20 bg-amber-400/5 p-6 sm:p-8 text-center">
           <Lock className="h-6 w-6 text-amber-400 mx-auto mb-3" />
-          <h3 className="font-serif text-lg font-light text-foreground mb-2">What "locked for life" means</h3>
+          <h3 className="font-serif text-lg font-light text-foreground mb-2">How founding rates work</h3>
           <p className="text-muted-foreground text-sm max-w-2xl mx-auto leading-relaxed">
-            When the beta closes, founding members keep their rate forever — even when public pricing rises. As long as your subscription remains active without interruption, the rate you locked in today is the rate you'll pay in five years.
+            A founding rate applies while the associated subscription remains active without interruption. If a subscription is cancelled or lapses, the founding rate may not be available if you rejoin.
           </p>
         </div>
 
