@@ -87,6 +87,12 @@
           setTimeout(function(){ s.remove(); }, 850);
         }, 400);
       };
+      // A route must never remain hidden if a module or auth request stalls before
+      // the app's first animation frame. The normal handler above still wins first.
+      window.setTimeout(function() {
+        var s = document.getElementById('splash');
+        if (s) s.remove();
+      }, 1600);
     </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>

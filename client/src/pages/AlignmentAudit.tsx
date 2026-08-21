@@ -173,7 +173,7 @@ const DIM_COLORS: Record<string, string> = {
   Strategy: "bg-strategy", Stewardship: "bg-stewardship",
 };
 
-type Step = "entry" | "consent" | "preframe" | "quiz" | "optional" | "mind_works" | "results";
+type Step = "entry" | "quiz" | "optional" | "mind_works" | "results";
 
 const AUDIT_DRAFT_STORAGE_KEY = "lifewoven.audit-draft.v1";
 const PENDING_AUDIT_STORAGE_KEY = "lifewoven.pending-audit-result.v1";
@@ -375,7 +375,7 @@ export default function AlignmentAudit() {
   const q = CORE_QUESTIONS[currentQ];
   const oq = OPTIONAL_QUESTIONS[optionalQ];
 
-  if (step === "entry" || step === "consent" || step === "preframe") return (
+  if (step === "entry") return (
     <div className="structural-shell min-h-screen bg-background">
       <Nav />
       <div className="container max-w-xl mx-auto pt-24 pb-20 text-center px-4 sm:px-6">
@@ -401,13 +401,17 @@ export default function AlignmentAudit() {
             </Button>
           )}
           {!isAuthenticated && (
-            <button
-              type="button"
-              className="w-full py-2 text-xs text-muted-foreground transition-colors hover:text-foreground"
-              onClick={() => { window.location.href = getLoginUrl("/dashboard"); }}
-            >
-              Rather set up first? Create your account →
-            </button>
+            <div className="border-t border-border/70 pt-4 text-center">
+              <p className="mb-2 text-sm text-muted-foreground">Not ready for the survey? You can still enter Lifewoven first.</p>
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                onClick={() => { window.location.href = getLoginUrl("/dashboard"); }}
+              >
+                Create your account first <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
           )}
         </div>
         <p className="text-xs text-muted-foreground">Your responses stay private and are used only to guide your experience.</p>
@@ -589,11 +593,13 @@ export default function AlignmentAudit() {
             <p className="font-serif text-base font-light text-foreground italic">"{profile.truth}"</p>
           </div>
 
-          <div className="p-5 rounded-2xl border border-border bg-card mb-4">
-            <p className="font-serif text-lg font-light text-foreground mb-1">Sharpen this reading — about 60 seconds.</p>
-            <p className="text-sm text-muted-foreground leading-relaxed mb-3">These four optional prompts can tailor your recommendations. They are not diagnostic, and you can skip any of them.</p>
-            <Button variant="ghost" size="sm" className="px-0 text-accent hover:bg-transparent hover:text-accent/80" onClick={() => setStep("optional")}>Answer the optional prompts <ArrowRight className="ml-1 h-3.5 w-3.5" /></Button>
-          </div>
+          {isAuthenticated && (
+            <div className="p-5 rounded-2xl border border-border bg-card mb-4">
+              <p className="font-serif text-lg font-light text-foreground mb-1">Sharpen this reading — about 60 seconds.</p>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-3">These four optional prompts can tailor your recommendations. They are not diagnostic, and you can skip any of them.</p>
+              <Button variant="ghost" size="sm" className="px-0 text-accent hover:bg-transparent hover:text-accent/80" onClick={() => setStep("optional")}>Answer the optional prompts <ArrowRight className="ml-1 h-3.5 w-3.5" /></Button>
+            </div>
+          )}
 
           {/* Oracle nudge — only name a dimension when the reading is genuinely distinct. */}
           {isAuthenticated && (() => {

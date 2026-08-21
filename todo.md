@@ -1601,6 +1601,14 @@
 - [x] Add an in-app privacy deletion control that gives members an actionable, explicit deletion-request path
 - [x] Add focused regression coverage, validate app and marketing builds, visually verify the revised funnel, and save the required checkpoints
 
+## Survey Funnel Regression Repair — August 21, 2026
+
+- [x] Restore a visible low-emphasis account-setup bypass beneath the logged-out survey entry’s Start the Survey action
+- [x] Remove any remaining pre-results “Almost there” or optional-refinement gate so core-question results appear immediately
+- [x] Limit logged-out results actions to Start free — save my results and Start Reset
+- [x] Add a failsafe splash dismissal so a loading overlay cannot trap visitors on the survey route
+- [x] Add regressions, complete a manual logged-out survey pass, run full validation, and checkpoint the repair
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA

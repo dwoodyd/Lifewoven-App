@@ -48,13 +48,17 @@ describe("launch trust safeguards", () => {
 
   it("shows results before optional refinement and limits logged-out result actions", () => {
     const audit = source("client/src/pages/AlignmentAudit.tsx");
-    expect(audit).not.toContain('type Step = "entry" | "consent" | "preframe" | "quiz" | "optional_prompt"');
+    expect(audit).toContain('type Step = "entry" | "quiz" | "optional" | "mind_works" | "results"');
+    expect(audit).not.toContain('type Step = "entry" | "consent" | "preframe"');
     expect(audit).toContain('setStep("results")');
     expect(audit).toContain("Sharpen this reading — about 60 seconds.");
     expect(audit).toContain("These four optional prompts can tailor your recommendations");
     expect(audit).toContain("isAuthenticated && (() =>");
     expect(audit).toContain("isAuthenticated && shareUrl &&");
     expect(audit).toContain('href="/pathway/reset">Start Reset</a>');
+    expect(audit).toContain("Create your account first");
+    expect(audit).toContain('window.location.href = getLoginUrl("/dashboard")');
+    expect(audit).toContain('{isAuthenticated && (\n            <div className="p-5 rounded-2xl border border-border bg-card mb-4">');
   });
 
   it("does not show Oracle-tier members an irrelevant upgrade quick link", () => {
@@ -101,6 +105,13 @@ describe("launch trust safeguards", () => {
     expect(settings).toContain('requestDeletion.mutate({ confirmation: "DELETE MY DATA" })');
     expect(routers).toContain("requestDeletion: protectedProcedure");
     expect(routers).toContain("Data deletion request:");
+  });
+
+  it("bounds the startup splash so a stalled first frame cannot trap a visitor", () => {
+    const indexHtml = source("client/index.html");
+    expect(indexHtml).toContain("window.setTimeout(function() {");
+    expect(indexHtml).toContain("if (s) s.remove();");
+    expect(indexHtml).toContain("}, 1600);");
   });
 
   it("keeps app pricing claims tied to the displayed monthly comparison", () => {
