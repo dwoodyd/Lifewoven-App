@@ -1614,6 +1614,11 @@
 - [x] Audit public survey calls to action and account-entry language against the repaired app funnel
 - [x] Apply and push any necessary marketing-source updates, with validation, for the next marketing checkpoint
 
+## Marketing LW-01 Final Alignment — August 21, 2026
+
+- [x] Align the marketing survey and account-entry copy with durable anonymous-result saving and the logged-out app bypass
+- [x] Validate and push any resulting marketing-source update for a new checkpoint
+
 ## LW-01 Anonymous Result Persistence Repair — August 21, 2026
 
 - [x] Persist the completed anonymous survey result in durable browser storage before the OAuth redirect
