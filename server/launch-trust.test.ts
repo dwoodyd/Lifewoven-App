@@ -82,6 +82,27 @@ describe("launch trust safeguards", () => {
     expect(simplified).toContain("Take the Load-Bearing Survey");
   });
 
+  it("keeps untagged Weave entries reachable and grounds posture colors in the product palette", () => {
+    const journal = source("client/src/pages/Journal.tsx");
+    const groundCheck = source("client/src/pages/btw/GroundCheck.tsx");
+    expect(journal).toContain('const filterModules = ["free", ...modules]');
+    expect(journal).toContain('free: "Free writing"');
+    expect(groundCheck).toContain('drifting: { label: "Drifting"');
+    expect(groundCheck).not.toContain("text-purple-600");
+    expect(groundCheck).not.toContain("text-emerald-600");
+  });
+
+  it("uses a shared 404 recovery voice and provides an in-app deletion-request path", () => {
+    const appNotFound = source("client/src/pages/NotFound.tsx");
+    const settings = source("client/src/pages/Settings.tsx");
+    const routers = source("server/routers.ts");
+    expect(appNotFound).toContain("This path is not part of the weave.");
+    expect(settings).toContain("Request data deletion");
+    expect(settings).toContain('requestDeletion.mutate({ confirmation: "DELETE MY DATA" })');
+    expect(routers).toContain("requestDeletion: protectedProcedure");
+    expect(routers).toContain("Data deletion request:");
+  });
+
   it("keeps app pricing claims tied to the displayed monthly comparison", () => {
     const pricing = source("client/src/pages/Pricing.tsx");
     expect(pricing).toContain("save 18% vs monthly");

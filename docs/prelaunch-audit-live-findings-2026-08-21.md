@@ -5,3 +5,5 @@ The live marketing homepage at `https://lifewoven.click` presents the canonical 
 The live app route `https://app.lifewoven.click/signin` still reaches the branded 404 screen rather than the OAuth entry. The app route map therefore needs a `/signin` compatibility alias to `/login`.
 
 The repaired development build was rechecked after implementation. Its `/signin` path now reaches the official Manus OAuth entry rather than the application 404. The authenticated `/audit` entry displayed the returning-member **“Take me into the app”** escape path. The anonymous setup control is conditionally rendered in source for logged-out visitors and is covered by launch-trust regression coverage.
+
+The subsequent polish review confirmed that The Weave visibly exposes a **Free** filter chip alongside the five canonical dimensions and that formerly untagged entries render under that label. Settings now visibly presents a **Request data deletion** control inside Privacy & Legal, with clear verification-before-deletion copy.

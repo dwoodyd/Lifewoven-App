@@ -1590,6 +1590,17 @@
 - [x] Add or update focused regression tests covering the anonymous-to-authenticated survey handoff and launch-trust requirements
 - [x] Run full app and marketing validation, complete a consumer-view pass, checkpoint the app, and record marketing source changes
 
+## Remaining Launch Polish — August 21, 2026
+
+- [x] Reduce redundant marketing-page destinations and clarify the difference between instant free access and reviewed founding-seat applications
+- [x] Ensure the marketing page leads with a single primary survey path and removes repeated decision points that do not advance the visitor
+- [x] Correct untagged Weave entries so the default “Free” module remains reachable through filters
+- [x] Reconcile Ground posture and score colors with the established Lifewoven palette and accessible semantic states
+- [x] Remove unnecessary route-transition splash behavior and ensure normal navigation does not show a prolonged loading screen
+- [x] Unify the app and marketing 404 recovery voice and route people toward a clear next step
+- [x] Add an in-app privacy deletion control that gives members an actionable, explicit deletion-request path
+- [x] Add focused regression coverage, validate app and marketing builds, visually verify the revised funnel, and save the required checkpoints
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA

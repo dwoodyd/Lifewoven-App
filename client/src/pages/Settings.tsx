@@ -249,6 +249,10 @@ export default function Settings() {
   const reminderPublicKey = trpc.reminders.publicKey.useQuery();
   const saveReminder = trpc.reminders.saveSubscription.useMutation();
   const disableReminder = trpc.reminders.disable.useMutation();
+  const requestDeletion = trpc.profile.requestDeletion.useMutation({
+    onSuccess: () => toast.success("Your deletion request has been submitted. We will verify it before removing your account data."),
+    onError: (error) => toast.error(error.message),
+  });
 
   useEffect(() => {
     if (reminderSettings.data?.reminderTime) setReminderTime(reminderSettings.data.reminderTime);
@@ -307,6 +311,11 @@ export default function Settings() {
     localStorage.removeItem("lifeos_onboarding_done");
     toast.success("Onboarding reset. Reload the page to replay the intro.");
     setTimeout(() => window.location.reload(), 800);
+  };
+
+  const handleDeletionRequest = () => {
+    const confirmed = window.confirm("Request deletion of your Lifewoven account data? This submits a verified request for manual review. You will receive confirmation before your data is removed.");
+    if (confirmed) requestDeletion.mutate({ confirmation: "DELETE MY DATA" });
   };
 
   const handleLuminEnabled = (value: boolean) => {
@@ -569,6 +578,13 @@ export default function Settings() {
               <Link href="/legal/terms" className="block text-sm text-accent hover:underline py-1">Terms of Service</Link>
               <Link href="/legal/refunds" className="block text-sm text-accent hover:underline py-1">Refund Policy</Link>
               <Link href="/support" className="block text-sm text-accent hover:underline py-1">Contact Support</Link>
+            </div>
+            <div className="mt-5 border-t border-border/50 pt-4">
+              <p className="text-sm font-medium text-foreground mb-1">Request data deletion</p>
+              <p className="text-xs text-muted-foreground font-light leading-relaxed mb-3">Submit a verified request to remove your Lifewoven account data under the Privacy Policy. We will confirm the request before deletion.</p>
+              <Button variant="outline" size="sm" className="border-destructive/40 text-destructive hover:bg-destructive/10" onClick={handleDeletionRequest} disabled={requestDeletion.isPending}>
+                {requestDeletion.isPending ? "Submitting request…" : "Request data deletion"}
+              </Button>
             </div>
           </div>
 

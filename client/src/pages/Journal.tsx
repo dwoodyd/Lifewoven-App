@@ -21,7 +21,7 @@ import { formatLifewovenDate, formatLifewovenToday } from "@/lib/datetime";
 
 const MODULE_COLORS: Record<string, string> = {
   state: "text-state", story: "text-story", standards: "text-standards",
-  strategy: "text-strategy", stewardship: "text-stewardship",
+  strategy: "text-strategy", stewardship: "text-stewardship", free: "text-muted-foreground",
 };
 
 const DEFAULT_PROMPTS = [
@@ -182,6 +182,8 @@ export default function Journal() {
   };
 
   const modules = ["state", "story", "standards", "strategy", "stewardship"];
+  const filterModules = ["free", ...modules];
+  const moduleLabels: Record<string, string> = { free: "Free writing", state: "State", story: "Story", standards: "Standards", strategy: "Strategy", stewardship: "Stewardship" };
 
   return (
     <div className="min-h-screen bg-background">
@@ -269,7 +271,7 @@ export default function Journal() {
                   </div>
                   <div className="flex gap-1 overflow-x-auto flex-shrink-0">
                     <button onClick={() => setSelectedModule("")} className={`text-xs px-2.5 py-1.5 rounded-lg border transition-colors ${!selectedModule ? "border-foreground bg-foreground text-background" : "border-border text-muted-foreground"}`}>All</button>
-                    {modules.map(m => { const abbr: Record<string,string> = { state:'State', story:'Story', standards:'Standards', strategy:'Strategy', stewardship:'Stewardship' }; return <button key={m} title={m.charAt(0).toUpperCase()+m.slice(1)} onClick={() => setSelectedModule(selectedModule === m ? '' : m)} className={`text-xs px-2.5 py-1.5 rounded-lg border transition-colors ${selectedModule === m ? `border-current bg-current/10 ${MODULE_COLORS[m]}` : 'border-border text-muted-foreground'}`}>{abbr[m]}</button>; })}
+                    {filterModules.map(m => <button key={m} title={moduleLabels[m]} onClick={() => setSelectedModule(selectedModule === m ? '' : m)} className={`text-xs px-2.5 py-1.5 rounded-lg border transition-colors ${selectedModule === m ? `border-current bg-current/10 ${MODULE_COLORS[m]}` : 'border-border text-muted-foreground'}`}>{m === "free" ? "Free" : moduleLabels[m]}</button>)}
                   </div>
                 </div>
                 {recentCheckIns.length > 0 && !searchQuery && !selectedModule && (
@@ -361,9 +363,9 @@ export default function Journal() {
             <div className="p-5 rounded-2xl border border-border bg-card">
               <div className="flex items-center gap-2 mb-3"><Tag className="h-4 w-4 text-muted-foreground" /><h2 className="font-serif text-base font-light text-foreground">Modules</h2></div>
               <div className="space-y-1.5">
-                {modules.map(m => (
+                {filterModules.map(m => (
                   <button key={m} onClick={() => setSelectedModule(selectedModule === m ? "" : m)} className={`w-full text-left p-2 rounded-lg transition-colors capitalize text-sm flex items-center justify-between ${selectedModule === m ? "bg-secondary" : "hover:bg-secondary/50"}`}>
-                    <span className={selectedModule === m ? MODULE_COLORS[m] : "text-muted-foreground"}>{m}</span>
+                    <span className={selectedModule === m ? MODULE_COLORS[m] : "text-muted-foreground"}>{moduleLabels[m]}</span>
                     <ArrowRight className="h-3.5 w-3.5 text-muted-foreground" />
                   </button>
                 ))}

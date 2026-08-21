@@ -1334,6 +1334,19 @@ const profileRouter = router({
       return { success: true };
     }),
 
+  requestDeletion: protectedProcedure
+    .input(z.object({ confirmation: z.literal("DELETE MY DATA") }))
+    .mutation(async ({ ctx }) => {
+      const delivered = await notifyOwner({
+        title: `Data deletion request: ${ctx.user.name ?? ctx.user.email ?? `User #${ctx.user.id}`}`,
+        content: `A signed-in member requested deletion of their Lifewoven account data.\n\nName: ${ctx.user.name ?? "Not provided"}\nEmail: ${ctx.user.email ?? "Not provided"}\nUser ID: ${ctx.user.id}\nRequested at: ${new Date().toISOString()}\n\nVerify the request and complete deletion under the Privacy Policy process.`,
+      });
+      if (!delivered) {
+        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "We could not submit your request right now. Please try again." });
+      }
+      return { success: true } as const;
+    }),
+
   saveMindPatterns: protectedProcedure
     .input(z.object({       patterns: z.array(z.string().max(200)).max(20) }))
     .mutation(async ({ ctx, input }) => {

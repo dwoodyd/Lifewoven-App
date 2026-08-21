@@ -15,9 +15,9 @@ export default function NotFound() {
         <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full border border-accent/50 bg-accent/10 text-accent">
           <Compass className="h-7 w-7" aria-hidden="true" />
         </div>
-        <p className="font-mono text-xs tracking-[0.22em] text-muted-foreground uppercase mb-3">Route not found · 404</p>
-        <h1 className="font-serif text-3xl sm:text-4xl text-foreground mb-4">This path is not part of your current map.</h1>
-        <p className="text-base text-muted-foreground leading-relaxed mb-8">Return to your daily reading or find a practice that meets the moment you are in.</p>
+        <p className="font-mono text-xs tracking-[0.22em] text-muted-foreground uppercase mb-3">Page not found · 404</p>
+        <h1 className="font-serif text-3xl sm:text-4xl text-foreground mb-4">This path is not part of the weave.</h1>
+        <p className="text-base text-muted-foreground leading-relaxed mb-8">The page you were looking for is not here. Return to your daily practice or find a resource that meets the moment.</p>
         <div id="not-found-button-group" className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button onClick={handleGoHome} className="min-h-11">
             <Home className="w-4 h-4 mr-2" />Today

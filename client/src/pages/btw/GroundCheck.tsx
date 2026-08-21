@@ -16,11 +16,11 @@ const QUESTIONS = [
 ];
 
 const STATE_LABELS: Record<string, { label: string; desc: string; route: string; color: string }> = {
-  bracing: { label: "Bracing", desc: "You're tense and guarded. Fear is close. The ground is still here.", route: "/ground/return?type=fear", color: "text-amber-600 dark:text-amber-400" },
-  striving: { label: "Striving", desc: "You're pushing hard. The effort is real. There's another way to move.", route: "/ground/prayers", color: "text-blue-600 dark:text-blue-400" },
-  drifting: { label: "Drifting", desc: "You've lost the thread. That's okay. You can return.", route: "/ground/return?type=2min", color: "text-purple-600 dark:text-purple-400" },
-  depleted: { label: "Depleted", desc: "You're running on empty. The first practice is rest, not effort.", route: "/ground/return?type=depletion", color: "text-rose-600 dark:text-rose-400" },
-  settled: { label: "Settled", desc: "You're in a good place to enter the ground or give thanks.", route: "/ground/enter-the-ground", color: "text-emerald-600 dark:text-emerald-400" },
+  bracing: { label: "Bracing", desc: "You're tense and guarded. Fear is close. The ground is still here.", route: "/ground/return?type=fear", color: "text-accent" },
+  striving: { label: "Striving", desc: "You're pushing hard. The effort is real. There's another way to move.", route: "/ground/prayers", color: "text-foreground" },
+  drifting: { label: "Drifting", desc: "You've lost the thread. That's okay. You can return.", route: "/ground/return?type=2min", color: "text-slate-600 dark:text-slate-300" },
+  depleted: { label: "Depleted", desc: "You're running on empty. The first practice is rest, not effort.", route: "/ground/return?type=depletion", color: "text-destructive" },
+  settled: { label: "Settled", desc: "You're in a good place to enter the ground or give thanks.", route: "/ground/enter-the-ground", color: "text-primary" },
 };
 
 export default function GroundCheck() {
