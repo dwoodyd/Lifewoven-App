@@ -1621,6 +1621,14 @@
 - [x] Render the survey bypass for logged-out visitors rather than only returning authenticated members
 - [x] Add end-to-end regression coverage, reproduce the OAuth return path, run full validation, and checkpoint the repair
 
+## LW-01 and LW-09 Regression Repair — August 21, 2026
+
+- [x] Add an explicit authenticated `audit.redeemClaim` mutation for the `audit_claim` OAuth-return path.
+- [x] Update the survey OAuth handoff to mint a server-backed claim and redeem it after authentication.
+- [x] Wire Profile’s `Sign Out` control to the same complete sign-out-and-redirect behavior as the account menu.
+- [x] Move Sign out ahead of the Account sub-list in desktop and mobile account menus.
+- [x] Add regression tests for the claim-redeem call and unified sign-out implementation.
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA

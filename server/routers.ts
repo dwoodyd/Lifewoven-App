@@ -18,12 +18,13 @@ import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import { getDb } from "./db";
+import { randomUUID } from "node:crypto";
 import {
   auditResults, checkIns, journalEntries, habits, habitLogs,
   scorecards, beliefs, decisions, energyAudits, oracleInsights,
   oracleConversations, userPathways, pathwaySessions, resources, courses, enrollments,
   products, communityPosts, communityComments, communityLikes, orders, users, moodLogs,
-  goals, goalMilestones, firstHonestWeekEntries, btwDailyIntentions
+  goals, goalMilestones, firstHonestWeekEntries, btwDailyIntentions, auditClaims
 } from "../drizzle/schema";
 import { eq, desc, and, like, sql, gte, lte } from "drizzle-orm";
 import { invokeLLM } from "./_core/llm";
@@ -191,13 +192,17 @@ const goalsRouter = router({
 });
 
 // ─── Audit Router ─────────────────────────────────────────────────────────────
+const auditPayloadSchema = z.object({
+  answers: z.record(z.string(), z.number()),
+  scores: z.record(z.string(), z.number()),
+  recommendedPathway: z.string().min(1).max(64),
+});
+
+const AUDIT_CLAIM_TTL_MS = 24 * 60 * 60 * 1000;
+
 const auditRouter = router({
   save: protectedProcedure
-    .input(z.object({
-      answers: z.record(z.string(), z.number()),
-      scores: z.record(z.string(), z.number()),
-      recommendedPathway: z.string(),
-    }))
+    .input(auditPayloadSchema)
     .mutation(async ({ ctx, input }) => {
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
@@ -215,6 +220,79 @@ const auditRouter = router({
       });
 
       return { success: true };
+    }),
+
+  /** Mint a short-lived opaque claim before sending an anonymous reader through OAuth. */
+  mintClaim: publicProcedure
+    .input(auditPayloadSchema)
+    .mutation(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database unavailable");
+
+      const claimId = randomUUID();
+      const now = new Date();
+      const expiresAt = new Date(now.getTime() + AUDIT_CLAIM_TTL_MS);
+      await db.insert(auditClaims).values({
+        id: claimId,
+        answers: input.answers,
+        scores: input.scores,
+        recommendedPathway: input.recommendedPathway,
+        expiresAt,
+      });
+
+      return { claimId, expiresAt };
+    }),
+
+  /**
+   * Redeem the token returned from OAuth. This is intentionally separate from
+   * `save` so the anonymous-to-authenticated handoff is observable, idempotent,
+   * and cannot depend on browser storage surviving the identity-provider trip.
+   */
+  redeemClaim: protectedProcedure
+    .input(z.object({ claimId: z.string().uuid() }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database unavailable");
+
+      const result = await db.transaction(async (tx) => {
+        const [claim] = await tx.select().from(auditClaims)
+          .where(eq(auditClaims.id, input.claimId))
+          .limit(1);
+
+        if (!claim || claim.expiresAt.getTime() <= Date.now()) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "This saved survey has expired. Please take the survey again.",
+          });
+        }
+
+        if (claim.redeemedAt) {
+          if (claim.redeemedByUserId === ctx.user.id) {
+            return { success: true, alreadyRedeemed: true };
+          }
+          throw new TRPCError({
+            code: "CONFLICT",
+            message: "This saved survey has already been claimed.",
+          });
+        }
+
+        await tx.insert(auditResults).values({
+          userId: ctx.user.id,
+          answers: claim.answers as Record<string, number>,
+          scores: claim.scores as Record<string, number>,
+          recommendedPathway: claim.recommendedPathway,
+        });
+        await tx.update(users)
+          .set({ onboardingCompleted: true, primaryPathway: claim.recommendedPathway })
+          .where(eq(users.id, ctx.user.id));
+        await tx.update(auditClaims)
+          .set({ redeemedByUserId: ctx.user.id, redeemedAt: new Date() })
+          .where(eq(auditClaims.id, input.claimId));
+
+        return { success: true, alreadyRedeemed: false };
+      });
+
+      return result;
     }),
 
   latest: protectedProcedure.query(async ({ ctx }) => {

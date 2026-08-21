@@ -7,6 +7,7 @@ import { User, BookOpen, Activity, Star, LogOut, ArrowRight, Flame, Lock, Sparkl
 import { trpc } from "@/lib/trpc";
 import { getLoginUrl } from "@/const";
 import { toast } from "sonner";
+import { useSignOut } from "@/hooks/useSignOut";
 
 const DIM_LABELS: Record<string, string> = {
   state: "State", story: "Story", standards: "Standards",
@@ -22,7 +23,8 @@ const TIER_LABELS: Record<string, string> = {
 };
 
 export default function Profile() {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated } = useAuth();
+  const { signOut, isSigningOut } = useSignOut();
   const utils = trpc.useUtils();
   const { data: dashData } = trpc.profile.dashboard.useQuery(undefined, { enabled: isAuthenticated });
   const { data: latestAudit } = trpc.audit.latest.useQuery(undefined, { enabled: isAuthenticated });
@@ -95,8 +97,8 @@ export default function Profile() {
               </span>
             )}
           </div>
-          <Button variant="outline" size="sm" className="gap-2" onClick={() => logout()}>
-            <LogOut className="h-3.5 w-3.5" /> Sign Out
+          <Button variant="outline" size="sm" className="gap-2" onClick={signOut} disabled={isSigningOut}>
+            <LogOut className="h-3.5 w-3.5" /> {isSigningOut ? "Signing out…" : "Sign Out"}
           </Button>
         </div>
 

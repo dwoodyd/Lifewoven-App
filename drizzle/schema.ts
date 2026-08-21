@@ -86,6 +86,22 @@ export const auditResults = mysqlTable("audit_results", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 }, (t) => [index("idx_audit_results_userId").on(t.userId)]);
 
+/**
+ * Short-lived, opaque claims bridge an anonymous completed survey through OAuth.
+ * The token in the return URL is useless without this server-side record and can
+ * only be redeemed once by the newly authenticated account.
+ */
+export const auditClaims = mysqlTable("audit_claims", {
+  id: varchar("id", { length: 36 }).primaryKey(),
+  answers: json("answers").notNull(),
+  scores: json("scores").notNull(),
+  recommendedPathway: varchar("recommendedPathway", { length: 64 }).notNull(),
+  expiresAt: timestamp("expiresAt").notNull(),
+  redeemedByUserId: int("redeemedByUserId"),
+  redeemedAt: timestamp("redeemedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (t) => [index("idx_audit_claims_expiresAt").on(t.expiresAt)]);
+
 // ─── Daily Check-ins ──────────────────────────────────────────────────────────
 
 export const checkIns = mysqlTable("check_ins", {

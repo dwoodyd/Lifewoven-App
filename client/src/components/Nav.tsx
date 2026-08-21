@@ -19,8 +19,7 @@ import {
   HelpCircle, LogOut, ExternalLink, Target, Layers,
 } from "lucide-react";
 import { replayOnboarding } from "@/components/OnboardingModal";
-import { trpc } from "@/lib/trpc";
-import { toast } from "sonner";
+import { useSignOut } from "@/hooks/useSignOut";
 
 // Primary nav links — always visible on desktop
 const primaryLinks = [
@@ -33,16 +32,10 @@ const primaryLinks = [
 
 export default function Nav() {
   const [location] = useLocation();
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated } = useAuth();
+  const { signOut, isSigningOut } = useSignOut();
   const { theme, toggleTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const logoutMutation = trpc.auth.logout.useMutation({
-    onSuccess: () => {
-      logout();
-      window.location.replace("/?signed_out=1");
-    },
-    onError: () => toast.error("We could not sign you out. Please try again."),
-  });
 
   const initials = user?.name
     ? user.name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)
@@ -199,6 +192,15 @@ export default function Nav() {
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
 
+                <DropdownMenuItem
+                  className="flex items-center gap-2 text-destructive focus:text-destructive cursor-pointer"
+                  onClick={signOut}
+                  disabled={isSigningOut}
+                >
+                  <LogOut className="h-3.5 w-3.5" />{isSigningOut ? "Signing out…" : "Sign out"}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+
                 {/* Account */}
                 <DropdownMenuLabel className="text-xs text-muted-foreground font-normal px-2 py-1">
                   Account
@@ -224,13 +226,6 @@ export default function Nav() {
                   </Link>
                 </DropdownMenuItem>
 
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="flex items-center gap-2 text-destructive focus:text-destructive cursor-pointer"
-                  onClick={() => logoutMutation.mutate()}
-                >
-                  <LogOut className="h-3.5 w-3.5" />Sign out
-                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
@@ -334,6 +329,16 @@ export default function Nav() {
                   </a>
                 </Button>
 
+                <Button
+                  variant="ghost"
+                  size="default"
+                  className="w-full gap-2 text-destructive justify-start"
+                  onClick={signOut}
+                  disabled={isSigningOut}
+                >
+                  <LogOut className="h-4 w-4" />{isSigningOut ? "Signing out…" : "Sign out"}
+                </Button>
+
                 <p className="text-xs text-muted-foreground px-2 pt-2 font-medium uppercase tracking-wide">Account</p>
                 <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground justify-start">
                   <Link href="/pricing" onClick={closeMobile}><CreditCard className="h-4 w-4" />Subscription</Link>
@@ -348,14 +353,6 @@ export default function Nav() {
                   <Link href="/support" onClick={closeMobile}><HelpCircle className="h-4 w-4" />Help</Link>
                 </Button>
 
-                <Button
-                  variant="ghost"
-                  size="default"
-                  className="w-full gap-2 text-destructive justify-start"
-                  onClick={() => { logoutMutation.mutate(); closeMobile(); }}
-                >
-                  <LogOut className="h-4 w-4" />Sign out
-                </Button>
               </>
             ) : (
               <>

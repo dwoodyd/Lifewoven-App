@@ -176,20 +176,10 @@ const DIM_COLORS: Record<string, string> = {
 type Step = "entry" | "quiz" | "optional" | "mind_works" | "results";
 
 const AUDIT_DRAFT_STORAGE_KEY = "lifewoven.audit-draft.v1";
-const LEGACY_PENDING_AUDIT_STORAGE_KEY = "lifewoven.pending-audit-result.v1";
-const PENDING_AUDIT_STORAGE_PREFIX = "lifewoven.pending-audit-result.v2.";
-const PENDING_AUDIT_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
 type AuditDraft = {
   answers: Record<number, ScaleValue>;
   currentQ: number;
-};
-
-type PendingAudit = {
-  answers: Record<string, number>;
-  scores: Record<string, number>;
-  recommendedPathway: string;
-  createdAt: number;
 };
 
 function readAuditDraft(): AuditDraft | null {
@@ -205,46 +195,12 @@ function readAuditDraft(): AuditDraft | null {
   }
 }
 
-function pendingAuditStorageKey(claimId: string) {
-  return `${PENDING_AUDIT_STORAGE_PREFIX}${claimId}`;
-}
-
-function createPendingAuditClaimId() {
-  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") return crypto.randomUUID();
-  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-}
-
-function removePendingAudit(key: string) {
-  try { window.localStorage.removeItem(key); } catch { /* storage may be blocked */ }
-  try { window.sessionStorage.removeItem(key); } catch { /* storage may be blocked */ }
-}
-
-function readPendingAudit(claimId: string | null): { key: string; value: PendingAudit } | null {
-  if (typeof window === "undefined") return null;
-  const keys = claimId ? [pendingAuditStorageKey(claimId)] : [LEGACY_PENDING_AUDIT_STORAGE_KEY];
-  try {
-    for (const key of keys) {
-      // localStorage survives the OAuth portal and custom-domain return; session
-      // storage remains a fallback for restrictive browser contexts.
-      const raw = window.localStorage.getItem(key) ?? window.sessionStorage.getItem(key);
-      if (!raw) continue;
-      const parsed = JSON.parse(raw) as PendingAudit;
-      if (!parsed || !parsed.answers || !parsed.scores || !parsed.recommendedPathway || !parsed.createdAt || Date.now() - parsed.createdAt > PENDING_AUDIT_MAX_AGE_MS) {
-        removePendingAudit(key);
-        continue;
-      }
-      return { key, value: parsed };
-    }
-    return null;
-  } catch {
-    return null;
-  }
-}
-
 export default function AlignmentAudit() {
-  const [location, navigate] = useLocation();
+  const [, navigate] = useLocation();
   const { isAuthenticated } = useAuth();
-  const pendingAuditClaimId = new URLSearchParams(location.split("?")[1] ?? "").get("audit_claim");
+  const pendingAuditClaimId = typeof window === "undefined"
+    ? null
+    : new URLSearchParams(window.location.search).get("audit_claim");
   const [storedDraft] = useState<AuditDraft | null>(() => readAuditDraft());
   const [step, setStep] = useState<Step>(() => storedDraft ? "quiz" : "entry");
   const [currentQ, setCurrentQ] = useState(() => storedDraft?.currentQ ?? 0);
@@ -265,6 +221,13 @@ export default function AlignmentAudit() {
       utils.auth.me.invalidate();
     },
   });
+  const mintAuditClaim = trpc.audit.mintClaim.useMutation();
+  const redeemAuditClaim = trpc.audit.redeemClaim.useMutation({
+    onSuccess: () => {
+      utils.profile.homeContext.invalidate();
+      utils.auth.me.invalidate();
+    },
+  });
   const saveMindPatterns = trpc.profile.saveMindPatterns.useMutation();
   const trackAuditEvent = trpc.system.trackAuditEvent.useMutation();
 
@@ -275,21 +238,14 @@ export default function AlignmentAudit() {
     window.sessionStorage.setItem(AUDIT_DRAFT_STORAGE_KEY, JSON.stringify({ answers, currentQ }));
   }, [answers, currentQ, step]);
 
-  // OAuth returns as a full page load. Attach the short-lived anonymous result
-  // to the authenticated account before moving the person into the dashboard.
+  // OAuth returns with ?audit_claim=<uuid>. Redeem the server-backed claim as a
+  // distinct authenticated tRPC operation before moving into the dashboard.
   useEffect(() => {
-    if (!isAuthenticated || pendingAuditClaimStarted.current || saveAudit.isPending) return;
-    const pendingAudit = readPendingAudit(pendingAuditClaimId);
-    if (!pendingAudit) return;
+    if (!isAuthenticated || !pendingAuditClaimId || pendingAuditClaimStarted.current || redeemAuditClaim.isPending) return;
 
     pendingAuditClaimStarted.current = true;
-    saveAudit.mutate({
-      answers: pendingAudit.value.answers,
-      scores: pendingAudit.value.scores,
-      recommendedPathway: pendingAudit.value.recommendedPathway,
-    }, {
+    redeemAuditClaim.mutate({ claimId: pendingAuditClaimId }, {
       onSuccess: () => {
-        removePendingAudit(pendingAudit.key);
         toast.success("Your survey results are saved to your profile.");
         navigate("/dashboard");
       },
@@ -298,7 +254,7 @@ export default function AlignmentAudit() {
         toast.error("We could not save your survey results yet. Please try again.");
       },
     });
-  }, [isAuthenticated, navigate, pendingAuditClaimId, saveAudit]);
+  }, [isAuthenticated, navigate, pendingAuditClaimId, redeemAuditClaim]);
 
   // Build a shareable URL encoding the profile key in the hash so no server round-trip is needed
   const [shareUrl, setShareUrl] = useState<string | null>(null);
@@ -352,19 +308,16 @@ export default function AlignmentAudit() {
       trackAuditEvent.mutate({ event: "audit_signup_click", properties: { profile: result?.profile.name } });
       const stringAnswers: Record<string, number> = {};
       Object.entries(answers).forEach(([key, value]) => { stringAnswers[key] = value; });
-      const pendingAudit: PendingAudit = {
+      mintAuditClaim.mutate({
         answers: stringAnswers,
         scores: result.scores.pct as Record<string, number>,
         recommendedPathway: result.profile.firstPathway.toLowerCase(),
-        createdAt: Date.now(),
-      };
-      const claimId = createPendingAuditClaimId();
-      const storageKey = pendingAuditStorageKey(claimId);
-      // Echo the storage key in OAuth's relative return path. The completed reading
-      // remains available after the portal and custom-domain round trip.
-      try { window.localStorage.setItem(storageKey, JSON.stringify(pendingAudit)); } catch { /* fallback below */ }
-      try { window.sessionStorage.setItem(storageKey, JSON.stringify(pendingAudit)); } catch { /* storage may be blocked */ }
-      window.location.href = getLoginUrl(`/audit?audit_claim=${encodeURIComponent(claimId)}`);
+      }, {
+        onSuccess: ({ claimId }) => {
+          window.location.href = getLoginUrl(`/audit?audit_claim=${encodeURIComponent(claimId)}`);
+        },
+        onError: () => toast.error("We could not prepare your saved survey. Please try again."),
+      });
       return;
     }
     if (result) {
@@ -690,8 +643,8 @@ export default function AlignmentAudit() {
                 <h3 className="font-serif text-lg font-light text-foreground mb-2">Save your results to your profile</h3>
                 <p className="text-base text-muted-foreground mb-4">Your audit results will be stored and used to personalise your Oracle, pathway recommendations, and progress tracking over time.</p>
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <Button className="gap-2" onClick={handleSaveResults} disabled={saveAudit.isPending}>
-                    <CheckCircle2 className="h-4 w-4" /> {saveAudit.isPending ? "Saving..." : "Save My Results"}
+                  <Button className="gap-2" onClick={handleSaveResults} disabled={saveAudit.isPending || mintAuditClaim.isPending}>
+                    <CheckCircle2 className="h-4 w-4" /> {saveAudit.isPending || mintAuditClaim.isPending ? "Saving..." : "Save My Results"}
                   </Button>
                   <Button variant="ghost" asChild><a href="/dashboard">Go to dashboard</a></Button>
                 </div>

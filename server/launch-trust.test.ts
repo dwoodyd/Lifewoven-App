@@ -8,9 +8,9 @@ function source(path: string) {
 
 describe("launch trust safeguards", () => {
   it("makes a completed sign-out visible and clears the stale authenticated view", () => {
-    const nav = source("client/src/components/Nav.tsx");
+    const signOut = source("client/src/hooks/useSignOut.ts");
     const home = source("client/src/pages/Home.tsx");
-    expect(nav).toContain('window.location.replace("/?signed_out=1")');
+    expect(signOut).toContain('window.location.replace("/?signed_out=1")');
     expect(home).toContain('toast.success("Signed out"');
   });
 
@@ -39,16 +39,35 @@ describe("launch trust safeguards", () => {
     expect(audit).not.toContain('href="/dashboard">Take me into the app</a>');
   });
 
-  it("persists anonymous results under a claim key and attaches them after OAuth", () => {
+  it("mints a server-backed anonymous result claim and explicitly redeems it after OAuth", () => {
     const audit = source("client/src/pages/AlignmentAudit.tsx");
-    expect(audit).toContain('const AUDIT_DRAFT_STORAGE_KEY = "lifewoven.audit-draft.v1"');
-    expect(audit).toContain('const PENDING_AUDIT_STORAGE_PREFIX = "lifewoven.pending-audit-result.v2."');
-    expect(audit).toContain("createPendingAuditClaimId()");
-    expect(audit).toContain("window.localStorage.setItem(storageKey, JSON.stringify(pendingAudit))");
+    const routers = source("server/routers.ts");
+    const schema = source("drizzle/schema.ts");
+
+    expect(schema).toContain('mysqlTable("audit_claims"');
+    expect(routers).toContain("mintClaim: publicProcedure");
+    expect(routers).toContain("redeemClaim: protectedProcedure");
+    expect(audit).toContain("trpc.audit.mintClaim.useMutation()");
+    expect(audit).toContain("trpc.audit.redeemClaim.useMutation");
+    expect(audit).toContain('new URLSearchParams(window.location.search).get("audit_claim")');
+    expect(audit).toContain("redeemAuditClaim.mutate({ claimId: pendingAuditClaimId }");
     expect(audit).toContain("getLoginUrl(`/audit?audit_claim=${encodeURIComponent(claimId)}`)");
-    expect(audit).toContain("readPendingAudit(pendingAuditClaimId)");
-    expect(audit).toContain("removePendingAudit(pendingAudit.key)");
+    expect(audit).not.toContain("window.localStorage.setItem(storageKey, JSON.stringify(pendingAudit))");
     expect(audit).toContain('navigate("/dashboard")');
+  });
+
+  it("uses one full sign-out behavior from Profile and places sign out before account links", () => {
+    const profile = source("client/src/pages/Profile.tsx");
+    const nav = source("client/src/components/Nav.tsx");
+    const signOut = source("client/src/hooks/useSignOut.ts");
+
+    expect(signOut).toContain("await logout()");
+    expect(signOut).toContain('window.location.replace("/?signed_out=1")');
+    expect(profile).toContain("const { signOut, isSigningOut } = useSignOut()");
+    expect(profile).toContain("onClick={signOut}");
+    expect(nav).toContain("const { signOut, isSigningOut } = useSignOut()");
+    expect(nav.indexOf("onClick={signOut}")).toBeLessThan(nav.indexOf("{/* Account */}"));
+    expect(nav).not.toContain("logoutMutation.mutate");
   });
 
   it("shows results before optional refinement and limits logged-out result actions", () => {
