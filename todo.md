@@ -1541,13 +1541,22 @@
 
 ## Launch Trust, Pricing, Policy, and Homepage Integrity
 
-- [ ] Reconcile Seeker founding pricing to one authoritative monthly and annual price across marketing and app pages
-- [ ] Reconcile refund policy, minimum age, content-processing language, and Manus Analytics disclosure across all public and app policies
-- [ ] Remove or revise unsupported locked-for-life, annual-savings, community-access, and AI-training claims
-- [ ] Standardize Lumen, Load-Bearing Survey, and Alignment Fundamentals naming across marketing and app funnel copy
-- [ ] Repair homepage logo rendering, desktop navigation wrap/CTA overlap, and visible founding-form honeypot field
+- [x] Reconcile Seeker founding pricing to one authoritative monthly and annual price across marketing and app pages
+- [x] Reconcile refund policy, minimum age, content-processing language, and Manus Analytics disclosure across all public and app policies
+- [x] Remove or revise unsupported locked-for-life, annual-savings, community-access, and AI-training claims
+- [x] Standardize Lumen, Load-Bearing Survey, and Alignment Fundamentals naming across marketing and app funnel copy
+- [x] Repair homepage logo rendering, desktop navigation wrap/CTA overlap, and visible founding-form honeypot field
 - [ ] Trace and prevent recurring disappearance of persisted check-in counts without modifying legitimate user data
-- [ ] Add regression coverage and visually verify policies, pricing, homepage, and check-in persistence before checkpointing
+- [ ] Visually verify deployed policies, pricing, homepage, and check-in persistence after the marketing deployment updates
+
+## Referenced Marketing-Site Launch Reconciliation
+
+- [x] Obtain authorized access to github.com/dwoodyd/lifewovenwebsite and inspect its active source structure
+- [x] Read the referenced marketing-site project and map pricing, policies, claims, naming, homepage, and form sources to their app counterparts
+- [x] Align marketing Seeker founding pricing, annual savings language, refund policy, age requirement, AI/content claims, Manus Analytics disclosure, and founding-rate terms with the app
+- [x] Standardize Lumen, Load-Bearing Survey, and Alignment Fundamentals terminology across marketing and app surfaces
+- [x] Remove unavailable community-access promises and correct marketing homepage logo, desktop navigation, and honeypot visibility
+- [ ] Visually verify the deployed marketing-to-app funnel after the GitHub deployment updates the public site
 
 ## Lifewoven Enhancement Brief (Current Scope)
 
