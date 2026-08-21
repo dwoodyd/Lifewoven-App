@@ -1507,6 +1507,7 @@ Write a single, personal, present-tense identity sentence (max 20 words) that re
       oracleInsightsList,
       activePathways,
       surveyHistory,
+      checkInTotal,
     ] = await Promise.all([
       // Exclude userId from check-in rows — client already knows whose session it is
       db.select({
@@ -1524,8 +1525,18 @@ Write a single, personal, present-tense identity sentence (max 20 words) that re
       db.select().from(userPathways).where(and(eq(userPathways.userId, ctx.user.id), eq(userPathways.status, "active"))).limit(3),
       db.select({ scores: auditResults.scores, createdAt: auditResults.createdAt }).from(auditResults)
         .where(eq(auditResults.userId, ctx.user.id)).orderBy(desc(auditResults.createdAt)).limit(50),
+      db.select({ total: sql<number>`count(*)` }).from(checkIns).where(eq(checkIns.userId, ctx.user.id)),
     ]);
-    return { recentCheckIns, activeHabits, recentJournals, oracleInsightsList, activePathways, latestSurvey: surveyHistory[0] ?? null, surveyHistory };
+    return {
+      recentCheckIns,
+      checkInCount: Number(checkInTotal[0]?.total ?? 0),
+      activeHabits,
+      recentJournals,
+      oracleInsightsList,
+      activePathways,
+      latestSurvey: surveyHistory[0] ?? null,
+      surveyHistory,
+    };
   }),
 });
 

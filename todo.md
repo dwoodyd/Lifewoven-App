@@ -1546,7 +1546,7 @@
 - [x] Remove or revise unsupported locked-for-life, annual-savings, community-access, and AI-training claims
 - [x] Standardize Lumen, Load-Bearing Survey, and Alignment Fundamentals naming across marketing and app funnel copy
 - [x] Repair homepage logo rendering, desktop navigation wrap/CTA overlap, and visible founding-form honeypot field
-- [ ] Trace and prevent recurring disappearance of persisted check-in counts without modifying legitimate user data
+- [x] Trace and prevent recurring disappearance of persisted check-in counts without modifying legitimate user data
 - [ ] Visually verify deployed policies, pricing, homepage, and check-in persistence after the marketing deployment updates
 
 ## Referenced Marketing-Site Launch Reconciliation

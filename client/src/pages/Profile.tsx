@@ -175,7 +175,7 @@ export default function Profile() {
           <div className="grid grid-cols-3 gap-3 sm:gap-4">
             {[
               { icon: BookOpen, label: "Journals", value: dashData.recentJournals?.length ?? 0 },
-              { icon: Activity, label: "Check-ins", value: dashData.recentCheckIns?.length ?? 0 },
+              { icon: Activity, label: "Check-ins", value: dashData.checkInCount ?? 0 },
               { icon: Star, label: "Habits", value: dashData.activeHabits?.length ?? 0 },
             ].map(({ icon: Icon, label, value }) => (
               <div key={label} className="p-3 sm:p-5 rounded-2xl border border-border bg-card text-center">
