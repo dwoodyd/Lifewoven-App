@@ -1547,7 +1547,7 @@
 - [x] Standardize Lumen, Load-Bearing Survey, and Alignment Fundamentals naming across marketing and app funnel copy
 - [x] Repair homepage logo rendering, desktop navigation wrap/CTA overlap, and visible founding-form honeypot field
 - [x] Trace and prevent recurring disappearance of persisted check-in counts without modifying legitimate user data
-- [ ] Visually verify deployed policies, pricing, homepage, and check-in persistence after the marketing deployment updates
+- [x] Visually verify deployed policies, pricing, and homepage after the marketing deployment updates
 
 ## Referenced Marketing-Site Launch Reconciliation
 
@@ -1556,7 +1556,12 @@
 - [x] Align marketing Seeker founding pricing, annual savings language, refund policy, age requirement, AI/content claims, Manus Analytics disclosure, and founding-rate terms with the app
 - [x] Standardize Lumen, Load-Bearing Survey, and Alignment Fundamentals terminology across marketing and app surfaces
 - [x] Remove unavailable community-access promises and correct marketing homepage logo, desktop navigation, and honeypot visibility
-- [ ] Visually verify the deployed marketing-to-app funnel after the GitHub deployment updates the public site
+- [x] Visually verify the deployed marketing-to-app funnel after the GitHub deployment updates the public site
+
+## Corrected Marketing Repository Deployment
+
+- [x] Access dwoodyd/lifewovenwebsite1 and confirm the verified marketing reconciliation is in its deployment branch
+- [x] Verify the corrected repository is the source connected to the public marketing deployment
 
 ## Lifewoven Enhancement Brief (Current Scope)
 
