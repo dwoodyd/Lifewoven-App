@@ -2,6 +2,7 @@ import { useState } from "react";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Library, BookOpen, Headphones, FileText, ArrowRight, ExternalLink, Info, Shield, Sparkles } from "lucide-react";
 
 type RightsLabel = "public-domain" | "original" | "licensed";
@@ -212,7 +213,7 @@ const RESOURCES: Resource[] = [
     rightsNote: "Original Lifewoven content from Build a Life That Does Not Break You.",
   },
   {
-    id: 22, category: "soul-engineer", module: "standards",
+    id: 22, category: "soul-engineer", module: "standards", slug: "load-bearing-beliefs-identification-guide",
     title: "Load-Bearing Beliefs — Identification Guide",
     author: "DeWayne Woods",
     description: "How to identify the beliefs that are structurally load-bearing in your life — the ones that, if changed, would change everything downstream of them.",
@@ -221,7 +222,7 @@ const RESOURCES: Resource[] = [
     rightsNote: "Original Lifewoven content from Build a Life That Does Not Break You.",
   },
   {
-    id: 23, category: "soul-engineer", module: "strategy",
+    id: 23, category: "soul-engineer", module: "strategy", slug: "honest-step-framework",
     title: "The Honest Step Framework",
     author: "DeWayne Woods",
     description: "Not the perfect step — the honest one. A practical framework for identifying the next right action when the full path is unclear.",
@@ -275,6 +276,9 @@ const CATEGORIES = [
 ];
 
 export default function ResourceLibrary() {
+  const { user } = useAuth();
+  const membershipTier = (user as any)?.membershipTier as string | undefined;
+  const hasPaidLibraryAccess = membershipTier === "oracle" || membershipTier === "seeker";
   const [activeCategory, setActiveCategory] = useState("soul-engineer");
   const [activeModule, setActiveModule] = useState("");
   const [activeRights, setActiveRights] = useState<RightsLabel | "">("");
@@ -374,6 +378,7 @@ export default function ResourceLibrary() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {filtered.map(resource => {
             const rights = RIGHTS_CONFIG[resource.rights];
+            const canRead = resource.free || hasPaidLibraryAccess;
             return (
               <div key={resource.id} className="p-5 rounded-2xl border border-border bg-card hover:border-muted-foreground transition-all group">
                 <div className="flex items-start justify-between gap-2 mb-3">
@@ -403,7 +408,7 @@ export default function ResourceLibrary() {
                   </p>
                 )}
 
-                {resource.slug ? (
+                {resource.slug && canRead ? (
                   <Button asChild size="sm" variant="outline" className="gap-1.5 text-xs">
                     <Link href={`/library/${resource.slug}`}>
                       <ArrowRight className="h-3 w-3" /> Read
@@ -415,6 +420,10 @@ export default function ResourceLibrary() {
                       <ArrowRight className="h-3 w-3" /> Explore & Journal
                     </Link>
                   </Button>
+                ) : hasPaidLibraryAccess ? (
+                  <span className="inline-flex items-center gap-1.5 text-xs text-accent">
+                    <Sparkles className="h-3.5 w-3.5" /> Included with your membership
+                  </span>
                 ) : (
                   <Button asChild size="sm" variant="outline" className="gap-1.5 text-xs">
                     <Link href="/pricing">

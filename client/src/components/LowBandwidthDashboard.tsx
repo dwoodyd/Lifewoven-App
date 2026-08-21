@@ -8,6 +8,7 @@ import { toast } from "sonner";
 
 interface LowBandwidthDashboardProps {
   onExit: () => void;
+  firstRun?: boolean;
 }
 
 const GROUNDING_PROMPTS = [
@@ -18,7 +19,7 @@ const GROUNDING_PROMPTS = [
   "You don't have to do everything. What is the one thing that matters most today?",
 ];
 
-export default function LowBandwidthDashboard({ onExit }: LowBandwidthDashboardProps) {
+export default function LowBandwidthDashboard({ onExit, firstRun = false }: LowBandwidthDashboardProps) {
   const [groundingIndex] = useState(() => Math.floor(Math.random() * GROUNDING_PROMPTS.length));
   const [shameInterruptOpen, setShameInterruptOpen] = useState(false);
 
@@ -28,6 +29,31 @@ export default function LowBandwidthDashboard({ onExit }: LowBandwidthDashboardP
   const activeHabits = habits?.filter(h => h.isActive) ?? [];
   const topHabit = activeHabits[0];
   const unreadInsight = insights?.find(i => !i.isRead);
+
+  if (firstRun) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6 py-12">
+        <div className="w-full max-w-md text-center">
+          <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">Welcome to Lifewoven</p>
+          <h1 className="font-serif text-3xl text-foreground mb-3">Begin with one clear reading.</h1>
+          <p className="text-muted-foreground text-sm leading-relaxed mb-8">The Load-Bearing Survey gives Lifewoven something real to support, instead of asking you to interpret an empty dashboard.</p>
+          <Card className="border-0 shadow-sm bg-card text-left">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
+                  <ChevronRight className="w-4 h-4 text-amber-700" />
+                </div>
+                <p className="text-xs uppercase tracking-widest text-muted-foreground font-mono">Your next step</p>
+              </div>
+              <p className="text-foreground font-medium mb-2">Take your first reading</p>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-5">Twelve questions. Three to five minutes. Your results are saved to your profile.</p>
+              <Button asChild className="w-full"><a href="/audit">Take the Load-Bearing Survey</a></Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6 py-12">

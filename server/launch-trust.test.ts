@@ -37,6 +37,51 @@ describe("launch trust safeguards", () => {
     expect(audit).toContain('href="/dashboard">Take me into the app</a>');
   });
 
+  it("preserves anonymous survey progress and attaches a completed result after OAuth", () => {
+    const audit = source("client/src/pages/AlignmentAudit.tsx");
+    expect(audit).toContain('const AUDIT_DRAFT_STORAGE_KEY = "lifewoven.audit-draft.v1"');
+    expect(audit).toContain('const PENDING_AUDIT_STORAGE_KEY = "lifewoven.pending-audit-result.v1"');
+    expect(audit).toContain('getLoginUrl("/audit?pending_result=1")');
+    expect(audit).toContain('window.sessionStorage.removeItem(PENDING_AUDIT_STORAGE_KEY)');
+    expect(audit).toContain('navigate("/dashboard")');
+  });
+
+  it("shows results before optional refinement and limits logged-out result actions", () => {
+    const audit = source("client/src/pages/AlignmentAudit.tsx");
+    expect(audit).not.toContain('type Step = "entry" | "consent" | "preframe" | "quiz" | "optional_prompt"');
+    expect(audit).toContain('setStep("results")');
+    expect(audit).toContain("Sharpen this reading — about 60 seconds.");
+    expect(audit).toContain("These four optional prompts can tailor your recommendations");
+    expect(audit).toContain("isAuthenticated && (() =>");
+    expect(audit).toContain("isAuthenticated && shareUrl &&");
+    expect(audit).toContain('href="/pathway/reset">Start Reset</a>');
+  });
+
+  it("does not show Oracle-tier members an irrelevant upgrade quick link", () => {
+    const profile = source("client/src/pages/Profile.tsx");
+    expect(profile).toContain('...(tier !== "oracle" ? [{ href: "/pricing", label: "Upgrade Plan" }] : [])');
+  });
+
+  it("gives paid members access to the complete advertised Library guides", () => {
+    const library = source("client/src/pages/ResourceLibrary.tsx");
+    const articles = source("client/src/data/libraryArticles.ts");
+    expect(library).toContain('slug: "load-bearing-beliefs-identification-guide"');
+    expect(library).toContain('slug: "honest-step-framework"');
+    expect(library).toContain('const hasPaidLibraryAccess = membershipTier === "oracle" || membershipTier === "seeker"');
+    expect(library).toContain('resource.slug && canRead');
+    expect(articles).toContain('slug: "load-bearing-beliefs-identification-guide"');
+    expect(articles).toContain('slug: "honest-step-framework"');
+  });
+
+  it("uses the simplified single-action view for members with no first-run data", () => {
+    const dashboard = source("client/src/pages/Dashboard.tsx");
+    const simplified = source("client/src/components/LowBandwidthDashboard.tsx");
+    expect(dashboard).toContain("const isFirstRun = isAuthenticated && !hasSurveyReading && !hasRecordedCheckIns && !hasHabits && !hasJournal");
+    expect(dashboard).toContain("<LowBandwidthDashboard onExit={toggleLowBandwidth} firstRun />");
+    expect(simplified).toContain("firstRun?: boolean");
+    expect(simplified).toContain("Take the Load-Bearing Survey");
+  });
+
   it("keeps app pricing claims tied to the displayed monthly comparison", () => {
     const pricing = source("client/src/pages/Pricing.tsx");
     expect(pricing).toContain("save 18% vs monthly");

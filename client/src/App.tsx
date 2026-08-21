@@ -106,6 +106,7 @@ function RouterSwitch() {
 
       {/* Auth */}
       <Route path="/login" component={Login} />
+      <Route path="/signin"><Redirect to="/login" replace /></Route>
       <Route path="/signup" component={Login} />
       <Route path="/auth" component={Login} />
       <Route path="/auth/callback" component={AuthCallback} />

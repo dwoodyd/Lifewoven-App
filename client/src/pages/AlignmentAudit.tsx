@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useLocation } from "wouter";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
@@ -173,19 +173,66 @@ const DIM_COLORS: Record<string, string> = {
   Strategy: "bg-strategy", Stewardship: "bg-stewardship",
 };
 
-type Step = "entry" | "consent" | "preframe" | "quiz" | "optional_prompt" | "optional" | "mind_works" | "results";
+type Step = "entry" | "consent" | "preframe" | "quiz" | "optional" | "mind_works" | "results";
+
+const AUDIT_DRAFT_STORAGE_KEY = "lifewoven.audit-draft.v1";
+const PENDING_AUDIT_STORAGE_KEY = "lifewoven.pending-audit-result.v1";
+const PENDING_AUDIT_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+
+type AuditDraft = {
+  answers: Record<number, ScaleValue>;
+  currentQ: number;
+};
+
+type PendingAudit = {
+  answers: Record<string, number>;
+  scores: Record<string, number>;
+  recommendedPathway: string;
+  createdAt: number;
+};
+
+function readAuditDraft(): AuditDraft | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.sessionStorage.getItem(AUDIT_DRAFT_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as AuditDraft;
+    if (!parsed || typeof parsed.currentQ !== "number" || !parsed.answers || parsed.currentQ < 0 || parsed.currentQ >= CORE_QUESTIONS.length) return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+function readPendingAudit(): PendingAudit | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.sessionStorage.getItem(PENDING_AUDIT_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as PendingAudit;
+    if (!parsed || !parsed.answers || !parsed.scores || !parsed.recommendedPathway || !parsed.createdAt || Date.now() - parsed.createdAt > PENDING_AUDIT_MAX_AGE_MS) {
+      window.sessionStorage.removeItem(PENDING_AUDIT_STORAGE_KEY);
+      return null;
+    }
+    return parsed;
+  } catch {
+    return null;
+  }
+}
 
 export default function AlignmentAudit() {
   const [, navigate] = useLocation();
   const { isAuthenticated } = useAuth();
-  const [step, setStep] = useState<Step>("entry");
-  const [currentQ, setCurrentQ] = useState(0);
-  const [answers, setAnswers] = useState<Record<number, ScaleValue>>({});
+  const [storedDraft] = useState<AuditDraft | null>(() => readAuditDraft());
+  const [step, setStep] = useState<Step>(() => storedDraft ? "quiz" : "entry");
+  const [currentQ, setCurrentQ] = useState(() => storedDraft?.currentQ ?? 0);
+  const [answers, setAnswers] = useState<Record<number, ScaleValue>>(() => storedDraft?.answers ?? {});
   const [optionalAnswers, setOptionalAnswers] = useState<Record<number, string>>({});
   const [optionalQ, setOptionalQ] = useState(0);
   const [result, setResult] = useState<{ profile: Profile; scores: ReturnType<typeof computeScores>; frictionTags: string[] } | null>(null);
   const [mindPatterns, setMindPatterns] = useState<string[]>([]);
   const [luminPulse, setLoomPulse] = useState(false);
+  const pendingAuditClaimStarted = useRef(false);
 
   const utils = trpc.useUtils();
   const saveAudit = trpc.audit.save.useMutation({
@@ -198,6 +245,38 @@ export default function AlignmentAudit() {
   });
   const saveMindPatterns = trpc.profile.saveMindPatterns.useMutation();
   const trackAuditEvent = trpc.system.trackAuditEvent.useMutation();
+
+  // Preserve unfinished anonymous survey progress in this browser tab so account
+  // setup does not force a member to start the twelve-question reading again.
+  useEffect(() => {
+    if (typeof window === "undefined" || step !== "quiz") return;
+    window.sessionStorage.setItem(AUDIT_DRAFT_STORAGE_KEY, JSON.stringify({ answers, currentQ }));
+  }, [answers, currentQ, step]);
+
+  // OAuth returns as a full page load. Attach the short-lived anonymous result
+  // to the authenticated account before moving the person into the dashboard.
+  useEffect(() => {
+    if (!isAuthenticated || pendingAuditClaimStarted.current || saveAudit.isPending) return;
+    const pendingAudit = readPendingAudit();
+    if (!pendingAudit) return;
+
+    pendingAuditClaimStarted.current = true;
+    saveAudit.mutate({
+      answers: pendingAudit.answers,
+      scores: pendingAudit.scores,
+      recommendedPathway: pendingAudit.recommendedPathway,
+    }, {
+      onSuccess: () => {
+        window.sessionStorage.removeItem(PENDING_AUDIT_STORAGE_KEY);
+        toast.success("Your survey results are saved to your profile.");
+        navigate("/dashboard");
+      },
+      onError: () => {
+        pendingAuditClaimStarted.current = false;
+        toast.error("We could not save your survey results yet. Please try again.");
+      },
+    });
+  }, [isAuthenticated, navigate, saveAudit]);
 
   // Build a shareable URL encoding the profile key in the hash so no server round-trip is needed
   const [shareUrl, setShareUrl] = useState<string | null>(null);
@@ -222,9 +301,10 @@ export default function AlignmentAudit() {
     const encoded = encodeURIComponent(profileKey);
     const url = `${window.location.origin}/audit#result=${encoded}`;
     setShareUrl(url);
+    window.sessionStorage.removeItem(AUDIT_DRAFT_STORAGE_KEY);
     // Track audit_completed
     trackAuditEvent.mutate({ event: "audit_completed", properties: { profile: profileKey } });
-    setStep("optional_prompt");
+    setStep("results");
   }
 
   function handleAnswer(qId: number, value: ScaleValue) {
@@ -245,10 +325,20 @@ export default function AlignmentAudit() {
 
   function handleSaveResults() {
     if (!isAuthenticated) {
+      if (!result) return;
       // Track signup click before redirecting
       trackAuditEvent.mutate({ event: "audit_signup_click", properties: { profile: result?.profile.name } });
-      // Carry the result into onboarding via the return path
-      window.location.href = getLoginUrl("/audit");
+      const stringAnswers: Record<string, number> = {};
+      Object.entries(answers).forEach(([key, value]) => { stringAnswers[key] = value; });
+      const pendingAudit: PendingAudit = {
+        answers: stringAnswers,
+        scores: result.scores.pct as Record<string, number>,
+        recommendedPathway: result.profile.firstPathway.toLowerCase(),
+        createdAt: Date.now(),
+      };
+      window.sessionStorage.setItem(PENDING_AUDIT_STORAGE_KEY, JSON.stringify(pendingAudit));
+      // The authenticated effect above claims the result before redirecting to the dashboard.
+      window.location.href = getLoginUrl("/audit?pending_result=1");
       return;
     }
     if (result) {
@@ -310,6 +400,15 @@ export default function AlignmentAudit() {
               <a href="/dashboard">Take me into the app</a>
             </Button>
           )}
+          {!isAuthenticated && (
+            <button
+              type="button"
+              className="w-full py-2 text-xs text-muted-foreground transition-colors hover:text-foreground"
+              onClick={() => { window.location.href = getLoginUrl("/dashboard"); }}
+            >
+              Rather set up first? Create your account →
+            </button>
+          )}
         </div>
         <p className="text-xs text-muted-foreground">Your responses stay private and are used only to guide your experience.</p>
       </div>
@@ -356,23 +455,6 @@ export default function AlignmentAudit() {
       </div>
     );
   }
-
-  if (step === "optional_prompt") return (
-    <div className="min-h-screen bg-background">
-      <Nav />
-      <div className="container max-w-xl mx-auto pt-24 pb-20 text-center px-4 sm:px-6 lumin-text">
-        <div className="p-5 sm:p-8 rounded-2xl border border-border bg-card">
-          <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Almost there</p>
-          <h2 className="font-serif text-2xl font-light text-foreground mb-4">A few optional questions to sharpen your results.</h2>
-          <p className="text-muted-foreground mb-8 text-sm leading-relaxed">These four optional prompts take about 90 seconds and can be skipped. They help tailor recommendations; they are not a diagnosis.</p>
-          <div className="space-y-3">
-            <Button className="w-full gap-2" onClick={() => setStep("optional")}>Answer optional questions <ArrowRight className="h-4 w-4" /></Button>
-            <Button variant="outline" className="w-full" onClick={() => setStep("results")}>Skip to my results</Button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
 
   if (step === "optional" && oq) return (
     <div className="min-h-screen bg-background">
@@ -450,12 +532,14 @@ export default function AlignmentAudit() {
               Based on your responses, this is the most important place to begin. Right now, support matters more than pressure.
             </p>
             <p className="text-sm text-muted-foreground mb-5">Then continue into <strong className="text-foreground">{profile.secondPathway}</strong> to deepen the work.</p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Button asChild className="gap-2">
-                <a href={`/pathway/${profile.firstPathway.toLowerCase()}`}>Start {profile.firstPathway} <ArrowRight className="h-4 w-4" /></a>
-              </Button>
-              <Button variant="outline" asChild><a href="/pathways">Explore all pathways</a></Button>
-            </div>
+            {isAuthenticated && (
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Button asChild className="gap-2">
+                  <a href={`/pathway/${profile.firstPathway.toLowerCase()}`}>Start {profile.firstPathway} <ArrowRight className="h-4 w-4" /></a>
+                </Button>
+                <Button variant="outline" asChild><a href="/pathways">Explore all pathways</a></Button>
+              </div>
+            )}
           </div>
 
           {/* Profile name + pattern */}
@@ -505,8 +589,14 @@ export default function AlignmentAudit() {
             <p className="font-serif text-base font-light text-foreground italic">"{profile.truth}"</p>
           </div>
 
+          <div className="p-5 rounded-2xl border border-border bg-card mb-4">
+            <p className="font-serif text-lg font-light text-foreground mb-1">Sharpen this reading — about 60 seconds.</p>
+            <p className="text-sm text-muted-foreground leading-relaxed mb-3">These four optional prompts can tailor your recommendations. They are not diagnostic, and you can skip any of them.</p>
+            <Button variant="ghost" size="sm" className="px-0 text-accent hover:bg-transparent hover:text-accent/80" onClick={() => setStep("optional")}>Answer the optional prompts <ArrowRight className="ml-1 h-3.5 w-3.5" /></Button>
+          </div>
+
           {/* Oracle nudge — only name a dimension when the reading is genuinely distinct. */}
-          {(() => {
+          {isAuthenticated && (() => {
             const dimensionScores = Object.entries(scores.pct) as [string, number][];
             const highestScore = Math.max(...dimensionScores.map(([, score]) => score));
             const highestDimensions = dimensionScores.filter(([, score]) => score === highestScore).map(([dimension]) => dimension);
@@ -555,7 +645,7 @@ export default function AlignmentAudit() {
             );
           })()}
           {/* Share your result */}
-          {shareUrl && (
+          {isAuthenticated && shareUrl && (
             <div className="p-5 rounded-2xl border border-border bg-card/60 mb-4 flex items-center justify-between gap-4 flex-wrap">
               <div>
                 <p className="text-sm font-medium text-foreground mb-0.5">Share your profile</p>
@@ -587,7 +677,7 @@ export default function AlignmentAudit() {
                   <Button className="gap-2" onClick={handleSaveResults}>
                     <CheckCircle2 className="h-4 w-4" /> Start free — save my results
                   </Button>
-                  <Button variant="ghost" asChild><a href="/">Back to home</a></Button>
+                  <Button variant="ghost" asChild><a href="/pathway/reset">Start Reset</a></Button>
                 </div>
                 <p className="mt-4 text-xs text-muted-foreground leading-relaxed">By continuing, you agree to Lifewoven’s <a className="text-accent hover:underline" href="/legal/terms">Terms of Service</a> and acknowledge the <a className="text-accent hover:underline" href="/legal/privacy">Privacy Policy</a>.</p>
               </>

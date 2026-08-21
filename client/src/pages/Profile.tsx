@@ -246,7 +246,7 @@ export default function Profile() {
               { href: "/dashboard", label: "Dashboard" },
               { href: "/weave", label: "The Weave" },
               { href: "/audit", label: "Load-Bearing Survey" },
-              { href: "/pricing", label: "Upgrade Plan" },
+              ...(tier !== "oracle" ? [{ href: "/pricing", label: "Upgrade Plan" }] : []),
               { href: "/store", label: "Store" },
             ].map(({ href, label }) => (
               <Link key={href} href={href}>

@@ -1569,6 +1569,27 @@
 - [x] Verify the bypass preserves guest survey access and routes signed-in returning members directly to the dashboard
 - [x] Add regression coverage, run full validation, and checkpoint the bypass
 
+## Pre-Launch Funnel Audit — August 20–21, 2026
+
+- [x] Audit and repair anonymous Load-Bearing Survey result persistence through Manus OAuth, then attach the result on first authenticated load
+- [x] Streamline the survey flow by showing results immediately after the twelve core questions and moving optional refinement after results
+- [x] Correct optional-question disclosure and consent copy, including the four-step count and sensitive personalization disclosure
+- [x] Reduce the logged-out results page to the primary save-and-start CTA plus the Reset path; reserve Oracle upsells and sharing for authenticated users
+- [x] Add a low-emphasis account-setup path beneath the survey primary CTA and make an interrupted survey resumable from the dashboard
+- [x] Make the empty first-run dashboard default to a single ranked next step rather than competing modules
+- [x] Confirm `/signin` aliases the official OAuth entry and prevent broken sign-in paths
+- [x] Audit Oracle-tier resource entitlement and ensure covered Library resources open for the top tier
+- [x] Hide irrelevant upgrade actions for top-tier subscribers and accurately label unavailable community access
+- [x] Verify all assessment readings and recommendations use a consistent load direction and dimension
+- [x] Reconcile app pricing, founding-rate, annual-savings, refund, age, data-processing, analytics, and founding-rate-lock claims with a single approved policy position
+- [x] Ensure Lifewoven Terms and Privacy consent is presented before the OAuth account-creation handoff
+- [x] Review and repair marketing-site navigation, sign-in destination, terminology, legal and privacy copy, payment claims, header layout, logo loading, and honeypot visibility
+- [x] Standardize public terminology across sites: Lumen, Load-Bearing Survey, and Alignment Fundamentals
+- [x] Update marketing privacy and homepage claims to accurately state data processing, analytics, and general-model-training limits
+- [x] Align marketing and app age thresholds, refund policy, pricing changes, and annual savings statement
+- [x] Add or update focused regression tests covering the anonymous-to-authenticated survey handoff and launch-trust requirements
+- [x] Run full app and marketing validation, complete a consumer-view pass, checkpoint the app, and record marketing source changes
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA

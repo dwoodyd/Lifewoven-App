@@ -216,6 +216,7 @@ export default function Dashboard() {
 
   const latestScores = ((dashData as any)?.latestSurvey?.scores ?? {}) as Record<string, number>;
   const hasSurveyReading = Object.keys(latestScores).length > 0;
+  const isFirstRun = isAuthenticated && !hasSurveyReading && !hasRecordedCheckIns && !hasHabits && !hasJournal;
 
   const nextStep = (() => {
     const base = !hasSurveyReading
@@ -268,6 +269,10 @@ export default function Dashboard() {
 
   if (lowBandwidthMode) {
     return <LowBandwidthDashboard onExit={toggleLowBandwidth} />;
+  }
+
+  if (isFirstRun) {
+    return <LowBandwidthDashboard onExit={toggleLowBandwidth} firstRun />;
   }
 
   if (isAuthenticated && dashLoading) {

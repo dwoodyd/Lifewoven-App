@@ -378,6 +378,38 @@ export const LIBRARY_ARTICLES: ArticleData[] = [
     ],
     coda: "The Align pathway on your dashboard is the interactive version of this practice. Use it daily.",
   },
+  {
+    slug: "load-bearing-beliefs-identification-guide",
+    title: "Load-Bearing Beliefs — Identification Guide",
+    subtitle: "Find the private conclusions that quietly organize what you attempt, avoid, and allow.",
+    category: "Standards",
+    type: "Guide",
+    author: "DeWayne Woods",
+    backHref: "/library",
+    backLabel: "Back to Library",
+    sections: [
+      { body: `Not every belief carries the same weight. Some are passing opinions; others become quiet rules about what you are allowed to need, whether support can be trusted, or what it means when you begin again. Those are load-bearing beliefs.\n\nA load-bearing belief may sound ordinary: *I have to keep everyone steady. If I cannot do it perfectly, I should not begin. Rest has to be earned.* The important question is what that thought asks your life to organize around. This guide helps you see the hidden rule before it keeps deciding for you.` },
+      { heading: "How to Recognize a Load-Bearing Belief", body: `Look for a thought that appears in more than one area of life. It may show up when you consider a new habit, receive feedback, disappoint someone, rest, ask for help, or choose between a familiar obligation and a more honest direction. The surface situation changes; the conclusion underneath stays remarkably consistent.\n\nA load-bearing belief often feels like a fact rather than an interpretation, creates a predictable pattern of over-functioning or avoidance, and becomes louder when you are close to meaningful change. Complete this sentence without correcting it yet: *In that moment, I act as though it is true that…*`, list: ["**Notice the rule.** What unspoken rule seems to govern this moment?", "**Name the cost.** What does following that rule cost your energy, honesty, relationships, or next step?", "**Find the evidence.** When has the rule been incomplete, untrue, or less absolute than it claims?", "**Choose a truer working belief.** Not a slogan; a sentence you can actually practice from today."] },
+      { heading: "A Four-Column Repair", body: `In The Weave, make four short columns: **The old rule; Where it shows up; What it protects; A truer practice.**\n\nFor example, an old rule might be: *If I pause, I will fall behind.* It may show up in overfilled days and anxiety about rest. A truer practice might be: *A deliberate pause helps me return with more capacity than panic does.* The new practice is not required to erase the old rule immediately. Its job is to make one honest alternative action possible today.` },
+    ],
+    coda: "The Story module can help you keep working with the belief once you have identified its structural role.",
+  },
+  {
+    slug: "honest-step-framework",
+    title: "The Honest Step Framework",
+    subtitle: "Choose the next action your current capacity can actually carry.",
+    category: "Strategy",
+    type: "Guide",
+    author: "DeWayne Woods",
+    backHref: "/library",
+    backLabel: "Back to Library",
+    sections: [
+      { body: `The honest step is not the perfect step, the impressive step, or the step that would settle the whole future at once. It is the next action that tells the truth about where you are, what matters, and what you can faithfully carry today.\n\nWhen a path feels impossible, the problem is often not a lack of ambition. The next move has been defined at a scale your present capacity cannot hold. The honest step restores contact with reality without asking you to abandon what you want.` },
+      { heading: "The Three Questions", body: `Before choosing an action, answer these questions in plain language. **What is actually true right now?** Name your available time, energy, obligations, and uncertainty. **What matters most inside those facts?** Choose what deserves care before urgency or appearance. **What can I complete or begin without borrowing against myself?** That answer is the honest step.\n\nA useful next step is small enough to begin, specific enough to recognize, and meaningful enough to create evidence that you can return.` },
+      { heading: "From Vague Pressure to a Usable Move", body: `Replace broad commands with observable actions. *Fix my life* becomes *write down the three commitments I am carrying this week.* *Get healthy* becomes *take a ten-minute walk before lunch.* *Figure out my career* becomes *send one message asking for a twenty-minute conversation.*\n\nIf an action still makes you brace, reduce its scale without removing its direction. At day’s end, ask without judgment: *Did I take the honest step? If not, what did it ask me to carry that was not actually available?* A missed action is information for the next design, not evidence against your character.` },
+    ],
+    coda: "Return to the Strategy module when you need to choose the next honest step in a larger decision.",
+  },
 ];
 
 export function getLibraryArticle(slug: string): ArticleData | undefined {
