@@ -1563,6 +1563,12 @@
 - [x] Access dwoodyd/lifewovenwebsite1 and confirm the verified marketing reconciliation is in its deployment branch
 - [x] Verify the corrected repository is the source connected to the public marketing deployment
 
+## Authenticated Survey Bypass
+
+- [x] Add a visible “Take me into the app” dashboard link to the authenticated in-app “Find your clearest place to begin” survey entry
+- [x] Verify the bypass preserves guest survey access and routes signed-in returning members directly to the dashboard
+- [x] Add regression coverage, run full validation, and checkpoint the bypass
+
 ## Lifewoven Enhancement Brief (Current Scope)
 
 - [x] Oracle Weekly Summary: require at least 3 Daily Check-ins or 1 Weave entry from the past 7 days before generation; otherwise render the specified grounded empty state and Weave CTA

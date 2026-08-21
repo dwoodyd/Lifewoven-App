@@ -305,6 +305,11 @@ export default function AlignmentAudit() {
         </div>
         <div className="space-y-3 mb-4">
           <Button size="lg" className="w-full gap-2" onClick={() => setStep("quiz")}><CheckCircle2 className="h-4 w-4" /> Start the Survey <ArrowRight className="h-4 w-4" /></Button>
+          {isAuthenticated && (
+            <Button variant="ghost" className="w-full" asChild>
+              <a href="/dashboard">Take me into the app</a>
+            </Button>
+          )}
         </div>
         <p className="text-xs text-muted-foreground">Your responses stay private and are used only to guide your experience.</p>
       </div>

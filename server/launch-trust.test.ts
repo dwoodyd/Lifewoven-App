@@ -31,6 +31,12 @@ describe("launch trust safeguards", () => {
     expect(audit).toContain("Start free — save my results");
   });
 
+  it("lets authenticated returning members bypass the survey entry and continue into the app", () => {
+    const audit = source("client/src/pages/AlignmentAudit.tsx");
+    expect(audit).toContain("isAuthenticated && (");
+    expect(audit).toContain('href="/dashboard">Take me into the app</a>');
+  });
+
   it("keeps app pricing claims tied to the displayed monthly comparison", () => {
     const pricing = source("client/src/pages/Pricing.tsx");
     expect(pricing).toContain("save 18% vs monthly");
