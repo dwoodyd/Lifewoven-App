@@ -1619,6 +1619,13 @@
 - [x] Align the marketing survey and account-entry copy with durable anonymous-result saving and the logged-out app bypass
 - [x] Validate and push any resulting marketing-source update for a new checkpoint
 
+## LW-01 Production Migration and Verification — August 21, 2026
+
+- [x] Inspect and apply Drizzle migration 0036_silent_frog_thor.sql to create the audit_claims table and expiry index
+- [x] Verify the production audit_claims schema and deployed claim-based OAuth return implementation
+- [x] Verify anonymous claim minting, authenticated claim redemption, persisted results, dashboard routing, and idempotency safeguards
+- [x] Record the production outcome and deployed checkpoint/version after the migration
+
 ## LW-01 Anonymous Result Persistence Repair — August 21, 2026
 
 - [x] Persist the completed anonymous survey result in durable browser storage before the OAuth redirect
