@@ -1,6 +1,6 @@
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { ShoppingBag, BookOpen, Layers, Star, Library, Lock, Percent, Check, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -112,6 +112,7 @@ const CATEGORIES = [
 export default function Store() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [purchasingId, setPurchasingId] = useState<string | null>(null);
+  const [, navigate] = useLocation();
   const { isAuthenticated } = useAuth();
 
   const { data: access } = trpc.store.getAccess.useQuery();
@@ -293,8 +294,14 @@ export default function Store() {
                     <div className="flex items-center gap-1.5 text-violet-300 text-sm">
                       <Check className="h-3.5 w-3.5" /> Included with Oracle
                     </div>
-                    <Button size="sm" variant="outline" className="border-violet-400/30 text-violet-300 hover:bg-violet-400/10" asChild>
-                      <Link href={product.category === "course" ? `/course/${product.id}` : `/product/${product.id}`}>Open</Link>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      className="border-violet-400/30 text-violet-300 hover:bg-violet-400/10"
+                      onClick={() => navigate(`/product/${product.id}`)}
+                    >
+                      Open
                     </Button>
                   </div>
                 ) : (
@@ -313,6 +320,7 @@ export default function Store() {
                     <Button
                       size="sm"
                       variant="outline"
+                      type="button"
                       onClick={() => handlePurchase(product.id, discountedPrice)}
                       disabled={purchasingId === product.id}
                     >

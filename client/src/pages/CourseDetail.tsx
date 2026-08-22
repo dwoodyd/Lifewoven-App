@@ -1,4 +1,4 @@
-import { useRoute } from "wouter";
+import { useLocation, useRoute } from "wouter";
 import DOMPurify from "dompurify";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,6 @@ import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useAdminPreview } from "@/contexts/AdminPreviewContext";
-import { getLoginUrl } from "@/const";
 import { useState } from "react";
 import { alignmentFundamentals, meaningFoundation, alignmentCurrent, identityInMotion, type CourseData } from "@/data/courseData";
 
@@ -60,19 +59,12 @@ const COURSE_PREVIEWS: Record<string, { label: string; excerpts: string[] }> = {
 };
 
 // Courses map to subscription tiers
-const COURSE_PLANS: Record<string, "seeker" | "oracle"> = {
-  "alignment-fundamentals": "seeker",
-  "meaning-foundation": "seeker",
-  "alignment-current": "oracle",
-  "identity-in-motion": "oracle",
-};
-
 export default function CourseDetail() {
   const [, params] = useRoute("/course/:id");
   const courseId = params?.id ?? "";
   const course = COURSES[courseId];
   const { user } = useAuth();
-  const { data: memberStatus } = trpc.paypalOrders.getMembershipStatus.useQuery(undefined, { enabled: !!user });
+  const [, navigate] = useLocation();
   const { data: myOrders } = trpc.paypalOrders.getMyOrders.useQuery(undefined, { enabled: !!user });
   const { data: storeProducts } = trpc.store.getProducts.useQuery();
 
@@ -106,25 +98,7 @@ export default function CourseDetail() {
     reissue.mutate({ productSlug: courseId });
   }
 
-  const handleEnroll = () => {
-    if (!user) {
-      window.location.href = getLoginUrl(window.location.pathname + window.location.search);
-      return;
-    }
-    if (effectiveAdmin) {
-      toast.success("Admin access — all course content is available to you.");
-      return;
-    }
-    const requiredPlan = COURSE_PLANS[courseId] ?? "seeker";
-    const currentTier = (memberStatus?.tier ?? "explorer") as "explorer" | "seeker" | "oracle";
-    const tierOrder: Record<"explorer" | "seeker" | "oracle", number> = { explorer: 0, seeker: 1, oracle: 2 };
-    if (tierOrder[currentTier] >= tierOrder[requiredPlan as "explorer" | "seeker" | "oracle"]) {
-      toast.success("You already have access!", { description: "Head to your dashboard to start this course." });
-      return;
-    }
-    // Redirect to pricing page for PayPal subscription
-    window.location.href = "/pricing";
-  };
+  const handleEnroll = () => navigate(`/product/${courseId}`);
 
   if (!course) {
     return (
@@ -141,8 +115,8 @@ export default function CourseDetail() {
   }
 
   const EnrollButton = ({ size = "lg" as "lg" | "default" }) => (effectiveAdmin || includedWithMembership) ? null : (
-    <Button size={size} className="gap-2" onClick={handleEnroll}>
-      Enroll Now — {course.price}
+    <Button type="button" size={size} className="gap-2" onClick={handleEnroll}>
+      Get the course PDF — {course.price}
     </Button>
   );
 

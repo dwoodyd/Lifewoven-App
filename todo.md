@@ -1637,6 +1637,14 @@
 - [x] Decide and label the course delivery model as PDF-first without representing the syllabus as a live in-app course reader
 - [x] Add focused delivery regressions, validate secure member download issuance without email or payment actions, and checkpoint the repair
 
+## Oracle Commerce Control Recovery — August 22, 2026
+
+- [x] Reproduce and correct the live Store Open controls, Downloads reissue controls, and product links that still use numeric IDs
+- [x] Provide a canonical PDF-first product detail or direct-download route for all nine published products
+- [x] Make download issuance errors visible to members and ensure Oracle membership issuance succeeds at the deployed gate
+- [x] Correct course-page entitlement buttons and investigate the inert non-entitled PayPal entry control without initiating payment
+- [ ] Add behavioral regression coverage, validate live routes and non-charging controls, and checkpoint the recovery
+
 ## LW-01 Anonymous Result Persistence Repair — August 21, 2026
 
 - [x] Persist the completed anonymous survey result in durable browser storage before the OAuth redirect

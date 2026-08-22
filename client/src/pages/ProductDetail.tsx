@@ -10,6 +10,7 @@ import { getLoginUrl } from "@/const";
 import { useState } from "react";
 import { toast } from "sonner";
 import { PayPalButton } from "@/components/PayPalButton";
+import PageSkeleton from "@/components/PageSkeleton";
 
 // SECURITY: No raw CDN/S3 URLs for paid deliverables are stored in the client bundle.
 // All paid file downloads are served exclusively through /api/download/:token.
@@ -203,7 +204,7 @@ const PRODUCTS: Record<string, {
 export default function ProductDetail() {
   const [, params] = useRoute("/product/:id");
   const productId = params?.id ?? "";
-  const product = PRODUCTS[productId];
+  const localProduct = PRODUCTS[productId];
   const { user, loading: authLoading } = useAuth();
   const [, navigate] = useLocation();
   const [notifyEmail, setNotifyEmail] = useState("");
@@ -221,7 +222,22 @@ export default function ProductDetail() {
   const { data: myOrders, refetch: refetchOrders } = trpc.paypalOrders.getMyOrders.useQuery(undefined, {
     enabled: !!user,
   });
-  const { data: storeProducts } = trpc.store.getProducts.useQuery();
+  const { data: storeProducts, isLoading: productsLoading } = trpc.store.getProducts.useQuery();
+  const serverProduct = storeProducts?.find((item) => item.slug === productId);
+  const product = localProduct ?? (serverProduct ? {
+    id: serverProduct.slug,
+    icon: serverProduct.type === "course" ? "📐" : serverProduct.type === "workbook" ? "✍️" : serverProduct.type === "script_bundle" ? "📝" : serverProduct.type === "card_deck" ? "🃏" : "📄",
+    category: serverProduct.type,
+    title: serverProduct.title,
+    subtitle: "Digital PDF delivery",
+    price: `$${serverProduct.basePrice}`,
+    priceInCents: Math.round(serverProduct.basePrice * 100),
+    description: serverProduct.description,
+    longDescription: serverProduct.description,
+    includes: ["Complete PDF edition", "Secure member delivery", "Download available immediately after access is confirmed"],
+    available: true,
+    tags: [serverProduct.type.replace("_", " "), "PDF delivery"],
+  } : undefined);
   const existingOrder = myOrders?.find((o: { productSlug: string | null }) => o.productSlug === productId);
   const alreadyPurchased = !!existingOrder;
   const includedWithMembership = storeProducts?.some((item) => item.slug === productId && item.isIncluded) ?? false;
@@ -235,7 +251,7 @@ export default function ProductDetail() {
       setDownloadToken(data.token);
       window.open(`/api/download/${data.token}`, "_blank");
     },
-    onError: () => toast.error("Could not generate download link. Please try again."),
+    onError: (error) => toast.error("Download link could not be generated", { description: error.message || "Please try again." }),
   });
 
   function handleDownload() {
@@ -262,6 +278,8 @@ export default function ProductDetail() {
   function handlePayPalError(msg: string) {
     toast.error("Payment failed", { description: msg });
   }
+
+  if (productsLoading) return <PageSkeleton />;
 
   if (!product) {
     return (

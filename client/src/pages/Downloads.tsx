@@ -1,6 +1,6 @@
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Download, ShoppingBag, RefreshCw, Clock, CheckCircle2, Loader2 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -35,6 +35,7 @@ const PRODUCT_ICONS: Record<string, string> = {
 
 export default function Downloads() {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
+  const [, navigate] = useLocation();
   const { data: orders, isLoading: ordersLoading, refetch } = trpc.paypalOrders.getMyOrders.useQuery(undefined, {
     enabled: !!user,
   });
@@ -48,8 +49,10 @@ export default function Downloads() {
       });
       window.open(`/api/download/${data.token}`, "_blank");
     },
-    onError: () => {
-      toast.error("Could not re-issue link", { description: "Please contact support if this persists." });
+    onError: (error) => {
+      toast.error("Download link could not be generated", {
+        description: error.message || "Please try again. If this persists, contact support.",
+      });
     },
   });
 
@@ -140,6 +143,7 @@ export default function Downloads() {
                       <Button
                         size="sm"
                         variant="outline"
+                        type="button"
                         className="gap-2"
                         onClick={() => reissue.mutate({ productSlug: order.productSlug ?? "" })}
                         disabled={reissue.isPending}
@@ -148,11 +152,15 @@ export default function Downloads() {
                         {isExpired ? "Generate fresh link" : "Generate download link"}
                       </Button>
                     )}
-                    <Link href={`/product/${order.productSlug}`}>
-                      <Button size="sm" variant="ghost" className="gap-2 text-muted-foreground">
-                        View Product
-                      </Button>
-                    </Link>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="ghost"
+                      className="gap-2 text-muted-foreground"
+                      onClick={() => navigate(`/product/${order.productSlug}`)}
+                    >
+                      View Product
+                    </Button>
                   </div>
                 </div>
               );

@@ -112,14 +112,29 @@ describe("launch trust safeguards", () => {
     expect(orders).toContain('No completed purchase or included membership access found');
     expect(orders).toContain('accessSource: "membership"');
     expect(orders).toContain('total: "0.00"');
-    expect(store).toContain('`/course/${product.id}` : `/product/${product.id}`');
+    expect(store).toContain('onClick={() => navigate(`/product/${product.id}`)}');
     expect(store).toContain("Included with Oracle");
     expect(downloads).toContain("Secure download link ready to generate");
     expect(downloads).toContain("Included with Oracle");
+    expect(downloads).toContain("Download link could not be generated");
     expect(course).toContain("PDF-first delivery");
     expect(course).toContain("Included with Oracle");
+    expect(course).toContain('type="button"');
+    expect(course).toContain('navigate(`/product/${courseId}`)');
+    expect(course).toContain("Get the course PDF");
     expect(nav).toContain('{ label: "Wisdom Tools", href: "/store" }');
     expect(nav).toContain("My Downloads");
+  });
+
+  it("keeps every published product on a canonical product route instead of a coming-soon dead end", () => {
+    const productDetail = source("client/src/pages/ProductDetail.tsx");
+    const downloads = source("client/src/pages/Downloads.tsx");
+
+    expect(productDetail).toContain("const serverProduct = storeProducts?.find");
+    expect(productDetail).toContain("const product = localProduct ?? (serverProduct ?");
+    expect(productDetail).toContain("if (productsLoading) return <PageSkeleton />");
+    expect(productDetail).toContain("Download link could not be generated");
+    expect(downloads).toContain('onClick={() => navigate(`/product/${order.productSlug}`)}');
   });
 
   it("uses the simplified single-action view for members with no first-run data", () => {
