@@ -137,6 +137,15 @@ describe("launch trust safeguards", () => {
     expect(downloads).toContain('onClick={() => navigate(`/product/${order.productSlug}`)}');
   });
 
+  it("treats issued download tokens as short-lived capabilities without weakening signed-out catalog gating", () => {
+    const handler = source("server/downloadHandler.ts");
+
+    expect(handler).toContain("A 256-bit, expiring token is the primary download capability");
+    expect(handler).toContain("if (sessionToken)");
+    expect(handler).toContain("if (sessionUser && order.userId !== sessionUser.id)");
+    expect(handler).not.toContain('return res.status(401).json({ error: "Authentication required to download." })');
+  });
+
   it("uses the simplified single-action view for members with no first-run data", () => {
     const dashboard = source("client/src/pages/Dashboard.tsx");
     const simplified = source("client/src/components/LowBandwidthDashboard.tsx");

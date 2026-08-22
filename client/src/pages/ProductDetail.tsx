@@ -324,13 +324,17 @@ export default function ProductDetail() {
           </p>
         </Link>
 
-        {/* Post-purchase success banner */}
+        {/* Access-ready banner */}
         {canDownload && (
           <div className="mb-8 p-5 rounded-2xl border border-green-500/30 bg-green-500/10 flex items-start gap-4">
             <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5 shrink-0" />
             <div>
-              <p className="text-base font-medium text-foreground mb-1">Purchase complete — your download is ready.</p>
-              <p className="text-sm text-muted-foreground mb-3">Thank you for your purchase. Click below to download your file.</p>
+              <p className="text-base font-medium text-foreground mb-1">
+                {includedWithMembership ? "Included with your Oracle membership — your download is ready." : "Purchase complete — your download is ready."}
+              </p>
+              <p className="text-sm text-muted-foreground mb-3">
+                {includedWithMembership ? "Your membership includes this file. Click below to generate your secure download." : "Thank you for your purchase. Click below to download your file."}
+              </p>
               <DownloadButton size="default" />
             </div>
           </div>

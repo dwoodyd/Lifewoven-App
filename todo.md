@@ -1643,6 +1643,8 @@
 - [x] Provide a canonical PDF-first product detail or direct-download route for all nine published products
 - [x] Make download issuance errors visible to members and ensure Oracle membership issuance succeeds at the deployed gate
 - [x] Correct course-page entitlement buttons and investigate the inert non-entitled PayPal entry control without initiating payment
+- [x] Replace purchase-complete wording on included Oracle product pages with accurate membership-access language
+- [x] Repair the authenticated secure-download token handoff so issued Oracle links do not resolve to a 401
 - [ ] Add behavioral regression coverage, validate live routes and non-charging controls, and checkpoint the recovery
 
 ## LW-01 Anonymous Result Persistence Repair — August 21, 2026

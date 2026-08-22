@@ -26,25 +26,24 @@ export async function downloadHandler(req: Request, res: Response) {
     return res.status(500).json({ error: "Database unavailable." });
   }
 
-  // Require authentication — bind download token to the session user
+  // A 256-bit, expiring token is the primary download capability. This keeps an
+  // issued link functional when it opens in a new browser context that does not
+  // carry the app session cookie. When a session is available, still bind it to
+  // the owning account as a defense-in-depth check.
   const sessionToken = req.cookies?.[COOKIE_NAME];
-  if (!sessionToken) {
-    return res.status(401).json({ error: "Authentication required to download." });
-  }
   let sessionUser: { id: number } | null = null;
-  try {
-    const info = await sdk.verifySession(sessionToken);
-    if (info?.openId) {
-      const dbConn = await getDb();
-      if (dbConn) {
-        const { users } = await import("../drizzle/schema");
-        const [u] = await dbConn.select({ id: users.id }).from(users).where(eq(users.openId, info.openId)).limit(1);
-        sessionUser = u ?? null;
+  if (sessionToken) {
+    try {
+      const info = await sdk.verifySession(sessionToken);
+      if (info?.openId) {
+        const dbConn = await getDb();
+        if (dbConn) {
+          const { users } = await import("../drizzle/schema");
+          const [u] = await dbConn.select({ id: users.id }).from(users).where(eq(users.openId, info.openId)).limit(1);
+          sessionUser = u ?? null;
+        }
       }
-    }
-  } catch { /* invalid session */ }
-  if (!sessionUser) {
-    return res.status(401).json({ error: "Invalid or expired session." });
+    } catch { /* A stale session does not invalidate an already-issued token. */ }
   }
 
   // Find the order by download token
@@ -58,8 +57,8 @@ export async function downloadHandler(req: Request, res: Response) {
     return res.status(404).json({ error: "Download link not found or already used." });
   }
 
-  // Verify the order belongs to the authenticated user
-  if (order.userId !== sessionUser.id) {
+  // When a valid session is present, it must belong to the token owner.
+  if (sessionUser && order.userId !== sessionUser.id) {
     return res.status(403).json({ error: "This download link does not belong to your account." });
   }
 
