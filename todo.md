@@ -1647,6 +1647,13 @@
 - [x] Repair the authenticated secure-download token handoff so issued Oracle links do not resolve to a 401
 - [ ] Add behavioral regression coverage, validate live routes and non-charging controls, and checkpoint the recovery
 
+## Self-Serve Acquisition Alignment — August 22, 2026
+
+- [x] Retire or redirect `/apply` to the immediate self-serve signup path while leaving invitation routes intact
+- [x] Remove the unsupported 30% standalone product discount claim from app pricing
+- [x] Confirm self-serve signup and instant Reading Bridge redemption remain free of approval or waiting states
+- [x] Add regression coverage, validate routes and pricing copy, and checkpoint the self-serve acquisition repair
+
 ## LW-01 Anonymous Result Persistence Repair — August 21, 2026
 
 - [x] Persist the completed anonymous survey result in durable browser storage before the OAuth redirect

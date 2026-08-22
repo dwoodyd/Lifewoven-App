@@ -1,7 +1,7 @@
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
-import { Check, Sparkles, Loader2, Lock, Library, Percent } from "lucide-react";
+import { Check, Sparkles, Loader2, Lock, Library } from "lucide-react";
 import { getLoginUrl } from "@/const";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { toast } from "sonner";
@@ -62,7 +62,6 @@ const TIERS = [
       "Belief rewrite system",
       "The Ground full practice suite",
       "Priority support",
-      "30% off all standalone store products",
     ],
   },
   {
@@ -98,10 +97,10 @@ const TIERS = [
 ];
 
 const LIBRARY_ROWS: [string, string | boolean, string | boolean, string | boolean][] = [
-  ["All 4 courses", false, "30% off", "Included"],
-  ["Both workbooks", false, "30% off", "Included"],
-  ["All guided scripts", false, "30% off", "Included"],
-  ["Wisdom Card Deck", false, "30% off", "Included"],
+  ["All 4 courses", false, false, "Included"],
+  ["Both workbooks", false, false, "Included"],
+  ["All guided scripts", false, false, "Included"],
+  ["Wisdom Card Deck", false, false, "Included"],
 ];
 
 export default function Pricing() {
@@ -249,7 +248,6 @@ export default function Pricing() {
 
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    {tier.id === "seeker" && <Percent className="h-4 w-4 text-amber-400" />}
                     {tier.id === "oracle" && <Library className="h-4 w-4 text-violet-400" />}
                     <h2 className="font-serif text-xl font-light text-foreground">{tier.name}</h2>
                   </div>
@@ -321,17 +319,6 @@ export default function Pricing() {
                   </div>
                 )}
 
-                {/* Founding Access CTA — shown below Oracle card for non-current-plan users */}
-                {tier.id === "oracle" && !isCurrent && (
-                  <div className="rounded-xl border border-violet-400/25 bg-violet-500/8 p-4 text-center">
-                    <p className="text-xs text-violet-300/80 leading-relaxed mb-3">
-                      Founding Members receive the current founding rate while their subscription remains active.
-                    </p>
-                    <Button asChild size="sm" variant="outline" className="w-full border-violet-400/40 text-violet-300 hover:bg-violet-400/10">
-                      <Link href="/apply">Apply for Founding Access</Link>
-                    </Button>
-                  </div>
-                )}
               </div>
             );
           })}

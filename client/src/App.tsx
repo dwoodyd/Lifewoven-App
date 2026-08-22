@@ -61,7 +61,6 @@ import Downloads from "./pages/Downloads";
 import Referrals from "./pages/Referrals";
 import BetaAccess from "./pages/BetaAccess";
 import SubscriptionSuccess from "./pages/SubscriptionSuccess";
-import Apply from "./pages/Apply";
 import InviteRedeem from "./pages/InviteRedeem";
 import Character from "./pages/Character";
 import CharacterBook from "./pages/CharacterBook";
@@ -174,7 +173,7 @@ function RouterSwitch() {
       <Route path="/downloads" component={Downloads} />
       <Route path="/referrals" component={Referrals} />
       <Route path="/beta" component={BetaAccess} />
-      <Route path="/apply" component={Apply} />
+      <Route path="/apply"><Redirect to="/signup" replace /></Route>
       <Route path="/invite/:code" component={InviteRedeem} />
       <Route path="/subscription/success" component={SubscriptionSuccess} />
 

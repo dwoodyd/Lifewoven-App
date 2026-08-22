@@ -206,4 +206,17 @@ describe("launch trust safeguards", () => {
     expect(privacy).toContain("attention, overwhelm, time perception");
     expect(privacy).toContain("aged 18 and over");
   });
+
+  it("keeps founding acquisition self-serve without an application gate or unsupported store discount", () => {
+    const app = source("client/src/App.tsx");
+    const pricing = source("client/src/pages/Pricing.tsx");
+    const beta = source("server/routers/beta.ts");
+
+    expect(app).toContain('<Route path="/apply"><Redirect to="/signup" replace /></Route>');
+    expect(app).toContain('<Route path="/invite/:code" component={InviteRedeem} />');
+    expect(pricing).not.toContain("30% off all standalone store products");
+    expect(pricing).not.toContain('href="/apply"');
+    expect(beta).toContain("User: redeem a beta code");
+    expect(beta).toContain("return { ok: true");
+  });
 });
