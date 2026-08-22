@@ -1626,6 +1626,17 @@
 - [x] Verify anonymous claim minting, authenticated claim redemption, persisted results, dashboard routing, and idempotency safeguards
 - [x] Record the production outcome and deployed checkpoint/version after the migration
 
+## Oracle Bundle Delivery Repair — August 22, 2026
+
+- [x] Allow Oracle-entitled members to issue secure product downloads without a completed PayPal order
+- [x] Distinguish included access with no issued link from an expired purchase link on My Downloads
+- [x] Resolve Store and My Downloads product links through canonical product slugs and prevent coming-soon dead ends
+- [x] Render included Oracle access on course pages without a base-price enrollment prompt
+- [x] Make Wisdom Tools and My Downloads discoverable in member navigation
+- [x] Rename Reset Audio and Morning Alignment Series in product data, correct their types, and align the Wisdom Tools filter labels
+- [x] Decide and label the course delivery model as PDF-first without representing the syllabus as a live in-app course reader
+- [x] Add focused delivery regressions, validate secure member download issuance without email or payment actions, and checkpoint the repair
+
 ## LW-01 Anonymous Result Persistence Repair — August 21, 2026
 
 - [x] Persist the completed anonymous survey result in durable browser storage before the OAuth redirect

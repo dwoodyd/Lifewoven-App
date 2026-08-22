@@ -16,7 +16,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Moon, Sun, Menu, X, CheckSquare, ClipboardList, BookOpen,
   BookMarked, BarChart2, ShoppingBag, CreditCard, Info, Settings,
-  HelpCircle, LogOut, ExternalLink, Target, Layers,
+  HelpCircle, LogOut, ExternalLink, Target, Layers, Download,
 } from "lucide-react";
 import { replayOnboarding } from "@/components/OnboardingModal";
 import { useSignOut } from "@/hooks/useSignOut";
@@ -28,6 +28,7 @@ const primaryLinks = [
   { label: "The Weave", href: "/weave" },
   { label: "Oracle", href: "/oracle" },
   { label: "Resources", href: "/library" },
+  { label: "Wisdom Tools", href: "/store" },
 ];
 
 export default function Nav() {
@@ -166,6 +167,11 @@ export default function Nav() {
                 <DropdownMenuItem asChild>
                   <Link href="/my-library" className="flex items-center gap-2">
                     <BookOpen className="h-3.5 w-3.5" />My Library
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/downloads" className="flex items-center gap-2">
+                    <Download className="h-3.5 w-3.5" />My Downloads
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
@@ -320,6 +326,9 @@ export default function Nav() {
                 </Button>
                 <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground justify-start">
                   <Link href="/my-library" onClick={closeMobile}><BookOpen className="h-4 w-4" />My Library</Link>
+                </Button>
+                <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground justify-start">
+                  <Link href="/downloads" onClick={closeMobile}><Download className="h-4 w-4" />My Downloads</Link>
                 </Button>
 
                 <p className="text-xs text-muted-foreground px-2 pt-2 font-medium uppercase tracking-wide">More from Soul Engineer</p>

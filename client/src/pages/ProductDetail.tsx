@@ -221,12 +221,14 @@ export default function ProductDetail() {
   const { data: myOrders, refetch: refetchOrders } = trpc.paypalOrders.getMyOrders.useQuery(undefined, {
     enabled: !!user,
   });
+  const { data: storeProducts } = trpc.store.getProducts.useQuery();
   const existingOrder = myOrders?.find((o: { productSlug: string | null }) => o.productSlug === productId);
   const alreadyPurchased = !!existingOrder;
+  const includedWithMembership = storeProducts?.some((item) => item.slug === productId && item.isIncluded) ?? false;
 
   // Token state — re-issued on demand via server
   const [downloadToken, setDownloadToken] = useState<string | null>(null);
-  const canDownloadNow = alreadyPurchased || purchaseSuccess || downloadToken !== null;
+  const canDownloadNow = alreadyPurchased || includedWithMembership || purchaseSuccess || downloadToken !== null;
 
   const reissue = trpc.paypalOrders.reissueDownload.useMutation({
     onSuccess: (data) => {
@@ -345,7 +347,7 @@ export default function ProductDetail() {
           <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-3 break-words">{product.title}</h1>
           <p className="text-lg sm:text-xl text-muted-foreground font-light mb-5">{product.subtitle}</p>
           <div className="flex flex-wrap items-center gap-4 mb-6">
-            <span className="text-2xl font-light text-foreground">{product.price}</span>
+            <span className="text-2xl font-light text-foreground">{includedWithMembership ? "Included with Oracle" : product.price}</span>
             <div className="flex flex-wrap gap-1.5">
               {product.tags.map(tag => (
                 <span key={tag} className="text-xs px-2 py-0.5 rounded-full bg-secondary text-muted-foreground">{tag}</span>

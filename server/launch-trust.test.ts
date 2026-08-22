@@ -101,6 +101,27 @@ describe("launch trust safeguards", () => {
     expect(articles).toContain('slug: "honest-step-framework"');
   });
 
+  it("issues secure downloads for Oracle-included tools and keeps their routes and delivery labels canonical", () => {
+    const orders = source("server/routers/paypalOrders.ts");
+    const store = source("client/src/pages/Store.tsx");
+    const downloads = source("client/src/pages/Downloads.tsx");
+    const course = source("client/src/pages/CourseDetail.tsx");
+    const nav = source("client/src/components/Nav.tsx");
+
+    expect(orders).toContain('getAccessLevel(ctx.user.membershipTier');
+    expect(orders).toContain('No completed purchase or included membership access found');
+    expect(orders).toContain('accessSource: "membership"');
+    expect(orders).toContain('total: "0.00"');
+    expect(store).toContain('`/course/${product.id}` : `/product/${product.id}`');
+    expect(store).toContain("Included with Oracle");
+    expect(downloads).toContain("Secure download link ready to generate");
+    expect(downloads).toContain("Included with Oracle");
+    expect(course).toContain("PDF-first delivery");
+    expect(course).toContain("Included with Oracle");
+    expect(nav).toContain('{ label: "Wisdom Tools", href: "/store" }');
+    expect(nav).toContain("My Downloads");
+  });
+
   it("uses the simplified single-action view for members with no first-run data", () => {
     const dashboard = source("client/src/pages/Dashboard.tsx");
     const simplified = source("client/src/components/LowBandwidthDashboard.tsx");

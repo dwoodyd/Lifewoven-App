@@ -356,7 +356,7 @@ export const products = mysqlTable("products", {
   slug: varchar("slug", { length: 128 }).notNull().unique(),
   title: varchar("title", { length: 255 }).notNull(),
   description: text("description"),
-  type: mysqlEnum("type", ["course", "workbook", "card_deck", "audio_bundle", "planner", "guide"]).notNull(),
+  type: mysqlEnum("type", ["course", "workbook", "card_deck", "audio_bundle", "script_bundle", "planner", "guide"]).notNull(),
   price: decimal("price", { precision: 8, scale: 2 }).notNull(),
   thumbnailUrl: text("thumbnailUrl"),
   downloadUrl: text("downloadUrl"),

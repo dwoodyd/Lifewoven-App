@@ -291,10 +291,10 @@ export default function Store() {
                 {product.isIncluded ? (
                   <div className="flex items-center justify-between pt-2 border-t border-violet-400/20">
                     <div className="flex items-center gap-1.5 text-violet-300 text-sm">
-                      <Check className="h-3.5 w-3.5" /> In your library
+                      <Check className="h-3.5 w-3.5" /> Included with Oracle
                     </div>
                     <Button size="sm" variant="outline" className="border-violet-400/30 text-violet-300 hover:bg-violet-400/10" asChild>
-                      <Link href={`/course/${product.id}`}>Open</Link>
+                      <Link href={product.category === "course" ? `/course/${product.id}` : `/product/${product.id}`}>Open</Link>
                     </Button>
                   </div>
                 ) : (

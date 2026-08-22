@@ -79,14 +79,14 @@ export default function Downloads() {
           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">Account</p>
           <h1 className="font-serif text-3xl sm:text-4xl font-light text-foreground mb-2">My Downloads</h1>
           <p className="text-muted-foreground text-base font-light">
-            Your purchased products. Download links are valid for 72 hours — use the re-send button to generate a fresh link anytime.
+            Your Wisdom Tools. Included member access and purchases both receive secure download links valid for 72 hours.
           </p>
         </div>
 
         {completedOrders.length === 0 ? (
           <div className="p-10 rounded-2xl border border-border bg-card text-center">
             <ShoppingBag className="h-10 w-10 text-muted-foreground mx-auto mb-4 opacity-30" />
-            <p className="text-muted-foreground text-base mb-6">You haven't purchased anything yet.</p>
+            <p className="text-muted-foreground text-base mb-6">You do not have any Wisdom Tools available yet.</p>
             <Link href="/store">
               <Button variant="outline" className="gap-2">
                 <ShoppingBag className="h-4 w-4" /> Browse the Store
@@ -95,12 +95,14 @@ export default function Downloads() {
           </div>
         ) : (
           <div className="space-y-4">
-            {completedOrders.map((order: { id: number; productSlug: string | null; downloadToken: string | null; downloadExpiresAt: Date | null; createdAt: Date }) => {
+            {completedOrders.map((order: { id: number; productSlug: string | null; downloadToken: string | null; downloadExpiresAt: Date | null; createdAt: Date; accessSource?: "membership" | "purchase" }) => {
               const title = PRODUCT_TITLES[order.productSlug ?? ""] ?? order.productSlug ?? "Product";
               const icon = PRODUCT_ICONS[order.productSlug ?? ""] ?? "📄";
               const token = order.downloadToken;
               const expiresAt = order.downloadExpiresAt ? new Date(order.downloadExpiresAt) : null;
-              const isExpired = expiresAt ? expiresAt < new Date() : true;
+              const hasIssuedLink = Boolean(token && expiresAt);
+              const isExpired = hasIssuedLink && expiresAt ? expiresAt < new Date() : false;
+              const isIncluded = order.accessSource === "membership";
               const purchasedAt = order.createdAt ? new Date(order.createdAt).toLocaleDateString() : "—";
 
               return (
@@ -108,11 +110,16 @@ export default function Downloads() {
                   <div className="text-3xl shrink-0">{icon}</div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-serif text-lg font-light text-foreground mb-0.5">{title}</h3>
-                    <p className="text-sm text-muted-foreground">Purchased {purchasedAt}</p>
+                    <p className="text-sm text-muted-foreground">{isIncluded ? "Included with Oracle" : `Purchased ${purchasedAt}`}</p>
                     {!isExpired && expiresAt && (
                       <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
                         <Clock className="h-3 w-3" />
                         Link expires {expiresAt.toLocaleString()}
+                      </p>
+                    )}
+                    {!hasIssuedLink && (
+                      <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+                        <Download className="h-3 w-3" /> Secure download link ready to generate
                       </p>
                     )}
                     {isExpired && (
@@ -138,7 +145,7 @@ export default function Downloads() {
                         disabled={reissue.isPending}
                       >
                         {reissue.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RefreshCw className="h-3.5 w-3.5" />}
-                        {isExpired ? "Re-send Link" : "Download"}
+                        {isExpired ? "Generate fresh link" : "Generate download link"}
                       </Button>
                     )}
                     <Link href={`/product/${order.productSlug}`}>

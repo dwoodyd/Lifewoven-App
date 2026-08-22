@@ -74,6 +74,7 @@ export default function CourseDetail() {
   const { user } = useAuth();
   const { data: memberStatus } = trpc.paypalOrders.getMembershipStatus.useQuery(undefined, { enabled: !!user });
   const { data: myOrders } = trpc.paypalOrders.getMyOrders.useQuery(undefined, { enabled: !!user });
+  const { data: storeProducts } = trpc.store.getProducts.useQuery();
 
   const isAdmin = false;
   const { previewAsUser, togglePreview } = useAdminPreview();
@@ -84,6 +85,8 @@ export default function CourseDetail() {
   const existingOrder = myOrders?.find(o => o.productSlug === courseId);
   const activeToken = downloadToken ?? existingOrder?.downloadToken ?? null;
   const hasPurchasedCourse = !!existingOrder || effectiveAdmin;
+  const includedWithMembership = storeProducts?.some((product) => product.slug === courseId && product.isIncluded) ?? false;
+  const hasCourseAccess = hasPurchasedCourse || includedWithMembership;
 
   const reissue = trpc.paypalOrders.reissueDownload.useMutation({
     onSuccess: (data) => {
@@ -137,14 +140,14 @@ export default function CourseDetail() {
     );
   }
 
-  const EnrollButton = ({ size = "lg" as "lg" | "default" }) => effectiveAdmin ? null : (
+  const EnrollButton = ({ size = "lg" as "lg" | "default" }) => (effectiveAdmin || includedWithMembership) ? null : (
     <Button size={size} className="gap-2" onClick={handleEnroll}>
       Enroll Now — {course.price}
     </Button>
   );
 
   const DownloadButton = ({ size = "lg" as "lg" | "default" }) => (
-    hasPurchasedCourse && COURSE_PDF_SLUGS.has(courseId) ? (
+    hasCourseAccess && COURSE_PDF_SLUGS.has(courseId) ? (
       <Button size={size} variant="outline" className="gap-2" onClick={handleDownloadCourse} disabled={reissue.isPending}>
         {reissue.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
         Download Course PDF
@@ -186,7 +189,7 @@ export default function CourseDetail() {
           <p className="text-lg sm:text-xl text-muted-foreground font-light mb-5">{course.subtitle}</p>
           <div className="flex flex-wrap items-center gap-3 mb-6">
             <span className="flex items-center gap-1.5 text-sm text-muted-foreground"><Clock className="h-4 w-4" />{course.duration}</span>
-            <span className="text-2xl font-light text-foreground">{course.price}</span>
+            <span className="text-2xl font-light text-foreground">{includedWithMembership ? "Included with Oracle" : course.price}</span>
           </div>
           <div className="flex flex-wrap gap-3">
             <EnrollButton />
@@ -221,9 +224,13 @@ export default function CourseDetail() {
           </div>
         )}
 
-        {/* Curriculum */}
+        <div className="mb-8 p-4 sm:p-6 rounded-2xl border border-violet-400/25 bg-violet-400/5">
+          <h2 className="font-serif text-2xl font-light text-foreground mb-3">PDF-first delivery</h2>
+          <p className="text-base text-muted-foreground font-light leading-relaxed">This course is delivered as a complete PDF with the full lesson bodies, exercises, and prompts. The outline below is a guide to what is included; use the download above to begin reading.</p>
+        </div>
+        {/* PDF contents */}
         <div>
-          <h2 className="font-serif text-2xl font-light text-foreground mb-6">Curriculum</h2>
+          <h2 className="font-serif text-2xl font-light text-foreground mb-6">Inside the PDF</h2>
           <div className="space-y-8">
             {course.weeks.map(week => (
               <div key={week.weekNum} className="border border-border rounded-2xl overflow-hidden">
