@@ -88,11 +88,11 @@ const PRODUCTS: Record<string, {
       "90 daily prompts across all 5S dimensions",
       "13 weekly integration reviews",
       "The complete 5S Framework orientation",
-      "Interactive document — printable from your browser",
-      "Exportable as Markdown"
+      "Printable PDF — 33 pages",
+      "Immediate download after purchase"
     ],
     available: true,
-    tags: ["Journal", "Interactive", "90 days", "5S Framework"],
+    tags: ["Journal", "PDF", "90 days", "5S Framework"],
   },
   "wisdom-card-deck": {
     id: "wisdom-card-deck",
@@ -108,11 +108,11 @@ const PRODUCTS: Record<string, {
       "52 wisdom cards — one per week for a year",
       "Cards from all four Lifewoven wisdom traditions",
       "Usage guide and practice instructions",
-      "Interactive card deck — printable from your browser",
-      "Exportable as Markdown"
+      "Digital Card Deck PDF — 12 pages",
+      "Immediate download after purchase"
     ],
     available: true,
-    tags: ["Cards", "Interactive", "52 cards", "Year-long practice"],
+    tags: ["Cards", "PDF", "52 cards", "Year-long practice"],
   },
   "morning-alignment-audio": {
     id: "morning-alignment-audio",
@@ -129,11 +129,11 @@ const PRODUCTS: Record<string, {
       "Monday: State · Tuesday: Belief · Wednesday: Body & Energy",
       "Thursday: Clarity · Friday: Identity · Saturday: Appreciation · Sunday: Integration",
       "~15 minutes per script",
-      "Interactive documents — printable from your browser",
-      "Exportable as Markdown"
+      "Audio Scripts PDF",
+      "Immediate download after purchase"
     ],
     available: true,
-    tags: ["Scripts", "Morning Practice", "7 days"],
+    tags: ["Audio Scripts PDF", "Morning Practice", "7 scripts"],
   },
   "belief-rewrite-workbook": {
     id: "belief-rewrite-workbook",
@@ -150,11 +150,11 @@ const PRODUCTS: Record<string, {
       "Belief surfacing and examination exercises",
       "Evidence-gathering and rewrite protocols",
       "Story module orientation from the 5S Framework",
-      "Interactive document — printable from your browser",
-      "Exportable as Markdown"
+      "Workbook PDF",
+      "Immediate download after purchase"
     ],
     available: true,
-    tags: ["Beliefs", "Interactive", "30 days", "Story Module"],
+    tags: ["Beliefs", "PDF", "30 days", "Story Module"],
   },
   "identity-stack-workbook": {
     id: "identity-stack-workbook",
@@ -172,11 +172,11 @@ const PRODUCTS: Record<string, {
       "Better Mirror tracking system",
       "Identity declaration templates",
       "Weekly review structure",
-      "Interactive document — printable from your browser",
-      "Exportable as Markdown"
+      "Workbook PDF",
+      "Immediate download after purchase"
     ],
     available: true,
-    tags: ["Habits", "Identity", "Interactive", "Behavior Science"],
+    tags: ["Habits", "Identity", "PDF", "Behavior Science"],
   },
   "reset-audio": {
     id: "reset-audio",
@@ -184,19 +184,19 @@ const PRODUCTS: Record<string, {
     category: "scripts",
     title: "The Reset Protocol",
     subtitle: "The Complete Return",
-    price: "$12",
-    priceInCents: 1200,
+    price: "$27",
+    priceInCents: 2700,
     description: "The complete guided script for the Reset protocol — a 45-minute practice you can read through at your own pace, or record in your own voice.",
     longDescription: `The Reset pathway is built on a single premise: returning is not failure. It is the practice.\n\nThis guided practice walks you through the complete Reset protocol — a 45-minute journey from wherever you are to a place of genuine re-ground. It is not a motivational session. It is not a pep talk. It is a structured, compassionate process for the specific experience of having lost your footing and needing to find it again.\n\nThe Reset Protocol is for the moments when you know something has shifted — when alignment feels distant, when the story has gone dark, when energy is low, and the path forward is unclear. It meets you there without judgment and walks you back.`,
     includes: [
       "Complete 45-minute Reset protocol script",
       "Read-through pacing notes",
       "Pause and breath markers",
-      "Interactive document — printable from your browser",
-      "Exportable as Markdown"
+      "Audio Scripts PDF",
+      "Immediate download after purchase"
     ],
     available: true,
-    tags: ["Guided Script", "Resilience", "45 min", "Reset Pathway"],
+    tags: ["Audio Scripts PDF", "Resilience", "45 min", "Reset Pathway"],
   },
 };
 

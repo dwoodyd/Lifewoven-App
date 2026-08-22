@@ -1656,3 +1656,12 @@
 - [x] Replace all app catalog retail-value claims of $607 with $592.
 - [x] Audit the Resource Library Audio filter and preserve it only for verified audio resources.
 - [x] Add regression coverage and validate the corrected app catalog before checkpointing.
+
+## Library Products — Revision 3 Audio Withdrawal (August 21, 2026)
+
+- [ ] Restore the verified PDF delivery labels and original $607 catalog total across app storefront surfaces.
+- [ ] Restore The Reset Protocol’s $27 price while retaining its renamed, recording-free script framing.
+- [ ] Remove only untrue recording, AI-voice, MP3, and audio-session promises from app product pages.
+- [ ] Keep the marketplace Audio tab renamed to Scripts and update its products without changing their verified PDF delivery.
+- [ ] Verify Resource Library Audio resources are recordings; rename the filter only where items are scripts or documents.
+- [ ] Revise regression tests to protect revision-3 pricing and PDF labels while rejecting untrue recording claims.

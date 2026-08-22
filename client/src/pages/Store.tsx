@@ -57,7 +57,7 @@ const PRODUCT_CATALOG = [
     subtitle: "Rewire Your Story in 30 Days",
     price: 19,
     description: "The story you tell about yourself is not a description of reality — it is a set of instructions. A structured 30-day process for surfacing the beliefs most actively limiting your experience and rewriting them with evidence.",
-    tags: ["Beliefs", "Interactive", "30 days"],
+    tags: ["Beliefs", "Workbook PDF", "30 days"],
   },
   {
     id: "identity-stack-workbook",
@@ -67,7 +67,7 @@ const PRODUCT_CATALOG = [
     subtitle: "Design the Habits That Make You, You",
     price: 22,
     description: "Who you are becoming shapes what you do. This workbook walks you through the complete identity-based habit design process — from surfacing your current identity architecture to building the habit stack that carries it into daily life.",
-    tags: ["Habits", "Identity", "Interactive"],
+    tags: ["Habits", "Identity", "Workbook PDF"],
   },
   {
     id: "morning-alignment-audio",
@@ -77,7 +77,7 @@ const PRODUCT_CATALOG = [
     subtitle: "7 Narrated Scripts",
     price: 37,
     description: "Fifteen minutes, before the day asks anything of you. Seven complete narrated scripts — one for each day of the week — moving through Arrive, Acknowledge, Appreciate, Intend, and Release.",
-    tags: ["Scripts", "Morning", "7 days"],
+    tags: ["Audio Scripts PDF", "Morning", "7 scripts"],
   },
   {
     id: "reset-audio",
@@ -85,9 +85,9 @@ const PRODUCT_CATALOG = [
     icon: "🔄",
     title: "The Reset Protocol",
     subtitle: "45-Minute Guided Script",
-    price: 12,
+    price: 27,
     description: "The complete guided script for the Reset protocol — a 45-minute practice you can read through at your own pace, or record in your own voice.",
-    tags: ["Guided Script", "Reset", "45 min"],
+    tags: ["Audio Scripts PDF", "Reset", "45 min"],
   },
   {
     id: "wisdom-card-deck",
@@ -213,7 +213,7 @@ export default function Store() {
           ) : (
             <div className="space-y-4">
               <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto">
-                Courses, workbooks, audio programs, and card decks — each one an original Lifewoven creation.
+                Courses, workbooks, guided scripts, and card decks — each one an original Lifewoven creation.
               </p>
               <div className="max-w-2xl mx-auto px-5 py-4 rounded-2xl border border-amber-500/25 bg-amber-500/5 flex flex-col sm:flex-row items-center gap-4 text-left">
                 <div className="flex-1">
@@ -339,7 +339,7 @@ export default function Store() {
               Get everything. Pay once a month.
             </h2>
             <p className="text-muted-foreground text-base max-w-2xl mx-auto mb-2 leading-relaxed">
-              Oracle members get the complete Lifewoven library — all 4 courses, both workbooks, all guided scripts, and the Wisdom Card Deck — included with their membership. Combined retail value: $592.
+              Oracle members get the complete Lifewoven library — all 4 courses, both workbooks, all guided scripts, and the Wisdom Card Deck — included with their membership. Combined retail value: $607.
             </p>
             <p className="text-violet-300 text-sm mb-8">
               Founding rate: $25/mo (retail $49/mo). Locked for life.

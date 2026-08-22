@@ -317,7 +317,7 @@ export default function Pricing() {
                         <span className="text-xs text-muted-foreground leading-snug">{item}</span>
                       </div>
                     ))}
-                    <p className="text-xs text-violet-300/70 mt-1">Combined retail: $592. Yours with Oracle.</p>
+                    <p className="text-xs text-violet-300/70 mt-1">Combined retail: $607. Yours with Oracle.</p>
                   </div>
                 )}
 
