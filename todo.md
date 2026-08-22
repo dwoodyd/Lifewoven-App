@@ -1647,3 +1647,12 @@
 - [x] Audit The Ground flow, Weave editor, Oracle input, and installation experience at a 390px mobile viewport; resolve documented usability gaps
 - [x] Add configurable daily PWA reminder settings, defaulting to 8:00 AM in the user’s device time zone, plus push-subscription persistence, permission handling, and scheduled delivery for The Ground
 - [x] Add offline-first saving and sync feedback for The Ground, The Weave, and Daily Check-In; add graceful offline states and cached insight fallbacks for Oracle
+
+## Library Products — Format Claims & Repricing (August 21, 2026)
+
+- [x] Rename Reset Audio to The Reset Protocol and change its standalone price from $27 to $12 across the app catalog.
+- [x] Replace unsupported audio, MP3, and PDF claims with the approved script and interactive-document labels.
+- [x] Replace the app marketplace Audio category with Scripts and remove inactive audio-player UI.
+- [x] Replace all app catalog retail-value claims of $607 with $592.
+- [x] Audit the Resource Library Audio filter and preserve it only for verified audio resources.
+- [x] Add regression coverage and validate the corrected app catalog before checkpointing.

@@ -1,7 +1,7 @@
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { ShoppingBag, BookOpen, Headphones, Layers, Star, Library, Lock, Percent, Check, Loader2 } from "lucide-react";
+import { ShoppingBag, BookOpen, Layers, Star, Library, Lock, Percent, Check, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
@@ -57,7 +57,7 @@ const PRODUCT_CATALOG = [
     subtitle: "Rewire Your Story in 30 Days",
     price: 19,
     description: "The story you tell about yourself is not a description of reality — it is a set of instructions. A structured 30-day process for surfacing the beliefs most actively limiting your experience and rewriting them with evidence.",
-    tags: ["Beliefs", "PDF", "30 days"],
+    tags: ["Beliefs", "Interactive", "30 days"],
   },
   {
     id: "identity-stack-workbook",
@@ -67,27 +67,27 @@ const PRODUCT_CATALOG = [
     subtitle: "Design the Habits That Make You, You",
     price: 22,
     description: "Who you are becoming shapes what you do. This workbook walks you through the complete identity-based habit design process — from surfacing your current identity architecture to building the habit stack that carries it into daily life.",
-    tags: ["Habits", "Identity", "PDF"],
+    tags: ["Habits", "Identity", "Interactive"],
   },
   {
     id: "morning-alignment-audio",
-    category: "audio",
-    icon: "🎧",
+    category: "scripts",
+    icon: "📝",
     title: "Morning Alignment Series",
-    subtitle: "7 Guided Morning Practices",
+    subtitle: "7 Narrated Scripts",
     price: 37,
-    description: "Fifteen minutes, before the day asks anything of you. Seven complete guided sessions — one for each day of the week — moving through Arrive, Acknowledge, Appreciate, Intend, and Release.",
-    tags: ["Audio", "Morning", "7 sessions"],
+    description: "Fifteen minutes, before the day asks anything of you. Seven complete narrated scripts — one for each day of the week — moving through Arrive, Acknowledge, Appreciate, Intend, and Release.",
+    tags: ["Scripts", "Morning", "7 days"],
   },
   {
     id: "reset-audio",
-    category: "audio",
+    category: "scripts",
     icon: "🔄",
-    title: "Reset Audio",
-    subtitle: "Guided Re-entry Practices",
-    price: 27,
-    description: "When you fall off — and you will — this is how you come back. Six guided audio sessions for re-entry: after a hard week, a pause, a season of drift. No shame. Just return.",
-    tags: ["Audio", "Reset", "6 sessions"],
+    title: "The Reset Protocol",
+    subtitle: "45-Minute Guided Script",
+    price: 12,
+    description: "The complete guided script for the Reset protocol — a 45-minute practice you can read through at your own pace, or record in your own voice.",
+    tags: ["Guided Script", "Reset", "45 min"],
   },
   {
     id: "wisdom-card-deck",
@@ -105,7 +105,7 @@ const CATEGORIES = [
   { id: "all", label: "All", icon: ShoppingBag },
   { id: "course", label: "Courses", icon: Layers },
   { id: "workbook", label: "Workbooks", icon: BookOpen },
-  { id: "audio", label: "Audio", icon: Headphones },
+  { id: "scripts", label: "Scripts", icon: BookOpen },
   { id: "cards", label: "Card Decks", icon: Star },
 ];
 
@@ -339,7 +339,7 @@ export default function Store() {
               Get everything. Pay once a month.
             </h2>
             <p className="text-muted-foreground text-base max-w-2xl mx-auto mb-2 leading-relaxed">
-              Oracle members get the complete Lifewoven library — all 4 courses, both workbooks, all audio programs, and the Wisdom Card Deck — included with their membership. Combined retail value: $607.
+              Oracle members get the complete Lifewoven library — all 4 courses, both workbooks, all guided scripts, and the Wisdom Card Deck — included with their membership. Combined retail value: $592.
             </p>
             <p className="text-violet-300 text-sm mb-8">
               Founding rate: $25/mo (retail $49/mo). Locked for life.
@@ -358,7 +358,7 @@ export default function Store() {
         )}
 
         <p className="text-center text-xs text-muted-foreground/50 mt-10 max-w-2xl mx-auto">
-          All Lifewoven courses, workbooks, and audio programs are original creations. They are informed by wisdom traditions and personal development ideas but are independently produced and not affiliated with, endorsed by, or licensed by any named author, teacher, or publisher.
+          All Lifewoven courses, workbooks, guided scripts, and card decks are original creations. They are informed by wisdom traditions and personal development ideas but are independently produced and not affiliated with, endorsed by, or licensed by any named author, teacher, or publisher.
         </p>
       </div>
     </div>

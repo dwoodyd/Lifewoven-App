@@ -345,7 +345,7 @@ export const LIBRARY_ARTICLES: ArticleData[] = [
     backLabel: "Back to Library",
     sections: [
       {
-        body: `The first ten minutes of your morning are not neutral.\n\nThey are already doing something — establishing a tone, setting a pattern, beginning a conversation between you and the day that will continue whether or not you are paying conscious attention to it. The question is not whether those minutes will shape the rest of your day. They will. The question is whether they will do so intentionally or by default.\n\nThe Morning Alignment practice is a structured ten-minute protocol for beginning the day from the inside out. This guide is the written companion to the audio session — a reference you can return to when you want to understand the practice more fully, practice it without the audio, or adapt it for your specific morning rhythm.`,
+        body: `The first ten minutes of your morning are not neutral.\n\nThey are already doing something — establishing a tone, setting a pattern, beginning a conversation between you and the day that will continue whether or not you are paying conscious attention to it. The question is not whether those minutes will shape the rest of your day. They will. The question is whether they will do so intentionally or by default.\n\nThe Morning Alignment practice is a structured ten-minute protocol for beginning the day from the inside out. This guide is a written version of the practice — a reference you can return to when you want to understand it more fully or adapt it for your specific morning rhythm.`,
       },
       {
         heading: "Why Morning Matters",
@@ -373,7 +373,7 @@ export const LIBRARY_ARTICLES: ArticleData[] = [
       },
       {
         heading: "Adapting the Practice",
-        body: `The five elements are designed to work in sequence, but they are flexible. On mornings when time is genuinely limited, the practice can be abbreviated: one slow breath, one thing you appreciate, one intention. Three minutes is better than nothing. Consistency over months is more valuable than perfect execution on any given day.\n\nThe Morning Alignment audio session guides you through the full practice with pacing and prompting. This text companion is for the mornings when you want to move through the practice at your own pace, in silence, or in writing.\n\nEither form produces the same result: a day that begins with intention rather than reaction, from the inside rather than in response to whatever arrives first.\n\nThat is the practice. Begin tomorrow.`,
+        body: `The five elements are designed to work in sequence, but they are flexible. On mornings when time is genuinely limited, the practice can be abbreviated: one slow breath, one thing you appreciate, one intention. Three minutes is better than nothing. Consistency over months is more valuable than perfect execution on any given day.\n\nUse this written practice with pacing and prompting that fit your morning. Move through it at your own pace, in silence, or in writing.\n\nThe practice produces a day that begins with intention rather than reaction, from the inside rather than in response to whatever arrives first.\n\nThat is the practice. Begin tomorrow.`,
       },
     ],
     coda: "The Align pathway on your dashboard is the interactive version of this practice. Use it daily.",

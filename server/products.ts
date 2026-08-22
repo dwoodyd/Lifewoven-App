@@ -8,7 +8,7 @@ export interface LWProduct {
   slug: string;
   title: string;
   subtitle: string;
-  type: "course" | "workbook" | "audio" | "deck" | "bundle";
+  type: "course" | "workbook" | "script" | "deck" | "bundle";
   priceUsd: number;       // display price
   priceCents: number;     // PayPal amount in cents
   description: string;
@@ -80,21 +80,21 @@ export const LIFEWOVEN_PRODUCTS: LWProduct[] = [
   {
     slug: "morning-alignment-audio",
     title: "Morning Alignment Series",
-    subtitle: "7 Guided Morning Sessions",
-    type: "audio",
+    subtitle: "7 Narrated Scripts",
+    type: "script",
     priceUsd: 37,
     priceCents: 3700,
-    description: "Seven guided morning alignment sessions — each approximately 15 minutes — designed to set your state, anchor your identity, and align your energy before the day begins. Scripts included for self-guided use.",
+    description: "Seven narrated morning-practice scripts — each approximately 15 minutes — designed to set your state, anchor your identity, and align your energy before the day begins.",
     s3Key: "07-morning-alignment-series_de6182e4.pdf",
   },
   {
     slug: "reset-audio",
-    title: "Reset Audio",
-    subtitle: "The 45-Minute Reset Protocol",
-    type: "audio",
-    priceUsd: 27,
-    priceCents: 2700,
-    description: "A single 45-minute guided reset session for moments of overwhelm, disconnection, or emotional dysregulation. Draws on the Reset pathway and the Stewardship module's resilience protocol. Owner-voiced version in production — purchasers receive the update free.",
+    title: "The Reset Protocol",
+    subtitle: "The 45-Minute Guided Script",
+    type: "script",
+    priceUsd: 12,
+    priceCents: 1200,
+    description: "The complete guided script for the Reset protocol — a 45-minute practice you can read through at your own pace, or record in your own voice.",
     s3Key: "08-reset-audio_fe10df5d.pdf",
   },
   {
@@ -110,11 +110,11 @@ export const LIFEWOVEN_PRODUCTS: LWProduct[] = [
   {
     slug: "complete-bundle",
     title: "Complete Lifewoven Bundle",
-    subtitle: "All 9 Products — Courses, Workbooks, Audio & Card Deck",
+    subtitle: "All 9 Products — Courses, Workbooks, Guided Scripts & Card Deck",
     type: "bundle",
     priceUsd: 297,
     priceCents: 29700,
-    description: "Every Lifewoven product in one purchase: 4 courses, 2 workbooks, 2 audio programs, and the Wisdom Card Deck. Save 52% off individual prices.",
+    description: "Every Lifewoven product in one purchase: 4 courses, 2 workbooks, 2 guided scripts, and the Wisdom Card Deck.",
     s3Key: "",
   },
 ];

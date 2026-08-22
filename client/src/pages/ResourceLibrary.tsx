@@ -3,7 +3,7 @@ import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { Library, BookOpen, Headphones, FileText, ArrowRight, ExternalLink, Info, Shield, Sparkles } from "lucide-react";
+import { Library, BookOpen, FileText, ArrowRight, ExternalLink, Info, Shield, Sparkles } from "lucide-react";
 
 type RightsLabel = "public-domain" | "original" | "licensed";
 
@@ -59,13 +59,13 @@ const RESOURCES: Resource[] = [
     rightsNote: "Original Lifewoven content. Original Lifewoven content.",
   },
   {
-    id: 5, category: "audio", module: "state",
+    id: 5, category: "guided-practice", module: "state",
     title: "Entering Alignment — Guided Practice",
     author: "Lifewoven",
-    description: "An original Lifewoven guided meditation for entering a state of interior alignment.",
-    type: "Meditation", free: false,
+    description: "An original Lifewoven guided practice for entering a state of interior alignment.",
+    type: "Guided Practice", free: false,
     rights: "original",
-    rightsNote: "Original Lifewoven audio content.",
+    rightsNote: "Original Lifewoven interactive document.",
   },
   {
     id: 6, category: "text", module: "standards", slug: "four-laws-of-behavior-change",
@@ -95,13 +95,13 @@ const RESOURCES: Resource[] = [
     rightsNote: "Original Lifewoven content.",
   },
   {
-    id: 9, category: "text", module: "stewardship", slug: "morning-alignment-text-companion",
+    id: 9, category: "text", module: "state", slug: "morning-alignment-text-companion",
     title: "Morning Alignment — Text Companion",
     author: "Lifewoven",
     description: "A 15-minute original guided morning practice to anchor you in alignment before the day begins.",
     type: "Meditation", free: true,
     rights: "original",
-    rightsNote: "Original Lifewoven audio content.",
+    rightsNote: "Original Lifewoven interactive document.",
   },
   {
     id: 10, category: "text", module: "strategy", slug: "leverage-mapper",
@@ -122,13 +122,13 @@ const RESOURCES: Resource[] = [
     rightsNote: "Original Lifewoven content.",
   },
   {
-    id: 12, category: "audio", module: "story",
+    id: 12, category: "guided-practice", module: "story",
     title: "Belief Rewrite Meditation",
     author: "Lifewoven",
-    description: "A guided audio session for identifying and rewriting a core constraining belief using the Story module framework.",
-    type: "Meditation", free: false,
+    description: "A guided practice for identifying and rewriting a core constraining belief using the Story module framework.",
+    type: "Guided Practice", free: false,
     rights: "original",
-    rightsNote: "Original Lifewoven audio content.",
+    rightsNote: "Original Lifewoven interactive document.",
   },
   // Soul Engineer Method entries
   {
@@ -271,7 +271,7 @@ const CATEGORIES = [
   { id: "soul-engineer", label: "Soul Engineer Method", icon: Sparkles },
   { id: "all", label: "All Resources", icon: Library },
   { id: "text", label: "Texts & Guides", icon: BookOpen },
-  { id: "audio", label: "Audio", icon: Headphones },
+  { id: "guided-practice", label: "Guided Practices", icon: FileText },
   { id: "summary", label: "Summaries", icon: FileText },
 ];
 

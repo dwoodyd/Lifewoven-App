@@ -1,19 +1,18 @@
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
-import { ArrowLeft, Download, FileText, Headphones, Star, CheckCircle2, Mail, Loader2, ShoppingCart, Volume2, VolumeX, Shield } from "lucide-react";
+import { ArrowLeft, Download, FileText, Star, CheckCircle2, Mail, Loader2, ShoppingCart, Shield } from "lucide-react";
 import { useRoute } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useAdminPreview } from "@/contexts/AdminPreviewContext";
 import { getLoginUrl } from "@/const";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { PayPalButton } from "@/components/PayPalButton";
 
 // SECURITY: No raw CDN/S3 URLs for paid deliverables are stored in the client bundle.
 // All paid file downloads are served exclusively through /api/download/:token.
-// The audio preview player uses server-issued tokens after purchase.
 
 const PREVIEWS: Record<string, { label: string; excerpts: string[] }> = {
   "wisdom-card-deck": {
@@ -89,11 +88,11 @@ const PRODUCTS: Record<string, {
       "90 daily prompts across all 5S dimensions",
       "13 weekly integration reviews",
       "The complete 5S Framework orientation",
-      "Printable PDF — 33 pages",
-      "Immediate download after purchase"
+      "Interactive document — printable from your browser",
+      "Exportable as Markdown"
     ],
     available: true,
-    tags: ["Journal", "PDF", "90 days", "5S Framework"],
+    tags: ["Journal", "Interactive", "90 days", "5S Framework"],
   },
   "wisdom-card-deck": {
     id: "wisdom-card-deck",
@@ -109,32 +108,32 @@ const PRODUCTS: Record<string, {
       "52 wisdom cards — one per week for a year",
       "Cards from all four Lifewoven wisdom traditions",
       "Usage guide and practice instructions",
-      "Printable PDF — 12 pages",
-      "Immediate download after purchase"
+      "Interactive card deck — printable from your browser",
+      "Exportable as Markdown"
     ],
     available: true,
-    tags: ["Cards", "PDF", "52 cards", "Year-long practice"],
+    tags: ["Cards", "Interactive", "52 cards", "Year-long practice"],
   },
   "morning-alignment-audio": {
     id: "morning-alignment-audio",
-    icon: "🎧",
-    category: "audio",
+    icon: "📝",
+    category: "scripts",
     title: "Morning Alignment Series",
-    subtitle: "7 Guided Morning Practices",
+    subtitle: "7 Narrated Scripts",
     price: "$37",
     priceInCents: 3700,
-    description: "Seven 15-minute guided audio sessions — one for each day of the week — to start your day in alignment.",
-    longDescription: `These fifteen minutes belong entirely to you — before the week asks anything of you, before the calendar fills, before the first message arrives.\n\nThe Morning Alignment Series is seven complete guided sessions, one for each day of the week, each approximately fifteen minutes. Each session moves through five elements: Arrive, Acknowledge, Appreciate, Intend, and Release — a complete interior practice that sets the interior tone for everything that follows.\n\nThe sessions are designed to be used in sequence across a week, or individually on the days when a specific practice is most needed. Monday's Foundation session establishes the week's ground. Each subsequent day builds on a specific dimension of the Lifewoven framework.\n\nThis download includes the complete narrated scripts — formatted for professional recording or personal use. Each script includes narrator pacing notes, pause markers, and breath cues.`,
+    description: "Seven 15-minute narrated scripts — one for each day of the week — to start your day in alignment.",
+    longDescription: `These fifteen minutes belong entirely to you — before the week asks anything of you, before the calendar fills, before the first message arrives.\n\nThe Morning Alignment Series is seven complete narrated scripts, one for each day of the week, each approximately fifteen minutes. Each script moves through five elements: Arrive, Acknowledge, Appreciate, Intend, and Release — a complete interior practice that sets the tone for everything that follows.\n\nUse them in sequence across a week, or choose the script that fits the day you are in. Monday's Foundation script establishes the week's ground. Each subsequent day builds on a specific dimension of the Lifewoven framework.\n\nEach script includes pacing notes, pause markers, and breath cues. Read it at your own pace, or record it in your own voice.`,
     includes: [
-      "7 complete guided audio sessions — one per day of the week",
+      "7 complete narrated scripts — one per day of the week",
       "Monday: State · Tuesday: Belief · Wednesday: Body & Energy",
       "Thursday: Clarity · Friday: Identity · Saturday: Appreciation · Sunday: Integration",
-      "~15 minutes per session · AI-voiced first edition",
-      "ZIP bundle — all 7 MP3s in one download",
-      "Immediate download after purchase"
+      "~15 minutes per script",
+      "Interactive documents — printable from your browser",
+      "Exportable as Markdown"
     ],
     available: true,
-    tags: ["Audio", "Morning Practice", "7 sessions", "MP3"],
+    tags: ["Scripts", "Morning Practice", "7 days"],
   },
   "belief-rewrite-workbook": {
     id: "belief-rewrite-workbook",
@@ -151,11 +150,11 @@ const PRODUCTS: Record<string, {
       "Belief surfacing and examination exercises",
       "Evidence-gathering and rewrite protocols",
       "Story module orientation from the 5S Framework",
-      "Printable PDF",
-      "Immediate download after purchase"
+      "Interactive document — printable from your browser",
+      "Exportable as Markdown"
     ],
     available: true,
-    tags: ["Beliefs", "PDF", "30 days", "Story Module"],
+    tags: ["Beliefs", "Interactive", "30 days", "Story Module"],
   },
   "identity-stack-workbook": {
     id: "identity-stack-workbook",
@@ -173,44 +172,33 @@ const PRODUCTS: Record<string, {
       "Better Mirror tracking system",
       "Identity declaration templates",
       "Weekly review structure",
-      "Printable PDF",
-      "Immediate download after purchase"
+      "Interactive document — printable from your browser",
+      "Exportable as Markdown"
     ],
     available: true,
-    tags: ["Habits", "Identity", "PDF", "Behavior Science"],
+    tags: ["Habits", "Identity", "Interactive", "Behavior Science"],
   },
   "reset-audio": {
     id: "reset-audio",
     icon: "🔄",
-    category: "audio",
-    title: "Reset Audio",
-    subtitle: "The Full Resilience Protocol",
-    price: "$27",
-    priceInCents: 2700,
-    description: "A guided audio experience walking you through the complete Reset pathway. For the moments when you need to return to yourself.",
-    longDescription: `The Reset pathway is built on a single premise: returning is not failure. It is the practice.\n\nThis guided audio experience walks you through the complete Reset protocol — a 45-minute journey from wherever you are to a place of genuine re-ground. It is not a motivational session. It is not a pep talk. It is a structured, compassionate process for the specific experience of having lost your footing and needing to find it again.\n\nThe Reset Audio is for the moments when you know something has shifted — when the alignment feels distant, when the story has gone dark, when the energy is low and the path forward is unclear. It meets you there, without judgment, and walks you back.\n\nThis is the first edition of the Reset Audio, narrated by an AI voice trained on the Lifewoven tone and pacing. A version narrated by the founder is in production and will be available to all purchasers as a free update when released.`,
+    category: "scripts",
+    title: "The Reset Protocol",
+    subtitle: "The Complete Return",
+    price: "$12",
+    priceInCents: 1200,
+    description: "The complete guided script for the Reset protocol — a 45-minute practice you can read through at your own pace, or record in your own voice.",
+    longDescription: `The Reset pathway is built on a single premise: returning is not failure. It is the practice.\n\nThis guided practice walks you through the complete Reset protocol — a 45-minute journey from wherever you are to a place of genuine re-ground. It is not a motivational session. It is not a pep talk. It is a structured, compassionate process for the specific experience of having lost your footing and needing to find it again.\n\nThe Reset Protocol is for the moments when you know something has shifted — when alignment feels distant, when the story has gone dark, when energy is low, and the path forward is unclear. It meets you there without judgment and walks you back.`,
     includes: [
       "Complete 45-minute Reset protocol script",
-      "Professional narrator pacing notes",
+      "Read-through pacing notes",
       "Pause and breath markers",
-      "MP3 audio download",
-      "Immediate download after purchase"
+      "Interactive document — printable from your browser",
+      "Exportable as Markdown"
     ],
     available: true,
-    tags: ["Audio Scripts", "Resilience", "45 min", "Reset Pathway"],
+    tags: ["Guided Script", "Resilience", "45 min", "Reset Pathway"],
   },
 };
-
-// Session labels for the Morning Alignment audio player (no URLs — served via token endpoint)
-const MORNING_SESSION_LABELS = [
-  "Monday — State",
-  "Tuesday — Belief",
-  "Wednesday — Body & Energy",
-  "Thursday — Clarity",
-  "Friday — Identity",
-  "Saturday — Appreciation",
-  "Sunday — Integration",
-];
 
 export default function ProductDetail() {
   const [, params] = useRoute("/product/:id");
@@ -291,30 +279,12 @@ export default function ProductDetail() {
     );
   }
 
-  const CategoryIcon = product.category === "audio" ? Headphones : product.category === "cards" ? Star : FileText;
+  const CategoryIcon = product.category === "cards" ? Star : FileText;
   const isAvailable = product.available;
   const isAdmin = false;
   const { previewAsUser, togglePreview } = useAdminPreview();
   const effectiveAdmin = isAdmin && !previewAsUser;
   const canDownload = effectiveAdmin || canDownloadNow;
-
-  // Audio preview player — no paid URLs exposed; player is shown as a UI element only
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const [isMuted, setIsMuted] = useState(true);
-  const isAudioProduct = productId === "reset-audio" || productId === "morning-alignment-audio";
-  const isMorningSeries = productId === "morning-alignment-audio";
-  const [activeSession, setActiveSession] = useState(0);
-
-  useEffect(() => {
-    if (!isAudioProduct || !audioRef.current) return;
-    audioRef.current.muted = true;
-  }, [isAudioProduct]);
-
-  function toggleMute() {
-    if (!audioRef.current) return;
-    audioRef.current.muted = !isMuted;
-    setIsMuted(m => !m);
-  }
 
   // Download button used in multiple places
   const DownloadButton = ({ size = "lg", label }: { size?: "lg" | "default"; label?: string }) => (
@@ -362,47 +332,6 @@ export default function ProductDetail() {
             >
               {previewAsUser ? "Restore Admin Access" : "Preview as User"}
             </button>
-          </div>
-        )}
-
-        {/* Audio Preview Player — UI only, no raw paid URLs */}
-        {isAudioProduct && (
-          <div className="mb-8 p-5 rounded-2xl border border-border bg-card">
-            <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">Audio Preview</p>
-            {isMorningSeries ? (
-              <>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {MORNING_SESSION_LABELS.map((label, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setActiveSession(i)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-light border transition-colors ${
-                        activeSession === i ? "border-foreground bg-foreground text-background" : "border-border bg-secondary hover:bg-secondary/80 text-foreground"
-                      }`}
-                    >{label}</button>
-                  ))}
-                </div>
-                <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-                  <p className="flex-1 text-sm font-light text-muted-foreground">{MORNING_SESSION_LABELS[activeSession]}</p>
-                  <button onClick={toggleMute} className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border bg-secondary hover:bg-secondary/80 transition-colors text-sm font-light">
-                    {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-                    {isMuted ? "Unmute" : "Mute"}
-                  </button>
-                </div>
-                {/* Audio element with no src — actual audio served post-purchase via token */}
-                <audio ref={audioRef} muted />
-              </>
-            ) : (
-              <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-                <p className="flex-1 text-base font-light text-foreground">Reset Protocol — Introduction</p>
-                <button onClick={toggleMute} className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border bg-secondary hover:bg-secondary/80 transition-colors text-sm font-light">
-                  {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-                  {isMuted ? "Unmute" : "Mute"}
-                </button>
-                {/* Audio element with no src — actual audio served post-purchase via token */}
-                <audio ref={audioRef} muted />
-              </div>
-            )}
           </div>
         )}
 

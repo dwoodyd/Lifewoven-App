@@ -81,7 +81,7 @@ const TIERS = [
     libraryItems: [
       "All 4 courses — Alignment Fundamentals · The Alignment Current · Identity in Motion · The Meaning Foundation",
       "Both workbooks — Belief Rewrite · Identity Stack",
-      "All audio programs — Morning Alignment Series · Reset Audio",
+      "All guided scripts — Morning Alignment Series · The Reset Protocol",
       "Wisdom Card Deck",
     ] as string[] | null,
     features: [
@@ -100,7 +100,7 @@ const TIERS = [
 const LIBRARY_ROWS: [string, string | boolean, string | boolean, string | boolean][] = [
   ["All 4 courses", false, "30% off", "Included"],
   ["Both workbooks", false, "30% off", "Included"],
-  ["All audio programs", false, "30% off", "Included"],
+  ["All guided scripts", false, "30% off", "Included"],
   ["Wisdom Card Deck", false, "30% off", "Included"],
 ];
 
@@ -317,7 +317,7 @@ export default function Pricing() {
                         <span className="text-xs text-muted-foreground leading-snug">{item}</span>
                       </div>
                     ))}
-                    <p className="text-xs text-violet-300/70 mt-1">Combined retail: $607. Yours with Oracle.</p>
+                    <p className="text-xs text-violet-300/70 mt-1">Combined retail: $592. Yours with Oracle.</p>
                   </div>
                 )}
 
@@ -367,7 +367,7 @@ export default function Pricing() {
                 <span className="text-xs text-violet-300/60">$25/mo founding · $49 retail</span>
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Everything in Seeker, plus the Oracle AI works continuously on your behalf — reading your patterns, naming what you can't yet see, generating weekly deep-dive reports. Plus the complete library of all 4 courses, both workbooks, all audio programs, and the Wisdom Card Deck.
+                Everything in Seeker, plus the Oracle AI works continuously on your behalf — reading your patterns, naming what you can't yet see, generating weekly deep-dive reports. Plus the complete library of all 4 courses, both workbooks, all guided scripts, and the Wisdom Card Deck.
               </p>
               <p className="text-xs text-muted-foreground/60 mt-3 italic">Best for: people who want AI-powered insight alongside daily practice.</p>
             </div>
