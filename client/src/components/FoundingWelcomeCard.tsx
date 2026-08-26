@@ -3,7 +3,7 @@
  *
  * One-time "Welcome to Oracle" card shown on the Dashboard for founding members
  * whose `needsIntro` flag is still true. Dismissed by calling
- * `applications.completeIntro`, which flips `needsIntro = false` in the DB.
+ * `founding.completeIntro`, which flips `needsIntro = false` in the DB.
  *
  * The card uses a Lumin video (transformation / bouncing_joyfully) as a
  * full-bleed right-panel accent, with the welcome copy on the left.
@@ -32,7 +32,7 @@ export default function FoundingWelcomeCard({ tier, onDismiss }: Props) {
   const [exiting, setExiting] = useState(false);
   const utils = trpc.useUtils();
 
-  const completeIntro = trpc.applications.completeIntro.useMutation({
+  const completeIntro = trpc.founding.completeIntro.useMutation({
     onSuccess: () => {
       // Invalidate auth.me so the needsIntro flag updates globally
       utils.auth.me.invalidate();
@@ -107,8 +107,8 @@ export default function FoundingWelcomeCard({ tier, onDismiss }: Props) {
               style={{ color: "oklch(0.72 0.04 260)" }}
             >
               The complete Lifewoven Library is now yours — every course, workbook,
-              audio program, and card deck, included with your membership. Your
-              founding rate is locked for life.
+              guided script, and card deck, included with your membership. Founding
+              rate while your subscription remains active.
             </p>
           </div>
 

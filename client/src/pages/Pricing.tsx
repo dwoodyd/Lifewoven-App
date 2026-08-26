@@ -61,6 +61,7 @@ const TIERS = [
       "Energy audit & trends",
       "Belief rewrite system",
       "The Ground full practice suite",
+      "30% off all standalone store products while your subscription remains active",
       "Priority support",
     ],
   },
@@ -105,7 +106,7 @@ const LIBRARY_ROWS: [string, string | boolean, string | boolean, string | boolea
 
 export default function Pricing() {
   const { user } = useAuth();
-  const [, navigate] = useLocation();
+  const [location, navigate] = useLocation();
   const [subStatus, setSubStatus] = useState<SubStatus | null>(null);
   const [pendingPlan, setPendingPlan] = useState<string | null>(null);
   const [annual, setAnnual] = useState(false);
@@ -118,13 +119,22 @@ export default function Pricing() {
       .catch(() => {});
   }, [user]);
 
+  useEffect(() => {
+    const tier = new URLSearchParams(location.split("?")[1] ?? "").get("tier");
+    if (tier !== "seeker" && tier !== "oracle") return;
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById(`tier-${tier}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [location]);
+
   const currentTier = subStatus?.tier ?? "explorer";
 
   async function handleTierCta(tierId: string) {
     if (tierId === "explorer") return;
     const basePlan = tierId as "seeker" | "oracle";
     if (!user) {
-      window.location.href = getLoginUrl(window.location.pathname + window.location.search);
+      window.location.href = getLoginUrl(`/pricing?tier=${basePlan}`, "signUp");
       return;
     }
     if (currentTier === basePlan) return;
@@ -230,6 +240,7 @@ export default function Pricing() {
             return (
               <div
                 key={tier.id}
+                id={`tier-${tier.id}`}
                 className={`relative overflow-visible rounded-2xl border p-6 flex flex-col gap-5 transition-all ${
                   tier.highlight
                     ? "border-amber-400/50 bg-amber-400/5 shadow-lg shadow-amber-400/10"
@@ -277,7 +288,7 @@ export default function Pricing() {
                   </div>
                 ) : tier.id === "explorer" ? (
                   <Button asChild variant="outline" className="w-full">
-                    <a href={getLoginUrl('/pricing')}>Start Free</a>
+                    <a href={getLoginUrl('/dashboard', 'signUp')}>Start Free</a>
                   </Button>
                 ) : (
                   <Button

@@ -166,7 +166,7 @@ export default function Profile() {
                 Founding Member · {TIER_LABELS[foundingTier ?? ""] ?? foundingTier ?? "Oracle"}
               </p>
               <p className="text-xs leading-relaxed text-muted-foreground">
-                Your founding rate is <strong className="text-violet-600 dark:text-violet-300">locked for life</strong>. As long as your subscription stays active, you'll never pay more than your founding price — even as retail pricing rises.
+                Your founding rate applies while your subscription remains active. You will not pay more than your founding price while that subscription remains active.
               </p>
             </div>
           </div>

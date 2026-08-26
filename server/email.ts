@@ -197,7 +197,7 @@ export async function sendApplicationApprovalEmail({
         <tr>
           <td style="padding:32px 40px;">
             <p style="margin:0 0 20px;font-size:16px;line-height:1.8;color:#b8b0a0;">
-              Your application has been reviewed and approved. You're one of the first people to enter Lifewoven as a founding member — your rate is locked for life.
+              Your application has been reviewed and approved. You're one of the first people to enter Lifewoven as a founding member. Your founding rate applies while your subscription remains active.
             </p>
             <p style="margin:0 0 24px;font-size:16px;line-height:1.8;color:#b8b0a0;">
               Click the button below to claim your access. This link is personal to you — it expires in 30 days and can only be used once.
@@ -267,7 +267,7 @@ export async function sendRedemptionConfirmationEmail({
         </p>`
       : tier === "seeker"
       ? `<p style="margin:0 0 20px;font-size:16px;line-height:1.8;color:#b8b0a0;">
-          As a Seeker Founding Member, every store product is available to you at 30% off your founding rate — for life.
+          As a Seeker Founding Member, every store product is available to you at 30% off while your subscription remains active.
         </p>`
       : "";
   const html = `
@@ -288,7 +288,7 @@ export async function sendRedemptionConfirmationEmail({
         <tr>
           <td style="padding:32px 40px;">
             <p style="margin:0 0 20px;font-size:16px;line-height:1.8;color:#b8b0a0;">
-              Your founding access is now active. Your rate is locked — it will never increase as long as your subscription remains active, even as Lifewoven grows and public pricing rises.
+              Your founding access is now active. Founding rate while your subscription remains active.
             </p>
             ${libraryNote}
             <p style="margin:0 0 24px;font-size:16px;line-height:1.8;color:#b8b0a0;">
@@ -310,7 +310,7 @@ export async function sendRedemptionConfirmationEmail({
         </tr>
         <tr>
           <td style="padding:20px 40px;border-top:1px solid #2a2a2a;text-align:center;">
-            <p style="margin:0;font-size:12px;color:#555;">Lifewoven · mail.lifewoven.click · Your founding rate is locked for life.</p>
+            <p style="margin:0;font-size:12px;color:#555;">Lifewoven · mail.lifewoven.click · Founding rate while your subscription remains active.</p>
           </td>
         </tr>
       </table>
@@ -318,7 +318,7 @@ export async function sendRedemptionConfirmationEmail({
   </table>
 </body>
 </html>`;
-  const text = `You're in, ${firstName}.\n\nFounding Member · ${tierLabel}\n\nYour founding access is now active. Your rate is locked for life.\n\nOpen your Dashboard: https://app.lifewoven.click/dashboard\n\nThis is the beginning of something that compounds.\n— Lumin`;
+  const text = `You're in, ${firstName}.\n\nFounding Member · ${tierLabel}\n\nYour founding access is now active. Founding rate while your subscription remains active.\n\nOpen your Dashboard: https://app.lifewoven.click/dashboard\n\nThis is the beginning of something that compounds.\n— Lumin`;
   const result = await resend.emails.send({
     from: LUMIN_FROM,
     replyTo: REPLY_TO,
@@ -362,7 +362,7 @@ export async function sendDay75FounderNote({ to, name }: Day75FounderNoteParams)
         <p style="margin:0 0 12px;font-size:17px;font-weight:600;color:#f5f0e8;">In 15 days, your free beta ends.</p>
         <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:#ccc;">I'm writing now, not at the deadline, because I want you to have time.</p>
         <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:#ccc;">Here's what happens at day 90: your account drops to the Explorer tier. You don't lose anything — every entry in The Weave, every check-in, your audit results, the work you've done — all still yours. The Seeker and Oracle features just pause until you decide to lock in.</p>
-        <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:#ccc;">Your founding rate stays locked, waiting. <strong style="color:#f5f0e8;">$10/mo Seeker · $25/mo Oracle</strong> — for life, even when retail rises. <em>(Oracle still includes the full Library — every course, every workbook, every audio program.)</em> There's no auto-charge, no expiration on the offer, no rush.</p>
+        <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:#ccc;">Founding rate while your subscription remains active: <strong style="color:#f5f0e8;">$10/mo Seeker · $25/mo Oracle</strong>. <em>(Oracle still includes the full Library — every course, every workbook, and every guided script.)</em> There's no auto-charge, no expiration on the offer, no rush.</p>
         <hr style="border:none;border-top:1px solid #2a2a2a;margin:28px 0;">
         <p style="margin:0 0 16px;font-size:15px;font-weight:600;color:#f5f0e8;">If Lifewoven's been worth your time:</p>
         <table cellpadding="0" cellspacing="0" style="margin:0 0 24px;"><tr><td style="background:#8b7355;border-radius:6px;padding:14px 28px;">
@@ -383,7 +383,7 @@ export async function sendDay75FounderNote({ to, name }: Day75FounderNoteParams)
     </table>
   </td></tr></table>
 </body></html>`;
-  const text = `Hi ${firstName},\n\nIt's been 75 days. I want to write this one personally — not from Lumin.\n\nIn 15 days, your free beta ends.\n\nYour founding rate stays locked, waiting. $10/mo Seeker · $25/mo Oracle — for life.\n\nIf Lifewoven's been worth your time: ${APP_URL}/founding\n\nEither way — thank you. Truly.\n— DeWayne`;
+  const text = `Hi ${firstName},\n\nIt's been 75 days. I want to write this one personally — not from Lumin.\n\nIn 15 days, your free beta ends.\n\nFounding rate while your subscription remains active: $10/mo Seeker · $25/mo Oracle.\n\nIf Lifewoven's been worth your time: ${APP_URL}/founding\n\nEither way — thank you. Truly.\n— DeWayne`;
   const result = await resend.emails.send({ from: DEWAYNE_FROM, replyTo: REPLY_TO, to, subject: "75 days in. A note from me.", html, text });
   if (result.error) throw new Error(result.error.message);
   return { id: result.data!.id };
@@ -415,8 +415,8 @@ export async function sendDay91TransitionNotice({ to, name }: Day91TransitionPar
         </ul>
         <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:#ccc;">Some features pause on Explorer (unlimited journal entries, all 7 Pathways, full 5S module suite, Oracle AI, the complete Library). They pick right back up the moment you decide to lock in.</p>
         <hr style="border:none;border-top:1px solid #2a2a2a;margin:28px 0;">
-        <p style="margin:0 0 16px;font-size:17px;font-weight:600;color:#f5f0e8;">Your founding rate is locked, waiting.</p>
-        <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:#ccc;">$10/mo Seeker or $25/mo Oracle — for life, even when retail rises. Oracle still includes the full Library. There's no expiration on the offer, no auto-charge, no rush.</p>
+        <p style="margin:0 0 16px;font-size:17px;font-weight:600;color:#f5f0e8;">Founding rate while your subscription remains active.</p>
+        <p style="margin:0 0 20px;font-size:15px;line-height:1.8;color:#ccc;">$10/mo Seeker or $25/mo Oracle while your subscription remains active. Oracle still includes the full Library. There's no expiration on the offer, no auto-charge, no rush.</p>
         <table cellpadding="0" cellspacing="0" style="margin:0 0 24px;"><tr><td style="background:#8b7355;border-radius:6px;padding:14px 28px;">
           <a href="${APP_URL}/founding" style="color:#fff;text-decoration:none;font-size:15px;font-weight:600;">Lock in your founding rate when you're ready →</a>
         </td></tr></table>

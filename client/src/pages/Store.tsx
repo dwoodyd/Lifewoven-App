@@ -204,10 +204,10 @@ export default function Store() {
               <div className="max-w-2xl mx-auto px-5 py-4 rounded-2xl border border-violet-400/20 bg-violet-400/5 flex flex-col sm:flex-row items-center gap-4 text-left">
                 <div className="flex-1">
                   <p className="text-sm font-medium text-violet-300 mb-0.5">Oracle Founding Members get the complete Library included.</p>
-                  <p className="text-xs text-muted-foreground">Lock in Oracle at $25/mo — all 4 courses, both workbooks, all audio, and the card deck. Founding rate, for life.</p>
+                  <p className="text-xs text-muted-foreground">Choose Oracle at $25/mo — all 4 courses, both workbooks, all guided scripts, and the card deck. Founding rate while your subscription remains active.</p>
                 </div>
                 <Button asChild size="sm" className="shrink-0 bg-violet-500 hover:bg-violet-600 text-white border-0">
-                  <Link href="/apply">Apply for Founding Access</Link>
+                  <Link href="/signup?returnTo=/pricing%3Ftier%3Doracle">Choose Oracle</Link>
                 </Button>
               </div>
             </div>
@@ -219,10 +219,10 @@ export default function Store() {
               <div className="max-w-2xl mx-auto px-5 py-4 rounded-2xl border border-amber-500/25 bg-amber-500/5 flex flex-col sm:flex-row items-center gap-4 text-left">
                 <div className="flex-1">
                   <p className="text-sm font-medium text-amber-700 dark:text-amber-300 mb-0.5">Oracle Founding Members get the complete Library — included free.</p>
-                  <p className="text-xs text-muted-foreground">Apply now to lock in Oracle at $25/mo (founding rate, for life) and get every item in this store included with your membership.</p>
+                  <p className="text-xs text-muted-foreground">Start free, then choose Oracle at $25/mo to get every item in this store included with your membership. Founding rate while your subscription remains active.</p>
                 </div>
                 <Button asChild size="sm" className="shrink-0 bg-amber-600 hover:bg-amber-700 text-white border-none">
-                  <Link href="/apply">Apply for Founding Access</Link>
+                  <Link href="/signup?returnTo=/pricing%3Ftier%3Doracle">Start Free</Link>
                 </Button>
               </div>
             </div>
@@ -350,7 +350,7 @@ export default function Store() {
               Oracle members get the complete Lifewoven library — all 4 courses, both workbooks, all guided scripts, and the Wisdom Card Deck — included with their membership. Combined retail value: $607.
             </p>
             <p className="text-violet-300 text-sm mb-8">
-              Founding rate: $25/mo (retail $49/mo). Locked for life.
+              Founding rate: $25/mo (retail $49/mo), while your subscription remains active.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button asChild className="border-violet-400/40 text-violet-300 hover:bg-violet-400/10" variant="outline">

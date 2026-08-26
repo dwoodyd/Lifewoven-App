@@ -17,12 +17,12 @@ export default function InviteRedeem() {
   const [, navigate] = useLocation();
   const [redeemed, setRedeemed] = useState(false);
 
-  const { data: validation, isLoading: validating } = trpc.applications.validateCode.useQuery(
+  const { data: validation, isLoading: validating } = trpc.founding.validateCode.useQuery(
     { code: code?.toUpperCase() ?? "" },
     { enabled: !!code, retry: false }
   );
 
-  const redeem = trpc.applications.redeemCode.useMutation({
+  const redeem = trpc.founding.redeemCode.useMutation({
     onSuccess: () => {
       setRedeemed(true);
       utils.auth.me.invalidate();
@@ -83,7 +83,7 @@ export default function InviteRedeem() {
           </p>
           <h1 className="text-3xl font-serif text-foreground">Welcome to the weave.</h1>
           <p className="text-muted-foreground text-lg leading-relaxed">
-            Your founding access is active. Your rate is locked for life.
+            Your founding access is active. Founding rate while your subscription remains active.
             Lumen is ready when you are.
           </p>
           <Button
@@ -118,7 +118,7 @@ export default function InviteRedeem() {
 
   // ── Not logged in — prompt login ───────────────────────────────────────────
   if (!user) {
-    const loginUrl = getLoginUrl(`/invite/${code}`);
+    const loginUrl = getLoginUrl(`/invite/${code}`, "signUp");
     return (
       <div className="min-h-screen bg-background flex items-center justify-center px-4">
         <div className="max-w-lg w-full">
@@ -129,11 +129,11 @@ export default function InviteRedeem() {
             </p>
             <h1 className="text-3xl font-serif text-foreground">Your invite is ready.</h1>
             <p className="text-muted-foreground leading-relaxed">
-              Sign in to claim your founding access. Your rate will be locked the moment you do.
+              Continue to claim your founding access. Founding rate while your subscription remains active.
             </p>
             <a href={loginUrl}>
               <Button className="w-full h-12 text-base font-semibold bg-accent text-accent-foreground hover:bg-accent/90">
-                Sign In to Claim Access →
+                Continue to Claim Access →
               </Button>
             </a>
             <p className="text-xs text-muted-foreground/50">

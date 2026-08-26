@@ -1,12 +1,14 @@
 export { COOKIE_NAME, ONE_YEAR_MS } from "@shared/const";
 
-// Generate login URL at runtime so redirect URI reflects the current origin.
+// Generate an OAuth URL at runtime so redirect URI reflects the current origin.
 // Pass an optional returnPath (e.g. "/beta?ref=LW-XXXX-XXXX") to land on a
 // specific page after OAuth completes instead of the default "/".
 // The registered OAuth redirect URI (must match what Manus OAuth server has whitelisted)
 const REGISTERED_REDIRECT_HOST = "https://lifeosplatform-krrwopfb.manus.space";
 
-export const getLoginUrl = (returnPath?: string) => {
+export type OAuthIntent = "signIn" | "signUp";
+
+export const getLoginUrl = (returnPath?: string, intent: OAuthIntent = "signIn") => {
   const oauthPortalUrl = import.meta.env.VITE_OAUTH_PORTAL_URL;
   const appId = import.meta.env.VITE_APP_ID;
   const currentOrigin = window.location.origin;
@@ -27,7 +29,7 @@ export const getLoginUrl = (returnPath?: string) => {
   url.searchParams.set("appId", appId);
   url.searchParams.set("redirectUri", registeredRedirectUri);
   url.searchParams.set("state", state);
-  url.searchParams.set("type", "signIn");
+  url.searchParams.set("type", intent);
 
   return url.toString();
 };

@@ -207,15 +207,19 @@ describe("launch trust safeguards", () => {
     expect(privacy).toContain("aged 18 and over");
   });
 
-  it("keeps founding acquisition self-serve without an application gate or unsupported store discount", () => {
+  it("keeps founding acquisition self-serve with a verified Seeker store discount", () => {
     const app = source("client/src/App.tsx");
     const pricing = source("client/src/pages/Pricing.tsx");
     const beta = source("server/routers/beta.ts");
+    const appRouter = source("server/routers.ts");
+    const server = source("server/_core/index.ts");
 
     expect(app).toContain('<Route path="/apply"><Redirect to="/signup" replace /></Route>');
     expect(app).toContain('<Route path="/invite/:code" component={InviteRedeem} />');
-    expect(pricing).not.toContain("30% off all standalone store products");
+    expect(pricing).toContain("30% off all standalone store products while your subscription remains active");
     expect(pricing).not.toContain('href="/apply"');
+    expect(appRouter).not.toContain("applications: applicationsRouter");
+    expect(server).not.toContain('app.post("/api/apply"');
     expect(beta).toContain("User: redeem a beta code");
     expect(beta).toContain("return { ok: true");
   });

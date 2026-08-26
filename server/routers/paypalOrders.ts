@@ -104,7 +104,7 @@ export const paypalOrdersRouter = router({
           downloadExpiresAt: expiresAt,
         });
       }
-      return { token: newToken, accessSource: hasLibraryAccess ? "membership" as const : "purchase" as const };
+      return { token: newToken, accessSource: hasLibraryAccess ? "membership" : "purchase" };
     }),
 
   // ── Get current membership status ──────────────────────────────────────────

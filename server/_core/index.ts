@@ -220,67 +220,6 @@ async function startServer() {
   // Voice transcription upload endpoint
   app.use(transcribeRouter);
 
-  // ── Security: Tight rate limit for public application form (5 per hour per IP)
-  const applyLimiter = rateLimit({
-    windowMs: 60 * 60 * 1000, // 1 hour
-    max: 5,
-    standardHeaders: true,
-    legacyHeaders: false,
-    validate: { xForwardedForHeader: false },
-    message: { error: "Too many application submissions. Please try again later." },
-    ...(redisStore ? { store: redisStore } : {}),
-  });
-
-  // ── Public POST /api/apply — for external marketing site form submissions
-  // Mirrors the tRPC applications.submit procedure but as a plain REST endpoint
-  // so a static marketing site can POST without needing tRPC.
-  app.post("/api/apply", applyLimiter, async (req, res) => {
-    try {
-      const { name, email, answer, origin } = req.body ?? {};
-      if (!name || typeof name !== "string" || name.trim().length < 2) {
-        return res.status(400).json({ error: "Name must be at least 2 characters." });
-      }
-      if (!email || typeof email !== "string" || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-        return res.status(400).json({ error: "A valid email address is required." });
-      }
-      if (!answer || typeof answer !== "string" || answer.trim().length < 50) {
-        return res.status(400).json({ error: "Please share at least 50 characters about why you're applying." });
-      }
-      const { applications } = await import("../../drizzle/schema");
-      const { eq } = await import("drizzle-orm");
-      const { sendApplicationQueueEmail } = await import("../email");
-      const db = await getDb();
-      if (!db) return res.status(503).json({ error: "Service temporarily unavailable. Please try again." });
-      // Prevent duplicate pending applications
-      const existing = await db.select({ id: applications.id, status: applications.status })
-        .from(applications).where(eq(applications.email, email.toLowerCase().trim())).limit(1);
-      if (existing.length && existing[0].status !== "declined") {
-        // Return generic success to prevent email enumeration — don't reveal whether this email has applied
-        return res.json({ ok: true });
-      }
-      const ip = (req.headers["x-forwarded-for"] as string | undefined)?.split(",")[0]?.trim() ?? req.socket?.remoteAddress ?? null;
-      const ua = req.headers["user-agent"] ?? null;
-      await db.insert(applications).values({
-        name: name.trim(),
-        email: email.toLowerCase().trim(),
-        answer: answer.trim(),
-        ipAddress: ip,
-        userAgent: ua,
-        status: "new",
-        tier: "seeker",
-      });
-      sendApplicationQueueEmail({ to: email.trim(), name: name.trim() }).catch(() => {});
-      notifyOwner({
-        title: `New founding member application: ${name.trim()}`,
-        content: `Email: ${email.trim()}\n\nAnswer: ${answer.slice(0, 300)}${answer.length > 300 ? "\u2026" : ""}`,
-      }).catch(() => {});
-      return res.json({ ok: true });
-    } catch (err: any) {
-      console.error("[POST /api/apply]", err);
-      return res.status(500).json({ error: "An unexpected error occurred. Please try again." });
-    }
-  });
-
   // tRPC API
   app.use(
     "/api/trpc",

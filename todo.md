@@ -1700,3 +1700,16 @@
 - [ ] Keep the marketplace Audio tab renamed to Scripts and update its products without changing their verified PDF delivery.
 - [ ] Verify Resource Library Audio resources are recordings; rename the filter only where items are scripts or documents.
 - [ ] Revise regression tests to protect revision-3 pricing and PDF labels while rejecting untrue recording claims.
+
+## Audited Repository Recovery (August 25, 2026)
+- [x] Back up the pre-restore workspace and compare it against audited commit 0cba415 before restoring.
+- [x] Fast-forward the codebase to audited commit 0cba415 and retain both the Git bundle backup and recovery stash.
+- [x] Apply missing migrations 0034–0037, including audit_claims and script_bundle enum support.
+- [x] Validate all nine products are published with download URLs, total $607, and correct product 7/8 script_bundle data and Reset Protocol title.
+- [x] Verify required recovery code: membership download entitlement, /apply redirect, and Downloads links in both navigation variants.
+- [x] Verify restored route count: 72 routes.
+- [x] Audit R-01/R-02: route /signup through OAuth signUp intent and return paid-tier entrants to the selected pricing tier.
+- [x] Audit R-03: verify the Seeker server-side price calculation ($97 → $67.90) and restore the accurate 30% standalone-product benefit.
+- [x] Audit R-04/R-05: replace unsupported lifetime-rate claims and application-gate Store language with subscription-qualified, self-serve copy.
+- [x] Audit R-06: confirm zero stored applications, remove public application intake and admin queue, and preserve issued-invite redemption in the founding router.
+- [ ] Resolve absent VAPID runtime keys so the restored full test suite can pass its push-configuration test.

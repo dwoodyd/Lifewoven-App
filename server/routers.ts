@@ -7,7 +7,7 @@ import { betaRouter } from "./routers/beta";
 import { characterRouter } from "./routers/character";
 import { moodLogRouter } from "./routers/moodLog";
 import { storeRouter } from "./routers/store";
-import { applicationsRouter } from "./routers/applications";
+import { foundingRouter } from "./routers/founding";
 import { firstHonestWeekRouter } from "./routers/firstHonestWeek";
 import { dimensionsRouter } from "./routers/dimensions";
 import { libraryRouter } from "./routers/library";
@@ -1689,7 +1689,7 @@ export const appRouter = router({
   beta: betaRouter,
   character: characterRouter,
   moodLog: moodLogRouter,
-  applications: applicationsRouter,
+  founding: foundingRouter,
   firstHonestWeek: firstHonestWeekRouter,
   dimensions: dimensionsRouter,
   library: libraryRouter,
