@@ -6,7 +6,7 @@
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=5, viewport-fit=cover" />
-    <link rel="icon" type="image/png" href="https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/app-icon_e26b6bab.png" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='12' fill='%231d1c1a'/%3E%3Cpath d='M13 15h22M13 24h22M13 33h22M18 11v26M24 11v26M30 11v26' stroke='%23e0bd65' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='24' cy='24' r='4' fill='%23f4df9d'/%3E%3C/svg%3E" />
     <link rel="canonical" href="https://app.lifewoven.click/" />
     <link rel="apple-touch-icon" href="/manus-storage/apple-touch-icon_6ad5dd2f.png" sizes="180x180" />
     <!-- Open Graph -->
@@ -36,7 +36,7 @@
     <meta name="apple-mobile-web-app-title" content="Lifewoven" />
     <!-- Splash screen colors for iOS -->  
     <meta name="msapplication-TileColor" content="#1a1714" />
-    <meta name="msapplication-TileImage" content="https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/app-icon_e26b6bab.png" />
+    <meta name="msapplication-TileImage" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='12' fill='%231d1c1a'/%3E%3Cpath d='M13 15h22M13 24h22M13 33h22M18 11v26M24 11v26M30 11v26' stroke='%23e0bd65' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='24' cy='24' r='4' fill='%23f4df9d'/%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -52,12 +52,11 @@
       background:var(--splash-bg,#f2ecdf);
       transition:opacity 0.8s ease, visibility 0.8s ease;
     ">
-      <img
-        src="https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/app-icon_e26b6bab.png"
-        alt="Lifewoven"
+      <span
         id="splash-icon"
-        style="width:120px;height:120px;border-radius:24px;animation:lw-spin 1.2s cubic-bezier(0.4,0,0.2,1) infinite;"
-      />
+        aria-label="Lifewoven"
+        style="width:120px;height:120px;border-radius:24px;animation:lw-spin 1.2s cubic-bezier(0.4,0,0.2,1) infinite;display:flex;align-items:center;justify-content:center;background:#1d1c1a;color:#e0bd65;font:600 34px/1 Inter,system-ui,sans-serif;letter-spacing:-0.08em;"
+      >LW</span>
     </div>
     <style>
       @keyframes lw-spin {

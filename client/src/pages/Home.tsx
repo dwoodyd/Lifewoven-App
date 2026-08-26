@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import NewMemberHome from "@/components/NewMemberHome";
+import { BrandMark } from "@/components/BrandMark";
 
 // Pick the floating/idle Lumin video for the hero
 const HERO_LUMIN = LUMIN_VIDEOS.find((v) => v.id === "floating_center") ?? LUMIN_VIDEOS[0];
@@ -481,7 +482,7 @@ export default function Home() {
             <div className="h-px flex-1 bg-[oklch(0.20_0.02_260)]" />
             <div className="flex items-center gap-3 shrink-0">
               <img
-                src="/manus-storage/dewayne-woods-founder_4f2325f0.webp"
+                src="/manus-storage/founder-dewayne-woods_1b237735.webp"
                 alt="DeWayne Woods"
                 className="w-12 h-12 rounded-full object-cover object-top border border-border"
               />
@@ -646,11 +647,7 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
             <div className="col-span-2">
               <div className="flex items-center gap-3 mb-4">
-                <img
-                  src="https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/app-icon_e26b6bab.png"
-                  alt="Lifewoven"
-                  className="w-10 h-10 rounded-xl object-cover"
-                />
+                <BrandMark className="w-10 h-10 shrink-0" />
                 <span style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.25rem", color: "oklch(0.88 0.02 60)", fontWeight: 400 }}>
                   Lifewoven
                 </span>

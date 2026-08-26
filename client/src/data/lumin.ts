@@ -86,7 +86,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "bouncing_joyfully",
-    url: "/manus-storage/Mascot_Lumen_bouncing_joyfully_202605081915_0baedd24.mp4",
+    url: "/manus-storage/lumen-bouncing_6bd010de.mp4",
     action: "Bounces joyfully",
     role: "reaction",
     duration: 8,
@@ -100,7 +100,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "core_unfurls",
-    url: "/manus-storage/core_unfurls_0cb2efa5.mp4",
+    url: "/manus-storage/lumen-oracle_eb93253f.mp4",
     action: "Core lights up and unfurls — Oracle mode",
     role: "onboarding",
     duration: 8,
@@ -177,7 +177,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "floating_center",
-    url: "/manus-storage/floating_center_0d813889.mp4",
+    url: "/manus-storage/lumen-hero_eec558c0.mp4",
     action: "Floating centered — calm ambient",
     role: "ambient",
     duration: 8,

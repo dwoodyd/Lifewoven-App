@@ -1712,4 +1712,6 @@
 - [x] Audit R-03: verify the Seeker server-side price calculation ($97 → $67.90) and restore the accurate 30% standalone-product benefit.
 - [x] Audit R-04/R-05: replace unsupported lifetime-rate claims and application-gate Store language with subscription-qualified, self-serve copy.
 - [x] Audit R-06: confirm zero stored applications, remove public application intake and admin queue, and preserve issued-invite redemption in the founding router.
-- [ ] Resolve absent VAPID runtime keys so the restored full test suite can pass its push-configuration test.
+- [x] Resolve absent VAPID runtime keys so the restored full test suite can pass its push-configuration test.
+- [x] Generate and store production VAPID credentials while retaining the existing push-notification feature gate in its disabled state until post-purchase verification.
+- [x] Fix broken public logo and mascot video delivery after the audited repository restore, then verify rendered media in the browser.

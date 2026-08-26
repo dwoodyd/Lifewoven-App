@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { replayOnboarding } from "@/components/OnboardingModal";
 import { useSignOut } from "@/hooks/useSignOut";
+import { BrandMark } from "@/components/BrandMark";
 
 // Primary nav links — always visible on desktop
 const primaryLinks = [
@@ -50,11 +51,7 @@ export default function Nav() {
 
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-2 shrink-0" onClick={closeMobile} style={{ viewTransitionName: 'nav-brand' }}>
-          <img
-            src="https://d2xsxph8kpxj0f.cloudfront.net/310519663270045694/kRrwoPFbyNWaiJXLmscJ4t/app-icon_e26b6bab.png"
-            alt="Lifewoven"
-            className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl object-cover"
-          />
+          <BrandMark className="w-8 h-8 sm:w-9 sm:h-9 shrink-0" />
           <span className="font-sans text-lg sm:text-xl font-semibold tracking-tight text-foreground">
             Lifewoven
           </span>
