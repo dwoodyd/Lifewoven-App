@@ -10,7 +10,6 @@ import { toast } from "sonner";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import NewMemberHome from "@/components/NewMemberHome";
-import { BrandMark } from "@/components/BrandMark";
 
 // Pick the floating/idle Lumin video for the hero
 const HERO_LUMIN = LUMIN_VIDEOS.find((v) => v.id === "floating_center") ?? LUMIN_VIDEOS[0];
@@ -647,7 +646,11 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
             <div className="col-span-2">
               <div className="flex items-center gap-3 mb-4">
-                <BrandMark className="w-10 h-10 shrink-0" />
+                <img
+                  src="/manus-storage/lifewoven-original-mark_811eea16.png"
+                  alt="Lifewoven"
+                  className="w-10 h-10 rounded-xl object-cover"
+                />
                 <span style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.25rem", color: "oklch(0.88 0.02 60)", fontWeight: 400 }}>
                   Lifewoven
                 </span>

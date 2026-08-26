@@ -13,7 +13,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Download, Share } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { gentleSpring } from "@/lib/springs";
-import { BrandMark } from "@/components/BrandMark";
 
 const DISMISS_KEY = "lifewoven_pwa_prompt_dismissed";
 const DISMISS_DAYS = 30;
@@ -116,7 +115,11 @@ export function PWAInstallPrompt() {
             </button>
 
             <div className="flex items-start gap-4 pr-6">
-              <BrandMark className="shrink-0 w-12 h-12" />
+              <img
+                src="/manus-storage/lifewoven-original-mark_811eea16.png"
+                alt="Lifewoven"
+                className="shrink-0 w-12 h-12 rounded-xl object-cover"
+              />
               <div className="flex-1 min-w-0">
                 <p className="font-serif text-base font-light text-foreground">Add Lifewoven to your home screen</p>
                 {isIOSDevice ? (

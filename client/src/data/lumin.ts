@@ -21,22 +21,22 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   // full-figure, watermark-free variants selected for the Pathways surfaces.
   {
     id: "pathway_reset_clean",
-    url: "/manus-storage/bouncing_joyfully-pathways_d5a682c5.mp4",
-    action: "Full-figure joyful bounce — clean Reset pathway scene",
+    url: "/manus-storage/lifewoven-bouncing-original_60092b33.mp4",
+    action: "Full-figure joyful bounce — original Reset pathway scene",
     role: "landscape",
     duration: 8,
   },
   {
     id: "pathway_align_clean",
-    url: "/manus-storage/starburst_joy-pathways_8554f7b2.mp4",
-    action: "Full-figure warm starburst — clean Align pathway scene",
+    url: "/manus-storage/lifewoven-starburst-original_cb3ab9d7.mp4",
+    action: "Full-figure warm starburst — original Align pathway scene",
     role: "landscape",
     duration: 8,
   },
   {
     id: "pathway_resonance_clean",
-    url: "/manus-storage/core_unfurls-pathways_6c184c48.mp4",
-    action: "Full-figure core unfurling — clean Resonance pathway scene",
+    url: "/manus-storage/lifewoven-core-unfurls-original_ffd8a81a.mp4",
+    action: "Full-figure core unfurling — original Resonance pathway scene",
     role: "landscape",
     duration: 8,
   },
@@ -86,7 +86,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "bouncing_joyfully",
-    url: "/manus-storage/lumen-bouncing_6bd010de.mp4",
+    url: "/manus-storage/lifewoven-bouncing-original_60092b33.mp4",
     action: "Bounces joyfully",
     role: "reaction",
     duration: 8,
@@ -100,7 +100,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "core_unfurls",
-    url: "/manus-storage/lumen-oracle_eb93253f.mp4",
+    url: "/manus-storage/lifewoven-core-unfurls-original_ffd8a81a.mp4",
     action: "Core lights up and unfurls — Oracle mode",
     role: "onboarding",
     duration: 8,
@@ -177,7 +177,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "floating_center",
-    url: "/manus-storage/lumen-hero_eec558c0.mp4",
+    url: "/manus-storage/lifewoven-floating-original_9793a54e.mp4",
     action: "Floating centered — calm ambient",
     role: "ambient",
     duration: 8,

@@ -1715,3 +1715,4 @@
 - [x] Resolve absent VAPID runtime keys so the restored full test suite can pass its push-configuration test.
 - [x] Generate and store production VAPID credentials while retaining the existing push-notification feature gate in its disabled state until post-purchase verification.
 - [x] Fix broken public logo and mascot video delivery after the audited repository restore, then verify rendered media in the browser.
+- [x] Correct the media repair: restore the intended Lifewoven logo and original mascot clips, then validate live Paths, Weave, and Oracle views.
