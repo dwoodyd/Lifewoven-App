@@ -65,7 +65,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "pointing_energy",
-    url: "/manus-storage/pointing_energy-landscape_457bde02.mp4",
+    url: "/manus-storage/lifewoven-original-pointing_energy_9690b72d.mp4",
     action: "Points forward with energetic smile",
     role: "onboarding",
     duration: 8,
@@ -93,7 +93,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "analyzing",
-    url: "/manus-storage/Mascot_analyzing_with_magnifying\u2026_202605081817_54ece545.mp4",
+    url: "/manus-storage/lifewoven-original-analyzing_79cda2cd.mp4",
     action: "Analyzing with magnifying glass — curious",
     role: "ambient",
     duration: 8,
@@ -114,7 +114,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "starburst_pose",
-    url: "/manus-storage/starburst_pose-landscape_471c971f.mp4",
+    url: "/manus-storage/lifewoven-original-starburst_pose_4d26bfa1.mp4",
     action: "Dynamic starburst pose — high energy",
     role: "reaction",
     duration: 8,
@@ -128,42 +128,42 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "self_soothing",
-    url: "/manus-storage/self_soothing_8fc40df4.mp4",
+    url: "/manus-storage/lifewoven-original-self_soothing_99caeafa.mp4",
     action: "Self-soothing hug with glow",
     role: "ambient",
     duration: 8,
   },
   {
     id: "smiles_sweeping",
-    url: "/manus-storage/Mascot_smiles_sweeping_outward_f\u2026_202605081522_985e11eb.mp4",
+    url: "/manus-storage/lifewoven-original-smiles_sweeping_c8d8c946.mp4",
     action: "Smiles and sweeps arms outward — welcoming",
     role: "onboarding",
     duration: 8,
   },
   {
     id: "taps_chin",
-    url: "/manus-storage/taps_chin_b455c537.mp4",
+    url: "/manus-storage/lifewoven-original-taps_chin_bddea47f.mp4",
     action: "Taps chin with pulsing light — thinking",
     role: "ambient",
     duration: 8,
   },
   {
     id: "tilting_listening",
-    url: "/manus-storage/tilting_listening_f4d923b8.mp4",
+    url: "/manus-storage/lifewoven-original-tilting_listening_4abe4b89.mp4",
     action: "Tilts core while listening — attentive",
     role: "ambient",
     duration: 8,
   },
   {
     id: "turning_dial",
-    url: "/manus-storage/turning_dial-landscape_ccd1fb89.mp4",
+    url: "/manus-storage/lifewoven-original-turning_dial_ab32ffbf.mp4",
     action: "Turns holographic UI dial",
     role: "ambient",
     duration: 8,
   },
   {
     id: "turning_extending",
-    url: "/manus-storage/Mascot_turning_right_extending_l\u2026_202605081518_73b0d78a.mp4",
+    url: "/manus-storage/lifewoven-original-turning_extending_0c8f099f.mp4",
     action: "Turns right and extends limb — pointing/directing",
     role: "onboarding",
     duration: 8,
@@ -184,7 +184,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "nodding_gently",
-    url: "/manus-storage/nodding_gently_e60b644d.mp4",
+    url: "/manus-storage/lifewoven-original-nodding_gently_b6d2dca1.mp4",
     action: "Nodding gently — affirming",
     role: "ambient",
     duration: 8,
@@ -193,7 +193,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   // ── Untitled videos (analyzed) ────────────────────────────────────────────
   {
     id: "waves_sparkles",
-    url: "/manus-storage/waves_sparkles-clean-landscape_f081fab7.mp4",
+    url: "/manus-storage/lifewoven-original-waves_sparkles_8020ba0c.mp4",
     action: "Waves arms with magical sparkles — peaceful happy",
     role: "ambient",
     duration: 8,
@@ -270,7 +270,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "holographic_panel",
-    url: "/manus-storage/onboarding_scene3_v2_2e4f9665.mov",
+    url: "/manus-storage/lifewoven-original-holographic_panel_ebcffa42.mp4",
     action: "Raises arms to lift holographic panel — presenting data",
     role: "ambient",
     duration: 8,
@@ -291,7 +291,7 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "self_hug",
-    url: "/manus-storage/self_hug-landscape_320e0025.mp4",
+    url: "/manus-storage/lifewoven-original-self_hug_069732f2.mp4",
     action: "Wraps rays around glowing face — self-soothing hug",
     role: "ambient",
     duration: 8,
@@ -305,14 +305,14 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   },
   {
     id: "settling",
-    url: "/manus-storage/settling-clean-landscape_65ee5cc6.mp4",
+    url: "/manus-storage/lifewoven-original-settling_897ce526.mp4",
     action: "Gently lowers arms — settling/calm",
     role: "ambient",
     duration: 8,
   },
   {
     id: "burst_joy",
-    url: "/manus-storage/burst_joy-landscape_94d73beb.mp4",
+    url: "/manus-storage/lifewoven-original-burst_joy_209c2f32.mp4",
     action: "Claps, glows, jumps, explodes into yarn puff — burst of joy",
     role: "reaction",
     duration: 8,

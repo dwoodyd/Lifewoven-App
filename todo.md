@@ -1716,3 +1716,4 @@
 - [x] Generate and store production VAPID credentials while retaining the existing push-notification feature gate in its disabled state until post-purchase verification.
 - [x] Fix broken public logo and mascot video delivery after the audited repository restore, then verify rendered media in the browser.
 - [x] Correct the media repair: restore the intended Lifewoven logo and original mascot clips, then validate live Paths, Weave, and Oracle views.
+- [x] Audit and repair every mascot video reference across the app; do not release until the full registry and all major video surfaces are verified non-blank.

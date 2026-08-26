@@ -27,4 +27,24 @@ describe("Lumen media fallbacks", () => {
     expect(sceneSource).toContain("poster={poster}");
     expect(sceneSource).not.toContain("<img");
   });
+
+  it("uses browser-safe MP4 sources for every registered mascot scene", () => {
+    const registrySource = readFileSync(resolve(process.cwd(), "client/src/data/lumin.ts"), "utf8");
+    const urls = [...registrySource.matchAll(/url:\s*"([^"]+)"/g)].map((match) => match[1]);
+
+    expect(urls.length).toBeGreaterThan(20);
+    expect(urls.every((url) => url.startsWith("/manus-storage/") && url.endsWith(".mp4"))).toBe(true);
+
+    for (const brokenKey of [
+      "-landscape_",
+      "-clean-landscape_",
+      "self_soothing_8fc40df4.mp4",
+      "nodding_gently_e60b644d.mp4",
+      "taps_chin_b455c537.mp4",
+      "tilting_listening_f4d923b8.mp4",
+      "onboarding_scene3_v2_2e4f9665.mov",
+    ]) {
+      expect(registrySource).not.toContain(brokenKey);
+    }
+  });
 });
