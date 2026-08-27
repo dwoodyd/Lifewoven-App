@@ -95,7 +95,7 @@ export const LIFEWOVEN_PRODUCTS: LWProduct[] = [
     priceUsd: 27,
     priceCents: 2700,
     description: "The complete guided script for the Reset protocol — a 45-minute practice you can read through at your own pace, or record in your own voice.",
-    s3Key: "08-reset-audio_fe10df5d_bfe5bc0c.pdf",
+    s3Key: "08-reset-audio-replacement-20260827_7a3d5c87.pdf",
   },
   {
     slug: "wisdom-card-deck",
