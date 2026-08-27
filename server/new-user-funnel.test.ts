@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { resolveReturnPath } from "../client/src/pages/Login";
 
 const root = resolve(import.meta.dirname, "..");
 const readClient = (path: string) => readFileSync(resolve(root, "client", "src", path), "utf8");
@@ -12,12 +13,19 @@ describe("new-user entry funnel", () => {
     const pricing = readClient("pages/Pricing.tsx");
 
     expect(login).toContain('getLoginUrl(returnPath, "signUp")');
-    expect(login).toContain("new URLSearchParams(window.location.search)");
+    expect(login).toContain("new URLSearchParams(search)");
     expect(login).not.toContain('location.split("?")[1]');
     expect(login).toContain('return `/pricing?tier=${tier}`');
     expect(home).toContain('getLoginUrl("/pricing?tier=seeker", "signUp")');
     expect(home).toContain('getLoginUrl("/pricing?tier=oracle", "signUp")');
     expect(pricing).toContain("getLoginUrl('/pricing', 'signUp')");
+  });
+
+  it("reads signup returnTo from the browser search string and preserves only approved pricing tiers", () => {
+    expect(resolveReturnPath("?returnTo=/pricing")).toBe("/pricing");
+    expect(resolveReturnPath("?returnTo=/pricing&tier=seeker")).toBe("/pricing?tier=seeker");
+    expect(resolveReturnPath("?returnTo=/pricing&tier=unapproved")).toBe("/pricing");
+    expect(resolveReturnPath("?returnTo=https://untrusted.example")).toBe("/dashboard");
   });
 
   it("shows Lifewoven legal consent before the signup OAuth handoff", () => {
