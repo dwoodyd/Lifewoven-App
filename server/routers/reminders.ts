@@ -3,6 +3,11 @@ import { z } from "zod";
 import { pushSubscriptions } from "../../drizzle/schema";
 import { getDb } from "../db";
 import { protectedProcedure, router } from "../_core/trpc";
+import { TRPCError } from "@trpc/server";
+
+export function isPushNotificationsEnabled(flag = process.env.ENABLE_PUSH_NOTIFICATIONS): boolean {
+  return flag === "true";
+}
 
 const reminderInput = z.object({
   endpoint: z.string().url(),
@@ -13,7 +18,10 @@ const reminderInput = z.object({
 });
 
 export const remindersRouter = router({
-  publicKey: protectedProcedure.query(() => ({ publicKey: process.env.VAPID_PUBLIC_KEY ?? "" })),
+  publicKey: protectedProcedure.query(() => ({
+    publicKey: isPushNotificationsEnabled() ? process.env.VAPID_PUBLIC_KEY ?? "" : "",
+    enabled: isPushNotificationsEnabled(),
+  })),
   getSettings: protectedProcedure.query(async ({ ctx }) => {
     const db = await getDb();
     if (!db) return null;
@@ -22,6 +30,12 @@ export const remindersRouter = router({
     return settings ?? null;
   }),
   saveSubscription: protectedProcedure.input(reminderInput).mutation(async ({ ctx, input }) => {
+    if (!isPushNotificationsEnabled()) {
+      throw new TRPCError({
+        code: "PRECONDITION_FAILED",
+        message: "Push notifications are not enabled for this release.",
+      });
+    }
     const db = await getDb();
     if (!db) throw new Error("Database unavailable");
     const [existing] = await db.select({ id: pushSubscriptions.id }).from(pushSubscriptions)

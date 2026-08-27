@@ -434,12 +434,18 @@ export default function Settings() {
 
           <div className="rounded-xl border border-border bg-card p-6 mb-5">
             <div className="flex items-center gap-2 mb-1"><Bell className="h-4 w-4 text-accent" /><h2 className="font-medium text-sm text-foreground">Daily Reminder</h2></div>
-            <p className="text-xs text-muted-foreground mb-4">A gentle prompt to begin The Ground. Default: 8:00 AM in your local time zone.</p>
-            <div className="flex flex-wrap items-center gap-3">
-              <input aria-label="Daily reminder time" type="time" value={reminderTime} onChange={e => setReminderTime(e.target.value)} className="h-9 rounded-md border border-border bg-background px-3 text-sm" />
-              <Button size="sm" onClick={handleDailyReminder} disabled={saveReminder.isPending}>{saveReminder.isPending ? "Saving…" : reminderSettings.data?.enabled ? "Update reminder" : "Enable reminder"}</Button>
-              {reminderSettings.data?.enabled && <Button size="sm" variant="outline" onClick={() => disableReminder.mutate(undefined, { onSuccess: () => reminderSettings.refetch() })}>Turn off</Button>}
-            </div>
+            {reminderPublicKey.data?.enabled ? (
+              <>
+                <p className="text-xs text-muted-foreground mb-4">A gentle prompt to begin The Ground. Default: 8:00 AM in your local time zone.</p>
+                <div className="flex flex-wrap items-center gap-3">
+                  <input aria-label="Daily reminder time" type="time" value={reminderTime} onChange={e => setReminderTime(e.target.value)} className="h-9 rounded-md border border-border bg-background px-3 text-sm" />
+                  <Button size="sm" onClick={handleDailyReminder} disabled={saveReminder.isPending}>{saveReminder.isPending ? "Saving…" : reminderSettings.data?.enabled ? "Update reminder" : "Enable reminder"}</Button>
+                  {reminderSettings.data?.enabled && <Button size="sm" variant="outline" onClick={() => disableReminder.mutate(undefined, { onSuccess: () => reminderSettings.refetch() })}>Turn off</Button>}
+                </div>
+              </>
+            ) : (
+              <p className="text-xs text-muted-foreground leading-relaxed">Daily reminders are being prepared and are not active in this release. Lifewoven will never request notification permission until this feature is intentionally enabled.</p>
+            )}
           </div>
 
           {/* Oracle Preferences */}
