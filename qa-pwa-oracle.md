@@ -1,6 +1,8 @@
 # PWA and Oracle Evidence QA Notes
 
 - The global PWA prompt previously scheduled itself after 20 seconds on Chrome or 30 seconds on iOS, so it could interrupt Dashboard and First Honest Week even though neither page mounted it directly.
-- The prompt is now event-driven and can only open after an intentional Settings action (`lifewoven:open-install`); it has no automatic 20-second or 30-second timer.
-- On the owner account, the last-seven-days evidence query returned 0 check-ins and 0 Weave entries. The shared readiness threshold is three records in either stream.
-- Pattern Mirror retrieval and generation now use that same threshold. Weekly Summary already rejects sparse data; its helper now checks up to three Weave entries consistently with the public eligibility endpoint.
+- The prompt is now event-driven and can only open after an intentional Settings action (`lifewoven:open-install`) or the `lifewoven:survey-completed` event after a successfully saved survey; it has no automatic 20-second or 30-second timer.
+- A controlled, clearly labeled QA check-in and QA Weave entry were added to the owner account. The last-seven-days counts are now 1 check-in and 1 Weave entry, with no weekly reflection pre-populated. The shared readiness threshold remains three records in either stream.
+- Guide, Pattern Mirror, and Weekly Summary all display the same recent seven-day evidence summary. Pattern Mirror retrieval and generation, Weekly Summary eligibility and generation, and Guide’s system prompt refuse to infer a recurring user pattern below the shared threshold.
+- The visible `/signup` page was verified to present Lifewoven consent, Terms, Privacy, and a separate “Continue to account creation” action before OAuth. Signup calls use `type=signUp`; ordinary Sign in routes retain `type=signIn`; allowed Seeker/Oracle tier selections are carried through `/pricing?tier=…`.
+- The registered OAuth callback remains the platform-managed `lifeosplatform-krrwopfb.manus.space/api/oauth/callback`. No project-level custom callback-host setting is exposed in the available configuration; changing it requires the hosting/OAuth platform configuration rather than an application-code edit.

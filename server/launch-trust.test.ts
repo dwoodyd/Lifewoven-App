@@ -35,7 +35,7 @@ describe("launch trust safeguards", () => {
     const audit = source("client/src/pages/AlignmentAudit.tsx");
     expect(audit).toContain("!isAuthenticated && (");
     expect(audit).toContain("Take me into the app");
-    expect(audit).toContain('window.location.href = getLoginUrl("/dashboard")');
+    expect(audit).toContain('window.location.href = getLoginUrl("/dashboard", "signUp")');
     expect(audit).not.toContain('href="/dashboard">Take me into the app</a>');
   });
 
@@ -51,7 +51,7 @@ describe("launch trust safeguards", () => {
     expect(audit).toContain("trpc.audit.redeemClaim.useMutation");
     expect(audit).toContain('new URLSearchParams(window.location.search).get("audit_claim")');
     expect(audit).toContain("redeemAuditClaim.mutate({ claimId: pendingAuditClaimId }");
-    expect(audit).toContain("getLoginUrl(`/audit?audit_claim=${encodeURIComponent(claimId)}`)");
+    expect(audit).toContain("getLoginUrl(`/audit?audit_claim=${encodeURIComponent(claimId)}`, \"signUp\")");
     expect(audit).not.toContain("window.localStorage.setItem(storageKey, JSON.stringify(pendingAudit))");
     expect(audit).toContain('navigate("/dashboard")');
   });
@@ -81,7 +81,7 @@ describe("launch trust safeguards", () => {
     expect(audit).toContain("isAuthenticated && shareUrl &&");
     expect(audit).toContain('href="/pathway/reset">Start Reset</a>');
     expect(audit).toContain("Take me into the app");
-    expect(audit).toContain('window.location.href = getLoginUrl("/dashboard")');
+    expect(audit).toContain('window.location.href = getLoginUrl("/dashboard", "signUp")');
     expect(audit).toContain('{isAuthenticated && (\n            <div className="p-5 rounded-2xl border border-border bg-card mb-4">');
   });
 

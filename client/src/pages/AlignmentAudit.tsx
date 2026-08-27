@@ -216,6 +216,7 @@ export default function AlignmentAudit() {
   const saveAudit = trpc.audit.save.useMutation({
     onSuccess: () => {
       toast.success("Results saved to your profile.");
+      window.dispatchEvent(new Event("lifewoven:survey-completed"));
       // Invalidate homeContext so the home screen immediately reflects the completed audit
       utils.profile.homeContext.invalidate();
       utils.auth.me.invalidate();
@@ -224,6 +225,7 @@ export default function AlignmentAudit() {
   const mintAuditClaim = trpc.audit.mintClaim.useMutation();
   const redeemAuditClaim = trpc.audit.redeemClaim.useMutation({
     onSuccess: () => {
+      window.dispatchEvent(new Event("lifewoven:survey-completed"));
       utils.profile.homeContext.invalidate();
       utils.auth.me.invalidate();
     },
@@ -314,7 +316,7 @@ export default function AlignmentAudit() {
         recommendedPathway: result.profile.firstPathway.toLowerCase(),
       }, {
         onSuccess: ({ claimId }) => {
-          window.location.href = getLoginUrl(`/audit?audit_claim=${encodeURIComponent(claimId)}`);
+          window.location.href = getLoginUrl(`/audit?audit_claim=${encodeURIComponent(claimId)}`, "signUp");
         },
         onError: () => toast.error("We could not prepare your saved survey. Please try again."),
       });
@@ -381,7 +383,7 @@ export default function AlignmentAudit() {
                 type="button"
                 variant="outline"
                 className="w-full"
-                onClick={() => { window.location.href = getLoginUrl("/dashboard"); }}
+                onClick={() => { window.location.href = getLoginUrl("/dashboard", "signUp"); }}
               >
                 Take me into the app <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
@@ -612,7 +614,7 @@ export default function AlignmentAudit() {
                         </Button>
                       ) : (
                         <Button size="sm" asChild>
-                          <a href={getLoginUrl("/audit")}>Start free — save my results →</a>
+                          <a href={getLoginUrl("/audit", "signUp")}>Start free — save my results →</a>
                         </Button>
                       )}
                       <Button size="sm" variant="ghost" asChild>

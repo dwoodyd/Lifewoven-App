@@ -52,6 +52,17 @@ const CRISIS_KEYWORDS = /\b(suicid|kill myself|end my life|don't want to be here
 type Message = { role: "user" | "assistant"; content: string; error?: boolean; crisis?: boolean; tags?: string[] };
 type OracleMode = "guide" | "unstuck" | "patterns" | "weekly";
 
+function evidenceSummary(readiness?: { checkInCount: number; journalEntryCount: number; totalRecords: number; minimumRecords: number }) {
+  const checkIns = readiness?.checkInCount ?? 0;
+  const entries = readiness?.journalEntryCount ?? 0;
+  const total = readiness?.totalRecords ?? 0;
+  const minimum = readiness?.minimumRecords ?? 3;
+  const checkInLabel = `check-in${checkIns === 1 ? "" : "s"}`;
+  const entryLabel = `Weave entr${entries === 1 ? "y" : "ies"}`;
+  const recordLabel = `record${total === 1 ? "" : "s"}`;
+  return `This week: ${checkIns} ${checkInLabel} and ${entries} ${entryLabel} (${total} recent ${recordLabel}). Personal pattern and weekly synthesis begin after ${minimum} check-ins or ${minimum} Weave entries in seven days.`;
+}
+
 export default function Oracle() {
   const { isAuthenticated, user } = useAuth();
   // Tier detection: oracle tier = full access; seeker = partial; explorer/null = threshold view
@@ -388,7 +399,7 @@ export default function Oracle() {
               <p className="text-sm text-muted-foreground font-light">
                 {oracleReadiness.data?.hasSufficientData
                   ? "Here is what the Oracle can responsibly reflect from your recent journal entries and check-ins."
-                  : "Pattern Mirror uses the same recent-evidence threshold as Weekly Summary before it names a pattern."}
+                  : evidenceSummary(oracleReadiness.data)}
               </p>
             </div>
             {insights.isLoading ? (
@@ -431,7 +442,7 @@ export default function Oracle() {
                 <TrendingUp className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" />
                 <p className="font-serif text-lg font-light text-foreground mb-2">No patterns yet</p>
                 <p className="text-base text-muted-foreground max-w-xs mx-auto">
-                  You have {oracleReadiness.data?.totalRecords ?? 0} recent record{oracleReadiness.data?.totalRecords === 1 ? "" : "s"}. Pattern Mirror begins after {oracleReadiness.data?.minimumRecords ?? 3} recent check-ins or {oracleReadiness.data?.minimumRecords ?? 3} Weave entries in the last seven days.
+                  {evidenceSummary(oracleReadiness.data)}
                 </p>
                 <Button variant="outline" size="sm" className="mt-4" asChild>
                   <Link href="/weave">Open The Weave</Link>
@@ -485,7 +496,7 @@ export default function Oracle() {
                 <Calendar className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" />
                 <p className="font-serif text-lg font-light text-foreground mb-2">No reflection yet</p>
                 <p className="text-base text-muted-foreground max-w-md mx-auto">
-                  The Oracle builds your weekly synthesis from your check-ins and Weave entries. Record three of either this week, then come back on Sunday — there will be something real here.
+                  {evidenceSummary(oracleReadiness.data)}
                 </p>
                 <Button variant="outline" size="sm" className="mt-5" asChild>
                   <Link href="/weave">Open The Weave</Link>
@@ -532,6 +543,12 @@ export default function Oracle() {
               <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-foreground">
                 You&apos;re offline. Your draft will stay here until you reconnect; Oracle guidance and live insights need a connection.
               </div>
+            )}
+
+            {mode === "guide" && oracleReadiness.data && !oracleReadiness.data.hasSufficientData && (
+              <p className="rounded-lg border border-border/70 bg-card/60 px-4 py-3 text-xs leading-relaxed text-muted-foreground">
+                <span className="font-medium text-foreground">Evidence check.</span> {evidenceSummary(oracleReadiness.data)} The Guide can still help with what you share in this conversation; it will not claim a personal pattern from limited history.
+              </p>
             )}
 
             {mode === "guide" && dailyIntention.data?.intention && (

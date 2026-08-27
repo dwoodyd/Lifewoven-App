@@ -527,7 +527,7 @@ export default function Home() {
                 desc: "Lumen opens the full system. Every tool, every pathway — fully unlocked.",
                 features: ["Everything in Explorer", "Unlimited Weave entries", "All 7 pathways", "Full 5S module suite", "Habit tracker & scorecard", "Decision journal", "Energy audit & trends"],
                 cta: "Start free, then choose Seeker",
-                href: getLoginUrl(),
+                href: getLoginUrl("/pricing?tier=seeker", "signUp"),
                 highlight: true,
               },
               {
@@ -537,7 +537,7 @@ export default function Home() {
                 desc: "Lumen and the Oracle work continuously. The AI layer that reads your patterns.",
                 features: ["Everything in Seeker", "Unlimited Oracle AI chat", "AI Weave reflections", "Cross-module pattern insights", "Monthly Oracle deep-dive report", "1-on-1 onboarding call"],
                 cta: "Start free, then choose Oracle",
-                href: getLoginUrl(),
+                href: getLoginUrl("/pricing?tier=oracle", "signUp"),
                 highlight: false,
               },
             ].map((tier) => (

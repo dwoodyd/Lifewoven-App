@@ -1723,3 +1723,10 @@
 - [x] Restore paid-download storage redemption: inventory all nine catalog objects, repair missing uploads or access, and verify signed redirect integrity.
 - [x] Ensure 72-hour download tokens never store short-lived signed URLs, and replace expired-storage errors with a branded reissue-link recovery path.
 - [x] Replace the Reset Audio PDF with the newly supplied file and update all protected catalog and order storage keys.
+- [x] New-user funnel A-1: ensure signup entry points request OAuth signUp while session-expiry and header links keep signIn.
+- [x] New-user funnel A-2: preserve returnTo across OAuth and carry pricing-tier selection intent through the callback.
+- [x] New-user funnel A-3/A-5: show a visible Lifewoven signup interstitial with Terms and Privacy consent before OAuth handoff.
+- [x] New-user funnel A-4: trigger the PWA installation prompt only after a completed survey or during a second session.
+- [x] New-user funnel A-6: assess custom OAuth callback-host capability and document any platform-side action required.
+- [x] New-user funnel A-7: add controlled QA evidence and verify honest, consistent Oracle behavior across Guide, Pattern Mirror, and Weekly Summary.
+- [x] New-user funnel: complete the brief’s route, consent, PWA, and Oracle verification matrix before publishing.

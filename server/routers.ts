@@ -853,15 +853,24 @@ const oracleRouter = router({
 
       // Ground every response in data fetched from the authenticated server context.
       // Never rely on a client-provided snapshot when describing what the user has recorded.
+      const recentEvidenceStart = new Date();
+      recentEvidenceStart.setDate(recentEvidenceStart.getDate() - 7);
       const [verifiedCheckIns, verifiedJournals] = await Promise.all([
         db.select({ emotionalScore: checkIns.emotionalScore, energyLevel: checkIns.energyLevel, clarityLevel: checkIns.clarityLevel, note: checkIns.note, createdAt: checkIns.createdAt })
-          .from(checkIns).where(eq(checkIns.userId, ctx.user.id)).orderBy(desc(checkIns.createdAt)).limit(7),
+          .from(checkIns).where(and(eq(checkIns.userId, ctx.user.id), gte(checkIns.createdAt, recentEvidenceStart))).orderBy(desc(checkIns.createdAt)).limit(7),
         db.select({ title: journalEntries.title, content: journalEntries.content, createdAt: journalEntries.createdAt })
-          .from(journalEntries).where(eq(journalEntries.userId, ctx.user.id)).orderBy(desc(journalEntries.createdAt)).limit(5),
+          .from(journalEntries).where(and(eq(journalEntries.userId, ctx.user.id), gte(journalEntries.createdAt, recentEvidenceStart))).orderBy(desc(journalEntries.createdAt)).limit(5),
       ]);
+      const guideReadiness = buildOracleReadiness({
+        checkInCount: verifiedCheckIns.length,
+        journalEntryCount: verifiedJournals.length,
+      });
+      const limitedHistorySafeguard = guideReadiness.hasSufficientData
+        ? ""
+        : `\n- RECENT EVIDENCE SAFEGUARD: There are only ${guideReadiness.checkInCount} recent check-in(s) and ${guideReadiness.journalEntryCount} recent Weave entry/entries. You may guide the user from what they share in this conversation, but you MUST NOT infer recurring personal patterns, trends, or a weekly narrative from this limited history. State that the record is still too small if asked for a pattern.`;
       const verifiedDataContext = `
 - Server-verified check-ins available: ${verifiedCheckIns.length}. Recent emotional scores: ${verifiedCheckIns.map(c => c.emotionalScore).join(", ") || "none"}.
-- Server-verified Weave entries available: ${verifiedJournals.length}.`;
+- Server-verified Weave entries available: ${verifiedJournals.length}.${limitedHistorySafeguard}`;
 
       // Build system prompt with user context
       const systemPrompt = `You are the Lifewoven Oracle — a wise, warm, and deeply perceptive guide rooted in the Soul Engineer Method, as taught in "Build a Life That Does Not Break You" by DeWayne Woods. The Soul Engineer Method is built on a single premise: most people are not failing because they lack motivation — they are failing because they are building on an unstable foundation. The method works by identifying and repairing the load-bearing structures of a person's interior life before optimizing performance.

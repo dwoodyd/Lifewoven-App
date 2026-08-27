@@ -181,7 +181,7 @@ describe("One-time code handoff flow", () => {
   });
 
   it("safe returnPath validation accepts normal paths", () => {
-    const paths = ["/", "/dashboard", "/btw/living-as-heard", "/pricing"];
+    const paths = ["/", "/dashboard", "/btw/living-as-heard", "/pricing", "/pricing?tier=seeker"];
     for (const p of paths) {
       const safePath = p.startsWith("/") && !p.startsWith("//") ? p : "/";
       expect(safePath).toBe(p);

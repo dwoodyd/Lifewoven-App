@@ -17,6 +17,7 @@ import { gentleSpring } from "@/lib/springs";
 const DISMISS_KEY = "lifewoven_pwa_prompt_dismissed";
 const DISMISS_DAYS = 30;
 export const PWA_INSTALL_REQUEST_EVENT = "lifewoven:open-install";
+export const PWA_SURVEY_COMPLETE_EVENT = "lifewoven:survey-completed";
 
 function isDismissed(): boolean {
   try {
@@ -69,15 +70,17 @@ export function PWAInstallPrompt() {
       setDeferredPrompt(e);
     };
     const openInstallPrompt = () => {
-      if (isInStandaloneMode()) return;
+      if (isInStandaloneMode() || isDismissed()) return;
       setIsIOSDevice(isIOS());
       setShow(true);
     };
     window.addEventListener("beforeinstallprompt", handler);
     window.addEventListener(PWA_INSTALL_REQUEST_EVENT, openInstallPrompt);
+    window.addEventListener(PWA_SURVEY_COMPLETE_EVENT, openInstallPrompt);
     return () => {
       window.removeEventListener("beforeinstallprompt", handler);
       window.removeEventListener(PWA_INSTALL_REQUEST_EVENT, openInstallPrompt);
+      window.removeEventListener(PWA_SURVEY_COMPLETE_EVENT, openInstallPrompt);
     };
   }, []);
 
