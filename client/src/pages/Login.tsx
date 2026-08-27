@@ -4,8 +4,8 @@ import { getLoginUrl } from "@/const";
 
 const PRICING_TIERS = new Set(["seeker", "oracle"]);
 
-function resolveReturnPath() {
-  const params = new URLSearchParams(window.location.search);
+export function resolveReturnPath(search = window.location.search) {
+  const params = new URLSearchParams(search);
   const requestedReturn = params.get("returnTo");
   const baseReturnPath = requestedReturn?.startsWith("/") ? requestedReturn : "/dashboard";
   const tier = params.get("tier");

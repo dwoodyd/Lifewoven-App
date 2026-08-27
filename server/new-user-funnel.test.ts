@@ -1,6 +1,8 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { getLoginUrl } from "../client/src/const";
+import { resolveReturnPath } from "../client/src/pages/Login";
 
 const root = resolve(import.meta.dirname, "..");
 const readClient = (path: string) => readFileSync(resolve(root, "client", "src", path), "utf8");
@@ -12,12 +14,35 @@ describe("new-user entry funnel", () => {
     const pricing = readClient("pages/Pricing.tsx");
 
     expect(login).toContain('getLoginUrl(returnPath, "signUp")');
-    expect(login).toContain('new URLSearchParams(window.location.search)');
+    expect(login).toContain("new URLSearchParams(search)");
     expect(login).not.toContain('location.split("?")[1]');
     expect(login).toContain('return `/pricing?tier=${tier}`');
     expect(home).toContain('getLoginUrl("/pricing?tier=seeker", "signUp")');
     expect(home).toContain('getLoginUrl("/pricing?tier=oracle", "signUp")');
     expect(pricing).toContain("getLoginUrl('/pricing', 'signUp')");
+  });
+
+  it("reads signup returnTo from the browser search string and preserves only approved pricing tiers", () => {
+    expect(resolveReturnPath("?returnTo=/pricing")).toBe("/pricing");
+    expect(resolveReturnPath("?returnTo=/pricing&tier=seeker")).toBe("/pricing?tier=seeker");
+    expect(resolveReturnPath("?returnTo=/pricing&tier=unapproved")).toBe("/pricing");
+    expect(resolveReturnPath("?returnTo=https://untrusted.example")).toBe("/dashboard");
+  });
+
+  it("encodes the resolved pricing path in the OAuth state payload", () => {
+    vi.stubEnv("VITE_OAUTH_PORTAL_URL", "https://oauth.example");
+    vi.stubEnv("VITE_APP_ID", "lifewoven-test-app");
+    vi.stubGlobal("window", { location: { origin: "https://app.lifewoven.click" } });
+
+    const oauthUrl = new URL(getLoginUrl(resolveReturnPath("?returnTo=/pricing"), "signUp"));
+    const state = Buffer.from(oauthUrl.searchParams.get("state") ?? "", "base64").toString("utf8");
+
+    expect(oauthUrl.searchParams.get("type")).toBe("signUp");
+    expect(state.split("||")[1]).toBe("/pricing");
+    expect(state.split("||")[2]).toBe("https://app.lifewoven.click");
+
+    vi.unstubAllEnvs();
+    vi.unstubAllGlobals();
   });
 
   it("shows Lifewoven legal consent before the signup OAuth handoff", () => {
