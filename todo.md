@@ -1730,3 +1730,4 @@
 - [x] New-user funnel A-6: assess custom OAuth callback-host capability and document any platform-side action required.
 - [x] New-user funnel A-7: add controlled QA evidence and verify honest, consistent Oracle behavior across Guide, Pattern Mirror, and Weekly Summary.
 - [x] New-user funnel: complete the brief’s route, consent, PWA, and Oracle verification matrix before publishing.
+- [x] Fix `/signup?returnTo=…` parsing so OAuth callback state preserves the requested path instead of defaulting to `/dashboard`.

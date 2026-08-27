@@ -12,6 +12,8 @@ describe("new-user entry funnel", () => {
     const pricing = readClient("pages/Pricing.tsx");
 
     expect(login).toContain('getLoginUrl(returnPath, "signUp")');
+    expect(login).toContain('new URLSearchParams(window.location.search)');
+    expect(login).not.toContain('location.split("?")[1]');
     expect(login).toContain('return `/pricing?tier=${tier}`');
     expect(home).toContain('getLoginUrl("/pricing?tier=seeker", "signUp")');
     expect(home).toContain('getLoginUrl("/pricing?tier=oracle", "signUp")');

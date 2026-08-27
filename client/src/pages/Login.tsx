@@ -4,8 +4,8 @@ import { getLoginUrl } from "@/const";
 
 const PRICING_TIERS = new Set(["seeker", "oracle"]);
 
-function resolveReturnPath(location: string) {
-  const params = new URLSearchParams(location.split("?")[1] || "");
+function resolveReturnPath() {
+  const params = new URLSearchParams(window.location.search);
   const requestedReturn = params.get("returnTo");
   const baseReturnPath = requestedReturn?.startsWith("/") ? requestedReturn : "/dashboard";
   const tier = params.get("tier");
@@ -27,7 +27,7 @@ export default function Login() {
   const [location] = useLocation();
   const pathname = location.split("?")[0];
   const isSignup = pathname === "/signup";
-  const returnPath = useMemo(() => resolveReturnPath(location), [location]);
+  const returnPath = useMemo(() => resolveReturnPath(), []);
 
   useEffect(() => {
     // Sign-in is an operational recovery path. It should retain its immediate
