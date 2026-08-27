@@ -975,6 +975,16 @@ User context:
   insights: protectedProcedure.query(async ({ ctx }) => {
     const db = await getDb();
     if (!db) return [];
+    const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const [recentCheckIns, recentJournalEntries] = await Promise.all([
+      db.select({ id: checkIns.id }).from(checkIns)
+        .where(and(eq(checkIns.userId, ctx.user.id), gte(checkIns.createdAt, weekAgo))).limit(3),
+      db.select({ id: journalEntries.id }).from(journalEntries)
+        .where(and(eq(journalEntries.userId, ctx.user.id), gte(journalEntries.createdAt, weekAgo))).limit(3),
+    ]);
+    if (!buildOracleReadiness({ checkInCount: recentCheckIns.length, journalEntryCount: recentJournalEntries.length }).hasSufficientData) {
+      return [];
+    }
     return db.select().from(oracleInsights)
       .where(and(eq(oracleInsights.userId, ctx.user.id), eq(oracleInsights.isRead, false)))
       .orderBy(desc(oracleInsights.createdAt))
@@ -1017,13 +1027,15 @@ User context:
     }
 
     // Gather recent data
+    const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     const [recentCheckIns, recentJournals, recentHabits] = await Promise.all([
-      db.select().from(checkIns).where(eq(checkIns.userId, ctx.user.id)).orderBy(desc(checkIns.createdAt)).limit(7),
-      db.select().from(journalEntries).where(eq(journalEntries.userId, ctx.user.id)).orderBy(desc(journalEntries.createdAt)).limit(5),
+      db.select().from(checkIns).where(and(eq(checkIns.userId, ctx.user.id), gte(checkIns.createdAt, weekAgo))).orderBy(desc(checkIns.createdAt)).limit(3),
+      db.select().from(journalEntries).where(and(eq(journalEntries.userId, ctx.user.id), gte(journalEntries.createdAt, weekAgo))).orderBy(desc(journalEntries.createdAt)).limit(3),
       db.select().from(habits).where(and(eq(habits.userId, ctx.user.id), eq(habits.isActive, true))).limit(10),
     ]);
 
-    if (recentCheckIns.length === 0 && recentJournals.length === 0) {
+    const readiness = buildOracleReadiness({ checkInCount: recentCheckIns.length, journalEntryCount: recentJournals.length });
+    if (!readiness.hasSufficientData) {
       return { insights: [] };
     }
 

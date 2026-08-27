@@ -431,7 +431,7 @@ export default function Oracle() {
                 <TrendingUp className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" />
                 <p className="font-serif text-lg font-light text-foreground mb-2">No patterns yet</p>
                 <p className="text-base text-muted-foreground max-w-xs mx-auto">
-                  You have {oracleReadiness.data?.totalRecords ?? 0} recent record{oracleReadiness.data?.totalRecords === 1 ? "" : "s"}. Pattern Mirror and Weekly Summary both begin after {oracleReadiness.data?.minimumRecords ?? 3} recent check-ins or Weave entries in the last seven days.
+                  You have {oracleReadiness.data?.totalRecords ?? 0} recent record{oracleReadiness.data?.totalRecords === 1 ? "" : "s"}. Pattern Mirror begins after {oracleReadiness.data?.minimumRecords ?? 3} recent check-ins or {oracleReadiness.data?.minimumRecords ?? 3} Weave entries in the last seven days.
                 </p>
                 <Button variant="outline" size="sm" className="mt-4" asChild>
                   <Link href="/weave">Open The Weave</Link>
@@ -485,7 +485,7 @@ export default function Oracle() {
                 <Calendar className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" />
                 <p className="font-serif text-lg font-light text-foreground mb-2">No reflection yet</p>
                 <p className="text-base text-muted-foreground max-w-md mx-auto">
-                  The Oracle builds your weekly synthesis from your check-ins and journal entries. Complete a few this week and come back on Sunday — there will be something real here.
+                  The Oracle builds your weekly synthesis from your check-ins and Weave entries. Record three of either this week, then come back on Sunday — there will be something real here.
                 </p>
                 <Button variant="outline" size="sm" className="mt-5" asChild>
                   <Link href="/weave">Open The Weave</Link>

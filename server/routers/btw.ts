@@ -54,7 +54,7 @@ async function getWeeklyReflectionEligibility(db: Awaited<ReturnType<typeof getD
   const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
   const [recentCheckIns, recentJournalEntries] = await Promise.all([
     db.select({ id: checkIns.id }).from(checkIns).where(and(eq(checkIns.userId, userId), gte(checkIns.createdAt, weekAgo))).limit(3),
-    db.select({ id: journalEntries.id }).from(journalEntries).where(and(eq(journalEntries.userId, userId), gte(journalEntries.createdAt, weekAgo))).limit(1),
+    db.select({ id: journalEntries.id }).from(journalEntries).where(and(eq(journalEntries.userId, userId), gte(journalEntries.createdAt, weekAgo))).limit(3),
   ]);
   const checkInCount = recentCheckIns.length;
   const journalEntryCount = recentJournalEntries.length;

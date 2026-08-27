@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Link } from "wouter";
 import { getLoginUrl } from "@/const";
-import { Settings2, Shield, Bell, User, Sparkles, Eye, CreditCard, ExternalLink, Moon, Sun, RefreshCw, Vibrate } from "lucide-react";
+import { Settings2, Shield, Bell, User, Sparkles, Eye, CreditCard, ExternalLink, Moon, Sun, RefreshCw, Vibrate, Download } from "lucide-react";
+import { PWA_INSTALL_REQUEST_EVENT } from "@/components/PWAInstallPrompt";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
@@ -313,6 +314,10 @@ export default function Settings() {
     setTimeout(() => window.location.reload(), 800);
   };
 
+  const handleInstallApp = () => {
+    window.dispatchEvent(new Event(PWA_INSTALL_REQUEST_EVENT));
+  };
+
   const handleDeletionRequest = () => {
     const confirmed = window.confirm("Request deletion of your Lifewoven account data? This submits a verified request for manual review. You will receive confirmation before your data is removed.");
     if (confirmed) requestDeletion.mutate({ confirmation: "DELETE MY DATA" });
@@ -402,6 +407,23 @@ export default function Settings() {
                 >
                   <RefreshCw className="h-3.5 w-3.5" />
                   Replay
+                </Button>
+              </div>
+              <div className="flex items-start justify-between gap-3 py-3 border-t border-border/50">
+                <div>
+                  <p className="text-sm font-medium text-foreground mb-0.5">Add Lifewoven to your home screen</p>
+                  <p className="text-xs text-muted-foreground font-light leading-relaxed max-w-sm">
+                    Optional. Install Lifewoven when you are ready for a faster, app-like return experience.
+                  </p>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-1.5 bg-transparent flex-shrink-0"
+                  onClick={handleInstallApp}
+                >
+                  <Download className="h-3.5 w-3.5" />
+                  Install
                 </Button>
               </div>
             </div>

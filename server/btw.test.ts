@@ -1,4 +1,6 @@
-import { describe, it, expect } from "vitest";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { describe, expect, it } from "vitest";
 
 import { hasSufficientWeeklyReflectionData, scoreGroundCheck } from "./routers/btw";
 
@@ -116,5 +118,12 @@ describe("Weekly Reflection data sufficiency", () => {
 
   it("rejects generation when the user has no meaningful recent data", () => {
     expect(hasSufficientWeeklyReflectionData({ checkInCount: 0, journalEntryCount: 0 })).toBe(false);
+  });
+
+  it("counts enough recent Weave entries to apply the same three-record evidence rule", () => {
+    const routerSource = readFileSync(resolve(process.cwd(), "server/routers/btw.ts"), "utf8");
+    const helperBlock = routerSource.slice(routerSource.indexOf("async function getWeeklyReflectionEligibility"), routerSource.indexOf("// ─── Router"));
+    expect(helperBlock).toContain("journalEntries.createdAt, weekAgo))).limit(3)");
+    expect(helperBlock).not.toContain("journalEntries.createdAt, weekAgo))).limit(1)");
   });
 });

@@ -1,11 +1,11 @@
 /**
  * PWAInstallPrompt — custom install prompt for Lifewoven PWA
  *
- * - Android/Chrome: intercepts the beforeinstallprompt event and shows a branded prompt
- * - iOS Safari: detects standalone mode absence and shows "Add to Home Screen" instructions
+ * - Android/Chrome: intercepts the beforeinstallprompt event and waits for an intentional request
+ * - iOS Safari: shows "Add to Home Screen" instructions only from the optional Settings action
  * - Respects user dismissal (stored in localStorage for 30 days)
  *
- * Place once in App.tsx — it manages its own visibility.
+ * Place once in App.tsx — it never interrupts a first visit automatically.
  */
 
 import { useEffect, useState } from "react";
@@ -16,6 +16,7 @@ import { gentleSpring } from "@/lib/springs";
 
 const DISMISS_KEY = "lifewoven_pwa_prompt_dismissed";
 const DISMISS_DAYS = 30;
+export const PWA_INSTALL_REQUEST_EVENT = "lifewoven:open-install";
 
 function isDismissed(): boolean {
   try {
@@ -59,24 +60,25 @@ export function PWAInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
 
   useEffect(() => {
-    if (isDismissed() || isInStandaloneMode()) return;
+    if (isInStandaloneMode()) return;
 
-    // iOS — show manual instructions after 30s
-    if (isIOS()) {
-      setIsIOSDevice(true);
-      const timer = setTimeout(() => setShow(true), 30_000);
-      return () => clearTimeout(timer);
-    }
-
-    // Android/Chrome — intercept beforeinstallprompt
+    // Keep the browser install event for an explicit Settings request. Do not
+    // turn it into a first-visit interruption on Dashboard or First Honest Week.
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e);
-      // Show after 20s of use
-      setTimeout(() => setShow(true), 20_000);
+    };
+    const openInstallPrompt = () => {
+      if (isInStandaloneMode()) return;
+      setIsIOSDevice(isIOS());
+      setShow(true);
     };
     window.addEventListener("beforeinstallprompt", handler);
-    return () => window.removeEventListener("beforeinstallprompt", handler);
+    window.addEventListener(PWA_INSTALL_REQUEST_EVENT, openInstallPrompt);
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handler);
+      window.removeEventListener(PWA_INSTALL_REQUEST_EVENT, openInstallPrompt);
+    };
   }, []);
 
   const handleInstall = async () => {
@@ -126,15 +128,19 @@ export function PWAInstallPrompt() {
                   <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
                     Tap <Share className="inline h-3 w-3 mx-0.5" /> then <strong>"Add to Home Screen"</strong> for the full app experience.
                   </p>
-                ) : (
+                ) : deferredPrompt ? (
                   <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
                     Install for offline access, faster load times, and a native app feel.
+                  </p>
+                ) : (
+                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                    Your browser has not offered installation yet. You can also use its menu to add Lifewoven to your home screen.
                   </p>
                 )}
               </div>
             </div>
 
-            {!isIOSDevice && (
+            {!isIOSDevice && deferredPrompt && (
               <div className="mt-4 flex gap-2">
                 <Button
                   onClick={handleInstall}

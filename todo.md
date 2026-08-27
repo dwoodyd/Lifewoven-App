@@ -1717,3 +1717,5 @@
 - [x] Fix broken public logo and mascot video delivery after the audited repository restore, then verify rendered media in the browser.
 - [x] Correct the media repair: restore the intended Lifewoven logo and original mascot clips, then validate live Paths, Weave, and Oracle views.
 - [x] Audit and repair every mascot video reference across the app; do not release until the full registry and all major video surfaces are verified non-blank.
+- [x] Defer the PWA home-screen prompt so it does not interrupt first visits to Dashboard or First Honest Week.
+- [x] Verify and harden Oracle Pattern Mirror and Weekly Summary so they disclose insufficient data and never fabricate user-specific insights.
