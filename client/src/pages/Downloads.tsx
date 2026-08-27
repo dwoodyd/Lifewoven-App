@@ -7,6 +7,8 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import { toast } from "sonner";
 import PageSkeleton from "@/components/PageSkeleton";
+import { useState } from "react";
+import { redeemAndOpenDownload } from "@/lib/secureDownload";
 
 // Product title map (slug → display title)
 const PRODUCT_TITLES: Record<string, string> = {
@@ -36,25 +38,32 @@ const PRODUCT_ICONS: Record<string, string> = {
 export default function Downloads() {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
   const [, navigate] = useLocation();
+  const [activeDownloadSlug, setActiveDownloadSlug] = useState<string | null>(null);
+  const [recoverySlug, setRecoverySlug] = useState<string | null>(null);
   const { data: orders, isLoading: ordersLoading, refetch } = trpc.paypalOrders.getMyOrders.useQuery(undefined, {
     enabled: !!user,
   });
 
-  const reissue = trpc.paypalOrders.reissueDownload.useMutation({
-    onSuccess: (data: { token: string }) => {
-      refetch();
-      toast.success("New download link generated", {
-        description: "Your fresh download link is active for 72 hours.",
-        duration: 6000,
+  const reissue = trpc.paypalOrders.reissueDownload.useMutation();
+
+  async function startSecureDownload(productSlug: string, token?: string | null, forceFresh = false) {
+    setActiveDownloadSlug(productSlug);
+    try {
+      const activeToken = forceFresh || !token
+        ? (await reissue.mutateAsync({ productSlug })).token
+        : token;
+      await redeemAndOpenDownload(activeToken);
+      setRecoverySlug(null);
+      await refetch();
+    } catch (error) {
+      setRecoverySlug(productSlug);
+      toast.error("Your download could not be prepared", {
+        description: error instanceof Error ? error.message : "Generate a fresh link and try again.",
       });
-      window.open(`/api/download/${data.token}`, "_blank");
-    },
-    onError: (error) => {
-      toast.error("Download link could not be generated", {
-        description: error.message || "Please try again. If this persists, contact support.",
-      });
-    },
-  });
+    } finally {
+      setActiveDownloadSlug(null);
+    }
+  }
 
   if (authLoading || (isAuthenticated && ordersLoading)) return <PageSkeleton />;
 
@@ -82,7 +91,7 @@ export default function Downloads() {
           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-3">Account</p>
           <h1 className="font-serif text-3xl sm:text-4xl font-light text-foreground mb-2">My Downloads</h1>
           <p className="text-muted-foreground text-base font-light">
-            Your Wisdom Tools. Included member access and purchases both receive secure download links valid for 72 hours.
+            Your Wisdom Tools. Included member access and purchases both receive secure download access for 72 hours.
           </p>
         </div>
 
@@ -117,7 +126,7 @@ export default function Downloads() {
                     {!isExpired && expiresAt && (
                       <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
                         <Clock className="h-3 w-3" />
-                        Link expires {expiresAt.toLocaleString()}
+                        Download access expires {expiresAt.toLocaleString()}
                       </p>
                     )}
                     {!hasIssuedLink && (
@@ -131,24 +140,32 @@ export default function Downloads() {
                         Download link expired — generate a new one below
                       </p>
                     )}
+                    {recoverySlug === order.productSlug && (
+                      <p role="alert" className="text-xs text-amber-500 mt-2">
+                        The secure file link could not be prepared. Generate a fresh link below and try again.
+                      </p>
+                    )}
                   </div>
                   <div className="flex gap-2 shrink-0 flex-wrap">
                     {token && !isExpired ? (
-                      <a href={`/api/download/${token}`} target="_blank" rel="noopener noreferrer">
-                        <Button size="sm" className="gap-2">
-                          <Download className="h-3.5 w-3.5" /> Download
-                        </Button>
-                      </a>
+                      <Button
+                        size="sm"
+                        className="gap-2"
+                        onClick={() => startSecureDownload(order.productSlug ?? "", token)}
+                        disabled={activeDownloadSlug === order.productSlug}
+                      >
+                        {activeDownloadSlug === order.productSlug ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />} Download
+                      </Button>
                     ) : (
                       <Button
                         size="sm"
                         variant="outline"
                         type="button"
                         className="gap-2"
-                        onClick={() => reissue.mutate({ productSlug: order.productSlug ?? "" })}
-                        disabled={reissue.isPending}
+                        onClick={() => startSecureDownload(order.productSlug ?? "", null, true)}
+                        disabled={activeDownloadSlug === order.productSlug}
                       >
-                        {reissue.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RefreshCw className="h-3.5 w-3.5" />}
+                        {activeDownloadSlug === order.productSlug ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RefreshCw className="h-3.5 w-3.5" />}
                         {isExpired ? "Generate fresh link" : "Generate download link"}
                       </Button>
                     )}
@@ -171,7 +188,7 @@ export default function Downloads() {
         <div className="mt-10 p-5 rounded-2xl border border-border bg-card/50 flex items-start gap-3">
           <CheckCircle2 className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
           <p className="text-sm text-muted-foreground font-light">
-            Download links expire after 72 hours as a security measure. You can generate a fresh link at any time — there is no limit on re-downloads for products you own. If you experience any issues, contact us at <a href="mailto:hello@lifewoven.click" className="underline underline-offset-2">hello@lifewoven.click</a>.
+            Download access expires after 72 hours as a security measure. Each click prepares a fresh short-lived file link, and you can generate a fresh 72-hour access link at any time — there is no limit on re-downloads for products you own. If you experience any issues, contact us at <a href="mailto:hello@lifewoven.click" className="underline underline-offset-2">hello@lifewoven.click</a>.
           </p>
         </div>
       </div>

@@ -8,6 +8,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { useAdminPreview } from "@/contexts/AdminPreviewContext";
 import { getLoginUrl } from "@/const";
 import { useState } from "react";
+import { redeemAndOpenDownload } from "@/lib/secureDownload";
 import { toast } from "sonner";
 import { PayPalButton } from "@/components/PayPalButton";
 import PageSkeleton from "@/components/PageSkeleton";
@@ -244,24 +245,29 @@ export default function ProductDetail() {
 
   // Token state — re-issued on demand via server
   const [downloadToken, setDownloadToken] = useState<string | null>(null);
+  const [downloadError, setDownloadError] = useState<string | null>(null);
+  const [isPreparingDownload, setIsPreparingDownload] = useState(false);
   const canDownloadNow = alreadyPurchased || includedWithMembership || purchaseSuccess || downloadToken !== null;
 
-  const reissue = trpc.paypalOrders.reissueDownload.useMutation({
-    onSuccess: (data) => {
-      setDownloadToken(data.token);
-      window.open(`/api/download/${data.token}`, "_blank");
-    },
-    onError: (error) => toast.error("Download link could not be generated", { description: error.message || "Please try again." }),
-  });
+  const reissue = trpc.paypalOrders.reissueDownload.useMutation();
 
-  function handleDownload() {
-    const token = downloadToken ?? existingOrder?.downloadToken ?? null;
-    if (token) {
-      window.open(`/api/download/${token}`, "_blank");
-      return;
+  async function handleDownload(forceFresh = false) {
+    setIsPreparingDownload(true);
+    try {
+      const currentToken = downloadToken ?? existingOrder?.downloadToken ?? null;
+      const token = !forceFresh && currentToken
+        ? currentToken
+        : (await reissue.mutateAsync({ productSlug: productId })).token;
+      setDownloadToken(token);
+      await redeemAndOpenDownload(token);
+      setDownloadError(null);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Generate a fresh link and try again.";
+      setDownloadError(message);
+      toast.error("Your download could not be prepared", { description: message });
+    } finally {
+      setIsPreparingDownload(false);
     }
-    // Token missing or expired — re-issue via server
-    reissue.mutate({ productSlug: productId });
   }
 
   function handlePayPalSuccess(_token: string, title: string) {
@@ -308,8 +314,8 @@ export default function ProductDetail() {
 
   // Download button used in multiple places
   const DownloadButton = ({ size = "lg", label }: { size?: "lg" | "default"; label?: string }) => (
-    <Button size={size} className="gap-2" onClick={handleDownload} disabled={reissue.isPending}>
-      {reissue.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+    <Button size={size} className="gap-2" onClick={() => handleDownload()} disabled={isPreparingDownload}>
+      {isPreparingDownload ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
       {label ?? `Download ${product.title}`}
     </Button>
   );
@@ -336,6 +342,12 @@ export default function ProductDetail() {
                 {includedWithMembership ? "Your membership includes this file. Click below to generate your secure download." : "Thank you for your purchase. Click below to download your file."}
               </p>
               <DownloadButton size="default" />
+              {downloadError && (
+                <div role="alert" className="mt-3 text-sm text-amber-300">
+                  <p>{downloadError}</p>
+                  <Button type="button" size="sm" variant="outline" className="mt-2" onClick={() => handleDownload(true)} disabled={isPreparingDownload}>Generate a fresh link</Button>
+                </div>
+              )}
             </div>
           </div>
         )}

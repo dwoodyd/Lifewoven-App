@@ -10,6 +10,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { useAdminPreview } from "@/contexts/AdminPreviewContext";
 import { useState } from "react";
 import { alignmentFundamentals, meaningFoundation, alignmentCurrent, identityInMotion, type CourseData } from "@/data/courseData";
+import { redeemAndOpenDownload } from "@/lib/secureDownload";
 
 const COURSES: Record<string, CourseData> = {
   "alignment-fundamentals": alignmentFundamentals,
@@ -74,28 +75,32 @@ export default function CourseDetail() {
 
   // Token-gated download state
   const [downloadToken, setDownloadToken] = useState<string | null>(null);
+  const [downloadError, setDownloadError] = useState<string | null>(null);
+  const [isPreparingDownload, setIsPreparingDownload] = useState(false);
   const existingOrder = myOrders?.find(o => o.productSlug === courseId);
   const activeToken = downloadToken ?? existingOrder?.downloadToken ?? null;
   const hasPurchasedCourse = !!existingOrder || effectiveAdmin;
   const includedWithMembership = storeProducts?.some((product) => product.slug === courseId && product.isIncluded) ?? false;
   const hasCourseAccess = hasPurchasedCourse || includedWithMembership;
 
-  const reissue = trpc.paypalOrders.reissueDownload.useMutation({
-    onSuccess: (data) => {
-      setDownloadToken(data.token);
-      // Open immediately after token is set
-      window.open(`/api/download/${data.token}`, "_blank");
-    },
-    onError: () => toast.error("Could not generate download link. Please try again."),
-  });
+  const reissue = trpc.paypalOrders.reissueDownload.useMutation();
 
-  function handleDownloadCourse() {
-    if (activeToken) {
-      window.open(`/api/download/${activeToken}`, "_blank");
-      return;
+  async function handleDownloadCourse(forceFresh = false) {
+    setIsPreparingDownload(true);
+    try {
+      const token = !forceFresh && activeToken
+        ? activeToken
+        : (await reissue.mutateAsync({ productSlug: courseId })).token;
+      setDownloadToken(token);
+      await redeemAndOpenDownload(token);
+      setDownloadError(null);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Generate a fresh link and try again.";
+      setDownloadError(message);
+      toast.error("Your course download could not be prepared", { description: message });
+    } finally {
+      setIsPreparingDownload(false);
     }
-    // Token missing or expired — re-issue via server
-    reissue.mutate({ productSlug: courseId });
   }
 
   const handleEnroll = () => navigate(`/product/${courseId}`);
@@ -122,8 +127,8 @@ export default function CourseDetail() {
 
   const DownloadButton = ({ size = "lg" as "lg" | "default" }) => (
     hasCourseAccess && COURSE_PDF_SLUGS.has(courseId) ? (
-      <Button size={size} variant="outline" className="gap-2" onClick={handleDownloadCourse} disabled={reissue.isPending}>
-        {reissue.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+      <Button size={size} variant="outline" className="gap-2" onClick={() => handleDownloadCourse()} disabled={isPreparingDownload}>
+        {isPreparingDownload ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
         Download Course PDF
       </Button>
     ) : null
@@ -169,6 +174,12 @@ export default function CourseDetail() {
             <EnrollButton />
             <DownloadButton />
           </div>
+          {downloadError && (
+            <div role="alert" className="mt-4 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm text-amber-200">
+              <p>{downloadError}</p>
+              <Button type="button" size="sm" variant="outline" className="mt-3" onClick={() => handleDownloadCourse(true)} disabled={isPreparingDownload}>Generate a fresh link</Button>
+            </div>
+          )}
         </div>
         {/* Overview */}
         <div className="mb-8 p-4 sm:p-6 rounded-2xl border border-border bg-card">

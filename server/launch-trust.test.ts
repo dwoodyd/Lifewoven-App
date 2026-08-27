@@ -116,7 +116,7 @@ describe("launch trust safeguards", () => {
     expect(store).toContain("Included with Oracle");
     expect(downloads).toContain("Secure download link ready to generate");
     expect(downloads).toContain("Included with Oracle");
-    expect(downloads).toContain("Download link could not be generated");
+    expect(downloads).toContain("Your download could not be prepared");
     expect(course).toContain("PDF-first delivery");
     expect(course).toContain("Included with Oracle");
     expect(course).toContain('type="button"');
@@ -133,13 +133,16 @@ describe("launch trust safeguards", () => {
     expect(productDetail).toContain("const serverProduct = storeProducts?.find");
     expect(productDetail).toContain("const product = localProduct ?? (serverProduct ?");
     expect(productDetail).toContain("if (productsLoading) return <PageSkeleton />");
-    expect(productDetail).toContain("Download link could not be generated");
+    expect(productDetail).toContain("Your download could not be prepared");
     expect(downloads).toContain('onClick={() => navigate(`/product/${order.productSlug}`)}');
   });
 
   it("treats issued download tokens as short-lived capabilities without weakening signed-out catalog gating", () => {
     const handler = source("server/downloadHandler.ts");
     const storage = source("server/storage.ts");
+    const downloads = source("client/src/pages/Downloads.tsx");
+    const productDetail = source("client/src/pages/ProductDetail.tsx");
+    const courseDetail = source("client/src/pages/CourseDetail.tsx");
 
     expect(handler).toContain("A 256-bit, expiring token is the primary download capability");
     expect(handler).toContain("if (sessionToken)");
@@ -148,6 +151,12 @@ describe("launch trust safeguards", () => {
     expect(handler).toContain('res.setHeader("Cache-Control", "private, no-store, max-age=0")');
     expect(storage).toContain('"v1/storage/presign/get"');
     expect(storage).not.toContain('"v1/storage/downloadUrl"');
+    expect(handler).toContain("verifySignedStorageUrl(presignedUrl)");
+    expect(handler).toContain('if (wantsJson(req)) return res.json({ url: presignedUrl })');
+    expect(downloads).toContain("redeemAndOpenDownload");
+    expect(productDetail).toContain("redeemAndOpenDownload");
+    expect(courseDetail).toContain("redeemAndOpenDownload");
+    expect(downloads).not.toContain('href={`/api/download/${token}`}');
   });
 
   it("uses the simplified single-action view for members with no first-run data", () => {

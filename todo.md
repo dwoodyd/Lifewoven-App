@@ -1721,3 +1721,4 @@
 - [x] Verify and harden Oracle Pattern Mirror and Weekly Summary so they disclose insufficient data and never fabricate user-specific insights.
 - [x] Keep push notifications functionally disabled until the post-purchase path is verified, despite configured VAPID credentials.
 - [x] Restore paid-download storage redemption: inventory all nine catalog objects, repair missing uploads or access, and verify signed redirect integrity.
+- [x] Ensure 72-hour download tokens never store short-lived signed URLs, and replace expired-storage errors with a branded reissue-link recovery path.
