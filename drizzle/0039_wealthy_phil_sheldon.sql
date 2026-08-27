@@ -1,0 +1,1 @@
+ALTER TABLE `beta_access` ADD `source` enum('free_beta','beta_code','referral') DEFAULT 'free_beta' NOT NULL;

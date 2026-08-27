@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { ArrowLeft, Download, BookOpen, Lock, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import Nav from "@/components/Nav";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
+import { trpc } from "@/lib/trpc";
 
 export interface ArticleSection {
   heading?: string;
@@ -47,7 +48,7 @@ function renderBody(text: string) {
   );
 }
 
-function ArticlePaywall({ isAuthenticated }: { isAuthenticated: boolean }) {
+function ArticlePaywall({ isAuthenticated, backHref }: { isAuthenticated: boolean; backHref: string }) {
   return (
     <div className="relative mt-0 mb-16">
       {/* Fade overlay over the last visible section */}
@@ -69,20 +70,20 @@ function ArticlePaywall({ isAuthenticated }: { isAuthenticated: boolean }) {
         </h3>
         <p className="text-base text-muted-foreground font-light mb-7 max-w-sm mx-auto leading-relaxed">
           {isAuthenticated
-            ? "This article is part of the Lifewoven library. Get full access with any membership plan."
-            : "Sign in to continue reading — or explore a membership plan for unlimited access to the full library."}
+            ? "You have reached the next layer of this library piece. When you are ready, Seeker opens the full reading path and practice tools."
+            : "Sign in to keep this reading connected to your Lifewoven practice, or explore the next layer whenever it feels useful."}
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           {isAuthenticated ? (
             <>
               <Button asChild size="lg" className="gap-2">
-                <Link href="/pricing">
+                <Link href="/pricing?tier=seeker">
                   <Sparkles className="h-4 w-4" />
-                  View Membership Plans
+                  Explore the next layer
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg">
-                <Link href="/audit">Take the Free Audit</Link>
+                <Link href={backHref}>Not now</Link>
               </Button>
             </>
           ) : (
@@ -97,7 +98,7 @@ function ArticlePaywall({ isAuthenticated }: { isAuthenticated: boolean }) {
           )}
         </div>
         <p className="text-xs text-muted-foreground mt-5 font-light">
-          Explorer plan is free · No credit card required
+          Your free tools and saved work remain available.
         </p>
       </div>
     </div>
@@ -107,10 +108,13 @@ function ArticlePaywall({ isAuthenticated }: { isAuthenticated: boolean }) {
 export default function ArticleReader({ article }: Props) {
   const { user, isAuthenticated } = useAuth();
   const isAdmin = false;
+  const { data: storeAccess } = trpc.store.getAccess.useQuery();
+  const trackEvent = trpc.system.trackEvent.useMutation();
+  const contentTracked = useRef(false);
 
   // Admins and oracle/seeker tier users get full access
   const membershipTier = (user as any)?.membershipTier as string | undefined;
-  const hasPaidAccess = isAdmin || membershipTier === "oracle" || membershipTier === "seeker";
+  const hasPaidAccess = isAdmin || membershipTier === "oracle" || membershipTier === "seeker" || storeAccess?.level === "library";
 
   // Gate applies when: logged out, or logged in as explorer (free tier)
   const showGate = !hasPaidAccess && article.sections.length > FREE_SECTIONS;
@@ -122,6 +126,19 @@ export default function ArticleReader({ article }: Props) {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [article.slug]);
+
+  useEffect(() => {
+    if (!isAuthenticated || showGate || contentTracked.current) return;
+    const markConsumed = () => {
+      const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (scrollableHeight > 0 && window.scrollY / scrollableHeight >= 0.55 && !contentTracked.current) {
+        contentTracked.current = true;
+        trackEvent.mutate({ event: "content_consumed", properties: { source: "article", slug: article.slug } });
+      }
+    };
+    window.addEventListener("scroll", markConsumed, { passive: true });
+    return () => window.removeEventListener("scroll", markConsumed);
+  }, [article.slug, isAuthenticated, showGate, trackEvent]);
 
   const handleDownload = () => {
     if (showGate) return; // prevent download on gated articles
@@ -268,7 +285,7 @@ ${article.coda ? `<p class="coda">${article.coda}</p>` : ""}
           ))}
 
           {/* Paywall gate */}
-          {showGate && <ArticlePaywall isAuthenticated={isAuthenticated} />}
+          {showGate && <ArticlePaywall isAuthenticated={isAuthenticated} backHref={article.backHref} />}
 
           {/* Coda — only shown when full access */}
           {!showGate && article.coda && (

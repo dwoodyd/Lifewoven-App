@@ -581,10 +581,11 @@ export const betaAccess = mysqlTable("beta_access", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull(),
   betaCodeId: int("betaCodeId"),  // L4: nullable for referral-based access (no beta code)
+  source: mysqlEnum("source", ["free_beta", "beta_code", "referral"]).default("free_beta").notNull(),
   activatedAt: timestamp("activatedAt").defaultNow().notNull(),
   expiresAt: timestamp("expiresAt").notNull(),       // activatedAt + durationDays
   notifiedAt: timestamp("notifiedAt"),               // when expiry warning was shown
-}, (t) => [index("idx_beta_access_userId").on(t.userId)]);
+}, (t) => [uniqueIndex("uq_beta_access_userId").on(t.userId)]);
 
 export const events = mysqlTable("events", {
   id:         int("id").autoincrement().primaryKey(),

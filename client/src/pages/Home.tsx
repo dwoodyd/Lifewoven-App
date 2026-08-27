@@ -210,7 +210,7 @@ export default function Home() {
             <p className="mt-6 text-xs text-[oklch(0.78_0.01_75)]">
               Free to start · No credit card required ·{" "}
               <Link href="/beta" className="text-[oklch(0.72_0.12_55)] hover:underline">
-                Have a beta code?
+                Have an invitation or access code?
               </Link>
             </p>
             </div>

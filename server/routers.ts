@@ -24,12 +24,13 @@ import {
   scorecards, beliefs, decisions, energyAudits, oracleInsights,
   oracleConversations, userPathways, pathwaySessions, resources, courses, enrollments,
   products, communityPosts, communityComments, communityLikes, orders, users, moodLogs,
-  goals, goalMilestones, firstHonestWeekEntries, btwDailyIntentions, auditClaims
+  goals, goalMilestones, firstHonestWeekEntries, btwDailyIntentions, auditClaims, events
 } from "../drizzle/schema";
 import { eq, desc, and, like, sql, gte, lte } from "drizzle-orm";
 import { invokeLLM } from "./_core/llm";
 import { checkLlmRateLimit } from "./_core/llmRateLimiter";
 import { tierCanAccessOracle } from "./tierHelpers";
+import { hasBetaOrPaidAccess } from "./routers/beta";
 import { TRPCError } from "@trpc/server";
 import { transcribeAudio } from "./_core/voiceTranscription";
 import { storagePut } from "./storage";
@@ -217,6 +218,12 @@ const auditRouter = router({
         await tx.update(users)
           .set({ onboardingCompleted: true, primaryPathway: input.recommendedPathway })
           .where(eq(users.id, ctx.user.id));
+        await tx.insert(events).values({
+          userId: ctx.user.id,
+          event: "reflective_tool_completed",
+          properties: JSON.stringify({ tool: "soul_engineer_assessment" }),
+          createdAt: Math.floor(Date.now() / 1000),
+        });
       });
 
       return { success: true };
@@ -323,6 +330,12 @@ const checkInRouter = router({
         userId: ctx.user.id,
         ...input,
       });
+      await db.insert(events).values({
+        userId: ctx.user.id,
+        event: "reflective_tool_completed",
+        properties: JSON.stringify({ tool: "daily_check_in" }),
+        createdAt: Math.floor(Date.now() / 1000),
+      });
       return result;
     }),
 
@@ -398,6 +411,12 @@ const journalRouter = router({
         ...input,
         title: autoTitle,
         tags: input.tags ?? [],
+      });
+      await db.insert(events).values({
+        userId: ctx.user.id,
+        event: "reflective_tool_completed",
+        properties: JSON.stringify({ tool: "weave_entry" }),
+        createdAt: Math.floor(Date.now() / 1000),
       });
       return { success: true };
     }),
@@ -761,10 +780,8 @@ const oracleRouter = router({
       if (!db) throw new Error("Database unavailable");
 
       // H1: Tier gate — Oracle chat requires oracle tier OR sampler (3 free/month for Explorer/Seeker)
-      const [userTierRow] = await db.select({ membershipTier: users.membershipTier, role: users.role }).from(users).where(eq(users.id, ctx.user.id)).limit(1);
-      const isAdmin = userTierRow?.role === "admin";
-      const hasFullOracle = tierCanAccessOracle(userTierRow?.membershipTier as any);
-      if (!isAdmin && !hasFullOracle) {
+      const hasFullOracle = await hasBetaOrPaidAccess(ctx.user.id);
+      if (!hasFullOracle) {
         // Oracle Sampler: allow 3 free questions per calendar month for Explorer/Seeker
         const SAMPLER_LIMIT = 3;
         const now = new Date();
@@ -1029,9 +1046,7 @@ User context:
     if (!db) throw new Error("Database unavailable");
 
     // H1: Tier gate — Oracle insights require oracle tier (admins bypass)
-    const [userTierRow2] = await db.select({ membershipTier: users.membershipTier, role: users.role }).from(users).where(eq(users.id, ctx.user.id)).limit(1);
-    const isAdmin2 = userTierRow2?.role === "admin";
-    if (!isAdmin2 && !tierCanAccessOracle(userTierRow2?.membershipTier as any)) {
+    if (!await hasBetaOrPaidAccess(ctx.user.id)) {
       throw new TRPCError({ code: "FORBIDDEN", message: "Oracle access requires the Oracle membership tier. Upgrade to unlock unlimited Oracle AI sessions." });
     }
 
@@ -1105,9 +1120,7 @@ Active habits: ${recentHabits.map(h => `${h.name} (streak: ${h.streak})`).join("
   getMonthlyUsage: protectedProcedure.query(async ({ ctx }) => {
     const db = await getDb();
     if (!db) return { used: 0, limit: 3, hasFullAccess: false };
-    const [userTierRow] = await db.select({ membershipTier: users.membershipTier, role: users.role }).from(users).where(eq(users.id, ctx.user.id)).limit(1);
-    const isAdmin = userTierRow?.role === "admin";
-    const hasFullAccess = isAdmin || tierCanAccessOracle(userTierRow?.membershipTier as any);
+    const hasFullAccess = await hasBetaOrPaidAccess(ctx.user.id);
     if (hasFullAccess) return { used: 0, limit: null, hasFullAccess: true };
     const now = new Date();
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);

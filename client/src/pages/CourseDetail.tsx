@@ -68,6 +68,7 @@ export default function CourseDetail() {
   const [, navigate] = useLocation();
   const { data: myOrders } = trpc.paypalOrders.getMyOrders.useQuery(undefined, { enabled: !!user });
   const { data: storeProducts } = trpc.store.getProducts.useQuery();
+  const trackEvent = trpc.system.trackEvent.useMutation();
 
   const isAdmin = false;
   const { previewAsUser, togglePreview } = useAdminPreview();
@@ -93,6 +94,7 @@ export default function CourseDetail() {
         : (await reissue.mutateAsync({ productSlug: courseId })).token;
       setDownloadToken(token);
       await redeemAndOpenDownload(token);
+      trackEvent.mutate({ event: "content_consumed", properties: { source: "course_pdf", courseId } });
       setDownloadError(null);
     } catch (error) {
       const message = error instanceof Error ? error.message : "Generate a fresh link and try again.";

@@ -288,7 +288,7 @@ export default function Pricing() {
                   </div>
                 ) : tier.id === "explorer" ? (
                   <Button asChild variant="outline" className="w-full">
-                    <a href={getLoginUrl('/pricing', 'signUp')}>Start Free</a>
+                    <a href={getLoginUrl('/dashboard', 'signUp')}>Begin your free beta</a>
                   </Button>
                 ) : (
                   <Button

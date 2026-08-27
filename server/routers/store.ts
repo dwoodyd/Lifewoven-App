@@ -13,6 +13,7 @@ import { getDb } from "../db";
 import { products, orders, users } from "../../drizzle/schema";
 import { eq, and } from "drizzle-orm";
 import { z } from "zod";
+import { getBetaAccess } from "./beta";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -45,12 +46,14 @@ export const storeRouter = router({
       return { level: "standalone" as StoreAccessLevel, tier: "explorer", isBetaMember: false };
     }
     // Founding members in beta get full library access without a paid subscription
-    if (ctx.user.storeAccess === "library_during_beta" || ctx.user.role === "admin") {
+    const beta = await getBetaAccess(ctx.user.id);
+    const hasActiveBeta = !!beta && !beta.expired;
+    if (hasActiveBeta || ctx.user.role === "admin") {
       return {
         level: "library" as StoreAccessLevel,
         tier: ctx.user.membershipTier ?? "explorer",
-        isBetaMember: ctx.user.storeAccess === "library_during_beta",
-        betaEndDate: ctx.user.betaEndDate ?? null,
+        isBetaMember: hasActiveBeta,
+        betaEndDate: beta?.expiresAt ?? null,
       };
     }
     const level = getAccessLevel(ctx.user.membershipTier ?? "explorer", ctx.user.role ?? "user");
@@ -67,8 +70,10 @@ export const storeRouter = router({
 
     const rows = await db.select().from(products).where(eq(products.isPublished, true));
 
+    const beta = ctx.user ? await getBetaAccess(ctx.user.id) : null;
+    const hasActiveBeta = !!beta && !beta.expired;
     const level: StoreAccessLevel = ctx.user
-      ? (ctx.user.storeAccess === "library_during_beta" || ctx.user.role === "admin"
+      ? (hasActiveBeta || ctx.user.role === "admin"
           ? "library"
           : getAccessLevel(ctx.user.membershipTier ?? "explorer", ctx.user.role ?? "user"))
       : "standalone";
@@ -117,7 +122,10 @@ export const storeRouter = router({
         .where(and(eq(products.slug, input.productSlug), eq(products.isPublished, true)));
       if (!product) throw new Error("Product not found");
 
-      const level = getAccessLevel(ctx.user.membershipTier ?? "explorer", ctx.user.role ?? "user");
+      const beta = await getBetaAccess(ctx.user.id);
+      const level = beta && !beta.expired
+        ? "library" as StoreAccessLevel
+        : getAccessLevel(ctx.user.membershipTier ?? "explorer", ctx.user.role ?? "user");
 
       // Oracle users already have access — no purchase needed
       if (level === "library") {
@@ -289,9 +297,15 @@ export const storeRouter = router({
   syncAccess: protectedProcedure.mutation(async ({ ctx }) => {
     const db = await getDb();
     if (!db) return { storeAccess: "standalone" as StoreAccessLevel };
-    const level = getAccessLevel(ctx.user.membershipTier ?? "explorer", ctx.user.role ?? "user");
+    const beta = await getBetaAccess(ctx.user.id);
+    const level = beta && !beta.expired
+      ? "library" as StoreAccessLevel
+      : getAccessLevel(ctx.user.membershipTier ?? "explorer", ctx.user.role ?? "user");
     await db.update(users)
-      .set({ storeAccess: level })
+      .set({
+        storeAccess: beta && !beta.expired ? "library_during_beta" : level,
+        betaEndDate: beta && !beta.expired ? beta.expiresAt : ctx.user.betaEndDate,
+      })
       .where(eq(users.id, ctx.user.id));
     return { storeAccess: level };
   }),

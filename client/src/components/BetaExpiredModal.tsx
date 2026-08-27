@@ -47,12 +47,11 @@ export function BetaExpiredModal() {
 
           {/* Headline */}
           <h2 className="text-2xl font-serif text-white mb-3">
-            Your Beta Access Has Ended
+            Keep Going With Your Practice
           </h2>
           <p className="text-stone-300 text-sm leading-relaxed mb-8">
-            Your 45-day beta trial is complete. We hope the journey has been transformative.
-            To continue your practice — your pathways, journal, Oracle, and all courses — 
-            choose a plan that fits where you are now.
+            Your complimentary beta window has concluded. Your saved reflections and free tools remain yours.
+            When you are ready, choose the membership depth that fits the practice you want to continue.
           </p>
 
           {/* CTA */}
@@ -62,7 +61,7 @@ export function BetaExpiredModal() {
             onClick={() => { dismiss(); navigate("/pricing"); }}
           >
             <Sparkles className="w-4 h-4 mr-2" />
-            Choose Your Plan
+            Explore Your Next Step
             <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
 

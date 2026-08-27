@@ -15,6 +15,8 @@ import { Button } from "@/components/ui/button";
 import { gentleSpring } from "@/lib/springs";
 
 const DISMISS_KEY = "lifewoven_pwa_prompt_dismissed";
+const SESSION_KEY = "lifewoven_pwa_session_seen";
+const SESSION_COUNT_KEY = "lifewoven_pwa_session_count";
 const DISMISS_DAYS = 30;
 export const PWA_INSTALL_REQUEST_EVENT = "lifewoven:open-install";
 export const PWA_SURVEY_COMPLETE_EVENT = "lifewoven:survey-completed";
@@ -74,6 +76,14 @@ export function PWAInstallPrompt() {
       setIsIOSDevice(isIOS());
       setShow(true);
     };
+    // A return visit is a reasonable, non-critical moment to make the optional
+    // installation benefit visible. Never show it during the first session.
+    if (!sessionStorage.getItem(SESSION_KEY)) {
+      sessionStorage.setItem(SESSION_KEY, "1");
+      const sessionCount = Number(localStorage.getItem(SESSION_COUNT_KEY) ?? "0") + 1;
+      localStorage.setItem(SESSION_COUNT_KEY, String(sessionCount));
+      if (sessionCount >= 2) window.setTimeout(openInstallPrompt, 1200);
+    }
     window.addEventListener("beforeinstallprompt", handler);
     window.addEventListener(PWA_INSTALL_REQUEST_EVENT, openInstallPrompt);
     window.addEventListener(PWA_SURVEY_COMPLETE_EVENT, openInstallPrompt);

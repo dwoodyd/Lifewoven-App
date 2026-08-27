@@ -3,10 +3,11 @@ import { TRPCError } from "@trpc/server";
 import { protectedProcedure, router } from "../_core/trpc";
 import { getDb } from "../db";
 import { tierCanAccessGroundGuide, tierCanAccessWeeklyReflection } from "../tierHelpers";
+import { hasBetaOrPaidAccess } from "./beta";
 import {
   users, btwProfiles, btwGroundChecks, btwDailySessions, btwReturns,
   btwPrayers, btwGratitudeEntries, btwAudioItems, btwWeeklyReflections, btwDailyIntentions,
-  checkIns, journalEntries,
+  checkIns, journalEntries, events,
 } from "../../drizzle/schema";
 import { eq, desc, and, gte } from "drizzle-orm";
 import { invokeLLM } from "../_core/llm";
@@ -112,6 +113,12 @@ export const btwRouter = router({
         recommendedPractice: practice,
       });
       await db.update(btwProfiles).set({ lastPrimaryState: state }).where(eq(btwProfiles.userId, ctx.user.id)).catch(() => {});
+      await db.insert(events).values({
+        userId: ctx.user.id,
+        event: "reflective_tool_completed",
+        properties: JSON.stringify({ tool: "ground_check" }),
+        createdAt: Math.floor(Date.now() / 1000),
+      });
       return { state, practice };
     }),
 
@@ -250,7 +257,7 @@ export const btwRouter = router({
       // Tier gate: Seeker+ only
       const db = await requireDb();
       const [user] = await db.select({ membershipTier: users.membershipTier }).from(users).where(eq(users.id, ctx.user.id));
-      if (!tierCanAccessGroundGuide(user?.membershipTier as any)) {
+      if (!tierCanAccessGroundGuide(user?.membershipTier as any) && !await hasBetaOrPaidAccess(ctx.user.id)) {
         throw new TRPCError({ code: "FORBIDDEN", message: "UPGRADE_REQUIRED:seeker" });
       }
       const response = await invokeLLM({
@@ -343,7 +350,7 @@ You are a reflective companion, not a spiritual authority.`,
       const db = await requireDb();
       // Tier gate: Seeker+ only
       const [user] = await db.select({ membershipTier: users.membershipTier }).from(users).where(eq(users.id, ctx.user.id));
-      if (!tierCanAccessWeeklyReflection(user?.membershipTier as any)) {
+      if (!tierCanAccessWeeklyReflection(user?.membershipTier as any) && !await hasBetaOrPaidAccess(ctx.user.id)) {
         throw new TRPCError({ code: "FORBIDDEN", message: "UPGRADE_REQUIRED:seeker" });
       }
    const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);

@@ -29,21 +29,76 @@ export async function getBetaAccess(userId: number) {
   return { ...row, expired: row.expiresAt < new Date() };
 }
 
-/** Returns true if user has active beta OR is admin OR has paid membership */
+const DEFAULT_FREE_BETA_DAYS = 30;
+
+async function claimStandardFreeBeta(userId: number) {
+  const db = await getDb();
+  if (!db) return { granted: false, reason: "database_unavailable" as const };
+  const userRows = await db.select({ role: users.role, membershipTier: users.membershipTier })
+    .from(users).where(eq(users.id, userId)).limit(1);
+  if (!userRows.length || userRows[0].role === "admin" || userRows[0].membershipTier !== "explorer") {
+    return { granted: false, reason: "paid_or_admin" as const };
+  }
+  const u = userRows[0];
+  const access = await getBetaAccess(userId);
+  if (access && !access.expired) {
+    await syncActiveBetaToUser(userId, access.activatedAt, access.expiresAt);
+    return { granted: false, reason: "already_active" as const, expiresAt: access.expiresAt };
+  }
+  if (access?.expired) return { granted: false, reason: "expired" as const, expiresAt: access.expiresAt };
+
+  const expiresAt = new Date(Date.now() + DEFAULT_FREE_BETA_DAYS * 24 * 60 * 60 * 1000);
+  try {
+    await db.insert(betaAccess).values({ userId, betaCodeId: null, source: "free_beta", expiresAt });
+  } catch {
+    const concurrent = await getBetaAccess(userId);
+    if (concurrent && !concurrent.expired) {
+      await syncActiveBetaToUser(userId, concurrent.activatedAt, concurrent.expiresAt);
+      return { granted: false, reason: "already_active" as const, expiresAt: concurrent.expiresAt };
+    }
+    throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Unable to establish beta access." });
+  }
+  await syncActiveBetaToUser(userId, new Date(), expiresAt);
+  return { granted: true, reason: "new_free_beta" as const, expiresAt };
+}
+
+/** Returns true if user has active beta OR is admin OR has paid membership.
+ * A brand-new Explorer receives their one-time beta entitlement on this first
+ * protected access check, so a direct deep link cannot race the client bootstrap.
+ */
 export async function hasBetaOrPaidAccess(userId: number): Promise<boolean> {
   const db = await getDb();
   if (!db) return false;
   const userRows = await db.select({ role: users.role, membershipTier: users.membershipTier })
     .from(users).where(eq(users.id, userId)).limit(1);
   if (!userRows.length) return false;
-  const u = userRows[0];
-  if (u.role === "admin") return true;
-  if (u.membershipTier !== "explorer") return true;
-  const access = await getBetaAccess(userId);
-  return !!access && !access.expired;
+  const user = userRows[0];
+  if (user.role === "admin" || user.membershipTier !== "explorer") return true;
+  const claim = await claimStandardFreeBeta(userId);
+  return claim.granted || claim.reason === "already_active";
+}
+
+async function syncActiveBetaToUser(userId: number, activatedAt: Date, expiresAt: Date) {
+  const db = await requireDb();
+  await db.update(users)
+    .set({
+      storeAccess: "library_during_beta",
+      betaStartDate: activatedAt,
+      betaEndDate: expiresAt,
+      billingStatus: "trialing_no_card",
+    })
+    .where(eq(users.id, userId));
 }
 
 export const betaRouter = router({
+  /**
+   * Grants the standard free beta window on an authenticated user's first app load.
+   * The unique beta_access.userId constraint makes simultaneous browser loads safe.
+   */
+  claimFreeAccess: protectedProcedure.mutation(async ({ ctx }) => {
+    return claimStandardFreeBeta(ctx.user.id);
+  }),
+
   /** Admin: generate beta codes */
   generateCodes: protectedProcedure
     .input(z.object({
@@ -139,11 +194,14 @@ export const betaRouter = router({
       const expiresAt = new Date();
       expiresAt.setDate(expiresAt.getDate() + betaCode.durationDays);
 
-      await db.insert(betaAccess).values({
-        userId: ctx.user.id,
-        betaCodeId: betaCode.id,
-        expiresAt,
-      });
+      if (existing) {
+        await db.update(betaAccess)
+          .set({ betaCodeId: betaCode.id, source: "beta_code", activatedAt: new Date(), expiresAt, notifiedAt: null })
+          .where(eq(betaAccess.id, existing.id));
+      } else {
+        await db.insert(betaAccess).values({ userId: ctx.user.id, betaCodeId: betaCode.id, source: "beta_code", expiresAt });
+      }
+      await syncActiveBetaToUser(ctx.user.id, new Date(), expiresAt);
       await db.update(betaCodes)
         .set({ usedCount: sql`${betaCodes.usedCount} + 1` })
         .where(eq(betaCodes.id, betaCode.id));

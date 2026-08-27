@@ -103,14 +103,14 @@ export default function BetaAccess() {
                 <div>
                   <h1 className="text-2xl font-serif text-white mb-3">Beta Access</h1>
                   <p className="text-stone-300 text-sm mb-6">
-                    Sign in first, then return here to enter your beta code.
+                    Create your Lifewoven account, then return here to enter your invitation or access code.
                   </p>
                   <Button
                     className="w-full h-11 font-semibold rounded-xl"
                     style={{ background: "linear-gradient(135deg, #c9a84c, #e8c96a)", color: "#0d0d1a" }}
-                    onClick={() => { window.location.href = getLoginUrl(currentReturnPath()); }}
+                    onClick={() => { window.location.href = `/signup?returnTo=${encodeURIComponent(currentReturnPath())}`; }}
                   >
-                    Sign In to Continue
+                    Continue to Account Creation
                   </Button>
                 </div>
               ) : (

@@ -19,7 +19,7 @@ describe("new-user entry funnel", () => {
     expect(login).toContain('return `/pricing?tier=${tier}`');
     expect(home).toContain('getLoginUrl("/pricing?tier=seeker", "signUp")');
     expect(home).toContain('getLoginUrl("/pricing?tier=oracle", "signUp")');
-    expect(pricing).toContain("getLoginUrl('/pricing', 'signUp')");
+    expect(pricing).toContain("getLoginUrl('/dashboard', 'signUp')");
   });
 
   it("reads signup returnTo from the browser search string and preserves only approved pricing tiers", () => {

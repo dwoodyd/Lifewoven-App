@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { notifyOwner } from "./notification";
 import { adminProcedure, protectedProcedure, publicProcedure, router } from "./trpc";
 import { getDb } from "../db";
@@ -50,6 +50,8 @@ export const systemRouter = router({
         "audit_completed",
         "audit_signup_click",
         "audit_share_click",
+        "reflective_tool_completed",
+        "content_consumed",
       ]),
       properties: z.record(z.string(), z.unknown()).optional(),
     }))
@@ -64,6 +66,21 @@ export const systemRouter = router({
       });
       return { ok: true };
     }),
+  /** Minimal, server-derived activation state for respectful conversion timing. */
+  activationStatus: protectedProcedure.query(async ({ ctx }) => {
+    const db = await getDb();
+    if (!db) return { reflectiveToolCompleted: false, contentConsumed: false, isActivated: false };
+    const rows = await db.select({ event: events.event })
+      .from(events)
+      .where(and(
+        eq(events.userId, ctx.user.id),
+        sql`${events.event} IN ('reflective_tool_completed', 'content_consumed')`,
+      ))
+      .limit(20);
+    const reflectiveToolCompleted = rows.some((row) => row.event === "reflective_tool_completed");
+    const contentConsumed = rows.some((row) => row.event === "content_consumed");
+    return { reflectiveToolCompleted, contentConsumed, isActivated: reflectiveToolCompleted && contentConsumed };
+  }),
   getOnboardingFunnel: adminProcedure.query(async () => {
     const db = await getDb();
     const slideOrder = ["thesis","state","framework","oracle","oracle_teaser","btw","reset","close"];

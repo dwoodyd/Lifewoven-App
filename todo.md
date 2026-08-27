@@ -1731,3 +1731,10 @@
 - [x] New-user funnel A-7: add controlled QA evidence and verify honest, consistent Oracle behavior across Guide, Pattern Mirror, and Weekly Summary.
 - [x] New-user funnel: complete the brief’s route, consent, PWA, and Oracle verification matrix before publishing.
 - [x] Fix `/signup?returnTo=…` parsing so OAuth callback state preserves the requested path instead of defaulting to `/dashboard`.
+- [x] Frictionless access: grant an idempotent, code-free beta window to new Explorer users on first sign-in while retaining beta-code, referral, invitation, and PayPal flows.
+- [x] Frictionless access: keep organic sign-ins app-first, while preserving explicit pricing and checkout return intent.
+- [x] Conversion timing: track reflective-tool completion and content consumption as activation events.
+- [x] Conversion timing: keep pre-activation experiences prompt-free and make paid-feature UpgradeGate copy specific, warm, dismissible, and tier-aware.
+- [x] Conversion timing: show one dismissible, post-completion Seeker invitation after an eligible free reflective milestone.
+- [x] Conversion timing: preserve and reframe beta-window-closing surfaces as a gentle “keep going” invitation.
+- [x] Conversion timing and frictionless access: verify fresh-account, free-tool, paid-gate, beta-expiry, code/referral/invitation, and PayPal-purchase paths.

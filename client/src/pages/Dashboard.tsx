@@ -48,6 +48,7 @@ const MODULE_CONFIG = [
 ];
 
 import FoundingWelcomeCard from "@/components/FoundingWelcomeCard";
+import PostActivationInvite from "@/components/PostActivationInvite";
 
 function LumenEmpty({ title, body, href, onAction, cta, videoId = "peaceful_idle" }: { title: string; body: string; href?: string; onAction?: () => void; cta: string; videoId?: string }) {
   return (
@@ -70,6 +71,7 @@ function LumenEmpty({ title, body, href, onAction, cta, videoId = "peaceful_idle
 
 export default function Dashboard() {
   const { user, isAuthenticated } = useAuth();
+  const { data: activation } = trpc.system.activationStatus.useQuery(undefined, { enabled: isAuthenticated });
   const [showCheckIn, setShowCheckIn] = useState(false);
   const [trialBannerDismissed, setTrialBannerDismissed] = useState(
     () => sessionStorage.getItem("lifeos_trial_banner_dismissed") === "true"
@@ -335,6 +337,8 @@ export default function Dashboard() {
             onDismiss={() => {}}
           />
         )}
+
+        {activation?.isActivated && <PostActivationInvite />}
 
         {/* Trial-state banner — shown for founding members in trialing_no_card state */}
         {!trialBannerDismissed && (user as any)?.billingStatus === "trialing_no_card" && (user as any)?.foundingMember && (

@@ -130,7 +130,7 @@ export const referralRouter = router({
 
       const existing = await db.select().from(betaAccess)
         .where(eq(betaAccess.userId, ctx.user.id)).limit(1);
-      if (existing.length > 0)
+      if (existing[0] && existing[0].expiresAt > new Date())
         throw new TRPCError({ code: "BAD_REQUEST", message: "You already have an active trial." });
 
       const codeRow = await db.select().from(referralCodes)
@@ -151,7 +151,21 @@ export const referralRouter = router({
         .where(eq(referralCodes.id, ref.id));
 
       // L4: betaCodeId should be null for referral-based access (no beta code was used)
-      await db.insert(betaAccess).values({ userId: ctx.user.id, betaCodeId: null, expiresAt });
+      if (existing[0]) {
+        await db.update(betaAccess)
+          .set({ betaCodeId: null, source: "referral", activatedAt: new Date(now), expiresAt, notifiedAt: null })
+          .where(eq(betaAccess.id, existing[0].id));
+      } else {
+        await db.insert(betaAccess).values({ userId: ctx.user.id, betaCodeId: null, source: "referral", expiresAt });
+      }
+      await db.update(users)
+        .set({
+          storeAccess: "library_during_beta",
+          betaStartDate: new Date(now),
+          betaEndDate: expiresAt,
+          billingStatus: "trialing_no_card",
+        })
+        .where(eq(users.id, ctx.user.id));
 
       const [ownerRow] = await db.select({ name: users.name, email: users.email })
         .from(users).where(eq(users.id, ref.ownerId)).limit(1);

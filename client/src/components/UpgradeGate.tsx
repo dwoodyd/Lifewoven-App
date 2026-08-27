@@ -29,13 +29,16 @@ export function UpgradeGate({ feature, description, requiredTier = "seeker", chi
           <Lock className="h-4 w-4 text-primary" />
         </div>
         <p className="text-sm font-light text-foreground mb-1">{feature}</p>
-        <p className="text-xs text-muted-foreground font-light mb-4 max-w-xs">{description}</p>
-        <Link href="/pricing">
-          <Button size="sm" className="gap-1.5">
+        <p className="text-xs text-muted-foreground font-light mb-4 max-w-xs">{description} When you are ready, {planLabel} opens this part of your practice.</p>
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          <Link href={`/pricing?tier=${requiredTier}`}>
+            <Button size="sm" className="gap-1.5">
             <Sparkles className="h-3 w-3" />
-            Unlock with {planLabel} — {planPrice}
-          </Button>
-        </Link>
+              Explore {planLabel} — {planPrice}
+            </Button>
+          </Link>
+          <Link href="/dashboard" className="text-xs text-muted-foreground underline-offset-4 hover:underline">Not now</Link>
+        </div>
       </div>
     </div>
   );
