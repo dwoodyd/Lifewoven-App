@@ -139,11 +139,15 @@ describe("launch trust safeguards", () => {
 
   it("treats issued download tokens as short-lived capabilities without weakening signed-out catalog gating", () => {
     const handler = source("server/downloadHandler.ts");
+    const storage = source("server/storage.ts");
 
     expect(handler).toContain("A 256-bit, expiring token is the primary download capability");
     expect(handler).toContain("if (sessionToken)");
     expect(handler).toContain("if (sessionUser && order.userId !== sessionUser.id)");
     expect(handler).not.toContain('return res.status(401).json({ error: "Authentication required to download." })');
+    expect(handler).toContain('res.setHeader("Cache-Control", "private, no-store, max-age=0")');
+    expect(storage).toContain('"v1/storage/presign/get"');
+    expect(storage).not.toContain('"v1/storage/downloadUrl"');
   });
 
   it("uses the simplified single-action view for members with no first-run data", () => {

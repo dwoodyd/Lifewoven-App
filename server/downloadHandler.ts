@@ -2,9 +2,9 @@
  * Secure download endpoint: GET /api/download/:token
  *
  * Validates the token against the orders table, checks expiry,
- * and redirects to a short-lived presigned S3 URL. The presigned URL
- * expires in 60 seconds — enough for the browser to initiate the download
- * but not long enough to share or bookmark.
+ * and redirects to a short-lived storage-provider signed URL. The provider
+ * currently issues roughly one-hour URLs, while this endpoint creates a new
+ * signed URL each time the still-valid 72-hour download token is redeemed.
  */
 import type { Request, Response } from "express";
 import { getDb } from "./db";
@@ -91,6 +91,8 @@ export async function downloadHandler(req: Request, res: Response) {
     // New path: generate a short-lived presigned URL
     try {
       const { url: presignedUrl } = await storageGet(rawUrl);
+      // Do not allow an authenticated redirect capability to be cached.
+      res.setHeader("Cache-Control", "private, no-store, max-age=0");
       return res.redirect(302, presignedUrl);
     } catch (err) {
       console.error(`[Download] storageGet failed for key ${rawUrl}:`, err);

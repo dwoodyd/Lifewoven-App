@@ -30,7 +30,7 @@ async function buildDownloadUrl(
   apiKey: string
 ): Promise<string> {
   const downloadApiUrl = new URL(
-    "v1/storage/downloadUrl",
+    "v1/storage/presign/get",
     ensureTrailingSlash(baseUrl)
   );
   downloadApiUrl.searchParams.set("path", normalizeKey(relKey));
@@ -38,7 +38,15 @@ async function buildDownloadUrl(
     method: "GET",
     headers: buildAuthHeaders(apiKey),
   });
-  return (await response.json()).url;
+  if (!response.ok) {
+    const message = await response.text().catch(() => response.statusText);
+    throw new Error(`Storage presign failed (${response.status} ${response.statusText}): ${message}`);
+  }
+  const payload = await response.json() as { url?: unknown };
+  if (typeof payload.url !== "string" || !payload.url) {
+    throw new Error("Storage presign response did not include a URL.");
+  }
+  return payload.url;
 }
 
 function ensureTrailingSlash(value: string): string {
