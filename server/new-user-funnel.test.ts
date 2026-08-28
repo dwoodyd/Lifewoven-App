@@ -64,6 +64,16 @@ describe("new-user entry funnel", () => {
     expect(prompt).not.toContain("setTimeout(() => setShow(true)");
   });
 
+  it("waits for authoritative Dashboard data before treating an account as first-run", () => {
+    const dashboard = readClient("pages/Dashboard.tsx");
+    const onboarding = readClient("components/OnboardingModal.tsx");
+
+    expect(dashboard).toContain("if (dashData && isFirstRun)");
+    expect(dashboard).toContain('new Event("lifewoven:first-run-onboarding")');
+    expect(onboarding).toContain('window.addEventListener("lifewoven:first-run-onboarding", openFirstRun)');
+    expect(onboarding).toContain('window.addEventListener("lifewoven:replay-onboarding", openReplay)');
+  });
+
   it("uses the same real evidence summary in Guide, Pattern Mirror, and Weekly Summary", () => {
     const oracle = readClient("pages/Oracle.tsx");
 
