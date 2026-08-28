@@ -59,9 +59,9 @@ export default function ClosingTheGap() {
                 Generate
               </Button>
             ) : (
-              <Link href="/pricing">
+              <Link href="/pricing?tier=seeker">
                 <Button variant="ghost" size="sm" className="gap-1.5 text-xs text-muted-foreground">
-                  <Lock className="h-3 w-3" /> Seeker only
+                  <Lock className="h-3 w-3" /> See your weekly thread with Seeker
                 </Button>
               </Link>
             )}
@@ -69,7 +69,7 @@ export default function ClosingTheGap() {
 
           {!canUseWeeklyReflection && (
             <div className="rounded-2xl border border-border bg-secondary/20 p-6 text-center mb-4">
-              <p className="text-sm font-light text-muted-foreground">Weekly AI reflection is available on the <span className="text-foreground">Seeker</span> plan.</p>
+              <p className="text-sm font-light text-muted-foreground">When you are ready, <span className="text-foreground">Seeker</span> turns your completed Ground practices into a private weekly reflection — showing what helped, where you returned, and what may serve you next.</p>
             </div>
           )}
           {weeklyData ? (
