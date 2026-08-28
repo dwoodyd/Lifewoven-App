@@ -1738,3 +1738,10 @@
 - [x] Conversion timing: show one dismissible, post-completion Seeker invitation after an eligible free reflective milestone.
 - [x] Conversion timing: preserve and reframe beta-window-closing surfaces as a gentle “keep going” invitation.
 - [x] Conversion timing and frictionless access: verify fresh-account, free-tool, paid-gate, beta-expiry, code/referral/invitation, and PayPal-purchase paths.
+- [ ] Conversion surface map: record reflective activation after Audit, Weave, and Ground Check completion.
+- [ ] Conversion surface map: record content activation after Resource Library, Oracle, and Ground lesson consumption.
+- [ ] Conversion surface map: verify all mapped premium Library, Course, Oracle, and Ground surfaces use value-specific UpgradeGate copy without gating results or support.
+- [ ] Conversion surface map: add one dismissible, post-exercise invitation on Audit, Weave, and Ground Check completion surfaces.
+- [ ] Conversion surface map: reframe Dashboard beta-window notices and expiry messaging as continuation invitations with no pre-activation prompts.
+- [ ] Conversion surface map: complete route, activation, prompt-frequency, and purchase-intent regression verification.
+- [ ] Signup routing: send bare `/pricing` browsing to `/dashboard` after account creation while preserving selected seeker/oracle tiers and referral paths.

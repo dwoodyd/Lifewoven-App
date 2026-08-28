@@ -16,16 +16,17 @@ describe("new-user entry funnel", () => {
     expect(login).toContain('getLoginUrl(returnPath, "signUp")');
     expect(login).toContain("new URLSearchParams(search)");
     expect(login).not.toContain('location.split("?")[1]');
-    expect(login).toContain('return `/pricing?tier=${tier}`');
+    expect(login).toContain('return chosenTier ? `/pricing?tier=${chosenTier}` : "/dashboard"');
     expect(home).toContain('getLoginUrl("/pricing?tier=seeker", "signUp")');
     expect(home).toContain('getLoginUrl("/pricing?tier=oracle", "signUp")');
     expect(pricing).toContain("getLoginUrl('/dashboard', 'signUp')");
   });
 
   it("reads signup returnTo from the browser search string and preserves only approved pricing tiers", () => {
-    expect(resolveReturnPath("?returnTo=/pricing")).toBe("/pricing");
+    expect(resolveReturnPath("?returnTo=/pricing")).toBe("/dashboard");
     expect(resolveReturnPath("?returnTo=/pricing&tier=seeker")).toBe("/pricing?tier=seeker");
-    expect(resolveReturnPath("?returnTo=/pricing&tier=unapproved")).toBe("/pricing");
+    expect(resolveReturnPath("?returnTo=/pricing&tier=unapproved")).toBe("/dashboard");
+    expect(resolveReturnPath("?returnTo=/pricing%3Ftier%3Doracle")).toBe("/pricing?tier=oracle");
     expect(resolveReturnPath("?returnTo=https://untrusted.example")).toBe("/dashboard");
   });
 
@@ -38,7 +39,7 @@ describe("new-user entry funnel", () => {
     const state = Buffer.from(oauthUrl.searchParams.get("state") ?? "", "base64").toString("utf8");
 
     expect(oauthUrl.searchParams.get("type")).toBe("signUp");
-    expect(state.split("||")[1]).toBe("/pricing");
+    expect(state.split("||")[1]).toBe("/dashboard");
     expect(state.split("||")[2]).toBe("https://app.lifewoven.click");
 
     vi.unstubAllEnvs();

@@ -10,10 +10,18 @@ export function resolveReturnPath(search = window.location.search) {
   const baseReturnPath = requestedReturn?.startsWith("/") ? requestedReturn : "/dashboard";
   const tier = params.get("tier");
 
-  // Marketing links use /signup?returnTo=/pricing&tier=seeker. Keep that
-  // selection through OAuth while refusing arbitrary query-string injection.
-  if (baseReturnPath === "/pricing" && tier && PRICING_TIERS.has(tier)) {
-    return `/pricing?tier=${tier}`;
+  // Only a selected paid tier is purchase intent. Pricing browsing itself
+  // should enter the app, where a new member's beta and onboarding begin.
+  const [returnPathOnly, returnQuery = ""] = baseReturnPath.split("?");
+  const innerTier = new URLSearchParams(returnQuery).get("tier");
+  const chosenTier = tier && PRICING_TIERS.has(tier)
+    ? tier
+    : innerTier && PRICING_TIERS.has(innerTier)
+      ? innerTier
+      : null;
+
+  if (returnPathOnly === "/pricing") {
+    return chosenTier ? `/pricing?tier=${chosenTier}` : "/dashboard";
   }
 
   return baseReturnPath;

@@ -368,12 +368,12 @@ export default function Dashboard() {
             <div className="flex items-center gap-2 min-w-0">
               <Sparkles className="h-4 w-4 text-amber-400 shrink-0" />
               <span className="text-sm text-amber-300">
-                Your beta period has ended. You're on the <strong>Explorer</strong> tier. Upgrade to Seeker or Oracle at your <strong>locked founding rate</strong>.
+                Your beta window has closed. Your <strong>Explorer</strong> tools remain here whenever you need them. When you are ready for deeper practice, Seeker and Oracle are available.
               </span>
             </div>
             <div className="flex items-center gap-2 shrink-0">
               <Link href="/pricing">
-                <button className="text-xs font-semibold text-amber-400 border border-amber-500/40 rounded-full px-3 py-1 hover:bg-amber-500/15 transition-colors">Upgrade</button>
+                <button className="text-xs font-semibold text-amber-400 border border-amber-500/40 rounded-full px-3 py-1 hover:bg-amber-500/15 transition-colors">See plans</button>
               </Link>
               <button
                 onClick={() => { sessionStorage.setItem("lifeos_trial_banner_dismissed", "true"); setTrialBannerDismissed(true); }}
@@ -391,10 +391,10 @@ export default function Dashboard() {
           <div className="mb-4 flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-red-500/30 bg-red-500/8">
             <div className="flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-red-400 shrink-0" />
-              <span className="text-sm text-red-300">Your beta trial ends in <strong>{daysLeft} day{daysLeft !== 1 ? "s" : ""}</strong>. Upgrade to keep full access.</span>
+              <span className="text-sm text-red-300">Your beta window closes in <strong>{daysLeft} day{daysLeft !== 1 ? "s" : ""}</strong>. Keep your practice going at the depth that serves you.</span>
             </div>
             <Link href="/pricing">
-              <button className="text-xs font-semibold text-red-400 border border-red-500/40 rounded-full px-3 py-1 hover:bg-red-500/15 transition-colors shrink-0">Upgrade</button>
+              <button className="text-xs font-semibold text-red-400 border border-red-500/40 rounded-full px-3 py-1 hover:bg-red-500/15 transition-colors shrink-0">See plans</button>
             </Link>
           </div>
         )}
@@ -463,7 +463,7 @@ export default function Dashboard() {
                       ? "bg-red-500/10 border-red-500/20 hover:bg-red-500/15"
                       : "bg-amber-500/10 border-amber-500/20 hover:bg-amber-500/15"
                   }`}
-                  title={`${daysLeft} day${daysLeft !== 1 ? 's' : ''} remaining in your beta access period. Click to upgrade and keep full access.`}
+                  title={`${daysLeft} day${daysLeft !== 1 ? 's' : ''} remain in your beta window. Explore the plans whenever you are ready to continue more deeply.`}
                 >
                   <Sparkles className={`h-3.5 w-3.5 ${daysLeft <= 7 ? "text-red-400" : "text-amber-400"}`} />
                   <span className={`text-xs font-medium ${daysLeft <= 7 ? "text-red-400" : "text-amber-400"}`}>

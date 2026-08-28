@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import Nav from "@/components/Nav";
+import PostActivationInvite from "@/components/PostActivationInvite";
 import { trpc } from "@/lib/trpc";
 import { ArrowRight, ArrowLeft } from "lucide-react";
 
@@ -28,7 +29,7 @@ export default function GroundCheck() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Array<number | null>>(Array(7).fill(null));
   const [result, setResult] = useState<{ state: string; practice: string } | null>(null);
-  const declaredState = new URLSearchParams(location.split("?")[1] ?? "").get("state");
+  const declaredState = new URLSearchParams(window.location.search).get("state");
   const validDeclaredState = declaredState === "scattered" || declaredState === "burdened" || declaredState === "settled"
     ? declaredState
     : undefined;
@@ -67,6 +68,7 @@ export default function GroundCheck() {
           <p className="text-sm text-muted-foreground mb-6 font-light">
             You are not evaluated. You are seen. The recommended practice meets you exactly here.
           </p>
+          <PostActivationInvite />
           <div className="flex flex-col gap-3">
             <Button asChild size="lg" className="gap-2">
               <a href={stateInfo.route}>Begin Recommended Practice <ArrowRight className="h-4 w-4" /></a>

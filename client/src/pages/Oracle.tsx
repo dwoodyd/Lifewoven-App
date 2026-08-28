@@ -122,6 +122,7 @@ export default function Oracle() {
   const weeklyData = weeklyReflection.data?.summaryJson as Record<string, string> | null ?? null;
   const hasWeeklyData = weeklyEligibility.data?.hasSufficientData ?? false;
   const monthlyUsage = trpc.oracle.getMonthlyUsage.useQuery(undefined, { enabled: isAuthenticated && !hasOracleAccess });
+  const trackEvent = trpc.system.trackEvent.useMutation();
   const { data: rbStatusOracle } = trpc.readingBridge.getStatus.useQuery(undefined, { enabled: isAuthenticated });
   // Weekly reading check-in: show once per week when user has a chapter set and no messages yet
   const [readingPromptDismissed, setReadingPromptDismissed] = useState(() => {
@@ -160,6 +161,7 @@ export default function Oracle() {
 
   const chat = trpc.oracle.chat.useMutation({
     onSuccess: (data: any) => {
+      trackEvent.mutate({ event: "content_consumed", properties: { source: "oracle_guidance" } });
       setMessages(prev => [...prev.filter(m => !m.error), { role: "assistant", content: data.reply, tags: data.tags ?? [] }]);
       setConversationId(typeof data.conversationId === "number" ? data.conversationId : null);
       setIsLoading(false);
