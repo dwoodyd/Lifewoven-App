@@ -60,7 +60,7 @@ export default function BTWLanding() {
         </div>
 
         {selectedState && (
-          <section className="relative mb-10 min-h-[300px] overflow-hidden border border-primary/25 bg-card px-5 pb-6 pt-44" aria-live="polite">
+          <section className="relative mb-10 min-h-[300px] overflow-hidden rounded-[var(--radius-surface)] border border-primary/25 bg-card px-4 pb-5 pt-44 sm:px-5 sm:pb-6" aria-live="polite">
             <div className="pointer-events-none absolute inset-x-0 top-0 h-[70%]" aria-hidden="true">
               <LuminScene videoId={selectedState.videoId} ambient loop ambientSize="min(46vw, 320px)" ambientPosition={{ position: "absolute", left: "50%", top: "45%", transform: "translate(-50%, -50%)" }} className="opacity-100" />
               <div className="absolute inset-x-0 bottom-0 h-1/2 bg-[linear-gradient(180deg,transparent,var(--card))]" />
@@ -75,17 +75,17 @@ export default function BTWLanding() {
 
         {/* Primary CTA */}
         <div className="flex flex-col sm:flex-row gap-3 justify-center mb-16">
-          <Button asChild size="lg" className="gap-2">
+          <Button asChild size="lg" className="w-full gap-2 sm:w-auto">
             <Link href="/ground/enter-the-ground">
               Begin Today's Practice <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
-          <Button asChild variant="outline" size="lg" className="gap-2">
+          <Button asChild variant="outline" size="lg" className="w-full gap-2 sm:w-auto">
             <Link href="/ground/ground-check">
               <Wind className="h-4 w-4" /> Ground Check
             </Link>
           </Button>
-          <Button asChild variant="ghost" size="sm" className="gap-2 text-muted-foreground">
+          <Button asChild variant="ghost" size="sm" className="w-full gap-2 text-muted-foreground sm:w-auto">
             <Link href="/ground/return?quick=true">
               <Clock className="h-3 w-3" /> I only have 2 minutes
             </Link>
@@ -93,7 +93,7 @@ export default function BTWLanding() {
         </div>
 
         {/* Who this is for */}
-        <div className="p-8 rounded-2xl border border-border bg-card mb-12">
+        <div className="p-4 sm:p-8 rounded-[var(--radius-surface)] border border-border bg-card mb-12">
           <h2 className="font-serif text-xl font-light text-foreground mb-4">Who this is for</h2>
           <div className="space-y-3 text-base text-muted-foreground font-light leading-relaxed">
             <p>People who know the right words but still feel inwardly split when they say them.</p>
@@ -108,7 +108,7 @@ export default function BTWLanding() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
           {SECTIONS.map(s => (
             <Link key={s.title} href={s.href}>
-              <div className="p-5 rounded-2xl border border-border bg-card hover:bg-secondary/40 transition-colors cursor-pointer h-full">
+              <div className="p-4 sm:p-5 rounded-[var(--radius-surface)] border border-border bg-card hover:bg-secondary/40 transition-colors cursor-pointer h-full">
                 <div className="flex items-start justify-between mb-2">
                   <h3 className="font-serif text-base font-light text-foreground">{s.title}</h3>
                   <span className="text-xs text-muted-foreground ml-2 shrink-0">{s.time}</span>

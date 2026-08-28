@@ -202,7 +202,7 @@ export default function Pricing() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
-      <div className="max-w-5xl mx-auto px-4 py-16 sm:py-24">
+      <main className="max-w-5xl mx-auto px-4 pt-[calc(5.5rem+env(safe-area-inset-top,0px))] pb-[calc(var(--tabbar-clearance)+env(safe-area-inset-bottom,0px))] sm:py-24">
 
         {/* Header */}
         <div className="text-center mb-12 sm:mb-16">
@@ -241,7 +241,7 @@ export default function Pricing() {
               <div
                 key={tier.id}
                 id={`tier-${tier.id}`}
-                className={`relative overflow-visible rounded-2xl border p-6 flex flex-col gap-5 transition-all ${
+                className={`relative overflow-visible rounded-[var(--radius-surface)] border p-4 sm:p-6 flex flex-col gap-5 transition-all ${
                   tier.highlight
                     ? "border-amber-400/50 bg-amber-400/5 shadow-lg shadow-amber-400/10"
                     : tier.id === "oracle"
@@ -450,7 +450,7 @@ export default function Pricing() {
           </Button>
         </div>
 
-      </div>
+      </main>
     </div>
   );
 }

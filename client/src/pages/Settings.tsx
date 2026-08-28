@@ -1,5 +1,6 @@
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
+import { Page } from "@/components/ui/page";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Link } from "wouter";
 import { getLoginUrl } from "@/const";
@@ -366,7 +367,7 @@ export default function Settings() {
 
       <div className="min-h-screen bg-background">
         <Nav />
-        <div className="container pt-20 pb-20 max-w-2xl mx-auto px-4 sm:px-6">
+        <Page className="pt-20 pb-20 max-w-2xl px-4 sm:px-6">
 
           {/* Header */}
           <div className="mb-8">
@@ -627,7 +628,7 @@ export default function Settings() {
             </p>
           </div>
 
-        </div>
+        </Page>
       </div>
     </>
   );

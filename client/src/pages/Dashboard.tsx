@@ -4,6 +4,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
+import { Page } from "@/components/ui/page";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -298,7 +299,7 @@ export default function Dashboard() {
         />
       )}
       <Nav />
-      <div className="container flex flex-col pt-20 pb-24 max-w-5xl mx-auto px-4 sm:px-6 font-sans">
+      <Page className="flex flex-col pt-20 pb-24 max-w-5xl px-4 sm:px-6 font-sans">
         {/* Adaptive top bar */}
         <div className="flex items-center justify-end mb-3">
           <button
@@ -830,7 +831,7 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-      </div>
+      </Page>
     </div>
     </>
   );
