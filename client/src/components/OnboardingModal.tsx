@@ -341,12 +341,6 @@ export default function OnboardingModal({ userId }: Props) {
     }
   }, [activeSlot]);
 
-  /* ── Open / replay ─────────────────────────────────────────────── */
-  useEffect(() => {
-    // Printed deep links must open the intended tool instead of a cinematic overlay.
-    if (location === "/" && !localStorage.getItem(DEVICE_KEY)) setOpen(true);
-  }, [location]);
-
   useEffect(() => {
     const openReplay = () => {
       setSceneIdx(0); setFinished(false); setDissolving(false);
