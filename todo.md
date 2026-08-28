@@ -1747,3 +1747,4 @@
 - [ ] Signup routing: send bare `/pricing` browsing to `/dashboard` after account creation while preserving selected seeker/oracle tiers and referral paths.
 - [ ] Fix the Settings Lumen intro replay control so it reliably restarts the intended onboarding experience.
 - [ ] Repair the live Settings replay path after event dispatch failed to open the mounted onboarding controller.
+- [ ] Visually audit and correct Lumen intro slide typography, including word spacing, tracking, line height, and scene hierarchy.

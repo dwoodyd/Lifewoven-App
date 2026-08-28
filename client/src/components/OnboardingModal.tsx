@@ -175,11 +175,12 @@ function WordReveal({
       {words.map((w, i) => (
         <span key={i} aria-hidden="true" style={{
           display: "inline-block",
+          marginRight: i < words.length - 1 ? "0.3em" : 0,
           opacity: revealed ? 1 : 0,
           transform: revealed ? "translateY(0) scale(1)" : "translateY(20px) scale(0.95)",
           transition: `opacity 0.6s cubic-bezier(0.22,1,0.36,1) ${i * 0.07}s,
                        transform 0.6s cubic-bezier(0.22,1,0.36,1) ${i * 0.07}s`,
-        }}>{w}{i < words.length - 1 ? " " : ""}</span>
+        }}>{w}</span>
       ))}
       </span>
     </span>
