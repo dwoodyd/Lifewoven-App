@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { useAuth } from "./_core/hooks/useAuth";
+import OnboardingModal from "./components/OnboardingModal";
 
 // Public pages
 import Home from "./pages/Home";
@@ -254,6 +255,7 @@ function App() {
           <BetaExpiredModal />
           <FeedbackWidget />
           <PWAInstallPrompt />
+          <OnboardingModal userId={user?.id} />
           <Router />
         </TooltipProvider>
       </ThemeProvider>
