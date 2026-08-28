@@ -309,9 +309,8 @@ export default function Settings() {
   };
 
   const handleReplayOnboarding = () => {
-    localStorage.removeItem("lifeos_onboarding_done");
-    toast.success("Onboarding reset. Reload the page to replay the intro.");
-    setTimeout(() => window.location.reload(), 800);
+    window.dispatchEvent(new Event("lifewoven:replay-onboarding"));
+    toast.success("Replaying Lumen's introduction.");
   };
 
   const handleInstallApp = () => {

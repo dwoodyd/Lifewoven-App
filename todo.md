@@ -1745,3 +1745,4 @@
 - [ ] Conversion surface map: reframe Dashboard beta-window notices and expiry messaging as continuation invitations with no pre-activation prompts.
 - [ ] Conversion surface map: complete route, activation, prompt-frequency, and purchase-intent regression verification.
 - [ ] Signup routing: send bare `/pricing` browsing to `/dashboard` after account creation while preserving selected seeker/oracle tiers and referral paths.
+- [ ] Fix the Settings Lumen intro replay control so it reliably restarts the intended onboarding experience.
