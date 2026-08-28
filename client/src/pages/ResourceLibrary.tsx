@@ -426,8 +426,8 @@ export default function ResourceLibrary() {
                   </span>
                 ) : (
                   <Button asChild size="sm" variant="outline" className="gap-1.5 text-xs">
-                    <Link href="/pricing">
-                      <ExternalLink className="h-3 w-3" /> Unlock with Membership
+                    <Link href="/pricing?tier=seeker">
+                      <ExternalLink className="h-3 w-3" /> Unlock the full library with Seeker
                     </Link>
                   </Button>
                 )}
