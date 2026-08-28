@@ -221,8 +221,10 @@ export default function Dashboard() {
   const isFirstRun = isAuthenticated && !hasSurveyReading && !hasRecordedCheckIns && !hasHabits && !hasJournal;
 
   useEffect(() => {
-    if (isFirstRun) window.dispatchEvent(new Event("lifewoven:first-run-onboarding"));
-  }, [isFirstRun]);
+    // Wait for the authoritative dashboard response; its initial undefined state
+    // looks empty and must never be mistaken for a returning account's first run.
+    if (dashData && isFirstRun) window.dispatchEvent(new Event("lifewoven:first-run-onboarding"));
+  }, [dashData, isFirstRun]);
 
   const nextStep = (() => {
     const base = !hasSurveyReading
