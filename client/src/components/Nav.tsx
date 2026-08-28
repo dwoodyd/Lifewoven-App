@@ -52,7 +52,7 @@ export default function Nav() {
         <Link href="/" className="flex items-center gap-2 shrink-0" onClick={closeMobile} style={{ viewTransitionName: 'nav-brand' }}>
           <img
             src="/manus-storage/lifewoven-original-mark_811eea16.png"
-            alt="Lifewoven"
+            alt=""
             className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl object-cover"
           />
           <span className="font-sans text-lg sm:text-xl font-semibold tracking-tight text-foreground">

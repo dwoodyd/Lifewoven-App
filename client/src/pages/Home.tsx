@@ -649,19 +649,19 @@ export default function Home() {
               <div className="flex items-center gap-3 mb-4">
                 <img
                   src="/manus-storage/lifewoven-original-mark_811eea16.png"
-                  alt="Lifewoven"
+                  alt=""
                   className="w-10 h-10 rounded-xl object-cover"
                 />
                 <span style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.25rem", color: "oklch(0.88 0.02 60)", fontWeight: 400 }}>
                   Lifewoven
                 </span>
               </div>
-              <p className="text-sm text-[oklch(0.40_0.01_260)] max-w-xs leading-relaxed font-light">
+              <p className="text-sm text-[oklch(0.7_0.01_260)] max-w-xs leading-relaxed font-light">
                 A personal transformation operating system rooted in timeless wisdom and powered by intelligent design.
               </p>
             </div>
             <div>
-              <p className="font-mono text-[9px] tracking-[0.25em] text-[oklch(0.35_0.01_260)] uppercase mb-4">Platform</p>
+              <p className="font-mono text-[10px] tracking-[0.22em] text-[oklch(0.7_0.01_260)] uppercase mb-4">Platform</p>
               <div className="space-y-2.5">
                 {[
                   { label: "Pathways", href: "/pathways" },
@@ -671,7 +671,7 @@ export default function Home() {
                   { label: "Sources & Influences", href: "/sources" },
                 ].map((l) => (
                   <div key={l.label}>
-                    <Link href={l.href} className="text-sm text-[oklch(0.40_0.01_260)] hover:text-[oklch(0.72_0.12_55)] transition-colors">
+                    <Link href={l.href} className="text-sm text-[oklch(0.7_0.01_260)] hover:text-[oklch(0.82_0.12_55)] transition-colors">
                       {l.label}
                     </Link>
                   </div>
@@ -679,7 +679,7 @@ export default function Home() {
               </div>
             </div>
             <div>
-              <p className="font-mono text-[9px] tracking-[0.25em] text-[oklch(0.35_0.01_260)] uppercase mb-4">Legal</p>
+              <p className="font-mono text-[10px] tracking-[0.22em] text-[oklch(0.7_0.01_260)] uppercase mb-4">Legal</p>
               <div className="space-y-2.5">
                 {[
                   { label: "Terms of Service", href: "/legal/terms" },
@@ -688,7 +688,7 @@ export default function Home() {
                   { label: "Contact & Support", href: "/support" },
                 ].map((l) => (
                   <div key={l.label}>
-                    <Link href={l.href} className="text-sm text-[oklch(0.40_0.01_260)] hover:text-[oklch(0.72_0.12_55)] transition-colors">
+                    <Link href={l.href} className="text-sm text-[oklch(0.7_0.01_260)] hover:text-[oklch(0.82_0.12_55)] transition-colors">
                       {l.label}
                     </Link>
                   </div>
@@ -697,7 +697,7 @@ export default function Home() {
             </div>
           </div>
           <div className="pt-8 border-t border-border">
-            <p className="text-xs text-[oklch(0.30_0.01_260)]">
+            <p className="text-xs text-[oklch(0.7_0.01_260)]">
               © {new Date().getFullYear()} Lifewoven. Built on the wisdom of the ages. Designed for the present moment.
             </p>
           </div>

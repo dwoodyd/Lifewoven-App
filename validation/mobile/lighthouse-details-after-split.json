@@ -1,0 +1,2479 @@
+{
+  "color-contrast": {
+    "id": "color-contrast",
+    "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+    "description": "Low-contrast text is difficult or impossible for many users to read. [Learn how to provide sufficient color contrast](https://dequeuniversity.com/rules/axe/4.10/color-contrast).",
+    "score": 0,
+    "scoreDisplayMode": "binary",
+    "details": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "node",
+          "valueType": "node",
+          "subItemsHeading": {
+            "key": "relatedNode",
+            "valueType": "node"
+          },
+          "label": "Failing Elements"
+        }
+      ],
+      "items": [
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-0-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,2,SECTION,0,DIV,0,P",
+            "selector": "div.min-h-screen > section.border-y > div.max-w-5xl > p.font-mono",
+            "boundingRect": {
+              "top": 916,
+              "bottom": 932,
+              "left": 29,
+              "right": 384,
+              "width": 355,
+              "height": 15
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:228\" class=\"font-mono text-[9px] tracking-[0.3em] text-[oklch(0.40_0.01_260)] uppercas…\">",
+            "nodeLabel": "INFORMED BY WISDOM TRADITIONS INCLUDING",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.24 (foreground color: #45484d, background color: #020307, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-1-SECTION",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,2,SECTION",
+                  "selector": "body > div#root > div.min-h-screen > section.border-y",
+                  "boundingRect": {
+                    "top": 887,
+                    "bottom": 1148,
+                    "left": 0,
+                    "right": 412,
+                    "width": 412,
+                    "height": 261
+                  },
+                  "snippet": "<section data-loc=\"client/src/pages/Home.tsx:226\" class=\"border-y border-border py-6 bg-[oklch(0.10_0.015_260)]\">",
+                  "nodeLabel": "INFORMED BY WISDOM TRADITIONS INCLUDING\n\nMind Science\nEmotional Guidance System…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-2-SPAN",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,2,SECTION,0,DIV,1,DIV,0,SPAN",
+            "selector": "section.border-y > div.max-w-5xl > div.flex > span",
+            "boundingRect": {
+              "top": 951,
+              "bottom": 971,
+              "left": 42,
+              "right": 138,
+              "width": 96,
+              "height": 21
+            },
+            "snippet": "<span data-loc=\"client/src/pages/Home.tsx:233\">",
+            "nodeLabel": "Mind Science",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.75 (foreground color: #52555b, background color: #020307, font size: 11.6pt (15.4375px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-1-SECTION",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,2,SECTION",
+                  "selector": "body > div#root > div.min-h-screen > section.border-y",
+                  "boundingRect": {
+                    "top": 887,
+                    "bottom": 1148,
+                    "left": 0,
+                    "right": 412,
+                    "width": 412,
+                    "height": 261
+                  },
+                  "snippet": "<section data-loc=\"client/src/pages/Home.tsx:226\" class=\"border-y border-border py-6 bg-[oklch(0.10_0.015_260)]\">",
+                  "nodeLabel": "INFORMED BY WISDOM TRADITIONS INCLUDING\n\nMind Science\nEmotional Guidance System…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-3-SPAN",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,2,SECTION,0,DIV,1,DIV,1,SPAN",
+            "selector": "section.border-y > div.max-w-5xl > div.flex > span",
+            "boundingRect": {
+              "top": 951,
+              "bottom": 971,
+              "left": 167,
+              "right": 370,
+              "width": 204,
+              "height": 21
+            },
+            "snippet": "<span data-loc=\"client/src/pages/Home.tsx:233\">",
+            "nodeLabel": "Emotional Guidance System",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.75 (foreground color: #52555b, background color: #020307, font size: 11.6pt (15.4375px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-1-SECTION",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,2,SECTION",
+                  "selector": "body > div#root > div.min-h-screen > section.border-y",
+                  "boundingRect": {
+                    "top": 887,
+                    "bottom": 1148,
+                    "left": 0,
+                    "right": 412,
+                    "width": 412,
+                    "height": 261
+                  },
+                  "snippet": "<section data-loc=\"client/src/pages/Home.tsx:226\" class=\"border-y border-border py-6 bg-[oklch(0.10_0.015_260)]\">",
+                  "nodeLabel": "INFORMED BY WISDOM TRADITIONS INCLUDING\n\nMind Science\nEmotional Guidance System…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-4-SPAN",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,2,SECTION,0,DIV,1,DIV,2,SPAN",
+            "selector": "section.border-y > div.max-w-5xl > div.flex > span",
+            "boundingRect": {
+              "top": 1000,
+              "bottom": 1020,
+              "left": 137,
+              "right": 275,
+              "width": 138,
+              "height": 21
+            },
+            "snippet": "<span data-loc=\"client/src/pages/Home.tsx:233\">",
+            "nodeLabel": "Behavioral Science",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.75 (foreground color: #52555b, background color: #020307, font size: 11.6pt (15.4375px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-1-SECTION",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,2,SECTION",
+                  "selector": "body > div#root > div.min-h-screen > section.border-y",
+                  "boundingRect": {
+                    "top": 887,
+                    "bottom": 1148,
+                    "left": 0,
+                    "right": 412,
+                    "width": 412,
+                    "height": 261
+                  },
+                  "snippet": "<section data-loc=\"client/src/pages/Home.tsx:226\" class=\"border-y border-border py-6 bg-[oklch(0.10_0.015_260)]\">",
+                  "nodeLabel": "INFORMED BY WISDOM TRADITIONS INCLUDING\n\nMind Science\nEmotional Guidance System…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-5-SPAN",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,2,SECTION,0,DIV,1,DIV,3,SPAN",
+            "selector": "section.border-y > div.max-w-5xl > div.flex > span",
+            "boundingRect": {
+              "top": 1049,
+              "bottom": 1069,
+              "left": 96,
+              "right": 316,
+              "width": 219,
+              "height": 21
+            },
+            "snippet": "<span data-loc=\"client/src/pages/Home.tsx:233\">",
+            "nodeLabel": "Meaning-Centered Philosophy",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.75 (foreground color: #52555b, background color: #020307, font size: 11.6pt (15.4375px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-1-SECTION",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,2,SECTION",
+                  "selector": "body > div#root > div.min-h-screen > section.border-y",
+                  "boundingRect": {
+                    "top": 887,
+                    "bottom": 1148,
+                    "left": 0,
+                    "right": 412,
+                    "width": 412,
+                    "height": 261
+                  },
+                  "snippet": "<section data-loc=\"client/src/pages/Home.tsx:226\" class=\"border-y border-border py-6 bg-[oklch(0.10_0.015_260)]\">",
+                  "nodeLabel": "INFORMED BY WISDOM TRADITIONS INCLUDING\n\nMind Science\nEmotional Guidance System…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-6-SPAN",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,2,SECTION,0,DIV,1,DIV,4,SPAN",
+            "selector": "section.border-y > div.max-w-5xl > div.flex > span",
+            "boundingRect": {
+              "top": 1098,
+              "bottom": 1118,
+              "left": 136,
+              "right": 276,
+              "width": 140,
+              "height": 21
+            },
+            "snippet": "<span data-loc=\"client/src/pages/Home.tsx:233\">",
+            "nodeLabel": "Conscious Creation",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.75 (foreground color: #52555b, background color: #020307, font size: 11.6pt (15.4375px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-1-SECTION",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,2,SECTION",
+                  "selector": "body > div#root > div.min-h-screen > section.border-y",
+                  "boundingRect": {
+                    "top": 887,
+                    "bottom": 1148,
+                    "left": 0,
+                    "right": 412,
+                    "width": 412,
+                    "height": 261
+                  },
+                  "snippet": "<section data-loc=\"client/src/pages/Home.tsx:226\" class=\"border-y border-border py-6 bg-[oklch(0.10_0.015_260)]\">",
+                  "nodeLabel": "INFORMED BY WISDOM TRADITIONS INCLUDING\n\nMind Science\nEmotional Guidance System…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-7-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,3,SECTION,0,DIV,0,DIV,1,DIV,0,A,0,DIV,1,DIV,1,P",
+            "selector": "a > div.group > div.flex-1 > p.text-sm",
+            "boundingRect": {
+              "top": 1801,
+              "bottom": 1852,
+              "left": 82,
+              "right": 316,
+              "width": 234,
+              "height": 51
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:271\" class=\"text-sm text-[oklch(0.50_0.01_260)] font-light\">",
+            "nodeLabel": "Emotional alignment and nervous system regulation.",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.36 (foreground color: #606369, background color: #03060b, font size: 13.4pt (17.8125px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-8-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,3,SECTION,0,DIV,0,DIV,1,DIV,0,A,0,DIV",
+                  "selector": "div.grid > div.grid > a > div.group",
+                  "boundingRect": {
+                    "top": 1742,
+                    "bottom": 1877,
+                    "left": 29,
+                    "right": 384,
+                    "width": 355,
+                    "height": 135
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:260\" class=\"group flex items-center gap-5 p-5 rounded-2xl border border-border bg-[okl…\">",
+                  "nodeLabel": "State\n\nEmotional alignment and nervous system regulation."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-9-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,3,SECTION,0,DIV,0,DIV,1,DIV,1,A,0,DIV,1,DIV,1,P",
+            "selector": "a > div.group > div.flex-1 > p.text-sm",
+            "boundingRect": {
+              "top": 1951,
+              "bottom": 2002,
+              "left": 82,
+              "right": 316,
+              "width": 234,
+              "height": 51
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:271\" class=\"text-sm text-[oklch(0.50_0.01_260)] font-light\">",
+            "nodeLabel": "Belief rewriting and identity building.",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.36 (foreground color: #606369, background color: #03060b, font size: 13.4pt (17.8125px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-10-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,3,SECTION,0,DIV,0,DIV,1,DIV,1,A,0,DIV",
+                  "selector": "div.grid > div.grid > a > div.group",
+                  "boundingRect": {
+                    "top": 1891,
+                    "bottom": 2026,
+                    "left": 29,
+                    "right": 384,
+                    "width": 355,
+                    "height": 135
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:260\" class=\"group flex items-center gap-5 p-5 rounded-2xl border border-border bg-[okl…\">",
+                  "nodeLabel": "Story\n\nBelief rewriting and identity building."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-11-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,3,SECTION,0,DIV,0,DIV,1,DIV,2,A,0,DIV,1,DIV,1,P",
+            "selector": "a > div.group > div.flex-1 > p.text-sm",
+            "boundingRect": {
+              "top": 2100,
+              "bottom": 2151,
+              "left": 82,
+              "right": 316,
+              "width": 234,
+              "height": 51
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:271\" class=\"text-sm text-[oklch(0.50_0.01_260)] font-light\">",
+            "nodeLabel": "Habit design and identity-based execution.",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.36 (foreground color: #606369, background color: #03060b, font size: 13.4pt (17.8125px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-12-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,3,SECTION,0,DIV,0,DIV,1,DIV,2,A,0,DIV",
+                  "selector": "div.grid > div.grid > a > div.group",
+                  "boundingRect": {
+                    "top": 2041,
+                    "bottom": 2176,
+                    "left": 29,
+                    "right": 384,
+                    "width": 355,
+                    "height": 135
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:260\" class=\"group flex items-center gap-5 p-5 rounded-2xl border border-border bg-[okl…\">",
+                  "nodeLabel": "Standards\n\nHabit design and identity-based execution."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-13-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,3,SECTION,0,DIV,0,DIV,1,DIV,3,A,0,DIV,1,DIV,1,P",
+            "selector": "a > div.group > div.flex-1 > p.text-sm",
+            "boundingRect": {
+              "top": 2249,
+              "bottom": 2300,
+              "left": 82,
+              "right": 316,
+              "width": 234,
+              "height": 51
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:271\" class=\"text-sm text-[oklch(0.50_0.01_260)] font-light\">",
+            "nodeLabel": "Decision quality and leverage thinking.",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.36 (foreground color: #606369, background color: #03060b, font size: 13.4pt (17.8125px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-14-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,3,SECTION,0,DIV,0,DIV,1,DIV,3,A,0,DIV",
+                  "selector": "div.grid > div.grid > a > div.group",
+                  "boundingRect": {
+                    "top": 2190,
+                    "bottom": 2325,
+                    "left": 29,
+                    "right": 384,
+                    "width": 355,
+                    "height": 135
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:260\" class=\"group flex items-center gap-5 p-5 rounded-2xl border border-border bg-[okl…\">",
+                  "nodeLabel": "Strategy\n\nDecision quality and leverage thinking."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-15-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,3,SECTION,0,DIV,0,DIV,1,DIV,4,A,0,DIV,1,DIV,1,P",
+            "selector": "a > div.group > div.flex-1 > p.text-sm",
+            "boundingRect": {
+              "top": 2399,
+              "bottom": 2449,
+              "left": 82,
+              "right": 316,
+              "width": 234,
+              "height": 51
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:271\" class=\"text-sm text-[oklch(0.50_0.01_260)] font-light\">",
+            "nodeLabel": "Energy, body, time, and wealth as sacred resources.",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.36 (foreground color: #606369, background color: #03060b, font size: 13.4pt (17.8125px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-16-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,3,SECTION,0,DIV,0,DIV,1,DIV,4,A,0,DIV",
+                  "selector": "div.grid > div.grid > a > div.group",
+                  "boundingRect": {
+                    "top": 2339,
+                    "bottom": 2474,
+                    "left": 29,
+                    "right": 384,
+                    "width": 355,
+                    "height": 135
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:260\" class=\"group flex items-center gap-5 p-5 rounded-2xl border border-border bg-[okl…\">",
+                  "nodeLabel": "Stewardship\n\nEnergy, body, time, and wealth as sacred resources."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-17-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,0,DIV,2,P",
+            "selector": "section#pathways > div.max-w-6xl > div.text-center > p.text-[oklch(0.55_0.01_260)]",
+            "boundingRect": {
+              "top": 3709,
+              "bottom": 3808,
+              "left": 29,
+              "right": 384,
+              "width": 355,
+              "height": 100
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:334\" class=\"text-[oklch(0.55_0.01_260)] text-lg font-light max-w-xl mx-auto\">",
+            "nodeLabel": "Seven curated pathways. Each a complete transformation protocol, not just a fea…",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 4.28 (foreground color: #6e7278, background color: #010206, font size: 16.0pt (21.375px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-18-SECTION",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION",
+                  "selector": "body > div#root > div.min-h-screen > section#pathways",
+                  "boundingRect": {
+                    "top": 3409,
+                    "bottom": 4750,
+                    "left": 0,
+                    "right": 412,
+                    "width": 412,
+                    "height": 1341
+                  },
+                  "snippet": "<section data-loc=\"client/src/pages/Home.tsx:323\" id=\"pathways\" class=\"py-32 bg-[oklch(0.09_0.015_260)]\">",
+                  "nodeLabel": "GUIDED EXPERIENCES\n\nEnter through your present need.\n\nSeven curated pathways. E…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-19-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,1,DIV,0,A,0,DIV,0,P",
+            "selector": "div.grid > a > div.group > p.font-mono",
+            "boundingRect": {
+              "top": 3914,
+              "bottom": 3929,
+              "left": 58,
+              "right": 169,
+              "width": 111,
+              "height": 15
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:343\" class=\"font-mono text-[9px] tracking-[0.25em] text-[oklch(0.40_0.01_260)] upperca…\">",
+            "nodeLabel": "01",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.21 (foreground color: #45484d, background color: #03060b, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-20-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,1,DIV,0,A,0,DIV",
+                  "selector": "div.max-w-6xl > div.grid > a > div.group",
+                  "boundingRect": {
+                    "top": 3884,
+                    "bottom": 4052,
+                    "left": 29,
+                    "right": 199,
+                    "width": 170,
+                    "height": 168
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:342\" class=\"group p-6 rounded-2xl border border-border bg-[oklch(0.12_0.015_260)] hove…\">",
+                  "nodeLabel": "01\n\nAlign\n\nDaily grounding"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-21-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,1,DIV,0,A,0,DIV,2,P",
+            "selector": "div.grid > a > div.group > p.text-xs",
+            "boundingRect": {
+              "top": 3981,
+              "bottom": 4002,
+              "left": 58,
+              "right": 169,
+              "width": 111,
+              "height": 21
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:352\" class=\"text-xs text-[oklch(0.45_0.01_260)] font-light\">",
+            "nodeLabel": "Daily grounding",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.71 (foreground color: #52555b, background color: #03060b, font size: 11.6pt (15.4375px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-20-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,1,DIV,0,A,0,DIV",
+                  "selector": "div.max-w-6xl > div.grid > a > div.group",
+                  "boundingRect": {
+                    "top": 3884,
+                    "bottom": 4052,
+                    "left": 29,
+                    "right": 199,
+                    "width": 170,
+                    "height": 168
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:342\" class=\"group p-6 rounded-2xl border border-border bg-[oklch(0.12_0.015_260)] hove…\">",
+                  "nodeLabel": "01\n\nAlign\n\nDaily grounding"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-22-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,1,DIV,1,A,0,DIV,0,P",
+            "selector": "div.grid > a > div.group > p.font-mono",
+            "boundingRect": {
+              "top": 3914,
+              "bottom": 3929,
+              "left": 243,
+              "right": 354,
+              "width": 111,
+              "height": 15
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:343\" class=\"font-mono text-[9px] tracking-[0.25em] text-[oklch(0.40_0.01_260)] upperca…\">",
+            "nodeLabel": "02",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.21 (foreground color: #45484d, background color: #03060b, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-23-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,1,DIV,1,A,0,DIV",
+                  "selector": "div.max-w-6xl > div.grid > a > div.group",
+                  "boundingRect": {
+                    "top": 3884,
+                    "bottom": 4052,
+                    "left": 213,
+                    "right": 384,
+                    "width": 170,
+                    "height": 168
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:342\" class=\"group p-6 rounded-2xl border border-border bg-[oklch(0.12_0.015_260)] hove…\">",
+                  "nodeLabel": "02\n\nResonance\n\nAdvanced alignment"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-24-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,1,DIV,1,A,0,DIV,2,P",
+            "selector": "div.grid > a > div.group > p.text-xs",
+            "boundingRect": {
+              "top": 3981,
+              "bottom": 4023,
+              "left": 243,
+              "right": 354,
+              "width": 111,
+              "height": 41
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:352\" class=\"text-xs text-[oklch(0.45_0.01_260)] font-light\">",
+            "nodeLabel": "Advanced alignment",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.71 (foreground color: #52555b, background color: #03060b, font size: 11.6pt (15.4375px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-23-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,1,DIV,1,A,0,DIV",
+                  "selector": "div.max-w-6xl > div.grid > a > div.group",
+                  "boundingRect": {
+                    "top": 3884,
+                    "bottom": 4052,
+                    "left": 213,
+                    "right": 384,
+                    "width": 170,
+                    "height": 168
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:342\" class=\"group p-6 rounded-2xl border border-border bg-[oklch(0.12_0.015_260)] hove…\">",
+                  "nodeLabel": "02\n\nResonance\n\nAdvanced alignment"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-25-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,1,DIV,2,A,0,DIV,0,P",
+            "selector": "div.grid > a > div.group > p.font-mono",
+            "boundingRect": {
+              "top": 4096,
+              "bottom": 4111,
+              "left": 58,
+              "right": 169,
+              "width": 111,
+              "height": 15
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:343\" class=\"font-mono text-[9px] tracking-[0.25em] text-[oklch(0.40_0.01_260)] upperca…\">",
+            "nodeLabel": "03",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.21 (foreground color: #45484d, background color: #03060b, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-26-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,1,DIV,2,A,0,DIV",
+                  "selector": "div.max-w-6xl > div.grid > a > div.group",
+                  "boundingRect": {
+                    "top": 4066,
+                    "bottom": 4234,
+                    "left": 29,
+                    "right": 199,
+                    "width": 170,
+                    "height": 168
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:342\" class=\"group p-6 rounded-2xl border border-border bg-[oklch(0.12_0.015_260)] hove…\">",
+                  "nodeLabel": "03\n\nUplift\n\nEmotional set-point"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-27-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,1,DIV,2,A,0,DIV,2,P",
+            "selector": "div.grid > a > div.group > p.text-xs",
+            "boundingRect": {
+              "top": 4163,
+              "bottom": 4205,
+              "left": 58,
+              "right": 169,
+              "width": 111,
+              "height": 41
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:352\" class=\"text-xs text-[oklch(0.45_0.01_260)] font-light\">",
+            "nodeLabel": "Emotional set-point",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.71 (foreground color: #52555b, background color: #03060b, font size: 11.6pt (15.4375px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-26-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,1,DIV,2,A,0,DIV",
+                  "selector": "div.max-w-6xl > div.grid > a > div.group",
+                  "boundingRect": {
+                    "top": 4066,
+                    "bottom": 4234,
+                    "left": 29,
+                    "right": 199,
+                    "width": 170,
+                    "height": 168
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:342\" class=\"group p-6 rounded-2xl border border-border bg-[oklch(0.12_0.015_260)] hove…\">",
+                  "nodeLabel": "03\n\nUplift\n\nEmotional set-point"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-28-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,1,DIV,3,A,0,DIV,0,P",
+            "selector": "div.grid > a > div.group > p.font-mono",
+            "boundingRect": {
+              "top": 4096,
+              "bottom": 4111,
+              "left": 243,
+              "right": 354,
+              "width": 111,
+              "height": 15
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:343\" class=\"font-mono text-[9px] tracking-[0.25em] text-[oklch(0.40_0.01_260)] upperca…\">",
+            "nodeLabel": "04",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.21 (foreground color: #45484d, background color: #03060b, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-29-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,1,DIV,3,A,0,DIV",
+                  "selector": "div.max-w-6xl > div.grid > a > div.group",
+                  "boundingRect": {
+                    "top": 4066,
+                    "bottom": 4234,
+                    "left": 213,
+                    "right": 384,
+                    "width": 170,
+                    "height": 168
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:342\" class=\"group p-6 rounded-2xl border border-border bg-[oklch(0.12_0.015_260)] hove…\">",
+                  "nodeLabel": "04\n\nFlow\n\nFuture-self activation"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-30-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,1,DIV,3,A,0,DIV,2,P",
+            "selector": "div.grid > a > div.group > p.text-xs",
+            "boundingRect": {
+              "top": 4163,
+              "bottom": 4205,
+              "left": 243,
+              "right": 354,
+              "width": 111,
+              "height": 41
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:352\" class=\"text-xs text-[oklch(0.45_0.01_260)] font-light\">",
+            "nodeLabel": "Future-self activation",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.71 (foreground color: #52555b, background color: #03060b, font size: 11.6pt (15.4375px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-29-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,1,DIV,3,A,0,DIV",
+                  "selector": "div.max-w-6xl > div.grid > a > div.group",
+                  "boundingRect": {
+                    "top": 4066,
+                    "bottom": 4234,
+                    "left": 213,
+                    "right": 384,
+                    "width": 170,
+                    "height": 168
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:342\" class=\"group p-6 rounded-2xl border border-border bg-[oklch(0.12_0.015_260)] hove…\">",
+                  "nodeLabel": "04\n\nFlow\n\nFuture-self activation"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-31-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,2,DIV,0,A,0,DIV,0,P",
+            "selector": "div.grid > a > div.group > p.font-mono",
+            "boundingRect": {
+              "top": 4278,
+              "bottom": 4293,
+              "left": 58,
+              "right": 169,
+              "width": 111,
+              "height": 15
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:362\" class=\"font-mono text-[9px] tracking-[0.25em] text-[oklch(0.40_0.01_260)] upperca…\">",
+            "nodeLabel": "05",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.21 (foreground color: #45484d, background color: #03060b, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-32-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,2,DIV,0,A,0,DIV",
+                  "selector": "div.max-w-6xl > div.grid > a > div.group",
+                  "boundingRect": {
+                    "top": 4248,
+                    "bottom": 4416,
+                    "left": 29,
+                    "right": 199,
+                    "width": 170,
+                    "height": 168
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:361\" class=\"group p-6 rounded-2xl border border-border bg-[oklch(0.12_0.015_260)] hove…\">",
+                  "nodeLabel": "05\n\nRhythms\n\nHabit execution"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-33-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,2,DIV,0,A,0,DIV,2,P",
+            "selector": "div.grid > a > div.group > p.text-xs",
+            "boundingRect": {
+              "top": 4345,
+              "bottom": 4366,
+              "left": 58,
+              "right": 169,
+              "width": 111,
+              "height": 21
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:371\" class=\"text-xs text-[oklch(0.45_0.01_260)] font-light\">",
+            "nodeLabel": "Habit execution",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.71 (foreground color: #52555b, background color: #03060b, font size: 11.6pt (15.4375px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-32-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,2,DIV,0,A,0,DIV",
+                  "selector": "div.max-w-6xl > div.grid > a > div.group",
+                  "boundingRect": {
+                    "top": 4248,
+                    "bottom": 4416,
+                    "left": 29,
+                    "right": 199,
+                    "width": 170,
+                    "height": 168
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:361\" class=\"group p-6 rounded-2xl border border-border bg-[oklch(0.12_0.015_260)] hove…\">",
+                  "nodeLabel": "05\n\nRhythms\n\nHabit execution"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-34-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,2,DIV,1,A,0,DIV,0,P",
+            "selector": "div.grid > a > div.group > p.font-mono",
+            "boundingRect": {
+              "top": 4278,
+              "bottom": 4293,
+              "left": 243,
+              "right": 354,
+              "width": 111,
+              "height": 15
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:362\" class=\"font-mono text-[9px] tracking-[0.25em] text-[oklch(0.40_0.01_260)] upperca…\">",
+            "nodeLabel": "06",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.21 (foreground color: #45484d, background color: #03060b, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-35-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,2,DIV,1,A,0,DIV",
+                  "selector": "div.max-w-6xl > div.grid > a > div.group",
+                  "boundingRect": {
+                    "top": 4248,
+                    "bottom": 4416,
+                    "left": 213,
+                    "right": 384,
+                    "width": 170,
+                    "height": 168
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:361\" class=\"group p-6 rounded-2xl border border-border bg-[oklch(0.12_0.015_260)] hove…\">",
+                  "nodeLabel": "06\n\nPurpose\n\nMeaning and resilience"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-36-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,2,DIV,1,A,0,DIV,2,P",
+            "selector": "div.grid > a > div.group > p.text-xs",
+            "boundingRect": {
+              "top": 4345,
+              "bottom": 4386,
+              "left": 243,
+              "right": 354,
+              "width": 111,
+              "height": 41
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:371\" class=\"text-xs text-[oklch(0.45_0.01_260)] font-light\">",
+            "nodeLabel": "Meaning and resilience",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.71 (foreground color: #52555b, background color: #03060b, font size: 11.6pt (15.4375px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-35-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,2,DIV,1,A,0,DIV",
+                  "selector": "div.max-w-6xl > div.grid > a > div.group",
+                  "boundingRect": {
+                    "top": 4248,
+                    "bottom": 4416,
+                    "left": 213,
+                    "right": 384,
+                    "width": 170,
+                    "height": 168
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:361\" class=\"group p-6 rounded-2xl border border-border bg-[oklch(0.12_0.015_260)] hove…\">",
+                  "nodeLabel": "06\n\nPurpose\n\nMeaning and resilience"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-37-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,2,DIV,2,A,0,DIV,0,P",
+            "selector": "div.grid > a > div.group > p.font-mono",
+            "boundingRect": {
+              "top": 4460,
+              "bottom": 4475,
+              "left": 58,
+              "right": 169,
+              "width": 111,
+              "height": 15
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:362\" class=\"font-mono text-[9px] tracking-[0.25em] text-[oklch(0.40_0.01_260)] upperca…\">",
+            "nodeLabel": "07",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.21 (foreground color: #45484d, background color: #03060b, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-38-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,2,DIV,2,A,0,DIV",
+                  "selector": "div.max-w-6xl > div.grid > a > div.group",
+                  "boundingRect": {
+                    "top": 4430,
+                    "bottom": 4598,
+                    "left": 29,
+                    "right": 199,
+                    "width": 170,
+                    "height": 168
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:361\" class=\"group p-6 rounded-2xl border border-border bg-[oklch(0.12_0.015_260)] hove…\">",
+                  "nodeLabel": "07\n\nReset\n\nFlagship protocol"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-39-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,2,DIV,2,A,0,DIV,2,P",
+            "selector": "div.grid > a > div.group > p.text-xs",
+            "boundingRect": {
+              "top": 4527,
+              "bottom": 4568,
+              "left": 58,
+              "right": 169,
+              "width": 111,
+              "height": 41
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:371\" class=\"text-xs text-[oklch(0.45_0.01_260)] font-light\">",
+            "nodeLabel": "Flagship protocol",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.71 (foreground color: #52555b, background color: #03060b, font size: 11.6pt (15.4375px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-38-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,4,SECTION,0,DIV,2,DIV,2,A,0,DIV",
+                  "selector": "div.max-w-6xl > div.grid > a > div.group",
+                  "boundingRect": {
+                    "top": 4430,
+                    "bottom": 4598,
+                    "left": 29,
+                    "right": 199,
+                    "width": 170,
+                    "height": 168
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:361\" class=\"group p-6 rounded-2xl border border-border bg-[oklch(0.12_0.015_260)] hove…\">",
+                  "nodeLabel": "07\n\nReset\n\nFlagship protocol"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-40-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,5,SECTION,0,DIV,1,DIV,0,DIV,2,P",
+            "selector": "div.max-w-5xl > div.grid > div.p-8 > p.text-sm",
+            "boundingRect": {
+              "top": 5266,
+              "bottom": 5353,
+              "left": 68,
+              "right": 345,
+              "width": 277,
+              "height": 87
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:406\" class=\"text-sm text-[oklch(0.50_0.01_260)] font-light leading-relaxed mb-6\">",
+            "nodeLabel": "A 12-question diagnostic. 5 minutes. Tells you exactly where to begin.",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.36 (foreground color: #606369, background color: #03060b, font size: 13.4pt (17.8125px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-41-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,5,SECTION,0,DIV,1,DIV,0,DIV",
+                  "selector": "section.py-32 > div.max-w-5xl > div.grid > div.p-8",
+                  "boundingRect": {
+                    "top": 5102,
+                    "bottom": 5446,
+                    "left": 29,
+                    "right": 384,
+                    "width": 355,
+                    "height": 343
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:398\" class=\"p-8 rounded-2xl border border-border bg-[oklch(0.12_0.015_260)]\">",
+                  "nodeLabel": "01\n\nTake the Load-Bearing Survey\n\nA 12-question diagnostic. 5 minutes. Tells yo…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-42-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,5,SECTION,0,DIV,1,DIV,1,DIV,2,P",
+            "selector": "div.max-w-5xl > div.grid > div.p-8 > p.text-sm",
+            "boundingRect": {
+              "top": 5604,
+              "bottom": 5691,
+              "left": 68,
+              "right": 345,
+              "width": 277,
+              "height": 87
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:406\" class=\"text-sm text-[oklch(0.50_0.01_260)] font-light leading-relaxed mb-6\">",
+            "nodeLabel": "Follow the guided protocol recommended for you. Step-by-step. No guesswork.",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.36 (foreground color: #606369, background color: #03060b, font size: 13.4pt (17.8125px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-43-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,5,SECTION,0,DIV,1,DIV,1,DIV",
+                  "selector": "section.py-32 > div.max-w-5xl > div.grid > div.p-8",
+                  "boundingRect": {
+                    "top": 5474,
+                    "bottom": 5784,
+                    "left": 29,
+                    "right": 384,
+                    "width": 355,
+                    "height": 310
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:398\" class=\"p-8 rounded-2xl border border-border bg-[oklch(0.12_0.015_260)]\">",
+                  "nodeLabel": "02\n\nEnter Your First Pathway\n\nFollow the guided protocol recommended for you. S…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-44-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,5,SECTION,0,DIV,1,DIV,2,DIV,2,P",
+            "selector": "div.max-w-5xl > div.grid > div.p-8 > p.text-sm",
+            "boundingRect": {
+              "top": 5943,
+              "bottom": 6059,
+              "left": 68,
+              "right": 345,
+              "width": 277,
+              "height": 116
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:406\" class=\"text-sm text-[oklch(0.50_0.01_260)] font-light leading-relaxed mb-6\">",
+            "nodeLabel": "As you journal and check in, the Oracle recognizes your patterns and tells you …",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.36 (foreground color: #606369, background color: #03060b, font size: 13.4pt (17.8125px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-45-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,5,SECTION,0,DIV,1,DIV,2,DIV",
+                  "selector": "section.py-32 > div.max-w-5xl > div.grid > div.p-8",
+                  "boundingRect": {
+                    "top": 5813,
+                    "bottom": 6152,
+                    "left": 29,
+                    "right": 384,
+                    "width": 355,
+                    "height": 339
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:398\" class=\"p-8 rounded-2xl border border-border bg-[oklch(0.12_0.015_260)]\">",
+                  "nodeLabel": "03\n\nLet the Oracle Guide You\n\nAs you journal and check in, the Oracle recognize…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-46-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,6,SECTION,0,DIV,0,DIV,0,DIV,2,P",
+            "selector": "div.max-w-5xl > div.rounded-3xl > div.flex-1 > p.text-[oklch(0.55_0.01_260)]",
+            "boundingRect": {
+              "top": 6567,
+              "bottom": 6721,
+              "left": 77,
+              "right": 335,
+              "width": 258,
+              "height": 154
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:428\" class=\"text-[oklch(0.55_0.01_260)] font-light leading-relaxed mb-3 max-w-md\">",
+            "nodeLabel": "A contemplative formation practice for people who know the right words — but wa…",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 4.23 (foreground color: #6e7278, background color: #02040b, font size: 14.3pt (19px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-47-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,6,SECTION,0,DIV,0,DIV",
+                  "selector": "div.min-h-screen > section.py-24 > div.max-w-5xl > div.rounded-3xl",
+                  "boundingRect": {
+                    "top": 6418,
+                    "bottom": 7336,
+                    "left": 29,
+                    "right": 384,
+                    "width": 355,
+                    "height": 918
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:419\" class=\"rounded-3xl border border-[oklch(0.72_0.12_55)/0.20] bg-[oklch(0.11_0.02_2…\">",
+                  "nodeLabel": "COMPANION PRACTICE\n\nThe Ground\n\nA contemplative formation practice for people w…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-48-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,6,SECTION,0,DIV,0,DIV,0,DIV,3,P",
+            "selector": "div.max-w-5xl > div.rounded-3xl > div.flex-1 > p.text-[oklch(0.55_0.01_260)]",
+            "boundingRect": {
+              "top": 6735,
+              "bottom": 6890,
+              "left": 77,
+              "right": 335,
+              "width": 258,
+              "height": 154
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:431\" class=\"text-[oklch(0.55_0.01_260)] font-light leading-relaxed mb-8 max-w-md\">",
+            "nodeLabel": "A companion to Build a Life That Does Not Break You. A practice for the space b…",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 4.23 (foreground color: #6e7278, background color: #02040b, font size: 14.3pt (19px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-47-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,6,SECTION,0,DIV,0,DIV",
+                  "selector": "div.min-h-screen > section.py-24 > div.max-w-5xl > div.rounded-3xl",
+                  "boundingRect": {
+                    "top": 6418,
+                    "bottom": 7336,
+                    "left": 29,
+                    "right": 384,
+                    "width": 355,
+                    "height": 918
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:419\" class=\"rounded-3xl border border-[oklch(0.72_0.12_55)/0.20] bg-[oklch(0.11_0.02_2…\">",
+                  "nodeLabel": "COMPANION PRACTICE\n\nThe Ground\n\nA contemplative formation practice for people w…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-49-EM",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,6,SECTION,0,DIV,0,DIV,0,DIV,3,P,1,EM",
+            "selector": "div.rounded-3xl > div.flex-1 > p.text-[oklch(0.55_0.01_260)] > em",
+            "boundingRect": {
+              "top": 6738,
+              "bottom": 6793,
+              "left": 77,
+              "right": 308,
+              "width": 231,
+              "height": 55
+            },
+            "snippet": "<em data-loc=\"client/src/pages/Home.tsx:432\">",
+            "nodeLabel": "Build a Life That Does Not Break You",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 4.23 (foreground color: #6e7278, background color: #02040b, font size: 14.3pt (19px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-47-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,6,SECTION,0,DIV,0,DIV",
+                  "selector": "div.min-h-screen > section.py-24 > div.max-w-5xl > div.rounded-3xl",
+                  "boundingRect": {
+                    "top": 6418,
+                    "bottom": 7336,
+                    "left": 29,
+                    "right": 384,
+                    "width": 355,
+                    "height": 918
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:419\" class=\"rounded-3xl border border-[oklch(0.72_0.12_55)/0.20] bg-[oklch(0.11_0.02_2…\">",
+                  "nodeLabel": "COMPANION PRACTICE\n\nThe Ground\n\nA contemplative formation practice for people w…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-50-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,6,SECTION,0,DIV,0,DIV,1,DIV,1,P",
+            "selector": "div.max-w-5xl > div.rounded-3xl > div.shrink-0 > p.text-xs",
+            "boundingRect": {
+              "top": 7246,
+              "bottom": 7267,
+              "left": 140,
+              "right": 273,
+              "width": 133,
+              "height": 21
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:460\" class=\"text-xs text-[oklch(0.40_0.01_260)]\">",
+            "nodeLabel": "Available now",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.23 (foreground color: #45484d, background color: #02040b, font size: 11.6pt (15.4375px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-47-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,6,SECTION,0,DIV,0,DIV",
+                  "selector": "div.min-h-screen > section.py-24 > div.max-w-5xl > div.rounded-3xl",
+                  "boundingRect": {
+                    "top": 6418,
+                    "bottom": 7336,
+                    "left": 29,
+                    "right": 384,
+                    "width": 355,
+                    "height": 918
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:419\" class=\"rounded-3xl border border-[oklch(0.72_0.12_55)/0.20] bg-[oklch(0.11_0.02_2…\">",
+                  "nodeLabel": "COMPANION PRACTICE\n\nThe Ground\n\nA contemplative formation practice for people w…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-51-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,6,SECTION,0,DIV,0,DIV,1,DIV,2,P",
+            "selector": "div.max-w-5xl > div.rounded-3xl > div.shrink-0 > p.text-xs",
+            "boundingRect": {
+              "top": 7267,
+              "bottom": 7288,
+              "left": 140,
+              "right": 273,
+              "width": 133,
+              "height": 21
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:461\" class=\"text-xs text-[oklch(0.40_0.01_260)]\">",
+            "nodeLabel": "Free with Explorer",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.23 (foreground color: #45484d, background color: #02040b, font size: 11.6pt (15.4375px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-47-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,6,SECTION,0,DIV,0,DIV",
+                  "selector": "div.min-h-screen > section.py-24 > div.max-w-5xl > div.rounded-3xl",
+                  "boundingRect": {
+                    "top": 6418,
+                    "bottom": 7336,
+                    "left": 29,
+                    "right": 384,
+                    "width": 355,
+                    "height": 918
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:419\" class=\"rounded-3xl border border-[oklch(0.72_0.12_55)/0.20] bg-[oklch(0.11_0.02_2…\">",
+                  "nodeLabel": "COMPANION PRACTICE\n\nThe Ground\n\nA contemplative formation practice for people w…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-52-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,7,SECTION,0,DIV,0,P",
+            "selector": "div.min-h-screen > section.py-32 > div.max-w-3xl > p.font-mono",
+            "boundingRect": {
+              "top": 7602,
+              "bottom": 7617,
+              "left": 29,
+              "right": 384,
+              "width": 355,
+              "height": 15
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:470\" class=\"font-mono text-[9px] tracking-[0.3em] text-[oklch(0.40_0.01_260)] uppercas…\">",
+            "nodeLabel": "A NOTE FROM THE FOUNDER",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.24 (foreground color: #45484d, background color: #020307, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-53-SECTION",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,7,SECTION",
+                  "selector": "body > div#root > div.min-h-screen > section.py-32",
+                  "boundingRect": {
+                    "top": 7450,
+                    "bottom": 8625,
+                    "left": 0,
+                    "right": 412,
+                    "width": 412,
+                    "height": 1175
+                  },
+                  "snippet": "<section data-loc=\"client/src/pages/Home.tsx:468\" class=\"py-32 bg-[oklch(0.10_0.015_260)]\">",
+                  "nodeLabel": "A NOTE FROM THE FOUNDER\n\n“I built Lifewoven because I kept chasing change and e…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-54-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,7,SECTION,0,DIV,2,DIV,1,DIV,1,DIV,1,P",
+            "selector": "div.flex > div.flex > div.text-right > p.text-xs",
+            "boundingRect": {
+              "top": 8447,
+              "bottom": 8467,
+              "left": 180,
+              "right": 384,
+              "width": 203,
+              "height": 21
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:491\" class=\"text-xs text-[oklch(0.40_0.01_260)]\">",
+            "nodeLabel": "Founder & Creator, Lifewoven",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.24 (foreground color: #45484d, background color: #020307, font size: 11.6pt (15.4375px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-53-SECTION",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,7,SECTION",
+                  "selector": "body > div#root > div.min-h-screen > section.py-32",
+                  "boundingRect": {
+                    "top": 7450,
+                    "bottom": 8625,
+                    "left": 0,
+                    "right": 412,
+                    "width": 412,
+                    "height": 1175
+                  },
+                  "snippet": "<section data-loc=\"client/src/pages/Home.tsx:468\" class=\"py-32 bg-[oklch(0.10_0.015_260)]\">",
+                  "nodeLabel": "A NOTE FROM THE FOUNDER\n\n“I built Lifewoven because I kept chasing change and e…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-55-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,8,SECTION,0,DIV,0,DIV,2,P",
+            "selector": "section#pricing > div.max-w-5xl > div.text-center > p.text-[oklch(0.55_0.01_260)]",
+            "boundingRect": {
+              "top": 8883,
+              "bottom": 8983,
+              "left": 29,
+              "right": 384,
+              "width": 355,
+              "height": 100
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:509\" class=\"text-[oklch(0.55_0.01_260)] text-lg font-light\">",
+            "nodeLabel": "Every tier creates real transformation. Start free. Upgrade when you are ready.",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 4.28 (foreground color: #6e7278, background color: #010206, font size: 16.0pt (21.375px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-56-SECTION",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,8,SECTION",
+                  "selector": "body > div#root > div.min-h-screen > section#pricing",
+                  "boundingRect": {
+                    "top": 8625,
+                    "bottom": 11061,
+                    "left": 0,
+                    "right": 412,
+                    "width": 412,
+                    "height": 2436
+                  },
+                  "snippet": "<section data-loc=\"client/src/pages/Home.tsx:499\" id=\"pricing\" class=\"py-32 bg-[oklch(0.09_0.015_260)]\">",
+                  "nodeLabel": "INVESTMENT\n\nChoose your path.\n\nEvery tier creates real transformation. Start fr…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-57-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,8,SECTION,0,DIV,1,DIV,0,DIV,2,P",
+            "selector": "div.max-w-5xl > div.grid > div.p-8 > p.text-sm",
+            "boundingRect": {
+              "top": 9202,
+              "bottom": 9260,
+              "left": 68,
+              "right": 345,
+              "width": 277,
+              "height": 58
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:574\" class=\"text-sm text-[oklch(0.50_0.01_260)] font-light mb-6 leading-relaxed\">",
+            "nodeLabel": "Lumen walks beside you. Begin your alignment journey.",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.4 (foreground color: #606369, background color: #030409, font size: 13.4pt (17.8125px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-58-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,8,SECTION,0,DIV,1,DIV,0,DIV",
+                  "selector": "section#pricing > div.max-w-5xl > div.grid > div.p-8",
+                  "boundingRect": {
+                    "top": 9059,
+                    "bottom": 9592,
+                    "left": 29,
+                    "right": 384,
+                    "width": 355,
+                    "height": 533
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:545\" class=\"p-8 rounded-2xl border flex flex-col\" style=\"border-color: oklch(0.2 0.02 260); background: oklch(0.11 0.015 260);\">",
+                  "nodeLabel": "Explorer\n$0\n\nLumen walks beside you. Begin your alignment journey.\n\nLoad-Bearin…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-59-SPAN",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,8,SECTION,0,DIV,1,DIV,1,DIV,2,DIV,1,SPAN",
+            "selector": "div.grid > div.p-8 > div.flex > span.text-sm",
+            "boundingRect": {
+              "top": 9761,
+              "bottom": 9786,
+              "left": 136,
+              "right": 169,
+              "width": 32,
+              "height": 25
+            },
+            "snippet": "<span data-loc=\"client/src/pages/Home.tsx:572\" class=\"text-sm text-[oklch(0.40_0.01_260)]\">",
+            "nodeLabel": "/mo",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.2 (foreground color: #45484d, background color: #03060d, font size: 13.4pt (17.8125px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-60-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,8,SECTION,0,DIV,1,DIV,1,DIV",
+                  "selector": "section#pricing > div.max-w-5xl > div.grid > div.p-8",
+                  "boundingRect": {
+                    "top": 9615,
+                    "bottom": 10289,
+                    "left": 29,
+                    "right": 384,
+                    "width": 355,
+                    "height": 673
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:545\" class=\"p-8 rounded-2xl border flex flex-col\" style=\"border-color: oklch(0.72 0.12 55 / 0.5); background: oklch(0.12 0.02 260);\">",
+                  "nodeLabel": "MOST POPULAR\nSeeker\n$19\n/mo\n\nLumen opens the full system. Every tool, every pat…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-61-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,8,SECTION,0,DIV,1,DIV,1,DIV,3,P",
+            "selector": "div.max-w-5xl > div.grid > div.p-8 > p.text-sm",
+            "boundingRect": {
+              "top": 9803,
+              "bottom": 9890,
+              "left": 68,
+              "right": 345,
+              "width": 277,
+              "height": 87
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:574\" class=\"text-sm text-[oklch(0.50_0.01_260)] font-light mb-6 leading-relaxed\">",
+            "nodeLabel": "Lumen opens the full system. Every tool, every pathway — fully unlocked.",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.36 (foreground color: #606369, background color: #03060d, font size: 13.4pt (17.8125px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-60-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,8,SECTION,0,DIV,1,DIV,1,DIV",
+                  "selector": "section#pricing > div.max-w-5xl > div.grid > div.p-8",
+                  "boundingRect": {
+                    "top": 9615,
+                    "bottom": 10289,
+                    "left": 29,
+                    "right": 384,
+                    "width": 355,
+                    "height": 673
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:545\" class=\"p-8 rounded-2xl border flex flex-col\" style=\"border-color: oklch(0.72 0.12 55 / 0.5); background: oklch(0.12 0.02 260);\">",
+                  "nodeLabel": "MOST POPULAR\nSeeker\n$19\n/mo\n\nLumen opens the full system. Every tool, every pat…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-62-SPAN",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,8,SECTION,0,DIV,1,DIV,2,DIV,1,DIV,1,SPAN",
+            "selector": "div.grid > div.p-8 > div.flex > span.text-sm",
+            "boundingRect": {
+              "top": 10414,
+              "bottom": 10439,
+              "left": 136,
+              "right": 169,
+              "width": 32,
+              "height": 25
+            },
+            "snippet": "<span data-loc=\"client/src/pages/Home.tsx:572\" class=\"text-sm text-[oklch(0.40_0.01_260)]\">",
+            "nodeLabel": "/mo",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.23 (foreground color: #45484d, background color: #030409, font size: 13.4pt (17.8125px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-63-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,8,SECTION,0,DIV,1,DIV,2,DIV",
+                  "selector": "section#pricing > div.max-w-5xl > div.grid > div.p-8",
+                  "boundingRect": {
+                    "top": 10313,
+                    "bottom": 10909,
+                    "left": 29,
+                    "right": 384,
+                    "width": 355,
+                    "height": 597
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:545\" class=\"p-8 rounded-2xl border flex flex-col\" style=\"border-color: oklch(0.2 0.02 260); background: oklch(0.11 0.015 260);\">",
+                  "nodeLabel": "Oracle\n$49\n/mo\n\nLumen and the Oracle work continuously. The AI layer that reads…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-64-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,8,SECTION,0,DIV,1,DIV,2,DIV,2,P",
+            "selector": "div.max-w-5xl > div.grid > div.p-8 > p.text-sm",
+            "boundingRect": {
+              "top": 10456,
+              "bottom": 10543,
+              "left": 68,
+              "right": 345,
+              "width": 277,
+              "height": 87
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:574\" class=\"text-sm text-[oklch(0.50_0.01_260)] font-light mb-6 leading-relaxed\">",
+            "nodeLabel": "Lumen and the Oracle work continuously. The AI layer that reads your patterns.",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.4 (foreground color: #606369, background color: #030409, font size: 13.4pt (17.8125px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-63-DIV",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,8,SECTION,0,DIV,1,DIV,2,DIV",
+                  "selector": "section#pricing > div.max-w-5xl > div.grid > div.p-8",
+                  "boundingRect": {
+                    "top": 10313,
+                    "bottom": 10909,
+                    "left": 29,
+                    "right": 384,
+                    "width": 355,
+                    "height": 597
+                  },
+                  "snippet": "<div data-loc=\"client/src/pages/Home.tsx:545\" class=\"p-8 rounded-2xl border flex flex-col\" style=\"border-color: oklch(0.2 0.02 260); background: oklch(0.11 0.015 260);\">",
+                  "nodeLabel": "Oracle\n$49\n/mo\n\nLumen and the Oracle work continuously. The AI layer that reads…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-65-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER,0,DIV,0,DIV,0,DIV,1,P",
+            "selector": "div.max-w-6xl > div.grid > div.col-span-2 > p.text-sm",
+            "boundingRect": {
+              "top": 12048,
+              "bottom": 12135,
+              "left": 29,
+              "right": 384,
+              "width": 355,
+              "height": 87
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:659\" class=\"text-sm text-[oklch(0.40_0.01_260)] max-w-xs leading-relaxed font-light\">",
+            "nodeLabel": "A personal transformation operating system rooted in timeless wisdom and powere…",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.26 (foreground color: #45484d, background color: #000205, font size: 13.4pt (17.8125px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-66-FOOTER",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER",
+                  "selector": "body > div#root > div.min-h-screen > footer.border-t",
+                  "boundingRect": {
+                    "top": 11905,
+                    "bottom": 12694,
+                    "left": 0,
+                    "right": 412,
+                    "width": 412,
+                    "height": 789
+                  },
+                  "snippet": "<footer data-loc=\"client/src/pages/Home.tsx:645\" class=\"border-t border-border py-16 bg-[oklch(0.08_0.02_260)]\">",
+                  "nodeLabel": "Lifewoven\n\nA personal transformation operating system rooted in timeless wisdom…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-67-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER,0,DIV,0,DIV,1,DIV,0,P",
+            "selector": "div.max-w-6xl > div.grid > div > p.font-mono",
+            "boundingRect": {
+              "top": 12173,
+              "bottom": 12188,
+              "left": 29,
+              "right": 187,
+              "width": 159,
+              "height": 15
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:664\" class=\"font-mono text-[9px] tracking-[0.25em] text-[oklch(0.35_0.01_260)] upperca…\">",
+            "nodeLabel": "PLATFORM",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.84 (foreground color: #373b40, background color: #000205, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-66-FOOTER",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER",
+                  "selector": "body > div#root > div.min-h-screen > footer.border-t",
+                  "boundingRect": {
+                    "top": 11905,
+                    "bottom": 12694,
+                    "left": 0,
+                    "right": 412,
+                    "width": 412,
+                    "height": 789
+                  },
+                  "snippet": "<footer data-loc=\"client/src/pages/Home.tsx:645\" class=\"border-t border-border py-16 bg-[oklch(0.08_0.02_260)]\">",
+                  "nodeLabel": "Lifewoven\n\nA personal transformation operating system rooted in timeless wisdom…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-68-A",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER,0,DIV,0,DIV,1,DIV,1,DIV,0,DIV,0,A",
+            "selector": "div > div.space-y-2.5 > div > a.text-sm",
+            "boundingRect": {
+              "top": 12212,
+              "bottom": 12235,
+              "left": 29,
+              "right": 105,
+              "width": 77,
+              "height": 23
+            },
+            "snippet": "<a data-loc=\"client/src/pages/Home.tsx:674\" href=\"/pathways\" class=\"text-sm text-[oklch(0.40_0.01_260)] hover:text-[oklch(0.72_0.12_55)] trans…\">",
+            "nodeLabel": "Pathways",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.26 (foreground color: #45484d, background color: #000205, font size: 13.4pt (17.8125px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-66-FOOTER",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER",
+                  "selector": "body > div#root > div.min-h-screen > footer.border-t",
+                  "boundingRect": {
+                    "top": 11905,
+                    "bottom": 12694,
+                    "left": 0,
+                    "right": 412,
+                    "width": 412,
+                    "height": 789
+                  },
+                  "snippet": "<footer data-loc=\"client/src/pages/Home.tsx:645\" class=\"border-t border-border py-16 bg-[oklch(0.08_0.02_260)]\">",
+                  "nodeLabel": "Lifewoven\n\nA personal transformation operating system rooted in timeless wisdom…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-69-A",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER,0,DIV,0,DIV,1,DIV,1,DIV,1,DIV,0,A",
+            "selector": "div > div.space-y-2.5 > div > a.text-sm",
+            "boundingRect": {
+              "top": 12256,
+              "bottom": 12279,
+              "left": 29,
+              "right": 84,
+              "width": 55,
+              "height": 23
+            },
+            "snippet": "<a data-loc=\"client/src/pages/Home.tsx:674\" href=\"/library\" class=\"text-sm text-[oklch(0.40_0.01_260)] hover:text-[oklch(0.72_0.12_55)] trans…\">",
+            "nodeLabel": "Library",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.26 (foreground color: #45484d, background color: #000205, font size: 13.4pt (17.8125px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-66-FOOTER",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER",
+                  "selector": "body > div#root > div.min-h-screen > footer.border-t",
+                  "boundingRect": {
+                    "top": 11905,
+                    "bottom": 12694,
+                    "left": 0,
+                    "right": 412,
+                    "width": 412,
+                    "height": 789
+                  },
+                  "snippet": "<footer data-loc=\"client/src/pages/Home.tsx:645\" class=\"border-t border-border py-16 bg-[oklch(0.08_0.02_260)]\">",
+                  "nodeLabel": "Lifewoven\n\nA personal transformation operating system rooted in timeless wisdom…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-70-A",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER,0,DIV,0,DIV,1,DIV,1,DIV,2,DIV,0,A",
+            "selector": "div > div.space-y-2.5 > div > a.text-sm",
+            "boundingRect": {
+              "top": 12301,
+              "bottom": 12356,
+              "left": 29,
+              "right": 146,
+              "width": 117,
+              "height": 55
+            },
+            "snippet": "<a data-loc=\"client/src/pages/Home.tsx:674\" href=\"/community\" class=\"text-sm text-[oklch(0.40_0.01_260)] hover:text-[oklch(0.72_0.12_55)] trans…\">",
+            "nodeLabel": "Community (Coming Soon)",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.26 (foreground color: #45484d, background color: #000205, font size: 13.4pt (17.8125px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-66-FOOTER",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER",
+                  "selector": "body > div#root > div.min-h-screen > footer.border-t",
+                  "boundingRect": {
+                    "top": 11905,
+                    "bottom": 12694,
+                    "left": 0,
+                    "right": 412,
+                    "width": 412,
+                    "height": 789
+                  },
+                  "snippet": "<footer data-loc=\"client/src/pages/Home.tsx:645\" class=\"border-t border-border py-16 bg-[oklch(0.08_0.02_260)]\">",
+                  "nodeLabel": "Lifewoven\n\nA personal transformation operating system rooted in timeless wisdom…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-71-A",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER,0,DIV,0,DIV,1,DIV,1,DIV,3,DIV,0,A",
+            "selector": "div > div.space-y-2.5 > div > a.text-sm",
+            "boundingRect": {
+              "top": 12377,
+              "bottom": 12400,
+              "left": 29,
+              "right": 83,
+              "width": 55,
+              "height": 23
+            },
+            "snippet": "<a data-loc=\"client/src/pages/Home.tsx:674\" href=\"/pricing\" class=\"text-sm text-[oklch(0.40_0.01_260)] hover:text-[oklch(0.72_0.12_55)] trans…\">",
+            "nodeLabel": "Pricing",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.26 (foreground color: #45484d, background color: #000205, font size: 13.4pt (17.8125px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-66-FOOTER",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER",
+                  "selector": "body > div#root > div.min-h-screen > footer.border-t",
+                  "boundingRect": {
+                    "top": 11905,
+                    "bottom": 12694,
+                    "left": 0,
+                    "right": 412,
+                    "width": 412,
+                    "height": 789
+                  },
+                  "snippet": "<footer data-loc=\"client/src/pages/Home.tsx:645\" class=\"border-t border-border py-16 bg-[oklch(0.08_0.02_260)]\">",
+                  "nodeLabel": "Lifewoven\n\nA personal transformation operating system rooted in timeless wisdom…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-72-A",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER,0,DIV,0,DIV,1,DIV,1,DIV,4,DIV,0,A",
+            "selector": "div > div.space-y-2.5 > div > a.text-sm",
+            "boundingRect": {
+              "top": 12421,
+              "bottom": 12477,
+              "left": 29,
+              "right": 114,
+              "width": 85,
+              "height": 55
+            },
+            "snippet": "<a data-loc=\"client/src/pages/Home.tsx:674\" href=\"/sources\" class=\"text-sm text-[oklch(0.40_0.01_260)] hover:text-[oklch(0.72_0.12_55)] trans…\">",
+            "nodeLabel": "Sources & Influences",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.26 (foreground color: #45484d, background color: #000205, font size: 13.4pt (17.8125px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-66-FOOTER",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER",
+                  "selector": "body > div#root > div.min-h-screen > footer.border-t",
+                  "boundingRect": {
+                    "top": 11905,
+                    "bottom": 12694,
+                    "left": 0,
+                    "right": 412,
+                    "width": 412,
+                    "height": 789
+                  },
+                  "snippet": "<footer data-loc=\"client/src/pages/Home.tsx:645\" class=\"border-t border-border py-16 bg-[oklch(0.08_0.02_260)]\">",
+                  "nodeLabel": "Lifewoven\n\nA personal transformation operating system rooted in timeless wisdom…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-73-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER,0,DIV,0,DIV,2,DIV,0,P",
+            "selector": "div.max-w-6xl > div.grid > div > p.font-mono",
+            "boundingRect": {
+              "top": 12173,
+              "bottom": 12188,
+              "left": 225,
+              "right": 384,
+              "width": 159,
+              "height": 15
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:682\" class=\"font-mono text-[9px] tracking-[0.25em] text-[oklch(0.35_0.01_260)] upperca…\">",
+            "nodeLabel": "LEGAL",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.84 (foreground color: #373b40, background color: #000205, font size: 6.8pt (9px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-66-FOOTER",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER",
+                  "selector": "body > div#root > div.min-h-screen > footer.border-t",
+                  "boundingRect": {
+                    "top": 11905,
+                    "bottom": 12694,
+                    "left": 0,
+                    "right": 412,
+                    "width": 412,
+                    "height": 789
+                  },
+                  "snippet": "<footer data-loc=\"client/src/pages/Home.tsx:645\" class=\"border-t border-border py-16 bg-[oklch(0.08_0.02_260)]\">",
+                  "nodeLabel": "Lifewoven\n\nA personal transformation operating system rooted in timeless wisdom…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-74-A",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER,0,DIV,0,DIV,2,DIV,1,DIV,0,DIV,0,A",
+            "selector": "div > div.space-y-2.5 > div > a.text-sm",
+            "boundingRect": {
+              "top": 12212,
+              "bottom": 12235,
+              "left": 225,
+              "right": 357,
+              "width": 132,
+              "height": 23
+            },
+            "snippet": "<a data-loc=\"client/src/pages/Home.tsx:691\" href=\"/legal/terms\" class=\"text-sm text-[oklch(0.40_0.01_260)] hover:text-[oklch(0.72_0.12_55)] trans…\">",
+            "nodeLabel": "Terms of Service",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.26 (foreground color: #45484d, background color: #000205, font size: 13.4pt (17.8125px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-66-FOOTER",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER",
+                  "selector": "body > div#root > div.min-h-screen > footer.border-t",
+                  "boundingRect": {
+                    "top": 11905,
+                    "bottom": 12694,
+                    "left": 0,
+                    "right": 412,
+                    "width": 412,
+                    "height": 789
+                  },
+                  "snippet": "<footer data-loc=\"client/src/pages/Home.tsx:645\" class=\"border-t border-border py-16 bg-[oklch(0.08_0.02_260)]\">",
+                  "nodeLabel": "Lifewoven\n\nA personal transformation operating system rooted in timeless wisdom…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-75-A",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER,0,DIV,0,DIV,2,DIV,1,DIV,1,DIV,0,A",
+            "selector": "div > div.space-y-2.5 > div > a.text-sm",
+            "boundingRect": {
+              "top": 12256,
+              "bottom": 12279,
+              "left": 225,
+              "right": 334,
+              "width": 109,
+              "height": 23
+            },
+            "snippet": "<a data-loc=\"client/src/pages/Home.tsx:691\" href=\"/legal/privacy\" class=\"text-sm text-[oklch(0.40_0.01_260)] hover:text-[oklch(0.72_0.12_55)] trans…\">",
+            "nodeLabel": "Privacy Policy",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.26 (foreground color: #45484d, background color: #000205, font size: 13.4pt (17.8125px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-66-FOOTER",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER",
+                  "selector": "body > div#root > div.min-h-screen > footer.border-t",
+                  "boundingRect": {
+                    "top": 11905,
+                    "bottom": 12694,
+                    "left": 0,
+                    "right": 412,
+                    "width": 412,
+                    "height": 789
+                  },
+                  "snippet": "<footer data-loc=\"client/src/pages/Home.tsx:645\" class=\"border-t border-border py-16 bg-[oklch(0.08_0.02_260)]\">",
+                  "nodeLabel": "Lifewoven\n\nA personal transformation operating system rooted in timeless wisdom…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-76-A",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER,0,DIV,0,DIV,2,DIV,1,DIV,2,DIV,0,A",
+            "selector": "div > div.space-y-2.5 > div > a.text-sm",
+            "boundingRect": {
+              "top": 12301,
+              "bottom": 12324,
+              "left": 225,
+              "right": 334,
+              "width": 109,
+              "height": 23
+            },
+            "snippet": "<a data-loc=\"client/src/pages/Home.tsx:691\" href=\"/legal/refunds\" class=\"text-sm text-[oklch(0.40_0.01_260)] hover:text-[oklch(0.72_0.12_55)] trans…\">",
+            "nodeLabel": "Refund Policy",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.26 (foreground color: #45484d, background color: #000205, font size: 13.4pt (17.8125px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-66-FOOTER",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER",
+                  "selector": "body > div#root > div.min-h-screen > footer.border-t",
+                  "boundingRect": {
+                    "top": 11905,
+                    "bottom": 12694,
+                    "left": 0,
+                    "right": 412,
+                    "width": 412,
+                    "height": 789
+                  },
+                  "snippet": "<footer data-loc=\"client/src/pages/Home.tsx:645\" class=\"border-t border-border py-16 bg-[oklch(0.08_0.02_260)]\">",
+                  "nodeLabel": "Lifewoven\n\nA personal transformation operating system rooted in timeless wisdom…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-77-A",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER,0,DIV,0,DIV,2,DIV,1,DIV,3,DIV,0,A",
+            "selector": "div > div.space-y-2.5 > div > a.text-sm",
+            "boundingRect": {
+              "top": 12345,
+              "bottom": 12368,
+              "left": 225,
+              "right": 372,
+              "width": 147,
+              "height": 23
+            },
+            "snippet": "<a data-loc=\"client/src/pages/Home.tsx:691\" href=\"/support\" class=\"text-sm text-[oklch(0.40_0.01_260)] hover:text-[oklch(0.72_0.12_55)] trans…\">",
+            "nodeLabel": "Contact & Support",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 2.26 (foreground color: #45484d, background color: #000205, font size: 13.4pt (17.8125px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-66-FOOTER",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER",
+                  "selector": "body > div#root > div.min-h-screen > footer.border-t",
+                  "boundingRect": {
+                    "top": 11905,
+                    "bottom": 12694,
+                    "left": 0,
+                    "right": 412,
+                    "width": 412,
+                    "height": 789
+                  },
+                  "snippet": "<footer data-loc=\"client/src/pages/Home.tsx:645\" class=\"border-t border-border py-16 bg-[oklch(0.08_0.02_260)]\">",
+                  "nodeLabel": "Lifewoven\n\nA personal transformation operating system rooted in timeless wisdom…"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-78-P",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER,0,DIV,1,DIV,0,P",
+            "selector": "footer.border-t > div.max-w-6xl > div.pt-8 > p.text-xs",
+            "boundingRect": {
+              "top": 12577,
+              "bottom": 12618,
+              "left": 29,
+              "right": 384,
+              "width": 355,
+              "height": 41
+            },
+            "snippet": "<p data-loc=\"client/src/pages/Home.tsx:700\" class=\"text-xs text-[oklch(0.30_0.01_260)]\">",
+            "nodeLabel": "© 2026 Lifewoven. Built on the wisdom of the ages. Designed for the present mom…",
+            "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.52 (foreground color: #2b2e33, background color: #000205, font size: 11.6pt (15.4375px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-66-FOOTER",
+                  "path": "1,HTML,1,BODY,7,DIV,2,DIV,10,FOOTER",
+                  "selector": "body > div#root > div.min-h-screen > footer.border-t",
+                  "boundingRect": {
+                    "top": 11905,
+                    "bottom": 12694,
+                    "left": 0,
+                    "right": 412,
+                    "width": 412,
+                    "height": 789
+                  },
+                  "snippet": "<footer data-loc=\"client/src/pages/Home.tsx:645\" class=\"border-t border-border py-16 bg-[oklch(0.08_0.02_260)]\">",
+                  "nodeLabel": "Lifewoven\n\nA personal transformation operating system rooted in timeless wisdom…"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "debugData": {
+        "type": "debugdata",
+        "impact": "serious",
+        "tags": [
+          "cat.color",
+          "wcag2aa",
+          "wcag143",
+          "TTv5",
+          "TT13.c",
+          "EN-301-549",
+          "EN-9.1.4.3",
+          "ACT",
+          "RGAAv4",
+          "RGAA-3.2.1"
+        ]
+      }
+    }
+  },
+  "image-redundant-alt": {
+    "id": "image-redundant-alt",
+    "title": "Image elements have `[alt]` attributes that are redundant text.",
+    "description": "Informative elements should aim for short, descriptive alternative text. Alternative text that is exactly the same as the text adjacent to the link or image is potentially confusing for screen reader users, because the text will be read twice. [Learn more about the `alt` attribute](https://dequeuniversity.com/rules/axe/4.10/image-redundant-alt).",
+    "score": 0,
+    "scoreDisplayMode": "binary",
+    "details": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "node",
+          "valueType": "node",
+          "subItemsHeading": {
+            "key": "relatedNode",
+            "valueType": "node"
+          },
+          "label": "Failing Elements"
+        }
+      ],
+      "items": [
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-79-IMG",
+            "path": "1,HTML,1,BODY,7,DIV,2,DIV,0,HEADER,0,DIV,0,A,0,IMG",
+            "selector": "header.fixed > div.container > a.flex > img.w-8",
+            "boundingRect": {
+              "top": 19,
+              "bottom": 57,
+              "left": 19,
+              "right": 57,
+              "width": 38,
+              "height": 38
+            },
+            "snippet": "<img data-loc=\"client/src/components/Nav.tsx:53\" alt=\"Lifewoven\" class=\"w-8 h-8 sm:w-9 sm:h-9 rounded-xl object-cover\" src=\"/manus-storage/lifewoven-original-mark_811eea16.png\">",
+            "nodeLabel": "Lifewoven",
+            "explanation": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+          }
+        }
+      ],
+      "debugData": {
+        "type": "debugdata",
+        "impact": "minor",
+        "tags": [
+          "cat.text-alternatives",
+          "best-practice"
+        ]
+      }
+    }
+  },
+  "bf-cache": {
+    "id": "bf-cache",
+    "title": "Page prevented back/forward cache restoration",
+    "description": "Many navigations are performed by going back to a previous page, or forwards again. The back/forward cache (bfcache) can speed up these return navigations. [Learn more about the bfcache](https://developer.chrome.com/docs/lighthouse/performance/bf-cache/)",
+    "score": 0,
+    "scoreDisplayMode": "binary",
+    "displayValue": "1 failure reason",
+    "details": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "reason",
+          "valueType": "text",
+          "subItemsHeading": {
+            "key": "frameUrl",
+            "valueType": "url"
+          },
+          "label": "Failure reason"
+        },
+        {
+          "key": "failureType",
+          "valueType": "text",
+          "label": "Failure type"
+        }
+      ],
+      "items": [
+        {
+          "reason": "The page has an unload handler in the main frame.",
+          "failureType": "Actionable",
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "frameUrl": "https://3000-im7a6cnyt1r9uwrxk718f-1b51eca7.us2.manus.computer/"
+              }
+            ]
+          },
+          "protocolReason": "UnloadHandlerExistsInMainFrame"
+        }
+      ]
+    },
+    "guidanceLevel": 4
+  },
+  "errors-in-console": {
+    "id": "errors-in-console",
+    "title": "Browser errors were logged to the console",
+    "description": "Errors logged to the console indicate unresolved problems. They can come from network request failures and other browser concerns. [Learn more about this errors in console diagnostic audit](https://developer.chrome.com/docs/lighthouse/best-practices/errors-in-console/)",
+    "score": 0,
+    "scoreDisplayMode": "binary",
+    "details": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "sourceLocation",
+          "valueType": "source-location",
+          "label": "Source"
+        },
+        {
+          "key": "description",
+          "valueType": "code",
+          "label": "Description"
+        }
+      ],
+      "items": [
+        {
+          "source": "security",
+          "description": "Refused to execute script from 'https://3000-im7a6cnyt1r9uwrxk718f-1b51eca7.us2.manus.computer/__manus__/debug-collector.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled.",
+          "sourceLocation": {
+            "type": "source-location",
+            "url": "https://3000-im7a6cnyt1r9uwrxk718f-1b51eca7.us2.manus.computer/",
+            "urlProvider": "network",
+            "line": 111,
+            "column": 0
+          }
+        }
+      ]
+    }
+  }
+}

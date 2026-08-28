@@ -1,0 +1,159 @@
+{
+  "categories": {
+    "performance": 35,
+    "accessibility": 95,
+    "best-practices": 79
+  },
+  "failingAudits": [
+    {
+      "id": "bf-cache",
+      "score": 0,
+      "title": "Page prevented back/forward cache restoration",
+      "displayValue": "1 failure reason"
+    },
+    {
+      "id": "bootup-time",
+      "score": 0,
+      "title": "Reduce JavaScript execution time",
+      "displayValue": "9.7 s"
+    },
+    {
+      "id": "cache-insight",
+      "score": 0,
+      "title": "Use efficient cache lifetimes",
+      "displayValue": "Est savings of 105 KiB"
+    },
+    {
+      "id": "color-contrast",
+      "score": 0,
+      "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+      "displayValue": null
+    },
+    {
+      "id": "deprecations",
+      "score": 0,
+      "title": "Uses deprecated APIs",
+      "displayValue": "1 warning found"
+    },
+    {
+      "id": "errors-in-console",
+      "score": 0,
+      "title": "Browser errors were logged to the console",
+      "displayValue": null
+    },
+    {
+      "id": "image-redundant-alt",
+      "score": 0,
+      "title": "Image elements have `[alt]` attributes that are redundant text.",
+      "displayValue": null
+    },
+    {
+      "id": "largest-contentful-paint",
+      "score": 0,
+      "title": "Largest Contentful Paint",
+      "displayValue": "9.5 s"
+    },
+    {
+      "id": "largest-contentful-paint-element",
+      "score": 0,
+      "title": "Largest Contentful Paint element",
+      "displayValue": "9,470 ms"
+    },
+    {
+      "id": "lcp-discovery-insight",
+      "score": 0,
+      "title": "LCP request discovery",
+      "displayValue": null
+    },
+    {
+      "id": "mainthread-work-breakdown",
+      "score": 0,
+      "title": "Minimize main-thread work",
+      "displayValue": "14.2 s"
+    },
+    {
+      "id": "modern-image-formats",
+      "score": 0,
+      "title": "Serve images in next-gen formats",
+      "displayValue": "Est savings of 233 KiB"
+    },
+    {
+      "id": "network-dependency-tree-insight",
+      "score": 0,
+      "title": "Network dependency tree",
+      "displayValue": null
+    },
+    {
+      "id": "render-blocking-insight",
+      "score": 0,
+      "title": "Render blocking requests",
+      "displayValue": "Est savings of 250 ms"
+    },
+    {
+      "id": "render-blocking-resources",
+      "score": 0,
+      "title": "Eliminate render-blocking resources",
+      "displayValue": "Est savings of 250 ms"
+    },
+    {
+      "id": "unminified-javascript",
+      "score": 0,
+      "title": "Minify JavaScript",
+      "displayValue": "Est savings of 338 KiB"
+    },
+    {
+      "id": "unused-javascript",
+      "score": 0,
+      "title": "Reduce unused JavaScript",
+      "displayValue": "Est savings of 186 KiB"
+    },
+    {
+      "id": "total-blocking-time",
+      "score": 0.02,
+      "title": "Total Blocking Time",
+      "displayValue": "3,210 ms"
+    },
+    {
+      "id": "max-potential-fid",
+      "score": 0.12,
+      "title": "Max Potential First Input Delay",
+      "displayValue": "450 ms"
+    },
+    {
+      "id": "speed-index",
+      "score": 0.2,
+      "title": "Speed Index",
+      "displayValue": "8.2 s"
+    },
+    {
+      "id": "interactive",
+      "score": 0.21,
+      "title": "Time to Interactive",
+      "displayValue": "11.0 s"
+    },
+    {
+      "id": "image-delivery-insight",
+      "score": 0.5,
+      "title": "Improve image delivery",
+      "displayValue": "Est savings of 242 KiB"
+    },
+    {
+      "id": "total-byte-weight",
+      "score": 0.5,
+      "title": "Avoid enormous network payloads",
+      "displayValue": "Total size was 15,906 KiB"
+    },
+    {
+      "id": "uses-long-cache-ttl",
+      "score": 0.5,
+      "title": "Serve static assets with an efficient cache policy",
+      "displayValue": "1 resource found"
+    },
+    {
+      "id": "first-contentful-paint",
+      "score": 0.76,
+      "title": "First Contentful Paint",
+      "displayValue": "2.2 s"
+    }
+  ]
+}

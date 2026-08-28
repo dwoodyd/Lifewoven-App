@@ -1,0 +1,165 @@
+{
+  "categories": {
+    "performance": 36,
+    "accessibility": 95,
+    "best-practices": 79
+  },
+  "failingAudits": [
+    {
+      "id": "bf-cache",
+      "score": 0,
+      "title": "Page prevented back/forward cache restoration",
+      "displayValue": "1 failure reason"
+    },
+    {
+      "id": "bootup-time",
+      "score": 0,
+      "title": "Reduce JavaScript execution time",
+      "displayValue": "2.7 s"
+    },
+    {
+      "id": "cache-insight",
+      "score": 0,
+      "title": "Use efficient cache lifetimes",
+      "displayValue": "Est savings of 105 KiB"
+    },
+    {
+      "id": "color-contrast",
+      "score": 0,
+      "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+      "displayValue": null
+    },
+    {
+      "id": "deprecations",
+      "score": 0,
+      "title": "Uses deprecated APIs",
+      "displayValue": "1 warning found"
+    },
+    {
+      "id": "errors-in-console",
+      "score": 0,
+      "title": "Browser errors were logged to the console",
+      "displayValue": null
+    },
+    {
+      "id": "forced-reflow-insight",
+      "score": 0,
+      "title": "Forced reflow",
+      "displayValue": null
+    },
+    {
+      "id": "image-redundant-alt",
+      "score": 0,
+      "title": "Image elements have `[alt]` attributes that are redundant text.",
+      "displayValue": null
+    },
+    {
+      "id": "largest-contentful-paint",
+      "score": 0,
+      "title": "Largest Contentful Paint",
+      "displayValue": "20.2 s"
+    },
+    {
+      "id": "largest-contentful-paint-element",
+      "score": 0,
+      "title": "Largest Contentful Paint element",
+      "displayValue": "20,230 ms"
+    },
+    {
+      "id": "lcp-discovery-insight",
+      "score": 0,
+      "title": "LCP request discovery",
+      "displayValue": null
+    },
+    {
+      "id": "mainthread-work-breakdown",
+      "score": 0,
+      "title": "Minimize main-thread work",
+      "displayValue": "8.8 s"
+    },
+    {
+      "id": "max-potential-fid",
+      "score": 0,
+      "title": "Max Potential First Input Delay",
+      "displayValue": "1,030 ms"
+    },
+    {
+      "id": "modern-image-formats",
+      "score": 0,
+      "title": "Serve images in next-gen formats",
+      "displayValue": "Est savings of 116 KiB"
+    },
+    {
+      "id": "network-dependency-tree-insight",
+      "score": 0,
+      "title": "Network dependency tree",
+      "displayValue": null
+    },
+    {
+      "id": "render-blocking-insight",
+      "score": 0,
+      "title": "Render blocking requests",
+      "displayValue": "Est savings of 260 ms"
+    },
+    {
+      "id": "render-blocking-resources",
+      "score": 0,
+      "title": "Eliminate render-blocking resources",
+      "displayValue": "Est savings of 260 ms"
+    },
+    {
+      "id": "unminified-javascript",
+      "score": 0,
+      "title": "Minify JavaScript",
+      "displayValue": "Est savings of 1,386 KiB"
+    },
+    {
+      "id": "unused-javascript",
+      "score": 0,
+      "title": "Reduce unused JavaScript",
+      "displayValue": "Est savings of 479 KiB"
+    },
+    {
+      "id": "interactive",
+      "score": 0.02,
+      "title": "Time to Interactive",
+      "displayValue": "20.2 s"
+    },
+    {
+      "id": "total-blocking-time",
+      "score": 0.05,
+      "title": "Total Blocking Time",
+      "displayValue": "2,360 ms"
+    },
+    {
+      "id": "speed-index",
+      "score": 0.44,
+      "title": "Speed Index",
+      "displayValue": "6.1 s"
+    },
+    {
+      "id": "first-contentful-paint",
+      "score": 0.49,
+      "title": "First Contentful Paint",
+      "displayValue": "3.0 s"
+    },
+    {
+      "id": "image-delivery-insight",
+      "score": 0.5,
+      "title": "Improve image delivery",
+      "displayValue": "Est savings of 121 KiB"
+    },
+    {
+      "id": "total-byte-weight",
+      "score": 0.5,
+      "title": "Avoid enormous network payloads",
+      "displayValue": "Total size was 19,364 KiB"
+    },
+    {
+      "id": "uses-long-cache-ttl",
+      "score": 0.5,
+      "title": "Serve static assets with an efficient cache policy",
+      "displayValue": "1 resource found"
+    }
+  ]
+}
