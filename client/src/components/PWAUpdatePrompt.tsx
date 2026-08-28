@@ -28,7 +28,7 @@ export default function PWAUpdatePrompt() {
   };
 
   return (
-    <aside className="fixed bottom-4 left-4 right-4 z-[10000] mx-auto max-w-md rounded-xl border border-amber-300/30 bg-[#24201b] p-4 text-[#f8f3e8] shadow-2xl" role="status" aria-live="polite">
+    <aside data-update-protocol="refresh-v2" className="fixed bottom-4 left-4 right-4 z-[10000] mx-auto max-w-md rounded-xl border border-amber-300/30 bg-[#24201b] p-4 text-[#f8f3e8] shadow-2xl" role="status" aria-live="polite">
       <div className="flex gap-3">
         <RefreshCw className="mt-0.5 h-5 w-5 shrink-0 text-amber-300" aria-hidden="true" />
         <div className="min-w-0 flex-1">
