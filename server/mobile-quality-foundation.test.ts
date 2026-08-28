@@ -22,12 +22,15 @@ describe("native-quality mobile foundations", () => {
   it("makes shared buttons and cards meet the mobile target and surface conventions", () => {
     const button = source("client/src/components/ui/button.tsx");
     const card = source("client/src/components/ui/card.tsx");
+    const page = source("client/src/components/ui/page.tsx");
 
     expect(button).toContain("min-h-11");
     expect(button).toContain('icon: "size-11"');
     expect(button).toContain("touch-manipulation");
     expect(card).toContain("rounded-[var(--radius-surface)]");
     expect(card).toContain("shadow-[var(--elevation-1)]");
+    expect(page).toContain("screen-safe");
+    expect(page).toContain('data-slot="page"');
   });
 
   it("keeps navigation and cinematic onboarding clear of installed-device safe areas", () => {
