@@ -48,8 +48,18 @@ describe("vite.config.ts", () => {
     expect(viteCfg).toContain("vite-plugin-pwa");
   });
 
-  it("sets registerType autoUpdate", () => {
-    expect(viteCfg).toContain("autoUpdate");
+  it("uses prompt-mode registration so users can apply an available update", () => {
+    expect(viteCfg).toContain('registerType: "prompt"');
+    expect(viteCfg).toContain("skipWaiting: false");
+  });
+
+  it("provides a visible application refresh action for a waiting worker", () => {
+    const main = fs.readFileSync(path.resolve(__dirname, "../client/src/main.tsx"), "utf-8");
+    const prompt = fs.readFileSync(path.resolve(__dirname, "../client/src/components/PWAUpdatePrompt.tsx"), "utf-8");
+    expect(main).toContain("virtual:pwa-register");
+    expect(main).toContain("lifewoven:pwa-update-ready");
+    expect(prompt).toContain("Refresh now");
+    expect(prompt).toContain("update(true)");
   });
 
   it("includes workbox globPatterns", () => {
