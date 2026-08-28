@@ -160,6 +160,12 @@ export const btwRouter = router({
         durationSeconds: input.durationSeconds,
         stateAfterId: input.stateAfter,
       }).where(and(eq(btwDailySessions.id, input.sessionId), eq(btwDailySessions.userId, ctx.user.id)));
+      await db.insert(events).values({
+        userId: ctx.user.id,
+        event: "content_consumed",
+        properties: JSON.stringify({ source: "ground_practice", sessionType: "completed" }),
+        createdAt: Math.floor(Date.now() / 1000),
+      });
       return { ok: true };
     }),
 

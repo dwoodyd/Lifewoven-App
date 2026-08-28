@@ -4,6 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import Nav from "@/components/Nav";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { useBetaAccess } from "@/hooks/useBetaAccess";
 import { Loader2, Sparkles, Trash2, Plus, Lock } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "wouter";
@@ -38,8 +39,9 @@ export default function LivingAsHeard() {
   const [reflectingId, setReflectingId] = useState<number | null>(null);
 
   const { user } = useAuth();
+  const betaAccess = useBetaAccess();
   const { data: memberStatus } = trpc.paypalOrders.getMembershipStatus.useQuery(undefined, { enabled: !!user });
-  const canUseGroundGuide = memberStatus?.tier === "seeker" || memberStatus?.tier === "oracle";
+  const canUseGroundGuide = memberStatus?.tier === "seeker" || memberStatus?.tier === "oracle" || betaAccess.hasAccess;
 
   const { data: prayers, refetch } = trpc.btw.getPrayers.useQuery();
   const saveMutation = trpc.btw.savePrayer.useMutation({ onSuccess: () => { refetch(); setWriting(false); setBody(""); setTitle(""); setReflection(null); } });

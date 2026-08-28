@@ -2,15 +2,17 @@ import { Button } from "@/components/ui/button";
 import Nav from "@/components/Nav";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { useBetaAccess } from "@/hooks/useBetaAccess";
 import { Loader2, RefreshCw, Lock } from "lucide-react";
 import { Link } from "wouter";
 
 export default function ClosingTheGap() {
   const { user } = useAuth();
+  const betaAccess = useBetaAccess();
   const { data: stats, isLoading: statsLoading } = trpc.btw.getStats.useQuery();
   const { data: weeklyReflection, refetch: refetchWeekly } = trpc.btw.getLatestWeeklyReflection.useQuery();
   const { data: memberStatus } = trpc.paypalOrders.getMembershipStatus.useQuery(undefined, { enabled: !!user });
-  const canUseWeeklyReflection = memberStatus?.tier === "seeker" || memberStatus?.tier === "oracle";
+  const canUseWeeklyReflection = memberStatus?.tier === "seeker" || memberStatus?.tier === "oracle" || betaAccess.hasAccess;
   const generateMutation = trpc.btw.generateWeeklyReflection.useMutation({ onSuccess: () => refetchWeekly() });
 
   const METRIC_CARDS = stats ? [

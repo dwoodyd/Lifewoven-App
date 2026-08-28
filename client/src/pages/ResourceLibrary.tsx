@@ -3,6 +3,7 @@ import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { trpc } from "@/lib/trpc";
 import { Library, BookOpen, FileText, ArrowRight, ExternalLink, Info, Shield, Sparkles } from "lucide-react";
 
 type RightsLabel = "public-domain" | "original" | "licensed";
@@ -278,7 +279,8 @@ const CATEGORIES = [
 export default function ResourceLibrary() {
   const { user } = useAuth();
   const membershipTier = (user as any)?.membershipTier as string | undefined;
-  const hasPaidLibraryAccess = membershipTier === "oracle" || membershipTier === "seeker";
+  const { data: access } = trpc.store.getAccess.useQuery(undefined, { enabled: !!user });
+  const hasPaidLibraryAccess = membershipTier === "oracle" || membershipTier === "seeker" || !!access?.isBetaMember;
   const [activeCategory, setActiveCategory] = useState("soul-engineer");
   const [activeModule, setActiveModule] = useState("");
   const [activeRights, setActiveRights] = useState<RightsLabel | "">("");
