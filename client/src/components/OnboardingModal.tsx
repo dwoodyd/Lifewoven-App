@@ -349,11 +349,16 @@ export default function OnboardingModal({ userId }: Props) {
 
   useEffect(() => {
     const handler = () => {
+      if (localStorage.getItem(DEVICE_KEY)) return;
       setSceneIdx(0); setFinished(false); setDissolving(false);
       setOpen(true);
     };
     window.addEventListener("lifewoven:replay-onboarding", handler);
-    return () => window.removeEventListener("lifewoven:replay-onboarding", handler);
+    window.addEventListener("lifewoven:first-run-onboarding", handler);
+    return () => {
+      window.removeEventListener("lifewoven:replay-onboarding", handler);
+      window.removeEventListener("lifewoven:first-run-onboarding", handler);
+    };
   }, []);
 
   // Lock body scroll

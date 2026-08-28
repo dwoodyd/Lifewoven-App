@@ -220,6 +220,10 @@ export default function Dashboard() {
   const hasSurveyReading = Object.keys(latestScores).length > 0;
   const isFirstRun = isAuthenticated && !hasSurveyReading && !hasRecordedCheckIns && !hasHabits && !hasJournal;
 
+  useEffect(() => {
+    if (isFirstRun) window.dispatchEvent(new Event("lifewoven:first-run-onboarding"));
+  }, [isFirstRun]);
+
   const nextStep = (() => {
     const base = !hasSurveyReading
       ? { label: "Let’s take your first reading", sub: "Start with a short structural survey. It gives the app something real to support instead of asking you to interpret an empty dashboard.", href: "/audit", cta: "Take first reading" }

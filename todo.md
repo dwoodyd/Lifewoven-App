@@ -1748,3 +1748,8 @@
 - [ ] Fix the Settings Lumen intro replay control so it reliably restarts the intended onboarding experience.
 - [ ] Repair the live Settings replay path after event dispatch failed to open the mounted onboarding controller.
 - [ ] Visually audit and correct Lumen intro slide typography, including word spacing, tracking, line height, and scene hierarchy.
+- [ ] Cinematic onboarding: auto-open Lumen intro once for eligible first-run root and dashboard entries, never tool deep-links or returning users.
+- [ ] Cinematic onboarding: transfer anonymous marketing-survey readings to a newly authenticated account and route intro completion to the reading or one-time survey.
+- [ ] Cinematic onboarding: preserve deliberate Settings replay and prevent any first-run duplicate survey prompt.
+- [ ] Cinematic onboarding: activate service-worker releases promptly and present a nonintrusive refresh prompt for new builds.
+- [ ] Cinematic onboarding: verify new-user, returning-user, survey-transfer, deep-link, replay, and PWA-update paths.
