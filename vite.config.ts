@@ -164,8 +164,9 @@ const vitePWA = VitePWA({
     cleanupOutdatedCaches: true,
     // Raise the precache size limit to 4 MiB to accommodate the main bundle
     maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
-    // Only precache small assets; large JS chunks are served from network
-    globPatterns: ["**/*.{css,html,ico,png,svg,woff2}"],
+    // Keep the hashed entry bundle with the HTML shell. Feature chunks remain
+    // network-first, but an installed app can still open a useful shell offline.
+    globPatterns: ["**/*.{css,html,ico,png,svg,woff2}", "assets/index-*.js"],
     navigateFallback: "/index.html",
     navigateFallbackDenylist: [/^\/api\//],
     runtimeCaching: [
@@ -192,8 +193,8 @@ const vitePWA = VitePWA({
     name: "Lifewoven — Personal Transformation Platform",
     short_name: "Lifewoven",
     description: "One intelligent operating system for your whole life, built on the 5S Framework.",
-    theme_color: "#2a2520",
-    background_color: "#2a2520",
+    theme_color: "#0B1020",
+    background_color: "#0B1020",
     display: "standalone",
     orientation: "portrait-primary",
     start_url: "/",
@@ -204,7 +205,7 @@ const vitePWA = VitePWA({
         src: "/manus-storage/pwa-192x192_455db248.png",
         sizes: "192x192",
         type: "image/png",
-        purpose: "any",
+        purpose: "any maskable",
       },
       {
         src: "/manus-storage/pwa-512x512_ffd77718.png",

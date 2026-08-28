@@ -138,7 +138,7 @@ function BillingSection() {
   const betaEndDate = sub?.betaEndDate;
 
   return (
-    <div className="rounded-xl border border-border bg-card p-6 mb-5">
+    <div className="rounded-[var(--radius-surface)] border border-border bg-card p-4 sm:p-6 mb-5">
       <div className="flex items-center gap-2 mb-4">
         <CreditCard className="h-4 w-4 text-muted-foreground" />
         <h2 className="font-medium text-sm text-foreground">Subscription & Billing</h2>
@@ -375,7 +375,7 @@ export default function Settings() {
           </div>
 
           {/* Account */}
-          <div className="rounded-xl border border-border bg-card p-6 mb-5">
+          <div className="rounded-[var(--radius-surface)] border border-border bg-card p-4 sm:p-6 mb-5">
             <div className="flex items-center gap-2 mb-4">
               <User className="h-4 w-4 text-muted-foreground" />
               <h2 className="font-medium text-sm text-foreground">Account</h2>
@@ -432,7 +432,7 @@ export default function Settings() {
           {/* Billing */}
           <BillingSection />
 
-          <div className="rounded-xl border border-border bg-card p-6 mb-5">
+          <div className="rounded-[var(--radius-surface)] border border-border bg-card p-4 sm:p-6 mb-5">
             <div className="flex items-center gap-2 mb-1"><Bell className="h-4 w-4 text-accent" /><h2 className="font-medium text-sm text-foreground">Daily Reminder</h2></div>
             {reminderPublicKey.data?.enabled ? (
               <>
@@ -449,7 +449,7 @@ export default function Settings() {
           </div>
 
           {/* Oracle Preferences */}
-          <div className="rounded-xl border border-border bg-card p-6 mb-5">
+          <div className="rounded-[var(--radius-surface)] border border-border bg-card p-4 sm:p-6 mb-5">
             <div className="flex items-center gap-2 mb-1">
               <Sparkles className="h-4 w-4 text-accent" />
               <h2 className="font-medium text-sm text-foreground">Oracle Preferences</h2>
@@ -490,7 +490,7 @@ export default function Settings() {
           </div>
 
           {/* Display Preferences */}
-          <div className="rounded-xl border border-border bg-card p-6 mb-5">
+          <div className="rounded-[var(--radius-surface)] border border-border bg-card p-4 sm:p-6 mb-5">
             <div className="flex items-center gap-2 mb-1">
               <Eye className="h-4 w-4 text-muted-foreground" />
               <h2 className="font-medium text-sm text-foreground">Display Preferences</h2>
@@ -596,16 +596,16 @@ export default function Settings() {
           </div>
 
           {/* Privacy */}
-          <div className="rounded-xl border border-border bg-card p-6 mb-5">
+          <div className="rounded-[var(--radius-surface)] border border-border bg-card p-4 sm:p-6 mb-5">
             <div className="flex items-center gap-2 mb-4">
               <Shield className="h-4 w-4 text-muted-foreground" />
               <h2 className="font-medium text-sm text-foreground">Privacy & Legal</h2>
             </div>
-            <div className="space-y-2">
-              <Link href="/legal/privacy" className="block text-sm text-accent hover:underline py-1">Privacy Policy</Link>
-              <Link href="/legal/terms" className="block text-sm text-accent hover:underline py-1">Terms of Service</Link>
-              <Link href="/legal/refunds" className="block text-sm text-accent hover:underline py-1">Refund Policy</Link>
-              <Link href="/support" className="block text-sm text-accent hover:underline py-1">Contact Support</Link>
+            <div className="space-y-1">
+              <Link href="/legal/privacy" className="flex min-h-11 items-center text-sm text-accent hover:underline">Privacy Policy</Link>
+              <Link href="/legal/terms" className="flex min-h-11 items-center text-sm text-accent hover:underline">Terms of Service</Link>
+              <Link href="/legal/refunds" className="flex min-h-11 items-center text-sm text-accent hover:underline">Refund Policy</Link>
+              <Link href="/support" className="flex min-h-11 items-center text-sm text-accent hover:underline">Contact Support</Link>
             </div>
             <div className="mt-5 border-t border-border/50 pt-4">
               <p className="text-sm font-medium text-foreground mb-1">Request data deletion</p>
@@ -617,7 +617,7 @@ export default function Settings() {
           </div>
 
           {/* Notifications placeholder */}
-          <div className="rounded-xl border border-border bg-card p-6">
+          <div className="rounded-[var(--radius-surface)] border border-border bg-card p-4 sm:p-6">
             <div className="flex items-center gap-2 mb-4">
               <Bell className="h-4 w-4 text-muted-foreground" />
               <h2 className="font-medium text-sm text-foreground">Notifications</h2>

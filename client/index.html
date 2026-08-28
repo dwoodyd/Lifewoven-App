@@ -42,7 +42,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
   </head>
 
-  <body>
+<body>
+    <script>(function(){try{var light=localStorage.getItem('theme')==='light';document.documentElement.style.setProperty('--splash-bg',light?'#F7F2E9':'#0B1020');}catch(e){}})()</script>
     <!-- Anti-FOUC: Lifewoven defaults to night; honor a stored light preference before React mounts. -->
     <script>(function(){try{var t=localStorage.getItem('theme');if(t==='light')document.documentElement.classList.remove('dark');else document.documentElement.classList.add('dark');}catch(e){}})()</script>
     <!-- Splash screen: spins favicon, fades out when React mounts -->

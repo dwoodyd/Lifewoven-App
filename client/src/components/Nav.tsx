@@ -45,7 +45,7 @@ export default function Nav() {
   const closeMobile = () => setMobileOpen(false);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border" style={{ viewTransitionName: 'nav-bar' }}>
+    <header className="fixed top-0 left-0 right-0 z-50 pt-safe bg-background/90 backdrop-blur-md border-b border-border" style={{ viewTransitionName: 'nav-bar' }}>
       <div className="container flex items-center justify-between h-16 px-4 sm:px-6">
 
         {/* Brand Logo */}
@@ -265,7 +265,7 @@ export default function Nav() {
       {mobileOpen && (
         <div
           id="mobile-nav"
-          className="md:hidden border-t border-border bg-background/95 backdrop-blur-md"
+          className="mobile-nav-panel md:hidden border-t border-border bg-background/95 backdrop-blur-md"
           role="navigation"
           aria-label="Mobile navigation"
         >

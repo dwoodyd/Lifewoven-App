@@ -204,7 +204,7 @@ function SceneText({
   return (
     <div style={{
       position: "absolute", bottom: 0, left: 0, right: 0,
-      padding: "0 clamp(1.5rem,6vw,5rem) 2.5rem",
+      padding: "0 clamp(1rem,6vw,5rem) calc(1.5rem + env(safe-area-inset-bottom, 0px))",
       zIndex: 10,
       display: "flex", flexDirection: "column", alignItems: "center",
       textAlign: "center", gap: "0.6rem",
@@ -556,7 +556,7 @@ export default function OnboardingModal({ userId }: Props) {
         ref={videoARef}
         {...(slotA.url ? { src: slotA.url } : {})}
         poster={getLumenPoster(slotA.videoId)}
-        preload="none"
+        preload="metadata"
         muted playsInline
         loop={activeSlot === "a" ? activeSceneLoop : false}
         autoPlay={activeSlot === "a"}
@@ -564,6 +564,7 @@ export default function OnboardingModal({ userId }: Props) {
           if (activeSlot !== "a" && videoARef.current) videoARef.current.pause();
           setSlotA(s => ({ ...s, ready: true }));
         }}
+        onError={() => setSlotA(s => ({ ...s, ready: true }))}
         style={{
           position: "absolute", inset: 0, zIndex: 1,
           width: "100%", height: "100%",
@@ -579,7 +580,7 @@ export default function OnboardingModal({ userId }: Props) {
         ref={videoBRef}
         {...(slotB.url ? { src: slotB.url } : {})}
         poster={getLumenPoster(slotB.videoId)}
-        preload="none"
+        preload="metadata"
         muted playsInline
         loop={activeSlot === "b" ? activeSceneLoop : false}
         autoPlay={activeSlot === "b"}
@@ -587,6 +588,7 @@ export default function OnboardingModal({ userId }: Props) {
           if (activeSlot !== "b" && videoBRef.current) videoBRef.current.pause();
           setSlotB(s => ({ ...s, ready: true }));
         }}
+        onError={() => setSlotB(s => ({ ...s, ready: true }))}
         style={{
           position: "absolute", inset: 0, zIndex: 1,
           width: "100%", height: "100%",
@@ -610,27 +612,28 @@ export default function OnboardingModal({ userId }: Props) {
         transition: "background 0.8s ease",
       }} />
 
-      {/* Skip button (scene 0 only) */}
+      {/* Skip control (scene 0 only) */}
       {!finished && sceneIdx === 0 && (
         <button
           onClick={handleSkip}
+          aria-label="Skip intro"
           style={{
-            position: "absolute", top: 24, right: 24, zIndex: 10,
+            position: "absolute", top: "calc(1rem + env(safe-area-inset-top, 0px))", right: "calc(1rem + env(safe-area-inset-right, 0px))", zIndex: 10,
             background: "rgba(255,255,255,0.08)",
             border: "1px solid rgba(255,255,255,0.15)",
-            color: T.quiet, fontSize: "0.7rem", letterSpacing: "0.14em",
-            padding: "0.45rem 1rem", borderRadius: 999, cursor: "pointer",
+            color: T.ink, fontSize: "1.4rem", lineHeight: 1,
+            width: 44, height: 44, borderRadius: 999, cursor: "pointer",
             fontFamily: "inherit", backdropFilter: "blur(8px)",
           }}
         >
-          Skip intro
+          ×
         </button>
       )}
 
       {/* Scene dot progress */}
       {!finished && (
         <div style={{
-          position: "absolute", top: 28, left: "50%", transform: "translateX(-50%)",
+          position: "absolute", top: "calc(1.25rem + env(safe-area-inset-top, 0px))", left: "50%", transform: "translateX(-50%)",
           display: "flex", gap: 6, zIndex: 10,
         }}>
           {SCENES.map((_, i) => (
@@ -663,7 +666,7 @@ export default function OnboardingModal({ userId }: Props) {
       {finished && (
         <div style={{
           position: "absolute", bottom: 0, left: 0, right: 0,
-          padding: "0 clamp(1.5rem,6vw,5rem) 3rem",
+          padding: "0 clamp(1rem,6vw,5rem) calc(1.5rem + env(safe-area-inset-bottom, 0px))",
           display: "flex", flexDirection: "column", alignItems: "center",
           textAlign: "center", gap: "1rem", zIndex: 10,
           animation: "fadeSlideUp 0.9s ease 0.3s both",
@@ -731,7 +734,7 @@ export default function OnboardingModal({ userId }: Props) {
               onClick={() => { setFinished(false); setSceneIdx(0); setVideoTime(0); setBtnVisible(false); }}
               style={{
                 background: "transparent", color: T.quiet, border: "none",
-                cursor: "pointer", fontSize: "0.85rem", fontFamily: "inherit",
+                cursor: "pointer", fontSize: "0.85rem", fontFamily: "inherit", minHeight: 44,
                 fontStyle: "italic", marginTop: "0.25rem",
                 transition: "color 0.2s",
               }}

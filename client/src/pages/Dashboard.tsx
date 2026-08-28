@@ -60,9 +60,9 @@ function LumenEmpty({ title, body, href, onAction, cta, videoId = "peaceful_idle
         <p className="text-sm font-medium text-foreground">{title}</p>
         <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{body}</p>
         {href ? (
-          <Button asChild size="sm" variant="outline" className="mt-3 min-h-9 text-xs"><Link href={href}>{cta}</Link></Button>
+          <Button asChild size="sm" variant="outline" className="mt-3 text-xs"><Link href={href}>{cta}</Link></Button>
         ) : (
-          <Button size="sm" variant="outline" className="mt-3 min-h-9 text-xs" onClick={onAction}>{cta}</Button>
+          <Button size="sm" variant="outline" className="mt-3 text-xs" onClick={onAction}>{cta}</Button>
         )}
       </div>
     </div>
@@ -298,7 +298,7 @@ export default function Dashboard() {
         />
       )}
       <Nav />
-      <div className="container flex flex-col pt-20 pb-24 max-w-5xl mx-auto px-3 sm:px-6 font-sans">
+      <div className="container flex flex-col pt-20 pb-24 max-w-5xl mx-auto px-4 sm:px-6 font-sans">
         {/* Adaptive top bar */}
         <div className="flex items-center justify-end mb-3">
           <button

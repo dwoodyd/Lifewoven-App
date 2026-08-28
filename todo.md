@@ -1753,3 +1753,8 @@
 - [ ] Cinematic onboarding: preserve deliberate Settings replay and prevent any first-run duplicate survey prompt.
 - [ ] Cinematic onboarding: activate service-worker releases promptly and present a nonintrusive refresh prompt for new builds.
 - [ ] Cinematic onboarding: verify new-user, returning-user, survey-transfer, deep-link, replay, and PWA-update paths.
+- [ ] Native-quality mobile: centralize 8pt spacing, type, radius, elevation, motion, touch-target, safe-area, and semantic theme tokens.
+- [ ] Native-quality mobile: audit and strengthen shared page, button, card, media, navigation, modal, and loading primitives.
+- [ ] Native-quality mobile: verify manifest, standalone launch, maskable icons, splash treatment, offline shell, update activation, installation timing, and supported haptics.
+- [ ] Native-quality mobile: directly improve and verify dashboard, Load-Bearing Survey, Lumen intro, pricing, Settings, Ground, Resource Library, and core practice routes at phone viewport.
+- [ ] Native-quality mobile: validate dark/light contrast, reduced motion, safe areas, tap targets, media fallbacks, overflow, input/keyboard behavior, and focused regression coverage.

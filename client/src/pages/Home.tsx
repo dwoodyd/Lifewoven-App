@@ -163,8 +163,8 @@ export default function Home() {
 
         {/* Content */}
         <div className="relative z-10 w-full">
-          <div className="flex min-h-[max(680px,100svh)] max-w-7xl items-center px-6 pb-20 pt-28 sm:px-10">
-            <div className="max-w-xl text-left">
+          <div className="flex min-h-[max(680px,100svh)] max-w-7xl items-center px-5 pb-[calc(5rem+env(safe-area-inset-bottom,0px))] pt-[calc(5rem+env(safe-area-inset-top,0px))] sm:px-10 sm:pb-20 sm:pt-28">
+            <div className="w-full max-w-xl text-left">
             {/* Eyebrow */}
             <p className="mb-8 font-mono text-xs uppercase tracking-[0.24em] text-[oklch(0.78_0.12_55)]">
               The 5S Personal Transformation System
@@ -173,7 +173,7 @@ export default function Home() {
             {/* Headline */}
             <h1
               className="mb-8 leading-[1.03] tracking-tight"
-              style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2.8rem, 5.5vw, 5.6rem)", fontWeight: 400 }}
+              style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2.35rem, 10vw, 5.6rem)", fontWeight: 400 }}
             >
               One intelligent
               <br />
@@ -189,14 +189,15 @@ export default function Home() {
             <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
               <Link
                 href="/audit"
-                className="group inline-flex items-center gap-3 px-8 py-4 rounded-full text-base font-medium transition-all duration-300"
+                className="group inline-flex w-full items-center justify-center gap-3 px-6 py-4 rounded-full text-base font-medium transition-all duration-300 sm:w-auto sm:px-8"
                 style={{
                   background: "linear-gradient(135deg, oklch(0.75 0.14 55), oklch(0.65 0.18 45))",
                   color: "oklch(0.12 0.02 260)",
                   boxShadow: "0 0 40px oklch(0.75 0.14 55 / 0.35)",
                 }}
               >
-                Take the Load-Bearing Survey
+                <span className="sm:hidden">Start the assessment</span>
+                <span className="hidden sm:inline">Take the Load-Bearing Survey</span>
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Link>
               <a
