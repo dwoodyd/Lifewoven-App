@@ -12,6 +12,7 @@ import { trpc } from "@/lib/trpc";
 import { Badge } from "@/components/ui/badge";
 import { LUMIN_VIDEOS } from "@/data/lumin";
 import { setHapticsEnabled, getHapticsEnabled } from "@/hooks/useHaptics";
+import { replayOnboarding } from "@/components/OnboardingModal";
 
 const TIER_LABELS: Record<string, { label: string; color: string; desc: string }> = {
   explorer: { label: "Explorer", color: "bg-secondary text-foreground", desc: "Free tier — core tools included." },
@@ -309,7 +310,7 @@ export default function Settings() {
   };
 
   const handleReplayOnboarding = () => {
-    window.dispatchEvent(new Event("lifewoven:replay-onboarding"));
+    replayOnboarding(user?.id);
     toast.success("Replaying Lumen's introduction.");
   };
 
