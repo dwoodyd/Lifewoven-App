@@ -22,10 +22,12 @@ describe("Lumen media fallbacks", () => {
     }
   });
 
-  it("uses the native video poster without an overlapping image sibling", () => {
+  it("uses matching canonical posters while loading and collapses failed decorative media", () => {
     const sceneSource = readFileSync(resolve(process.cwd(), "client/src/components/LuminScene.tsx"), "utf8");
     expect(sceneSource).toContain("poster={poster}");
-    expect(sceneSource).not.toContain("<img");
+    expect(sceneSource).toContain("src={poster}");
+    expect(sceneSource).toContain("showMediaSkeleton");
+    expect(sceneSource).toContain("if (ambient && videoFailed && !posterReady) return null;");
   });
 
   it("uses browser-safe MP4 sources for every registered mascot scene", () => {

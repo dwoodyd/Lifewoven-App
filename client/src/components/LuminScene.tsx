@@ -92,6 +92,8 @@ export function LuminScene({
   const [entered, setEntered] = useState(false);
   const [shouldLoadVideo, setShouldLoadVideo] = useState(!ambient);
   const [videoReady, setVideoReady] = useState(false);
+  const [videoFailed, setVideoFailed] = useState(false);
+  const [posterReady, setPosterReady] = useState(false);
 
   const url = getVideoUrl(videoId);
   const poster = getLumenPoster(videoId);
@@ -106,6 +108,8 @@ export function LuminScene({
   // before loading one, while a portrait poster is visible immediately.
   useEffect(() => {
     setVideoReady(false);
+    setVideoFailed(false);
+    setPosterReady(false);
     setShouldLoadVideo(!ambient);
   }, [ambient, videoId]);
 
@@ -146,6 +150,13 @@ export function LuminScene({
     if (!loop) handleComplete();
   }, [loop, handleComplete]);
 
+  const showMediaSkeleton = !videoReady && !posterReady && !videoFailed;
+  const canShowPoster = Boolean(poster);
+
+  // Decorative ambient media should never leave an empty fixed-size panel if
+  // neither the video nor its poster is reachable.
+  if (ambient && videoFailed && !posterReady) return null;
+
   // ── Ambient mode — Lumin floats over existing content ──────────────────
   if (ambient) {
     return (
@@ -168,17 +179,30 @@ export function LuminScene({
           opacity: entered ? 1 : 0,
         }}
       >
+        {canShowPoster && (
+          <img
+            src={poster}
+            alt=""
+            aria-hidden="true"
+            onLoad={() => setPosterReady(true)}
+            onError={() => setPosterReady(false)}
+            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: ambientFit, display: "block" }}
+          />
+        )}
+        {showMediaSkeleton && (
+          <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(110deg, var(--secondary), var(--card), var(--secondary))", backgroundSize: "200% 100%", animation: "pulse 1.4s ease-in-out infinite" }} />
+        )}
         <video
           ref={videoRef}
           src={shouldLoadVideo ? url : undefined}
           poster={poster}
-          preload="none"
+          preload="metadata"
           autoPlay={shouldLoadVideo}
           muted
           loop={loop}
           playsInline
           onCanPlay={() => setVideoReady(true)}
-          onError={() => setVideoReady(false)}
+          onError={() => { setVideoReady(false); setVideoFailed(true); }}
           onTimeUpdate={handleTimeUpdate}
           onEnded={handleVideoEnd}
           style={{
@@ -188,8 +212,10 @@ export function LuminScene({
             height: "100%",
             objectFit: ambientFit,
             mixBlendMode: ambientBlendMode,
-            background: "var(--card)",
+            background: "transparent",
             display: "block",
+            opacity: videoReady ? 1 : 0,
+            transition: "opacity var(--duration-standard) var(--ease-out-native)",
           }}
         />
       </div>
@@ -217,18 +243,31 @@ export function LuminScene({
         transform: dissolving ? "scale(1.04)" : "scale(1)",
       }}
     >
+      {canShowPoster && (
+        <img
+          src={poster}
+          alt=""
+          aria-hidden="true"
+          onLoad={() => setPosterReady(true)}
+          onError={() => setPosterReady(false)}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 1, display: "block" }}
+        />
+      )}
+      {showMediaSkeleton && (
+        <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 1, background: "linear-gradient(110deg, #11172a, #1a2035, #11172a)", backgroundSize: "200% 100%", animation: "pulse 1.4s ease-in-out infinite" }} />
+      )}
       {/* ── Full-bleed video ── */}
       <video
         ref={videoRef}
         src={shouldLoadVideo ? url : undefined}
         poster={poster}
-        preload="none"
+        preload="metadata"
         autoPlay={shouldLoadVideo}
         muted
         loop={loop}
         playsInline
         onCanPlay={() => setVideoReady(true)}
-        onError={() => setVideoReady(false)}
+        onError={() => { setVideoReady(false); setVideoFailed(true); }}
         onTimeUpdate={handleTimeUpdate}
         onEnded={handleVideoEnd}
         style={{
@@ -240,6 +279,8 @@ export function LuminScene({
           mixBlendMode: "screen",
           background: "#000",
           zIndex: 1,
+          opacity: videoReady ? 1 : 0,
+          transition: "opacity var(--duration-standard) var(--ease-out-native)",
         }}
       />
 
