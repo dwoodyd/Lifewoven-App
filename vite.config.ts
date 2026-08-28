@@ -152,7 +152,7 @@ function vitePluginManusDebugCollector(): Plugin {
 }
 
 const vitePWA = VitePWA({
-  registerType: "autoUpdate",
+  registerType: "prompt",
   // In dev mode the service worker is not injected to avoid interfering with HMR
   devOptions: { enabled: false },
   // Workbox config: cache app shell + assets
@@ -160,7 +160,7 @@ const vitePWA = VitePWA({
     // Activate an updated app shell for existing PWA sessions instead of waiting
     // for every previously opened tab to close.
     clientsClaim: true,
-    skipWaiting: true,
+    skipWaiting: false,
     cleanupOutdatedCaches: true,
     // Raise the precache size limit to 4 MiB to accommodate the main bundle
     maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,

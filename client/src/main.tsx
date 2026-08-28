@@ -9,6 +9,8 @@ import App from "./App";
 import { AdminPreviewProvider } from "./contexts/AdminPreviewContext";
 import { LuminMomentProvider } from "./components/LuminMoment";
 import { getLoginUrl } from "./const";
+import { registerSW } from "virtual:pwa-register";
+import PWAUpdatePrompt from "./components/PWAUpdatePrompt";
 import "./index.css";
 import "./view-transitions.css";
 
@@ -109,11 +111,19 @@ root.render(
       <AdminPreviewProvider>
         <LuminMomentProvider>
           <App />
+          <PWAUpdatePrompt />
         </LuminMomentProvider>
       </AdminPreviewProvider>
     </QueryClientProvider>
   </trpc.Provider>
 );
+
+const updateServiceWorker = registerSW({
+  immediate: true,
+  onNeedRefresh() {
+    window.dispatchEvent(new CustomEvent("lifewoven:pwa-update-ready", { detail: updateServiceWorker }));
+  },
+});
 
 // Dismiss splash on the first rendered frame; route changes must never feel like a reboot.
 const splashStart = Date.now();

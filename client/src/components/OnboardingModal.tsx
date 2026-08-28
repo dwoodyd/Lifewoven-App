@@ -307,6 +307,13 @@ export default function OnboardingModal({ userId }: Props) {
   // trackEvent requires auth; onboarding shows before login, so we silence failures.
   const completeMutation = trpc.profile.completeOnboarding.useMutation({ onError: () => {} });
   const trackEvent       = trpc.system.trackEvent.useMutation({ onError: () => {} });
+  const { data: dashboardData, isFetched: hasLoadedDashboard } = trpc.profile.dashboard.useQuery(
+    undefined,
+    { enabled: open && Boolean(userId), staleTime: 1000 * 60 * 2 },
+  );
+  const hasSurveyReading = Boolean((dashboardData as { latestSurvey?: unknown } | null)?.latestSurvey);
+  const postIntroPath = hasSurveyReading ? "/dashboard" : "/audit";
+  const postIntroLabel = hasSurveyReading ? "Open your reading →" : "Take the Load-Bearing Survey →";
 
   /* ── Preload next video into the inactive slot ─────────────────── */
   const preloadIntoInactiveSlot = useCallback((videoId: string) => {
@@ -515,8 +522,8 @@ export default function OnboardingModal({ userId }: Props) {
 
   function handleSkip() {
     trackEvent.mutate({ event: "onboarding_complete", properties: { skipped: true, at: sceneIdx } });
-    setDissolving(true);
-    setTimeout(dismiss, 700);
+    if (userId && !hasLoadedDashboard) return;
+    goTo(postIntroPath);
   }
 
   function goTo(path: string) {
@@ -699,13 +706,13 @@ export default function OnboardingModal({ userId }: Props) {
             textShadow: "0 2px 12px rgba(0,0,0,1), 0 1px 4px rgba(0,0,0,1)",
             marginBottom: "0.4rem",
           }}>
-            Open your dashboard whenever you're ready.<br />
-            Lumen is already waiting inside.
+            {hasSurveyReading ? "Your reading is waiting on your dashboard." : "Begin with one honest survey, then choose your first practice."}
           </p>
 
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.75rem", marginTop: "0.4rem" }}>
             <button
-              onClick={() => goTo("/audit")}
+              onClick={() => goTo(postIntroPath)}
+              disabled={Boolean(userId) && !hasLoadedDashboard}
               style={{
                 background: `linear-gradient(135deg, ${T.thread}, #c9a55a)`,
                 color: "#1a1610", border: "none",
@@ -717,22 +724,7 @@ export default function OnboardingModal({ userId }: Props) {
               onMouseEnter={e => { (e.target as HTMLElement).style.transform = "scale(1.04)"; }}
               onMouseLeave={e => { (e.target as HTMLElement).style.transform = "scale(1)"; }}
             >
-              Take the Load-Bearing Survey →
-            </button>
-
-            <button
-              onClick={() => goTo("/pricing")}
-              style={{
-                background: "rgba(216,184,120,0.12)", color: "#d8b878",
-                border: "1px solid rgba(216,184,120,0.35)",
-                padding: "0.75rem 2rem", borderRadius: 999,
-                fontSize: "0.88rem", fontWeight: 500, cursor: "pointer", fontFamily: "inherit",
-                transition: "background 0.2s ease",
-              }}
-              onMouseEnter={e => { (e.target as HTMLElement).style.background = "rgba(216,184,120,0.22)"; }}
-              onMouseLeave={e => { (e.target as HTMLElement).style.background = "rgba(216,184,120,0.12)"; }}
-            >
-              Unlock the Oracle — $49/mo
+              {postIntroLabel}
             </button>
 
             <button
