@@ -125,10 +125,6 @@
           var message = String(event.reason && (event.reason.message || event.reason));
           if (/ChunkLoadError|Failed to fetch dynamically imported module|Importing a module script failed/i.test(message)) showRecovery();
         });
-        window.setTimeout(function () {
-          var root = document.getElementById('root');
-          if (root && !root.hasChildNodes()) showRecovery();
-        }, 6000);
         if (retry) retry.addEventListener('click', function () {
           Promise.all([
             'serviceWorker' in navigator ? navigator.serviceWorker.getRegistrations().then(function (registrations) { return Promise.all(registrations.map(function (registration) { return registration.unregister(); })); }) : Promise.resolve(),
