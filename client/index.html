@@ -96,6 +96,48 @@
       }, 1600);
     </script>
     <div id="root"></div>
+    <div id="pwa-startup-recovery" role="alert" aria-live="assertive" hidden style="position:fixed;inset:0;z-index:10000;align-items:center;justify-content:center;padding:24px;background:#0B1020;color:#F7F2E9;font-family:Inter,system-ui,sans-serif;text-align:center">
+      <div style="max-width:360px">
+        <img src="/manus-storage/lifewoven-original-mark_811eea16.png" alt="" width="56" height="56" style="border-radius:16px;margin:0 auto 24px" />
+        <h1 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:30px;line-height:1.1;margin:0 0 12px">Lifewoven needs a refresh.</h1>
+        <p style="color:#D1D5DB;line-height:1.55;margin:0 0 24px">A saved app update did not finish loading. Refreshing will safely load the latest version.</p>
+        <button id="pwa-startup-refresh" type="button" style="min-height:48px;padding:12px 20px;border:0;border-radius:999px;background:#F59E0B;color:#111827;font:600 16px Inter,system-ui,sans-serif">Refresh Lifewoven</button>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var appMounted = false;
+        var recovery = document.getElementById('pwa-startup-recovery');
+        var retry = document.getElementById('pwa-startup-refresh');
+        function showRecovery() {
+          if (!recovery || appMounted) return;
+          var splash = document.getElementById('splash');
+          if (splash) splash.remove();
+          recovery.hidden = false;
+          recovery.style.display = 'flex';
+        }
+        window.__lifewovenAppMounted = function () { appMounted = true; };
+        window.__lifewovenShowStartupRecovery = showRecovery;
+        window.addEventListener('error', function (event) {
+          var target = event.target;
+          if (target && target.tagName === 'SCRIPT') showRecovery();
+        }, true);
+        window.addEventListener('unhandledrejection', function (event) {
+          var message = String(event.reason && (event.reason.message || event.reason));
+          if (/ChunkLoadError|Failed to fetch dynamically imported module|Importing a module script failed/i.test(message)) showRecovery();
+        });
+        window.setTimeout(function () {
+          var root = document.getElementById('root');
+          if (!appMounted && root && !root.hasChildNodes()) showRecovery();
+        }, 6000);
+        if (retry) retry.addEventListener('click', function () {
+          Promise.all([
+            'serviceWorker' in navigator ? navigator.serviceWorker.getRegistrations().then(function (registrations) { return Promise.all(registrations.map(function (registration) { return registration.unregister(); })); }) : Promise.resolve(),
+            'caches' in window ? caches.keys().then(function (keys) { return Promise.all(keys.map(function (key) { return caches.delete(key); })); }) : Promise.resolve(),
+          ]).finally(function () { window.location.reload(); });
+        });
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
     <!-- Analytics: only loaded when VITE_ANALYTICS_ENDPOINT and VITE_ANALYTICS_WEBSITE_ID are set -->
     <script>

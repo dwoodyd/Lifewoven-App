@@ -1759,3 +1759,4 @@
 - [ ] Native-quality mobile: directly improve and verify dashboard, Load-Bearing Survey, Lumen intro, pricing, Settings, Ground, Resource Library, and core practice routes at phone viewport.
 - [ ] Native-quality mobile: validate dark/light contrast, reduced motion, safe areas, tap targets, media fallbacks, overflow, input/keyboard behavior, and focused regression coverage.
 - [ ] Native-quality mobile: publish the current hardening checkpoint and record installed-PWA verification on real iOS Safari and Android Chrome.
+- [ ] P0 installed-PWA startup: Android home-screen launch shows only the splash/background and never mounts Lifewoven UI; diagnose and fix before further mobile release claims.

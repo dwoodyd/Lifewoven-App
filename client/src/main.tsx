@@ -118,6 +118,10 @@ root.render(
   </trpc.Provider>
 );
 
+// The static startup shell can expose recovery before this module runs. Mark
+// the app as booted as soon as React owns the root so it never covers a live UI.
+(window as typeof window & { __lifewovenAppMounted?: () => void }).__lifewovenAppMounted?.();
+
 const updateServiceWorker = registerSW({
   immediate: true,
   onNeedRefresh() {

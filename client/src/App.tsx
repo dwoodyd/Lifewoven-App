@@ -1,8 +1,9 @@
 import { Toaster } from "@/components/ui/sonner";
 import FeedbackWidget from "./components/FeedbackWidget";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import NotFound from "@/pages/NotFound";
 import { Route, Switch, useLocation, Redirect } from "wouter";
-import { lazy, Suspense, useEffect } from "react";
+import { useEffect } from "react";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { useAuth } from "./_core/hooks/useAuth";
@@ -10,80 +11,63 @@ import OnboardingModal from "./components/OnboardingModal";
 
 import { BetaExpiredModal } from "./components/BetaExpiredModal";
 import { PWAInstallPrompt } from "./components/PWAInstallPrompt";
-
-// Route modules are intentionally lazy. Loading every feature (including the
-// rich reader) on the public first paint delayed interaction on mobile.
-const NotFound = lazy(() => import("@/pages/NotFound"));
-const Home = lazy(() => import("./pages/Home"));
-const AlignmentAudit = lazy(() => import("./pages/AlignmentAudit"));
-const Pricing = lazy(() => import("./pages/Pricing"));
-const About = lazy(() => import("./pages/About"));
-const Sources = lazy(() => import("./pages/Sources"));
-const AuthCallback = lazy(() => import("./pages/AuthCallback"));
-const AuthComplete = lazy(() => import("./pages/AuthComplete"));
-const Login = lazy(() => import("./pages/Login"));
-const Dashboard = lazy(() => import("./pages/Dashboard"));
-const Profile = lazy(() => import("./pages/Profile"));
-const StateModule = lazy(() => import("./pages/modules/StateModule"));
-const StoryModule = lazy(() => import("./pages/modules/StoryModule"));
-const StandardsModule = lazy(() => import("./pages/modules/StandardsModule"));
-const StrategyModule = lazy(() => import("./pages/modules/StrategyModule"));
-const StewardshipModule = lazy(() => import("./pages/modules/StewardshipModule"));
-const PathwayPage = lazy(() => import("./pages/PathwayPage"));
-const PathwaysListing = lazy(() => import("./pages/PathwaysListing"));
-const Journal = lazy(() => import("./pages/Journal"));
-const JournalEntry = lazy(() => import("./pages/JournalEntry"));
-const Goals = lazy(() => import("./pages/Goals"));
-const Oracle = lazy(() => import("./pages/Oracle"));
-const Store = lazy(() => import("./pages/Store"));
-const CourseDetail = lazy(() => import("./pages/CourseDetail"));
-const ProductDetail = lazy(() => import("./pages/ProductDetail"));
-const Community = lazy(() => import("./pages/Community"));
-const ResourceLibrary = lazy(() => import("./pages/ResourceLibrary"));
-const LibraryArticlePage = lazy(() => import("./pages/LibraryArticlePage"));
-const Settings = lazy(() => import("./pages/Settings"));
-const Downloads = lazy(() => import("./pages/Downloads"));
-const Referrals = lazy(() => import("./pages/Referrals"));
-const BetaAccess = lazy(() => import("./pages/BetaAccess"));
-const SubscriptionSuccess = lazy(() => import("./pages/SubscriptionSuccess"));
-const InviteRedeem = lazy(() => import("./pages/InviteRedeem"));
-const Character = lazy(() => import("./pages/Character"));
-const CharacterBook = lazy(() => import("./pages/CharacterBook"));
-const MoodRhythmChart = lazy(() => import("./pages/MoodRhythmChart"));
-const FirstHonestWeek = lazy(() => import("./pages/FirstHonestWeek"));
-const Dimensions = lazy(() => import("./pages/Dimensions"));
-const MyLibrary = lazy(() => import("./pages/MyLibrary"));
-const LibraryReader = lazy(() => import("./pages/LibraryReader"));
-const ReadingBridge = lazy(() => import("./pages/ReadingBridge"));
-const BTWLanding = lazy(() => import("./pages/btw/BTWLanding"));
-const GroundCheck = lazy(() => import("./pages/btw/GroundCheck"));
-const EnterTheGround = lazy(() => import("./pages/btw/EnterTheGround"));
-const ReturnToGround = lazy(() => import("./pages/btw/ReturnToGround"));
-const StateYouEnter = lazy(() => import("./pages/btw/StateYouEnter"));
-const LivingAsHeard = lazy(() => import("./pages/btw/LivingAsHeard"));
-const ThankingFromThere = lazy(() => import("./pages/btw/ThankingFromThere"));
-const WordsWithWeight = lazy(() => import("./pages/btw/WordsWithWeight"));
-const ClosingTheGap = lazy(() => import("./pages/btw/ClosingTheGap"));
-const BTWLibrary = lazy(() => import("./pages/btw/BTWLibrary"));
-const BTWArticlePage = lazy(() => import("./pages/btw/BTWArticlePage"));
-const Terms = lazy(() => import("./pages/legal/Terms"));
-const Privacy = lazy(() => import("./pages/legal/Privacy"));
-const Refunds = lazy(() => import("./pages/legal/Refunds"));
-const Support = lazy(() => import("./pages/Support"));
-const Admin = lazy(() => import("./pages/Admin"));
-
-function RouteSkeleton() {
-  return (
-    <main className="screen-safe bg-background">
-      <div className="mx-auto max-w-5xl space-y-4 pt-20">
-        <div className="h-5 w-28 animate-pulse rounded-full bg-secondary" />
-        <div className="h-10 w-3/4 max-w-md animate-pulse rounded-xl bg-secondary" />
-        <div className="h-20 max-w-2xl animate-pulse rounded-[var(--radius-surface)] bg-secondary" />
-        <div className="h-44 max-w-2xl animate-pulse rounded-[var(--radius-surface)] bg-secondary" />
-      </div>
-    </main>
-  );
-}
+import Home from "./pages/Home";
+import AlignmentAudit from "./pages/AlignmentAudit";
+import Pricing from "./pages/Pricing";
+import About from "./pages/About";
+import Sources from "./pages/Sources";
+import AuthCallback from "./pages/AuthCallback";
+import AuthComplete from "./pages/AuthComplete";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
+import StateModule from "./pages/modules/StateModule";
+import StoryModule from "./pages/modules/StoryModule";
+import StandardsModule from "./pages/modules/StandardsModule";
+import StrategyModule from "./pages/modules/StrategyModule";
+import StewardshipModule from "./pages/modules/StewardshipModule";
+import PathwayPage from "./pages/PathwayPage";
+import PathwaysListing from "./pages/PathwaysListing";
+import Journal from "./pages/Journal";
+import JournalEntry from "./pages/JournalEntry";
+import Goals from "./pages/Goals";
+import Oracle from "./pages/Oracle";
+import Store from "./pages/Store";
+import CourseDetail from "./pages/CourseDetail";
+import ProductDetail from "./pages/ProductDetail";
+import Community from "./pages/Community";
+import ResourceLibrary from "./pages/ResourceLibrary";
+import LibraryArticlePage from "./pages/LibraryArticlePage";
+import Settings from "./pages/Settings";
+import Downloads from "./pages/Downloads";
+import Referrals from "./pages/Referrals";
+import BetaAccess from "./pages/BetaAccess";
+import SubscriptionSuccess from "./pages/SubscriptionSuccess";
+import InviteRedeem from "./pages/InviteRedeem";
+import Character from "./pages/Character";
+import CharacterBook from "./pages/CharacterBook";
+import MoodRhythmChart from "./pages/MoodRhythmChart";
+import FirstHonestWeek from "./pages/FirstHonestWeek";
+import Dimensions from "./pages/Dimensions";
+import MyLibrary from "./pages/MyLibrary";
+import LibraryReader from "./pages/LibraryReader";
+import ReadingBridge from "./pages/ReadingBridge";
+import BTWLanding from "./pages/btw/BTWLanding";
+import GroundCheck from "./pages/btw/GroundCheck";
+import EnterTheGround from "./pages/btw/EnterTheGround";
+import ReturnToGround from "./pages/btw/ReturnToGround";
+import StateYouEnter from "./pages/btw/StateYouEnter";
+import LivingAsHeard from "./pages/btw/LivingAsHeard";
+import ThankingFromThere from "./pages/btw/ThankingFromThere";
+import WordsWithWeight from "./pages/btw/WordsWithWeight";
+import ClosingTheGap from "./pages/btw/ClosingTheGap";
+import BTWLibrary from "./pages/btw/BTWLibrary";
+import BTWArticlePage from "./pages/btw/BTWArticlePage";
+import Terms from "./pages/legal/Terms";
+import Privacy from "./pages/legal/Privacy";
+import Refunds from "./pages/legal/Refunds";
+import Support from "./pages/Support";
+import Admin from "./pages/Admin";
 
 function RouterSwitch() {
   return (
@@ -231,9 +215,7 @@ function Router() {
   return (
     <>
       <ScrollToTop />
-      <Suspense fallback={<RouteSkeleton />}>
-        <RouterSwitch />
-      </Suspense>
+      <RouterSwitch />
     </>
   );
 }
