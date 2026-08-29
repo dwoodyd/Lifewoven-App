@@ -106,21 +106,20 @@
     </div>
     <script>
       (function () {
-        var appMounted = false;
         var recovery = document.getElementById('pwa-startup-recovery');
         var retry = document.getElementById('pwa-startup-refresh');
         function showRecovery() {
-          if (!recovery || appMounted) return;
+          var root = document.getElementById('root');
+          if (!recovery || (root && root.hasChildNodes())) return;
           var splash = document.getElementById('splash');
           if (splash) splash.remove();
           recovery.hidden = false;
           recovery.style.display = 'flex';
         }
-        window.__lifewovenAppMounted = function () { appMounted = true; };
         window.__lifewovenShowStartupRecovery = showRecovery;
         window.addEventListener('error', function (event) {
           var target = event.target;
-          if (target && target.tagName === 'SCRIPT') showRecovery();
+          if (target && target.tagName === 'SCRIPT' && target.type === 'module') showRecovery();
         }, true);
         window.addEventListener('unhandledrejection', function (event) {
           var message = String(event.reason && (event.reason.message || event.reason));
@@ -128,7 +127,7 @@
         });
         window.setTimeout(function () {
           var root = document.getElementById('root');
-          if (!appMounted && root && !root.hasChildNodes()) showRecovery();
+          if (root && !root.hasChildNodes()) showRecovery();
         }, 6000);
         if (retry) retry.addEventListener('click', function () {
           Promise.all([
