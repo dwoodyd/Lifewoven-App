@@ -9,7 +9,7 @@ describe("PWA update policy", () => {
     const html = readFileSync(resolve(process.cwd(), "client/index.html"), "utf8");
     const app = readFileSync(resolve(process.cwd(), "client/src/App.tsx"), "utf8");
     expect(config).toContain("clientsClaim: true");
-    expect(config).toContain("skipWaiting: false");
+    expect(config).toContain("skipWaiting: true");
     expect(config).toContain('registerType: "prompt"');
     expect(main).toContain("onNeedRefresh");
     expect(config).toContain('handler: "NetworkFirst"');
