@@ -117,6 +117,15 @@
           recovery.style.display = 'flex';
         }
         window.__lifewovenShowStartupRecovery = showRecovery;
+        var root = document.getElementById('root');
+        if (root && 'MutationObserver' in window) {
+          new MutationObserver(function () {
+            if (root.hasChildNodes() && recovery) {
+              recovery.hidden = true;
+              recovery.style.display = 'none';
+            }
+          }).observe(root, { childList: true });
+        }
         window.addEventListener('error', function (event) {
           var target = event.target;
           if (target && target.tagName === 'SCRIPT' && target.type === 'module') showRecovery();

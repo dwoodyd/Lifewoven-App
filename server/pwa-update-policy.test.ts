@@ -15,6 +15,7 @@ describe("PWA update policy", () => {
     expect(config).toContain('handler: "NetworkFirst"');
     expect(html).toContain('id="pwa-startup-recovery"');
     expect(html).toContain("target.type === 'module'");
+    expect(html).toContain("MutationObserver");
     expect(html).toContain("navigator.serviceWorker.getRegistrations()");
     expect(html).toContain("caches.keys()");
     expect(app).not.toContain("lazy(() => import(");
