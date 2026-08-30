@@ -304,14 +304,14 @@ export default function ResourceLibrary() {
   return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container pt-20 pb-24 max-w-5xl mx-auto px-4 sm:px-6">
+      <div className="container pt-[calc(5.5rem+env(safe-area-inset-top))] pb-[calc(7rem+env(safe-area-inset-bottom))] max-w-5xl mx-auto px-4 sm:px-6">
 
         {/* Header */}
         <div className="mb-10">
           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-4">Library</p>
           <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-4">Resource Library</h1>
-          <p className="text-muted-foreground text-lg font-light max-w-2xl">
-            The distilled wisdom of the ages, organized by the 5S Framework. Every resource is clearly labeled by content rights so you always know what you are working with.
+          <p className="text-muted-foreground text-lg font-light max-w-2xl leading-relaxed">
+            A curated working library for clearer decisions, steadier practice, and a life that holds its shape. Every resource is organized through the 5S Framework and labeled with its content rights.
           </p>
         </div>
 
@@ -339,37 +339,37 @@ export default function ResourceLibrary() {
 
         {/* Filters */}
         <div className="space-y-3 mb-10">
-          <div className="flex flex-wrap gap-2">
+          <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none]">
             {CATEGORIES.map(cat => {
               const Icon = cat.icon;
               return (
                 <button key={cat.id} onClick={() => setActiveCategory(cat.id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm transition-colors ${activeCategory === cat.id ? "border-foreground bg-foreground text-background" : "border-border text-muted-foreground hover:border-muted-foreground"}`}>
+                  className={`shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-full border text-sm transition-colors ${activeCategory === cat.id ? "border-foreground bg-foreground text-background" : "border-border text-muted-foreground hover:border-muted-foreground"}`}>
                   <Icon className="h-3.5 w-3.5" /> {cat.label}
                 </button>
               );
             })}
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none]">
             <button onClick={() => setActiveModule("")}
-              className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${!activeModule ? "border-foreground bg-foreground text-background" : "border-border text-muted-foreground"}`}>
+              className={`shrink-0 text-xs px-3 py-2.5 rounded-full border transition-colors ${!activeModule ? "border-foreground bg-foreground text-background" : "border-border text-muted-foreground"}`}>
               All Modules
             </button>
             {modules.map(m => (
               <button key={m} onClick={() => setActiveModule(activeModule === m ? "" : m)}
-                className={`text-xs px-3 py-1.5 rounded-full border transition-colors capitalize ${activeModule === m ? `border-current bg-current/10 ${MODULE_COLORS[m]}` : "border-border text-muted-foreground"}`}>
+                className={`shrink-0 text-xs px-3 py-2.5 rounded-full border transition-colors capitalize ${activeModule === m ? `border-current bg-current/10 ${MODULE_COLORS[m]}` : "border-border text-muted-foreground"}`}>
                 {m}
               </button>
             ))}
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none]">
             <button onClick={() => setActiveRights("")}
-              className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${!activeRights ? "border-foreground bg-foreground text-background" : "border-border text-muted-foreground"}`}>
+              className={`shrink-0 text-xs px-3 py-2.5 rounded-full border transition-colors ${!activeRights ? "border-foreground bg-foreground text-background" : "border-border text-muted-foreground"}`}>
               All Rights
             </button>
             {(["public-domain", "original", "licensed"] as RightsLabel[]).map(r => (
               <button key={r} onClick={() => setActiveRights(activeRights === r ? "" : r)}
-                className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${activeRights === r ? `${RIGHTS_CONFIG[r].color} ${RIGHTS_CONFIG[r].bg}` : "border-border text-muted-foreground"}`}>
+                className={`shrink-0 text-xs px-3 py-2.5 rounded-full border transition-colors ${activeRights === r ? `${RIGHTS_CONFIG[r].color} ${RIGHTS_CONFIG[r].bg}` : "border-border text-muted-foreground"}`}>
                 {RIGHTS_CONFIG[r].label}
               </button>
             ))}
@@ -382,7 +382,7 @@ export default function ResourceLibrary() {
             const rights = RIGHTS_CONFIG[resource.rights];
             const canRead = resource.free || hasPaidLibraryAccess;
             return (
-              <div key={resource.id} className="p-5 rounded-2xl border border-border bg-card hover:border-muted-foreground transition-all group">
+              <div key={resource.id} className="p-5 rounded-2xl border border-border bg-card hover:border-primary/45 transition-all group flex flex-col">
                 <div className="flex items-start justify-between gap-2 mb-3">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center flex-wrap gap-1.5 mb-1.5">
@@ -402,7 +402,7 @@ export default function ResourceLibrary() {
                   </span>
                 </div>
 
-                <p className="text-base text-muted-foreground font-light leading-relaxed mb-3">{resource.description}</p>
+                <p className="text-base text-muted-foreground font-light leading-relaxed mb-3 flex-1">{resource.description}</p>
 
                 {resource.rightsNote && (
                   <p className="text-sm text-muted-foreground/70 italic leading-relaxed mb-3 border-l-2 border-border pl-2">
@@ -423,7 +423,7 @@ export default function ResourceLibrary() {
                     </Link>
                   </Button>
                 ) : hasPaidLibraryAccess ? (
-                  <span className="inline-flex items-center gap-1.5 text-xs text-accent">
+                  <span className="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-accent/20 bg-accent/5 px-3 text-xs text-accent">
                     <Sparkles className="h-3.5 w-3.5" /> Included with your membership
                   </span>
                 ) : (

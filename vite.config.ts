@@ -157,11 +157,10 @@ const vitePWA = VitePWA({
   devOptions: { enabled: false },
   // Workbox config: cache app shell + assets
   workbox: {
-    // Emergency one-release migration: installed Android clients have a stuck
-    // legacy worker/cache and cannot render the update prompt. Activate this
-    // corrective worker immediately; restore prompt-only activation afterward.
+    // Normal release policy: a visible in-app prompt lets a member choose when
+    // to activate a newly installed worker instead of interrupting practice.
     clientsClaim: true,
-    skipWaiting: true,
+    skipWaiting: false,
     cleanupOutdatedCaches: true,
     // Raise the precache size limit to 4 MiB to accommodate the main bundle
     maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,

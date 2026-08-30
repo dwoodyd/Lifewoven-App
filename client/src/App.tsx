@@ -3,7 +3,7 @@ import FeedbackWidget from "./components/FeedbackWidget";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch, useLocation, Redirect } from "wouter";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { useAuth } from "./_core/hooks/useAuth";
@@ -204,9 +204,11 @@ function ScrollToTop() {
     return () => { window.history.scrollRestoration = priorRestoration; };
   }, []);
 
-  useEffect(() => {
-    const frame = window.requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: "auto" }));
-    return () => window.cancelAnimationFrame(frame);
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+    const frame = window.requestAnimationFrame(() => window.scrollTo(0, 0));
+    const timer = window.setTimeout(() => window.scrollTo(0, 0), 120);
+    return () => { window.cancelAnimationFrame(frame); window.clearTimeout(timer); };
   }, [location]);
   return null;
 }

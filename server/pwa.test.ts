@@ -48,9 +48,9 @@ describe("vite.config.ts", () => {
     expect(viteCfg).toContain("vite-plugin-pwa");
   });
 
-  it("keeps prompt-mode registration while this recovery release immediately retires its stuck predecessor", () => {
+  it("keeps prompt-mode registration after the emergency recovery migration", () => {
     expect(viteCfg).toContain('registerType: "prompt"');
-    expect(viteCfg).toContain("skipWaiting: true");
+    expect(viteCfg).toContain("skipWaiting: false");
   });
 
   it("provides a visible application refresh action for a waiting worker", () => {

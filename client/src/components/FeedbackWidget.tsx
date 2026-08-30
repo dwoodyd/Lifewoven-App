@@ -37,8 +37,8 @@ export default function FeedbackWidget() {
         aria-label="Send feedback"
         title="Send feedback"
         className={`
-          fixed bottom-6 right-6 z-40
-          w-10 h-10 rounded-full
+          fixed bottom-[calc(env(safe-area-inset-bottom)+1rem)] right-[calc(env(safe-area-inset-right)+1rem)] z-40
+          w-11 h-11 rounded-full
           flex items-center justify-center
           bg-[oklch(0.22_0.02_60)] border border-border
           text-[oklch(0.72_0.08_60)]
@@ -55,7 +55,7 @@ export default function FeedbackWidget() {
       {/* Panel */}
       {open && (
         <div
-          className="fixed bottom-[4.5rem] right-6 z-50 w-80 bg-card border border-border rounded-2xl shadow-2xl p-5"
+          className="fixed bottom-[calc(env(safe-area-inset-bottom)+4.5rem)] right-[max(1rem,env(safe-area-inset-right))] z-50 w-[min(20rem,calc(100vw-2rem))] bg-card border border-border rounded-2xl shadow-2xl p-5"
           style={{ boxShadow: "0 8px 40px oklch(0 0 0 / 0.35)" }}
         >
           <div className="flex items-center justify-between mb-4">

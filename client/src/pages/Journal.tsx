@@ -188,26 +188,26 @@ export default function Journal() {
   return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <div className="container pt-20 pb-24 max-w-5xl mx-auto px-4 sm:px-6">
-        <div className="relative mb-6 min-h-[230px] overflow-hidden border-b border-primary/20 sm:min-h-[250px]">
+      <div className="container pt-[calc(4.5rem+env(safe-area-inset-top))] pb-[calc(7rem+env(safe-area-inset-bottom))] max-w-5xl mx-auto px-4 sm:px-6">
+        <div className="relative mb-6 min-h-[210px] overflow-hidden border-b border-primary/20 sm:min-h-[250px]">
           <div className="pointer-events-none absolute right-[-6%] top-1/2 hidden h-full w-[42%] -translate-y-1/2 sm:block" aria-hidden="true">
             <LuminScene videoId="tilting_listening" ambient loop ambientSize="100%" ambientPosition={{ position: "absolute", inset: 0 }} ambientAspectRatio="16 / 9" ambientFit="contain" ambientBlendMode="normal" ambientMaskImage="linear-gradient(to right, transparent 0%, rgba(0,0,0,0.7) 24%, #000 56%, #000 100%)" className="opacity-100" />
           </div>
-          <div className="relative z-10 flex items-start justify-between gap-3 pt-5 sm:max-w-[68%]">
-          <div className="flex items-start gap-3">
+          <div className="relative z-10 flex flex-col gap-4 pt-5 sm:max-w-[68%] sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex items-start gap-3 w-full">
             <div className="p-2.5 sm:p-3 rounded-xl bg-secondary flex-shrink-0"><BookOpen className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" /></div>
             <div>
               <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-1">The Weave</h1>
-              <p className="text-muted-foreground text-sm font-light">The private record that holds every entry, every check-in, every reflection. The receipt that you’re doing the work.</p>
+              <p className="text-muted-foreground text-sm font-light leading-relaxed max-w-xl">The private record that holds every entry, every check-in, every reflection. The receipt that you’re doing the work.</p>
             </div>
           </div>
           {isAuthenticated && !isWriting && (
-            <div className="flex gap-2 flex-shrink-0">
+            <div className="flex gap-2 w-full sm:w-auto">
               <Button variant="outline" size="sm" onClick={handleExportPdf} disabled={isExporting} className="gap-1.5">
                 {isExporting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
                 <span className="hidden sm:inline">Export PDF</span>
               </Button>
-              <Button onClick={() => setIsWriting(true)} size="sm" className="gap-1.5"><Plus className="h-4 w-4" /><span className="hidden sm:inline">New Entry</span><span className="sm:hidden">New</span></Button>
+              <Button onClick={() => setIsWriting(true)} size="sm" className="gap-1.5 flex-1 sm:flex-none"><Plus className="h-4 w-4" /><span>New entry</span></Button>
             </div>
           )}
         </div>
@@ -269,9 +269,9 @@ export default function Journal() {
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
                     <Input placeholder="Search entries..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pl-9 text-sm" />
                   </div>
-                  <div className="flex gap-1 overflow-x-auto flex-shrink-0">
+                  <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none]">
                     <button onClick={() => setSelectedModule("")} className={`text-xs px-2.5 py-1.5 rounded-lg border transition-colors ${!selectedModule ? "border-foreground bg-foreground text-background" : "border-border text-muted-foreground"}`}>All</button>
-                    {filterModules.map(m => <button key={m} title={moduleLabels[m]} onClick={() => setSelectedModule(selectedModule === m ? '' : m)} className={`text-xs px-2.5 py-1.5 rounded-lg border transition-colors ${selectedModule === m ? `border-current bg-current/10 ${MODULE_COLORS[m]}` : 'border-border text-muted-foreground'}`}>{m === "free" ? "Free" : moduleLabels[m]}</button>)}
+                    {filterModules.map(m => <button key={m} title={moduleLabels[m]} onClick={() => setSelectedModule(selectedModule === m ? '' : m)} className={`shrink-0 text-xs px-2.5 py-2.5 rounded-lg border transition-colors ${selectedModule === m ? `border-current bg-current/10 ${MODULE_COLORS[m]}` : 'border-border text-muted-foreground'}`}>{m === "free" ? "Free" : moduleLabels[m]}</button>)}
                   </div>
                 </div>
                 {recentCheckIns.length > 0 && !searchQuery && !selectedModule && (

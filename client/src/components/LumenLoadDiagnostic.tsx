@@ -34,8 +34,8 @@ export function LumenLoadDiagnostic({ readings, hasReading }: { readings: LumenD
     <section className="blueprint-grid relative isolate overflow-hidden border-y border-primary/20 bg-background lg:min-h-[760px]" aria-labelledby="lumen-diagnostic-title">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_60%_48%,color-mix(in_oklch,var(--primary)_11%,transparent),transparent_42%)]" aria-hidden="true" />
 
-      {/* Mobile opens on Lumen (~45% viewport); desktop makes her 50–60% of the daily opening. */}
-      <div className="relative z-10 h-[52svh] min-h-[420px] lg:absolute lg:inset-y-0 lg:left-[27%] lg:right-0 lg:h-auto" aria-label={hasReading ? `Lumen represents a ${coherence} percent structural coherence reading` : "Lumen is curled and dim, waiting for a first structural reading"}>
+      {/* Mobile keeps Lumen prominent without creating a stranded half-screen before the reading copy. */}
+      <div className="relative z-10 h-[44svh] min-h-[330px] sm:h-[52svh] sm:min-h-[420px] lg:absolute lg:inset-y-0 lg:left-[27%] lg:right-0 lg:h-auto" aria-label={hasReading ? `Lumen represents a ${coherence} percent structural coherence reading` : "Lumen is curled and dim, waiting for a first structural reading"}>
         <LuminScene
           videoId={hasReading ? "core_unfurls" : "nodding_gently"}
           ambient

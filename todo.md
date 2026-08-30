@@ -1759,5 +1759,15 @@
 - [ ] Native-quality mobile: directly improve and verify dashboard, Load-Bearing Survey, Lumen intro, pricing, Settings, Ground, Resource Library, and core practice routes at phone viewport.
 - [ ] Native-quality mobile: validate dark/light contrast, reduced motion, safe areas, tap targets, media fallbacks, overflow, input/keyboard behavior, and focused regression coverage.
 - [ ] Native-quality mobile: publish the current hardening checkpoint and record installed-PWA verification on real iOS Safari and Android Chrome.
-- [ ] P0 installed-PWA startup: Android home-screen launch shows only the splash/background and never mounts Lifewoven UI; diagnose and fix before further mobile release claims.
-- [ ] P0 installed-PWA migration: corrected static startup build was published and Android retest remained blank; retire the persistent legacy service worker/cache state without clearing user data.
+- [x] P0 installed-PWA startup: Android home-screen launch shows only the splash/background and never mounts Lifewoven UI; diagnose and fix before further mobile release claims.
+- [x] P0 installed-PWA migration: corrected static startup build was published and Android retest remained blank; retire the persistent legacy service worker/cache state without clearing user data.
+- [ ] Mobile Round 1: replace every watermarked Lumen/Veo clip with clean approved media and eliminate video pillarbox bars.
+- [x] Mobile Round 1: inspect, register, and verify supplied clean exports Untitledvideo(65).mov and Untitledvideo(67).mov against the active Lumen scene mappings.
+- [x] Mobile Round 1: rebuild The Weave mobile header, intro measure, and filter-chip behavior so title/actions are calm, copy is full width, and filters never clip.
+- [x] Mobile Round 1: reset scroll position on navigation; correct dashboard top-header clearance and the overlapping red note action.
+- [x] Mobile Round 1: reserve safe clearance around the chat FAB so it never covers content or calls to action.
+- [x] Mobile Round 1: tighten the mobile Dashboard hero vertical rhythm and revalidate targets, contrast, media, safe areas, and installed-PWA behavior.
+- [x] Merchandising Round 1: redesign Resources and Wisdom Tools offering cards with visual anchors, benefit-led copy, spec chips, clear tier/price signals, and one confident mobile CTA.
+- [x] Merchandising Round 1: improve Resources, Wisdom Tools, and The Weave collection headers and discovery filters into a premium, honest shopping experience.
+- [x] Mobile Round 1: run direct mobile render checks and full regression validation while preserving survey and reading logic unchanged.
+- [x] Mobile Round 1: inspect supplied Android Dashboard and The Weave screenshot archives and resolve any remaining directly evidenced layout defects.

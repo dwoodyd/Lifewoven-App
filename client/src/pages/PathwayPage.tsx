@@ -328,7 +328,7 @@ export default function PathwayPage() {
       )}
 
       {id !== "reset" && (
-        <div className="fixed bottom-6 right-6 z-40">
+        <div className="fixed bottom-[calc(env(safe-area-inset-bottom)+4.75rem)] right-[max(1rem,env(safe-area-inset-right))] z-40">
           <Link href="/pathway/reset">
             <Button size="sm" variant="outline" className="gap-2 shadow-lg bg-background/90 backdrop-blur-sm border-stewardship/30 text-stewardship hover:bg-stewardship/5">
               <RotateCcw className="h-3.5 w-3.5" /> Need a Reset?

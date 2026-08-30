@@ -40,6 +40,20 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
     role: "landscape",
     duration: 8,
   },
+  {
+    id: "pathway_uplift_clean",
+    url: "/manus-storage/lumen-clean-65_a5bdeed4.mp4",
+    action: "Full-figure celebratory burst with golden sparkles — clean Uplift pathway scene",
+    role: "landscape",
+    duration: 8,
+  },
+  {
+    id: "pathway_purpose_clean",
+    url: "/manus-storage/lumen-clean-67_c525a513.mp4",
+    action: "Centered self-embrace — clean Purpose pathway scene",
+    role: "landscape",
+    duration: 8,
+  },
   // ── Onboarding screen 1 hero ─────────────────────────────────────────────
   {
     id: "screen1_hero",

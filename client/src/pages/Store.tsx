@@ -17,6 +17,7 @@ const PRODUCT_CATALOG = [
     subtitle: "The 5S Framework in Practice",
     price: 97,
     description: "Six weeks. Five dimensions. One coherent life. The complete introduction to the 5S Framework — State, Story, Standards, Strategy, Stewardship — built for people ready to move from insight to practice.",
+    benefits: ["Find the load-bearing issue", "Turn insight into a weekly practice", "Work the complete 5S framework"],
     tags: ["5S Framework", "Foundations", "6 weeks"],
   },
   {
@@ -27,6 +28,7 @@ const PRODUCT_CATALOG = [
     subtitle: "Advanced Alignment Practice",
     price: 147,
     description: "Most people touch alignment occasionally. This course teaches you to live there. A four-week deep-immersion in the daily practices and inner conditions that make sustained interior coherence a way of being.",
+    benefits: ["Stabilize your inner conditions", "Build a repeatable alignment rhythm", "Practice coherence under pressure"],
     tags: ["Interior Alignment", "Advanced", "4 weeks"],
   },
   {
@@ -37,6 +39,7 @@ const PRODUCT_CATALOG = [
     subtitle: "Habit Architecture for the Whole Self",
     price: 127,
     description: "Behavior change fails when built on willpower. Identity in Motion teaches you to build habits from the inside out — starting with who you are becoming, then designing the daily practices that make that identity real.",
+    benefits: ["Name the identity you are building", "Design habits that fit your life", "Return without self-punishment"],
     tags: ["Habits", "Identity", "Behavior Science"],
   },
   {
@@ -47,6 +50,7 @@ const PRODUCT_CATALOG = [
     subtitle: "Purpose, Resilience & the Unshakeable Why",
     price: 97,
     description: "Meaning is not found — it is made. A four-week course in meaning-centered living: how to locate your deepest why, use it as an anchor through difficulty, and build a life that holds its shape under pressure.",
+    benefits: ["Clarify your deepest why", "Anchor through difficult seasons", "Make resilient decisions"],
     tags: ["Meaning", "Purpose", "Resilience"],
   },
   {
@@ -57,6 +61,7 @@ const PRODUCT_CATALOG = [
     subtitle: "Rewire Your Story in 30 Days",
     price: 19,
     description: "The story you tell about yourself is not a description of reality — it is a set of instructions. A structured 30-day process for surfacing the beliefs most actively limiting your experience and rewriting them with evidence.",
+    benefits: ["Surface the story running you", "Test beliefs against evidence", "Write a truer next instruction"],
     tags: ["Beliefs", "Workbook PDF", "30 days"],
   },
   {
@@ -67,6 +72,7 @@ const PRODUCT_CATALOG = [
     subtitle: "Design the Habits That Make You, You",
     price: 22,
     description: "Who you are becoming shapes what you do. This workbook walks you through the complete identity-based habit design process — from surfacing your current identity architecture to building the habit stack that carries it into daily life.",
+    benefits: ["Map your current habit architecture", "Choose one identity anchor", "Build a stack you can sustain"],
     tags: ["Habits", "Identity", "Workbook PDF"],
   },
   {
@@ -77,6 +83,7 @@ const PRODUCT_CATALOG = [
     subtitle: "7 Narrated Scripts",
     price: 37,
     description: "Fifteen minutes, before the day asks anything of you. Seven complete narrated scripts — one for each day of the week — moving through Arrive, Acknowledge, Appreciate, Intend, and Release.",
+    benefits: ["Begin each day more anchored", "Use a guided 15-minute rhythm", "Practice all five morning movements"],
     tags: ["Audio Scripts PDF", "Morning", "7 scripts"],
   },
   {
@@ -87,6 +94,7 @@ const PRODUCT_CATALOG = [
     subtitle: "45-Minute Guided Script",
     price: 27,
     description: "The complete guided script for the Reset protocol — a 45-minute practice you can read through at your own pace, or record in your own voice.",
+    benefits: ["Regain footing after interruption", "Follow the full Reset sequence", "Return to practice without shame"],
     tags: ["Audio Scripts PDF", "Reset", "45 min"],
   },
   {
@@ -97,6 +105,7 @@ const PRODUCT_CATALOG = [
     subtitle: "52 Principles for the Aligned Life",
     price: 34,
     description: "One card. One principle. One day. The Wisdom Card Deck is a year of daily practice distilled into 52 cards — each one a prompt for reflection, a lens for the day, a reminder of what you already know.",
+    benefits: ["Start each day with one clear lens", "Turn reflection into a daily ritual", "Carry 52 enduring principles"],
     tags: ["Cards", "Daily Practice", "52 cards"],
   },
 ];
@@ -169,7 +178,7 @@ export default function Store() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
-      <div className="max-w-6xl mx-auto px-4 py-16 sm:py-24">
+      <div className="max-w-6xl mx-auto px-4 pt-[calc(5.5rem+env(safe-area-inset-top))] pb-[calc(7rem+env(safe-area-inset-bottom))] sm:py-24">
 
         {/* Header */}
         <div className="text-center mb-12">
@@ -230,14 +239,14 @@ export default function Store() {
         </div>
 
         {/* Category filter */}
-        <div className="flex flex-wrap gap-2 justify-center mb-8">
+        <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-2 mb-8 [scrollbar-width:none]">
           {CATEGORIES.map(cat => {
             const Icon = cat.icon;
             return (
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm transition-colors ${
+                className={`shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-full border text-sm transition-colors ${
                   activeCategory === cat.id
                     ? "border-foreground bg-foreground text-background"
                     : "border-border text-muted-foreground hover:border-muted-foreground"
@@ -259,7 +268,7 @@ export default function Store() {
             return (
               <div
                 key={product.id}
-                className={`relative p-5 sm:p-6 rounded-2xl border flex flex-col gap-4 transition-all ${
+                className={`relative overflow-hidden p-5 sm:p-6 rounded-2xl border flex flex-col gap-4 transition-all ${
                   product.isIncluded
                     ? "border-violet-400/30 bg-violet-400/5"
                     : "border-border bg-card hover:border-muted-foreground"
@@ -271,7 +280,7 @@ export default function Store() {
                   </div>
                 )}
 
-                <div className="text-3xl">{product.icon}</div>
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-primary/25 bg-gradient-to-br from-primary/20 via-secondary to-background text-3xl shadow-sm">{product.icon}</div>
 
                 <div>
                   <h3 className="font-serif text-lg font-light text-foreground mb-0.5">{product.title}</h3>
@@ -279,6 +288,12 @@ export default function Store() {
                 </div>
 
                 <p className="text-sm text-muted-foreground leading-relaxed flex-1">{product.description}</p>
+
+                <ul className="space-y-1.5 text-sm text-muted-foreground" aria-label={`${product.title} outcomes`}>
+                  {product.benefits.map((benefit) => (
+                    <li key={benefit} className="flex gap-2"><Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />{benefit}</li>
+                  ))}
+                </ul>
 
                 <div className="flex flex-wrap gap-1.5">
                   {product.tags.map(tag => (
@@ -290,7 +305,7 @@ export default function Store() {
 
                 {/* Price + CTA */}
                 {product.isIncluded ? (
-                  <div className="flex items-center justify-between pt-2 border-t border-violet-400/20">
+                  <div className="space-y-3 pt-3 border-t border-violet-400/20">
                     <div className="flex items-center gap-1.5 text-violet-300 text-sm">
                       <Check className="h-3.5 w-3.5" /> Included with Oracle
                     </div>
@@ -298,14 +313,14 @@ export default function Store() {
                       type="button"
                       size="sm"
                       variant="outline"
-                      className="border-violet-400/30 text-violet-300 hover:bg-violet-400/10"
+                      className="w-full border-violet-400/30 text-violet-300 hover:bg-violet-400/10"
                       onClick={() => navigate(`/product/${product.id}`)}
                     >
                       Open
                     </Button>
                   </div>
                 ) : (
-                  <div className="flex items-center justify-between pt-2 border-t border-border">
+                  <div className="space-y-3 pt-3 border-t border-border">
                     <div>
                       <div className="flex items-baseline gap-2">
                         <span className="text-lg font-light text-foreground">${discountedPrice}</span>
@@ -323,11 +338,12 @@ export default function Store() {
                       type="button"
                       onClick={() => handlePurchase(product.id, discountedPrice)}
                       disabled={purchasingId === product.id}
+                      className="w-full"
                     >
                       {purchasingId === product.id ? (
                         <Loader2 className="h-3.5 w-3.5 animate-spin" />
                       ) : isAuthenticated ? (
-                        "Buy"
+                        `Buy now — $${discountedPrice}`
                       ) : (
                         <span className="flex items-center gap-1"><Lock className="h-3 w-3" />Sign in</span>
                       )}
