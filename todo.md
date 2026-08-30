@@ -1771,3 +1771,4 @@
 - [x] Merchandising Round 1: improve Resources, Wisdom Tools, and The Weave collection headers and discovery filters into a premium, honest shopping experience.
 - [x] Mobile Round 1: run direct mobile render checks and full regression validation while preserving survey and reading logic unchanged.
 - [x] Mobile Round 1: inspect supplied Android Dashboard and The Weave screenshot archives and resolve any remaining directly evidenced layout defects.
+- [ ] P0 Mobile Round 1 follow-up: fresh published Android The Weave screenshot shows the chat control still overlapping the lower check-in card; reposition the shared control and revalidate.
