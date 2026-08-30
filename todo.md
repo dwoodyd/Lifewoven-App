@@ -1762,6 +1762,7 @@
 - [x] P0 installed-PWA startup: Android home-screen launch shows only the splash/background and never mounts Lifewoven UI; diagnose and fix before further mobile release claims.
 - [x] P0 installed-PWA migration: corrected static startup build was published and Android retest remained blank; retire the persistent legacy service worker/cache state without clearing user data.
 - [ ] Mobile Round 1: replace every watermarked Lumen/Veo clip with clean approved media and eliminate video pillarbox bars.
+- [ ] P0 media follow-up: replace the verified watermarked Align pathway card clip with a distinct clean static visual and retest it on Android.
 - [x] Mobile Round 1: inspect, register, and verify supplied clean exports Untitledvideo(65).mov and Untitledvideo(67).mov against the active Lumen scene mappings.
 - [x] Mobile Round 1: rebuild The Weave mobile header, intro measure, and filter-chip behavior so title/actions are calm, copy is full width, and filters never clip.
 - [x] Mobile Round 1: reset scroll position on navigation; correct dashboard top-header clearance and the overlapping red note action.
@@ -1771,4 +1772,4 @@
 - [x] Merchandising Round 1: improve Resources, Wisdom Tools, and The Weave collection headers and discovery filters into a premium, honest shopping experience.
 - [x] Mobile Round 1: run direct mobile render checks and full regression validation while preserving survey and reading logic unchanged.
 - [x] Mobile Round 1: inspect supplied Android Dashboard and The Weave screenshot archives and resolve any remaining directly evidenced layout defects.
-- [ ] P0 Mobile Round 1 follow-up: fresh published Android The Weave screenshot shows the chat control still overlapping the lower check-in card; reposition the shared control and revalidate.
+- [x] P0 Mobile Round 1 follow-up: fresh published Android The Weave screenshot shows the chat control still overlapping the lower check-in card; reposition the shared control and revalidate.

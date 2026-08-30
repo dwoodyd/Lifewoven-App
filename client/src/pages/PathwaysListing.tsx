@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "wouter";
 import { ArrowRight, Zap, Waves, TrendingUp, Eye, Layers, Compass, RefreshCw } from "lucide-react";
 import { LuminScene } from "@/components/LuminScene";
+import { getLumenPoster } from "@shared/lumenMedia";
 
 const PATHWAYS = [
   {
@@ -14,6 +15,7 @@ const PATHWAYS = [
     duration: "7–10 min",
     icon: Compass,
     scene: "pathway_align_clean",
+    staticPoster: getLumenPoster("nodding_gently"),
     mediaAspect: "16 / 9",
     tag: "Daily Practice",
     dimension: "State",
@@ -152,7 +154,15 @@ export default function PathwaysListing() {
               <Link key={pathway.slug} href={`/pathway/${pathway.slug}`}>
                 <div className="group overflow-hidden border border-border bg-card transition-all duration-200 hover:border-primary/70">
                   <div className="relative overflow-hidden bg-[oklch(0.12_0.015_260)]" style={{ aspectRatio: pathway.mediaAspect }}>
-                    <LuminScene videoId={pathway.scene} ambient loop ambientSize="100%" ambientPosition={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }} ambientFit="cover" ambientAspectRatio={pathway.mediaAspect} ambientBlendMode="normal" className="opacity-100" />
+                    {pathway.staticPoster ? (
+                      <img
+                        src={pathway.staticPoster}
+                        alt="Lumen in a calm, attentive moment"
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                      />
+                    ) : (
+                      <LuminScene videoId={pathway.scene} ambient loop ambientSize="100%" ambientPosition={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }} ambientFit="cover" ambientAspectRatio={pathway.mediaAspect} ambientBlendMode="normal" className="opacity-100" />
+                    )}
                   </div>
                   <div className="relative z-10 p-4 sm:p-6">
                     <div className="flex items-center gap-2 mb-0.5 flex-wrap">
