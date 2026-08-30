@@ -4,7 +4,6 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "wouter";
 import { ArrowRight, Zap, Waves, TrendingUp, Eye, Layers, Compass, RefreshCw } from "lucide-react";
 import { LuminScene } from "@/components/LuminScene";
-import { getLumenPoster } from "@shared/lumenMedia";
 
 const PATHWAYS = [
   {
@@ -15,7 +14,7 @@ const PATHWAYS = [
     duration: "7–10 min",
     icon: Compass,
     scene: "pathway_align_clean",
-    staticPoster: getLumenPoster("nodding_gently"),
+    staticPoster: "/manus-storage/align-clean-still_4d19f9c4.jpg",
     mediaAspect: "16 / 9",
     tag: "Daily Practice",
     dimension: "State",
@@ -155,11 +154,17 @@ export default function PathwaysListing() {
                 <div className="group overflow-hidden border border-border bg-card transition-all duration-200 hover:border-primary/70">
                   <div className="relative overflow-hidden bg-[oklch(0.12_0.015_260)]" style={{ aspectRatio: pathway.mediaAspect }}>
                     {pathway.staticPoster ? (
-                      <img
-                        src={pathway.staticPoster}
-                        alt="Lumen in a calm, attentive moment"
-                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                      />
+                      <>
+                        <div className="absolute inset-0 grid place-items-center bg-[radial-gradient(circle_at_center,oklch(0.74_0.11_76_/_0.22),transparent_52%),oklch(0.12_0.015_260)]" aria-hidden="true">
+                          <Compass className="h-12 w-12 text-primary/70" />
+                        </div>
+                        <img
+                          src={pathway.staticPoster}
+                          alt="Lumen in a calm, attentive moment"
+                          onError={(event) => { event.currentTarget.style.display = "none"; }}
+                          className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                        />
+                      </>
                     ) : (
                       <LuminScene videoId={pathway.scene} ambient loop ambientSize="100%" ambientPosition={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }} ambientFit="cover" ambientAspectRatio={pathway.mediaAspect} ambientBlendMode="normal" className="opacity-100" />
                     )}

@@ -1763,6 +1763,7 @@
 - [x] P0 installed-PWA migration: corrected static startup build was published and Android retest remained blank; retire the persistent legacy service worker/cache state without clearing user data.
 - [ ] Mobile Round 1: replace every watermarked Lumen/Veo clip with clean approved media and eliminate video pillarbox bars.
 - [ ] P0 media follow-up: replace the verified watermarked Align pathway card clip with a distinct clean static visual and retest it on Android.
+- [ ] P0 media regression: published Android Align static replacement returns a broken image and exposes alt text; use a verified managed image plus an in-card fallback.
 - [x] Mobile Round 1: inspect, register, and verify supplied clean exports Untitledvideo(65).mov and Untitledvideo(67).mov against the active Lumen scene mappings.
 - [x] Mobile Round 1: rebuild The Weave mobile header, intro measure, and filter-chip behavior so title/actions are calm, copy is full width, and filters never clip.
 - [x] Mobile Round 1: reset scroll position on navigation; correct dashboard top-header clearance and the overlapping red note action.
