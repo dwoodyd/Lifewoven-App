@@ -74,7 +74,7 @@ const PATHWAYS = [
     description: "Reconnect with your deepest why. Explore the sources of meaning in your life and build the resilience that comes from knowing what you are living for.",
     duration: "25–30 min",
     icon: Zap,
-    scene: "pathway_purpose_clean",
+    scene: "self_hug",
     mediaAspect: "16 / 9",
     tag: "Meaning Work",
     dimension: "Stewardship",
