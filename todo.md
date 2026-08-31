@@ -1767,6 +1767,8 @@
 - [ ] P0 media correction: Align must use a distinct verified clean video, not a static image; preserve unique clean media across Align, Resonance, and Purpose.
 - [ ] P0 media regression: legacy clips were reintroduced for Align/Purpose without exact supplied-export validation; freeze substitutions and remap only confirmed clean user-provided assets.
 - [ ] P0 media assignment: keep the current clean Uplift video; map one newly supplied clean video to Align and the other distinct supplied clean video to Flow, then confirm Android playback.
+- [ ] P0 media assignment: replace the current Reset pathway video with the remaining unassigned clean video so each visible pathway card remains distinct.
+- [ ] P0 media assignment: process and map the user-supplied Untitledvideo(66).mov as the exact clean Reset pathway video.
 - [ ] P0 media follow-up: Resonance and Purpose currently share the same pathway video; assign one a distinct clean visual that matches its pathway meaning and verify on Android.
 - [x] Mobile Round 1: inspect, register, and verify supplied clean exports Untitledvideo(65).mov and Untitledvideo(67).mov against the active Lumen scene mappings.
 - [x] Mobile Round 1: rebuild The Weave mobile header, intro measure, and filter-chip behavior so title/actions are calm, copy is full width, and filters never clip.

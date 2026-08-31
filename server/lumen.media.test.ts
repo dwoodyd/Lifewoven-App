@@ -59,11 +59,14 @@ describe("Lumen media fallbacks", () => {
     const purpose = pathwayRecord("purpose");
 
     expect(align).toContain('scene: "pathway_align_clean"');
+    expect(pathwayRecord("reset")).toContain('scene: "pathway_reset_clean"');
     expect(pathwayRecord("uplift")).toContain('scene: "pathway_uplift_clean"');
     expect(flow).toContain('scene: "pathway_flow_clean"');
     expect(purpose).toContain('scene: "pathway_purpose_clean"');
     expect(registry).toContain('id: "pathway_align_clean"');
     expect(registry).toContain('url: "/manus-storage/align-grounding-clean_51f6d462.mp4"');
+    expect(registry).toContain('id: "pathway_reset_clean"');
+    expect(registry).toContain('url: "/manus-storage/reset-resilience-clean_dbe54966.mp4"');
     expect(registry).toContain('id: "pathway_flow_clean"');
     expect(registry).toContain('url: "/manus-storage/flow-visualization-clean_9944f8ae.mp4"');
     expect(align).not.toMatch(/scene: "(?:pathway_uplift_clean|settling)"/);

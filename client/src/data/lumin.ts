@@ -21,8 +21,8 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
   // full-figure, watermark-free variants selected for the Pathways surfaces.
   {
     id: "pathway_reset_clean",
-    url: "/manus-storage/lifewoven-bouncing-original_60092b33.mp4",
-    action: "Full-figure joyful bounce — original Reset pathway scene",
+    url: "/manus-storage/reset-resilience-clean_dbe54966.mp4",
+    action: "Calm reassuring wink — clean Reset resilience scene supplied by the user",
     role: "landscape",
     duration: 8,
   },
