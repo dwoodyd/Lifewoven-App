@@ -1764,6 +1764,7 @@
 - [ ] Mobile Round 1: replace every watermarked Lumen/Veo clip with clean approved media and eliminate video pillarbox bars.
 - [ ] P0 media follow-up: replace the verified watermarked Align pathway card clip with a distinct clean static visual and retest it on Android.
 - [ ] P0 media regression: published Android Align static replacement returns a broken image and exposes alt text; use a verified managed image plus an in-card fallback.
+- [ ] P0 media correction: Align must use a distinct verified clean video, not a static image; preserve unique clean media across Align, Resonance, and Purpose.
 - [ ] P0 media follow-up: Resonance and Purpose currently share the same pathway video; assign one a distinct clean visual that matches its pathway meaning and verify on Android.
 - [x] Mobile Round 1: inspect, register, and verify supplied clean exports Untitledvideo(65).mov and Untitledvideo(67).mov against the active Lumen scene mappings.
 - [x] Mobile Round 1: rebuild The Weave mobile header, intro measure, and filter-chip behavior so title/actions are calm, copy is full width, and filters never clip.
