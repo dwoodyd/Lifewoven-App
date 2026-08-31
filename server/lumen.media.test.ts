@@ -50,12 +50,24 @@ describe("Lumen media fallbacks", () => {
     }
   });
 
-  it("keeps the affected pathway cards on the user-supplied clean exports", () => {
+  it("keeps affected pathway cards on their assigned clean video sources", () => {
     const pathways = readFileSync(resolve(process.cwd(), "client/src/pages/PathwaysListing.tsx"), "utf8");
+    const registry = readFileSync(resolve(process.cwd(), "client/src/data/lumin.ts"), "utf8");
+    const pathwayRecord = (slug: string) => pathways.match(new RegExp(`\\{\\n\\s+slug: "${slug}"[\\s\\S]*?\\n  \\},`))?.[0] ?? "";
+    const align = pathwayRecord("align");
+    const flow = pathwayRecord("flow");
+    const purpose = pathwayRecord("purpose");
 
-    expect(pathways).toMatch(/slug: "align"[\s\S]*?scene: "pathway_uplift_clean"/);
-    expect(pathways).toMatch(/slug: "purpose"[\s\S]*?scene: "pathway_purpose_clean"/);
-    expect(pathways).not.toMatch(/slug: "align"[\s\S]*?scene: "(?:pathway_align_clean|settling)"/);
-    expect(pathways).not.toMatch(/slug: "purpose"[\s\S]*?scene: "self_hug"/);
+    expect(align).toContain('scene: "pathway_align_clean"');
+    expect(pathwayRecord("uplift")).toContain('scene: "pathway_uplift_clean"');
+    expect(flow).toContain('scene: "pathway_flow_clean"');
+    expect(purpose).toContain('scene: "pathway_purpose_clean"');
+    expect(registry).toContain('id: "pathway_align_clean"');
+    expect(registry).toContain('url: "/manus-storage/align-grounding-clean_51f6d462.mp4"');
+    expect(registry).toContain('id: "pathway_flow_clean"');
+    expect(registry).toContain('url: "/manus-storage/flow-visualization-clean_9944f8ae.mp4"');
+    expect(align).not.toMatch(/scene: "(?:pathway_uplift_clean|settling)"/);
+    expect(flow).not.toContain('scene: "pointing_energy"');
+    expect(purpose).not.toContain('scene: "self_hug"');
   });
 });
