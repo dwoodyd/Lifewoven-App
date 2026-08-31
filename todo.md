@@ -1769,6 +1769,13 @@
 - [ ] P0 media assignment: keep the current clean Uplift video; map one newly supplied clean video to Align and the other distinct supplied clean video to Flow, then confirm Android playback.
 - [ ] P0 media assignment: replace the current Reset pathway video with the remaining unassigned clean video so each visible pathway card remains distinct.
 - [ ] P0 media assignment: process and map the user-supplied Untitledvideo(66).mov as the exact clean Reset pathway video.
+- [ ] Deployment readiness: assess the current Lifewoven checkpoint, validation status, and open tracker items; treat the owner-only PayPal approval-page test as intentionally deferred.
+- [x] P0 cost controls: centralize all server-side model calls behind a task-tiered helper with bounded response tokens and no direct provider bypasses.
+- [x] P0 cost controls: add an llm_usage ledger with user, feature, model, token, and cost-estimate audit fields for every completed model call.
+- [x] P0 cost controls: enforce a configurable per-user local-day rich-generation budget with calm graceful over-cap behavior.
+- [x] P0 cost controls: add normal, exact-boundary, and rejected-over-cap regression coverage that asserts ledger writes.
+- [x] P0 dependency security: remediate every critical/high finding from pnpm audit --prod, starting with fast-xml-parser and covering production Axios, PayPal SDK, Express, Multer, and transitive chains.
+- [x] P0 security verification: re-run clean production dependency audit, full tests, build/SW, and non-transactional PayPal plus AWS-storage smoke checks without changing survey, reading, or onboarding behavior.
 - [ ] P0 media follow-up: Resonance and Purpose currently share the same pathway video; assign one a distinct clean visual that matches its pathway meaning and verify on Android.
 - [x] Mobile Round 1: inspect, register, and verify supplied clean exports Untitledvideo(65).mov and Untitledvideo(67).mov against the active Lumen scene mappings.
 - [x] Mobile Round 1: rebuild The Weave mobile header, intro measure, and filter-chip behavior so title/actions are calm, copy is full width, and filters never clip.

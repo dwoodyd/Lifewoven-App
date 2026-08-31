@@ -10,7 +10,7 @@ import {
   checkIns, journalEntries, events,
 } from "../../drizzle/schema";
 import { eq, desc, and, gte } from "drizzle-orm";
-import { invokeLLM } from "../_core/llm";
+import { invokeMeteredLLM } from "../llmCostControls";
 import { hasSufficientOracleEvidence } from "../oracleReadiness";
 
 // ─── Ground Check scoring ─────────────────────────────────────────────────────
@@ -266,7 +266,10 @@ export const btwRouter = router({
       if (!tierCanAccessGroundGuide(user?.membershipTier as any) && !await hasBetaOrPaidAccess(ctx.user.id)) {
         throw new TRPCError({ code: "FORBIDDEN", message: "UPGRADE_REQUIRED:seeker" });
       }
-      const response = await invokeLLM({
+      const response = await invokeMeteredLLM({
+        userId: ctx.user.id,
+        feature: "ground_prayer_reflection",
+        tier: "rich",
         messages: [
           {
             role: "system" as const,
@@ -389,7 +392,10 @@ You are a reflective companion, not a spiritual authority.`,
       statesMostCommon: returns.map((r: typeof returns[0]) => r.beforeState).filter(Boolean),
     };
 
-    const response = await invokeLLM({
+    const response = await invokeMeteredLLM({
+      userId: ctx.user.id,
+      feature: "ground_weekly_reflection",
+      tier: "rich",
       messages: [
         {
           role: "system" as const,

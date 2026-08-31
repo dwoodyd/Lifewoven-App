@@ -57,6 +57,8 @@ export type ToolChoice =
 
 export type InvokeParams = {
   messages: Message[];
+  /** Selected by Lifewoven's centralized server-side cost-control helper. */
+  model?: string;
   tools?: Tool[];
   toolChoice?: ToolChoice;
   tool_choice?: ToolChoice;
@@ -270,6 +272,9 @@ export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
 
   const {
     messages,
+    model,
+    maxTokens,
+    max_tokens,
     tools,
     toolChoice,
     tool_choice,
@@ -280,7 +285,7 @@ export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
   } = params;
 
   const payload: Record<string, unknown> = {
-    model: "gemini-2.5-flash",
+    model: model ?? "gpt-5-mini",
     messages: messages.map(normalizeMessage),
   };
 
@@ -296,7 +301,12 @@ export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
     payload.tool_choice = normalizedToolChoice;
   }
 
-  payload.max_tokens = 4096
+  const boundedTokens = maxTokens ?? max_tokens ?? 2048;
+  if ((model ?? "").startsWith("gpt-")) {
+    payload.max_completion_tokens = boundedTokens;
+  } else {
+    payload.max_tokens = boundedTokens;
+  }
 
   const normalizedResponseFormat = normalizeResponseFormat({
     responseFormat,

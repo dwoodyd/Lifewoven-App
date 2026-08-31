@@ -3,7 +3,7 @@ import { getDb } from "../db";
 import { users, habitLogs, journalEntries, pathwaySessions, checkIns } from "../../drizzle/schema";
 import { eq, sql } from "drizzle-orm";
 import { notifyOwner } from "../_core/notification";
-import { invokeLLM } from "../_core/llm";
+import { invokeMeteredLLM } from "../llmCostControls";
 
 async function sendWeeklyDigestForUser(user: { id: number; name: string | null; email: string | null }) {
   const db = await getDb();
@@ -26,7 +26,10 @@ async function sendWeeklyDigestForUser(user: { id: number; name: string | null; 
   const sessionCount = Number(sessions[0]?.count ?? 0);
   const checkinCount = Number(checkins[0]?.count ?? 0);
 
-  const llmResponse = await invokeLLM({
+  const llmResponse = await invokeMeteredLLM({
+    userId: user.id,
+    feature: "weekly_digest",
+    tier: "economical",
     messages: [
       { role: "system", content: "You are the Lifewoven Oracle writing a warm, brief (3 sentences max) weekly reflection for a user. Be specific, encouraging, and grounded." },
       { role: "user", content: `User: ${user.name ?? "friend"}. This week: ${habitCount} habit logs, ${journalCount} journal entries, ${sessionCount} pathway sessions, ${checkinCount} check-ins. Write a brief reflection.` },

@@ -31,9 +31,10 @@ async function fetchWithTimeout(url: URL | string, init: RequestInit, timeoutMs 
 }
 
 export function registerStorageProxy(app: Express) {
-  // Express 4 wildcard: use "/*" and read req.params[0]
-  app.get("/manus-storage/*", async (req, res) => {
-    const key = (req.params as unknown as Record<string, string>)["0"];
+  // Express 5 requires named splats; preserve the complete storage key.
+  app.get("/manus-storage/*key", async (req, res) => {
+    const rawKey = (req.params as unknown as Record<string, string | string[]>).key;
+    const key = Array.isArray(rawKey) ? rawKey.join("/") : rawKey;
     if (!key) {
       res.status(400).send("Missing storage key");
       return;

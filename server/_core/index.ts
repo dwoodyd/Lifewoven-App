@@ -195,7 +195,7 @@ async function startServer() {
 
   // 301 redirects: /btw → /ground (permanent rename)
   app.get("/btw", (_req, res) => res.redirect(301, "/ground"));
-  app.get("/btw/*", (req, res) => {
+  app.get("/btw/*splat", (req, res) => {
     const sub = req.path.replace(/^\/btw/, "");
     res.redirect(301, `/ground${sub}`);
   });

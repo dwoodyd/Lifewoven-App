@@ -23,7 +23,7 @@ import {
 } from "../../drizzle/schema";
 import { eq, and, desc, sql } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
-import { invokeLLM } from "../_core/llm";
+import { invokeMeteredLLM } from "../llmCostControls";
 import { storagePut } from "../storage";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -421,7 +421,12 @@ ${context}`;
         { role: "user", content: input.message },
       ];
 
-      const llmResponse = await invokeLLM({ messages: llmMessages });
+      const llmResponse = await invokeMeteredLLM({
+        userId,
+        feature: "library_reading_companion",
+        tier: "economical",
+        messages: llmMessages,
+      });
       const rawContent = llmResponse.choices?.[0]?.message?.content;
       const assistantContent: string = typeof rawContent === "string" ? rawContent : (rawContent ? JSON.stringify(rawContent) : "I wasn't able to generate a response. Please try again.");
 

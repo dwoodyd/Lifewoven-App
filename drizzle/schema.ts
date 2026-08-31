@@ -102,6 +102,24 @@ export const auditClaims = mysqlTable("audit_claims", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 }, (t) => [index("idx_audit_claims_expiresAt").on(t.expiresAt)]);
 
+// ─── LLM Usage Ledger ─────────────────────────────────────────────────────────
+// Every server-initiated model call is recorded here so cost controls are
+// enforceable and usage can be audited without retaining a user's prompt text.
+export const llmUsage = mysqlTable("llm_usage", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  feature: varchar("feature", { length: 96 }).notNull(),
+  model: varchar("model", { length: 96 }).notNull(),
+  promptTokens: int("promptTokens").default(0).notNull(),
+  completionTokens: int("completionTokens").default(0).notNull(),
+  totalTokens: int("totalTokens").default(0).notNull(),
+  costEstimateUsd: decimal("costEstimateUsd", { precision: 12, scale: 6 }).default("0").notNull(),
+}, (t) => [
+  index("idx_llm_usage_user_created").on(t.userId, t.createdAt),
+  index("idx_llm_usage_feature_created").on(t.feature, t.createdAt),
+]);
+
 // ─── Daily Check-ins ──────────────────────────────────────────────────────────
 
 export const checkIns = mysqlTable("check_ins", {
