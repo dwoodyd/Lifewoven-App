@@ -49,4 +49,13 @@ describe("Lumen media fallbacks", () => {
       expect(registrySource).not.toContain(brokenKey);
     }
   });
+
+  it("keeps the affected pathway cards on the user-supplied clean exports", () => {
+    const pathways = readFileSync(resolve(process.cwd(), "client/src/pages/PathwaysListing.tsx"), "utf8");
+
+    expect(pathways).toMatch(/slug: "align"[\s\S]*?scene: "pathway_uplift_clean"/);
+    expect(pathways).toMatch(/slug: "purpose"[\s\S]*?scene: "pathway_purpose_clean"/);
+    expect(pathways).not.toMatch(/slug: "align"[\s\S]*?scene: "(?:pathway_align_clean|settling)"/);
+    expect(pathways).not.toMatch(/slug: "purpose"[\s\S]*?scene: "self_hug"/);
+  });
 });
