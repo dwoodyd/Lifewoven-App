@@ -54,6 +54,8 @@ export interface LuminSceneProps {
   ambientMaxWidth?: string;
   /** Optional CSS mask for softly dissolving an ambient scene into its surrounding composition. */
   ambientMaskImage?: string;
+  /** Fill the containing media slot rather than using Lumen's usual floating ambient footprint. */
+  ambientFill?: boolean;
   /** Extra className on the root element */
   className?: string;
 }
@@ -83,6 +85,7 @@ export function LuminScene({
   ambientBlendMode = "screen",
   ambientMaxWidth = "min(86vw, 520px)",
   ambientMaskImage,
+  ambientFill = false,
   className = "",
 }: LuminSceneProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -168,10 +171,11 @@ export function LuminScene({
           pointerEvents: "none",
           zIndex: 10,
           ...ambientPosition,
-          width: ambientSize,
-          minWidth: ambientSize === "68px" ? undefined : "min(30vw, 380px)",
-          maxWidth: ambientMaxWidth,
-          aspectRatio: ambientAspectRatio,
+          width: ambientFill ? "100%" : ambientSize,
+          height: ambientFill ? "100%" : undefined,
+          minWidth: ambientFill || ambientSize === "68px" ? undefined : "min(30vw, 380px)",
+          maxWidth: ambientFill ? "none" : ambientMaxWidth,
+          aspectRatio: ambientFill ? undefined : ambientAspectRatio,
           overflow: "hidden",
           WebkitMaskImage: ambientMaskImage,
           maskImage: ambientMaskImage,
