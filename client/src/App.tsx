@@ -1,5 +1,4 @@
 import { Toaster } from "@/components/ui/sonner";
-import FeedbackWidget from "./components/FeedbackWidget";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch, useLocation, Redirect } from "wouter";
@@ -230,7 +229,6 @@ function App() {
         <TooltipProvider>
           <Toaster duration={3000} />
           <BetaExpiredModal />
-          <FeedbackWidget />
           <PWAInstallPrompt />
           <OnboardingModal userId={user?.id} />
           <Router />

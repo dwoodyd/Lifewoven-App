@@ -382,6 +382,7 @@
     min-height: 100dvh;
     padding-left: max(var(--page-gutter), env(safe-area-inset-left, 0px));
     padding-right: max(var(--page-gutter), env(safe-area-inset-right, 0px));
+    padding-top: calc(4rem + env(safe-area-inset-top, 0px));
     padding-bottom: calc(var(--tabbar-clearance) + env(safe-area-inset-bottom, 0px));
   }
   .sticky-action-safe { padding-bottom: max(var(--space-3), env(safe-area-inset-bottom, 0px)); }
@@ -513,11 +514,13 @@
       padding-right: var(--page-gutter);
     }
 
-    /* Nav is fixed; every direct container that follows it receives a single,
-       safe-area-aware content offset instead of each route guessing one. */
+    /* A direct container without its own pt-* utility needs one nav offset.
+       Route shells with an explicit pt-* offset must not receive it twice. */
+    header.fixed + .container:not([class*="pt-"]) {
+      padding-top: calc(4.5rem + env(safe-area-inset-top, 0px)) !important;
+    }
     header.fixed + .container,
     header.fixed + .screen-safe {
-      padding-top: calc(4.5rem + env(safe-area-inset-top, 0px)) !important;
       padding-bottom: calc(var(--tabbar-clearance) + env(safe-area-inset-bottom, 0px)) !important;
     }
   }

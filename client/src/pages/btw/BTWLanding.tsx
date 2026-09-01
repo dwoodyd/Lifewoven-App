@@ -27,7 +27,7 @@ export default function BTWLanding() {
   return (
     <div className="structural-shell min-h-screen bg-background">
       <Nav />
-      <div className="container pt-20 pb-24 max-w-3xl mx-auto px-4 sm:px-6">
+      <div className="container pt-[calc(4.25rem+env(safe-area-inset-top,0px))] pb-24 max-w-3xl mx-auto px-4 sm:px-6 sm:pt-20">
 
         {/* Disclaimer badge */}
         <div className="flex justify-center mb-8">
@@ -60,12 +60,12 @@ export default function BTWLanding() {
         </div>
 
         {selectedState && (
-          <section className="relative mb-10 min-h-[300px] overflow-hidden rounded-[var(--radius-surface)] border border-primary/25 bg-card px-4 pb-5 pt-44 sm:px-5 sm:pb-6" aria-live="polite">
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-[70%]" aria-hidden="true">
+          <section className="relative mb-10 overflow-hidden rounded-[var(--radius-surface)] border border-primary/25 bg-card" aria-live="polite">
+            <div className="pointer-events-none relative h-44 sm:absolute sm:inset-x-0 sm:top-0 sm:h-[70%]" aria-hidden="true">
               <LuminScene videoId={selectedState.videoId} ambient loop ambientSize="min(46vw, 320px)" ambientPosition={{ position: "absolute", left: "50%", top: "45%", transform: "translate(-50%, -50%)" }} className="opacity-100" />
               <div className="absolute inset-x-0 bottom-0 h-1/2 bg-[linear-gradient(180deg,transparent,var(--card))]" />
             </div>
-            <div className="relative z-10 max-w-lg">
+            <div className="relative z-10 max-w-lg px-4 pb-5 pt-2 sm:px-5 sm:pb-6 sm:pt-44">
               <p className="font-mono text-xs uppercase tracking-[0.16em] text-primary mb-2">Lumen sees the reading</p>
               <p className="text-sm leading-relaxed text-foreground">{selectedState.response}</p>
               <Button asChild size="sm" className="mt-4 gap-2"><Link href={selectedState.href}>Begin from here <ArrowRight className="h-4 w-4" /></Link></Button>

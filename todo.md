@@ -1770,6 +1770,12 @@
 - [ ] P0 media assignment: replace the current Reset pathway video with the remaining unassigned clean video so each visible pathway card remains distinct.
 - [ ] P0 media assignment: process and map the user-supplied Untitledvideo(66).mov as the exact clean Reset pathway video.
 - [ ] Deployment readiness: assess the current Lifewoven checkpoint, validation status, and open tracker items; treat the owner-only PayPal approval-page test as intentionally deferred.
+- [x] iOS mobile P0: remove excessive 100vh-centered top gaps on Ground, Wisdom Tools, founder, Guided Experiences, and Oracle/Live Guidance surfaces.
+- [x] iOS mobile P0: reposition the feedback CTA so it never peeks under the sticky header or leaves a dead top gap, with safe-area-aware placement.
+- [x] iOS mobile P0: make Wisdom Tools Included badges, card titles, and nearby eyebrows fully visible with no clipping or cross-card overlap.
+- [x] iOS mobile P0: stack Oracle/Live Guidance and marketing-hero media and copy on mobile so text never overlaps Lumen media.
+- [ ] iOS mobile P0: verify the completed fixes on real iPhone app and marketing surfaces plus TypeScript and regression tests.
+- [ ] P0 PWA verification: ensure the stale-update recovery screen cannot mask a successfully mounted app during mobile startup or preview verification.
 - [x] P0 cost controls: centralize all server-side model calls behind a task-tiered helper with bounded response tokens and no direct provider bypasses.
 - [x] P0 cost controls: add an llm_usage ledger with user, feature, model, token, and cost-estimate audit fields for every completed model call.
 - [x] P0 cost controls: enforce a configurable per-user local-day rich-generation budget with calm graceful over-cap behavior.

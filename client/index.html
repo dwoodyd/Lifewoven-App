@@ -126,9 +126,10 @@
             }
           }).observe(root, { childList: true });
         }
+        var bootstrap = document.querySelector('script[data-lifewoven-bootstrap]');
         window.addEventListener('error', function (event) {
           var target = event.target;
-          if (target && target.tagName === 'SCRIPT' && target.type === 'module') showRecovery();
+          if (target === bootstrap) showRecovery();
         }, true);
         window.addEventListener('unhandledrejection', function (event) {
           var message = String(event.reason && (event.reason.message || event.reason));
@@ -142,7 +143,7 @@
         });
       })();
     </script>
-    <script type="module" src="/src/main.tsx"></script>
+    <script data-lifewoven-bootstrap type="module" src="/src/main.tsx"></script>
     <!-- Analytics: only loaded when VITE_ANALYTICS_ENDPOINT and VITE_ANALYTICS_WEBSITE_ID are set -->
     <script>
       (function() {

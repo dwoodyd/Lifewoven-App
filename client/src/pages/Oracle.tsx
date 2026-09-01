@@ -256,24 +256,26 @@ export default function Oracle() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Nav />
-      <div className="container pt-20 pb-6 max-w-3xl mx-auto flex flex-col flex-1 px-4 sm:px-6">
+      <div className="container pt-[calc(4.25rem+env(safe-area-inset-top,0px))] pb-6 max-w-3xl mx-auto flex flex-col flex-1 px-4 sm:px-6 sm:pt-20">
 
         {/* Oracle is one of Lumen's immersive surfaces: she is who the member addresses. */}
-        <section className="blueprint-grid relative -mx-4 mb-6 min-h-[46svh] overflow-hidden border-y border-primary/20 sm:mx-0 sm:min-h-[430px]" aria-labelledby="oracle-title">
-          <LuminScene
-            videoId={luminPulse ? "core_unfurls" : "nodding_gently"}
-            ambient
-            loop
-            ambientSize="min(52vw, 560px)"
-            ambientPosition={{ position: "absolute", right: "-4%", top: "50%", transform: "translateY(-50%)" }}
-            ambientAspectRatio="16 / 9"
-            ambientFit="contain"
-            ambientBlendMode="normal"
-            ambientMaskImage="linear-gradient(to right, transparent 0%, rgba(0,0,0,0.68) 20%, #000 44%, #000 100%)"
-            className="opacity-100"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--background)_4%,color-mix(in_oklch,var(--background)_78%,transparent)_48%,transparent_75%)]" aria-hidden="true" />
-          <div className="relative z-20 flex min-h-[46svh] max-w-sm flex-col justify-center px-5 py-10 sm:min-h-[430px] sm:px-9">
+        <section className="blueprint-grid relative -mx-4 mb-6 overflow-hidden border-y border-primary/20 sm:mx-0 sm:min-h-[430px]" aria-labelledby="oracle-title">
+          <div className="relative h-[38svh] min-h-[260px] sm:absolute sm:inset-0 sm:h-auto">
+            <LuminScene
+              videoId={luminPulse ? "core_unfurls" : "nodding_gently"}
+              ambient
+              loop
+              ambientSize="min(52vw, 560px)"
+              ambientPosition={{ position: "absolute", right: "-4%", top: "50%", transform: "translateY(-50%)" }}
+              ambientAspectRatio="16 / 9"
+              ambientFit="contain"
+              ambientBlendMode="normal"
+              ambientMaskImage="linear-gradient(to right, transparent 0%, rgba(0,0,0,0.68) 20%, #000 44%, #000 100%)"
+              className="opacity-100"
+            />
+          </div>
+          <div className="absolute inset-0 hidden bg-[linear-gradient(90deg,var(--background)_4%,color-mix(in_oklch,var(--background)_78%,transparent)_48%,transparent_75%)] sm:block" aria-hidden="true" />
+          <div className="relative z-20 flex max-w-sm flex-col justify-start px-5 py-8 sm:min-h-[430px] sm:justify-center sm:px-9 sm:py-10">
             <p className="instrument-label mb-3">The Oracle / live guidance</p>
             <h1 id="oracle-title" className="font-sans text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">Ask, and we will read.</h1>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">

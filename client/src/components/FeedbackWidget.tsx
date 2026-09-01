@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 
-export default function FeedbackWidget() {
+export default function FeedbackWidget({ embedded = false }: { embedded?: boolean }) {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [rating, setRating] = useState<number | null>(null);
@@ -36,10 +36,13 @@ export default function FeedbackWidget() {
         onClick={() => setOpen(o => !o)}
         aria-label="Send feedback"
         title="Send feedback"
-        className={`
+        className={embedded ? `
+          inline-flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-medium
+          text-accent hover:bg-accent/10 transition-colors
+          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[oklch(0.72_0.08_60)]/50
+        ` : `
           fixed bottom-[calc(env(safe-area-inset-bottom)+1rem)] right-[calc(env(safe-area-inset-right)+1rem)] z-40
           w-11 h-11 rounded-full
-          max-sm:static max-sm:mx-auto max-sm:mb-[calc(env(safe-area-inset-bottom)+1.25rem)] max-sm:mt-6 max-sm:h-11 max-sm:w-auto max-sm:rounded-full max-sm:px-4
           flex items-center justify-center
           bg-[oklch(0.22_0.02_60)] border border-border
           text-[oklch(0.72_0.08_60)]
@@ -51,7 +54,7 @@ export default function FeedbackWidget() {
         `}
       >
         <MessageSquare className="h-4 w-4" />
-        <span className="hidden max-sm:inline text-sm font-medium">Feedback</span>
+        <span className={embedded ? "" : "sr-only"}>Feedback</span>
       </button>
 
       {/* Panel */}

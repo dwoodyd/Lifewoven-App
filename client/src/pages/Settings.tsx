@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { LUMIN_VIDEOS } from "@/data/lumin";
 import { setHapticsEnabled, getHapticsEnabled } from "@/hooks/useHaptics";
 import { replayOnboarding } from "@/components/OnboardingModal";
+import FeedbackWidget from "@/components/FeedbackWidget";
 
 const TIER_LABELS: Record<string, { label: string; color: string; desc: string }> = {
   explorer: { label: "Explorer", color: "bg-secondary text-foreground", desc: "Free tier — core tools included." },
@@ -427,6 +428,19 @@ export default function Settings() {
                   Install
                 </Button>
               </div>
+            </div>
+          </div>
+
+          {/* Feedback stays deliberate on mobile rather than floating over every surface. */}
+          <div className="rounded-[var(--radius-surface)] border border-border bg-card p-4 sm:p-6 mb-5">
+            <div className="flex items-center gap-2 mb-1">
+              <Bell className="h-4 w-4 text-muted-foreground" />
+              <h2 className="font-medium text-sm text-foreground">Feedback &amp; Support</h2>
+            </div>
+            <p className="text-xs text-muted-foreground font-light leading-relaxed mb-3">Tell us what is working, what feels unclear, or what would make Lifewoven more useful.</p>
+            <div className="flex flex-wrap items-center gap-3">
+              <FeedbackWidget embedded />
+              <Link href="/support" className="inline-flex min-h-11 items-center text-sm text-accent hover:underline">Contact support</Link>
             </div>
           </div>
 

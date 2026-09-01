@@ -144,12 +144,12 @@ export default function Home() {
       <Nav />
 
       {/* ─── HERO ─── */}
-      <section className="relative min-h-[max(680px,100svh)] overflow-hidden">
+      <section className="relative overflow-hidden sm:min-h-[max(680px,100svh)]">
         {/* Deep navy gradient backdrop */}
         <div className="absolute inset-0 bg-gradient-to-br from-[oklch(0.08_0.02_260)] via-[oklch(0.10_0.015_260)] to-[oklch(0.12_0.025_280)]" />
 
         {/* Lumen stays in the open right field; copy never crosses her face or tendrils. */}
-        <div className="pointer-events-none absolute inset-y-0 right-0 flex w-full items-center justify-center sm:w-[70%] sm:justify-end">
+        <div className="pointer-events-none relative mt-[calc(4rem+env(safe-area-inset-top,0px))] flex h-[40svh] min-h-[280px] w-full items-center justify-center sm:absolute sm:inset-y-0 sm:right-0 sm:mt-0 sm:h-auto sm:w-[70%] sm:justify-end">
           <LuminVideo
             video={HERO_LUMIN}
             className="relative aspect-video w-[min(98vw,1160px)] opacity-90 sm:w-[min(76vw,1160px)]"
@@ -158,12 +158,12 @@ export default function Home() {
         </div>
 
         {/* A shaped copy field protects readable typography without obscuring Lumen. */}
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,oklch(0.08_0.02_260)_0%,oklch(0.08_0.02_260/0.96)_42%,oklch(0.08_0.02_260/0.52)_63%,transparent_84%)]" />
+        <div className="pointer-events-none absolute inset-0 hidden bg-[linear-gradient(90deg,oklch(0.08_0.02_260)_0%,oklch(0.08_0.02_260/0.96)_42%,oklch(0.08_0.02_260/0.52)_63%,transparent_84%)] sm:block" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-[linear-gradient(0deg,oklch(0.08_0.02_260)_0%,transparent_100%)]" />
 
         {/* Content */}
         <div className="relative z-10 w-full">
-          <div className="flex min-h-[max(680px,100svh)] max-w-7xl items-center px-5 pb-[calc(5rem+env(safe-area-inset-bottom,0px))] pt-[calc(5rem+env(safe-area-inset-top,0px))] sm:px-10 sm:pb-20 sm:pt-28">
+          <div className="flex max-w-7xl items-start px-5 pb-[calc(5rem+env(safe-area-inset-bottom,0px))] pt-7 sm:min-h-[max(680px,100svh)] sm:items-center sm:px-10 sm:pb-20 sm:pt-28">
             <div className="w-full max-w-xl text-left">
             {/* Eyebrow */}
             <p className="mb-8 font-mono text-xs uppercase tracking-[0.24em] text-[oklch(0.78_0.12_55)]">
@@ -237,7 +237,7 @@ export default function Home() {
       </section>
 
       {/* ─── THE SYSTEM ─── */}
-      <section id="system" className="py-32 bg-[oklch(0.10_0.015_260)]">
+      <section id="system" className="py-20 sm:py-32 bg-[oklch(0.10_0.015_260)]">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-center mb-24">
             <div>
@@ -280,13 +280,13 @@ export default function Home() {
           {/* Oracle feature block */}
           <div className="relative rounded-3xl overflow-hidden border border-[oklch(0.72_0.12_55)/0.25] bg-[oklch(0.11_0.02_260)]">
             {/* Lumin in the background */}
-            <div className="absolute right-0 top-0 bottom-0 w-1/2 flex items-center justify-end pointer-events-none overflow-hidden">
+            <div className="relative h-[34svh] min-h-[230px] w-full flex items-center justify-center pointer-events-none overflow-hidden md:absolute md:right-0 md:top-0 md:bottom-0 md:h-auto md:w-1/2 md:justify-end">
               <LuminVideo
                 video={ORACLE_LUMIN}
                 className="w-[min(55vw,500px)] h-[min(55vw,500px)] object-contain opacity-50"
               />
             </div>
-            <div className="relative z-10 p-10 md:p-16 max-w-xl">
+            <div className="relative z-10 max-w-xl p-6 md:p-16">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[oklch(0.72_0.12_55)/0.30] bg-[oklch(0.72_0.12_55)/0.08] mb-6">
                 <Sparkles className="h-3 w-3 text-[oklch(0.82_0.14_55)]" />
                 <span className="font-mono text-[9px] tracking-[0.25em] text-[oklch(0.82_0.14_55)] uppercase">Oracle Tier</span>
@@ -320,7 +320,7 @@ export default function Home() {
       </section>
 
       {/* ─── PATHWAYS ─── */}
-      <section id="pathways" className="py-32 bg-[oklch(0.09_0.015_260)]">
+      <section id="pathways" className="py-20 sm:py-32 bg-[oklch(0.09_0.015_260)]">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
             <p className="font-mono text-[10px] tracking-[0.3em] text-[oklch(0.72_0.12_55)] uppercase mb-5">Guided Experiences</p>
@@ -377,7 +377,7 @@ export default function Home() {
       </section>
 
       {/* ─── WHERE TO BEGIN ─── */}
-      <section className="py-32 bg-[oklch(0.10_0.015_260)]">
+      <section className="py-20 sm:py-32 bg-[oklch(0.10_0.015_260)]">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-16">
             <p className="font-mono text-[10px] tracking-[0.3em] text-[oklch(0.72_0.12_55)] uppercase mb-5">Your Starting Point</p>
@@ -414,7 +414,7 @@ export default function Home() {
       </section>
 
       {/* ─── BEFORE THE WORDS ─── */}
-      <section className="py-24 bg-[oklch(0.09_0.015_260)]">
+      <section className="py-16 sm:py-24 bg-[oklch(0.09_0.015_260)]">
         <div className="max-w-5xl mx-auto px-6">
           <div className="rounded-3xl border border-[oklch(0.72_0.12_55)/0.20] bg-[oklch(0.11_0.02_260)] p-10 md:p-16 flex flex-col md:flex-row items-center gap-10">
             <div className="flex-1">
@@ -465,7 +465,7 @@ export default function Home() {
       </section>
 
       {/* ─── FOUNDER'S NOTE ─── */}
-      <section className="py-32 bg-[oklch(0.10_0.015_260)]">
+      <section className="py-20 sm:py-32 bg-[oklch(0.10_0.015_260)]">
         <div className="max-w-3xl mx-auto px-6">
           <p className="font-mono text-[9px] tracking-[0.3em] text-[oklch(0.40_0.01_260)] uppercase mb-10">A note from the founder</p>
           <blockquote
@@ -496,7 +496,7 @@ export default function Home() {
       </section>
 
       {/* ─── PRICING ─── */}
-      <section id="pricing" className="py-32 bg-[oklch(0.09_0.015_260)]">
+      <section id="pricing" className="py-20 sm:py-32 bg-[oklch(0.09_0.015_260)]">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-16">
             <p className="font-mono text-[10px] tracking-[0.3em] text-[oklch(0.72_0.12_55)] uppercase mb-5">Investment</p>

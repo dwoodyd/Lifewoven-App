@@ -178,7 +178,7 @@ export default function Store() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
-      <div className="max-w-6xl mx-auto px-4 pt-[calc(5.5rem+env(safe-area-inset-top))] pb-[calc(7rem+env(safe-area-inset-bottom))] sm:py-24">
+      <div className="max-w-6xl mx-auto px-4 pt-[calc(4.25rem+env(safe-area-inset-top))] pb-[calc(7rem+env(safe-area-inset-bottom))] sm:py-24">
 
         {/* Header */}
         <div className="text-center mb-12">
@@ -268,14 +268,14 @@ export default function Store() {
             return (
               <div
                 key={product.id}
-                className={`relative overflow-hidden p-5 sm:p-6 rounded-2xl border flex flex-col gap-4 transition-all ${
+                className={`relative overflow-visible p-5 sm:p-6 rounded-2xl border flex flex-col gap-4 transition-all ${
                   product.isIncluded
                     ? "border-violet-400/30 bg-violet-400/5"
                     : "border-border bg-card hover:border-muted-foreground"
                 }`}
               >
                 {product.isIncluded && (
-                  <div className="absolute -top-2.5 left-4 px-2.5 py-0.5 rounded-full text-xs bg-violet-500/20 text-violet-300 border border-violet-400/30 flex items-center gap-1">
+                  <div className="self-start px-2.5 py-0.5 rounded-full text-xs bg-violet-500/20 text-violet-300 border border-violet-400/30 flex items-center gap-1">
                     <Library className="h-3 w-3" /> Included
                   </div>
                 )}
