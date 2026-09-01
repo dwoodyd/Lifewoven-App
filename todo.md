@@ -1776,6 +1776,7 @@
 - [x] iOS mobile P0: stack Oracle/Live Guidance and marketing-hero media and copy on mobile so text never overlaps Lumen media.
 - [ ] iOS mobile P0: verify the completed fixes on real iPhone app and marketing surfaces plus TypeScript and regression tests.
 - [ ] P0 PWA verification: ensure the stale-update recovery screen cannot mask a successfully mounted app during mobile startup or preview verification.
+- [x] iPhone follow-up: reduce the verified excess empty height in the Oracle mobile hero while preserving the clean media-and-copy separation.
 - [x] P0 cost controls: centralize all server-side model calls behind a task-tiered helper with bounded response tokens and no direct provider bypasses.
 - [x] P0 cost controls: add an llm_usage ledger with user, feature, model, token, and cost-estimate audit fields for every completed model call.
 - [x] P0 cost controls: enforce a configurable per-user local-day rich-generation budget with calm graceful over-cap behavior.

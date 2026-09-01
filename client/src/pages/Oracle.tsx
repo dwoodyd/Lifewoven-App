@@ -260,7 +260,7 @@ export default function Oracle() {
 
         {/* Oracle is one of Lumen's immersive surfaces: she is who the member addresses. */}
         <section className="blueprint-grid relative -mx-4 mb-6 overflow-hidden border-y border-primary/20 sm:mx-0 sm:min-h-[430px]" aria-labelledby="oracle-title">
-          <div className="relative h-[38svh] min-h-[260px] sm:absolute sm:inset-0 sm:h-auto">
+          <div className="relative h-[27svh] min-h-[210px] sm:absolute sm:inset-0 sm:h-auto">
             <LuminScene
               videoId={luminPulse ? "core_unfurls" : "nodding_gently"}
               ambient
