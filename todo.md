@@ -1774,7 +1774,7 @@
 - [x] iOS mobile P0: reposition the feedback CTA so it never peeks under the sticky header or leaves a dead top gap, with safe-area-aware placement.
 - [x] iOS mobile P0: make Wisdom Tools Included badges, card titles, and nearby eyebrows fully visible with no clipping or cross-card overlap.
 - [x] iOS mobile P0: stack Oracle/Live Guidance and marketing-hero media and copy on mobile so text never overlaps Lumen media.
-- [ ] iOS mobile P0: verify the completed fixes on real iPhone app and marketing surfaces plus TypeScript and regression tests.
+- [x] iOS mobile P0: verify the completed fixes on real iPhone app and marketing surfaces plus TypeScript and regression tests.
 - [ ] P0 PWA verification: ensure the stale-update recovery screen cannot mask a successfully mounted app during mobile startup or preview verification.
 - [x] iPhone follow-up: reduce the verified excess empty height in the Oracle mobile hero while preserving the clean media-and-copy separation.
 - [x] iPhone Oracle P0: replace the small right-aligned media island with a full-width edge-to-edge cover-cropped Lumen visual above the copy, without distortion or overlap.
@@ -1786,6 +1786,8 @@
 - [x] P0 cost controls: add normal, exact-boundary, and rejected-over-cap regression coverage that asserts ledger writes.
 - [x] P0 dependency security: remediate every critical/high finding from pnpm audit --prod, starting with fast-xml-parser and covering production Axios, PayPal SDK, Express, Multer, and transitive chains.
 - [x] P0 security verification: re-run clean production dependency audit, full tests, build/SW, and non-transactional PayPal plus AWS-storage smoke checks without changing survey, reading, or onboarding behavior.
+- [x] P0 launch-gate recheck: independently verify that centralized AI cost controls and a clean production dependency audit are present in the current checkpoint; treat P1 device/signup confirmations separately.
+- [x] P0 dependency regression: production audit currently reports one high-severity mysql2 vulnerability through Drizzle; upgrade or pin a compatible patched chain and rerun the audit.
 - [ ] P0 media follow-up: Resonance and Purpose currently share the same pathway video; assign one a distinct clean visual that matches its pathway meaning and verify on Android.
 - [x] Mobile Round 1: inspect, register, and verify supplied clean exports Untitledvideo(65).mov and Untitledvideo(67).mov against the active Lumen scene mappings.
 - [x] Mobile Round 1: rebuild The Weave mobile header, intro measure, and filter-chip behavior so title/actions are calm, copy is full width, and filters never clip.
