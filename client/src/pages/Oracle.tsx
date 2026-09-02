@@ -719,7 +719,7 @@ export default function Oracle() {
                       <div className={`max-w-[80%] rounded-2xl text-sm leading-relaxed ${msg.role === "user" ? "bg-foreground text-background rounded-br-sm p-4 font-normal" : "bg-card/90 border border-border/60 shadow-sm text-card-foreground rounded-bl-sm"}`}>
                         {msg.role === "assistant" ? (
                           <>
-                            <div className="p-4 text-card-foreground">
+                            <div className="weave-in p-4 text-card-foreground">
                               <Streamdown>{msg.content}</Streamdown>
                             </div>
                             {msg.tags && msg.tags.length > 0 && (

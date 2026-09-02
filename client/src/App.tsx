@@ -213,10 +213,13 @@ function ScrollToTop() {
 }
 
 function Router() {
+  const [location] = useLocation();
   return (
     <>
       <ScrollToTop />
-      <RouterSwitch />
+      <div key={location} className="settle-in">
+        <RouterSwitch />
+      </div>
     </>
   );
 }
