@@ -414,7 +414,7 @@ export default function AlignmentAudit() {
               </span>
             </div>
           )}
-          <div className="p-5 sm:p-8 rounded-2xl border border-border bg-card mb-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+          <div key={q.id} className="settle-in p-5 sm:p-8 rounded-2xl border border-border bg-card mb-6">
             <p className="font-serif text-lg sm:text-xl md:text-2xl font-light text-foreground leading-relaxed mb-6">{q.text}</p>
             <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
               {SCALE.map((label, idx) => {

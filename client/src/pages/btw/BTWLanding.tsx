@@ -60,7 +60,7 @@ export default function BTWLanding() {
         </div>
 
         {selectedState && (
-          <section className="relative mb-10 overflow-hidden rounded-[var(--radius-surface)] border border-primary/25 bg-card" aria-live="polite">
+          <section className="settle-in relative mb-10 overflow-hidden rounded-[var(--radius-surface)] border border-primary/25 bg-card" aria-live="polite">
             <div className="pointer-events-none relative h-44 sm:absolute sm:inset-x-0 sm:top-0 sm:h-[70%]" aria-hidden="true">
               <LuminScene videoId={selectedState.videoId} ambient loop ambientSize="min(46vw, 320px)" ambientPosition={{ position: "absolute", left: "50%", top: "45%", transform: "translate(-50%, -50%)" }} className="opacity-100" />
               <div className="absolute inset-x-0 bottom-0 h-1/2 bg-[linear-gradient(180deg,transparent,var(--card))]" />
@@ -105,7 +105,7 @@ export default function BTWLanding() {
 
         {/* Pathway sections grid */}
         <h2 className="font-serif text-2xl font-light text-foreground mb-6">The Pathway</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
+        <div className="weave-in grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
           {SECTIONS.map(s => (
             <Link key={s.title} href={s.href}>
               <div className="p-4 sm:p-5 rounded-[var(--radius-surface)] border border-border bg-card hover:bg-secondary/40 transition-colors cursor-pointer h-full">

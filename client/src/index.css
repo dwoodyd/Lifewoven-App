@@ -102,6 +102,13 @@
   --ease-out-native: cubic-bezier(0.22, 1, 0.36, 1);
   --duration-fast: 150ms;
   --duration-standard: 240ms;
+  /* Contemplative interaction system: quick enough to feel responsive, with
+     softened landing curves rather than commercial snap. */
+  --motion-settle: 280ms;
+  --motion-weave: 320ms;
+  --motion-stagger: 42ms;
+  --ease-settle: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-weave: cubic-bezier(0.16, 1, 0.3, 1);
   --tap-target: 2.75rem;
   --tabbar-clearance: 5.25rem;
   /* Lifewoven light field — warm paper, ink, and woven-gold contrast. */
@@ -255,6 +262,7 @@
   [role="button"]:not([aria-disabled="true"]):active,
   a[href]:active {
     opacity: 0.88;
+    transform: scale(0.985);
   }
   /* Visible gold focus ring for keyboard navigation */
   :focus-visible {
@@ -280,6 +288,19 @@
   .breathe { animation: breathe 4s ease-in-out infinite; }
   .fade-in { animation: fadeIn 0.4s ease-out forwards; }
   .slide-up { animation: slideUp 0.3s ease-out forwards; }
+  /* Shared contemplative entrances. Apply at route or list boundaries; they
+     animate transform/opacity only and degrade to fades under reduced motion. */
+  .settle-in {
+    animation: settleIn var(--motion-settle) var(--ease-settle) both;
+  }
+  .weave-in > * {
+    animation: weaveIn var(--motion-weave) var(--ease-weave) both;
+  }
+  .weave-in > :nth-child(1) { animation-delay: 0ms; }
+  .weave-in > :nth-child(2) { animation-delay: var(--motion-stagger); }
+  .weave-in > :nth-child(3) { animation-delay: calc(var(--motion-stagger) * 2); }
+  .weave-in > :nth-child(4) { animation-delay: calc(var(--motion-stagger) * 3); }
+  .weave-in > :nth-child(5) { animation-delay: calc(var(--motion-stagger) * 4); }
   .glow-gold { box-shadow: 0 0 24px oklch(0.639 0.113 80 / 0.22); }
   /* Woven gold text utilities */
   .text-gold { color: oklch(0.639 0.113 80); }      /* #B0832F light mode */
@@ -478,6 +499,14 @@
 }
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes settleIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes weaveIn {
+  from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 

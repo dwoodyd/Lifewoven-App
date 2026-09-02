@@ -1788,6 +1788,10 @@
 - [x] P0 security verification: re-run clean production dependency audit, full tests, build/SW, and non-transactional PayPal plus AWS-storage smoke checks without changing survey, reading, or onboarding behavior.
 - [x] P0 launch-gate recheck: independently verify that centralized AI cost controls and a clean production dependency audit are present in the current checkpoint; treat P1 device/signup confirmations separately.
 - [x] P0 dependency regression: production audit currently reports one high-severity mysql2 vulnerability through Drizzle; upgrade or pin a compatible patched chain and rerun the audit.
+- [x] Motion polish: centralize Lifewoven’s contemplative motion tokens and spring presets, respecting reduced motion and transform/opacity-only animation.
+- [ ] Motion polish: audit and consolidate feedback through Sonner and secondary surfaces through existing Vaul primitives without altering core flows.
+- [ ] Motion polish: add restrained settling/weaving transitions to Ground, Oracle reading, Survey, and The Weave while preserving Lumin, faith-rooted tone, and product behavior.
+- [ ] Motion polish: verify tappable press feedback, route/list transitions, reduced-motion fallbacks, and regression coverage without delaying launch readiness.
 - [ ] P0 media follow-up: Resonance and Purpose currently share the same pathway video; assign one a distinct clean visual that matches its pathway meaning and verify on Android.
 - [x] Mobile Round 1: inspect, register, and verify supplied clean exports Untitledvideo(65).mov and Untitledvideo(67).mov against the active Lumen scene mappings.
 - [x] Mobile Round 1: rebuild The Weave mobile header, intro measure, and filter-chip behavior so title/actions are calm, copy is full width, and filters never clip.

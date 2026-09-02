@@ -12,6 +12,10 @@ describe("native-quality mobile foundations", () => {
     expect(css).toContain("--space-4: 1rem");
     expect(css).toContain("--tap-target: 2.75rem");
     expect(css).toContain("--duration-standard: 240ms");
+    expect(css).toContain("--motion-settle: 280ms");
+    expect(css).toContain("--motion-weave: 320ms");
+    expect(css).toContain(".settle-in");
+    expect(css).toContain(".weave-in > *");
     expect(css).toContain(".screen-safe");
     expect(css).toContain(".native-tabbar");
     expect(css).toContain("touch-action: manipulation");
@@ -53,5 +57,14 @@ describe("native-quality mobile foundations", () => {
     expect(vite).toContain('purpose: "any maskable"');
     expect(vite).toContain('"assets/index-*.js"');
     expect(vite).toContain("navigateFallback: \"/index.html\"");
+  });
+
+  it("uses the shared settling and weaving motion language on core practice surfaces", () => {
+    const ground = source("client/src/pages/btw/BTWLanding.tsx");
+    const survey = source("client/src/pages/AlignmentAudit.tsx");
+
+    expect(ground).toContain('className="settle-in relative');
+    expect(ground).toContain('className="weave-in grid');
+    expect(survey).toContain('key={q.id} className="settle-in');
   });
 });
