@@ -1762,13 +1762,13 @@
 - [x] P0 installed-PWA startup: Android home-screen launch shows only the splash/background and never mounts Lifewoven UI; diagnose and fix before further mobile release claims.
 - [x] P0 installed-PWA migration: corrected static startup build was published and Android retest remained blank; retire the persistent legacy service worker/cache state without clearing user data.
 - [ ] Mobile Round 1: replace every watermarked Lumen/Veo clip with clean approved media and eliminate video pillarbox bars.
-- [ ] P0 media follow-up: replace the verified watermarked Align pathway card clip with a distinct clean static visual and retest it on Android.
-- [ ] P0 media regression: published Android Align static replacement returns a broken image and exposes alt text; use a verified managed image plus an in-card fallback.
-- [ ] P0 media correction: Align must use a distinct verified clean video, not a static image; preserve unique clean media across Align, Resonance, and Purpose.
-- [ ] P0 media regression: legacy clips were reintroduced for Align/Purpose without exact supplied-export validation; freeze substitutions and remap only confirmed clean user-provided assets.
-- [ ] P0 media assignment: keep the current clean Uplift video; map one newly supplied clean video to Align and the other distinct supplied clean video to Flow, then confirm Android playback.
-- [ ] P0 media assignment: replace the current Reset pathway video with the remaining unassigned clean video so each visible pathway card remains distinct.
-- [ ] P0 media assignment: process and map the user-supplied Untitledvideo(66).mov as the exact clean Reset pathway video.
+- [x] P0 media follow-up: replace the verified watermarked Align pathway card clip with a distinct clean static visual and retest it on Android.
+- [x] P0 media regression: published Android Align static replacement returns a broken image and exposes alt text; use a verified managed image plus an in-card fallback.
+- [x] P0 media correction: Align must use a distinct verified clean video, not a static image; preserve unique clean media across Align, Resonance, and Purpose.
+- [x] P0 media regression: legacy clips were reintroduced for Align/Purpose without exact supplied-export validation; freeze substitutions and remap only confirmed clean user-provided assets.
+- [x] P0 media assignment: keep the current clean Uplift video; map one newly supplied clean video to Align and the other distinct supplied clean video to Flow, then confirm Android playback.
+- [x] P0 media assignment: replace the current Reset pathway video with the remaining unassigned clean video so each visible pathway card remains distinct.
+- [x] P0 media assignment: process and map the user-supplied Untitledvideo(66).mov as the exact clean Reset pathway video.
 - [ ] Deployment readiness: assess the current Lifewoven checkpoint, validation status, and open tracker items; treat the owner-only PayPal approval-page test as intentionally deferred.
 - [x] iOS mobile P0: remove excessive 100vh-centered top gaps on Ground, Wisdom Tools, founder, Guided Experiences, and Oracle/Live Guidance surfaces.
 - [x] iOS mobile P0: reposition the feedback CTA so it never peeks under the sticky header or leaves a dead top gap, with safe-area-aware placement.
@@ -1796,7 +1796,7 @@
 - [x] Entry funnel: streamline the consent/context-to-auth handoff so necessary consent remains visible without creating an avoidable extra decision step.
 - [x] Entry funnel: preserve returning-member navigation, public discovery routes, legal disclosure, survey claim transfer, pricing intent, and authenticated access controls while simplifying first visit.
 - [x] Entry funnel: add regression coverage and verify new-visitor and returning-member paths on mobile and desktop.
-- [ ] P0 media follow-up: Resonance and Purpose currently share the same pathway video; assign one a distinct clean visual that matches its pathway meaning and verify on Android.
+- [x] P0 media follow-up: Resonance and Purpose currently share the same pathway video; assign one a distinct clean visual that matches its pathway meaning and verify on Android.
 - [x] Mobile Round 1: inspect, register, and verify supplied clean exports Untitledvideo(65).mov and Untitledvideo(67).mov against the active Lumen scene mappings.
 - [x] Mobile Round 1: rebuild The Weave mobile header, intro measure, and filter-chip behavior so title/actions are calm, copy is full width, and filters never clip.
 - [x] Mobile Round 1: reset scroll position on navigation; correct dashboard top-header clearance and the overlapping red note action.
