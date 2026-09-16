@@ -1769,7 +1769,7 @@
 - [x] P0 media assignment: keep the current clean Uplift video; map one newly supplied clean video to Align and the other distinct supplied clean video to Flow, then confirm Android playback.
 - [x] P0 media assignment: replace the current Reset pathway video with the remaining unassigned clean video so each visible pathway card remains distinct.
 - [x] P0 media assignment: process and map the user-supplied Untitledvideo(66).mov as the exact clean Reset pathway video.
-- [ ] Deployment readiness: assess the current Lifewoven checkpoint, validation status, and open tracker items; treat the owner-only PayPal approval-page test as intentionally deferred.
+- [x] Deployment readiness: assess the current Lifewoven checkpoint, validation status, and open tracker items; treat the owner-only PayPal approval-page test as intentionally deferred.
 - [x] iOS mobile P0: remove excessive 100vh-centered top gaps on Ground, Wisdom Tools, founder, Guided Experiences, and Oracle/Live Guidance surfaces.
 - [x] iOS mobile P0: reposition the feedback CTA so it never peeks under the sticky header or leaves a dead top gap, with safe-area-aware placement.
 - [x] iOS mobile P0: make Wisdom Tools Included badges, card titles, and nearby eyebrows fully visible with no clipping or cross-card overlap.
