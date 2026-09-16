@@ -13,7 +13,7 @@ describe("new-user entry funnel", () => {
     const home = readClient("pages/Home.tsx");
     const pricing = readClient("pages/Pricing.tsx");
 
-    expect(login).toContain('getLoginUrl(returnPath, "signUp")');
+    expect(login).toContain('getLoginUrl(returnPath, isSignup ? "signUp" : "signIn")');
     expect(login).toContain("new URLSearchParams(search)");
     expect(login).not.toContain('location.split("?")[1]');
     expect(login).toContain('return chosenTier ? `/pricing?tier=${chosenTier}` : "/dashboard"');
@@ -46,14 +46,20 @@ describe("new-user entry funnel", () => {
     vi.unstubAllGlobals();
   });
 
-  it("shows Lifewoven legal consent before the signup OAuth handoff", () => {
+  it("keeps direct signup handoff while showing legal context beside the public account-creation action", () => {
     const login = readClient("pages/Login.tsx");
+    const home = readClient("pages/Home.tsx");
+    const nav = readClient("components/Nav.tsx");
 
-    expect(login).toContain("Welcome to Lifewoven");
-    expect(login).toContain('href="/legal/terms"');
-    expect(login).toContain('href="/legal/privacy"');
-    expect(login).toContain("Continue to account creation");
-    expect(login).toContain("provided through Manus services");
+    expect(login).toContain('getLoginUrl(returnPath, isSignup ? "signUp" : "signIn")');
+    expect(home).toContain('getLoginUrl("/dashboard", "signUp")');
+    expect(home).toContain('href="/legal/terms"');
+    expect(home).toContain('href="/legal/privacy"');
+    expect(home).toContain("Begin your private space");
+    expect(home).toContain("provided through Manus services");
+    expect(nav).toContain("const publicLinks");
+    expect(nav).toContain('{ label: "How it works", href: "/#system" }');
+    expect(nav).toContain("const visibleLinks = isAuthenticated ? primaryLinks : publicLinks");
   });
 
   it("does not auto-open installation on first visit and unlocks only after an intentional event", () => {

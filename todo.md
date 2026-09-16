@@ -1792,6 +1792,10 @@
 - [x] Motion polish: audit and consolidate feedback through Sonner and secondary surfaces through existing Vaul primitives without altering core flows.
 - [x] Motion polish: add restrained settling/weaving transitions to Ground, Oracle reading, Survey, and The Weave while preserving Lumin, faith-rooted tone, and product behavior.
 - [x] Motion polish: verify tappable press feedback, route/list transitions, reduced-motion fallbacks, and regression coverage without delaying launch readiness.
+- [x] Entry funnel: reduce unauthenticated landing navigation from the full six-tool system to progressive disclosure with one clear guided next step.
+- [x] Entry funnel: streamline the consent/context-to-auth handoff so necessary consent remains visible without creating an avoidable extra decision step.
+- [x] Entry funnel: preserve returning-member navigation, public discovery routes, legal disclosure, survey claim transfer, pricing intent, and authenticated access controls while simplifying first visit.
+- [x] Entry funnel: add regression coverage and verify new-visitor and returning-member paths on mobile and desktop.
 - [ ] P0 media follow-up: Resonance and Purpose currently share the same pathway video; assign one a distinct clean visual that matches its pathway meaning and verify on Android.
 - [x] Mobile Round 1: inspect, register, and verify supplied clean exports Untitledvideo(65).mov and Untitledvideo(67).mov against the active Lumen scene mappings.
 - [x] Mobile Round 1: rebuild The Weave mobile header, intro measure, and filter-chip behavior so title/actions are calm, copy is full width, and filters never clip.

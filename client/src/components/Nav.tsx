@@ -21,7 +21,8 @@ import {
 import { replayOnboarding } from "@/components/OnboardingModal";
 import { useSignOut } from "@/hooks/useSignOut";
 
-// Primary nav links — always visible on desktop
+// The full system is useful after a member has context. Before sign-in, keep the
+// public header intentionally small and let the landing page explain the system.
 const primaryLinks = [
   { label: "Pathways", href: "/pathways" },
   { label: "The Ground", href: "/ground" },
@@ -29,6 +30,12 @@ const primaryLinks = [
   { label: "Oracle", href: "/oracle" },
   { label: "Resources", href: "/library" },
   { label: "Wisdom Tools", href: "/store" },
+];
+
+const publicLinks = [
+  { label: "How it works", href: "/#system" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "About", href: "/about" },
 ];
 
 export default function Nav() {
@@ -43,6 +50,10 @@ export default function Nav() {
     : "?";
 
   const closeMobile = () => setMobileOpen(false);
+  const visibleLinks = isAuthenticated ? primaryLinks : publicLinks;
+  const beginPrivateSpace = () => {
+    window.location.assign(getLoginUrl("/dashboard", "signUp"));
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 pt-safe bg-background/90 backdrop-blur-md border-b border-border" style={{ viewTransitionName: 'nav-bar' }}>
@@ -62,7 +73,7 @@ export default function Nav() {
 
         {/* Desktop Primary Nav */}
         <nav className="hidden md:flex min-w-0 items-center gap-3 lg:gap-4 xl:gap-6" aria-label="Main navigation">
-          {primaryLinks.map((link) => {
+          {visibleLinks.map((link) => {
             const isActive = (() => {
               // Root link — exact match only
               if (link.href === "/") return location === "/";
@@ -240,8 +251,8 @@ export default function Nav() {
               <Button variant="outline" size="sm" asChild className="hidden md:flex min-h-11 border-foreground/40 text-foreground hover:bg-foreground hover:text-background">
                 <a href={getLoginUrl(window.location.pathname + window.location.search)}>Sign in</a>
               </Button>
-              <Button size="sm" asChild className="hidden sm:flex">
-                <Link href="/audit">Take the Survey</Link>
+              <Button size="sm" className="hidden sm:flex" onClick={beginPrivateSpace}>
+                Begin
               </Button>
             </>
           )}
@@ -271,7 +282,7 @@ export default function Nav() {
         >
           {/* Primary links */}
           <div className="px-4 py-3 space-y-0.5">
-            {primaryLinks.map((link) => (
+            {visibleLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -365,8 +376,15 @@ export default function Nav() {
               </>
             ) : (
               <>
-                <Button size="default" asChild className="w-full">
-                  <Link href="/audit" onClick={closeMobile}>Take the Load-Bearing Survey</Link>
+                <Button
+                  size="default"
+                  className="w-full"
+                  onClick={() => {
+                    closeMobile();
+                    beginPrivateSpace();
+                  }}
+                >
+                  Begin your private space
                 </Button>
                 <Button variant="outline" size="default" asChild className="w-full bg-transparent">
                   <a href={getLoginUrl(window.location.pathname + window.location.search)} onClick={closeMobile}>Sign in</a>
