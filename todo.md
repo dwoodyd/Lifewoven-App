@@ -1775,7 +1775,7 @@
 - [x] iOS mobile P0: make Wisdom Tools Included badges, card titles, and nearby eyebrows fully visible with no clipping or cross-card overlap.
 - [x] iOS mobile P0: stack Oracle/Live Guidance and marketing-hero media and copy on mobile so text never overlaps Lumen media.
 - [x] iOS mobile P0: verify the completed fixes on real iPhone app and marketing surfaces plus TypeScript and regression tests.
-- [ ] P0 PWA verification: ensure the stale-update recovery screen cannot mask a successfully mounted app during mobile startup or preview verification.
+- [x] P0 PWA verification: ensure the stale-update recovery screen cannot mask a successfully mounted app during mobile startup or preview verification.
 - [x] iPhone follow-up: reduce the verified excess empty height in the Oracle mobile hero while preserving the clean media-and-copy separation.
 - [x] iPhone Oracle P0: replace the small right-aligned media island with a full-width edge-to-edge cover-cropped Lumen visual above the copy, without distortion or overlap.
 - [x] iPhone Oracle refinement: reduce the verified full-bleed hero slightly while retaining its edge-to-edge cover treatment and visual prominence.
