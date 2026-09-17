@@ -5,6 +5,18 @@ import { nanoid } from "nanoid";
 import path from "path";
 import { createServer as createViteServer } from "vite";
 import viteConfig from "../../vite.config";
+
+function isMissingJavaScriptAsset(pathname: string) {
+  return /^\/assets\/.+\.(?:js|mjs)$/i.test(pathname);
+}
+
+function sendMissingJavaScriptAsset(res: express.Response) {
+  return res.status(404).set({
+    "Content-Type": "text/plain; charset=utf-8",
+    "Cache-Control": "no-store",
+  }).send("JavaScript asset not found");
+}
+
 export async function setupVite(app: Express, server: Server) {
   const serverOptions = {
     middlewareMode: true,
@@ -20,6 +32,12 @@ export async function setupVite(app: Express, server: Server) {
   });
 
   app.use(vite.middlewares);
+  // Never transform a missing hashed bundle request into the HTML shell. An
+  // old installed shell must receive a meaningful 404, not HTML as JavaScript.
+  app.use((req, res, next) => {
+    if (isMissingJavaScriptAsset(req.path)) return sendMissingJavaScriptAsset(res);
+    next();
+  });
   // Exclude server-side routes from the Vite HTML catch-all
   app.use("/{*splat}", async (req, res, next) => {
     const url = req.originalUrl;
@@ -62,6 +80,13 @@ export function serveStatic(app: Express) {
   }
 
   app.use(express.static(distPath));
+
+  // Keep missing hashed module requests out of the SPA fallback. Returning
+  // index.html here causes a stale service-worker shell to fail silently.
+  app.use((req, res, next) => {
+    if (isMissingJavaScriptAsset(req.path)) return sendMissingJavaScriptAsset(res);
+    next();
+  });
 
   // fall through to index.html if the file doesn't exist
   app.use("/{*splat}", (_req, res) => {

@@ -48,18 +48,17 @@ describe("vite.config.ts", () => {
     expect(viteCfg).toContain("vite-plugin-pwa");
   });
 
-  it("keeps prompt-mode registration after the emergency recovery migration", () => {
-    expect(viteCfg).toContain('registerType: "prompt"');
-    expect(viteCfg).toContain("skipWaiting: false");
+  it("activates new service workers immediately after the emergency recovery migration", () => {
+    expect(viteCfg).toContain('registerType: "autoUpdate"');
+    expect(viteCfg).toContain("skipWaiting: true");
+    expect(viteCfg).toContain("clientsClaim: true");
   });
 
-  it("provides a visible application refresh action for a waiting worker", () => {
+  it("registers service workers immediately without retaining the prompt-mode handoff", () => {
     const main = fs.readFileSync(path.resolve(__dirname, "../client/src/main.tsx"), "utf-8");
-    const prompt = fs.readFileSync(path.resolve(__dirname, "../client/src/components/PWAUpdatePrompt.tsx"), "utf-8");
     expect(main).toContain("virtual:pwa-register");
-    expect(main).toContain("lifewoven:pwa-update-ready");
-    expect(prompt).toContain("Refresh now");
-    expect(prompt).toContain("update(true)");
+    expect(main).toContain("registerSW({ immediate: true })");
+    expect(main).not.toContain("lifewoven:pwa-update-ready");
   });
 
   it("includes workbox globPatterns", () => {

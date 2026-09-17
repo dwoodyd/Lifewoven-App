@@ -10,7 +10,6 @@ import { AdminPreviewProvider } from "./contexts/AdminPreviewContext";
 import { LuminMomentProvider } from "./components/LuminMoment";
 import { getLoginUrl } from "./const";
 import { registerSW } from "virtual:pwa-register";
-import PWAUpdatePrompt from "./components/PWAUpdatePrompt";
 import "./index.css";
 import "./view-transitions.css";
 
@@ -109,16 +108,17 @@ root.render(
   <trpc.Provider client={trpcClient} queryClient={queryClient}>
     <QueryClientProvider client={queryClient}>
       <AdminPreviewProvider>
-        <LuminMomentProvider>
-          <App />
-          <PWAUpdatePrompt />
-        </LuminMomentProvider>
+          <LuminMomentProvider>
+            <App />
+          </LuminMomentProvider>
       </AdminPreviewProvider>
     </QueryClientProvider>
   </trpc.Provider>
 );
 
 requestAnimationFrame(() => {
+  document.documentElement.dataset.lifewovenMounted = "true";
+  document.getElementById("crawlable-landing")?.setAttribute("hidden", "");
   const recovery = document.getElementById("pwa-startup-recovery");
   if (recovery) {
     recovery.hidden = true;
@@ -126,12 +126,7 @@ requestAnimationFrame(() => {
   }
 });
 
-const updateServiceWorker = registerSW({
-  immediate: true,
-  onNeedRefresh() {
-    window.dispatchEvent(new CustomEvent("lifewoven:pwa-update-ready", { detail: updateServiceWorker }));
-  },
-});
+registerSW({ immediate: true });
 
 // Dismiss splash on the first rendered frame; route changes must never feel like a reboot.
 const splashStart = Date.now();

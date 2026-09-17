@@ -1796,6 +1796,13 @@
 - [x] Entry funnel: streamline the consent/context-to-auth handoff so necessary consent remains visible without creating an avoidable extra decision step.
 - [x] Entry funnel: preserve returning-member navigation, public discovery routes, legal disclosure, survey claim transfer, pricing intent, and authenticated access controls while simplifying first visit.
 - [x] Entry funnel: add regression coverage and verify new-visitor and returning-member paths on mobile and desktop.
+- [x] First-time-user P0: configure immediate service-worker activation with `skipWaiting`, `clientsClaim`, and auto-update registration so returning visitors receive the latest release.
+- [x] First-time-user P0: return HTTP 404 for absent hashed `/assets/*.js` requests rather than serving the SPA HTML fallback.
+- [x] First-time-user discovery: rewrite title, meta description, and public landing language in concrete plain words; retain 5S as secondary explanatory language.
+- [x] First-time-user discovery: add crawler-readable landing content, correct sitemap coverage, and validate the public social-share image response.
+- [x] First-time-user pricing: give paid Seeker and Oracle actions tier-specific labels and preserve tier plus safe `/pricing` return intent through sign-up.
+- [x] First-time-user trust: retain Lifewoven legal disclosure while clarifying the sign-in method and keeping the account-creation handoff in the same tab where supported.
+- [x] First-time-user audit: add regression coverage and validate PWA cache, missing asset, metadata, sitemap, pricing intent, and new-user route behavior.
 - [x] P0 media follow-up: Resonance and Purpose currently share the same pathway video; assign one a distinct clean visual that matches its pathway meaning and verify on Android.
 - [x] Mobile Round 1: inspect, register, and verify supplied clean exports Untitledvideo(65).mov and Untitledvideo(67).mov against the active Lumen scene mappings.
 - [x] Mobile Round 1: rebuild The Weave mobile header, intro measure, and filter-chip behavior so title/actions are calm, copy is full width, and filters never clip.

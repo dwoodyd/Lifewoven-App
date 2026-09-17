@@ -152,15 +152,17 @@ function vitePluginManusDebugCollector(): Plugin {
 }
 
 const vitePWA = VitePWA({
-  registerType: "prompt",
+  // A new worker activates immediately so returning installed clients never
+  // remain on an HTML shell that points at already-pruned hashed bundles.
+  registerType: "autoUpdate",
   // In dev mode the service worker is not injected to avoid interfering with HMR
   devOptions: { enabled: false },
   // Workbox config: cache app shell + assets
   workbox: {
-    // Normal release policy: a visible in-app prompt lets a member choose when
-    // to activate a newly installed worker instead of interrupting practice.
+    // A release must take control as soon as it is installed. This is paired
+    // with a real 404 for absent hashed assets in the Express SPA fallback.
     clientsClaim: true,
-    skipWaiting: false,
+    skipWaiting: true,
     cleanupOutdatedCaches: true,
     // Raise the precache size limit to 4 MiB to accommodate the main bundle
     maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
@@ -190,9 +192,9 @@ const vitePWA = VitePWA({
     ],
   },
   manifest: {
-    name: "Lifewoven — Personal Transformation Platform",
+    name: "Lifewoven — Habits, Goals & AI Guidance",
     short_name: "Lifewoven",
-    description: "One intelligent operating system for your whole life, built on the 5S Framework.",
+    description: "Check in on how you feel, build habits that fit your life, and choose your next step with an AI guide.",
     theme_color: "#0B1020",
     background_color: "#0B1020",
     display: "standalone",

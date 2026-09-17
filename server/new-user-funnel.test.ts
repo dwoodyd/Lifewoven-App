@@ -17,8 +17,8 @@ describe("new-user entry funnel", () => {
     expect(login).toContain("new URLSearchParams(search)");
     expect(login).not.toContain('location.split("?")[1]');
     expect(login).toContain('return chosenTier ? `/pricing?tier=${chosenTier}` : "/dashboard"');
-    expect(home).toContain('getLoginUrl("/pricing?tier=seeker", "signUp")');
-    expect(home).toContain('getLoginUrl("/pricing?tier=oracle", "signUp")');
+    expect(home).toContain('const beginTier = (tier: "seeker" | "oracle")');
+    expect(home).toContain('getLoginUrl(`/pricing?tier=${tier}`, "signUp")');
     expect(pricing).toContain("getLoginUrl('/dashboard', 'signUp')");
   });
 
@@ -55,7 +55,7 @@ describe("new-user entry funnel", () => {
     expect(home).toContain('getLoginUrl("/dashboard", "signUp")');
     expect(home).toContain('href="/legal/terms"');
     expect(home).toContain('href="/legal/privacy"');
-    expect(home).toContain("Begin your private space");
+    expect(home).toContain("Start your private space");
     expect(home).toContain("provided through Manus services");
     expect(nav).toContain("const publicLinks");
     expect(nav).toContain('{ label: "How it works", href: "/#system" }');

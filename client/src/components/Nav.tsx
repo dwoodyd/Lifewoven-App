@@ -54,6 +54,9 @@ export default function Nav() {
   const beginPrivateSpace = () => {
     window.location.assign(getLoginUrl("/dashboard", "signUp"));
   };
+  const beginSignIn = () => {
+    window.location.assign(getLoginUrl(window.location.pathname + window.location.search, "signIn"));
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 pt-safe bg-background/90 backdrop-blur-md border-b border-border" style={{ viewTransitionName: 'nav-bar' }}>
@@ -248,8 +251,8 @@ export default function Nav() {
           ) : (
             /* ── Unauthenticated ── */
             <>
-              <Button variant="outline" size="sm" asChild className="hidden md:flex min-h-11 border-foreground/40 text-foreground hover:bg-foreground hover:text-background">
-                <a href={getLoginUrl(window.location.pathname + window.location.search)}>Sign in</a>
+              <Button variant="outline" size="sm" onClick={beginSignIn} className="hidden md:flex min-h-11 border-foreground/40 text-foreground hover:bg-foreground hover:text-background">
+                Sign in
               </Button>
               <Button size="sm" className="hidden sm:flex" onClick={beginPrivateSpace}>
                 Begin
@@ -386,8 +389,11 @@ export default function Nav() {
                 >
                   Begin your private space
                 </Button>
-                <Button variant="outline" size="default" asChild className="w-full bg-transparent">
-                  <a href={getLoginUrl(window.location.pathname + window.location.search)} onClick={closeMobile}>Sign in</a>
+                <Button variant="outline" size="default" className="w-full bg-transparent" onClick={() => {
+                  closeMobile();
+                  beginSignIn();
+                }}>
+                  Sign in
                 </Button>
               </>
             )}

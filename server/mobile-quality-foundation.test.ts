@@ -48,10 +48,12 @@ describe("native-quality mobile foundations", () => {
     expect(onboarding).toContain('preload="metadata"');
   });
 
-  it("keeps the standalone PWA manifest, prompt-based updates, and entry shell offline-capable", () => {
+  it("keeps the standalone PWA manifest, immediate updates, and entry shell offline-capable", () => {
     const vite = source("vite.config.ts");
 
-    expect(vite).toContain('registerType: "prompt"');
+    expect(vite).toContain('registerType: "autoUpdate"');
+    expect(vite).toContain("skipWaiting: true");
+    expect(vite).toContain("clientsClaim: true");
     expect(vite).toContain("display: \"standalone\"");
     expect(vite).toContain("orientation: \"portrait-primary\"");
     expect(vite).toContain('purpose: "any maskable"');

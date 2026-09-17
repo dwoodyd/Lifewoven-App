@@ -88,6 +88,10 @@ export default function Home() {
     window.location.assign(getLoginUrl("/dashboard", "signUp"));
   };
 
+  const beginTier = (tier: "seeker" | "oracle") => {
+    window.location.assign(getLoginUrl(`/pricing?tier=${tier}`, "signUp"));
+  };
+
   // Fetch home context only when authenticated
   const { data: homeCtx, isLoading: homeCtxLoading } = trpc.profile.homeContext.useQuery(
     undefined,
@@ -171,7 +175,7 @@ export default function Home() {
             <div className="w-full max-w-xl text-left">
             {/* Eyebrow */}
             <p className="mb-8 font-mono text-xs uppercase tracking-[0.24em] text-[oklch(0.78_0.12_55)]">
-              The 5S Personal Transformation System
+              A guided space for habits, identity, and next steps
             </p>
 
             {/* Headline */}
@@ -179,15 +183,15 @@ export default function Home() {
               className="mb-8 leading-[1.03] tracking-tight"
               style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2.35rem, 10vw, 5.6rem)", fontWeight: 400 }}
             >
-              One intelligent
+              Live the life
               <br />
-              <em style={{ color: "oklch(0.82 0.14 55)", fontStyle: "italic" }}>operating system</em>
+              you <em style={{ color: "oklch(0.82 0.14 55)", fontStyle: "italic" }}>say</em>
               <br />
-              for your whole life.
+              you want.
             </h1>
 
             <p className="mb-10 max-w-xl text-lg font-light leading-relaxed text-[oklch(0.84_0.01_75)] sm:text-xl">
-              Lifewoven brings together emotional alignment, belief work, habit execution, strategic clarity, and holistic stewardship — in one guided, intelligent platform.
+              Check in on how you feel, build the standards you want to live by, and choose your next move with guidance that connects it all.
             </p>
 
             <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
@@ -201,8 +205,7 @@ export default function Home() {
                   boxShadow: "0 0 40px oklch(0.75 0.14 55 / 0.35)",
                 }}
               >
-                <span className="sm:hidden">Begin your private space</span>
-                <span className="hidden sm:inline">Begin your private space</span>
+                <span>Start your private space</span>
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </button>
               <a
@@ -214,7 +217,7 @@ export default function Home() {
             </div>
 
             <p className="mt-6 max-w-md text-xs leading-relaxed text-[oklch(0.78_0.01_75)]">
-              Free to start · No credit card required · By continuing, you agree to Lifewoven&apos;s{" "}
+              Sign up with Google, Apple, Microsoft, or email · No credit card required · By continuing, you agree to Lifewoven&apos;s{" "}
               <Link href="/legal/terms" className="text-[oklch(0.82_0.14_55)] hover:underline">Terms</Link>{" "}
               and acknowledge its <Link href="/legal/privacy" className="text-[oklch(0.82_0.14_55)] hover:underline">Privacy Policy</Link>.{" "}
               Optional AI guidance is provided through Manus services. {" "}
@@ -525,7 +528,7 @@ export default function Home() {
                 price: "$0",
                 desc: "Lumen walks beside you. Begin your alignment journey.",
                 features: ["Load-Bearing Survey diagnostic", "Daily emotional check-in", "The Weave (30 entries)", "Align & Uplift pathways", "5S Framework overview"],
-                cta: "Start Free",
+                cta: "Take the 2-minute check-in",
                 href: "/audit",
                 highlight: false,
               },
@@ -535,8 +538,8 @@ export default function Home() {
                 period: "/mo",
                 desc: "Lumen opens the full system. Every tool, every pathway — fully unlocked.",
                 features: ["Everything in Explorer", "Unlimited Weave entries", "All 7 pathways", "Full 5S module suite", "Habit tracker & scorecard", "Decision journal", "Energy audit & trends"],
-                cta: "Start free, then choose Seeker",
-                href: getLoginUrl("/pricing?tier=seeker", "signUp"),
+                cta: "Start Seeker",
+                tier: "seeker" as const,
                 highlight: true,
               },
               {
@@ -545,8 +548,8 @@ export default function Home() {
                 period: "/mo",
                 desc: "Lumen and the Oracle work continuously. The AI layer that reads your patterns.",
                 features: ["Everything in Seeker", "Unlimited Oracle AI chat", "AI Weave reflections", "Cross-module pattern insights", "Monthly Oracle deep-dive report", "1-on-1 onboarding call"],
-                cta: "Start free, then choose Oracle",
-                href: getLoginUrl("/pricing?tier=oracle", "signUp"),
+                cta: "Start Oracle",
+                tier: "oracle" as const,
                 highlight: false,
               },
             ].map((tier) => (
@@ -588,8 +591,9 @@ export default function Home() {
                     </li>
                   ))}
                 </ul>
-                <a href={tier.href}>
-                  <button
+                <button
+                    type="button"
+                    onClick={() => tier.tier ? beginTier(tier.tier) : window.location.assign(tier.href)}
                     className="w-full py-3.5 rounded-full text-sm font-medium transition-all duration-300"
                     style={
                       tier.highlight
@@ -607,7 +611,6 @@ export default function Home() {
                   >
                     {tier.cta}
                   </button>
-                </a>
               </div>
             ))}
           </div>
@@ -632,7 +635,7 @@ export default function Home() {
             Begin with one honest step.
           </h2>
           <p className="text-[oklch(0.55_0.01_260)] text-lg font-light mb-10 max-w-xl mx-auto">
-            Create your private space first. Then the 12-question diagnostic identifies where you are across the 5S dimensions and recommends one starting pathway.
+            Create your private space first. Then take a 2-minute check-in that helps you choose one grounded place to begin.
           </p>
           <button
             type="button"
@@ -644,9 +647,35 @@ export default function Home() {
               boxShadow: "0 0 60px oklch(0.75 0.14 55 / 0.40)",
             }}
           >
-            Begin your private space
+            Start your private space
             <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </button>
+        </div>
+      </section>
+
+      {/* ─── FIRST-VISIT FAQ ─── */}
+      <section className="border-t border-border bg-[oklch(0.09_0.015_260)] py-20 sm:py-28">
+        <div className="mx-auto max-w-4xl px-6">
+          <p className="mb-4 text-center font-mono text-[10px] uppercase tracking-[0.3em] text-[oklch(0.72_0.12_55)]">Before you begin</p>
+          <h2 className="mb-10 text-center text-[oklch(0.93_0.02_60)]" style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 400 }}>
+            A private place to begin, without guessing.
+          </h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {[
+              ["What happens first?", "Create your account, then take a short check-in. Lifewoven recommends one starting practice based on your answers."],
+              ["Do I need to use AI?", "No. AI guidance is optional. You can use the check-ins, pathways, and reflection tools without asking the Oracle."],
+              ["Can I change or cancel my plan?", "Yes. Explorer is free to begin. Paid plans can be managed from your account settings; see the refund policy for purchase terms."],
+              ["Is my information private?", "Your entries stay in your private account. Read the Privacy Policy for the details of how Lifewoven handles account and product data."],
+            ].map(([question, answer]) => (
+              <article key={question} className="rounded-2xl border border-[oklch(0.24_0.02_260)] bg-[oklch(0.11_0.015_260)] p-6">
+                <h3 className="mb-3 text-lg text-[oklch(0.88_0.02_60)]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 400 }}>{question}</h3>
+                <p className="text-sm font-light leading-relaxed text-[oklch(0.67_0.01_260)]">{answer}</p>
+              </article>
+            ))}
+          </div>
+          <p className="mt-8 text-center text-sm text-[oklch(0.67_0.01_260)]">
+            Questions before you start? <Link href="/support" className="text-[oklch(0.82_0.14_55)] hover:underline">Contact Lifewoven support</Link>.
+          </p>
         </div>
       </section>
 
@@ -666,7 +695,7 @@ export default function Home() {
                 </span>
               </div>
               <p className="text-sm text-[oklch(0.7_0.01_260)] max-w-xs leading-relaxed font-light">
-                A personal transformation operating system rooted in timeless wisdom and powered by intelligent design.
+                A private space for your habits, identity, goals, and next grounded step.
               </p>
             </div>
             <div>
