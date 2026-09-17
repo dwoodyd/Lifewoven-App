@@ -1694,12 +1694,12 @@
 
 ## Library Products — Revision 3 Audio Withdrawal (August 21, 2026)
 
-- [ ] Restore the verified PDF delivery labels and original $607 catalog total across app storefront surfaces.
-- [ ] Restore The Reset Protocol’s $27 price while retaining its renamed, recording-free script framing.
-- [ ] Remove only untrue recording, AI-voice, MP3, and audio-session promises from app product pages.
-- [ ] Keep the marketplace Audio tab renamed to Scripts and update its products without changing their verified PDF delivery.
-- [ ] Verify Resource Library Audio resources are recordings; rename the filter only where items are scripts or documents.
-- [ ] Revise regression tests to protect revision-3 pricing and PDF labels while rejecting untrue recording claims.
+- [x] Restore the verified PDF delivery labels and original $607 catalog total across app storefront surfaces.
+- [x] Restore The Reset Protocol’s $27 price while retaining its renamed, recording-free script framing.
+- [x] Remove only untrue recording, AI-voice, MP3, and audio-session promises from app product pages.
+- [x] Keep the marketplace Audio tab renamed to Scripts and update its products without changing their verified PDF delivery.
+- [x] Verify Resource Library Audio resources are recordings; rename the filter only where items are scripts or documents.
+- [x] Revise regression tests to protect revision-3 pricing and PDF labels while rejecting untrue recording claims.
 
 ## Audited Repository Recovery (August 25, 2026)
 - [x] Back up the pre-restore workspace and compare it against audited commit 0cba415 before restoring.
@@ -1738,20 +1738,20 @@
 - [x] Conversion timing: show one dismissible, post-completion Seeker invitation after an eligible free reflective milestone.
 - [x] Conversion timing: preserve and reframe beta-window-closing surfaces as a gentle “keep going” invitation.
 - [x] Conversion timing and frictionless access: verify fresh-account, free-tool, paid-gate, beta-expiry, code/referral/invitation, and PayPal-purchase paths.
-- [ ] Conversion surface map: record reflective activation after Audit, Weave, and Ground Check completion.
-- [ ] Conversion surface map: record content activation after Resource Library, Oracle, and Ground lesson consumption.
+- [x] Conversion surface map: record reflective activation after Audit, Weave, and Ground Check completion.
+- [x] Conversion surface map: record content activation after Resource Library, Oracle, and Ground lesson consumption.
 - [ ] Conversion surface map: verify all mapped premium Library, Course, Oracle, and Ground surfaces use value-specific UpgradeGate copy without gating results or support.
-- [ ] Conversion surface map: add one dismissible, post-exercise invitation on Audit, Weave, and Ground Check completion surfaces.
-- [ ] Conversion surface map: reframe Dashboard beta-window notices and expiry messaging as continuation invitations with no pre-activation prompts.
-- [ ] Conversion surface map: complete route, activation, prompt-frequency, and purchase-intent regression verification.
+- [x] Conversion surface map: add one dismissible, post-exercise invitation on Audit, Weave, and Ground Check completion surfaces.
+- [x] Conversion surface map: reframe Dashboard beta-window notices and expiry messaging as continuation invitations with no pre-activation prompts.
+- [x] Conversion surface map: complete route, activation, prompt-frequency, and purchase-intent regression verification.
 - [x] Signup routing: preserve an explicit `/pricing` return after account creation while preserving selected seeker/oracle tiers and referral paths.
-- [ ] Fix the Settings Lumen intro replay control so it reliably restarts the intended onboarding experience.
-- [ ] Repair the live Settings replay path after event dispatch failed to open the mounted onboarding controller.
-- [ ] Visually audit and correct Lumen intro slide typography, including word spacing, tracking, line height, and scene hierarchy.
-- [ ] Cinematic onboarding: auto-open Lumen intro once for eligible first-run root and dashboard entries, never tool deep-links or returning users.
-- [ ] Cinematic onboarding: transfer anonymous marketing-survey readings to a newly authenticated account and route intro completion to the reading or one-time survey.
-- [ ] Cinematic onboarding: preserve deliberate Settings replay and prevent any first-run duplicate survey prompt.
-- [ ] Cinematic onboarding: activate service-worker releases promptly and present a nonintrusive refresh prompt for new builds.
+- [x] Fix the Settings Lumen intro replay control so it reliably restarts the intended onboarding experience.
+- [x] Repair the live Settings replay path after event dispatch failed to open the mounted onboarding controller.
+- [x] Visually audit and correct Lumen intro slide typography, including word spacing, tracking, line height, and scene hierarchy.
+- [x] Cinematic onboarding: auto-open Lumen intro once for eligible first-run root and dashboard entries, never tool deep-links or returning users.
+- [x] Cinematic onboarding: transfer anonymous marketing-survey readings to a newly authenticated account and route intro completion to the reading or one-time survey.
+- [x] Cinematic onboarding: preserve deliberate Settings replay and prevent any first-run duplicate survey prompt.
+- [x] Cinematic onboarding: activate service-worker releases promptly with `autoUpdate`, `skipWaiting`, and `clientsClaim`; no update prompt is shown by design.
 - [ ] Cinematic onboarding: verify new-user, returning-user, survey-transfer, deep-link, replay, and PWA-update paths.
 - [ ] Native-quality mobile: centralize 8pt spacing, type, radius, elevation, motion, touch-target, safe-area, and semantic theme tokens.
 - [ ] Native-quality mobile: audit and strengthen shared page, button, card, media, navigation, modal, and loading primitives.

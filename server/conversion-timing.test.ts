@@ -40,4 +40,36 @@ describe("frictionless beta access and conversion timing", () => {
     expect(systemRouter).toContain('"reflective_tool_completed"');
     expect(systemRouter).toContain('"content_consumed"');
   });
+
+  it("places the one dismissible invitation after all three reflective surfaces and refreshes it after an Audit or Weave save", () => {
+    const audit = source("client/src/pages/AlignmentAudit.tsx");
+    const weave = source("client/src/pages/Journal.tsx");
+    const groundCheck = source("client/src/pages/btw/GroundCheck.tsx");
+
+    expect(audit).toContain('import PostActivationInvite from "@/components/PostActivationInvite"');
+    expect(audit).toContain("utils.system.activationStatus.invalidate()");
+    expect(audit).toContain("{isAuthenticated && <PostActivationInvite />}");
+    expect(weave).toContain('import PostActivationInvite from "@/components/PostActivationInvite"');
+    expect(weave).toContain("utils.system.activationStatus.invalidate()");
+    expect(weave).toContain("{isAuthenticated && <PostActivationInvite />}");
+    expect(groundCheck).toContain("<PostActivationInvite />");
+  });
+
+  it("records the authenticated completion of an anonymous survey claim without changing its idempotency guard", () => {
+    const auditRouter = source("server/routers.ts");
+    expect(auditRouter).toContain('properties: JSON.stringify({ tool: "soul_engineer_assessment", source: "audit_claim" })');
+    expect(auditRouter).toContain("if (claim.redeemedAt)");
+    expect(auditRouter).toContain("alreadyRedeemed: true");
+  });
+
+  it("opens the cinematic intro only from the eligible first-run root or dashboard entry", () => {
+    const firstRunHome = source("client/src/components/NewMemberHome.tsx");
+    const dashboard = source("client/src/pages/Dashboard.tsx");
+    const onboarding = source("client/src/components/OnboardingModal.tsx");
+
+    expect(firstRunHome).toContain('window.dispatchEvent(new Event("lifewoven:first-run-onboarding"))');
+    expect(dashboard).toContain('if (dashData && isFirstRun) window.dispatchEvent(new Event("lifewoven:first-run-onboarding"))');
+    expect(onboarding).toContain('window.addEventListener("lifewoven:first-run-onboarding", openFirstRun)');
+    expect(onboarding).toContain("if (localStorage.getItem(DEVICE_KEY)) return");
+  });
 });

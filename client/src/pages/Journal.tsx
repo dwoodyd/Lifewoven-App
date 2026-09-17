@@ -18,6 +18,7 @@ import VoiceRecorder from "@/components/VoiceRecorder";
 import { Streamdown } from "streamdown";
 import { motion } from "framer-motion";
 import { formatLifewovenDate, formatLifewovenToday } from "@/lib/datetime";
+import PostActivationInvite from "@/components/PostActivationInvite";
 
 const MODULE_COLORS: Record<string, string> = {
   state: "text-state", story: "text-story", standards: "text-standards",
@@ -127,12 +128,15 @@ export default function Journal() {
   const { data: entries, refetch } = trpc.journal.list.useQuery({ module: selectedModule || undefined, search: searchQuery || undefined }, { enabled: isAuthenticated });
   const { data: recentCheckIns = [] } = trpc.checkIn.recent.useQuery({ limit: 7 }, { enabled: isAuthenticated });
   const { triggerMoment } = useLuminMoment();
+  const utils = trpc.useUtils();
   const deleteMutation = trpc.journal.delete.useMutation({ onSuccess: () => { toast.success("Entry deleted."); refetch(); } });
   const createEntry = trpc.journal.create.useMutation({
     onSuccess: () => {
       toast.success("Entry saved.");
       // Journal save — Lumin waves sparkles in appreciation
       triggerMoment(Math.random() < 0.5 ? "waves_sparkles" : "nodding_gently");
+      // Refresh the server-derived threshold so a qualifying invitation can appear now.
+      utils.system.activationStatus.invalidate();
       setContent(""); setTitle(""); setTags(""); setIsWriting(false); refetch();
     },
   });
@@ -212,6 +216,8 @@ export default function Journal() {
           )}
         </div>
         </div>
+
+        {isAuthenticated && <PostActivationInvite />}
 
         {isWriting && (
           <div className="p-4 sm:p-6 rounded-2xl border border-border bg-card mb-6">

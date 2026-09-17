@@ -9,6 +9,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import { toast } from "sonner";
 import { ArrowRight, CheckCircle2, Share2, Copy } from "lucide-react";
+import PostActivationInvite from "@/components/PostActivationInvite";
 
 // ─────────────────────────────────────────────
 // CANONICAL QUESTIONS — source: lifeos-audit-copy-system.html
@@ -220,6 +221,8 @@ export default function AlignmentAudit() {
       // Invalidate homeContext so the home screen immediately reflects the completed audit
       utils.profile.homeContext.invalidate();
       utils.auth.me.invalidate();
+      // The persisted completion event may satisfy a previously recorded content activation.
+      utils.system.activationStatus.invalidate();
     },
   });
   const mintAuditClaim = trpc.audit.mintClaim.useMutation();
@@ -521,6 +524,8 @@ export default function AlignmentAudit() {
               </div>
             )}
           </div>
+
+          {isAuthenticated && <PostActivationInvite />}
 
           {/* Profile name + pattern */}
           <p className="text-xs font-mono tracking-widest text-muted-foreground uppercase mb-1">Your Current Pattern</p>

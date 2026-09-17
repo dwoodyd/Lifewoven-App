@@ -289,6 +289,15 @@ const auditRouter = router({
           scores: claim.scores as Record<string, number>,
           recommendedPathway: claim.recommendedPathway,
         });
+        // Claim redemption is the authenticated completion of an anonymous reading.
+        // Record it exactly once inside this transaction so conversion eligibility is
+        // identical to a member who completed and saved the reading in-app.
+        await tx.insert(events).values({
+          userId: ctx.user.id,
+          event: "reflective_tool_completed",
+          properties: JSON.stringify({ tool: "soul_engineer_assessment", source: "audit_claim" }),
+          createdAt: Math.floor(Date.now() / 1000),
+        });
         await tx.update(users)
           .set({ onboardingCompleted: true, primaryPathway: claim.recommendedPathway })
           .where(eq(users.id, ctx.user.id));

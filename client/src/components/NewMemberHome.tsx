@@ -6,9 +6,17 @@
 import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
 import Nav from "@/components/Nav";
+import { useEffect } from "react";
 
 export default function NewMemberHome({ userName }: { userName: string }) {
   const firstName = userName.split(" ")[0];
+
+  // This component only renders for an authenticated member at the root with no
+  // recorded activity. The modal owns its device-level once-only guard; dispatch
+  // here so a direct root entry receives the same guided first run as Dashboard.
+  useEffect(() => {
+    window.dispatchEvent(new Event("lifewoven:first-run-onboarding"));
+  }, []);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
