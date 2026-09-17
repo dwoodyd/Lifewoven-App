@@ -24,6 +24,16 @@ describe("new-user entry funnel", () => {
     expect(pricing).toContain('data-testid="selected-plan-confirmation"');
     expect(pricing).toContain("Your plan choice carried through sign-in");
     expect(pricing).toContain("const selectedTier = requestedTier === \"seeker\" || requestedTier === \"oracle\" ? requestedTier : null");
+    expect(pricing).toContain("Continue to checkout");
+    expect(pricing).toContain("Upgrade to ${tier.name}");
+    expect(pricing).toContain("Continue to your practice");
+    expect(pricing).toContain("Debit or credit card checkout is shown there when available");
+  });
+
+  it("keeps viewport zoom available for accessibility", () => {
+    const indexHtml = readFileSync(resolve(root, "client", "index.html"), "utf8");
+    expect(indexHtml).toContain('content="width=device-width, initial-scale=1.0, viewport-fit=cover"');
+    expect(indexHtml).not.toContain("maximum-scale");
   });
 
   it("preserves an explicit safe pricing return and only approved pricing tiers", () => {

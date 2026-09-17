@@ -105,7 +105,7 @@ const LIBRARY_ROWS: [string, string | boolean, string | boolean, string | boolea
 ];
 
 export default function Pricing() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [location, navigate] = useLocation();
   const [subStatus, setSubStatus] = useState<SubStatus | null>(null);
   const [pendingPlan, setPendingPlan] = useState<string | null>(null);
@@ -131,6 +131,12 @@ export default function Pricing() {
   }, [location, selectedTier]);
 
   const currentTier = subStatus?.tier ?? "explorer";
+
+  function paidTierActionLabel(tier: (typeof TIERS)[number], isSelected: boolean) {
+    if (!user) return `Create your account to choose ${tier.name}`;
+    if (isSelected) return "Continue to checkout";
+    return `Upgrade to ${tier.name}`;
+  }
 
   async function handleTierCta(tierId: string) {
     if (tierId === "explorer") return;
@@ -308,24 +314,35 @@ export default function Pricing() {
                   <div className="rounded-xl border border-border bg-secondary/40 py-2.5 text-center text-sm text-muted-foreground font-light">
                     Current plan
                   </div>
-                ) : tier.id === "explorer" ? (
+                ) : tier.id === "explorer" && !user && !authLoading ? (
                   <Button asChild variant="outline" className="w-full">
                     <a href={getLoginUrl('/dashboard', 'signUp')}>Begin your free beta</a>
                   </Button>
-                ) : (
-                  <Button
-                    variant={tier.highlight ? "default" : "outline"}
-                    className={`w-full ${tier.id === "oracle" ? "border-violet-400/40 text-violet-300 hover:bg-violet-400/10" : ""}`}
-                    onClick={() => handleTierCta(tier.id)}
-                    disabled={pendingPlan === tier.id}
-                  >
-                    {pendingPlan === tier.id ? (
-                      <span className="flex items-center gap-2">
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        Opening PayPal…
-                      </span>
-                    ) : tier.cta}
+                ) : tier.id === "explorer" ? (
+                  <Button variant="outline" className="w-full" onClick={() => navigate("/dashboard")}>
+                    Continue to your practice
                   </Button>
+                ) : (
+                  <>
+                    <Button
+                      variant={tier.highlight ? "default" : "outline"}
+                      className={`w-full ${tier.id === "oracle" ? "border-violet-400/40 text-violet-300 hover:bg-violet-400/10" : ""}`}
+                      onClick={() => handleTierCta(tier.id)}
+                      disabled={pendingPlan === tier.id}
+                    >
+                      {pendingPlan === tier.id ? (
+                        <span className="flex items-center gap-2">
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Opening PayPal…
+                        </span>
+                      ) : paidTierActionLabel(tier, isSelected)}
+                    </Button>
+                    {user && (
+                      <p className="text-center text-xs leading-relaxed text-muted-foreground">
+                        Secure checkout is completed with PayPal. Debit or credit card checkout is shown there when available for your account and location.
+                      </p>
+                    )}
+                  </>
                 )}
 
                 {/* Features */}
