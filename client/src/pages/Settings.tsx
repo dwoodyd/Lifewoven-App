@@ -307,6 +307,7 @@ export default function Settings() {
 
   const handleShowProfile = (value: boolean) => {
     localStorage.setItem("lifeos_show_profile", value ? "true" : "false");
+    window.dispatchEvent(new StorageEvent("storage", { key: "lifeos_show_profile", newValue: value ? "true" : "false" }));
     setShowProfile(value);
     toast.success("Preference saved.");
   };

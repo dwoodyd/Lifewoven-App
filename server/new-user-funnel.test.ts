@@ -16,14 +16,15 @@ describe("new-user entry funnel", () => {
     expect(login).toContain('getLoginUrl(returnPath, isSignup ? "signUp" : "signIn")');
     expect(login).toContain("new URLSearchParams(search)");
     expect(login).not.toContain('location.split("?")[1]');
-    expect(login).toContain('return chosenTier ? `/pricing?tier=${chosenTier}` : "/dashboard"');
+    expect(login).toContain('? `/pricing?tier=${chosenTier}`');
+    expect(login).toContain('includesTierIntent');
     expect(home).toContain('const beginTier = (tier: "seeker" | "oracle")');
     expect(home).toContain('getLoginUrl(`/pricing?tier=${tier}`, "signUp")');
     expect(pricing).toContain("getLoginUrl('/dashboard', 'signUp')");
   });
 
-  it("reads signup returnTo from the browser search string and preserves only approved pricing tiers", () => {
-    expect(resolveReturnPath("?returnTo=/pricing")).toBe("/dashboard");
+  it("preserves an explicit safe pricing return and only approved pricing tiers", () => {
+    expect(resolveReturnPath("?returnTo=/pricing")).toBe("/pricing");
     expect(resolveReturnPath("?returnTo=/pricing&tier=seeker")).toBe("/pricing?tier=seeker");
     expect(resolveReturnPath("?returnTo=/pricing&tier=unapproved")).toBe("/dashboard");
     expect(resolveReturnPath("?returnTo=/pricing%3Ftier%3Doracle")).toBe("/pricing?tier=oracle");
@@ -39,7 +40,7 @@ describe("new-user entry funnel", () => {
     const state = Buffer.from(oauthUrl.searchParams.get("state") ?? "", "base64").toString("utf8");
 
     expect(oauthUrl.searchParams.get("type")).toBe("signUp");
-    expect(state.split("||")[1]).toBe("/dashboard");
+    expect(state.split("||")[1]).toBe("/pricing");
     expect(state.split("||")[2]).toBe("https://app.lifewoven.click");
 
     vi.unstubAllEnvs();

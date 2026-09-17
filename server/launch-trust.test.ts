@@ -70,6 +70,17 @@ describe("launch trust safeguards", () => {
     expect(nav).not.toContain("logoutMutation.mutate");
   });
 
+  it("keeps the account menu keyboard-accessible and honors the profile-navigation preference", () => {
+    const nav = source("client/src/components/Nav.tsx");
+    const settings = source("client/src/pages/Settings.tsx");
+
+    expect(nav).toContain('type="button"');
+    expect(nav).toContain('aria-label="Open account menu"');
+    expect(nav).toContain('localStorage.getItem("lifeos_show_profile") !== "false"');
+    expect(nav).toContain('window.addEventListener("storage", syncProfilePreference)');
+    expect(settings).toContain('new StorageEvent("storage", { key: "lifeos_show_profile"');
+  });
+
   it("shows results before optional refinement and limits logged-out result actions", () => {
     const audit = source("client/src/pages/AlignmentAudit.tsx");
     expect(audit).toContain('type Step = "entry" | "quiz" | "optional" | "mind_works" | "results"');

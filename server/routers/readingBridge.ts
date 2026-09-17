@@ -110,7 +110,7 @@ export const readingBridgeRouter = router({
       const db = await getDb();
       await db!
         .update(users)
-        .set({ readingChapter: input.chapterId })
+        .set({ readingChapter: input.chapterId, readingBridgeDismissed: false })
         .where(eq(users.id, ctx.user.id));
       const section = CHAPTER_SECTION_MAP[input.chapterId] ?? null;
       const progress = calcProgress(input.chapterId);

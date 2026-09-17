@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -16,7 +16,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Moon, Sun, Menu, X, CheckSquare, ClipboardList, BookOpen,
   BookMarked, BarChart2, ShoppingBag, CreditCard, Info, Settings,
-  HelpCircle, LogOut, ExternalLink, Target, Layers, Download,
+  HelpCircle, LogOut, ExternalLink, Target, Layers, Download, UserRound,
 } from "lucide-react";
 import { replayOnboarding } from "@/components/OnboardingModal";
 import { useSignOut } from "@/hooks/useSignOut";
@@ -44,6 +44,19 @@ export default function Nav() {
   const { signOut, isSigningOut } = useSignOut();
   const { theme, toggleTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [showProfile, setShowProfile] = useState(
+    () => localStorage.getItem("lifeos_show_profile") !== "false"
+  );
+
+  useEffect(() => {
+    const syncProfilePreference = (event: StorageEvent) => {
+      if (event.key === "lifeos_show_profile") {
+        setShowProfile(event.newValue !== "false");
+      }
+    };
+    window.addEventListener("storage", syncProfilePreference);
+    return () => window.removeEventListener("storage", syncProfilePreference);
+  }, []);
 
   const initials = user?.name
     ? user.name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)
@@ -124,11 +137,22 @@ export default function Nav() {
             /* ── Authenticated: DW avatar dropdown ── */
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Avatar className="h-8 w-8 cursor-pointer border border-border hover:border-accent transition-colors" style={{ viewTransitionName: 'user-avatar' } as React.CSSProperties}>
-                  <AvatarFallback className="bg-secondary text-secondary-foreground text-xs font-medium">
-                    {initials}
-                  </AvatarFallback>
-                </Avatar>
+                <button
+                  type="button"
+                  aria-label="Open account menu"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-border transition-colors hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                  style={{ viewTransitionName: 'user-avatar' } as React.CSSProperties}
+                >
+                  {showProfile ? (
+                    <Avatar className="h-8 w-8">
+                      <AvatarFallback className="bg-secondary text-secondary-foreground text-xs font-medium">
+                        {initials}
+                      </AvatarFallback>
+                    </Avatar>
+                  ) : (
+                    <UserRound className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                  )}
+                </button>
               </DropdownMenuTrigger>
 
               <DropdownMenuContent align="end" className="w-56">
@@ -303,15 +327,17 @@ export default function Nav() {
           <div className="px-4 pb-4 pt-2 border-t border-border space-y-2">
             {isAuthenticated ? (
               <>
-                <div className="flex items-center gap-3 px-2 py-2 mb-1">
-                  <Avatar className="h-8 w-8 border border-border">
-                    <AvatarFallback className="bg-secondary text-xs font-medium">{initials}</AvatarFallback>
-                  </Avatar>
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium truncate">{user?.name}</p>
-                    <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+                {showProfile && (
+                  <div className="flex items-center gap-3 px-2 py-2 mb-1">
+                    <Avatar className="h-8 w-8 border border-border">
+                      <AvatarFallback className="bg-secondary text-xs font-medium">{initials}</AvatarFallback>
+                    </Avatar>
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium truncate">{user?.name}</p>
+                      <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <p className="text-xs text-muted-foreground px-2 pt-1 font-medium uppercase tracking-wide">Practice tools</p>
                 <Button variant="ghost" size="default" asChild className="w-full gap-2 text-muted-foreground justify-start">

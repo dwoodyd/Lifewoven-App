@@ -50,6 +50,7 @@ const MODULE_CONFIG = [
 
 import FoundingWelcomeCard from "@/components/FoundingWelcomeCard";
 import PostActivationInvite from "@/components/PostActivationInvite";
+import ReadingBridgePrompt from "@/components/ReadingBridgePrompt";
 
 function LumenEmpty({ title, body, href, onAction, cta, videoId = "peaceful_idle" }: { title: string; body: string; href?: string; onAction?: () => void; cta: string; videoId?: string }) {
   return (
@@ -346,6 +347,7 @@ export default function Dashboard() {
         )}
 
         {activation?.isActivated && <PostActivationInvite />}
+        <ReadingBridgePrompt enabled={isAuthenticated} />
 
         {/* Trial-state banner — shown for founding members in trialing_no_card state */}
         {!trialBannerDismissed && (user as any)?.billingStatus === "trialing_no_card" && (user as any)?.foundingMember && (

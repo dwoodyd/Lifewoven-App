@@ -10,8 +10,8 @@ export function resolveReturnPath(search = window.location.search) {
   const baseReturnPath = requestedReturn?.startsWith("/") ? requestedReturn : "/dashboard";
   const tier = params.get("tier");
 
-  // Only a selected paid tier is purchase intent. Pricing browsing itself
-  // should enter the app, where a new member's beta and onboarding begin.
+  // A selected paid tier is purchase intent. An explicit pricing return stays
+  // on pricing as well, while app-first entry points pass /dashboard directly.
   const [returnPathOnly, returnQuery = ""] = baseReturnPath.split("?");
   const innerTier = new URLSearchParams(returnQuery).get("tier");
   const chosenTier = tier && PRICING_TIERS.has(tier)
@@ -19,9 +19,14 @@ export function resolveReturnPath(search = window.location.search) {
     : innerTier && PRICING_TIERS.has(innerTier)
       ? innerTier
       : null;
+  const includesTierIntent = tier !== null || innerTier !== null;
 
   if (returnPathOnly === "/pricing") {
-    return chosenTier ? `/pricing?tier=${chosenTier}` : "/dashboard";
+    return chosenTier
+      ? `/pricing?tier=${chosenTier}`
+      : includesTierIntent
+        ? "/dashboard"
+        : "/pricing";
   }
 
   return baseReturnPath;

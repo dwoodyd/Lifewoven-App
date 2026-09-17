@@ -1260,16 +1260,16 @@
 - [ ] 7.1 Remove Community from primary nav; add footer link "Community (Coming Soon)"
 
 ## Reading Bridge Feature
-- [ ] Add readingChapter and readingBridgeDismissed columns to users table, generate migration, apply SQL
-- [ ] Add readingBridge tRPC procedures: getStatus, setChapter, dismiss
-- [ ] Build Reading Bridge page (chapter list grouped by 5S section, gold section headers, selected state, "Not reading it" / "Finished" options)
-- [ ] Add Reading Bridge route in App.tsx and sidebar nav entry (below Pathways, book icon, no badge)
-- [ ] Dashboard pathway card: add contextual line + book icon when reading chapter is set
-- [ ] First-time dismissible prompt after session 3 (not a modal, two options: Set my chapter / Not reading it)
-- [ ] Oracle system prompt: inject current reading section as optional context when set
-- [ ] Weekly check-in prompt: "One thing from your reading this week that's still with you?" (once per week, skippable)
-- [ ] homeContext procedure: return readingBridge status so dashboard and prompt can use it
-- [ ] Write vitest tests for Reading Bridge procedures
+- [x] Add readingChapter and readingBridgeDismissed columns to users table, generate migration, apply SQL
+- [x] Add readingBridge tRPC procedures: getStatus, setChapter, dismiss
+- [x] Build Reading Bridge page (chapter list grouped by 5S section, gold section headers, selected state, "Not reading it" / "Finished" options)
+- [x] Add Reading Bridge route in App.tsx and sidebar nav entry (below Pathways, book icon, no badge)
+- [x] Dashboard pathway card: add contextual line + book icon when reading chapter is set
+- [x] First-time dismissible prompt after session 3 (not a modal, two options: Set my chapter / Not reading it)
+- [x] Oracle system prompt: inject current reading section as optional context when set
+- [x] Weekly check-in prompt: "One thing from your reading this week that's still with you?" (once per week, skippable)
+- [x] homeContext procedure: return readingBridge status so dashboard and prompt can use it
+- [x] Write vitest tests for Reading Bridge procedures
 
 ## Oracle Regression Fixes (Verified)
 
@@ -1744,7 +1744,7 @@
 - [ ] Conversion surface map: add one dismissible, post-exercise invitation on Audit, Weave, and Ground Check completion surfaces.
 - [ ] Conversion surface map: reframe Dashboard beta-window notices and expiry messaging as continuation invitations with no pre-activation prompts.
 - [ ] Conversion surface map: complete route, activation, prompt-frequency, and purchase-intent regression verification.
-- [ ] Signup routing: send bare `/pricing` browsing to `/dashboard` after account creation while preserving selected seeker/oracle tiers and referral paths.
+- [x] Signup routing: preserve an explicit `/pricing` return after account creation while preserving selected seeker/oracle tiers and referral paths.
 - [ ] Fix the Settings Lumen intro replay control so it reliably restarts the intended onboarding experience.
 - [ ] Repair the live Settings replay path after event dispatch failed to open the mounted onboarding controller.
 - [ ] Visually audit and correct Lumen intro slide typography, including word spacing, tracking, line height, and scene hierarchy.
