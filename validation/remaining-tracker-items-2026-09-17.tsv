@@ -1,0 +1,105 @@
+58	## Upcoming / Future Enhancements	Sonic design layer (completion sounds, timer tones) — EXTERNAL: requires audio assets; deferred
+60	## Upcoming / Future Enhancements	Email notifications for Oracle insights — EXTERNAL: requires email template design; deferred
+61	## Upcoming / Future Enhancements	Live workshop scheduling and community events — EXTERNAL: requires calendar/scheduling service; deferred
+62	## Upcoming / Future Enhancements	Course content delivery (video lessons, progress tracking) — EXTERNAL: requires video hosting; deferred
+63	## Upcoming / Future Enhancements	Habit streak notifications — EXTERNAL: requires push notification service; deferred
+64	## Upcoming / Future Enhancements	Weekly Oracle summary report — EXTERNAL: requires scheduled job + email template; deferred
+629	### Oracle Threshold / Open Architecture	Post-upgrade animation: weave opens, Lumin lifts (celebratory) then settles to watching — FUTURE: deferred
+662	## Resend Email Integration (May 7, 2026)	Add custom sending domain in Resend dashboard — EXTERNAL: requires DNS configuration in Resend; deferred
+1014	## Launch Readiness — Section C (Audit Funnel) & Section B (Billing Cleanup)	Section B: Apply migration 0028_sad_hex.sql (DROP TABLE stripe_events) — DEFERRED: requires direct DB access; table is empty and harmless until then
+1101	## First Honest Week (Soul Engineer Brief — P2)	DB: add `first_honest_week_entries` table (id, userId, dayNumber, prompt, response, completedAt, createdAt)
+1102	## First Honest Week (Soul Engineer Brief — P2)	tRPC: firstHonestWeek.getProgress — returns current day and all completed entries
+1103	## First Honest Week (Soul Engineer Brief — P2)	tRPC: firstHonestWeek.submitDay — saves day response, marks day complete
+1104	## First Honest Week (Soul Engineer Brief — P2)	tRPC: firstHonestWeek.reset — allows restarting the week
+1105	## First Honest Week (Soul Engineer Brief — P2)	Run Drizzle migration for first_honest_week_entries table
+1106	## First Honest Week (Soul Engineer Brief — P2)	Route: /first-honest-week — entry screen, 7-day flow, completion screen
+1107	## First Honest Week (Soul Engineer Brief — P2)	Entry screen: heading, subhead, body copy, "Begin Day 1" CTA (verbatim from brief)
+1108	## First Honest Week (Soul Engineer Brief — P2)	Day screens: prompt + sub-prompt, completion message per day (verbatim from brief)
+1109	## First Honest Week (Soul Engineer Brief — P2)	Completion screen: "You did the work." heading, 3 most significant entries, dual CTA
+1110	## First Honest Week (Soul Engineer Brief — P2)	Add /first-honest-week to App.tsx routes
+1111	## First Honest Week (Soul Engineer Brief — P2)	Add First Honest Week nav item to sidebar (under The Weave)
+1115	## Home Screen Book Entry Card & 5S Descriptions (P2)	Add "Just finished the book?" persistent card to ReturningHome and NewMemberHome
+1116	## Home Screen Book Entry Card & 5S Descriptions (P2)	Card links to /first-honest-week with brief description
+1117	## Home Screen Book Entry Card & 5S Descriptions (P2)	Add one-sentence dimension description to each 5S pillar on Dashboard and Pathways pages
+1121	## 6 Dimensions Life Map (P3)	DB: add `dimension_entries` table (id, userId, dimension, content, becomingQuestion, createdAt)
+1122	## 6 Dimensions Life Map (P3)	tRPC: dimensions.getEntries — returns all entries per dimension for the user
+1123	## 6 Dimensions Life Map (P3)	tRPC: dimensions.saveEntry — saves a reflection entry for a dimension
+1124	## 6 Dimensions Life Map (P3)	Run Drizzle migration for dimension_entries table
+1125	## 6 Dimensions Life Map (P3)	Route: /dimensions — 6 expandable journal cards with Becoming Questions (verbatim from brief)
+1126	## 6 Dimensions Life Map (P3)	Lumin trigger: if user hasn't visited in 30 days, surface one Becoming Question in check-in
+1127	## 6 Dimensions Life Map (P3)	Footer link on dimensions page: "The 5S is how you work on these dimensions daily."
+1128	## 6 Dimensions Life Map (P3)	Add Dimensions nav item to sidebar
+1132	## The Library — Backend (P2/P3)	Install pdfjs-dist and @mozilla/readability + node-fetch for content extraction
+1133	## The Library — Backend (P2/P3)	DB: library_resources table (id, userId, title, author, sourceType, fileKey, fileUrl, coverUrl, wordCount, chunkCount, pathwayTags JSON, status, createdAt, updatedAt)
+1134	## The Library — Backend (P2/P3)	DB: library_chunks table (id, resourceId, userId, chunkIndex, content, embedding MEDIUMTEXT, createdAt)
+1135	## The Library — Backend (P2/P3)	DB: library_highlights table (id, resourceId, userId, content, note, pathwayTag, chunkIndex, sentToWeave, weaveEntryId, createdAt)
+1136	## The Library — Backend (P2/P3)	DB: library_sessions table (id, resourceId, userId, activePathway, createdAt, updatedAt)
+1137	## The Library — Backend (P2/P3)	DB: library_messages table (id, sessionId, resourceId, userId, role, content, sourceChunkIds JSON, sentToWeave, weaveEntryId, createdAt)
+1138	## The Library — Backend (P2/P3)	Run Drizzle migration for all library tables
+1139	## The Library — Backend (P2/P3)	Server utility: text chunker (800-token chunks, 100-token overlap)
+1140	## The Library — Backend (P2/P3)	Server utility: embeddings via built-in LLM API
+1141	## The Library — Backend (P2/P3)	Server utility: cosine similarity search over stored JSON embeddings
+1142	## The Library — Backend (P2/P3)	Server utility: PDF text extraction via pdfjs-dist
+1143	## The Library — Backend (P2/P3)	Server utility: URL scraping via @mozilla/readability + node-fetch
+1144	## The Library — Backend (P2/P3)	tRPC: library.addResource — create resource record
+1145	## The Library — Backend (P2/P3)	tRPC: library.processResource — extract text, chunk, embed, store (async, returns status)
+1146	## The Library — Backend (P2/P3)	tRPC: library.getResources — list all user resources with metadata
+1147	## The Library — Backend (P2/P3)	tRPC: library.getResource — single resource with chunks and highlights
+1148	## The Library — Backend (P2/P3)	tRPC: library.deleteResource — cascade delete resource + chunks + highlights + messages
+1149	## The Library — Backend (P2/P3)	tRPC: library.chat — embed query, semantic search, pathway-aware LLM response, save messages
+1150	## The Library — Backend (P2/P3)	tRPC: library.addHighlight — save highlighted passage with optional note
+1151	## The Library — Backend (P2/P3)	tRPC: library.sendToWeave — create journal_entries row pre-populated from highlight or AI message
+1152	## The Library — Backend (P2/P3)	tRPC: library.getHighlights — list highlights for a resource
+1153	## The Library — Backend (P2/P3)	tRPC: library.getMessages — list chat messages for a session
+1154	## The Library — Backend (P2/P3)	Free tier gate: 2 resources max, 50 chat turns/month; paid tier: unlimited
+1158	## The Library — Frontend (P2/P3)	Route: /weave/library — ResourceGrid page
+1159	## The Library — Frontend (P2/P3)	Route: /weave/library/:id — ResourceReader + ChatSidebar
+1160	## The Library — Frontend (P2/P3)	AddResourceModal: PDF upload tab, URL tab, paste-text tab
+1161	## The Library — Frontend (P2/P3)	ResourceCard component: cover, title, author, progress indicator, pathway tags
+1162	## The Library — Frontend (P2/P3)	ResourceGrid: list + grid view toggle, filter by pathway tag
+1163	## The Library — Frontend (P2/P3)	ResourceReader: paginated text display with HighlightableText
+1164	## The Library — Frontend (P2/P3)	Floating highlight toolbar: highlight, add note, send to Weave
+1165	## The Library — Frontend (P2/P3)	ChatSidebar: desktop right column, mobile bottom sheet, message history, pathway context badge
+1166	## The Library — Frontend (P2/P3)	SendToWeaveButton: confirmation sheet with module selector
+1167	## The Library — Frontend (P2/P3)	HighlightList: collapsible panel showing all highlights for current resource
+1168	## The Library — Frontend (P2/P3)	ProcessingStatus: skeleton + progress indicator while resource is being processed
+1169	## The Library — Frontend (P2/P3)	Add Library nav item to DashboardLayout sidebar (under The Weave section)
+1170	## The Library — Frontend (P2/P3)	Add /weave/library and /weave/library/:id routes to App.tsx
+1230	### Part 1 — Immediate Copy Fixes	1.1 Rename "Alignment Audit" → "Capacity Audit" in all locations (Home, Pathways footer, /audit header, /audit body, nav)
+1231	### Part 1 — Immediate Copy Fixes	1.2 Oracle subtitle: "four pillars" → "five movements of the Soul Engineer Method"
+1232	### Part 1 — Immediate Copy Fixes	1.3 Weave filter tabs: Stds→Standards, Strat→Strategy, Stew→Stewardship
+1233	### Part 1 — Immediate Copy Fixes	1.4 The Ground: replace book "Coming Soon" placeholder with published book info + link to soulengineer.online
+1234	### Part 1 — Immediate Copy Fixes	1.5 Settings: flip Oracle Preferences defaults — Personalized guidance ON, Pattern Mirror ON
+1235	### Part 1 — Immediate Copy Fixes	1.6 Oracle Guide tab: opening message → "What are you carrying right now? You don't have to have it figured out to begin."
+1236	### Part 1 — Immediate Copy Fixes	1.7 Weave entry form placeholders: tags → "load-bearing, signals, capacity"; textarea → "Name what you're carrying. The building begins with honest seeing."
+1237	### Part 1 — Immediate Copy Fixes	1.8 Community: remove from primary nav; add as footer link "Community (Coming Soon)"
+1240	### Part 2 — Weave Prompts + Oracle Voice	2.1 Replace all existing Weave prompts with 12 Soul Engineer prompts (tagged by 5S module)
+1241	### Part 2 — Weave Prompts + Oracle Voice	2.2 Update Oracle Reflect system prompt to Lumin Soul Engineer voice guide
+1242	### Part 2 — Weave Prompts + Oracle Voice	2.3 Prompt sidebar: show 4-5 at a time, filter by active 5S tab
+1245	### Part 3 — Library Soul Engineer Content	3.1 Add "Soul Engineer Method" content type and rights category to Resource Library
+1246	### Part 3 — Library Soul Engineer Content	3.2 Add 12 Soul Engineer Method entries (with chapter/page references) to library
+1247	### Part 3 — Library Soul Engineer Content	3.3 Soul Engineer Method entries appear first in default library view
+1248	### Part 3 — Library Soul Engineer Content	3.4 Relabel existing external content as "Wisdom Traditions"
+1251	### Part 4 — Home Screen Returning-User Dashboard	4.1 Daily Capacity Check-In component (1–10 slider + submit)
+1252	### Part 4 — Home Screen Returning-User Dashboard	4.2 Today's Lumin Prompt component (rotating from 12 SE prompts)
+1253	### Part 4 — Home Screen Returning-User Dashboard	4.3 First Honest Week Progress component (day counter + link)
+1254	### Part 4 — Home Screen Returning-User Dashboard	4.4 Recommended Pathway component (based on Capacity Audit result)
+1255	### Part 4 — Home Screen Returning-User Dashboard	4.5 Recent Weave Activity component (last 2–3 entries)
+1258	### Part 5/6/7 — Pathways, Oracle Sources, Community	5.1 Add 5S dimension tags to each pathway card on Pathways page
+1259	### Part 5/6/7 — Pathways, Oracle Sources, Community	6.1 Oracle "See Wisdom Sources": add "Build a Life That Does Not Break You" as first entry
+1260	### Part 5/6/7 — Pathways, Oracle Sources, Community	7.1 Remove Community from primary nav; add footer link "Community (Coming Soon)"
+1315	## Welcoming Dashboard and Lumen Empty-State Pass	Test, visually verify, and checkpoint the welcoming reordering pass
+1325	## Lumen Load-Bearing Diagnostic	Test and visually verify Lumen diagnostic reading and no-reading states before checkpointing
+1329	## Revised Structural Survey — Ground Rule / Fix 1	Review the replacement Ground rule and Fix 1 instructions from the updated artifact
+1386	## August 19 Audit — Next Priority	Make the avatar open its intended menu
+1420	## Consumer-View Rendered-Page Audit	Review the same primary consumer flows at mobile width when a mobile browser viewport is available
+1648	## Oracle Commerce Control Recovery — August 22, 2026	Add behavioral regression coverage, validate live routes and non-charging controls, and checkpoint the recovery
+1743	## Audited Repository Recovery (August 25, 2026)	Conversion surface map: verify all mapped premium Library, Course, Oracle, and Ground surfaces use value-specific UpgradeGate copy without gating results or support.
+1755	## Audited Repository Recovery (August 25, 2026)	Cinematic onboarding: verify new-user, returning-user, survey-transfer, deep-link, replay, and PWA-update paths.
+1756	## Audited Repository Recovery (August 25, 2026)	Native-quality mobile: centralize 8pt spacing, type, radius, elevation, motion, touch-target, safe-area, and semantic theme tokens.
+1757	## Audited Repository Recovery (August 25, 2026)	Native-quality mobile: audit and strengthen shared page, button, card, media, navigation, modal, and loading primitives.
+1758	## Audited Repository Recovery (August 25, 2026)	Native-quality mobile: verify manifest, standalone launch, maskable icons, splash treatment, offline shell, update activation, installation timing, and supported haptics.
+1759	## Audited Repository Recovery (August 25, 2026)	Native-quality mobile: directly improve and verify dashboard, Load-Bearing Survey, Lumen intro, pricing, Settings, Ground, Resource Library, and core practice routes at phone viewport.
+1760	## Audited Repository Recovery (August 25, 2026)	Native-quality mobile: validate dark/light contrast, reduced motion, safe areas, tap targets, media fallbacks, overflow, input/keyboard behavior, and focused regression coverage.
+1761	## Audited Repository Recovery (August 25, 2026)	Native-quality mobile: publish the current hardening checkpoint and record installed-PWA verification on real iOS Safari and Android Chrome.
+1764	## Audited Repository Recovery (August 25, 2026)	Mobile Round 1: replace every watermarked Lumen/Veo clip with clean approved media and eliminate video pillarbox bars.

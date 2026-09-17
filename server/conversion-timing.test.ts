@@ -72,4 +72,34 @@ describe("frictionless beta access and conversion timing", () => {
     expect(onboarding).toContain('window.addEventListener("lifewoven:first-run-onboarding", openFirstRun)');
     expect(onboarding).toContain("if (localStorage.getItem(DEVICE_KEY)) return");
   });
+
+  it("uses value-specific tier invitations without gating survey results or support", () => {
+    const articleReader = source("client/src/components/ArticleReader.tsx");
+    const course = source("client/src/pages/CourseDetail.tsx");
+    const oracle = source("client/src/pages/Oracle.tsx");
+    const ground = source("client/src/pages/btw/ClosingTheGap.tsx");
+    const audit = source("client/src/pages/AlignmentAudit.tsx");
+    const support = source("client/src/pages/Support.tsx");
+
+    expect(articleReader).toContain('href="/pricing?tier=seeker"');
+    expect(articleReader).toContain("Seeker opens the full reading path and practice tools");
+    expect(course).toContain("Get the course PDF — {course.price}");
+    expect(oracle).toContain('href="/pricing?tier=seeker">Upgrade to Seeker');
+    expect(oracle).toContain('href="/pricing?tier=oracle"');
+    expect(ground).toContain('href="/pricing?tier=seeker"');
+    expect(ground).toContain("trpc.btw.getWeeklyReflectionEligibility.useQuery()");
+    expect(ground).toContain("const hasWeeklyEvidence = weeklyEligibility.data?.hasSufficientData === true");
+    expect(ground).toContain("canUseWeeklyReflection && hasWeeklyEvidence");
+    expect(ground).toContain("after three check-ins or three Weave entries within seven days");
+    expect(audit).not.toContain("UpgradeGate");
+    expect(support).not.toContain("UpgradeGate");
+  });
+
+  it("offers one optional Becoming Question inside the check-in after a long absence", () => {
+    const dashboard = source("client/src/pages/Dashboard.tsx");
+    expect(dashboard).toContain("const LONG_ABSENCE_BECOMING_QUESTION");
+    expect(dashboard).toContain("daysSinceActive >= 30");
+    expect(dashboard).toContain("A becoming question");
+    expect(dashboard).toContain("You do not need to answer it perfectly");
+  });
 });

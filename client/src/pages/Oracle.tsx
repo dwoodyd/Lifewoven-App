@@ -303,7 +303,7 @@ export default function Oracle() {
               <span className="text-foreground font-medium">{Math.max(0, 3 - (monthlyUsage.data.used ?? 0))}</span> of 3 free Oracle questions remaining this month
             </span>
             {(monthlyUsage.data.used ?? 0) >= 3 ? (
-              <Link href="/pricing"><Button size="sm" variant="outline" className="text-xs h-7 border-accent/30 text-accent hover:bg-accent/10"><Sparkles className="h-3 w-3 mr-1" />Upgrade</Button></Link>
+              <Link href="/pricing?tier=oracle"><Button size="sm" variant="outline" className="text-xs h-7 border-accent/30 text-accent hover:bg-accent/10"><Sparkles className="h-3 w-3 mr-1" />Upgrade</Button></Link>
             ) : (
               <span className="text-xs text-muted-foreground/60 italic">Resets monthly</span>
             )}
@@ -360,7 +360,7 @@ export default function Oracle() {
                 Available on the Oracle plan.
               </p>
               <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", flexWrap: "wrap" }}>
-                <Link href="/pricing">
+                <Link href="/pricing?tier=oracle">
                   <Button
                     style={{
                       background: "linear-gradient(135deg, #d8b878, #c9a55a)",
@@ -370,10 +370,10 @@ export default function Oracle() {
                     }}
                   >
                     <Sparkles className="h-3.5 w-3.5 mr-1.5" />
-                    Unlock the Oracle
+                      Unlock the Oracle
                   </Button>
                 </Link>
-                <Link href="/pricing">
+                <Link href="/pricing?tier=oracle">
                   <Button variant="ghost" size="sm" style={{ color: "var(--muted-foreground)", fontStyle: "italic" }}>
                     See all plans
                   </Button>
@@ -490,7 +490,7 @@ export default function Oracle() {
                 <Lock className="h-8 w-8 text-muted-foreground/40 mx-auto mb-3" />
                 <p className="text-base font-light text-foreground mb-2">Weekly AI Reflection</p>
                 <p className="text-sm text-muted-foreground mb-4">Available on the Seeker plan and above.</p>
-                <Button size="sm" asChild><Link href="/pricing">Upgrade to Seeker</Link></Button>
+                <Button size="sm" asChild><Link href="/pricing?tier=seeker">Upgrade to Seeker</Link></Button>
               </div>
             ) : weeklyReflection.isLoading ? (
               <div className="flex items-center gap-2 text-muted-foreground py-8">
@@ -627,12 +627,12 @@ export default function Oracle() {
               {messages.length === 0 ? (
                 <div className="pt-8 pb-4 flex flex-col items-center justify-center text-center">
                   <p className="font-serif text-xl font-light text-foreground mb-2" style={{ letterSpacing: "0.01em" }}>
-                    Ask, and we will read.
+                    What are you carrying right now?
                   </p>
                   <p className="text-sm text-muted-foreground font-light max-w-xs" style={{ lineHeight: 1.7 }}>
                     {mode === "unstuck"
                       ? "Describe what is blocking you. The Oracle will meet you there."
-                      : "The Oracle reads across all five dimensions. Begin anywhere."}
+                      : "You don't have to have it figured out to begin. The Oracle reads across all five dimensions."}
                   </p>
                 </div>
               ) : (
@@ -681,7 +681,7 @@ export default function Oracle() {
                             <>
                               <p className="font-medium text-foreground">Oracle AI is available on the Oracle plan.</p>
                               <p className="text-muted-foreground text-xs">Upgrade to unlock unlimited Oracle AI sessions — your personal guide rooted in the full 5S Framework.</p>
-                              <Link href="/pricing">
+                              <Link href="/pricing?tier=oracle">
                                 <Button size="sm" className="gap-1.5 h-7 text-xs bg-accent text-accent-foreground hover:bg-accent/90">
                                   <Sparkles className="h-3 w-3" />
                                   Upgrade to Oracle

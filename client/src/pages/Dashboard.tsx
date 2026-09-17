@@ -48,6 +48,8 @@ const MODULE_CONFIG = [
   { key: "stewardship", label: "Stewardship", icon: Leaf, color: "text-stewardship", bg: "bg-stewardship/10", borderBase: "border-stewardship/20", borderHover: "hover:border-stewardship/50", href: "/stewardship" },
 ];
 
+const LONG_ABSENCE_BECOMING_QUESTION = "In ten years, what will I most wish I had given my attention to? Am I giving it that attention now?";
+
 import FoundingWelcomeCard from "@/components/FoundingWelcomeCard";
 import PostActivationInvite from "@/components/PostActivationInvite";
 import ReadingBridgePrompt from "@/components/ReadingBridgePrompt";
@@ -553,6 +555,13 @@ export default function Dashboard() {
           <div className="p-4 sm:p-6 rounded-2xl border border-border bg-card mb-6 sm:mb-8 animate-in fade-in slide-in-from-top-2 duration-300">
             <h2 className="font-serif text-xl font-light text-foreground mb-5">How are you right now?</h2>
             <div className="space-y-5">
+              {daysSinceActive >= 30 && (
+                <div className="rounded-xl border border-accent/20 bg-accent/5 px-4 py-3">
+                  <p className="text-[10px] font-mono uppercase tracking-[0.16em] text-accent mb-1.5">A becoming question</p>
+                  <p className="text-sm leading-relaxed text-foreground">{LONG_ABSENCE_BECOMING_QUESTION}</p>
+                  <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">You do not need to answer it perfectly. Let it inform one honest line below if it helps.</p>
+                </div>
+              )}
               <div>
                 <div className="flex items-center justify-between mb-2 gap-2">
                   <label className="text-sm text-muted-foreground">Emotional State</label>

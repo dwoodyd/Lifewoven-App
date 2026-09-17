@@ -11,8 +11,10 @@ export default function ClosingTheGap() {
   const betaAccess = useBetaAccess();
   const { data: stats, isLoading: statsLoading } = trpc.btw.getStats.useQuery();
   const { data: weeklyReflection, refetch: refetchWeekly } = trpc.btw.getLatestWeeklyReflection.useQuery();
+  const weeklyEligibility = trpc.btw.getWeeklyReflectionEligibility.useQuery();
   const { data: memberStatus } = trpc.paypalOrders.getMembershipStatus.useQuery(undefined, { enabled: !!user });
   const canUseWeeklyReflection = memberStatus?.tier === "seeker" || memberStatus?.tier === "oracle" || betaAccess.hasAccess;
+  const hasWeeklyEvidence = weeklyEligibility.data?.hasSufficientData === true;
   const generateMutation = trpc.btw.generateWeeklyReflection.useMutation({ onSuccess: () => refetchWeekly() });
 
   const METRIC_CARDS = stats ? [
@@ -55,18 +57,18 @@ export default function ClosingTheGap() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-serif text-xl font-light text-foreground">Weekly Reflection</h2>
-            {canUseWeeklyReflection ? (
+            {canUseWeeklyReflection && hasWeeklyEvidence ? (
               <Button variant="ghost" size="sm" className="gap-1.5 text-xs" onClick={() => generateMutation.mutate()} disabled={generateMutation.isPending}>
                 {generateMutation.isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <RefreshCw className="h-3 w-3" />}
                 Generate
               </Button>
-            ) : (
+            ) : !canUseWeeklyReflection ? (
               <Link href="/pricing?tier=seeker">
                 <Button variant="ghost" size="sm" className="gap-1.5 text-xs text-muted-foreground">
                   <Lock className="h-3 w-3" /> See your weekly thread with Seeker
                 </Button>
               </Link>
-            )}
+            ) : null}
           </div>
 
           {!canUseWeeklyReflection && (
@@ -89,7 +91,15 @@ export default function ClosingTheGap() {
                 </div>
               ))}
             </div>
-          ) : (
+          ) : weeklyEligibility.isLoading ? (
+            <div className="flex items-center gap-2 rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
+              <Loader2 className="h-4 w-4 animate-spin" /> Checking this week&apos;s practice signal…
+            </div>
+          ) : canUseWeeklyReflection && !hasWeeklyEvidence ? (
+            <div className="rounded-2xl border border-border bg-card p-6 text-center">
+              <p className="text-sm font-light leading-relaxed text-muted-foreground">Keep gathering an honest signal. Your weekly reflection becomes available after three check-ins or three Weave entries within seven days.</p>
+            </div>
+          ) : canUseWeeklyReflection && hasWeeklyEvidence ? (
             <div className="p-8 rounded-2xl border border-border bg-card text-center">
               <p className="text-muted-foreground font-light mb-4 text-base">
                 No weekly reflection yet. Generate one to see patterns across your practices this week.
@@ -99,7 +109,7 @@ export default function ClosingTheGap() {
                 Generate Weekly Reflection
               </Button>
             </div>
-          )}
+          ) : null}
         </div>
 
         {/* Encouragement */}

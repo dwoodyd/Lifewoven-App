@@ -7,7 +7,7 @@
  *
  * Route: /my-library
  */
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useRoute } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -33,7 +33,7 @@ import {
 import { toast } from "sonner";
 import {
   BookOpen, Plus, Trash2, MessageSquare, ArrowRight,
-  FileText, Globe, Loader2, BookMarked, Send, Bookmark, X,
+  FileText, Globe, Loader2, BookMarked, Send, Bookmark, X, LayoutGrid, List,
 } from "lucide-react";
 import { getLoginUrl } from "@/const";
 
@@ -220,10 +220,15 @@ function ChatPanel({
     onError: () => toast.error("Could not send to The Weave."),
   });
 
-  // Start session on mount
-  useState(() => {
+  // Start a resource-scoped session after the chat panel mounts. This must be an
+  // effect rather than a state initializer so it remains a deliberate side effect
+  // under React Strict Mode and can respond if the selected resource changes.
+  useEffect(() => {
     getOrCreateSession.mutate({ resourceId });
-  });
+  // The mutation object is recreated by the hook; resource selection is the only
+  // intended trigger for a new or resumed session.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resourceId]);
 
   const handleSend = () => {
     if (!message.trim() || !sessionId || sending) return;
@@ -339,8 +344,14 @@ export default function MyLibrary() {
   const [, navigate] = useLocation();
   const [showAdd, setShowAdd] = useState(false);
   const [chatResource, setChatResource] = useState<{ id: number; title: string; author?: string | null } | null>(null);
+  const [pathwayFilter, setPathwayFilter] = useState("all");
+  const [viewMode, setViewMode] = useState<"list" | "grid">("list");
+  const libraryQueryInput = useMemo(
+    () => pathwayFilter === "all" ? undefined : { pathwayTag: pathwayFilter },
+    [pathwayFilter],
+  );
 
-  const { data: resources, refetch, isLoading } = trpc.library.list.useQuery(undefined, {
+  const { data: resources, refetch, isLoading } = trpc.library.list.useQuery(libraryQueryInput, {
     enabled: isAuthenticated,
   });
 
@@ -410,6 +421,43 @@ export default function MyLibrary() {
                 Add
               </Button>
             </div>
+            <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
+              <Select value={pathwayFilter} onValueChange={setPathwayFilter}>
+                <SelectTrigger className="h-9 w-full sm:w-[190px] text-xs">
+                  <SelectValue placeholder="Filter by pathway" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All pathways</SelectItem>
+                  {PATHWAY_OPTIONS.map((pathway) => (
+                    <SelectItem key={pathway.value} value={pathway.value}>{pathway.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <div className="flex items-center rounded-lg border border-border p-0.5" aria-label="Library view">
+                <Button
+                  type="button"
+                  size="icon"
+                  variant={viewMode === "list" ? "secondary" : "ghost"}
+                  className="h-8 w-8"
+                  onClick={() => setViewMode("list")}
+                  aria-label="Show library as a list"
+                  aria-pressed={viewMode === "list"}
+                >
+                  <List className="h-4 w-4" />
+                </Button>
+                <Button
+                  type="button"
+                  size="icon"
+                  variant={viewMode === "grid" ? "secondary" : "ghost"}
+                  className="h-8 w-8"
+                  onClick={() => setViewMode("grid")}
+                  aria-label="Show library as a grid"
+                  aria-pressed={viewMode === "grid"}
+                >
+                  <LayoutGrid className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
           </div>
 
           {/* Resource list */}
@@ -426,10 +474,10 @@ export default function MyLibrary() {
                 className="text-muted-foreground mb-2"
                 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: "italic", fontSize: "1.1rem" }}
               >
-                Your library is empty.
+                {pathwayFilter === "all" ? "Your library is empty." : "No resources match this pathway yet."}
               </p>
               <p className="text-sm text-muted-foreground mb-6">
-                Add a book, article, or passage to begin.
+                {pathwayFilter === "all" ? "Add a book, article, or passage to begin." : "Try another pathway or add a resource with this tag."}
               </p>
               <Button variant="outline" onClick={() => setShowAdd(true)} className="gap-2">
                 <Plus className="h-4 w-4" />
@@ -437,7 +485,7 @@ export default function MyLibrary() {
               </Button>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className={viewMode === "grid" ? "grid gap-3 sm:grid-cols-2" : "space-y-3"}>
               {resources.map(resource => (
                 <div
                   key={resource.id}

@@ -45,3 +45,13 @@ The production build generated a precache with 23 entries totaling 3265.41 KiB. 
 ## Remaining boundary
 
 This sweep deliberately leaves external or evidence-limited work open: the direct production database cleanup migration that drops the legacy empty Stripe table, custom Resend sender-domain DNS, an owner-controlled PayPal approval-page exercise, real installed iOS/Android PWA checks, and the broader watermark audit of legacy-named ambient/onboarding media. No protected download files, payment credentials, billing rules, account data, or content assets were modified.
+
+## Follow-up application-function repair — 2026-09-17
+
+The current follow-up closes several code-owned interaction gaps without changing payments, access grants, account data, or protected files. Oracle's guide now opens with the intended invitation—“What are you carrying right now?”—and its supporting line makes clear that an answer need not be fully formed. Every Oracle upgrade invitation now carries `tier=oracle` or `tier=seeker` as appropriate, so the selected plan remains intact through the established pricing and OAuth flow.
+
+The Ground weekly-reflection view now reads the same server-side seven-day evidence eligibility used elsewhere. A member with access but insufficient signal sees an honest threshold explanation rather than a generation action that would fail; eligible members retain generation controls, and non-members retain the Seeker-specific invitation. A long-absent member (30 or more days) sees one optional Becoming Question only inside the Daily Check-in, without blocking a return or requiring an answer.
+
+The personal Library now initializes a selected chat session through a React effect rather than a state initializer, which prevents an effect from running during render initialization. Its resource view adds an accessible list/grid control and a stable server-backed pathway filter. The public preview correctly renders the unauthenticated Oracle and Library entry surfaces at `/oracle` and `/my-library`; authenticated Library controls and member-only Oracle copy are covered by source and regression tests rather than a browser login in this sweep.
+
+The complete release gate passed after these changes: TypeScript, **35 Vitest files / 260 tests**, production PWA build, `pnpm audit --prod --audit-level=high` with no known vulnerabilities, and `git diff --check`. The build retains the previously documented advisory 2.83 MB minified (824.90 KB gzip) application chunk; this is a performance follow-up rather than a failed build.

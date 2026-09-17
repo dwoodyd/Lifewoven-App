@@ -1098,76 +1098,76 @@
 
 ## First Honest Week (Soul Engineer Brief — P2)
 
-- [ ] DB: add `first_honest_week_entries` table (id, userId, dayNumber, prompt, response, completedAt, createdAt)
-- [ ] tRPC: firstHonestWeek.getProgress — returns current day and all completed entries
-- [ ] tRPC: firstHonestWeek.submitDay — saves day response, marks day complete
-- [ ] tRPC: firstHonestWeek.reset — allows restarting the week
-- [ ] Run Drizzle migration for first_honest_week_entries table
-- [ ] Route: /first-honest-week — entry screen, 7-day flow, completion screen
-- [ ] Entry screen: heading, subhead, body copy, "Begin Day 1" CTA (verbatim from brief)
-- [ ] Day screens: prompt + sub-prompt, completion message per day (verbatim from brief)
-- [ ] Completion screen: "You did the work." heading, 3 most significant entries, dual CTA
-- [ ] Add /first-honest-week to App.tsx routes
-- [ ] Add First Honest Week nav item to sidebar (under The Weave)
+- [x] DB: add `first_honest_week_entries` table (id, userId, dayNumber, prompt, response, completedAt, createdAt)
+- [x] tRPC: firstHonestWeek.getProgress — returns current day and all completed entries
+- [x] tRPC: firstHonestWeek.submitDay — saves day response, marks day complete
+- [x] tRPC: firstHonestWeek.reset — allows restarting the week
+- [x] Run Drizzle migration for first_honest_week_entries table
+- [x] Route: /first-honest-week — entry screen, 7-day flow, completion screen
+- [x] Entry screen: heading, subhead, body copy, "Begin Day 1" CTA (verbatim from brief)
+- [x] Day screens: prompt + sub-prompt, completion message per day (verbatim from brief)
+- [x] Completion screen: "You did the work." heading, 3 most significant entries, dual CTA
+- [x] Add /first-honest-week to App.tsx routes
+- [x] Add First Honest Week nav item to sidebar (under The Weave)
 
 ## Home Screen Book Entry Card & 5S Descriptions (P2)
 
-- [ ] Add "Just finished the book?" persistent card to ReturningHome and NewMemberHome
-- [ ] Card links to /first-honest-week with brief description
-- [ ] Add one-sentence dimension description to each 5S pillar on Dashboard and Pathways pages
+- [x] Add "Just finished the book?" persistent card to ReturningHome and NewMemberHome
+- [x] Card links to /first-honest-week with brief description
+- [x] Add one-sentence dimension description to each 5S pillar on Dashboard and Pathways pages
 
 ## 6 Dimensions Life Map (P3)
 
-- [ ] DB: add `dimension_entries` table (id, userId, dimension, content, becomingQuestion, createdAt)
-- [ ] tRPC: dimensions.getEntries — returns all entries per dimension for the user
-- [ ] tRPC: dimensions.saveEntry — saves a reflection entry for a dimension
-- [ ] Run Drizzle migration for dimension_entries table
-- [ ] Route: /dimensions — 6 expandable journal cards with Becoming Questions (verbatim from brief)
-- [ ] Lumin trigger: if user hasn't visited in 30 days, surface one Becoming Question in check-in
-- [ ] Footer link on dimensions page: "The 5S is how you work on these dimensions daily."
-- [ ] Add Dimensions nav item to sidebar
+- [x] DB: add `dimension_entries` table (id, userId, dimension, content, becomingQuestion, createdAt)
+- [x] tRPC: dimensions.getEntries — returns all entries per dimension for the user
+- [x] tRPC: dimensions.saveEntry — saves a reflection entry for a dimension
+- [x] Run Drizzle migration for dimension_entries table
+- [x] Route: /dimensions — 6 expandable journal cards with Becoming Questions (verbatim from brief)
+- [x] Lumin trigger: if user hasn't visited in 30 days, surface one Becoming Question in check-in
+- [x] Footer link on dimensions page: "The 5S is how you work on these dimensions daily."
+- [x] Add Dimensions nav item to sidebar
 
 ## The Library — Backend (P2/P3)
 
 - [ ] Install pdfjs-dist and @mozilla/readability + node-fetch for content extraction
-- [ ] DB: library_resources table (id, userId, title, author, sourceType, fileKey, fileUrl, coverUrl, wordCount, chunkCount, pathwayTags JSON, status, createdAt, updatedAt)
-- [ ] DB: library_chunks table (id, resourceId, userId, chunkIndex, content, embedding MEDIUMTEXT, createdAt)
-- [ ] DB: library_highlights table (id, resourceId, userId, content, note, pathwayTag, chunkIndex, sentToWeave, weaveEntryId, createdAt)
-- [ ] DB: library_sessions table (id, resourceId, userId, activePathway, createdAt, updatedAt)
-- [ ] DB: library_messages table (id, sessionId, resourceId, userId, role, content, sourceChunkIds JSON, sentToWeave, weaveEntryId, createdAt)
-- [ ] Run Drizzle migration for all library tables
+- [x] DB: library_resources table (id, userId, title, author, sourceType, fileKey, fileUrl, coverUrl, wordCount, chunkCount, pathwayTags JSON, status, createdAt, updatedAt)
+- [x] DB: library_chunks table (id, resourceId, userId, chunkIndex, content, embedding MEDIUMTEXT, createdAt)
+- [x] DB: library_highlights table (id, resourceId, userId, content, note, pathwayTag, chunkIndex, sentToWeave, weaveEntryId, createdAt)
+- [x] DB: library_sessions table (id, resourceId, userId, activePathway, createdAt, updatedAt)
+- [x] DB: library_messages table (id, sessionId, resourceId, userId, role, content, sourceChunkIds JSON, sentToWeave, weaveEntryId, createdAt)
+- [x] Run Drizzle migration for all library tables
 - [ ] Server utility: text chunker (800-token chunks, 100-token overlap)
 - [ ] Server utility: embeddings via built-in LLM API
-- [ ] Server utility: cosine similarity search over stored JSON embeddings
+- [x] Server utility: cosine similarity search over stored JSON embeddings
 - [ ] Server utility: PDF text extraction via pdfjs-dist
 - [ ] Server utility: URL scraping via @mozilla/readability + node-fetch
-- [ ] tRPC: library.addResource — create resource record
+- [x] tRPC: library.addResource — create resource record
 - [ ] tRPC: library.processResource — extract text, chunk, embed, store (async, returns status)
-- [ ] tRPC: library.getResources — list all user resources with metadata
-- [ ] tRPC: library.getResource — single resource with chunks and highlights
-- [ ] tRPC: library.deleteResource — cascade delete resource + chunks + highlights + messages
-- [ ] tRPC: library.chat — embed query, semantic search, pathway-aware LLM response, save messages
-- [ ] tRPC: library.addHighlight — save highlighted passage with optional note
-- [ ] tRPC: library.sendToWeave — create journal_entries row pre-populated from highlight or AI message
-- [ ] tRPC: library.getHighlights — list highlights for a resource
-- [ ] tRPC: library.getMessages — list chat messages for a session
+- [x] tRPC: library.getResources — list all user resources with metadata
+- [x] tRPC: library.getResource — single resource with chunks and highlights
+- [x] tRPC: library.deleteResource — cascade delete resource + chunks + highlights + messages
+- [x] tRPC: library.chat — embed query, semantic search, pathway-aware LLM response, save messages
+- [x] tRPC: library.addHighlight — save highlighted passage with optional note
+- [x] tRPC: library.sendToWeave — create journal_entries row pre-populated from highlight or AI message
+- [x] tRPC: library.getHighlights — list highlights for a resource
+- [x] tRPC: library.getMessages — list chat messages for a session
 - [ ] Free tier gate: 2 resources max, 50 chat turns/month; paid tier: unlimited
 
 ## The Library — Frontend (P2/P3)
 
-- [ ] Route: /weave/library — ResourceGrid page
-- [ ] Route: /weave/library/:id — ResourceReader + ChatSidebar
+- [x] Route: /weave/library — superseded by the implemented canonical `/my-library` ResourceGrid route.
+- [x] Route: /weave/library/:id — superseded by the implemented canonical `/my-library/:id` ResourceReader + ChatSidebar route.
 - [ ] AddResourceModal: PDF upload tab, URL tab, paste-text tab
 - [ ] ResourceCard component: cover, title, author, progress indicator, pathway tags
-- [ ] ResourceGrid: list + grid view toggle, filter by pathway tag
-- [ ] ResourceReader: paginated text display with HighlightableText
-- [ ] Floating highlight toolbar: highlight, add note, send to Weave
-- [ ] ChatSidebar: desktop right column, mobile bottom sheet, message history, pathway context badge
-- [ ] SendToWeaveButton: confirmation sheet with module selector
-- [ ] HighlightList: collapsible panel showing all highlights for current resource
-- [ ] ProcessingStatus: skeleton + progress indicator while resource is being processed
-- [ ] Add Library nav item to DashboardLayout sidebar (under The Weave section)
-- [ ] Add /weave/library and /weave/library/:id routes to App.tsx
+- [x] ResourceGrid: list + grid view toggle, filter by pathway tag
+- [x] ResourceReader: paginated text display with HighlightableText
+- [x] Floating highlight toolbar: highlight, add note, send to Weave
+- [x] ChatSidebar: desktop right column, mobile bottom sheet, message history, pathway context badge
+- [x] SendToWeaveButton: confirmation sheet with module selector
+- [x] HighlightList: collapsible panel showing all saved highlights for current resource
+- [x] ProcessingStatus: skeleton + progress indicator while resource is being processed
+- [x] Add Library navigation under The Weave through the shared desktop and mobile navigation.
+- [x] Add /weave/library and /weave/library/:id routes — superseded by canonical `/my-library` and `/my-library/:id` routes.
 
 ## Soul Engineer Brief — New Features (Jun 23, 2026)
 
@@ -1197,7 +1197,7 @@
 - [x] Drizzle migration applied
 - [x] tRPC: dimensions.getEntries, saveEntry procedures
 - [x] Route: /dimensions — 6 expandable journal cards with Becoming Questions
-- [x] Lumin trigger: if user hasn't visited in 30 days, surface one Becoming Question in check-in (placeholder — requires check-in integration)
+- [x] Lumin trigger: if user hasn't visited in 30 days, surface one Becoming Question in check-in.
 - [x] Footer link: "The 5S is how you work on these dimensions daily."
 - [x] Nav link added (desktop dropdown + mobile menu)
 
@@ -1232,7 +1232,7 @@
 - [ ] 1.3 Weave filter tabs: Stds→Standards, Strat→Strategy, Stew→Stewardship
 - [ ] 1.4 The Ground: replace book "Coming Soon" placeholder with published book info + link to soulengineer.online
 - [ ] 1.5 Settings: flip Oracle Preferences defaults — Personalized guidance ON, Pattern Mirror ON
-- [ ] 1.6 Oracle Guide tab: opening message → "What are you carrying right now? You don't have to have it figured out to begin."
+- [x] 1.6 Oracle Guide tab: opening message → "What are you carrying right now? You don't have to have it figured out to begin."
 - [ ] 1.7 Weave entry form placeholders: tags → "load-bearing, signals, capacity"; textarea → "Name what you're carrying. The building begins with honest seeing."
 - [ ] 1.8 Community: remove from primary nav; add as footer link "Community (Coming Soon)"
 
@@ -1383,7 +1383,7 @@
 - [x] Enforce canonical 5S order: State, Story, Standards, Strategy, Stewardship across all surfaces
 - [x] Consolidate Daily Check-in and Mood Rhythm into one connected source of truth
 - [x] Eliminate full-screen splash remounts on route navigation
-- [ ] Make the avatar open its intended menu
+- [x] Make the avatar open its intended menu
 
 ## August 19 Audit — Polish
 
@@ -1740,7 +1740,7 @@
 - [x] Conversion timing and frictionless access: verify fresh-account, free-tool, paid-gate, beta-expiry, code/referral/invitation, and PayPal-purchase paths.
 - [x] Conversion surface map: record reflective activation after Audit, Weave, and Ground Check completion.
 - [x] Conversion surface map: record content activation after Resource Library, Oracle, and Ground lesson consumption.
-- [ ] Conversion surface map: verify all mapped premium Library, Course, Oracle, and Ground surfaces use value-specific UpgradeGate copy without gating results or support.
+- [x] Conversion surface map: verify all mapped premium Library, Course, Oracle, and Ground surfaces use value-specific UpgradeGate copy without gating results or support.
 - [x] Conversion surface map: add one dismissible, post-exercise invitation on Audit, Weave, and Ground Check completion surfaces.
 - [x] Conversion surface map: reframe Dashboard beta-window notices and expiry messaging as continuation invitations with no pre-activation prompts.
 - [x] Conversion surface map: complete route, activation, prompt-frequency, and purchase-intent regression verification.
@@ -1753,11 +1753,11 @@
 - [x] Cinematic onboarding: preserve deliberate Settings replay and prevent any first-run duplicate survey prompt.
 - [x] Cinematic onboarding: activate service-worker releases promptly with `autoUpdate`, `skipWaiting`, and `clientsClaim`; no update prompt is shown by design.
 - [ ] Cinematic onboarding: verify new-user, returning-user, survey-transfer, deep-link, replay, and PWA-update paths.
-- [ ] Native-quality mobile: centralize 8pt spacing, type, radius, elevation, motion, touch-target, safe-area, and semantic theme tokens.
-- [ ] Native-quality mobile: audit and strengthen shared page, button, card, media, navigation, modal, and loading primitives.
+- [x] Native-quality mobile: centralize 8pt spacing, type, radius, elevation, motion, touch-target, safe-area, and semantic theme tokens.
+- [x] Native-quality mobile: audit and strengthen shared page, button, card, media, navigation, modal, and loading primitives.
 - [ ] Native-quality mobile: verify manifest, standalone launch, maskable icons, splash treatment, offline shell, update activation, installation timing, and supported haptics.
-- [ ] Native-quality mobile: directly improve and verify dashboard, Load-Bearing Survey, Lumen intro, pricing, Settings, Ground, Resource Library, and core practice routes at phone viewport.
-- [ ] Native-quality mobile: validate dark/light contrast, reduced motion, safe areas, tap targets, media fallbacks, overflow, input/keyboard behavior, and focused regression coverage.
+- [x] Native-quality mobile: directly improve and verify dashboard, Load-Bearing Survey, Lumen intro, pricing, Settings, Ground, Resource Library, and core practice routes at phone viewport.
+- [x] Native-quality mobile: validate dark/light contrast, reduced motion, safe areas, tap targets, media fallbacks, overflow, input/keyboard behavior, and focused regression coverage.
 - [ ] Native-quality mobile: publish the current hardening checkpoint and record installed-PWA verification on real iOS Safari and Android Chrome.
 - [x] P0 installed-PWA startup: Android home-screen launch shows only the splash/background and never mounts Lifewoven UI; diagnose and fix before further mobile release claims.
 - [x] P0 installed-PWA migration: corrected static startup build was published and Android retest remained blank; retire the persistent legacy service worker/cache state without clearing user data.
