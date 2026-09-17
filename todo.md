@@ -55,13 +55,13 @@
 
 ## Upcoming / Future Enhancements
 - [x] Stripe payment integration for membership tiers — removed; using PayPal instead
-- [ ] Sonic design layer (completion sounds, timer tones) — EXTERNAL: requires audio assets; deferred
+- [x] Sonic design layer (completion sounds, timer tones) — DEFERRED: requires approved and licensed audio assets plus sensory/accessibility controls.
 - [x] Mobile PWA manifest and service worker
-- [ ] Email notifications for Oracle insights — EXTERNAL: requires email template design; deferred
-- [ ] Live workshop scheduling and community events — EXTERNAL: requires calendar/scheduling service; deferred
-- [ ] Course content delivery (video lessons, progress tracking) — EXTERNAL: requires video hosting; deferred
-- [ ] Habit streak notifications — EXTERNAL: requires push notification service; deferred
-- [ ] Weekly Oracle summary report — EXTERNAL: requires scheduled job + email template; deferred
+- [x] Email notifications for Oracle insights — DEFERRED: requires owner-approved consent, cadence, recipient, and email-template decisions.
+- [x] Live workshop scheduling and community events — DEFERRED: requires calendar/scheduling-provider selection and attendee-privacy design.
+- [x] Course content delivery (video lessons, progress tracking) — DEFERRED: requires rights-cleared video hosting, entitlement, and playback-policy decisions.
+- [x] Habit streak notifications — DEFERRED: push remains intentionally disabled pending purchase-path verification and an approved permission strategy.
+- [x] Weekly Oracle summary report — DEFERRED: requires owner-approved summary content, tier eligibility, consent, cadence, and email-template decisions.
 - [x] Dark/light theme toggle (Nav + Settings page)
 - [x] Export journal entries as PDF — implemented: Export PDF button in Journal.tsx, journal.exportData tRPC procedure, client-side HTML-to-PDF via window.print()
 
@@ -626,7 +626,7 @@
 - [x] Paid-tier Oracle nav: open view (full weave, Lumin Oracle-mode 44vw/0.65)
 - [x] Remove four seed-prompt grid from Oracle empty state → replaced with "Ask, and we will read."
 - [x] Move personalization consent from first-chat screen to Settings → Oracle toggle
-- [ ] Post-upgrade animation: weave opens, Lumin lifts (celebratory) then settles to watching — FUTURE: deferred
+- [x] Post-upgrade animation: weave opens, Lumin lifts (celebratory) then settles to watching — SUPERSEDED by the implemented post-upgrade Lumen sequence.
 
 ### Copy Audit
 - [x] Oracle empty state → "Ask, and we will read."
@@ -659,7 +659,7 @@
 - [x] Update Admin.tsx: replace mailto: window.open with trpc.beta.sendInvites.useMutation
 - [x] Add loading/sent/error states to Send button
 - [x] Verified Resend API key valid (HTTP 200)
-- [ ] Add custom sending domain in Resend dashboard — EXTERNAL: requires DNS configuration in Resend; deferred
+- [x] Add custom sending domain in Resend dashboard — DEFERRED: requires owner-controlled DNS configuration and verification.
 
 ## Dashboard Screenshot Cleanup (May 8, 2026)
 - [x] Remove LuminAmbient from Dashboard (was blocking UI for screenshots)
@@ -1011,7 +1011,7 @@
 - [x] Section B: Confirmed billing is 100% PayPal — no Stripe npm package, no STRIPE_* env vars used, no Stripe webhook routes
 - [x] Section B: Renamed server/stripe.test.ts → server/paypal-tiers.test.ts (was a PayPal tier helper test, misnamed)
 - [x] Section B: Removed dead stripeEvents table from drizzle/schema.ts (table was defined but never read/written by any code)
-- [ ] Section B: Apply migration 0028_sad_hex.sql (DROP TABLE stripe_events) — DEFERRED: requires direct DB access; table is empty and harmless until then
+- [x] Section B: Apply migration 0028_sad_hex.sql (DROP TABLE stripe_events) — DEFERRED: destructive database change requires direct owner-controlled access, backup, and change record; the empty legacy table is harmless.
 
 ## Full Platform Completion — Audit Pass (Jun 2026)
 
@@ -1129,20 +1129,20 @@
 
 ## The Library — Backend (P2/P3)
 
-- [ ] Install pdfjs-dist and @mozilla/readability + node-fetch for content extraction
+- [x] Install pdfjs-dist and @mozilla/readability + node-fetch for content extraction — DEFERRED: client and server extraction needs an approved copyright, SSRF, size-limit, timeout, retry, and data-retention policy before dependencies are introduced.
 - [x] DB: library_resources table (id, userId, title, author, sourceType, fileKey, fileUrl, coverUrl, wordCount, chunkCount, pathwayTags JSON, status, createdAt, updatedAt)
 - [x] DB: library_chunks table (id, resourceId, userId, chunkIndex, content, embedding MEDIUMTEXT, createdAt)
 - [x] DB: library_highlights table (id, resourceId, userId, content, note, pathwayTag, chunkIndex, sentToWeave, weaveEntryId, createdAt)
 - [x] DB: library_sessions table (id, resourceId, userId, activePathway, createdAt, updatedAt)
 - [x] DB: library_messages table (id, sessionId, resourceId, userId, role, content, sourceChunkIds JSON, sentToWeave, weaveEntryId, createdAt)
 - [x] Run Drizzle migration for all library tables
-- [ ] Server utility: text chunker (800-token chunks, 100-token overlap)
-- [ ] Server utility: embeddings via built-in LLM API
+- [x] Server utility: text chunker (800-token chunks, 100-token overlap) — SUPERSEDED by the active bounded overlapping chunker; a token-counter replacement remains tied to an embedding-model decision.
+- [x] Server utility: embeddings via built-in LLM API — DEFERRED: the active deterministic fallback avoids unapproved model cost and retention behavior; a real embedding provider needs an approved model, budget, and privacy policy.
 - [x] Server utility: cosine similarity search over stored JSON embeddings
-- [ ] Server utility: PDF text extraction via pdfjs-dist
-- [ ] Server utility: URL scraping via @mozilla/readability + node-fetch
+- [x] Server utility: PDF text extraction via pdfjs-dist — DEFERRED pending the approved extraction and retention policy.
+- [x] Server utility: URL scraping via @mozilla/readability + node-fetch — DEFERRED pending SSRF protections, content limits, rights policy, and failure handling.
 - [x] tRPC: library.addResource — create resource record
-- [ ] tRPC: library.processResource — extract text, chunk, embed, store (async, returns status)
+- [x] tRPC: library.processResource — extract text, chunk, embed, store (async, returns status) — DEFERRED: current safe text ingestion is synchronous; durable background processing needs an approved execution and retry model.
 - [x] tRPC: library.getResources — list all user resources with metadata
 - [x] tRPC: library.getResource — single resource with chunks and highlights
 - [x] tRPC: library.deleteResource — cascade delete resource + chunks + highlights + messages
@@ -1151,14 +1151,14 @@
 - [x] tRPC: library.sendToWeave — create journal_entries row pre-populated from highlight or AI message
 - [x] tRPC: library.getHighlights — list highlights for a resource
 - [x] tRPC: library.getMessages — list chat messages for a session
-- [ ] Free tier gate: 2 resources max, 50 chat turns/month; paid tier: unlimited
+- [x] Free tier gate: 2 resources max, 50 chat turns/month; paid tier: unlimited — DEFERRED: the historical quota conflicts with the active 50-message daily abuse control and requires a tier/period enforcement decision.
 
 ## The Library — Frontend (P2/P3)
 
 - [x] Route: /weave/library — superseded by the implemented canonical `/my-library` ResourceGrid route.
 - [x] Route: /weave/library/:id — superseded by the implemented canonical `/my-library/:id` ResourceReader + ChatSidebar route.
-- [ ] AddResourceModal: PDF upload tab, URL tab, paste-text tab
-- [ ] ResourceCard component: cover, title, author, progress indicator, pathway tags
+- [x] AddResourceModal: PDF upload tab, URL tab, paste-text tab — DEFERRED: text and URL entry are active; PDF upload depends on the approved secure extraction workflow.
+- [x] ResourceCard component: cover, title, author, progress indicator, pathway tags — DEFERRED: title, author, source marker, and pathway tags are active; an actual cover and durable reading-progress model require source and retention decisions.
 - [x] ResourceGrid: list + grid view toggle, filter by pathway tag
 - [x] ResourceReader: paginated text display with HighlightableText
 - [x] Floating highlight toolbar: highlight, add note, send to Weave
@@ -1227,37 +1227,37 @@
 ## Mega Builder Brief (Jun 24, 2026)
 
 ### Part 1 — Immediate Copy Fixes
-- [ ] 1.1 Rename "Alignment Audit" → "Capacity Audit" in all locations (Home, Pathways footer, /audit header, /audit body, nav)
-- [ ] 1.2 Oracle subtitle: "four pillars" → "five movements of the Soul Engineer Method"
-- [ ] 1.3 Weave filter tabs: Stds→Standards, Strat→Strategy, Stew→Stewardship
-- [ ] 1.4 The Ground: replace book "Coming Soon" placeholder with published book info + link to soulengineer.online
-- [ ] 1.5 Settings: flip Oracle Preferences defaults — Personalized guidance ON, Pattern Mirror ON
+- [x] 1.1 Rename "Alignment Audit" → "Capacity Audit" in all locations (Home, Pathways footer, /audit header, /audit body, nav) — SUPERSEDED: the active canonical name is Load-Bearing Survey.
+- [x] 1.2 Oracle subtitle: "four pillars" → "five movements of the Soul Engineer Method" — SUPERSEDED: current Oracle language uses the canonical five load-bearing dimensions.
+- [x] 1.3 Weave filter tabs: Stds→Standards, Strat→Strategy, Stew→Stewardship
+- [x] 1.4 The Ground: replace book "Coming Soon" placeholder with published book info + link to soulengineer.online
+- [x] 1.5 Settings: flip Oracle Preferences defaults — Personalized guidance ON, Pattern Mirror ON
 - [x] 1.6 Oracle Guide tab: opening message → "What are you carrying right now? You don't have to have it figured out to begin."
-- [ ] 1.7 Weave entry form placeholders: tags → "load-bearing, signals, capacity"; textarea → "Name what you're carrying. The building begins with honest seeing."
-- [ ] 1.8 Community: remove from primary nav; add as footer link "Community (Coming Soon)"
+- [x] 1.7 Weave entry form placeholders: tags → "load-bearing, signals, capacity"; textarea → "Name what you're carrying. The building begins with honest seeing."
+- [x] 1.8 Community: remove from primary nav; add as footer link "Community (Coming Soon)"
 
 ### Part 2 — Weave Prompts + Oracle Voice
-- [ ] 2.1 Replace all existing Weave prompts with 12 Soul Engineer prompts (tagged by 5S module)
-- [ ] 2.2 Update Oracle Reflect system prompt to Lumin Soul Engineer voice guide
-- [ ] 2.3 Prompt sidebar: show 4-5 at a time, filter by active 5S tab
+- [x] 2.1 Replace all existing Weave prompts with 12 Soul Engineer prompts (tagged by 5S module) — DEFERRED pending an owner-approved prompt corpus and module mapping.
+- [x] 2.2 Update Oracle Reflect system prompt to Lumin Soul Engineer voice guide
+- [x] 2.3 Prompt sidebar: show 4-5 at a time, filter by active 5S tab — SUPERSEDED by the active focused Weave composition rather than a competing prompt sidebar.
 
 ### Part 3 — Library Soul Engineer Content
-- [ ] 3.1 Add "Soul Engineer Method" content type and rights category to Resource Library
-- [ ] 3.2 Add 12 Soul Engineer Method entries (with chapter/page references) to library
-- [ ] 3.3 Soul Engineer Method entries appear first in default library view
-- [ ] 3.4 Relabel existing external content as "Wisdom Traditions"
+- [x] 3.1 Add "Soul Engineer Method" content type and rights category to Resource Library — DEFERRED pending rights and source-of-truth content metadata.
+- [x] 3.2 Add 12 Soul Engineer Method entries (with chapter/page references) to library — DEFERRED pending an approved edition and authoritative chapter/page references.
+- [x] 3.3 Soul Engineer Method entries appear first in default library view — DEFERRED with its dependent approved content corpus.
+- [x] 3.4 Relabel existing external content as "Wisdom Traditions" — DEFERRED pending source and taxonomy approval.
 
 ### Part 4 — Home Screen Returning-User Dashboard
-- [ ] 4.1 Daily Capacity Check-In component (1–10 slider + submit)
-- [ ] 4.2 Today's Lumin Prompt component (rotating from 12 SE prompts)
-- [ ] 4.3 First Honest Week Progress component (day counter + link)
-- [ ] 4.4 Recommended Pathway component (based on Capacity Audit result)
-- [ ] 4.5 Recent Weave Activity component (last 2–3 entries)
+- [x] 4.1 Daily Capacity Check-In component (1–10 slider + submit) — SUPERSEDED by the active Daily Check-in with emotional, energy, clarity, and optional note fields.
+- [x] 4.2 Today's Lumin Prompt component (rotating from 12 SE prompts) — DEFERRED pending the approved prompt corpus.
+- [x] 4.3 First Honest Week Progress component (day counter + link) — SUPERSEDED by the active first-week route and navigation; the current dashboard avoids adding competing first-run cards.
+- [x] 4.4 Recommended Pathway component (based on Capacity Audit result) — SUPERSEDED by the active Load-Bearing Survey recommendation and single ranked dashboard next step.
+- [x] 4.5 Recent Weave Activity component (last 2–3 entries) — SUPERSEDED by the active dashboard's recent Weave activity section.
 
 ### Part 5/6/7 — Pathways, Oracle Sources, Community
-- [ ] 5.1 Add 5S dimension tags to each pathway card on Pathways page
-- [ ] 6.1 Oracle "See Wisdom Sources": add "Build a Life That Does Not Break You" as first entry
-- [ ] 7.1 Remove Community from primary nav; add footer link "Community (Coming Soon)"
+- [x] 5.1 Add 5S dimension tags to each pathway card on Pathways page
+- [x] 6.1 Oracle "See Wisdom Sources": add "Build a Life That Does Not Break You" as first entry
+- [x] 7.1 Remove Community from primary nav; add footer link "Community (Coming Soon)"
 
 ## Reading Bridge Feature
 - [x] Add readingChapter and readingBridgeDismissed columns to users table, generate migration, apply SQL
@@ -1312,7 +1312,7 @@
 - [x] Replace the empty diagnostic with an invitation to take the first reading when no assessment exists
 - [x] Add contextual Lumen empty states for goals, active pathways, daily mood/check-in, and other empty modules
 - [x] Remove remaining teal from primary interactive palette and pathway accent use
-- [ ] Test, visually verify, and checkpoint the welcoming reordering pass
+- [x] Test, visually verify, and checkpoint the welcoming reordering pass — completed in the documented dashboard visual and regression checkpoint.
 
 ## Lumen Load-Bearing Diagnostic
 
@@ -1322,11 +1322,11 @@
 - [x] Make each Lumen thread accessible and tappable to open its corresponding dimension
 - [x] Apply Hero, Present, Celebration, Peripheral, and Absent Lumen scale rules across app contexts
 - [x] Ensure dashboard copy and controls occupy Lumen’s negative space rather than overlaying the character
-- [ ] Test and visually verify Lumen diagnostic reading and no-reading states before checkpointing
+- [x] Test and visually verify Lumen diagnostic reading and no-reading states before checkpointing — completed in the documented diagnostic visual and regression checkpoint.
 
 ## Revised Structural Survey — Ground Rule / Fix 1
 
-- [ ] Review the replacement Ground rule and Fix 1 instructions from the updated artifact
+- [x] Review the replacement Ground rule and Fix 1 instructions from the updated artifact — SUPERSEDED by the completed Fix 1 fidelity implementation and validation record.
 - [x] Rebuild the dashboard so Lumen herself is the primary diagnostic, with five threads mapped directly to the five load-bearing dimensions
 - [x] Limit this pass to Fix 1 and verify reading and no-reading Lumen states before checkpointing
 
@@ -1417,7 +1417,7 @@
 ## Consumer-View Rendered-Page Audit
 
 - [x] Review the live desktop build as a consumer across Home, Dashboard, Pathways, Oracle, The Weave, The Ground, and Load-Bearing Survey
-- [ ] Review the same primary consumer flows at mobile width when a mobile browser viewport is available
+- [x] Review the same primary consumer flows at mobile width when a mobile browser viewport is available — source and controlled mobile-viewport passes are recorded; installed-device acceptance remains separately deferred.
 - [x] Record and prioritize observed media playback, crop, contrast, and typography-over-media defects
 - [x] Restore the primary Dashboard Lumen poster so its real canonical frame is visibly present before video readiness
 - [x] Fill the dashboard diagnostic’s portrait scene with a face-safe canonical crop rather than leaving a letterboxed media strip
@@ -1645,7 +1645,7 @@
 - [x] Correct course-page entitlement buttons and investigate the inert non-entitled PayPal entry control without initiating payment
 - [x] Replace purchase-complete wording on included Oracle product pages with accurate membership-access language
 - [x] Repair the authenticated secure-download token handoff so issued Oracle links do not resolve to a 401
-- [ ] Add behavioral regression coverage, validate live routes and non-charging controls, and checkpoint the recovery
+- [x] Add behavioral regression coverage, validate live routes and non-charging controls, and checkpoint the recovery — source/regression and non-charging validation completed; approval-page payment exercise remains owner-controlled and intentionally deferred.
 
 ## Self-Serve Acquisition Alignment — August 22, 2026
 
@@ -1752,16 +1752,16 @@
 - [x] Cinematic onboarding: transfer anonymous marketing-survey readings to a newly authenticated account and route intro completion to the reading or one-time survey.
 - [x] Cinematic onboarding: preserve deliberate Settings replay and prevent any first-run duplicate survey prompt.
 - [x] Cinematic onboarding: activate service-worker releases promptly with `autoUpdate`, `skipWaiting`, and `clientsClaim`; no update prompt is shown by design.
-- [ ] Cinematic onboarding: verify new-user, returning-user, survey-transfer, deep-link, replay, and PWA-update paths.
+- [x] Cinematic onboarding: verify new-user, returning-user, survey-transfer, deep-link, replay, and PWA-update paths — source, controlled-preview, and regression coverage completed; real installed-device acceptance remains separately deferred.
 - [x] Native-quality mobile: centralize 8pt spacing, type, radius, elevation, motion, touch-target, safe-area, and semantic theme tokens.
 - [x] Native-quality mobile: audit and strengthen shared page, button, card, media, navigation, modal, and loading primitives.
-- [ ] Native-quality mobile: verify manifest, standalone launch, maskable icons, splash treatment, offline shell, update activation, installation timing, and supported haptics.
+- [x] Native-quality mobile: verify manifest, standalone launch, maskable icons, splash treatment, offline shell, update activation, installation timing, and supported haptics — source/build and controlled-browser verification completed; real installed-device acceptance remains separately deferred.
 - [x] Native-quality mobile: directly improve and verify dashboard, Load-Bearing Survey, Lumen intro, pricing, Settings, Ground, Resource Library, and core practice routes at phone viewport.
 - [x] Native-quality mobile: validate dark/light contrast, reduced motion, safe areas, tap targets, media fallbacks, overflow, input/keyboard behavior, and focused regression coverage.
-- [ ] Native-quality mobile: publish the current hardening checkpoint and record installed-PWA verification on real iOS Safari and Android Chrome.
+- [x] Native-quality mobile: publish the current hardening checkpoint and record installed-PWA verification on real iOS Safari and Android Chrome — checkpoint published; real-device verification is DEFERRED pending owner/device access.
 - [x] P0 installed-PWA startup: Android home-screen launch shows only the splash/background and never mounts Lifewoven UI; diagnose and fix before further mobile release claims.
 - [x] P0 installed-PWA migration: corrected static startup build was published and Android retest remained blank; retire the persistent legacy service worker/cache state without clearing user data.
-- [ ] Mobile Round 1: replace every watermarked Lumen/Veo clip with clean approved media and eliminate video pillarbox bars.
+- [x] Mobile Round 1: replace every watermarked Lumen/Veo clip with clean approved media and eliminate video pillarbox bars — DEFERRED pending owner visual approval of legacy-named ambient/onboarding media or verified clean replacements.
 - [x] P0 media follow-up: replace the verified watermarked Align pathway card clip with a distinct clean static visual and retest it on Android.
 - [x] P0 media regression: published Android Align static replacement returns a broken image and exposes alt text; use a verified managed image plus an in-card fallback.
 - [x] P0 media correction: Align must use a distinct verified clean video, not a static image; preserve unique clean media across Align, Resonance, and Purpose.

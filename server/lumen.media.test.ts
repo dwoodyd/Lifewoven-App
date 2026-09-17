@@ -73,4 +73,14 @@ describe("Lumen media fallbacks", () => {
     expect(flow).not.toContain('scene: "pointing_energy"');
     expect(purpose).not.toContain('scene: "self_hug"');
   });
+
+  it("keeps each pathway's mapped 5S dimension visible on its card", () => {
+    const pathways = readFileSync(resolve(process.cwd(), "client/src/pages/PathwaysListing.tsx"), "utf8");
+
+    expect(pathways).toContain('dimension: "State"');
+    expect(pathways).toContain('dimension: "Story"');
+    expect(pathways).toContain('dimension: "Standards"');
+    expect(pathways).toContain('dimension: "Stewardship"');
+    expect(pathways).toContain("5S · {pathway.dimension}");
+  });
 });

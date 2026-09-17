@@ -162,7 +162,12 @@ export default function PathwaysListing() {
                     <p className="text-sm text-muted-foreground mb-2">{pathway.subtitle}</p>
                     <p className="text-sm text-muted-foreground font-light leading-relaxed mb-4">{pathway.description}</p>
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-muted-foreground font-mono">{pathway.duration} / {pathway.dimension}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-muted-foreground font-mono">{pathway.duration}</span>
+                        <Badge variant="outline" className="border-primary/25 bg-primary/5 text-[10px] font-mono tracking-wide text-primary">
+                          5S · {pathway.dimension}
+                        </Badge>
+                      </div>
                       <span className="flex items-center gap-1 text-xs font-medium text-primary transition-all group-hover:gap-2">
                         Begin <ArrowRight className="h-3 w-3" />
                       </span>
