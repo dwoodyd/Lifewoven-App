@@ -21,6 +21,9 @@ describe("new-user entry funnel", () => {
     expect(home).toContain('const beginTier = (tier: "seeker" | "oracle")');
     expect(home).toContain('getLoginUrl(`/pricing?tier=${tier}`, "signUp")');
     expect(pricing).toContain("getLoginUrl('/dashboard', 'signUp')");
+    expect(pricing).toContain('data-testid="selected-plan-confirmation"');
+    expect(pricing).toContain("Your plan choice carried through sign-in");
+    expect(pricing).toContain("const selectedTier = requestedTier === \"seeker\" || requestedTier === \"oracle\" ? requestedTier : null");
   });
 
   it("preserves an explicit safe pricing return and only approved pricing tiers", () => {

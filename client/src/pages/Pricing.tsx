@@ -110,6 +110,9 @@ export default function Pricing() {
   const [subStatus, setSubStatus] = useState<SubStatus | null>(null);
   const [pendingPlan, setPendingPlan] = useState<string | null>(null);
   const [annual, setAnnual] = useState(false);
+  const requestedTier = new URLSearchParams(window.location.search).get("tier");
+  const selectedTier = requestedTier === "seeker" || requestedTier === "oracle" ? requestedTier : null;
+  const selectedTierName = selectedTier === "seeker" ? "Seeker" : selectedTier === "oracle" ? "Oracle" : null;
 
   useEffect(() => {
     if (!user) return;
@@ -120,13 +123,12 @@ export default function Pricing() {
   }, [user]);
 
   useEffect(() => {
-    const tier = new URLSearchParams(location.split("?")[1] ?? "").get("tier");
-    if (tier !== "seeker" && tier !== "oracle") return;
+    if (!selectedTier) return;
     const frame = window.requestAnimationFrame(() => {
-      document.getElementById(`tier-${tier}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+      document.getElementById(`tier-${selectedTier}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
     });
     return () => window.cancelAnimationFrame(frame);
-  }, [location]);
+  }, [location, selectedTier]);
 
   const currentTier = subStatus?.tier ?? "explorer";
 
@@ -211,6 +213,17 @@ export default function Pricing() {
           <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
             Founding rates are available during the closed beta. The founding rate remains available while an uninterrupted founding subscription stays active.
           </p>
+          {selectedTier && selectedTierName && (
+            <div
+              role="status"
+              aria-live="polite"
+              data-testid="selected-plan-confirmation"
+              className="mt-5 inline-flex max-w-xl flex-wrap items-center justify-center gap-x-2 gap-y-1 rounded-full border border-amber-400/35 bg-amber-400/10 px-4 py-2 text-sm text-foreground"
+            >
+              <span className="font-medium text-amber-300">{selectedTierName} selected</span>
+              <span className="text-muted-foreground">Your plan choice carried through sign-in. Choose monthly or annual billing below, then continue to secure checkout.</span>
+            </div>
+          )}
         </div>
 
         {/* Annual / Monthly toggle */}
@@ -232,6 +245,7 @@ export default function Pricing() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-14 pt-5">
           {TIERS.map(tier => {
             const isCurrent = currentTier === tier.id;
+            const isSelected = selectedTier === tier.id;
             const displayPrice = annual && tier.annualPrice ? tier.annualPrice : tier.price;
             const displaySub = annual && tier.annualPrice ? "/yr" : tier.priceSub;
             const displayRetail = annual ? tier.annualRetail : tier.retailPrice;
@@ -242,7 +256,9 @@ export default function Pricing() {
                 key={tier.id}
                 id={`tier-${tier.id}`}
                 className={`relative overflow-visible rounded-[var(--radius-surface)] border p-4 sm:p-6 flex flex-col gap-5 transition-all ${
-                  tier.highlight
+                  isSelected
+                    ? "border-amber-300 bg-amber-400/10 ring-1 ring-amber-300/45"
+                    : tier.highlight
                     ? "border-amber-400/50 bg-amber-400/5 shadow-lg shadow-amber-400/10"
                     : tier.id === "oracle"
                     ? "border-violet-400/30 bg-violet-400/5"
@@ -254,6 +270,12 @@ export default function Pricing() {
                     tier.id === "oracle" ? "bg-violet-500/20 text-violet-300 border border-violet-400/30" : "bg-amber-500/20 text-amber-300 border border-amber-400/30"
                   }`}>
                     {tier.badge}
+                  </div>
+                )}
+
+                {isSelected && (
+                  <div className="absolute -top-3 right-4 rounded-full border border-amber-300/50 bg-background px-2.5 py-1 text-[11px] font-medium text-amber-300 shadow-sm">
+                    Selected plan
                   </div>
                 )}
 
