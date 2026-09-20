@@ -16,13 +16,20 @@ const WEALTH_AFFIRMATIONS = ["Money flows to me easily and freely.", "I am a wis
 
 export default function StewardshipModule() {
   const { isAuthenticated } = useAuth();
+  const utils = trpc.useUtils();
   const [sleepHours, setSleepHours] = useState(7);
   const [movementMins, setMovementMins] = useState(30);
   const [energyScore, setEnergyScore] = useState(7);
   const [auditNote, setAuditNote] = useState("");
   const [wealthAffirmation] = useState(() => WEALTH_AFFIRMATIONS[Math.floor(Math.random() * WEALTH_AFFIRMATIONS.length)]);
-  const { data: recentAudits, isLoading: moduleLoading } = trpc.energy.recent.useQuery({ limit: 7 }, { enabled: isAuthenticated });
-  const createAudit = trpc.energy.create.useMutation({ onSuccess: () => { toast.success("Energy audit saved."); setAuditNote(""); } });
+  const { data: recentAudits = [], isLoading: moduleLoading } = trpc.energy.recent.useQuery({ limit: 7 }, { enabled: isAuthenticated });
+  const createAudit = trpc.energy.create.useMutation({
+    onSuccess: async () => {
+      setAuditNote("");
+      await utils.energy.recent.invalidate({ limit: 7 });
+      toast.success("Energy audit saved.");
+    },
+  });
   if (isAuthenticated && moduleLoading) return <PageSkeleton rows={3} />;
   return (
     <div className="min-h-screen bg-background">
@@ -46,6 +53,7 @@ export default function StewardshipModule() {
           <div className="lg:col-span-2 space-y-6">
             <div className="p-6 rounded-2xl border border-border bg-card">
               <div className="flex items-center gap-2 mb-5"><Battery className="h-4 w-4 text-muted-foreground" /><h2 className="font-serif text-xl font-light text-foreground">Daily Energy Audit</h2></div>
+              <p className="text-sm text-muted-foreground mb-5">Begin a new reading below. Your saved energy audits appear in the history panel.</p>
               <div className="space-y-5">
                 <div><div className="flex items-center justify-between mb-2"><label className="text-sm text-muted-foreground flex items-center gap-1.5"><Moon className="h-3.5 w-3.5" /> Sleep</label><span className="text-xs font-mono text-foreground">{sleepHours} hours</span></div><Slider min={3} max={12} step={0.5} value={[sleepHours]} onValueChange={([v]) => setSleepHours(v)} /></div>
                 <div><div className="flex items-center justify-between mb-2"><label className="text-sm text-muted-foreground flex items-center gap-1.5"><Heart className="h-3.5 w-3.5" /> Movement</label><span className="text-xs font-mono text-foreground">{movementMins} min</span></div><Slider min={0} max={120} step={5} value={[movementMins]} onValueChange={([v]) => setMovementMins(v)} /></div>
@@ -65,7 +73,47 @@ export default function StewardshipModule() {
             </div>
           </div>
           <div className="space-y-6">
-            {isAuthenticated && recentAudits && recentAudits.length > 0 && (<div className="p-5 rounded-2xl border border-border bg-card"><h2 className="font-serif text-base font-light text-foreground mb-4">Energy Trend</h2><div className="space-y-1.5">{recentAudits.slice(0, 7).map((audit: any) => (<div key={audit.id} className="flex items-center gap-2"><span className="text-xs text-muted-foreground w-16 flex-shrink-0">{new Date(audit.date).toLocaleDateString("en", { weekday: "short" })}</span><div className="flex-1 bg-secondary rounded-full h-1.5 overflow-hidden"><div className="h-full rounded-full bg-stewardship/60 transition-all" style={{ width: `${(audit.energyScore / 10) * 100}%` }} /></div><span className="text-xs font-mono text-muted-foreground w-4">{audit.energyScore}</span></div>))}</div></div>)}
+            {isAuthenticated && (
+              <section className="p-5 rounded-2xl border border-border bg-card" aria-labelledby="recent-energy-audits-heading">
+                <h2 id="recent-energy-audits-heading" className="font-serif text-base font-light text-foreground mb-1">Recent energy audits</h2>
+                <p className="text-xs text-muted-foreground mb-4">Your seven most recently saved readings.</p>
+                {recentAudits.length > 0 ? (
+                  <ol className="space-y-4">
+                    {recentAudits.map((audit) => {
+                      const score = typeof audit.energyScore === "number" ? audit.energyScore : null;
+                      const scoreWidth = score === null ? 0 : Math.min(100, Math.max(0, score * 10));
+                      const date = new Date(`${audit.date}T12:00:00`);
+                      const dateLabel = Number.isNaN(date.getTime()) ? audit.date : date.toLocaleDateString(undefined, {
+                        weekday: "short",
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      });
+                      return (
+                        <li key={audit.id} className="border-b border-border/60 pb-4 last:border-0 last:pb-0">
+                          <div className="flex items-center justify-between gap-3">
+                            <time dateTime={audit.date} className="text-xs font-medium text-foreground">{dateLabel}</time>
+                            <span className="text-xs font-mono text-muted-foreground">
+                              {score === null ? "Energy not recorded" : `Energy ${score}/10`}
+                            </span>
+                          </div>
+                          <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-secondary" aria-hidden="true">
+                            <div className="h-full rounded-full bg-stewardship/60 transition-all" style={{ width: `${scoreWidth}%` }} />
+                          </div>
+                          <dl className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+                            <div><dt className="sr-only">Sleep</dt><dd>Sleep: {audit.sleepHours == null ? "not recorded" : `${audit.sleepHours} hours`}</dd></div>
+                            <div><dt className="sr-only">Movement</dt><dd>Movement: {audit.movementMinutes == null ? "not recorded" : `${audit.movementMinutes} min`}</dd></div>
+                          </dl>
+                          {audit.notes && <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{audit.notes}</p>}
+                        </li>
+                      );
+                    })}
+                  </ol>
+                ) : (
+                  <p className="text-sm leading-relaxed text-muted-foreground">No energy audits yet. Your saved audits will appear here.</p>
+                )}
+              </section>
+            )}
             <div className="p-5 rounded-2xl border border-border bg-card"><h2 className="font-serif text-base font-light text-foreground mb-4">Stewardship Pathways</h2><div className="space-y-2">{[{ href: "/pathway/align", label: "Align — Daily Grounding", desc: "Morning ritual practice" }, { href: "/pathway/reset", label: "Reset", desc: "Restore your energy" }].map(({ href, label, desc }) => (<Link key={href} href={href}><div className="p-3 rounded-lg border border-border hover:border-stewardship/40 hover:bg-stewardship/5 transition-all cursor-pointer"><p className="text-sm font-medium text-foreground">{label}</p><p className="text-xs text-muted-foreground">{desc}</p></div></Link>))}</div></div>
           </div>
         </div>

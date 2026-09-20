@@ -760,7 +760,7 @@ const energyRouter = router({
     }),
 
   recent: protectedProcedure
-    .input(z.object({ limit: z.number().default(7) }))
+    .input(z.object({ limit: z.number().int().min(1).max(30).default(7) }))
     .query(async ({ ctx, input }) => {
       const db = await getDb();
       if (!db) return [];

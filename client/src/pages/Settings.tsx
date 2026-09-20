@@ -538,6 +538,8 @@ export default function Settings() {
               </div>
               <button
                 onClick={() => handleLowBandwidth(!lowBandwidth)}
+                aria-label={lowBandwidth ? "Disable simplified view" : "Enable simplified view"}
+                aria-pressed={lowBandwidth}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 mt-0.5 ${lowBandwidth ? "bg-accent" : "bg-muted"}`}
               >
                 <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${lowBandwidth ? "translate-x-6" : "translate-x-1"}`} />
@@ -553,6 +555,8 @@ export default function Settings() {
               </div>
               <button
                 onClick={() => handleShowProfile(!showProfile)}
+                aria-label={showProfile ? "Hide profile in navigation" : "Show profile in navigation"}
+                aria-pressed={showProfile}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 mt-0.5 ${showProfile ? "bg-accent" : "bg-muted"}`}
               >
                 <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${showProfile ? "translate-x-6" : "translate-x-1"}`} />

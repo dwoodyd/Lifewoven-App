@@ -118,18 +118,18 @@ function AddBookModal({ open, onClose }: { open: boolean; onClose: () => void })
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label>Category</Label>
+              <Label htmlFor="book-category">Category</Label>
               <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger><SelectValue placeholder="Select…" /></SelectTrigger>
+                <SelectTrigger id="book-category" aria-label="Book category"><SelectValue placeholder="Select…" /></SelectTrigger>
                 <SelectContent>
                   {CATEGORIES.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-1.5">
-              <Label>Status</Label>
+              <Label htmlFor="book-status">Status</Label>
               <Select value={status} onValueChange={v => setStatus(v as BookStatus)}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger id="book-status" aria-label="Reading status"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {(Object.entries(STATUS_CONFIG) as [BookStatus, typeof STATUS_CONFIG[BookStatus]][]).map(([k, v]) => (
                     <SelectItem key={k} value={k}>{v.label}</SelectItem>
@@ -154,7 +154,7 @@ function AddBookModal({ open, onClose }: { open: boolean; onClose: () => void })
                   <Upload className="h-3 w-3" />
                   {uploadingCover ? "Uploading…" : "Upload"}
                 </Button>
-                <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileUpload} />
+                <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileUpload} aria-hidden="true" tabIndex={-1} />
               </div>
             </div>
 
@@ -164,6 +164,8 @@ function AddBookModal({ open, onClose }: { open: boolean; onClose: () => void })
                 {coverResults.map((url) => (
                   <button key={url} type="button"
                     onClick={() => setCoverUrl(url)}
+                    aria-label={coverUrl === url ? "Selected book cover option" : "Select this book cover option"}
+                    aria-pressed={coverUrl === url}
                     className={`relative aspect-[2/3] rounded-lg overflow-hidden border-2 transition-all ${
                       coverUrl === url ? "border-amber-500 ring-2 ring-amber-500/30" : "border-border/50 hover:border-amber-500/50"
                     }`}>
@@ -181,12 +183,12 @@ function AddBookModal({ open, onClose }: { open: boolean; onClose: () => void })
             {/* Selected cover preview or empty state */}
             {coverUrl ? (
               <div className="flex items-center gap-3 p-2 rounded-lg bg-card border border-border/50">
-                <img src={coverUrl} alt="selected cover" className="h-14 w-10 object-cover rounded" />
+                <img src={coverUrl} alt="Selected book cover preview" className="h-14 w-10 object-cover rounded" />
                 <div className="flex-1 min-w-0">
                   <p className="text-xs text-muted-foreground truncate">{coverUrl.length > 50 ? coverUrl.slice(0, 50) + "…" : coverUrl}</p>
                   <p className="text-xs text-green-400 mt-0.5 flex items-center gap-1"><Check className="h-3 w-3" /> Cover selected</p>
                 </div>
-                <Button type="button" size="icon" variant="ghost" className="h-7 w-7 shrink-0" onClick={() => setCoverUrl("")}>
+                <Button type="button" size="icon" variant="ghost" className="h-7 w-7 shrink-0" onClick={() => setCoverUrl("")} aria-label="Remove selected cover">
                   <X className="h-3.5 w-3.5" />
                 </Button>
               </div>
@@ -272,9 +274,9 @@ function BookCard({ book }: { book: { id: number; title: string; author?: string
         </div>
         {/* Actions menu */}
         <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity" onClick={e => e.stopPropagation()}>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button size="icon" variant="ghost" className="h-7 w-7 bg-background/80 backdrop-blur-sm rounded-full">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+              <Button size="icon" variant="ghost" className="h-7 w-7 bg-background/80 backdrop-blur-sm rounded-full" aria-label={`More actions for ${book.title}`}>
                 <MoreVertical className="h-3.5 w-3.5" />
               </Button>
             </DropdownMenuTrigger>
@@ -300,7 +302,7 @@ function BookCard({ book }: { book: { id: number; title: string; author?: string
       </div>
 
       {/* Hidden cover file input */}
-      <input ref={coverFileRef} type="file" accept="image/*" className="hidden" onChange={handleReplaceCover} />
+      <input ref={coverFileRef} type="file" accept="image/*" className="hidden" onChange={handleReplaceCover} aria-hidden="true" tabIndex={-1} />
 
       {/* Info */}
       <div className="p-3">

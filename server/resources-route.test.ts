@@ -5,6 +5,9 @@ import { resolve } from "node:path";
 describe("legacy Resources route", () => {
   it("redirects legacy reader vocabulary to canonical app routes", () => {
     const appSource = readFileSync(resolve(process.cwd(), "client/src/App.tsx"), "utf8");
+    expect(appSource).toContain('<Route path="/habits"><Redirect to="/standards" replace /></Route>');
+    expect(appSource).toContain('<Route path="/journal"><Redirect to="/weave" replace /></Route>');
+    expect(appSource).toContain('<Route path="/journal/:id">{(params: { id: string }) => <Redirect to={`/weave/${params.id}`} replace />}</Route>');
     expect(appSource).toContain('<Route path="/resources"><Redirect to="/library" replace /></Route>');
     expect(appSource).toContain('<Route path="/today"><Redirect to="/dashboard" replace /></Route>');
     expect(appSource).toContain('<Route path="/assessment"><Redirect to="/audit" replace /></Route>');

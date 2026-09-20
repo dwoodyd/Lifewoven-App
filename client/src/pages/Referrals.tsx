@@ -86,8 +86,8 @@ export default function Referrals() {
         <div className="p-5 rounded-xl border border-accent/30 bg-accent/5 mb-6">
           <h2 className="font-serif text-lg font-light mb-3">Your Referral Link</h2>
           <div className="flex gap-2">
-            <Input value={referralUrl} readOnly className="text-sm font-mono bg-background" />
-            <Button onClick={copyLink} size="icon" variant="outline"><Copy className="h-4 w-4" /></Button>
+            <Input value={referralUrl} readOnly aria-label="Your referral link" className="text-sm font-mono bg-background" />
+            <Button onClick={copyLink} size="icon" variant="outline" aria-label="Copy referral link"><Copy className="h-4 w-4" /></Button>
           </div>
           <p className="text-xs text-muted-foreground mt-2">Code: <span className="font-mono font-semibold text-foreground">{codeData?.code}</span></p>
         </div>
@@ -98,6 +98,7 @@ export default function Referrals() {
           <p className="text-sm text-muted-foreground mb-3">Were you referred by a friend? Enter their code to credit them.</p>
           <div className="flex gap-2">
             <Input
+              aria-label="Referral code to apply"
               placeholder="Enter code (e.g. A1B2C3D4E5F6)"
               value={applyCode}
               onChange={e => setApplyCode(e.target.value.toUpperCase())}
@@ -121,8 +122,8 @@ export default function Referrals() {
             </div>
             <p className="text-sm text-muted-foreground mb-3">As a paying member, you can give friends a 30-day free trial — your personal way of saying "this changed things for me."</p>
             <div className="flex gap-2 mb-2">
-              <Input value={trialUrl} readOnly className="text-sm font-mono bg-background" />
-              <Button onClick={copyTrialLink} size="icon" variant="outline"><Copy className="h-4 w-4" /></Button>
+              <Input value={trialUrl} readOnly aria-label="Your trial referral link" className="text-sm font-mono bg-background" />
+              <Button onClick={copyTrialLink} size="icon" variant="outline" aria-label="Copy trial referral link"><Copy className="h-4 w-4" /></Button>
             </div>
             <p className="text-xs text-muted-foreground">Code: <span className="font-mono font-semibold text-amber-400">{trialCodeData.code}</span> · {trialCodeData.redeemedCount} friend{trialCodeData.redeemedCount !== 1 ? "s" : ""} activated</p>
           </div>
@@ -135,6 +136,7 @@ export default function Referrals() {
             <p className="text-sm text-muted-foreground mb-3">If a friend shared a <span className="font-mono">REF-XXXX-XXXX</span> code with you, enter it here for 30 days of free access.</p>
             <div className="flex gap-2">
               <Input
+                aria-label="Trial code to redeem"
                 placeholder="REF-XXXX-XXXX"
                 value={trialCode}
                 onChange={e => setTrialCode(e.target.value.toUpperCase())}
