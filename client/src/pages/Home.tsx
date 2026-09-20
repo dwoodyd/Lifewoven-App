@@ -687,7 +687,7 @@ export default function Home() {
               <div className="flex items-center gap-3 mb-4">
                 <img
                   src="/manus-storage/lifewoven-original-mark_811eea16.png"
-                  alt=""
+                  alt="Lifewoven logo"
                   className="w-10 h-10 rounded-xl object-cover"
                 />
                 <span style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.25rem", color: "oklch(0.88 0.02 60)", fontWeight: 400 }}>

@@ -29,6 +29,7 @@ import {
 import { eq, desc, and, like, sql, gte, lte } from "drizzle-orm";
 import { invokeLLM } from "./_core/llm";
 import { checkLlmRateLimit } from "./_core/llmRateLimiter";
+import { invokeMeteredLLM } from "./llmCostControls";
 import { tierCanAccessOracle } from "./tierHelpers";
 import { hasBetaOrPaidAccess } from "./routers/beta";
 import { TRPCError } from "@trpc/server";
@@ -633,7 +634,8 @@ const beliefsRouter = router({
     .mutation(async ({ ctx, input }) => {
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
-      await db.insert(beliefs).values({ userId: ctx.user.id, ...input });
+      const { declaration, ...belief } = input;
+      await db.insert(beliefs).values({ userId: ctx.user.id, ...belief, affirmation: declaration });
       return { success: true };
     }),
 
@@ -642,7 +644,10 @@ const beliefsRouter = router({
     .mutation(async ({ ctx, input }) => {
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
-      const response = await invokeLLM({
+      const response = await invokeMeteredLLM({
+        userId: ctx.user.id,
+        feature: "story_belief_rewrite",
+        tier: "economical",
         messages: [
           { role: "system", content: "You are a belief transformation coach trained in the Lifewoven belief transformation framework. Given a constraining belief, provide: 1) An empowering reframe, 2) Three pieces of counter-evidence to collect, 3) A grounding declaration. Format as JSON: { empoweringBelief, evidence, declaration }" },
           { role: "user", content: `Constraining belief: "${input.limitingBelief}"` },
@@ -667,8 +672,9 @@ const beliefsRouter = router({
       });
       const rawBelief = response.choices[0]?.message?.content;
       const content = JSON.parse(typeof rawBelief === "string" ? rawBelief : "{}");
+      const { declaration, ...belief } = content;
       await db.update(beliefs)
-        .set({ ...content, isRewritten: true })
+        .set({ ...belief, affirmation: declaration, isRewritten: true })
         .where(and(eq(beliefs.id, input.id), eq(beliefs.userId, ctx.user.id)));
       return content;
     }),
@@ -698,12 +704,25 @@ const decisionsRouter = router({
     }),
 
   analyze: protectedProcedure
-    .input(z.object({ id: z.number(), title: z.string(), context: z.string().optional(), options: z.array(z.string()) }))
+    .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      const response = await invokeLLM({
+      const db = await getDb();
+      if (!db) throw new Error("Database unavailable");
+      const [decision] = await db.select().from(decisions)
+        .where(and(eq(decisions.id, input.id), eq(decisions.userId, ctx.user.id)))
+        .limit(1);
+      if (!decision) throw new TRPCError({ code: "FORBIDDEN" });
+
+      const storedOptions = Array.isArray(decision.options)
+        ? decision.options.map((option) => typeof option === "string" ? option : JSON.stringify(option))
+        : [];
+      const response = await invokeMeteredLLM({
+        userId: ctx.user.id,
+        feature: "strategy_decision_analysis",
+        tier: "economical",
         messages: [
           { role: "system", content: "You are a strategic decision coach. Analyze this decision using second-order thinking and provide clear guidance. Return JSON: { analysis, secondOrderEffects, recommendation, keyQuestion }" },
-          { role: "user", content: `Decision: ${input.title}\nContext: ${input.context ?? "none"}\nOptions: ${input.options.join(", ")}` },
+          { role: "user", content: `Decision: ${decision.title}\nContext: ${decision.context ?? "none"}\nOptions: ${storedOptions.join(", ") || "none recorded"}` },
         ],
         response_format: {
           type: "json_schema",
@@ -725,7 +744,15 @@ const decisionsRouter = router({
         },
       });
       const rawDecision = response.choices[0]?.message?.content;
-      return JSON.parse(typeof rawDecision === "string" ? rawDecision : "{}");
+      const content = JSON.parse(typeof rawDecision === "string" ? rawDecision : "{}");
+      await db.update(decisions)
+        .set({
+          reasoning: typeof content.analysis === "string" ? content.analysis : null,
+          secondOrderEffects: typeof content.secondOrderEffects === "string" ? content.secondOrderEffects : null,
+          status: "reviewing",
+        })
+        .where(and(eq(decisions.id, decision.id), eq(decisions.userId, ctx.user.id)));
+      return content;
     }),
 });
 

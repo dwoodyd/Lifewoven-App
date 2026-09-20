@@ -154,7 +154,7 @@ function AddBookModal({ open, onClose }: { open: boolean; onClose: () => void })
                   <Upload className="h-3 w-3" />
                   {uploadingCover ? "Uploading…" : "Upload"}
                 </Button>
-                <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileUpload} aria-hidden="true" tabIndex={-1} />
+                <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileUpload} aria-label="Upload a book cover image" aria-hidden="true" tabIndex={-1} />
               </div>
             </div>
 
@@ -302,7 +302,7 @@ function BookCard({ book }: { book: { id: number; title: string; author?: string
       </div>
 
       {/* Hidden cover file input */}
-      <input ref={coverFileRef} type="file" accept="image/*" className="hidden" onChange={handleReplaceCover} aria-hidden="true" tabIndex={-1} />
+      <input ref={coverFileRef} type="file" accept="image/*" className="hidden" onChange={handleReplaceCover} aria-label={`Replace the cover for ${book.title}`} aria-hidden="true" tabIndex={-1} />
 
       {/* Info */}
       <div className="p-3">
@@ -392,6 +392,7 @@ export default function Character() {
             <button
               key={f.value}
               onClick={() => setStatusFilter(f.value)}
+              aria-pressed={statusFilter === f.value}
               className={`px-3 py-1.5 rounded-full text-xs font-mono tracking-wide transition-all ${
                 statusFilter === f.value
                   ? "bg-amber-500/20 text-amber-400 border border-amber-500/40"

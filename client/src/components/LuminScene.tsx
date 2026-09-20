@@ -100,6 +100,8 @@ export function LuminScene({
 
   const url = getVideoUrl(videoId);
   const poster = getLumenPoster(videoId);
+  const video = LUMIN_VIDEOS.find((entry) => entry.id === videoId);
+  const mediaLabel = `Lumen animation: ${video?.action ?? "Lumen in a guided Lifewoven scene"}`;
 
   // Entrance animation
   useEffect(() => {
@@ -186,8 +188,7 @@ export function LuminScene({
         {canShowPoster && (
           <img
             src={poster}
-            alt=""
-            aria-hidden="true"
+            alt={mediaLabel}
             onLoad={() => setPosterReady(true)}
             onError={() => setPosterReady(false)}
             style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: ambientFit, display: "block" }}
@@ -200,6 +201,7 @@ export function LuminScene({
           ref={videoRef}
           src={shouldLoadVideo ? url : undefined}
           poster={poster}
+          aria-label={mediaLabel}
           preload="metadata"
           autoPlay={shouldLoadVideo}
           muted
@@ -250,8 +252,7 @@ export function LuminScene({
       {canShowPoster && (
         <img
           src={poster}
-          alt=""
-          aria-hidden="true"
+          alt={mediaLabel}
           onLoad={() => setPosterReady(true)}
           onError={() => setPosterReady(false)}
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 1, display: "block" }}
@@ -265,6 +266,7 @@ export function LuminScene({
         ref={videoRef}
         src={shouldLoadVideo ? url : undefined}
         poster={poster}
+        aria-label={mediaLabel}
         preload="metadata"
         autoPlay={shouldLoadVideo}
         muted

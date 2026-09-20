@@ -28,16 +28,30 @@ const SECOND_ORDER_PROMPTS = [
 
 export default function StrategyModule() {
   const { isAuthenticated } = useAuth();
+  const utils = trpc.useUtils();
   const [showAddDecision, setShowAddDecision] = useState(false);
   const [decisionTitle, setDecisionTitle] = useState("");
   const [decisionContext, setDecisionContext] = useState("");
   const [analyzingId, setAnalyzingId] = useState<number | null>(null);
   const [analysisResult, setAnalysisResult] = useState<Record<number, any>>({});
 
-  const { data: decisions, refetch, isLoading: moduleLoading } = trpc.decisions.list.useQuery(undefined, { enabled: isAuthenticated });
-  const createDecision = trpc.decisions.create.useMutation({ onSuccess: () => { toast.success("Decision captured."); setDecisionTitle(""); setDecisionContext(""); setShowAddDecision(false); refetch(); } });
+  const { data: decisions = [], isLoading: moduleLoading } = trpc.decisions.list.useQuery(undefined, { enabled: isAuthenticated });
+  const createDecision = trpc.decisions.create.useMutation({
+    onSuccess: async () => {
+      setDecisionTitle("");
+      setDecisionContext("");
+      setShowAddDecision(false);
+      await utils.decisions.list.invalidate();
+      toast.success("Decision captured. It is saved in your decision history.");
+    },
+  });
   const analyzeDecision = trpc.decisions.analyze.useMutation({
-    onSuccess: (data: any, vars: any) => { setAnalysisResult(prev => ({ ...prev, [vars.id]: data })); setAnalyzingId(null); toast.success("Oracle analysis complete."); },
+    onSuccess: async (data: any, vars: any) => {
+      setAnalysisResult(prev => ({ ...prev, [vars.id]: data }));
+      setAnalyzingId(null);
+      await utils.decisions.list.invalidate();
+      toast.success("Oracle analysis complete and saved.");
+    },
   });
 
   if (isAuthenticated && moduleLoading) return <PageSkeleton rows={3} />;
@@ -64,12 +78,14 @@ export default function StrategyModule() {
             <div className="p-6 rounded-2xl border border-border bg-card">
               <div className="flex items-center justify-between mb-5">
                 <h2 className="font-serif text-xl font-light text-foreground">Decision Journal</h2>
-                {isAuthenticated && <Button size="sm" variant="outline" className="gap-1.5 text-xs" onClick={() => setShowAddDecision(!showAddDecision)}><Plus className="h-3.5 w-3.5" /> Add Decision</Button>}
+                {isAuthenticated && <Button size="sm" variant="outline" className="gap-1.5 text-xs" onClick={() => setShowAddDecision(!showAddDecision)} aria-expanded={showAddDecision} aria-controls="add-decision-form"><Plus className="h-3.5 w-3.5" /> Add Decision</Button>}
               </div>
               {showAddDecision && (
-                <div className="mb-5 p-4 rounded-xl bg-secondary/50 space-y-3">
-                  <Input placeholder="What decision are you facing?" value={decisionTitle} onChange={e => setDecisionTitle(e.target.value)} className="text-sm" />
-                  <Textarea placeholder="Context: What do you know? What are the options? What's at stake?" value={decisionContext} onChange={e => setDecisionContext(e.target.value)} className="resize-none text-sm" rows={3} />
+                <div id="add-decision-form" className="mb-5 p-4 rounded-xl bg-secondary/50 space-y-3">
+                  <label htmlFor="decision-title" className="sr-only">Decision title</label>
+                  <Input id="decision-title" placeholder="What decision are you facing?" value={decisionTitle} onChange={e => setDecisionTitle(e.target.value)} className="text-sm" />
+                  <label htmlFor="decision-context" className="sr-only">Decision context</label>
+                  <Textarea id="decision-context" placeholder="Context: What do you know? What are the options? What's at stake?" value={decisionContext} onChange={e => setDecisionContext(e.target.value)} className="resize-none text-sm" rows={3} />
                   <div className="flex gap-2">
                     <Button size="sm" onClick={() => createDecision.mutate({ title: decisionTitle, context: decisionContext || undefined })} disabled={!decisionTitle || createDecision.isPending} className="gap-1.5"><Plus className="h-3.5 w-3.5" /> Capture</Button>
                     <Button size="sm" variant="ghost" onClick={() => setShowAddDecision(false)}>Cancel</Button>
@@ -78,8 +94,12 @@ export default function StrategyModule() {
               )}
               {!isAuthenticated ? (
                 <div className="text-center py-8"><Compass className="h-10 w-10 text-muted-foreground mx-auto mb-3" /><p className="text-sm text-muted-foreground mb-4">Sign in to use the Decision Journal.</p><Button asChild variant="outline"><Link href="/dashboard">Get Started</Link></Button></div>
-              ) : decisions && decisions.length > 0 ? (
-                <div className="space-y-3">
+              ) : decisions.length > 0 ? (
+                <section className="space-y-3" aria-labelledby="saved-decisions-heading" aria-live="polite">
+                  <div className="flex items-center justify-between gap-3">
+                    <h3 id="saved-decisions-heading" className="text-sm font-medium text-foreground">Saved decisions</h3>
+                    <span className="text-xs text-muted-foreground">{decisions.length} {decisions.length === 1 ? "entry" : "entries"}</span>
+                  </div>
                   {decisions.map((decision: any) => (
                     <div key={decision.id} className="p-4 rounded-xl border border-border bg-background">
                       <div className="flex items-start justify-between gap-2 mb-2">
@@ -87,20 +107,26 @@ export default function StrategyModule() {
                         <span className="text-xs text-muted-foreground flex-shrink-0">{new Date(decision.createdAt).toLocaleDateString()}</span>
                       </div>
                       {decision.context && <p className="text-xs text-muted-foreground mb-3">{decision.context}</p>}
-                      {analysisResult[decision.id] ? (
+                      {analysisResult[decision.id] || decision.reasoning ? (
                         <div className="mt-2 pt-2 border-t border-strategy/20 space-y-2">
                           <p className="text-xs font-medium text-strategy">Oracle Analysis:</p>
-                          <Streamdown className="text-xs text-foreground leading-relaxed">{analysisResult[decision.id].analysis}</Streamdown>
+                          <Streamdown className="text-xs text-foreground leading-relaxed">{analysisResult[decision.id]?.analysis ?? decision.reasoning}</Streamdown>
+                          {(analysisResult[decision.id]?.secondOrderEffects ?? decision.secondOrderEffects) && (
+                            <div className="rounded-lg bg-strategy/5 p-2.5">
+                              <p className="text-xs font-medium text-strategy">Second-order effects</p>
+                              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{analysisResult[decision.id]?.secondOrderEffects ?? decision.secondOrderEffects}</p>
+                            </div>
+                          )}
                         </div>
                       ) : (
-                        <Button size="sm" variant="outline" className="gap-1.5 text-xs" onClick={() => { setAnalyzingId(decision.id); analyzeDecision.mutate({ id: decision.id, title: decision.title, context: decision.context, options: [] }); }} disabled={analyzingId === decision.id && analyzeDecision.isPending}>
+                        <Button size="sm" variant="outline" className="gap-1.5 text-xs" onClick={() => { setAnalyzingId(decision.id); analyzeDecision.mutate({ id: decision.id }); }} disabled={analyzingId === decision.id && analyzeDecision.isPending}>
                           {analyzingId === decision.id && analyzeDecision.isPending ? <><RefreshCw className="h-3 w-3 animate-spin" /> Analyzing...</> : <><Sparkles className="h-3 w-3" /> Oracle Analysis</>}
                         </Button>
                       )}
                     </div>
                   ))}
-                </div>
-              ) : <div className="text-center py-10 px-4"><p className="text-sm font-medium text-foreground mb-2">No decisions captured yet.</p><p className="text-sm text-muted-foreground max-w-xs mx-auto">Start with a real decision you’re facing right now. Write it out, map the consequences, and let the framework help you see past the obvious choice.</p></div>}
+                </section>
+              ) : <div className="text-center py-10 px-4"><p className="text-sm font-medium text-foreground mb-2">No saved decisions yet.</p><p className="text-sm text-muted-foreground max-w-xs mx-auto">Capture a real decision you’re facing now. Saved decisions remain private to your account and return here after a reload.</p></div>}
             </div>
             <div className="p-6 rounded-2xl border border-border bg-card">
               <div className="flex items-center gap-2 mb-2"><Lightbulb className="h-4 w-4 text-muted-foreground" /><h2 className="font-serif text-xl font-light text-foreground">Leverage Mapper</h2></div>

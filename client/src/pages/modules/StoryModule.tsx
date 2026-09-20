@@ -37,18 +37,29 @@ const MEANING_QUOTES = [
 
 export default function StoryModule() {
   const { isAuthenticated } = useAuth();
+  const utils = trpc.useUtils();
   const [newBelief, setNewBelief] = useState("");
   const [newBeliefPrompt, setNewBeliefPrompt] = useState("");
   const [showAddBelief, setShowAddBelief] = useState(false);
   const [rewritingId, setRewritingId] = useState<number | null>(null);
   const [dailyQuote] = useState(() => MEANING_QUOTES[Math.floor(Math.random() * MEANING_QUOTES.length)]);
 
-  const { data: beliefs, refetch: refetchBeliefs, isLoading: moduleLoading } = trpc.beliefs.list.useQuery(undefined, { enabled: isAuthenticated });
+  const { data: beliefs = [], isLoading: moduleLoading } = trpc.beliefs.list.useQuery(undefined, { enabled: isAuthenticated });
   const createBelief = trpc.beliefs.create.useMutation({
-    onSuccess: () => { toast.success("Belief captured. Now we can work with it."); setNewBelief(""); setNewBeliefPrompt(""); setShowAddBelief(false); refetchBeliefs(); },
+    onSuccess: async () => {
+      setNewBelief("");
+      setNewBeliefPrompt("");
+      setShowAddBelief(false);
+      await utils.beliefs.list.invalidate();
+      toast.success("Belief captured. It is saved in your belief history.");
+    },
   });
   const rewriteBelief = trpc.beliefs.rewrite.useMutation({
-    onSuccess: () => { toast.success("The Oracle has rewritten this belief."); setRewritingId(null); refetchBeliefs(); },
+    onSuccess: async () => {
+      setRewritingId(null);
+      await utils.beliefs.list.invalidate();
+      toast.success("The Oracle rewrite is saved in your belief history.");
+    },
   });
 
   if (isAuthenticated && moduleLoading) return <PageSkeleton rows={3} />;
@@ -78,10 +89,10 @@ export default function StoryModule() {
             <div className="p-6 rounded-2xl border border-border bg-card">
               <div className="flex items-center justify-between mb-5">
                 <h2 className="font-serif text-xl font-light text-foreground">Belief Rewrite Lab</h2>
-                {isAuthenticated && <Button size="sm" variant="outline" className="gap-1.5 text-xs" onClick={() => setShowAddBelief(!showAddBelief)}><Plus className="h-3.5 w-3.5" /> Add Belief</Button>}
+                {isAuthenticated && <Button size="sm" variant="outline" className="gap-1.5 text-xs" onClick={() => setShowAddBelief(!showAddBelief)} aria-expanded={showAddBelief} aria-controls="add-belief-form"><Plus className="h-3.5 w-3.5" /> Add Belief</Button>}
               </div>
               {showAddBelief && (
-                <div className="mb-5 p-4 rounded-xl bg-secondary/50 space-y-3">
+                <div id="add-belief-form" className="mb-5 p-4 rounded-xl bg-secondary/50 space-y-3">
                   <p className="text-xs text-muted-foreground">What constraining belief is holding you back?</p>
                   <div className="flex flex-wrap gap-2 mb-2">
                     {LIMITING_BELIEF_PROMPTS.map(p => (
@@ -89,7 +100,8 @@ export default function StoryModule() {
                     ))}
                   </div>
                   {newBeliefPrompt && <p className="text-xs font-medium text-foreground">{newBeliefPrompt}</p>}
-                  <Textarea placeholder="Write the constraining belief as you currently hold it..." value={newBelief} onChange={e => setNewBelief(e.target.value)} className="resize-none text-sm" rows={2} />
+                  <label htmlFor="limiting-belief" className="sr-only">Constraining belief</label>
+                  <Textarea id="limiting-belief" placeholder="Write the constraining belief as you currently hold it..." value={newBelief} onChange={e => setNewBelief(e.target.value)} className="resize-none text-sm" rows={2} />
                   <div className="flex gap-2">
                     <Button size="sm" onClick={() => createBelief.mutate({ limitingBelief: (newBeliefPrompt ? newBeliefPrompt + " " : "") + newBelief })} disabled={!newBelief || createBelief.isPending} className="gap-1.5"><Plus className="h-3.5 w-3.5" /> Capture</Button>
                     <Button size="sm" variant="ghost" onClick={() => setShowAddBelief(false)}>Cancel</Button>
@@ -98,8 +110,12 @@ export default function StoryModule() {
               )}
               {!isAuthenticated ? (
                 <div className="text-center py-8"><BookOpen className="h-10 w-10 text-muted-foreground mx-auto mb-3" /><p className="text-sm text-muted-foreground mb-4">Sign in to begin your belief work.</p><Button asChild variant="outline"><Link href="/dashboard">Get Started</Link></Button></div>
-              ) : beliefs && beliefs.length > 0 ? (
-                <div className="space-y-3">
+              ) : beliefs.length > 0 ? (
+                <section className="space-y-3" aria-labelledby="saved-beliefs-heading" aria-live="polite">
+                  <div className="flex items-center justify-between gap-3">
+                    <h3 id="saved-beliefs-heading" className="text-sm font-medium text-foreground">Saved beliefs</h3>
+                    <span className="text-xs text-muted-foreground">{beliefs.length} {beliefs.length === 1 ? "entry" : "entries"}</span>
+                  </div>
                   {beliefs.map((belief: any) => (
                     <div key={belief.id} className={`p-4 rounded-xl border transition-all ${belief.isRewritten ? "border-story/30 bg-story/5" : "border-border bg-background"}`}>
                       <div className="flex items-start justify-between gap-2 mb-2">
@@ -110,7 +126,7 @@ export default function StoryModule() {
                         <div className="mt-2 pt-2 border-t border-story/20">
                           <p className="text-xs text-muted-foreground mb-1">Empowering Belief:</p>
                           <p className="text-sm font-medium text-foreground">"{belief.empoweringBelief}"</p>
-                          {belief.declaration && <p className="text-xs text-story mt-1 italic">Declaration: {belief.declaration}</p>}
+                          {belief.affirmation && <p className="text-xs text-story mt-1 italic">Declaration: {belief.affirmation}</p>}
                         </div>
                       )}
                       {!belief.isRewritten && (
@@ -120,23 +136,24 @@ export default function StoryModule() {
                       )}
                     </div>
                   ))}
-                </div>
+                </section>
               ) : (
                 <div className="space-y-4">
-                  {/* Seed example belief */}
+                  <div className="rounded-xl border border-dashed border-story/30 bg-story/5 p-4">
+                    <p className="text-sm font-medium text-foreground mb-1">No saved beliefs yet.</p>
+                    <p className="text-sm text-muted-foreground">Add a belief above. Saved beliefs remain private to your account and return here after a reload.</p>
+                  </div>
+                  {/* Clearly labelled learning example, not account data. */}
                   <div className="p-4 rounded-xl border border-story/20 bg-story/5">
                     <div className="flex items-start justify-between gap-2 mb-2">
                       <p className="text-sm text-muted-foreground italic">“I always start strong and then fall apart. I don’t have the consistency to follow through.”</p>
-                      <Badge variant="default" className="text-xs flex-shrink-0">Example</Badge>
+                      <Badge variant="default" className="text-xs flex-shrink-0">Example — not saved</Badge>
                     </div>
                     <div className="mt-2 pt-2 border-t border-story/20">
                       <p className="text-xs text-muted-foreground mb-1">Empowering Belief:</p>
                       <p className="text-sm font-medium text-foreground">“I am someone who returns. Every time I drift, I practice coming back — and that is the skill.”</p>
                       <p className="text-xs text-story mt-1 italic">Declaration: I am a person who returns.</p>
                     </div>
-                  </div>
-                  <div className="text-center py-4 px-4">
-                    <p className="text-sm text-muted-foreground max-w-xs mx-auto">Add your first belief above. Be honest — this is private.</p>
                   </div>
                 </div>
               )}

@@ -63,27 +63,44 @@ describe("page-by-page audit regression contract", () => {
     expect(stewardship).toContain("Energy ${score}/10");
   });
 
-  it("preserves existing belief and decision retrieval after save and reload", () => {
+  it("makes saved beliefs and decisions visibly durable after save and reload", () => {
     const story = source("client/src/pages/modules/StoryModule.tsx");
     const strategy = source("client/src/pages/modules/StrategyModule.tsx");
+    const routers = source("server/routers.ts");
 
     expect(story).toContain("trpc.beliefs.list.useQuery");
-    expect(story).toContain("refetchBeliefs();");
+    expect(story).toContain("utils.beliefs.list.invalidate()");
+    expect(story).toContain("Saved beliefs");
     expect(story).toContain("beliefs.map");
+    expect(story).toContain("belief.affirmation");
     expect(strategy).toContain("trpc.decisions.list.useQuery");
-    expect(strategy).toContain("refetch();");
+    expect(strategy).toContain("utils.decisions.list.invalidate()");
+    expect(strategy).toContain("Saved decisions");
     expect(strategy).toContain("decisions.map");
+    expect(strategy).toContain("decision.reasoning");
+    expect(strategy).toContain("decision.secondOrderEffects");
+    expect(routers).toContain('affirmation: declaration');
+    expect(routers).toContain('feature: "story_belief_rewrite"');
+    expect(routers).toContain('feature: "strategy_decision_analysis"');
+    expect(routers).toContain('reasoning: typeof content.analysis === "string" ? content.analysis : null');
   });
 
-  it("keeps every direct image deliberately described or decorative", () => {
+  it("gives every rendered image a non-empty text alternative", () => {
     const imageTags = sourceFiles(resolve(root, "client/src"))
       .flatMap((file) => [...readFileSync(file, "utf8").matchAll(/<img\b[\s\S]*?>/g)])
       .map((match) => match[0]);
+    const allClientSource = sourceFiles(resolve(root, "client/src"))
+      .map((file) => readFileSync(file, "utf8"))
+      .join("\n");
 
     expect(imageTags.length).toBeGreaterThan(0);
     for (const tag of imageTags) {
-      expect(tag).toMatch(/\balt=(?:"[^"]*"|\{[^}]+\})/);
+      expect(tag).toMatch(/\balt=(?:"[^"\s][^"]*"|\{[^}]+\})/);
     }
+    expect(allClientSource).not.toContain('alt=""');
+    expect(source("client/index.html")).not.toContain('alt=""');
+    expect(source("client/src/components/LuminScene.tsx")).toContain("const mediaLabel");
+    expect(source("client/src/components/LuminScene.tsx")).toContain("aria-label={mediaLabel}");
   });
 
   it("gives the remaining audited controls programmatic names", () => {
@@ -97,6 +114,8 @@ describe("page-by-page audit regression contract", () => {
     expect(character).toContain('aria-label="Reading status"');
     expect(character).toContain('aria-label="Remove selected cover"');
     expect(character).toContain('aria-label={`More actions for ${book.title}`}');
+    expect(character).toContain('aria-label="Upload a book cover image"');
+    expect(character).toContain('aria-label={`Replace the cover for ${book.title}`}');
     expect(referrals).toContain('aria-label="Copy referral link"');
     expect(referrals).toContain('aria-label="Copy trial referral link"');
     expect(referrals).toContain('aria-label="Referral code to apply"');
