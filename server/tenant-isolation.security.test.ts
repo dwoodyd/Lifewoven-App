@@ -37,7 +37,7 @@ describe("tenant isolation security regressions", () => {
     expect(oracle).toContain("if (!conversation) throw new TRPCError({ code: \"NOT_FOUND\" })");
     expect(oracle).toContain("eq(oracleConversations.id, input.conversationId)");
     expect(oracle).toContain("eq(oracleConversations.userId, ctx.user.id)");
-    expect(oracle.indexOf("if (!conversation)")).toBeLessThan(oracle.indexOf("invokeLLM({"));
+    expect(oracle.indexOf("if (!conversation)")).toBeLessThan(oracle.indexOf("invokeMeteredLLM({"));
   });
 
   it("requires a caller-owned parent book before creating notes, journal entries, or attachments", () => {

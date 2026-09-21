@@ -27,7 +27,6 @@ import {
   goals, goalMilestones, firstHonestWeekEntries, btwDailyIntentions, auditClaims, events
 } from "../drizzle/schema";
 import { eq, desc, and, like, sql, gte, lte } from "drizzle-orm";
-import { invokeLLM } from "./_core/llm";
 import { checkLlmRateLimit } from "./_core/llmRateLimiter";
 import { invokeMeteredLLM } from "./llmCostControls";
 import { tierCanAccessOracle } from "./tierHelpers";
@@ -470,7 +469,10 @@ const journalRouter = router({
         throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many AI requests. Please wait a moment." });
       }
       const systemPrompt = `You are the Lifewoven Journal Oracle — a wise, warm, and perceptive guide rooted in the Lifewoven framework of interior alignment, identity, meaning, and deliberate practice. Generate a single, powerful journaling prompt for the ${input.module} module${input.pathway ? ` (${input.pathway} pathway)` : ""}. The prompt should be introspective, specific, and invite genuine self-reflection. Return only the prompt text, nothing else.`;
-      const response = await invokeLLM({
+      const response = await invokeMeteredLLM({
+        userId: ctx.user.id,
+        feature: "journal_prompt",
+        tier: "economical",
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: `Generate a journaling prompt for the ${input.module} module.` },
@@ -487,7 +489,10 @@ const journalRouter = router({
       }
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
-      const response = await invokeLLM({
+      const response = await invokeMeteredLLM({
+        userId: ctx.user.id,
+        feature: "journal_reflection",
+        tier: "economical",
         messages: [
           { role: "system", content: "You are the Lifewoven Oracle. Read this journal entry and offer a brief, wise, compassionate reflection (2-3 sentences). Identify one key theme or pattern. Do not be preachy. Be warm and specific." },
           { role: "user", content: input.content },
@@ -974,7 +979,10 @@ User context:
       // Get or build conversation history
       let messages: { role: string; content: string }[] = (storedConversation?.messages as { role: string; content: string }[]) ?? [];
       messages.push({ role: "user", content: input.message });
-      const response = await invokeLLM({
+      const response = await invokeMeteredLLM({
+        userId: ctx.user.id,
+        feature: "oracle_chat",
+        tier: "rich",
         messages: [
           { role: "system", content: systemPrompt },
           ...messages.map(m => ({ role: m.role as "user" | "assistant", content: m.content })),
@@ -1116,7 +1124,10 @@ Check-ins (last 7): ${JSON.stringify(recentCheckIns.map(c => ({ emotional: c.emo
 Journal themes: ${recentJournals.map(j => j.title || j.content.slice(0, 100)).join("; ")}
 Active habits: ${recentHabits.map(h => `${h.name} (streak: ${h.streak})`).join(", ")}`;
 
-    const response = await invokeLLM({
+    const response = await invokeMeteredLLM({
+      userId: ctx.user.id,
+      feature: "oracle_insights",
+      tier: "rich",
       messages: [
         { role: "system", content: "You are the Lifewoven Oracle pattern recognition engine. Analyze the user's recent data and identify 1-2 meaningful patterns or insights. Return JSON array: [{ type: 'pattern'|'recommendation'|'nudge', module: string, content: string }]" },
         { role: "user", content: dataContext },
@@ -1584,7 +1595,10 @@ const profileRouter = router({
     const prompt = `You are writing a one-sentence identity affirmation for a personal growth app user.
 Behavior data: ${jCount} journal entries, active habits: ${topHabits}, recommended pathway: ${pathway}${topDim ? `, strongest dimension: ${topDim}` : ""}.
 Write a single, personal, present-tense identity sentence (max 20 words) that reflects who this person is becoming. Start with "I am". No quotes, no period.`;
-    const llmRes = await invokeLLM({
+    const llmRes = await invokeMeteredLLM({
+      userId: ctx.user.id,
+      feature: "identity_sentence",
+      tier: "economical",
       messages: [
         { role: "system", content: "You write concise, powerful identity affirmations. Respond with only the sentence." },
         { role: "user", content: prompt },
@@ -1694,7 +1708,10 @@ Write a single, personal, present-tense identity sentence (max 20 words) that re
       }).from(checkIns).where(eq(checkIns.userId, ctx.user.id)).orderBy(desc(checkIns.createdAt)).limit(7),
       db.select().from(habits).where(and(eq(habits.userId, ctx.user.id), eq(habits.isActive, true))).limit(5),
       db.select().from(journalEntries).where(eq(journalEntries.userId, ctx.user.id)).orderBy(desc(journalEntries.createdAt)).limit(3),
-      db.select().from(oracleInsights).where(and(eq(oracleInsights.userId, ctx.user.id), eq(oracleInsights.isRead, false))).limit(3),
+      db.select().from(oracleInsights)
+        .where(and(eq(oracleInsights.userId, ctx.user.id), eq(oracleInsights.isRead, false)))
+        .orderBy(desc(oracleInsights.createdAt))
+        .limit(3),
       db.select().from(userPathways).where(and(eq(userPathways.userId, ctx.user.id), eq(userPathways.status, "active"))).limit(3),
       db.select({ scores: auditResults.scores, createdAt: auditResults.createdAt }).from(auditResults)
         .where(eq(auditResults.userId, ctx.user.id)).orderBy(desc(auditResults.createdAt)).limit(50),

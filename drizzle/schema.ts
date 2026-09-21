@@ -84,7 +84,10 @@ export const auditResults = mysqlTable("audit_results", {
   scores: json("scores").notNull(),   // { state: 0-100, story: 0-100, ... }
   recommendedPathway: varchar("recommendedPathway", { length: 64 }).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-}, (t) => [index("idx_audit_results_userId").on(t.userId)]);
+}, (t) => [
+  index("idx_audit_results_userId").on(t.userId),
+  index("idx_audit_results_user_created").on(t.userId, t.createdAt),
+]);
 
 /**
  * Short-lived, opaque claims bridge an anonymous completed survey through OAuth.
@@ -131,7 +134,10 @@ export const checkIns = mysqlTable("check_ins", {
   note: text("note"),
   module: varchar("module", { length: 32 }),       // which 5S module triggered this
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-}, (t) => [index("idx_check_ins_userId").on(t.userId)]);
+}, (t) => [
+  index("idx_check_ins_userId").on(t.userId),
+  index("idx_check_ins_user_created").on(t.userId, t.createdAt),
+]);
 
 // ─── Journal Entries ──────────────────────────────────────────────────────────
 
@@ -148,7 +154,10 @@ export const journalEntries = mysqlTable("journal_entries", {
   isPrivate: boolean("isPrivate").default(true).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-}, (t) => [index("idx_journal_entries_userId").on(t.userId)]);
+}, (t) => [
+  index("idx_journal_entries_userId").on(t.userId),
+  index("idx_journal_entries_user_created").on(t.userId, t.createdAt),
+]);
 
 // ─── Habits ───────────────────────────────────────────────────────────────────
 
@@ -174,7 +183,10 @@ export const habits = mysqlTable("habits", {
   returnCount: int("returnCount").default(0).notNull(),
   lastCompletedAt: timestamp("lastCompletedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-}, (t) => [index("idx_habits_userId").on(t.userId)]);
+}, (t) => [
+  index("idx_habits_userId").on(t.userId),
+  index("idx_habits_user_active").on(t.userId, t.isActive),
+]);
 
 export const habitLogs = mysqlTable("habit_logs", {
   id: int("id").autoincrement().primaryKey(),
@@ -186,6 +198,7 @@ export const habitLogs = mysqlTable("habit_logs", {
 }, (t) => [
   index("idx_habit_logs_userId").on(t.userId),
   index("idx_habit_logs_habitId").on(t.habitId),
+  index("idx_habit_logs_user_completed").on(t.userId, t.completedAt),
 ]);
 
 // ─── Daily Scorecard ──────────────────────────────────────────────────────────
@@ -261,7 +274,10 @@ export const oracleInsights = mysqlTable("oracle_insights", {
   sourceData: json("sourceData"), // what data triggered this insight
   isRead: boolean("isRead").default(false).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-}, (t) => [index("idx_oracle_insights_userId").on(t.userId)]);
+}, (t) => [
+  index("idx_oracle_insights_userId").on(t.userId),
+  index("idx_oracle_insights_user_read_created").on(t.userId, t.isRead, t.createdAt),
+]);
 
 export const oracleConversations = mysqlTable("oracle_conversations", {
   id: int("id").autoincrement().primaryKey(),
@@ -283,7 +299,10 @@ export const userPathways = mysqlTable("user_pathways", {
   totalSteps: int("totalSteps").default(0).notNull(),
   startedAt: timestamp("startedAt").defaultNow().notNull(),
   completedAt: timestamp("completedAt"),
-}, (t) => [index("idx_user_pathways_userId").on(t.userId)]);
+}, (t) => [
+  index("idx_user_pathways_userId").on(t.userId),
+  index("idx_user_pathways_user_status").on(t.userId, t.status),
+]);
 
 // ─── Pathway Sessions ───────────────────────────────────────────────────────
 

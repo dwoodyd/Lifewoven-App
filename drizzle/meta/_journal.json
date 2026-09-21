@@ -288,6 +288,13 @@
       "when": 1788146532959,
       "tag": "0040_clumsy_gorilla_man",
       "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "5",
+      "when": 1790023766811,
+      "tag": "0041_steady_dagger",
+      "breakpoints": true
     }
   ]
 }
