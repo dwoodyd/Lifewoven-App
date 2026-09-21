@@ -14,7 +14,6 @@
  * sensitive credentials are ever bundled into the client build.
  */
 import { useEffect, useRef, useState } from "react";
-import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 
 interface PayPalButtonProps {
@@ -35,7 +34,6 @@ export function PayPalButton({ productSlug, priceUsd, onSuccess, onError }: PayP
   // Default: redirect to /downloads so the user can fetch their token via getMyOrders.
   // Server does not return the token in the capture response (security measure C4).
   const handleSuccess = onSuccess ?? ((_token: string) => { window.location.href = "/downloads"; });
-  const { user } = useAuth();
   const containerRef = useRef<HTMLDivElement>(null);
   const [sdkReady, setSdkReady] = useState(false);
   const [rendered, setRendered] = useState(false);
@@ -81,7 +79,7 @@ export function PayPalButton({ productSlug, priceUsd, onSuccess, onError }: PayP
         const res = await fetch("/api/paypal/create-order", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ productSlug, userId: user?.id, useCredit: true }),
+          body: JSON.stringify({ productSlug, useCredit: true }),
         });
         const data = await res.json() as { orderId?: string; creditApplied?: number; error?: string };
         if (!data.orderId) throw new Error(data.error ?? "Failed to create order");
@@ -96,7 +94,6 @@ export function PayPalButton({ productSlug, priceUsd, onSuccess, onError }: PayP
           body: JSON.stringify({
             orderId: data.orderID,
             productSlug,
-            userId: user?.id,
           }),
         });
         const result = await res.json() as {
@@ -123,7 +120,7 @@ export function PayPalButton({ productSlug, priceUsd, onSuccess, onError }: PayP
         // silently ignore cancellations
       },
     }).render(containerRef.current);
-  }, [sdkReady, rendered, productSlug, priceUsd, user, onSuccess, onError]);
+  }, [sdkReady, rendered, productSlug, priceUsd, onSuccess, onError]);
 
   return (
     <div className="w-full">

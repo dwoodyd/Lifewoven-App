@@ -14,11 +14,14 @@ describe("Personal Library lifecycle", () => {
     expect(library).not.toContain("useState(() => {\n    getOrCreateSession.mutate({ resourceId });");
   });
 
-  it("keeps the server session owner-scoped", () => {
+  it("keeps the server session owner- and resource-scoped before it can affect chat history", () => {
     const router = source("server/routers/library.ts");
 
     expect(router).toContain("eq(librarySessions.resourceId, input.resourceId), eq(librarySessions.userId, userId)");
-    expect(router).toContain("eq(librarySessions.id, input.sessionId), eq(librarySessions.userId, userId)");
+    expect(router).toContain("eq(librarySessions.id, input.sessionId)");
+    expect(router).toContain("eq(librarySessions.userId, userId)");
+    expect(router).toContain("eq(librarySessions.resourceId, input.resourceId)");
+    expect(router).toContain("if (!session) throw new TRPCError({ code: \"NOT_FOUND\" })");
   });
 
   it("offers stable pathway filtering and an accessible list-or-grid view", () => {

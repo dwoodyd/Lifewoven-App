@@ -6,17 +6,32 @@ import { sdk } from "./sdk";
 // must only be served to the authenticated owner. The userId segment is always
 // the first path component after the prefix (e.g. "voice/42/...").
 const PRIVATE_PREFIXES = ["voice/", "voice-journal/", "book-covers/", "book-attachments/"];
+const PUBLIC_TOP_LEVEL_KEY = /^[A-Za-z0-9][A-Za-z0-9._() -]{0,511}$/;
 
-function extractOwnerIdFromKey(key: string): number | null {
+export type StorageAccess = { kind: "public" } | { kind: "private"; ownerId: number } | { kind: "deny" };
+
+/**
+ * Only a known public top-level asset or a strictly owner-scoped private path
+ * may reach the presigner. Unknown nested paths (including private products)
+ * fail closed rather than becoming public by convention.
+ */
+export function resolveStorageAccess(rawKey: string): StorageAccess {
+  if (!rawKey || rawKey.length > 512 || rawKey.includes("\\") || rawKey.includes("\0")) return { kind: "deny" };
+  const segments = rawKey.split("/");
+  if (segments.some((segment) => !segment || segment === "." || segment === "..")) return { kind: "deny" };
+
   for (const prefix of PRIVATE_PREFIXES) {
-    if (key.startsWith(prefix)) {
-      const rest = key.slice(prefix.length);
-      const segment = rest.split("/")[0];
-      const id = parseInt(segment, 10);
-      return isNaN(id) ? null : id;
+    if (rawKey.startsWith(prefix)) {
+      const privateSegments = rawKey.slice(prefix.length).split("/");
+      const ownerSegment = privateSegments[0];
+      // Do not accept parseInt-style prefixes such as "42anything".
+      if (!/^[1-9]\d*$/.test(ownerSegment) || privateSegments.length < 2) return { kind: "deny" };
+      const ownerId = Number(ownerSegment);
+      return Number.isSafeInteger(ownerId) ? { kind: "private", ownerId } : { kind: "deny" };
     }
   }
-  return null; // public key — no ownership restriction
+
+  return PUBLIC_TOP_LEVEL_KEY.test(rawKey) ? { kind: "public" } : { kind: "deny" };
 }
 
 /** Fetch with a hard timeout. Throws AbortError on timeout. */
@@ -45,15 +60,21 @@ export function registerStorageProxy(app: Express) {
       return;
     }
 
-    // SECURITY: private prefixes require authentication and ownership check.
-    const ownerId = extractOwnerIdFromKey(key);
-    if (ownerId !== null) {
+    const access = resolveStorageAccess(key);
+    if (access.kind === "deny") {
+      // Do not reveal whether an unrecognized private path exists.
+      res.status(404).send("Not found");
+      return;
+    }
+
+    // SECURITY: private prefixes require authentication and exact ownership.
+    if (access.kind === "private") {
       const user = await sdk.authenticateRequest(req).catch(() => null);
       if (!user) {
         res.status(401).send("Unauthorized");
         return;
       }
-      if (user.id !== ownerId) {
+      if (user.id !== access.ownerId) {
         // Return 404 rather than 403 to avoid confirming the resource exists
         res.status(404).send("Not found");
         return;

@@ -13,6 +13,7 @@ import { getDb } from "../db";
 import { products, orders, users } from "../../drizzle/schema";
 import { eq, and } from "drizzle-orm";
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 import { getBetaAccess } from "./beta";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -27,6 +28,23 @@ export function getAccessLevel(tier: string, role: string): StoreAccessLevel {
 }
 
 const SEEKER_DISCOUNT = 0.30; // 30% off
+const CHECKOUT_RETURN_ORIGINS = new Set([
+  "https://app.lifewoven.click",
+  "https://lifewovenapp.manus.space",
+  "https://lifeosplatform-krrwopfb.manus.space",
+]);
+
+export function getTrustedCheckoutOrigin(value: string): string {
+  const origin = new URL(value).origin;
+  const isDevelopmentPreview = process.env.NODE_ENV !== "production"
+    && /^https:\/\/3000-[a-z0-9-]+\.us1\.manus\.computer$/.test(origin);
+  const isLocalDevelopment = process.env.NODE_ENV !== "production"
+    && /^http:\/\/localhost(?::\d+)?$/.test(origin);
+  if (!CHECKOUT_RETURN_ORIGINS.has(origin) && !isDevelopmentPreview && !isLocalDevelopment) {
+    throw new TRPCError({ code: "BAD_REQUEST", message: "Unsupported checkout return origin." });
+  }
+  return origin;
+}
 
 export function getEffectivePrice(basePrice: number, level: StoreAccessLevel): number {
   if (level === "library") return 0;
@@ -116,6 +134,7 @@ export const storeRouter = router({
     .mutation(async ({ ctx, input }) => {
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
+      const checkoutOrigin = getTrustedCheckoutOrigin(input.origin);
 
       // Fetch the product
       const [product] = await db.select().from(products)
@@ -188,8 +207,8 @@ export const storeRouter = router({
             brand_name: "Lifewoven",
             landing_page: "BILLING",
             user_action: "PAY_NOW",
-            return_url: `${input.origin}/store/success?product=${input.productSlug}`,
-            cancel_url: `${input.origin}/store`,
+            return_url: `${checkoutOrigin}/store/success?product=${input.productSlug}`,
+            cancel_url: `${checkoutOrigin}/store`,
           },
         }),
       });

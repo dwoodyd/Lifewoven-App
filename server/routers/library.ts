@@ -367,6 +367,20 @@ export const libraryRouter = router({
         .where(and(eq(libraryResources.id, input.resourceId), eq(libraryResources.userId, userId)));
       if (!resource) throw new TRPCError({ code: "NOT_FOUND" });
 
+      // A chat session is tenant data in its own right. Confirm that this exact
+      // session belongs to the caller *and* to the selected resource before it
+      // can influence model context or receive any new messages.
+      const [session] = await db
+        .select({ id: librarySessions.id })
+        .from(librarySessions)
+        .where(and(
+          eq(librarySessions.id, input.sessionId),
+          eq(librarySessions.userId, userId),
+          eq(librarySessions.resourceId, input.resourceId),
+        ))
+        .limit(1);
+      if (!session) throw new TRPCError({ code: "NOT_FOUND" });
+
       // Embed the user query
       const queryEmbedding = await embedText(input.message);
 
@@ -388,7 +402,11 @@ export const libraryRouter = router({
       const history = await db
         .select({ role: libraryMessages.role, content: libraryMessages.content })
         .from(libraryMessages)
-        .where(eq(libraryMessages.sessionId, input.sessionId))
+        .where(and(
+          eq(libraryMessages.sessionId, session.id),
+          eq(libraryMessages.userId, userId),
+          eq(libraryMessages.resourceId, input.resourceId),
+        ))
         .orderBy(desc(libraryMessages.createdAt))
         .limit(6);
       history.reverse();
@@ -432,7 +450,7 @@ ${context}`;
 
       // Save user message
       await db.insert(libraryMessages).values({
-        sessionId: input.sessionId,
+        sessionId: session.id,
         resourceId: input.resourceId,
         userId,
         role: "user",
@@ -442,7 +460,7 @@ ${context}`;
 
       // Save assistant message
       const [{ insertId: msgId }] = await db.insert(libraryMessages).values({
-        sessionId: input.sessionId,
+        sessionId: session.id,
         resourceId: input.resourceId,
         userId,
         role: "assistant",
@@ -454,7 +472,11 @@ ${context}`;
       await db
         .update(librarySessions)
         .set({ activePathway: input.activePathway ?? null })
-        .where(and(eq(librarySessions.id, input.sessionId), eq(librarySessions.userId, userId)));
+        .where(and(
+          eq(librarySessions.id, session.id),
+          eq(librarySessions.userId, userId),
+          eq(librarySessions.resourceId, input.resourceId),
+        ));
 
       return { messageId: msgId, content: assistantContent };
     }),
@@ -471,6 +493,12 @@ ${context}`;
     .mutation(async ({ ctx, input }) => {
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+      const [resource] = await db
+        .select({ id: libraryResources.id })
+        .from(libraryResources)
+        .where(and(eq(libraryResources.id, input.resourceId), eq(libraryResources.userId, ctx.user.id)))
+        .limit(1);
+      if (!resource) throw new TRPCError({ code: "NOT_FOUND" });
       const [{ insertId }] = await db.insert(libraryHighlights).values({
         resourceId: input.resourceId,
         userId: ctx.user.id,

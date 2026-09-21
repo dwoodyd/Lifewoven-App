@@ -4,6 +4,7 @@ import { router, protectedProcedure } from "../_core/trpc";
 import { getDb } from "../db";
 import { books, bookNotes, characterJournal, bookAttachments } from "../../drizzle/schema";
 import { storagePut } from "../storage";
+import { TRPCError } from "@trpc/server";
 
 async function requireDb() {
   const db = await getDb();
@@ -176,6 +177,12 @@ export const characterRouter = router({
     }))
     .mutation(async ({ ctx, input }) => {
       const db = await requireDb();
+      const [book] = await db
+        .select({ id: books.id })
+        .from(books)
+        .where(and(eq(books.id, input.bookId), eq(books.userId, ctx.user.id)))
+        .limit(1);
+      if (!book) throw new TRPCError({ code: "NOT_FOUND" });
       const [result] = await db.insert(bookNotes).values({
         bookId:  input.bookId,
         userId:  ctx.user.id,
@@ -234,6 +241,14 @@ export const characterRouter = router({
     }))
     .mutation(async ({ ctx, input }) => {
       const db = await requireDb();
+      if (input.bookId) {
+        const [book] = await db
+          .select({ id: books.id })
+          .from(books)
+          .where(and(eq(books.id, input.bookId), eq(books.userId, ctx.user.id)))
+          .limit(1);
+        if (!book) throw new TRPCError({ code: "NOT_FOUND" });
+      }
       const [result] = await db.insert(characterJournal).values({
         userId:  ctx.user.id,
         bookId:  input.bookId ?? null,
@@ -288,6 +303,14 @@ export const characterRouter = router({
       fileDataB64: z.string().min(1),  // base64-encoded file content
     }))
     .mutation(async ({ ctx, input }) => {
+      const db = await requireDb();
+      const [book] = await db
+        .select({ id: books.id })
+        .from(books)
+        .where(and(eq(books.id, input.bookId), eq(books.userId, ctx.user.id)))
+        .limit(1);
+      if (!book) throw new TRPCError({ code: "NOT_FOUND" });
+
       const buffer = Buffer.from(input.fileDataB64, "base64");
       const maxBytes = 10 * 1024 * 1024; // 10 MB
       if (buffer.byteLength > maxBytes) throw new Error("File too large (max 10 MB)");
@@ -297,7 +320,6 @@ export const characterRouter = router({
       const key = `book-attachments/${ctx.user.id}/${input.bookId}/${Date.now()}-${Math.random().toString(36).slice(2)}-${safeName}`;
       const { url } = await storagePut(key, buffer, input.mimeType);
 
-      const db = await requireDb();
       const [result] = await db.insert(bookAttachments).values({
         bookId:   input.bookId,
         userId:   ctx.user.id,

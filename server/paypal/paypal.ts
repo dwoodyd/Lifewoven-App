@@ -6,6 +6,7 @@
  */
 import { Router, type Request, type Response } from "express";
 import crypto from "crypto";
+import { z } from "zod";
 import { getDb } from "../db";
 import { orders, referralCredits } from "../../drizzle/schema";
 import { getProductBySlug, getAllProducts } from "../products";
@@ -48,6 +49,16 @@ async function getAccessToken(): Promise<string> {
 
 export const paypalRouter = Router();
 
+const productSlugSchema = z.string().trim().min(1).max(128).regex(/^[a-z0-9-]+$/);
+const createOrderInputSchema = z.object({
+  productSlug: productSlugSchema,
+  useCredit: z.boolean().optional(),
+}).strict();
+const captureOrderInputSchema = z.object({
+  orderId: z.string().trim().min(6).max(128).regex(/^[A-Za-z0-9-]+$/),
+  productSlug: productSlugSchema,
+}).strict();
+
 // ── Create Order ─────────────────────────────────────────────────────────────
 paypalRouter.post("/api/paypal/create-order", async (req: Request, res: Response) => {
   try {
@@ -55,7 +66,9 @@ paypalRouter.post("/api/paypal/create-order", async (req: Request, res: Response
     const user = await sdk.authenticateRequest(req).catch(() => null);
     if (!user) return res.status(401).json({ error: "Unauthorized" });
 
-    const { productSlug, useCredit } = req.body as { productSlug: string; useCredit?: boolean };
+    const parsedInput = createOrderInputSchema.safeParse(req.body);
+    if (!parsedInput.success) return res.status(400).json({ error: "Invalid order request" });
+    const { productSlug, useCredit } = parsedInput.data;
 
     const product = getProductBySlug(productSlug);
     if (!product) return res.status(404).json({ error: "Product not found" });
@@ -127,14 +140,9 @@ paypalRouter.post("/api/paypal/capture-order", async (req: Request, res: Respons
     const user = await sdk.authenticateRequest(req).catch(() => null);
     if (!user) return res.status(401).json({ error: "Unauthorized" });
 
-    const { orderId, productSlug } = req.body as {
-      orderId: string;
-      productSlug: string;
-    };
-
-    if (!orderId || !productSlug) {
-      return res.status(400).json({ error: "Missing orderId or productSlug" });
-    }
+    const parsedInput = captureOrderInputSchema.safeParse(req.body);
+    if (!parsedInput.success) return res.status(400).json({ error: "Invalid capture request" });
+    const { orderId, productSlug } = parsedInput.data;
 
     const product = getProductBySlug(productSlug);
     if (!product) return res.status(404).json({ error: "Product not found" });

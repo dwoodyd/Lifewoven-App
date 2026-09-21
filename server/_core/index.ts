@@ -77,21 +77,26 @@ async function startServer() {
     next();
   });
 
-  // ── Security: Explicit CORS whitelist — no wildcard
-  const allowedOrigins = [
-    /\.manus\.space$/,
-    /\.manus\.computer$/,
-    /\.us1\.manus\.computer$/,
-    /^https:\/\/lifewovenapp\.manus\.space$/,
-    /^https:\/\/lifeosplatform-krrwopfb\.manus\.space$/,
-    /^https:\/\/([a-z0-9-]+\.)?lifewoven\.click$/,
-    ...(process.env.NODE_ENV !== "production" ? [/^http:\/\/localhost(:\d+)?$/] : []),
+  // ── Security: Exact credentialed CORS allowlist — never trust sibling sites.
+  // Keep every production browser origin explicit. Preview/localhost support is
+  // development-only and cannot widen the deployed production boundary.
+  const productionOrigins = new Set([
+    "https://app.lifewoven.click",
+    "https://lifewovenapp.manus.space",
+    "https://lifeosplatform-krrwopfb.manus.space",
+  ]);
+  const developmentOrigins = [
+    /^http:\/\/localhost(?::\d+)?$/,
+    /^https:\/\/3000-[a-z0-9-]+\.us1\.manus\.computer$/,
   ];
   app.use(cors({
     origin: (origin, callback) => {
       if (!origin) return callback(null, true); // allow server-to-server
-      const allowed = allowedOrigins.some(p => p.test(origin));
-      callback(allowed ? null : new Error("Not allowed by CORS"), allowed);
+      const allowed = productionOrigins.has(origin)
+        || (process.env.NODE_ENV !== "production" && developmentOrigins.some((pattern) => pattern.test(origin)));
+      // A disallowed browser origin receives no CORS headers. Avoid converting
+      // an otherwise harmless preflight into a server error or log-noise event.
+      callback(null, allowed);
     },
     credentials: true,
   }));

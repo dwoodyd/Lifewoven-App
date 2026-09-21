@@ -815,6 +815,22 @@ const oracleRouter = router({
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
 
+      // A supplied conversation ID is never a capability. Verify ownership
+      // before it can affect a response or be updated later in this request.
+      let storedConversation: { messages: unknown } | null = null;
+      if (input.conversationId) {
+        const [conversation] = await db
+          .select({ messages: oracleConversations.messages })
+          .from(oracleConversations)
+          .where(and(
+            eq(oracleConversations.id, input.conversationId),
+            eq(oracleConversations.userId, ctx.user.id),
+          ))
+          .limit(1);
+        if (!conversation) throw new TRPCError({ code: "NOT_FOUND" });
+        storedConversation = conversation;
+      }
+
       // H1: Tier gate — Oracle chat requires oracle tier OR sampler (3 free/month for Explorer/Seeker)
       const hasFullOracle = await hasBetaOrPaidAccess(ctx.user.id);
       if (!hasFullOracle) {
@@ -956,14 +972,7 @@ User context:
 	- Habit streak: ${input.context?.habitStreak ?? 0} days${verifiedDataContext}${mindContext}${cycleContext}${readingContext}${dailyIntentionContext}`;
 
       // Get or build conversation history
-      let messages: { role: string; content: string }[] = [];
-      if (input.conversationId) {
-        const convs = await db.select().from(oracleConversations)
-          .where(and(eq(oracleConversations.id, input.conversationId), eq(oracleConversations.userId, ctx.user.id)));
-        if (convs[0]) {
-          messages = (convs[0].messages as any[]) ?? [];
-        }
-      }
+      let messages: { role: string; content: string }[] = (storedConversation?.messages as { role: string; content: string }[]) ?? [];
       messages.push({ role: "user", content: input.message });
       const response = await invokeLLM({
         messages: [
@@ -1022,7 +1031,10 @@ User context:
       if (input.conversationId) {
         await db.update(oracleConversations)
           .set({ messages, updatedAt: new Date() })
-          .where(eq(oracleConversations.id, input.conversationId));
+          .where(and(
+            eq(oracleConversations.id, input.conversationId),
+            eq(oracleConversations.userId, ctx.user.id),
+          ));
         return { reply, tags, conversationId: input.conversationId };
       } else {
         const [inserted] = await db.insert(oracleConversations).values({
