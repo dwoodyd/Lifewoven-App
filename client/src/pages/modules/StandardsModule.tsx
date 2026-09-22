@@ -55,7 +55,7 @@ export default function StandardsModule() {
       toast.success("You showed up. That's who you are.");
       haptics.success();
       // Celebrate habit completion with a Lumin micro-animation
-      triggerMoment(Math.random() < 0.5 ? "bouncy_dance" : "spin_celebrate");
+      triggerMoment(Math.random() < 0.5 ? "bouncy_dance" : "twirls_sparkles");
       refetch();
       refetchLogs();
     }

@@ -123,7 +123,7 @@ const ILLUSTRATIONS: Record<string, React.FC> = {
 const LUMEN_EMPTY_VIDEOS: Record<string, string> = {
   habits: "taps_chin",
   journal: "tilting_listening",
-  books: "peaceful_idle",
+  books: "nodding_gently",
   oracle: "core_unfurls",
   pathways: "floating_center",
   generic: "nodding_gently",

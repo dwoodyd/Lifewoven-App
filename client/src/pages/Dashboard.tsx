@@ -54,7 +54,7 @@ import FoundingWelcomeCard from "@/components/FoundingWelcomeCard";
 import PostActivationInvite from "@/components/PostActivationInvite";
 import ReadingBridgePrompt from "@/components/ReadingBridgePrompt";
 
-function LumenEmpty({ title, body, href, onAction, cta, videoId = "peaceful_idle" }: { title: string; body: string; href?: string; onAction?: () => void; cta: string; videoId?: string }) {
+function LumenEmpty({ title, body, href, onAction, cta, videoId = "nodding_gently" }: { title: string; body: string; href?: string; onAction?: () => void; cta: string; videoId?: string }) {
   return (
     <div className="overflow-hidden border border-primary/20 bg-card text-left">
       <div className="relative h-44 overflow-hidden border-b border-primary/15 bg-background sm:h-48" aria-hidden="true">

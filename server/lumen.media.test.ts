@@ -50,6 +50,32 @@ describe("Lumen media fallbacks", () => {
     }
   });
 
+  it("keeps every active Lumen source out of the visually failed watermark set", () => {
+    const registrySource = readFileSync(resolve(process.cwd(), "client/src/data/lumin.ts"), "utf8");
+    const flaggedIds = [
+      "analyzing", "smiles_sweeping", "waves_sparkles", "burst_arms", "gentle_open",
+      "peaceful_idle", "spin_return", "spin_celebrate", "protect_head", "idle_wriggle",
+      "magnifying", "awakening", "elder_book", "holographic_panel", "winking_idle",
+      "self_hug", "dancing", "settling", "burst_joy", "peekaboo_reveal", "pure_joy",
+      "pointing_down", "spinning", "peeking",
+    ];
+
+    expect(registrySource).not.toContain("Untitledvideo(");
+    for (const id of flaggedIds) {
+      expect(registrySource).not.toContain(`id: \"${id}\"`);
+    }
+
+    const activeSourceFiles = [
+      "client/src/components/EmptyState.tsx",
+      "client/src/pages/Dashboard.tsx",
+      "client/src/pages/Journal.tsx",
+      "client/src/pages/modules/StandardsModule.tsx",
+    ].map((file) => readFileSync(resolve(process.cwd(), file), "utf8")).join("\n");
+    for (const id of flaggedIds) {
+      expect(activeSourceFiles).not.toMatch(new RegExp(`(?:videoId|triggerMoment)\\([^)]*${id}|videoId\\s*[=:]\\s*[\"']${id}`));
+    }
+  });
+
   it("keeps affected pathway cards on their assigned clean video sources", () => {
     const pathways = readFileSync(resolve(process.cwd(), "client/src/pages/PathwaysListing.tsx"), "utf8");
     const registry = readFileSync(resolve(process.cwd(), "client/src/data/lumin.ts"), "utf8");

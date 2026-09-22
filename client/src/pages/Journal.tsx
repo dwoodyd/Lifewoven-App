@@ -133,8 +133,8 @@ export default function Journal() {
   const createEntry = trpc.journal.create.useMutation({
     onSuccess: () => {
       toast.success("Entry saved.");
-      // Journal save — Lumin waves sparkles in appreciation
-      triggerMoment(Math.random() < 0.5 ? "waves_sparkles" : "nodding_gently");
+      // Journal save — use the reviewed, watermark-free appreciation scene.
+      triggerMoment("nodding_gently");
       // Refresh the server-derived threshold so a qualifying invitation can appear now.
       utils.system.activationStatus.invalidate();
       setContent(""); setTitle(""); setTags(""); setIsWriting(false); refetch();
