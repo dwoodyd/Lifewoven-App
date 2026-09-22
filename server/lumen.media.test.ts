@@ -74,6 +74,25 @@ describe("Lumen media fallbacks", () => {
     expect(purpose).not.toContain('scene: "self_hug"');
   });
 
+  it("uses the explicitly approved clean clips for the formerly watermarked onboarding scenes", () => {
+    const onboarding = readFileSync(resolve(process.cwd(), "client/src/components/OnboardingModal.tsx"), "utf8");
+    const registry = readFileSync(resolve(process.cwd(), "client/src/data/lumin.ts"), "utf8");
+
+    expect(onboarding).toContain('id: "system"');
+    expect(onboarding).toContain('videoId: "onboarding_framework_clean"');
+    expect(onboarding).toContain('id: "contemplative"');
+    expect(onboarding).toContain('videoId: "onboarding_contemplative_clean"');
+    expect(onboarding).toContain('id: "launch"');
+    expect(onboarding).toContain('videoId: "onboarding_launch_clean"');
+    expect(onboarding).not.toMatch(/id: "system"[\s\S]*?videoId: "holographic_panel"/);
+    expect(onboarding).not.toMatch(/id: "contemplative"[\s\S]*?videoId: "self_hug"/);
+    expect(onboarding).not.toMatch(/id: "launch"[\s\S]*?videoId: "burst_joy"/);
+
+    expect(registry).toContain('url: "/manus-storage/lifewoven-onboarding-framework-clean-h264_15653685.mp4"');
+    expect(registry).toContain('url: "/manus-storage/lifewoven-onboarding-contemplative-clean-h264_8562197f.mp4"');
+    expect(registry).toContain('url: "/manus-storage/lifewoven-onboarding-launch-clean_b487be0e.mp4"');
+  });
+
   it("keeps each pathway's mapped 5S dimension visible on its card", () => {
     const pathways = readFileSync(resolve(process.cwd(), "client/src/pages/PathwaysListing.tsx"), "utf8");
 

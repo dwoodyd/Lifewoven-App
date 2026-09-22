@@ -69,6 +69,30 @@ export const LUMIN_VIDEOS: LuminVideo[] = [
     role: "onboarding",
     duration: 10,
   },
+  // ── Approved clean onboarding replacements ────────────────────────────────
+  // Supplied by the owner and visually checked before replacing the three
+  // watermarked legacy onboarding scenes on 2026-09-22.
+  {
+    id: "onboarding_framework_clean",
+    url: "/manus-storage/lifewoven-onboarding-framework-clean-h264_15653685.mp4",
+    action: "Peaceful, attentive Lumen presence for the 5S Framework scene",
+    role: "onboarding",
+    duration: 8,
+  },
+  {
+    id: "onboarding_contemplative_clean",
+    url: "/manus-storage/lifewoven-onboarding-contemplative-clean-h264_8562197f.mp4",
+    action: "Gentle self-embrace for the contemplative practice scene",
+    role: "onboarding",
+    duration: 8,
+  },
+  {
+    id: "onboarding_launch_clean",
+    url: "/manus-storage/lifewoven-onboarding-launch-clean_b487be0e.mp4",
+    action: "Joyful starburst welcome for the launch scene",
+    role: "onboarding",
+    duration: 8,
+  },
   // ── Named / clean originals ──────────────────────────────────────────────
   {
     id: "bouncy_dance",

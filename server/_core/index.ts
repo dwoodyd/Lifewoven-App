@@ -45,6 +45,16 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
   throw new Error(`No available port found starting from ${startPort}`);
 }
 
+function isRedisTlsUrl(value: string | undefined): value is string {
+  if (!value) return false;
+  try {
+    const url = new URL(value);
+    return url.protocol === "rediss:" && Boolean(url.hostname) && Boolean(url.password) && url.port === "6379";
+  } catch {
+    return false;
+  }
+}
+
 async function startServer() {
   const app = express();
   const server = createServer(app);
@@ -126,12 +136,17 @@ async function startServer() {
 
   // ── Redis rate-limit store: use Redis when REDIS_URL is set, fall back to memory
   let redisStore: RedisStore | undefined;
-  if (process.env.REDIS_URL) {
+  const redisUrl = process.env.REDIS_URL;
+  if (isRedisTlsUrl(redisUrl)) {
     try {
-      const redisClient = new Redis(process.env.REDIS_URL, {
+      const redisClient = new Redis(redisUrl, {
         enableOfflineQueue: false,
         connectTimeout: 3000,
         lazyConnect: true,
+        retryStrategy: () => null,
+      });
+      redisClient.on("error", (error) => {
+        console.warn("[RateLimit] Redis connection error — using in-memory rate limits:", error.message);
       });
       await redisClient.connect().catch(() => null);
       if (redisClient.status === "ready") {
@@ -147,6 +162,8 @@ async function startServer() {
     } catch (err) {
       console.warn("[RateLimit] Redis init error — falling back to in-memory store:", (err as Error).message);
     }
+  } else if (redisUrl) {
+    console.warn("[RateLimit] REDIS_URL is not a TLS Redis URI — expected rediss://:PASSWORD@HOST:6379; using in-memory store");
   } else {
     console.warn("[RateLimit] REDIS_URL not set — using in-memory store (not suitable for multi-replica deployments)");
   }

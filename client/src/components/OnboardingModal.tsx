@@ -74,7 +74,7 @@ const SCENES: Scene[] = [
   },
   {
     id: "system",
-    videoId: "holographic_panel",
+    videoId: "onboarding_framework_clean",
     overlayOpacity: 0.32,
     loop: true,
     lines: [
@@ -102,7 +102,7 @@ const SCENES: Scene[] = [
   },
   {
     id: "contemplative",
-    videoId: "self_hug",
+    videoId: "onboarding_contemplative_clean",
     overlayOpacity: 0.30,
     loop: true,
     lines: [
@@ -115,7 +115,7 @@ const SCENES: Scene[] = [
   },
   {
     id: "launch",
-    videoId: "burst_joy",
+    videoId: "onboarding_launch_clean",
     overlayOpacity: 0.28,
     loop: true,
     lines: [

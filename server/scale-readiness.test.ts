@@ -43,4 +43,13 @@ describe("dashboard scale readiness", () => {
       expect(routers).toContain(`feature: "${feature}"`);
     }
   });
+
+  it("uses the deployment-provided Redis URL only for shared rate limiting", () => {
+    const server = source("server/_core/index.ts");
+    expect(server).toContain("process.env.REDIS_URL");
+    expect(server).toContain("isRedisTlsUrl");
+    expect(server).toContain("new Redis(redisUrl");
+    expect(server).toContain("Redis store connected — rate limits shared across replicas");
+    expect(server).not.toMatch(/rediss:\/:[A-Za-z0-9_-]{20,}@/);
+  });
 });
